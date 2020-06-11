@@ -1,0 +1,20 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-metagon-dev-161807-authRole",
+            "UnauthRoleArn": "arn:aws:iam::547054413317:role/amplify-metagon-dev-161807-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::547054413317:role/amplify-metagon-dev-161807-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "amplify-metagon-dev-161807-deployment",
+            "UnauthRoleName": "amplify-metagon-dev-161807-unauthRole",
+            "StackName": "amplify-metagon-dev-161807",
+            "StackId": "arn:aws:cloudformation:us-east-1:547054413317:stack/amplify-metagon-dev-161807/1164fa00-a71a-11ea-8e92-0e0e50fbc697",
+            "AmplifyAppId": "dogds40284yu5"
+        },
+        "categories": {
+            "auth": {
+                "metagon99fcca73": {}
+            }
+        }
+    }
+}
