@@ -33,9 +33,8 @@ const Register = () => {
     const confirmSignUp = () => {
         Auth.confirmSignUp(email, confirmationCode)
         .then(() => (
-           // eslint-disable-next-line no-sequences
-           history.push('/login'),
-           window.location.reload()
+          
+           history.push(`/login`)
         ))
         .catch((err) => setCodeError(true))
     }
