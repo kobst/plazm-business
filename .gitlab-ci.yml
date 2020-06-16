@@ -9,6 +9,6 @@ sonar-scanner:
 deploy:
  stage: deploy
  script:
-   - rsync -aurvz --delete -e 'ssh -p 22' --stats --include-from=deployment-include.txt . $user@$host:$path;
+   - rsync -aurvz --delete -e 'ssh -p 22' --stats --include 'build' --exclude '*' . $user@$host:$path;
  only:
    - master
