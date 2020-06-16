@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import './login.css'
 import { Auth } from 'aws-amplify';
+import {Link } from "react-router-dom";
 
 const Login = () => {
     const [user,setUser]= useState()
@@ -89,8 +90,8 @@ const Login = () => {
 							<button type="submit" className="btn btn-primary">Login</button>
                             {error ?<div class="form-group"><br /><h6> Invalid Username or Password</h6></div>: null}
                             <div className="login-links-wrapper login-links-extra-links">
-								<a href="http://localhost:3000/register" className="link-btn"> Don't have an account? <strong>Signup</strong></a>
-								<a href="http://localhost:3000/forgot-password" className="link-btn"> Forgot Password </a>
+								<a href=" " className="link-btn"> <Link to ='/register' >\Don't have an account? <strong>Signup</strong></Link></a>
+								<a href=" " className="link-btn"> <Link to ='/forgot-password' > Forgot Password </Link> </a>
 							</div>
 							
 						</form>
