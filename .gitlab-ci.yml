@@ -5,7 +5,7 @@ sonar-scanner:
  stage: sonar-scanner
  script:
    - source /etc/environment
-   - echo "sonar-scanner -Dsonar.projectKey=metagon-curator-business -Dsonar.sources=. -Dsonar.host.url=$SONAR_HOST -Dsonar.login=$SONAR_KEY"
+   - sonar-scanner -Dsonar.projectKey=metagon-curator-business -Dsonar.sources=. -Dsonar.host.url=$SONAR_HOST -Dsonar.login=$SONAR_KEY
 deploy:
  stage: deploy
  script:
