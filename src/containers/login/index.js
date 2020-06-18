@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react'
 import './login.css'
 import { Auth } from 'aws-amplify';
-import {Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
-const Login = () => {
+const Login = (props) => {
+    const type = props.match.url
     const [user,setUser]= useState()
     const [password,setPassword]= useState()
     const [signedIn,setSignedIn]= useState(false)
@@ -15,7 +16,6 @@ const Login = () => {
             setSignedIn(true)
             
           } catch {
-              console.log('okkay')
            
           }
         }
@@ -58,7 +58,7 @@ const Login = () => {
                 <button type="submit" onClick = {() => (
                     // eslint-disable-next-line no-sequences
                     Auth.signOut(),
-                     window.location.reload())} className="btn btn-primary">Logout</button>
+                    window.location.reload())} className="btn btn-primary">  <Link to ='/register' ></Link>Logout</button>
             </div>
         );
     } 
@@ -90,8 +90,15 @@ const Login = () => {
 							<button type="submit" className="btn btn-primary">Login</button>
                             {error ?<div class="form-group"><br /><h6> Invalid Username or Password</h6></div>: null}
                             <div className="login-links-wrapper login-links-extra-links">
-								<a href=" " className="link-btn"> <Link to ='/register' >\Don't have an account? <strong>Signup</strong></Link></a>
-								<a href=" " className="link-btn"> <Link to ='/forgot-password' > Forgot Password </Link> </a>
+                            { type.includes('business') ?
+                            <Link to ='/business/register' >Don't have an account? <strong>Signup</strong></Link> :
+                             <Link to ='/curator/register' >Don't have an account? <strong>Signup</strong></Link>
+                             }
+                               { type.includes('business') ?
+                            <Link to ='/business/forgot-password' >Forgot Password</Link> :
+                             <Link to ='/curator/forgot-password' >Forgot Password</Link>
+                             }
+	
 							</div>
 							
 						</form>
