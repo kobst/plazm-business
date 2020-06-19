@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
       function SearchLocationInput() { 
-            const [business,setbusiness] = useState('');
             const [query, setQuery] = useState("");
             const autoCompleteRef = useRef(null);
             let autoComplete;
@@ -37,9 +36,7 @@ import React, { useState, useEffect, useRef } from "react";
                 async function handlePlaceSelect(updateQuery) {
                      const addressObject = autoComplete.getPlace();
                      const value = addressObject.name
-                     const query = addressObject.name + ' '+ addressObject.formatted_address;
                      updateQuery(value);
-                     setbusiness(query)
                 }
 
             useEffect(() => {
@@ -51,15 +48,14 @@ import React, { useState, useEffect, useRef } from "react";
         }, []);
 
         return (
-            <div className="search-location-input">
+          
             <input
                 ref={autoCompleteRef}
                 onChange={event => setQuery(event.target.value)}
                 placeholder="Enter Your Business"
                 value={query}
             />
-            {business ? <div> {business}</div>: null}
-             </div>
+            
             );
         }
 

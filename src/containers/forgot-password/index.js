@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import './forgot-password.css'
 import { Auth } from 'aws-amplify';
+import history from '../../utils/history'
 import {Link} from 'react-router-dom'
+import ValueLoader from '../../utils/loader'
 
 const ForgotPassword = (props) => {
     const type = props.match.url
@@ -10,13 +12,15 @@ const ForgotPassword = (props) => {
     const [new_password,setPassword] = useState()
     const [confirmPass,setConfirmPass] = useState()
     const [email,setEmail] = useState(false)
-    const [message,setMessgae] = useState(false)
     const [error,setError] = useState(false)
     const [emailError,setEmailError] = useState(false)
     const [passErr,setPassErr] = useState(false)
+    const [verificationErr,setVerificationErr] = useState()
+    const [loader,setLoader] = useState(false)
 
     const submitEmail = e => {
         e.preventDefault()
+        setLoader(true)
     Auth.forgotPassword(username)
     .then(data => setEmail(true) )
     .catch(err => setEmailError(true));
@@ -24,23 +28,33 @@ const ForgotPassword = (props) => {
     }
    
     const submitPassword = e => {
+        e.preventDefault()
         setError(false)
         setPassErr(false)
-        e.preventDefault()
-        if(new_password === confirmPass){
+    if(new_password === confirmPass){
     Auth.forgotPasswordSubmit(username, code, new_password)
-    .then(data => setMessgae(true) )
-    .catch(err => setError(true));
+    .then(data => {if(type.includes('business')){
+        return (history.push(`/business/login`),
+        window.location.reload() )
+        }
+        else{
+            return( history.push(`/curator/login`),
+            window.location.reload())  
+        }
+    }
+     )
+    .catch(err => setVerificationErr(err.message), setError(true));
     setPassword('')
     setCode('')
-    e.target.reset()}
+}
     else{
         setPassErr(true)
-        e.target.reset()
     }
    }
 
    const handleChange = e => {
+    setError(false)
+    setPassErr(false)
     if (e.target.id === 'username') {
       setUserName(e.target.value)
       
@@ -79,9 +93,8 @@ if(email === true)
                                 <input type="password" id="conPassword" className="form-control" onChange={e => handleChange(e)} placeholder="Confirm Password"/>
                             </div>
                             <button type="submit" className="btn btn-primary">Submit</button>
-                            {message ?<div className="form-group"><br /><h5>Your password succesfully Changed </h5></div>: null}
-                            {error ?<div className="form-group"><br /><h6> Invalid Verification Code</h6></div>: null}
-                            {passErr ?<div className="form-group"><br /><h6> Password Does not Match</h6></div>: null}
+                            {error ?<div className="form-group"><br /><h6> {verificationErr}</h6></div>: null}
+                            {passErr ?<div className="form-group"><br /><h6> Password Does not match.</h6></div>: null}
                             <div className="login-links-wrapper">
                             { type.includes('business') ?
                             <Link to ='/business/login' className="link-btn">Back to Login</Link> :
@@ -121,7 +134,7 @@ else{
                                 <div className="form-group">
                                     <input type="email" id="username" className="form-control" onChange={e => handleChange(e)} placeholder="Email address"/>
                                 </div>
-                                <button type="submit" className="btn btn-primary">Reset</button>
+                                <button type="submit" className="btn btn-primary">{loader && !emailError ? <ValueLoader />: 'Reset'}</button>
                                 
                                 {emailError ?<div className="form-group"><br /><h6>This Email is not Registered.</h6></div>: null}
                                 <div className="login-links-wrapper">
