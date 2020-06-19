@@ -3,6 +3,7 @@ import './register.css'
 import { Auth } from 'aws-amplify';
 import history from '../../utils/history'
 import {Link} from "react-router-dom";
+import SearchLocationInput  from '../../utils/findYourBusiness'
 
 const Register = (props) => {
      const type = props.match.url
@@ -146,7 +147,7 @@ const Register = (props) => {
                                     <h2> Find Your Business</h2>
                                     <br />
                                     <div className="form-group">
-                                          <input id='business' type='text' placeholder="Business Name"/>
+                                    <SearchLocationInput onChange={() => null} />
                                         </div>
                                     <p>By clicking register, I represent I have read, understand, and agree to the Postmates Privacy Policy and Terms of Service. This site is protected bt reCAPTCHA and google Privacy Policy and Terms of Service apply.</p>
                                 </div>
