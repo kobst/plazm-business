@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-d
 import Login from '../containers/login/index'
 import Register from '../containers/register/index'
 import ForgotPassword from '../containers/forgot-password/index'
+import Dashboard from '../containers/dashboard/index'
 
 
 
@@ -16,8 +17,9 @@ const Routes = () => (
           <Route path="/curator/register" component={Register} />
           <Route path="/business/forgot-password" component={ForgotPassword} />
           <Route path="/curator/forgot-password" component={ForgotPassword} />
+          <Route path="/dashboard" component={Dashboard} />
           <Redirect exact from="/*" to="/business/login" />
-        </Switch>
+      </Switch>
     
   </Router>
 )
