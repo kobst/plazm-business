@@ -10,10 +10,13 @@ import ForgotPassword from '../containers/forgot-password/index'
 const Routes = () => (
   <Router>
     <Switch>
-          <Route path="/login" component={Login} />
-          <Route path="/register" component={Register} />
-          <Route path="/forgot-password" component={ForgotPassword} />
-          <Redirect exact from="/*" to="/login" />
+          <Route path="/business/login" component={Login} />
+          <Route path="/curator/login" component={Login} />
+          <Route path="/business/register" component={Register} />
+          <Route path="/curator/register" component={Register} />
+          <Route path="/business/forgot-password" component={ForgotPassword} />
+          <Route path="/curator/forgot-password" component={ForgotPassword} />
+          <Redirect exact from="/*" to="/business/login" />
         </Switch>
     
   </Router>
