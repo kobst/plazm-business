@@ -131,7 +131,7 @@ const Register = (props) => {
                         <div className="login-form-nested-wrapper">
                             { verified ? ( <form onSubmit={ (e)=> handleSubmit(e) }>
                             <div className="row">
-                                    <div className="col-md-6">
+                                    <div className="col-md-12">
                                     <p> Enter the Confirmation code sent to your Registered Email</p>
                                         <div className="form-group">
                                           <input id='confirmationCode' type='text' onChange={ (e) => handleChange(e)} placeholder="Confirmation Code"/>

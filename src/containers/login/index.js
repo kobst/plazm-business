@@ -3,6 +3,7 @@ import './login.css'
 import { Auth } from 'aws-amplify';
 import {Link} from "react-router-dom";
 import ValueLoader from '../../utils/loader'
+import Input from '../../component/UI/Input/Input'
 
 const Login = (props) => {
     const type = props.match.url
@@ -109,12 +110,13 @@ const Validation = () => {
                     <div className="login-form-nested-wrapper login-fields-spacing"> 
                     <form onSubmit={ (e) => handleSubmit(e) }>
 							<div className="form-group">
-                            <input type="text" id='username' onChange={(e) => handleChange(e)} 
-                            className={userError ? "form-error": "form-control"} placeholder="Email address"/>
+                                <Input type="text" id='username' onChange={(e) => handleChange(e)} 
+                                 error={userError}  placeholder="Email address"/>
 							</div>
                             <div className="form-group">
-                                <input type="password" id='password' onChange={(e) => handleChange(e)}
-                                 className={passwordError ? "form-error": "form-control"} placeholder="Password" />
+
+                                <Input type="password" id='password' onChange={(e) => handleChange(e)}
+                                  error={passwordError} placeholder="Password" />
 							</div>
 							<div className="form-group remember-checkbox">
 								<input type="checkbox" id="rememberMe" />

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import Input from '../component/UI/Input/Input'
       function SearchLocationInput() { 
             const [query, setQuery] = useState("");
             const autoCompleteRef = useRef(null);
@@ -49,7 +50,7 @@ import React, { useState, useEffect, useRef } from "react";
 
         return (
           
-            <input
+            <Input
                 ref={autoCompleteRef}
                 onChange={event => setQuery(event.target.value)}
                 placeholder="Enter Your Business"
