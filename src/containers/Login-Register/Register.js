@@ -6,9 +6,10 @@ import {Link} from "react-router-dom";
 import Input from '../../component/UI/Input/Input'
 import Button from '../../component/UI/Button/Button'
 import SearchLocationInput  from '../../utils/findYourBusiness'
+import ValueLoader from '../../utils/loader'
 
 const Register = (props) => {
-     const type = props.match.url
+    const type = props.match.url
     const [username,setUser]= useState()
     const [password,setPassword]= useState()
     const [verified,setVerified]= useState(false)
@@ -23,6 +24,7 @@ const Register = (props) => {
     const [phoneError, setPhoneError] = useState(false)
     const [passwordError,setPasswordError] = useState(false)
     const [business,setbusiness] = useState(false)
+    const [loader,setLoader] = useState(false)
 
     const signUp = () => {
         Auth.signUp({
@@ -36,6 +38,7 @@ const Register = (props) => {
         })
         .then(() => {
             setVerified(true)
+            setError(false)
         })
         .catch((err) => setMessage(err.message) , setError(true) )
     }
@@ -84,13 +87,11 @@ const Register = (props) => {
         e.preventDefault();
         if (verified) {
             confirmSignUp();
-            setconfirmationCode('')
-            setUser('')
           }
         if(Validation()){
-           signUp();
-          setPassword()
-          setPhoneNumber()
+           setError(false)
+           signUp()
+           setLoader(true)
         }
     }
   
@@ -128,7 +129,7 @@ const Register = (props) => {
                             <h1>Register to Get Started</h1>
                             <p> Start working on your business profile page </p>
                         </div>
-                        {err ?<div class="form-group"><br /><h6>{message}</h6></div>: null}
+                        {err ?<div className="form-group"><br /><h6>{message}</h6></div>: null}
                        
                         <div className="login-form-nested-wrapper">
                             { verified ? ( <form onSubmit={ (e)=> handleSubmit(e) }>
@@ -139,7 +140,7 @@ const Register = (props) => {
                                           <Input id='confirmationCode' type='text' onChange={ (e) => handleChange(e)} placeholder="Confirmation Code"/>
                                         </div>
                                         <Button type="submit" className="btn btn-primary">Confirm Sign up</Button>
-                                        {codeError ?<div class="form-group"><br /><h6>Confirmation code does not match</h6></div>: null}
+                                        {codeError ?<div className="form-group"><br /><h6>Confirmation code does not match</h6></div>: null}
                                      </div>
                           </div>
                         </form> ) :
@@ -172,7 +173,7 @@ const Register = (props) => {
                                 <div className="row">
                                     <div className="col-md-12">
                                         <div className="form-group">
-                                            <Input type="email" id='email' onChange={ (e) => handleChange(e) } 
+                                            <Input type="text" id='email' onChange={ (e) => handleChange(e) } 
                                             error={emailError} placeholder="Email address"/>
                                     
                                         </div>									
@@ -203,7 +204,7 @@ const Register = (props) => {
                             
                                 
     
-                                <Button type="submit" className="btn btn-primary">Register</Button>
+                                <Button type="submit" className="btn btn-primary">{loader && !message? <ValueLoader /> : 'Register'}</Button>
                                 <div className="login-links-wrapper login-links-extra-links">
                                 { type.includes('business') ?
                             <Link to ='/business/login' className="link-btn">Already have an account? <strong>Log In</strong></Link> :
@@ -287,7 +288,7 @@ else{
                                 <div className="row">
                                     <div className="col-md-12">
                                         <div className="form-group">
-                                            <Input type="email" id='email' onChange={ (e) => handleChange(e) } 
+                                            <Input type="text" id='email' onChange={ (e) => handleChange(e) } 
                                             error={emailError} placeholder="Email address"/>
                                            
                                         </div>									
