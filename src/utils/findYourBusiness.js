@@ -49,11 +49,10 @@ import Input from '../component/UI/Input/Input'
         }, []);
 
         return (
-          
             <Input
-                ref={autoCompleteRef}
+                refs={autoCompleteRef}
                 onChange={event => setQuery(event.target.value)}
-                placeholder="Enter Your Business"
+                placeholder="Business Name"
                 value={query}
             />
             

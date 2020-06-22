@@ -1,22 +1,35 @@
 {
   "files": {
-    "main.css": "/static/css/main.fed825b0.chunk.css",
-    "main.js": "/static/js/main.27de2c13.chunk.js",
-    "main.js.map": "/static/js/main.27de2c13.chunk.js.map",
+    "main.css": "/static/css/main.6ddc54f8.chunk.css",
+    "main.js": "/static/js/main.10ab345c.chunk.js",
+    "main.js.map": "/static/js/main.10ab345c.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.b89d9217.js",
     "runtime-main.js.map": "/static/js/runtime-main.b89d9217.js.map",
-    "static/js/2.b17a5759.chunk.js": "/static/js/2.b17a5759.chunk.js",
-    "static/js/2.b17a5759.chunk.js.map": "/static/js/2.b17a5759.chunk.js.map",
+    "static/js/2.42b9cc1f.chunk.js": "/static/js/2.42b9cc1f.chunk.js",
+    "static/js/2.42b9cc1f.chunk.js.map": "/static/js/2.42b9cc1f.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.0ccaba7d0656ba3130525faba3c032c5.js": "/precache-manifest.0ccaba7d0656ba3130525faba3c032c5.js",
+    "precache-manifest.4efb4eae9cb558fbd53113b0c9cd8f6b.js": "/precache-manifest.4efb4eae9cb558fbd53113b0c9cd8f6b.js",
     "service-worker.js": "/service-worker.js",
-    "static/css/main.fed825b0.chunk.css.map": "/static/css/main.fed825b0.chunk.css.map",
-    "static/js/2.b17a5759.chunk.js.LICENSE.txt": "/static/js/2.b17a5759.chunk.js.LICENSE.txt"
+    "static/css/main.6ddc54f8.chunk.css.map": "/static/css/main.6ddc54f8.chunk.css.map",
+    "static/js/2.42b9cc1f.chunk.js.LICENSE.txt": "/static/js/2.42b9cc1f.chunk.js.LICENSE.txt",
+    "static/media/arrow-left.svg": "/static/media/arrow-left.a3f1b152.svg",
+    "static/media/comment.svg": "/static/media/comment.8e9f9660.svg",
+    "static/media/cross.svg": "/static/media/cross.c5717ac2.svg",
+    "static/media/down-arrow.svg": "/static/media/down-arrow.afee6954.svg",
+    "static/media/facebook.svg": "/static/media/facebook.63bc58cd.svg",
+    "static/media/instagram.svg": "/static/media/instagram.0288de58.svg",
+    "static/media/like.svg": "/static/media/like.8a18e7da.svg",
+    "static/media/linkedin.svg": "/static/media/linkedin.9469ccc9.svg",
+    "static/media/pin.svg": "/static/media/pin.8efc2b1b.svg",
+    "static/media/plus.svg": "/static/media/plus.9f0d2b0a.svg",
+    "static/media/search.svg": "/static/media/search.56759190.svg",
+    "static/media/send.svg": "/static/media/send.7de60657.svg",
+    "static/media/twitter.svg": "/static/media/twitter.6ff6c7b8.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.b89d9217.js",
-    "static/js/2.b17a5759.chunk.js",
-    "static/css/main.fed825b0.chunk.css",
-    "static/js/main.27de2c13.chunk.js"
+    "static/js/2.42b9cc1f.chunk.js",
+    "static/css/main.6ddc54f8.chunk.css",
+    "static/js/main.10ab345c.chunk.js"
   ]
 }

@@ -1,9 +1,9 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-import Login from '../containers/login/index'
-import Register from '../containers/register/index'
-import ForgotPassword from '../containers/forgot-password/index'
-import Dashboard from '../containers/dashboard/index'
+import Login from '../containers/Login-Register/Login'
+import Register from '../containers/Login-Register/Register'
+import ForgotPassword from '../containers/Login-Register/Forgot-password'
+import Dashboard from '../containers/Dashboard'
 
 
 

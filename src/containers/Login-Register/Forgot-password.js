@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
-import './forgot-password.css'
+import './style.css'
 import { Auth } from 'aws-amplify';
 import history from '../../utils/history'
 import {Link} from 'react-router-dom'
+import Input from '../../component/UI/Input/Input'
+import Button from '../../component/UI/Button/Button'
 import ValueLoader from '../../utils/loader'
 
 const ForgotPassword = (props) => {
@@ -16,6 +18,10 @@ const ForgotPassword = (props) => {
     const [emailError,setEmailError] = useState(false)
     const [passErr,setPassErr] = useState(false)
     const [verificationErr,setVerificationErr] = useState()
+    const [codeErr,setcodeErr] = useState(false)
+    const [newPassErr,setNewPassErr] = useState(false)
+    const [confirmPassErr,setConfirmPassErr] = useState(false)
+
     const [loader,setLoader] = useState(false)
 
     const submitEmail = e => {
@@ -31,7 +37,7 @@ const ForgotPassword = (props) => {
         e.preventDefault()
         setError(false)
         setPassErr(false)
-    if(new_password === confirmPass){
+    if(new_password === confirmPass && Validation()){
     Auth.forgotPasswordSubmit(username, code, new_password)
     .then(data => {if(type.includes('business')){
         return (history.push(`/business/login`),
@@ -47,13 +53,31 @@ const ForgotPassword = (props) => {
     setPassword('')
     setCode('')
 }
-    else{
+    else if(new_password!== confirmPass){
         setPassErr(true)
     }
    }
+   const Validation = () => {
+    if(!code){
+        setcodeErr(true)
+    }
+    if(!new_password){
+        setNewPassErr(true)
+    }
+    if(!confirmPass){
+        setConfirmPassErr(true)
+    }
+    else{
+        return true
+    }
+
+}
 
    const handleChange = e => {
     setError(false)
+    setcodeErr(false)
+    setNewPassErr(false)
+    setConfirmPassErr(false)
     setPassErr(false)
     if (e.target.id === 'username') {
       setUserName(e.target.value)
@@ -84,15 +108,15 @@ if(email === true)
                     <div className="login-form-nested-wrapper">
                         <form onSubmit = {e => submitPassword(e)}>
                             <div className="form-group">
-                                <input type="text" id="code" className="form-control" onChange={e => handleChange(e)} placeholder="Verification Code"/>
+                                <Input type="text" id="code" error={codeErr} onChange={e => handleChange(e)} placeholder="Confirmation Code"/>
                             </div>
                             <div className="form-group">
-                                <input type="password" id="password" className="form-control" onChange={e => handleChange(e)} placeholder="New Password"/>
+                                <Input type="password" id="password" error={newPassErr} onChange={e => handleChange(e)} placeholder="New Password"/>
                             </div>
                             <div className="form-group">
-                                <input type="password" id="conPassword" className="form-control" onChange={e => handleChange(e)} placeholder="Confirm Password"/>
+                                <Input type="password" id="conPassword" error={confirmPassErr} onChange={e => handleChange(e)} placeholder="Confirm Password"/>
                             </div>
-                            <button type="submit" className="btn btn-primary">Submit</button>
+                            <Button type="submit" className="btn btn-primary">Submit</Button>
                             {error ?<div className="form-group"><br /><h6> {verificationErr}</h6></div>: null}
                             {passErr ?<div className="form-group"><br /><h6> Password Does not match.</h6></div>: null}
                             <div className="login-links-wrapper">
@@ -132,9 +156,9 @@ else{
                         <div className="login-form-nested-wrapper">
                             <form onSubmit = {e => submitEmail(e)}>
                                 <div className="form-group">
-                                    <input type="email" id="username" className="form-control" onChange={e => handleChange(e)} placeholder="Email address"/>
+                                    <Input type="email" id="username" onChange={e => handleChange(e)} placeholder="Email address"/>
                                 </div>
-                                <button type="submit" className="btn btn-primary">{loader && !emailError ? <ValueLoader />: 'Reset'}</button>
+                                <Button type="submit" className="btn btn-primary">{loader && !emailError ? <ValueLoader />: 'Reset'}</Button>
                                 
                                 {emailError ?<div className="form-group"><br /><h6>This Email is not Registered.</h6></div>: null}
                                 <div className="login-links-wrapper">

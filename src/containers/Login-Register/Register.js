@@ -1,8 +1,10 @@
 import React, {useState} from 'react'
-import './register.css'
+import './style.css'
 import { Auth } from 'aws-amplify';
 import history from '../../utils/history'
 import {Link} from "react-router-dom";
+import Input from '../../component/UI/Input/Input'
+import Button from '../../component/UI/Button/Button'
 import SearchLocationInput  from '../../utils/findYourBusiness'
 
 const Register = (props) => {
@@ -134,9 +136,9 @@ const Register = (props) => {
                                     <div className="col-md-12">
                                     <p> Enter the Confirmation code sent to your Registered Email</p>
                                         <div className="form-group">
-                                          <input id='confirmationCode' type='text' onChange={ (e) => handleChange(e)} placeholder="Confirmation Code"/>
+                                          <Input id='confirmationCode' type='text' onChange={ (e) => handleChange(e)} placeholder="Confirmation Code"/>
                                         </div>
-                                        <button type="submit" className="btn btn-primary">Confirm Sign up</button>
+                                        <Button type="submit" className="btn btn-primary">Confirm Sign up</Button>
                                         {codeError ?<div class="form-group"><br /><h6>Confirmation code does not match</h6></div>: null}
                                      </div>
                           </div>
@@ -145,22 +147,22 @@ const Register = (props) => {
                                 <div className="row">
                                     <div className="col-md-6">
                                         <div className="form-group">
-                                            <input type="text" id="username" onChange={ (e) => handleChange(e) }
-                                             className={firstNameError ? "form-error": "form-control"} placeholder="First Name"/>
+                                            <Input type="text" id="username" onChange={ (e) => handleChange(e) }
+                                             error = {firstNameError} placeholder="First Name"/>
                                                            
                                         </div>									
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group">
-                                            <input id="last_name" onChange={ (e) => handleChange(e)} type="text" className="form-control" placeholder="Last Name"/>
+                                            <Input id="last_name" onChange={ (e) => handleChange(e)} type="text" placeholder="Last Name"/>
                                         </div>									
                                     </div>								
                                 </div>
                                 <div className="row">
                                     <div className="col-md-12">
                                         <div className="form-group">
-                                            <input id='phone_number' onChange={ (e) => handleChange(e) } 
-                                            className={phoneError ? "form-error": "form-control"} placeholder="Phone Number"/>
+                                            <Input id='phone_number' onChange={ (e) => handleChange(e) } 
+                                            error={phoneError} placeholder="Phone Number"/>
                                         </div>									
                                     </div>
                                 </div>		
@@ -170,8 +172,8 @@ const Register = (props) => {
                                 <div className="row">
                                     <div className="col-md-12">
                                         <div className="form-group">
-                                            <input type="email" id='email' onChange={ (e) => handleChange(e) } 
-                                            className={emailError ? "form-error": "form-control"} placeholder="Email address"/>
+                                            <Input type="email" id='email' onChange={ (e) => handleChange(e) } 
+                                            error={emailError} placeholder="Email address"/>
                                     
                                         </div>									
                                     </div>
@@ -181,8 +183,8 @@ const Register = (props) => {
                                 <div className="row">
                                     <div className="col-md-12">
                                         <div className="form-group">
-                                            <input type="password" id="password" onChange={ (e) => handleChange(e) } 
-                                            className={passwordError ? "form-error": "form-control"} placeholder="Password"/>
+                                            <Input type="password" id="password" onChange={ (e) => handleChange(e) } 
+                                            error={passwordError} placeholder="Password"/>
                                         </div>									
                                     </div>
                                 </div>
@@ -193,7 +195,7 @@ const Register = (props) => {
                                     <h2 onClick= {()=> setbusiness(true)}> Find Your Business</h2>
                                     <br />
                                     <div className="form-group">
-                                    {business ? <SearchLocationInput className="form-control" onChange={() => null} />: null }
+                                    {business ? <SearchLocationInput onChange={() => null} />: null }
                                         </div>
                                     <p>By clicking register, I represent I have read, understand, and agree to the Postmates Privacy Policy and Terms of Service. This site is protected bt reCAPTCHA and google Privacy Policy and Terms of Service apply.</p>
                                 </div>
@@ -201,7 +203,7 @@ const Register = (props) => {
                             
                                 
     
-                                <button type="submit" className="btn btn-primary">Register</button>
+                                <Button type="submit" className="btn btn-primary">Register</Button>
                                 <div className="login-links-wrapper login-links-extra-links">
                                 { type.includes('business') ?
                             <Link to ='/business/login' className="link-btn">Already have an account? <strong>Log In</strong></Link> :
@@ -259,22 +261,22 @@ else{
                                 <div className="row">
                                     <div className="col-md-6">
                                         <div className="form-group">
-                                            <input type="text" id="username" onChange={ (e) => handleChange(e) } 
-                                            className={firstNameError ? "form-error": "form-control"} placeholder="First Name"/>
+                                            <Input type="text" id="username" onChange={ (e) => handleChange(e) } 
+                                            error={firstNameError} placeholder="First Name"/>
                                         
                                         </div>									
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group">
-                                            <input id="last_name" onChange={ (e) => handleChange(e)} type="text" className="form-control" placeholder="Last Name"/>
+                                            <Input id="last_name" onChange={ (e) => handleChange(e)} type="text" placeholder="Last Name"/>
                                         </div>									
                                     </div>								
                                 </div>
                                 <div className="row">
                                     <div className="col-md-12">
                                         <div className="form-group">
-                                            <input id='phone_number' onChange={ (e) => handleChange(e) } 
-                                           className={phoneError ? "form-error": "form-control"} placeholder="Phone Number"/>
+                                            <Input id='phone_number' onChange={ (e) => handleChange(e) } 
+                                           error={phoneError} placeholder="Phone Number"/>
                                           
                                         </div>									
                                     </div>
@@ -285,8 +287,8 @@ else{
                                 <div className="row">
                                     <div className="col-md-12">
                                         <div className="form-group">
-                                            <input type="email" id='email' onChange={ (e) => handleChange(e) } 
-                                            className={emailError ? "form-error": "form-control"} placeholder="Email address"/>
+                                            <Input type="email" id='email' onChange={ (e) => handleChange(e) } 
+                                            error={emailError} placeholder="Email address"/>
                                            
                                         </div>									
                                     </div>
@@ -296,8 +298,8 @@ else{
                                 <div className="row">
                                     <div className="col-md-12">
                                         <div className="form-group">
-                                            <input type="password" id="password" onChange={ (e) => handleChange(e) } 
-                                            className={passwordError ? "form-error": "form-control"} placeholder="Password"/>
+                                            <Input type="password" id="password" onChange={ (e) => handleChange(e) } 
+                                            error={passwordError} placeholder="Password"/>
                                            
                                         </div>									
                                     </div>
@@ -311,7 +313,7 @@ else{
                             
                                 
     
-                                <button type="submit" className="btn btn-primary">Register</button>
+                                <Button type="submit" className="btn btn-primary">Register</Button>
                                  {err ?<div className="form-group"><br /><h6>{message}</h6></div>: null}
                                 <div className="login-links-wrapper login-links-extra-links">
                                 { type.includes('business') ?

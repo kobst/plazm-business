@@ -17,7 +17,7 @@ padding:0 15px;
 
 const Input = (props) => {
     return(
-    <InputText usererror = {props.error}/>
+    <InputText ref={props.refs} {...props} usererror = {props.error}/>
     )
 }
 

@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react'
-import './login.css'
+import './style.css'
 import { Auth } from 'aws-amplify';
 import {Link} from "react-router-dom";
 import ValueLoader from '../../utils/loader'
 import Input from '../../component/UI/Input/Input'
+import Button from '../../component/UI/Button/Button'
 
 const Login = (props) => {
     const type = props.match.url
@@ -122,7 +123,7 @@ const Validation = () => {
 								<input type="checkbox" id="rememberMe" />
 								<label htmlFor="rememberMe">Remember me</label>
 							</div>	
-                            <button type="submit" className="btn btn-primary">{loader && !message? <ValueLoader /> : 'Login'}</button>
+                            <Button type="submit" className="btn btn-primary">{loader && !message? <ValueLoader /> : 'Login'}</Button>
     
                             <div className="login-links-wrapper login-links-extra-links">
                             { type.includes('business') ?
