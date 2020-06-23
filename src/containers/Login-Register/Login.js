@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 import ValueLoader from '../../utils/loader'
 import Input from '../../component/UI/Input/Input'
 import Button from '../../component/UI/Button/Button'
+import history from '../../utils/history'
 
 const Login = (props) => {
     const type = props.match.url
@@ -21,22 +22,23 @@ const Login = (props) => {
         let updateUser = async authState => {
           try {
              await Auth.currentAuthenticatedUser()
-            setSignedIn(true)
+             setSignedIn(true)
             
           } catch {
-           
+             setSignedIn(false)
           }
         }
         updateUser()
-      }, []);
+      }, [signedIn]);
 
     const signIn = () => {
         Auth.signIn({
             username: user,
             password: password
         })
-        .then(() =>{  setSignedIn(true) 
-    })
+        .then(() =>( history.push('/dashboard'),
+        window.location.reload() 
+        ))
         .catch((err) => setmessage(err.message),setError(true))
     }
 
@@ -83,18 +85,6 @@ const Validation = () => {
 
 
   
-    if (signedIn) {
-        return (
-            <div>
-                <h1>You have signed in!</h1>
-                <button type="submit" onClick = {() => (
-                    // eslint-disable-next-line no-sequences
-                    Auth.signOut(),
-                    window.location.reload())} className="btn btn-primary">  <Link to ='/register' ></Link>Logout</button>
-            </div>
-        );
-    } 
-    else{
 
     return(
     <div className="login-wrapper">
@@ -107,7 +97,7 @@ const Validation = () => {
 						<h1>Howdy! Welcome Back</h1>
 						<p> login to start working on your business profile page </p>
 					</div>
-                    {error ?<div class="form-group"><br /><h6>{message}</h6></div>: null}
+                    {error ?<div className="form-group"><br /><h6>{message}</h6></div>: null}
                     <div className="login-form-nested-wrapper login-fields-spacing"> 
                     <form onSubmit={ (e) => handleSubmit(e) }>
 							<div className="form-group">
@@ -149,7 +139,6 @@ const Validation = () => {
     </div>
     </div>
     )
-    }
 }
 
 export default Login

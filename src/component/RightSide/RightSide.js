@@ -10,6 +10,8 @@ import Listing from '../UI/Listing/Listing'
 import Search from '../UI/Search/Search'
 import Messages from '../UI/Messages/Messages'
 import ChatBox from '../UI/ChatBox/ChatBox'
+import { Auth } from 'aws-amplify';
+import {Link} from "react-router-dom";
 
 const RightSection = styled.div`
 margin-left: 30px;
@@ -87,6 +89,8 @@ const RightSide = () => {
     <RightSection>
       <Card>
         <Heading name="Event" />
+        <button type="submit" onClick = {() => (
+                    Auth.signOut() )} className="btn btn-primary">  <Link to ='/business/login' >Logout</Link></button>
         <Events />
       </Card>
 
