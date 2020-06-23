@@ -1,17 +1,18 @@
 import React, {useState, useEffect} from 'react'
 import './style.css'
 import { Auth } from 'aws-amplify';
-import {Link} from "react-router-dom";
-import ValueLoader from '../../utils/loader'
-import Input from '../../component/UI/Input/Input'
-import Button from '../../component/UI/Button/Button'
+import {getMessage} from '../../config'
+
 import history from '../../utils/history'
+import Wrapper from '../../component/Login-Register/Wrapper'
+import LoginForm from '../../component/Login-Register/Form-Components/Login-Form'
+
+const renderMessage= getMessage()
 
 const Login = (props) => {
     const type = props.match.url
     const [user,setUser]= useState()
     const [password,setPassword]= useState()
-    const [signedIn,setSignedIn]= useState(false)
     const [error,setError] = useState(false)
     const [userError,setuserError] = useState(false)
     const [passwordError, setPasswordError] = useState(false)
@@ -22,14 +23,16 @@ const Login = (props) => {
         let updateUser = async authState => {
           try {
              await Auth.currentAuthenticatedUser()
-             setSignedIn(true)
+             history.push('/dashboard')
+             window.location.reload() 
             
           } catch {
-             setSignedIn(false)
+             console.log(message)
           }
         }
         updateUser()
-      }, [signedIn]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, []);
 
     const signIn = () => {
         Auth.signIn({
@@ -50,11 +53,10 @@ const Login = (props) => {
 
     const handleSubmit = e => {
         e.preventDefault()
+        setError(false)
         if(Validation()){
          setLoader(true)
          signIn()
-         setUser('')
-         setPassword('')
         }
 }
 
@@ -73,6 +75,8 @@ const Validation = () => {
 
    const handleChange = e => {
        setError(false)
+       setmessage()
+       setLoader(false)
        setuserError(false)
        setPasswordError(false)
         if (e.target.id === 'username') {
@@ -84,60 +88,21 @@ const Validation = () => {
     }
 
 
-  
 
     return(
-    <div className="login-wrapper">
-        <div className="container-fluid">
-        <div className="row">
-        <div className="col-md-6 cover-image"> </div>
-			<div className="col-md-6">
-                <div className="login-form-wrapper">
-					<div className="login-form-header">
-						<h1>Howdy! Welcome Back</h1>
-						<p> login to start working on your business profile page </p>
-					</div>
-                    {error ?<div className="form-group"><br /><h6>{message}</h6></div>: null}
-                    <div className="login-form-nested-wrapper login-fields-spacing"> 
-                    <form onSubmit={ (e) => handleSubmit(e) }>
-							<div className="form-group">
-                                <Input type="text" id='username' onChange={(e) => handleChange(e)} 
-                                 error={userError}  placeholder="Email address"/>
-							</div>
-                            <div className="form-group">
-
-                                <Input type="password" id='password' onChange={(e) => handleChange(e)}
-                                  error={passwordError} placeholder="Password" />
-							</div>
-							<div className="form-group remember-checkbox">
-								<input type="checkbox" id="rememberMe" />
-								<label htmlFor="rememberMe">Remember me</label>
-							</div>	
-                            <Button type="submit" className="btn btn-primary">{loader && !message? <ValueLoader /> : 'Login'}</Button>
-    
-                            <div className="login-links-wrapper login-links-extra-links">
-                            { type.includes('business') ?
-                            <Link to ='/business/register' >Don't have an account? <strong>Signup</strong></Link> :
-                             <Link to ='/curator/register' >Don't have an account? <strong>Signup</strong></Link>
-                             }
-                               { type.includes('business') ?
-                            <Link to ='/business/forgot-password' >Forgot Password</Link> :
-                             <Link to ='/curator/forgot-password' >Forgot Password</Link>
-                             }
-							</div> 
-							
-						</form>
-                    
-                    
-                    </div>
-
-            </div>
-        
-
-            </div>
-        </div>
-    </div>
-    </div>
+        <Wrapper heading={renderMessage.Welcome} welcomeMessage={renderMessage.Login_Mess} >
+            <LoginForm
+                  type ={type}
+                  error={error}
+                  userError={userError}
+                  passwordError={passwordError}
+                  loader={loader}
+                  message={message}
+                  handleChange={handleChange}
+                  handleSubmit={handleSubmit}
+                  />
+                  </Wrapper>
+   
     )
 }
 

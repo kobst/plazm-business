@@ -2,11 +2,11 @@ import React, {useState} from 'react'
 import './style.css'
 import { Auth } from 'aws-amplify';
 import history from '../../utils/history'
-import {Link} from "react-router-dom";
-import Input from '../../component/UI/Input/Input'
-import Button from '../../component/UI/Button/Button'
-import SearchLocationInput  from '../../utils/findYourBusiness'
-import ValueLoader from '../../utils/loader'
+import Wrapper from '../../component/Login-Register/Wrapper'
+import RegisterForm from '../../component/Login-Register/Form-Components/Register-Form'
+import {getMessage} from '../../config'
+
+const renderMessage= getMessage()
 
 const Register = (props) => {
     const type = props.match.url
@@ -20,6 +20,7 @@ const Register = (props) => {
     const [message,setMessage] = useState()
     const [codeError,setCodeError] = useState(false)
     const [firstNameError,setFirstNameError] = useState(false)
+    const [firstError,setFirstError] = useState(false)
     const [emailError,setEmailError] = useState(false)
     const [phoneError, setPhoneError] = useState(false)
     const [passwordError,setPasswordError] = useState(false)
@@ -68,6 +69,12 @@ const Register = (props) => {
         if(!username){
             setFirstNameError(true)
         }
+        if(username){
+            console.log('true')
+            if(username.length<3){
+            setFirstError(true)
+            }
+        }
         if(!phone_number){
             setPhoneError(true)
         }
@@ -85,10 +92,13 @@ const Register = (props) => {
   
    const handleSubmit = (e) => {
         e.preventDefault();
+        setMessage()
         if (verified) {
+            setMessage()
             confirmSignUp();
           }
-        if(Validation()){
+        if(!verified && Validation()){
+            setMessage()
            setError(false)
            signUp()
            setLoader(true)
@@ -97,6 +107,7 @@ const Register = (props) => {
   
     const handleChange = (e) => {
         setFirstNameError(false)
+        setFirstError(false)
         setPhoneError(false)
         setEmailError(false)
         setPasswordError(false)
@@ -115,233 +126,30 @@ const Register = (props) => {
         }
     }
 
-    if(type.includes('business')){
     return(
-        <div className="login-wrapper">
-        <div className="container-fluid">
-            <div className="row">			
-                <div className="col-md-6 cover-image"> </div>
-                <div className="col-md-6">
-                    
-                    <div className="login-form-wrapper">
-                    
-                        <div className="login-form-header">
-                            <h1>Register to Get Started</h1>
-                            <p> Start working on your business profile page </p>
-                        </div>
-                        {err ?<div className="form-group"><br /><h6>{message}</h6></div>: null}
-                       
-                        <div className="login-form-nested-wrapper">
-                            { verified ? ( <form onSubmit={ (e)=> handleSubmit(e) }>
-                            <div className="row">
-                                    <div className="col-md-12">
-                                    <p> Enter the Confirmation code sent to your Registered Email</p>
-                                        <div className="form-group">
-                                          <Input id='confirmationCode' type='text' onChange={ (e) => handleChange(e)} placeholder="Confirmation Code"/>
-                                        </div>
-                                        <Button type="submit" className="btn btn-primary">Confirm Sign up</Button>
-                                        {codeError ?<div className="form-group"><br /><h6>Confirmation code does not match</h6></div>: null}
-                                     </div>
-                          </div>
-                        </form> ) :
-                            <form onSubmit={ (e)=> handleSubmit(e) }>
-                                <div className="row">
-                                    <div className="col-md-6">
-                                        <div className="form-group">
-                                            <Input type="text" id="username" onChange={ (e) => handleChange(e) }
-                                             error = {firstNameError} placeholder="First Name"/>
-                                                           
-                                        </div>									
-                                    </div>
-                                    <div className="col-md-6">
-                                        <div className="form-group">
-                                            <Input id="last_name" onChange={ (e) => handleChange(e)} type="text" placeholder="Last Name"/>
-                                        </div>									
-                                    </div>								
-                                </div>
-                                <div className="row">
-                                    <div className="col-md-12">
-                                        <div className="form-group">
-                                            <Input id='phone_number' onChange={ (e) => handleChange(e) } 
-                                            error={phoneError} placeholder="Phone Number"/>
-                                        </div>									
-                                    </div>
-                                </div>		
-    
-            
-                                
-                                <div className="row">
-                                    <div className="col-md-12">
-                                        <div className="form-group">
-                                            <Input type="text" id='email' onChange={ (e) => handleChange(e) } 
-                                            error={emailError} placeholder="Email address"/>
-                                    
-                                        </div>									
-                                    </div>
-                                </div>	
-    
-    
-                                <div className="row">
-                                    <div className="col-md-12">
-                                        <div className="form-group">
-                                            <Input type="password" id="password" onChange={ (e) => handleChange(e) } 
-                                            error={passwordError} placeholder="Password"/>
-                                        </div>									
-                                    </div>
-                                </div>
-    
-    
-                          
-                                <div className="find-your-business-wrapper">
-                                    <h2 onClick= {()=> setbusiness(true)}> Find Your Business</h2>
-                                    <br />
-                                    <div className="form-group">
-                                    {business ? <SearchLocationInput onChange={() => null} />: null }
-                                        </div>
-                                    <p>By clicking register, I represent I have read, understand, and agree to the Postmates Privacy Policy and Terms of Service. This site is protected bt reCAPTCHA and google Privacy Policy and Terms of Service apply.</p>
-                                </div>
-                        
-                            
-                                
-    
-                                <Button type="submit" className="btn btn-primary">{loader && !message? <ValueLoader /> : 'Register'}</Button>
-                                <div className="login-links-wrapper login-links-extra-links">
-                                { type.includes('business') ?
-                            <Link to ='/business/login' className="link-btn">Already have an account? <strong>Log In</strong></Link> :
-                            <Link to ='/curator/login' className="link-btn">Already have an account? <strong>Log In</strong></Link>
-                             }
-                                
-                                </div>
-                          							
-    
-                                
-                            </form>
-}
-                        </div>
-                  
-    
-                    </div>
-              
-    
-                    
-                </div>			
-            </div>
-        </div>
-    </div>
-    )
-}
-else{
-    return(
-        <div className="login-wrapper">
-        <div className="container-fluid">
-            <div className="row">			
-                <div className="col-md-6 cover-image"> </div>
-                <div className="col-md-6">
-                    
-                    <div className="login-form-wrapper">
-                    
-                        <div className="login-form-header">
-                            <h1>Register to Get Started</h1>
-                            <p> Start working on your business profile page </p>
-                        </div>
-                       
-                        <div className="login-form-nested-wrapper">
-                            { verified ? ( <form onSubmit={ (e)=> handleSubmit(e) }>
-                            <div className="row">
-                                    <div className="col-md-6">
-                                    <p> Enter the Confirmation code sent to your Registered Email</p>
-                                        <div className="form-group">
-                                          <input id='confirmationCode' type='text' onChange={ (e) => handleChange(e)} placeholder="Confirmation Code"/>
-                                        </div>
-                                        <button type="submit" className="btn btn-primary">Sign up</button>
-                                        {codeError ?<div className="form-group"><br /><h6>Confirmation code does not match</h6></div>: null}
-                                     </div>
-                          </div>
-                        </form> ) :
-                            <form onSubmit={ (e)=> handleSubmit(e) }>
-                                <div className="row">
-                                    <div className="col-md-6">
-                                        <div className="form-group">
-                                            <Input type="text" id="username" onChange={ (e) => handleChange(e) } 
-                                            error={firstNameError} placeholder="First Name"/>
-                                        
-                                        </div>									
-                                    </div>
-                                    <div className="col-md-6">
-                                        <div className="form-group">
-                                            <Input id="last_name" onChange={ (e) => handleChange(e)} type="text" placeholder="Last Name"/>
-                                        </div>									
-                                    </div>								
-                                </div>
-                                <div className="row">
-                                    <div className="col-md-12">
-                                        <div className="form-group">
-                                            <Input id='phone_number' onChange={ (e) => handleChange(e) } 
-                                           error={phoneError} placeholder="Phone Number"/>
-                                          
-                                        </div>									
-                                    </div>
-                                </div>		
-    
-            
-                                
-                                <div className="row">
-                                    <div className="col-md-12">
-                                        <div className="form-group">
-                                            <Input type="text" id='email' onChange={ (e) => handleChange(e) } 
-                                            error={emailError} placeholder="Email address"/>
-                                           
-                                        </div>									
-                                    </div>
-                                </div>	
-    
-    
-                                <div className="row">
-                                    <div className="col-md-12">
-                                        <div className="form-group">
-                                            <Input type="password" id="password" onChange={ (e) => handleChange(e) } 
-                                            error={passwordError} placeholder="Password"/>
-                                           
-                                        </div>									
-                                    </div>
-                                </div>
-    
-    
-                          
-                                <div className="find-your-business-wrapper">
-                                    <p>By clicking register, I represent I have read, understand, and agree to the Postmates Privacy Policy and Terms of Service. This site is protected bt reCAPTCHA and google Privacy Policy and Terms of Service apply.</p>
-                                </div>
-                            
-                                
-    
-                                <Button type="submit" className="btn btn-primary">Register</Button>
-                                 {err ?<div className="form-group"><br /><h6>{message}</h6></div>: null}
-                                <div className="login-links-wrapper login-links-extra-links">
-                                { type.includes('business') ?
-                            <Link to ='/business/login' className="link-btn">Already have an account? <strong>Log In</strong></Link> :
-                            <Link to ='/curator/login' className="link-btn">Already have an account? <strong>Log In</strong></Link>
-                             }
-                                
-                                </div>
-                          							
-    
-                                
-                            </form>
-}
-                        </div>
-                  
-    
-                    </div>
-              
-    
-                    
-                </div>			
-            </div>
-        </div>
-    </div>
+        <Wrapper heading={renderMessage.Reg} welcomeMessage={renderMessage.New_Reg}>
+            <RegisterForm
+                  type ={type}
+                  err={err}
+                  firstError={firstError}
+                  passwordError={passwordError}
+                  loader={loader}
+                  message={message}
+                  handleChange={handleChange}
+                  handleSubmit={handleSubmit}
+                  verified={verified}
+                  business={business}
+                  setbusiness={setbusiness}
+                  codeError={codeError}
+                  firstNameError={firstNameError}
+                  phoneError={phoneError}
+                  emailError={emailError}
+                  />
+        </Wrapper>
+   
     )
 
-}
+
 }
 
 export default Register
