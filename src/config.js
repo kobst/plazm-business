@@ -20,6 +20,7 @@ return{
     "Log_Link":"Back to Login",
     "Submit":"Submit",
     "Email_Msg":"Enter the email address you registered with and we'll send you instruction to Reset your password",
-    "Email_Err":"This Email is not Registered."
+    "Email_Err":"This Email is not Registered.",
+    "Busi_Err":"The business you are trying to add is associated with an account. If you are the owner of the business and would like to reclaim the business for yourself, please send an email to support@metagon.com along with Proof",
 }
 }

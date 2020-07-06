@@ -1,5 +1,6 @@
 
-import React from 'react'
+import React, {useEffect, useState} from 'react'
+import { Auth } from 'aws-amplify';
 import styled from 'styled-components'
 import ProfileImage from '../ProfileImage/ProfileImage'
 import SubHeading from '../SubHeading/SubHeading'
@@ -7,6 +8,8 @@ import Facebook from '../../../Public/images/facebook.svg'
 import Twitter from '../../../Public/images/twitter.svg'
 import Instagram from '../../../Public/images/instagram.svg'
 import Linkedin from '../../../Public/images/linkedin.svg'
+import ModalBox from '../../Edit-Business/index'
+
 
 const LeftSidebar = styled.div`
   width:270px;
@@ -58,42 +61,76 @@ img{
 }
 `
 const Sidebar = () => {
+  const [placeValue,setPlace] = useState({})
+  const [isOpen, setIsOpen] = useState(false)
+
+
+const callPlace = async(userSub) => {
+  const response= await fetch(`${process.env.REACT_APP_API_URL}/api/place-fetch/${userSub}`, {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+const body = await response.text();
+const val = JSON.parse(body)
+return val
+}
+
+  
+// eslint-disable-next-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    let updateUser = async authState => {
+      try {
+         const value = await Auth.currentAuthenticatedUser()
+        const place = await callPlace(value.attributes.sub)
+        setPlace(place[0])
+      } catch (err){
+         console.log(err)
+      }
+    }
+    updateUser()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+ 
   return (
 
     <LeftSidebar>
-      <ProfileImage />
+      <ProfileImage name={placeValue.company_name} setIsOpen={setIsOpen} />
       <Listing>
         <SubHeading name="Address" />
-        <p>110 Cedar St, New York, NY 10006</p>
+        <p>{placeValue.address}</p>
+        <ModalBox value={placeValue} isOpen={isOpen} data='' closeModal={()=> setIsOpen(false)} />
       </Listing>
       <Listing>
         <SubHeading name="Website" />
-        <p>www.stevepizza.com</p>
+        <p>{placeValue.web_site?placeValue.web_site:'-'}</p>
       </Listing>
       <Listing>
-        <SubHeading name="General Type" />
-        <p>Restaurant</p>
+        <SubHeading name="Type" />
+        <p>{placeValue.type?placeValue.type:'-'}</p>
       </Listing>
       <Listing>
-        <SubHeading name="Specific Type" />
-        <p>-</p>
+        <SubHeading name="Status" />
+        <p>{placeValue.status?placeValue.status:'-'}</p>
       </Listing>
       <Listing>
         <SubHeading name="Phone" />
-        <p>202 619 3062</p>
+        <p>{placeValue.telephone?placeValue.telephone:'-'}</p>
       </Listing>
       <Listing>
         <SubHeading name="Opening Hours" />
-        <p><span>Monday - Friday</span><span>8 am - 9 pm</span></p>
-        <p><span>Saturday - Sunday</span><span>Closed</span></p>
+        <p><span>Monday - Friday</span><span> </span></p>
+        <p><span>Saturday - Sunday</span><span> </span></p>
       </Listing>
 
       <Listing>
         <SubHeading name="Hashtags" />
-          <Badges>Comfort food</Badges>
-          <Badges>Quick bite</Badges>
-          <Badges>Bar</Badges>
-          <Badges>Longe</Badges>
+          <Badges></Badges>
+          <Badges></Badges>
+          <Badges></Badges>
+          <Badges></Badges>
       </Listing>
       <Listing>
         <SubHeading name="Social Media" />

@@ -43,7 +43,7 @@ p{
 ` 
 
 
-const RegisterForm = ({verified,err,firstError, business,loader,setbusiness,message,type,locationError,codeError,firstNameError,phoneError,emailError,passwordError,handleChange,handleSubmit}) => {
+const RegisterForm = ({verified,err,firstError, business,loader,setbusiness,setBusinessInfo,setName, message,type,locationError,codeError,firstNameError,phoneError,emailError,passwordError,handleChange,handleSubmit}) => {
 return (
     <>
     {err ?<FormGroup><br /><h6>{message}</h6></FormGroup>: null}
@@ -99,7 +99,7 @@ return (
         <h2 onClick= {()=> setbusiness(true)}> Find Your Business</h2>
         <br />
         <FormGroup>
-        <SearchLocationInput id="location" error={locationError} handleChange={handleChange} /> 
+        <SearchLocationInput id="location" error={locationError} handleChange={handleChange} setBusinessInfo={setBusinessInfo} setName={setName} /> 
             </FormGroup>
             </>
          : null}

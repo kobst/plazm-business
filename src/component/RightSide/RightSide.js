@@ -12,6 +12,10 @@ import Messages from '../UI/Messages/Messages'
 import ChatBox from '../UI/ChatBox/ChatBox'
 import { Auth } from 'aws-amplify';
 import {Link} from "react-router-dom";
+import { Calendar, momentLocalizer } from 'react-big-calendar'
+import moment from 'moment'
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+
 
 const RightSection = styled.div`
 margin-left: 30px;
@@ -83,7 +87,7 @@ margin-top: 20px;
 height: 300px;
 overflow-y: auto;
 `
-
+const localizer = momentLocalizer(moment)
 const RightSide = () => {
   return (
     <RightSection>
@@ -92,6 +96,25 @@ const RightSide = () => {
         <button type="submit" onClick = {() => (
                     Auth.signOut() )} className="btn btn-primary">  <Link to ='/business/login' >Logout</Link></button>
         <Events />
+       <div>
+    <Calendar
+      localizer={localizer}
+      events={[
+        {
+          'title': 'My event',
+          'allDay': false,
+          'start': new Date(2020, 0, 7, 10, 0), // 10.00 AM
+          'end': new Date(2020, 0, 7, 14, 0), // 2.00 PM 
+        }
+      ]}
+      startAccessor="start"
+      endAccessor="end"
+      step={60}
+      view='week'
+      views={['week']}
+      style={{ height: 400, width:800 }}
+    />
+  </div>
       </Card>
 
       <Row>
