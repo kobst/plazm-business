@@ -39,6 +39,7 @@ const Login = (props) => {
             username: user,
             password: password
         })
+        // eslint-disable-next-line no-sequences
         .then(() =>( history.push('/dashboard'),
         window.location.reload() 
         ))
