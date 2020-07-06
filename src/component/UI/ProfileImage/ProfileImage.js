@@ -22,14 +22,14 @@ margin-top:10px;
 font-family: 'Roboto', sans-serif;
 `
 
-const ProfileImage = () => {
+const ProfileImage = ({name,setIsOpen}) => {
     return(
       <ProfileSection>
        <ProfileImg/>
-       <Heading name="Steve’s Pizza" />
+       <Heading name={name} />
        <SubHeading name="Followers" />
-       <Numbers>121</Numbers>
-       <Button buttontext="Edit Profile" />
+       <Numbers>-</Numbers>
+       <Button buttontext="Edit Profile" onClick ={() => setIsOpen(true)} > Edit </Button>
        </ProfileSection>
     )
 }

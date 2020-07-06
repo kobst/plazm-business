@@ -2,3 +2,47 @@ body, html{font-family: 'Roboto',sans-serif; height: 100%; background-color:#eee
 .input-error{
   border-color: red;
 }
+.Modal {
+  max-width:990px;
+  border-radius: 5px;
+  width:100%;
+  background-color: #fff;
+  padding:1.5em 1.5em 3.5em;
+  margin: 20px 0 20px;
+  height: auto;
+  border-radius: 5px;
+  top:0px;
+  position: relative;
+  max-height: 95%;
+  overflow: auto;
+}
+.Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: auto;
+}
+.ReactModal__Html--open {
+  overflow-y: hidden;
+}
+.ModalHeader {
+  padding: 0px;
+}
+.ContentModal{
+  margin-top:10px;
+  height: calc(100vh - 100px);
+  margin-bottom: 10px;
+}
+
+.ContentModal label{
+  margin-top: 15px;
+  margin-bottom: 15px;
+  }
+
+

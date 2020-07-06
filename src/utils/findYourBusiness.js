@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Input from '../component/UI/Input/Input'
-      function SearchLocationInput() { 
+      function SearchLocationInput({id,handleChange,error,setBusinessInfo,setName}) { 
             const [query, setQuery] = useState("");
             const autoCompleteRef = useRef(null);
             let autoComplete;
@@ -28,7 +28,6 @@ import Input from '../component/UI/Input/Input'
                           autoComplete = new window.google.maps.places.Autocomplete(
                           autoCompleteRef.current
                         );
-                          autoComplete.setFields(["address_components", "formatted_address","name"]);
                           autoComplete.addListener("place_changed", () =>
                          handlePlaceSelect(updateQuery)
                         );
@@ -37,7 +36,10 @@ import Input from '../component/UI/Input/Input'
                 async function handlePlaceSelect(updateQuery) {
                      const addressObject = autoComplete.getPlace();
                      const value = addressObject.name
-                     updateQuery(value);
+                     console.log(addressObject)
+                     setBusinessInfo(addressObject)
+                     setName(value)
+                     updateQuery(value)
                 }
 
             useEffect(() => {
@@ -50,8 +52,10 @@ import Input from '../component/UI/Input/Input'
 
         return (
             <Input
+                error={error}
+                id={id}
                 refs={autoCompleteRef}
-                onChange={event => setQuery(event.target.value)}
+                onChange={event => (setQuery(event.target.value), handleChange(event))}
                 placeholder="Business Name"
                 value={query}
             />

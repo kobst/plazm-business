@@ -2,10 +2,11 @@ import React, { useState } from 'react'
 import './style.css'
 import { Auth } from 'aws-amplify';
 import history from '../../utils/history'
-import {Link} from 'react-router-dom'
-import Input from '../../component/UI/Input/Input'
-import Button from '../../component/UI/Button/Button'
-import ValueLoader from '../../utils/loader'
+import Wrapper from '../../component/Login-Register/Wrapper'
+import ForgotPasswordForm from '../../component/Login-Register/Form-Components/Forgot-Password-Form'
+import {getMessage} from '../../config'
+
+const renderMessage= getMessage()
 
 const ForgotPassword = (props) => {
     const type = props.match.url
@@ -21,7 +22,6 @@ const ForgotPassword = (props) => {
     const [codeErr,setcodeErr] = useState(false)
     const [newPassErr,setNewPassErr] = useState(false)
     const [confirmPassErr,setConfirmPassErr] = useState(false)
-
     const [loader,setLoader] = useState(false)
 
     const submitEmail = e => {
@@ -50,8 +50,6 @@ const ForgotPassword = (props) => {
     }
      )
     .catch(err => setVerificationErr(err.message), setError(true));
-    setPassword('')
-    setCode('')
 }
     else if(new_password!== confirmPass){
         setPassErr(true)
@@ -93,97 +91,28 @@ const ForgotPassword = (props) => {
       }
 }
 
-if(email === true)
-{ return(
-    <div className="login-wrapper">
-    <div className="container-fluid">
-        <div className="row">			
-            <div className="col-md-6 cover-image"> </div>
-            <div className="col-md-6">
-                <div className="login-form-wrapper">
-                    <div className="login-form-header">
-                        <h1>Reset Password </h1>
-                        <p> Enter the code sent to your Registered Email And also Enter your new password </p>
-                    </div>
-                    <div className="login-form-nested-wrapper">
-                        <form onSubmit = {e => submitPassword(e)}>
-                            <div className="form-group">
-                                <Input type="text" id="code" error={codeErr} onChange={e => handleChange(e)} placeholder="Confirmation Code"/>
-                            </div>
-                            <div className="form-group">
-                                <Input type="password" id="password" error={newPassErr} onChange={e => handleChange(e)} placeholder="New Password"/>
-                            </div>
-                            <div className="form-group">
-                                <Input type="password" id="conPassword" error={confirmPassErr} onChange={e => handleChange(e)} placeholder="Confirm Password"/>
-                            </div>
-                            <Button type="submit" className="btn btn-primary">Submit</Button>
-                            {error ?<div className="form-group"><br /><h6> {verificationErr}</h6></div>: null}
-                            {passErr ?<div className="form-group"><br /><h6> Password Does not match.</h6></div>: null}
-                            <div className="login-links-wrapper">
-                            { type.includes('business') ?
-                            <Link to ='/business/login' className="link-btn">Back to Login</Link> :
-                            <Link to ='/curator/login' className="link-btn">Back to Login</Link>
-                             }
-                            </div>
-                        
-                            
-                        </form>
-                    </div>
-            
+ return(
+     <Wrapper heading={renderMessage.Reset} welcomeMessage={email?renderMessage.Res_Message:renderMessage.Email_Msg}>
+         <ForgotPasswordForm 
+         type = {type}
+         email ={email}
+         loader= {loader} 
+         submitPassword = {submitPassword}
+         codeErr= {codeErr}
+         error = {error}
+         passErr =  {passErr}
+         newPassErr = {newPassErr}
+         emailError={emailError}
+         confirmPassErr= {confirmPassErr}
+         verificationErr={verificationErr}
+         handleChange={handleChange}
+         submitEmail={submitEmail}
+         
+         />
+         </Wrapper>
 
-                </div>
-
-                
-            </div>			
-        </div>
-    </div>
-</div>
-)
-
-}
-else{
-    return(
-        <div className="login-wrapper">
-        <div className="container-fluid">
-            <div className="row">			
-                <div className="col-md-6 cover-image"> </div>
-                <div className="col-md-6">
-                    <div className="login-form-wrapper">
-                        <div className="login-form-header">
-                            <h1>Reset Password </h1>
-                            <p> Enter the email address you registered with and we'll send you instruction to Reset your password </p>
-                        </div>
-                        <div className="login-form-nested-wrapper">
-                            <form onSubmit = {e => submitEmail(e)}>
-                                <div className="form-group">
-                                    <Input type="email" id="username" onChange={e => handleChange(e)} placeholder="Email address"/>
-                                </div>
-                                <Button type="submit" className="btn btn-primary">{loader && !emailError ? <ValueLoader />: 'Reset'}</Button>
-                                
-                                {emailError ?<div className="form-group"><br /><h6>This Email is not Registered.</h6></div>: null}
-                                <div className="login-links-wrapper">
-                            { type.includes('business') ?
-                            <Link to ='/business/login' className="link-btn">Back to Login</Link> :
-                            <Link to ='/curator/login' className="link-btn">Back to Login</Link>
-                             }
-                            </div>
-                            
-                                
-                            </form>
-                        </div>
-                
+ )
     
-                    </div>
-    
-                    
-                </div>			
-            </div>
-        </div>
-    </div>
-    )
-
-}
-    
-}
+ }
 
 export default ForgotPassword
