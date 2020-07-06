@@ -43,7 +43,7 @@ p{
 ` 
 
 
-const RegisterForm = ({verified,err,firstError, business,loader,setbusiness,message,type,codeError,firstNameError,phoneError,emailError,passwordError,handleChange,handleSubmit}) => {
+const RegisterForm = ({verified,err,firstError, business,loader,setbusiness,message,type,locationError,codeError,firstNameError,phoneError,emailError,passwordError,handleChange,handleSubmit}) => {
 return (
     <>
     {err ?<FormGroup><br /><h6>{message}</h6></FormGroup>: null}
@@ -94,11 +94,15 @@ return (
 
 
     <FindYourBusinessWrapper>
+        {type.includes('business') ?
+        <>
         <h2 onClick= {()=> setbusiness(true)}> Find Your Business</h2>
         <br />
         <FormGroup>
-        {business ? <SearchLocationInput onChange={() => null} />: null }
+        <SearchLocationInput id="location" error={locationError} handleChange={handleChange} /> 
             </FormGroup>
+            </>
+         : null}
         <p>By clicking register, I represent I have read, understand, and agree to the Postmates Privacy Policy and Terms of Service. This site is protected bt reCAPTCHA and google Privacy Policy and Terms of Service apply.</p>
     </FindYourBusinessWrapper>
 
