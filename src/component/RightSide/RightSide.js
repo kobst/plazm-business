@@ -102,9 +102,9 @@ const RightSide = () => {
       events={[
         {
           'title': 'My event',
-          'allDay': false,
-          'start': new Date(2020, 0, 7, 10, 0), // 10.00 AM
-          'end': new Date(2020, 0, 7, 14, 0), // 2.00 PM 
+          'allDay': true,
+          'start': new Date(2020, 0, 7, 10, 0),
+          'end': new Date(2020, 0, 7, 14, 0),
         }
       ]}
       startAccessor="start"

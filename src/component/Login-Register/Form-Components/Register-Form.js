@@ -54,7 +54,7 @@ return (
             <FormGroup>
               <Input id='confirmationCode' type='text' onChange={ (e) => handleChange(e)} placeholder="Confirmation Code"/>
             </FormGroup>
-            <Button type="submit" className="btn btn-primary">Confirm Sign up</Button>
+            <Button type="submit" className="btn btn-primary">{loader && !codeError? <ValueLoader /> : 'Confirm Sign up'}</Button>
             {codeError ?<div className="form-group"><br /><h6>Confirmation code does not match</h6></div>: null}
          </div>
 </Row>

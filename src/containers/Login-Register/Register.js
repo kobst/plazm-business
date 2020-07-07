@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState,useEffect} from 'react'
 import './style.css'
 import { Auth } from 'aws-amplify';
 import history from '../../utils/history'
@@ -31,6 +31,19 @@ const Register = (props) => {
     const [locationError,setLocError]= useState(false)
     const [business,setbusiness] = useState(false)
     const [loader,setLoader] = useState(false)
+    useEffect(() => {
+        let updateUser = async authState => {
+          try {
+             await Auth.currentAuthenticatedUser()
+             history.push('/dashboard')
+             window.location.reload() 
+            
+          } catch {
+          }
+        }
+        updateUser()
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, []);
     
 
     const signUp = () => {
@@ -48,6 +61,7 @@ const Register = (props) => {
             if(await checkBusiness(res.userSub)){
             setVerified(true)
             setError(false)
+            setLoader(false)
             }
             else{
                 setError(true)
@@ -55,20 +69,30 @@ const Register = (props) => {
 
             }
         })
-        .catch((err) => setMessage(err.message) , setError(true) )
-    }
-  
-    const confirmSignUp = () => {
-        Auth.confirmSignUp(email, confirmationCode)
-        .then(() => {
-            if(type.includes('business')){
-            return (history.push(`/business/login`),
-            window.location.reload() )
+        .catch((err) => {
+            if(err.message.includes('phone'))
+            {  
+                return(setMessage(renderMessage.phone_Err) , setError(true)) 
             }
             else{
-                return( history.push(`/curator/login`),
-                window.location.reload())  
+                return(setMessage(err.message) , setError(true))
+                
             }
+    })
+    }
+  
+    const confirmSignUp =() => {
+        Auth.confirmSignUp(email, confirmationCode)
+        .then(() => {
+            Auth.signIn({
+                username: email,
+                password: password
+            })
+            // eslint-disable-next-line no-sequences
+            .then(() =>( history.push('/dashboard'),
+            window.location.reload() 
+            ))
+            .catch((err) => console.log(err))
         })
         .catch((err) => setCodeError(true))
     }
@@ -112,6 +136,7 @@ const Register = (props) => {
         if (verified) {
             setMessage()
             confirmSignUp();
+            setLoader(true)
           }
         if(!verified && Validation()){
            setMessage()
@@ -156,7 +181,7 @@ const Register = (props) => {
         } else if (e.target.id === 'phone_number') {
           setPhoneNumber(e.target.value)
         } else if (e.target.id === 'email') {
-          setEmail(e.target.value)
+          setEmail(e.target.value.trim())
         } else if (e.target.id === 'confirmationCode') {
           setconfirmationCode(e.target.value)
         }
