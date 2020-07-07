@@ -36,7 +36,6 @@ import Input from '../component/UI/Input/Input'
                 async function handlePlaceSelect(updateQuery) {
                      const addressObject = autoComplete.getPlace();
                      const value = addressObject.name
-                     console.log(addressObject)
                      setBusinessInfo(addressObject)
                      setName(value)
                      updateQuery(value)
@@ -55,6 +54,7 @@ import Input from '../component/UI/Input/Input'
                 error={error}
                 id={id}
                 refs={autoCompleteRef}
+                // eslint-disable-next-line no-sequences
                 onChange={event => (setQuery(event.target.value), handleChange(event))}
                 placeholder="Business Name"
                 value={query}

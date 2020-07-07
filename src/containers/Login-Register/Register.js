@@ -5,7 +5,7 @@ import history from '../../utils/history'
 import Wrapper from '../../component/Login-Register/Wrapper'
 import RegisterForm from '../../component/Login-Register/Form-Components/Register-Form'
 import {getMessage} from '../../config'
-
+import {callApi,addBusiness, updateBusiness} from '../../Api'
 
 const renderMessage= getMessage()
 
@@ -121,74 +121,19 @@ const Register = (props) => {
         
     }
 }
-    const callApi = async() => {
-        const response= await fetch(`${process.env.REACT_APP_API_URL}/api/place/${name}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const body = await response.text();
-      return JSON.parse(body)
-    }
-
-    const addBusiness = async (userSub) => {
-        const response= await fetch(`${process.env.REACT_APP_API_URL}/api/place`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                
-                    status: businessInfo.business_status,
-                    userAddress: businessInfo.formatted_address,
-                    telephone: businessInfo.international_phone_number,
-                    companyName:businessInfo.name,
-                    placeId: businessInfo.place_id,
-                    mapLink:businessInfo.url,
-                    rating: businessInfo.rating,
-                    website: businessInfo.website,
-                    userSub: userSub,
-                    latitude: businessInfo.geometry.location.lat(),
-                    longitude: businessInfo.geometry.location.lng(),
-                
-          })
-        });
-          const body = await response.text();
-          return body
-
-    }
-    const updateBusiness = async (id,userSub) => {
-        const response= await fetch(`${process.env.REACT_APP_API_URL}/api/place`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({  
-                _id:id,
-                userSub: userSub,
-                    
-                
-          })
-        });
-          const body = await response.text();
-          console.log(body)
-          return body
-
-    }
 
     const checkBusiness = async(userSub) => {
-        const val = await callApi()
+        const val = await callApi(name)
         if(val.length!==0 && val[0].userSub){
            return false
 
         }
         else if(val.length === 0){
-            await addBusiness(userSub)
+            await addBusiness(userSub,businessInfo)
             return true
         }
         else if(val.length!==0 && !val[0].userSub){
-            await updateBusiness(val[0]._id,userSub)
+            await updateBusiness(val[0],userSub)
             return true
 
     }

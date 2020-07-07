@@ -1,7 +1,7 @@
 
 import React from 'react'
 import styled from 'styled-components'
-import PlusIcon from '../../../Public/images/plus.svg'
+// import PlusIcon from '../../../Public/images/plus.svg'
 
 const ButtonText = styled.button`
 height: 37px;

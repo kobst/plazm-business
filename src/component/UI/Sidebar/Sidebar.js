@@ -9,6 +9,7 @@ import Twitter from '../../../Public/images/twitter.svg'
 import Instagram from '../../../Public/images/instagram.svg'
 import Linkedin from '../../../Public/images/linkedin.svg'
 import ModalBox from '../../Edit-Business/index'
+import {callPlace} from '../../../Api'
 
 
 const LeftSidebar = styled.div`
@@ -65,21 +66,6 @@ const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false)
 
 
-const callPlace = async(userSub) => {
-  const response= await fetch(`${process.env.REACT_APP_API_URL}/api/place-fetch/${userSub}`, {
-  method: 'GET',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-const body = await response.text();
-const val = JSON.parse(body)
-return val
-}
-
-  
-// eslint-disable-next-line react-hooks/exhaustive-deps
-
   useEffect(() => {
     let updateUser = async authState => {
       try {
@@ -97,11 +83,11 @@ return val
   return (
 
     <LeftSidebar>
-      <ProfileImage name={placeValue.company_name} setIsOpen={setIsOpen} />
+      <ProfileImage name={placeValue.company_name?placeValue.company_name:'-'} setIsOpen={setIsOpen} />
       <Listing>
         <SubHeading name="Address" />
         <p>{placeValue.address}</p>
-        <ModalBox value={placeValue} isOpen={isOpen} data='' closeModal={()=> setIsOpen(false)} />
+        <ModalBox value={placeValue} isOpen={isOpen} setIsOpen={setIsOpen} data='' closeModal={()=> setIsOpen(false)} />
       </Listing>
       <Listing>
         <SubHeading name="Website" />
