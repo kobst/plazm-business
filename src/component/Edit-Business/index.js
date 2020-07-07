@@ -9,7 +9,7 @@ Modal.setAppElement('#root')
 
 
 
-const ModalBox = ({ data, value, isOpen, closeModal }) => {
+const ModalBox = ({value, isOpen,setIsOpen,closeModal }) => {
   const [company,setCompany] = useState()
   const [website,setWebsite] = useState()
   const [phone,setPhone] = useState()
@@ -81,12 +81,13 @@ const ModalBox = ({ data, value, isOpen, closeModal }) => {
       })
     });
       const body = await response.text();
-      console.log(body)
+      window.location.reload() 
       return body
 
 }
 
 const handleSubmit = () => {
+  setIsOpen(false)
   updateBusiness()
 
 }
