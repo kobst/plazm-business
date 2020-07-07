@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './style.css'
 import { Auth } from 'aws-amplify';
 import history from '../../utils/history'
@@ -23,6 +23,20 @@ const ForgotPassword = (props) => {
     const [newPassErr,setNewPassErr] = useState(false)
     const [confirmPassErr,setConfirmPassErr] = useState(false)
     const [loader,setLoader] = useState(false)
+    
+    useEffect(() => {
+        let updateUser = async authState => {
+          try {
+             await Auth.currentAuthenticatedUser()
+             history.push('/dashboard')
+             window.location.reload() 
+            
+          } catch {
+          }
+        }
+        updateUser()
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, []);
 
     const submitEmail = e => {
         e.preventDefault()
@@ -78,7 +92,7 @@ const ForgotPassword = (props) => {
     setConfirmPassErr(false)
     setPassErr(false)
     if (e.target.id === 'username') {
-      setUserName(e.target.value)
+      setUserName(e.target.value.trim())
       
     } else if (e.target.id === 'password') {
       setPassword(e.target.value)
