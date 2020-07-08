@@ -41,7 +41,6 @@ const ForgotPasswordForm = ({type,email,con,conMessage,loader, submitPassword,co
                  <Button type="submit" className="btn btn-primary">{renderMessage.Submit}</Button>
                 {error ?<FormGroup><br /><h6> {verificationErr}</h6></FormGroup>: null}
                 {passErr ?<FormGroup><br /><h6> {renderMessage.Pass_Err} </h6></FormGroup>: null}
-                {passErr ?<FormGroup><br /><h6> {renderMessage.Pass_Err} </h6></FormGroup>: null}
                 {con ?<FormGroup><br /><h5> {renderMessage.con} </h5></FormGroup>: null}
                 <Links>
                 { type.includes('business') ?
