@@ -57,17 +57,13 @@ const Register = (props) => {
             }
         })
         .then(async(res) => {
-        
-            if(await checkBusiness(res.userSub)){
+            if(res.userSub){
+         if(await checkUser(res.userSub)){
             setVerified(true)
             setError(false)
             setLoader(false)
             }
-            else{
-                setError(true)
-                setMessage(renderMessage.Busi_Err) 
-
-            }
+        }
         })
         .catch((err) => {
             if(err.message.includes('phone'))
@@ -108,13 +104,24 @@ const Register = (props) => {
             setFirstNameError(true)
         }
         if(username){
-            if(username.length<3){
+            if(username.length<=3){
             setFirstError(true)
             }
         }
         if(!loc){
             setLocError(true)
         }
+        if(loc){
+        if(!name){
+            setError(true)
+            setMessage(renderMessage.Err)
+
+        } else if(!businessInfo){
+            setError(true)
+            setMessage(renderMessage.Err)
+
+        }
+    }
         if(!phone_number){
             setPhoneError(true)
         }
@@ -124,13 +131,13 @@ const Register = (props) => {
         if(!password){
             setPasswordError(true)
         }
-        else if(username && loc && phone_number && validateEmail(email) && password ){
+        if(username && loc && username.length>3 && phone_number && validateEmail(email) && password && name ){
             return true
         }
 
     }
   
-   const handleSubmit = (e) => {
+   const handleSubmit = async (e) => {
         e.preventDefault();
         setMessage()
         if (verified) {
@@ -139,30 +146,44 @@ const Register = (props) => {
             setLoader(true)
           }
         if(!verified && Validation()){
+            setLoader(true)
+            if(await checkBusiness()){
            setMessage()
            setError(false)
            signUp()
-           setLoader(true)
+            }
+            else{
+                setError(true)
+                setMessage(renderMessage.Busi_Err)
+
+            }
         
     }
 }
 
-    const checkBusiness = async(userSub) => {
+    const checkBusiness = async() => {
+        
         const val = await callApi(name)
         if(val.length!==0 && val[0].userSub){
            return false
 
         }
-        else if(val.length === 0){
-            await addBusiness(userSub,businessInfo)
+        else{
             return true
         }
-        else if(val.length!==0 && !val[0].userSub){
-            await updateBusiness(val[0],userSub)
-            return true
-
-    }
+        
 }
+  const checkUser = async(userSub) => {
+     const val = await callApi(name)
+     if(val.length === 0){
+     await addBusiness(userSub,businessInfo)
+     return true
+  }
+  else if(val.length!==0 && !val[0].userSub){
+     await updateBusiness(val[0],userSub)
+     return true
+}
+ }
     const handleChange = (e) => {
         setFirstNameError(false)
         setFirstError(false)

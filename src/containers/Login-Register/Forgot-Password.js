@@ -22,6 +22,7 @@ const ForgotPassword = (props) => {
     const [codeErr,setcodeErr] = useState(false)
     const [newPassErr,setNewPassErr] = useState(false)
     const [confirmPassErr,setConfirmPassErr] = useState(false)
+    const [con,setCon] = useState(false)
     const [loader,setLoader] = useState(false)
     
     useEffect(() => {
@@ -54,6 +55,7 @@ const ForgotPassword = (props) => {
     if(new_password === confirmPass && Validation()){
     Auth.forgotPasswordSubmit(username, code, new_password)
     .then(data => {if(type.includes('business')){
+        setCon(true)
         return (history.push(`/business/login`),
         window.location.reload() )
         }
@@ -109,6 +111,7 @@ const ForgotPassword = (props) => {
      <Wrapper heading={renderMessage.Reset} welcomeMessage={email?renderMessage.Res_Message:renderMessage.Email_Msg}>
          <ForgotPasswordForm 
          type = {type}
+         con={con}
          email ={email}
          loader= {loader} 
          submitPassword = {submitPassword}
