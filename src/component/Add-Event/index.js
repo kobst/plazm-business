@@ -60,7 +60,26 @@ const AddModalBox = ({isOpen,value,data,editValue,setEdit,setIsOpen,closeModal }
       return body
 
 }
-const handleEdit=()=> {
+const handleEdit= async () => {
+  const response= await fetch(`${process.env.REACT_APP_API_URL}/api/items`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        _id:id,
+        name:title,
+        place_id:data._id,
+        scheduledEvent:"yes",
+        recurring:recurring,
+        start_time:start,
+        end_time:end
+    })
+  });
+    const body = await response.text();
+    window.location.reload() 
+    console.log(body)
+    return body
 
 }
 
