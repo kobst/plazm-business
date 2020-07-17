@@ -23,7 +23,7 @@ h6{
 
 
 const renderMessage = getMessage()
-const ForgotPasswordForm = ({type,email,con,conMessage,loader, submitPassword,codeErr,error,passErr,newPassErr,emailError, confirmPassErr,verificationErr,handleChange,submitEmail}) => {
+const ForgotPasswordForm = ({type,email,con,loader, submitPassword,codeErr,error,passErr,newPassErr,emailError, confirmPassErr,verificationErr,handleChange,submitEmail}) => {
   
     return (
       <>

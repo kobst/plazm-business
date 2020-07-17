@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import styled from 'styled-components'
 import Heading from '../UI/Heading/Heading'
 import Card from '../UI/Card/Card'
@@ -12,8 +12,12 @@ import Messages from '../UI/Messages/Messages'
 import ChatBox from '../UI/ChatBox/ChatBox'
 import { Auth } from 'aws-amplify';
 import {Link} from "react-router-dom";
+import AddModalBox from '../Add-Event/index'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
+import {callPlace,fetchItems} from '../../Api'
+import ValueLoader from '../../utils/loader'
+import { RRule } from 'rrule'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 
@@ -89,6 +93,114 @@ overflow-y: auto;
 `
 const localizer = momentLocalizer(moment)
 const RightSide = () => {
+  const [isOpen, setIsOpen] = useState(false)
+  const [place,setPlace]= useState({})
+  const [event,setEvent]= useState()
+  const [details,setDetails]= useState() 
+  const [edit , setEdit]= useState(false)
+  useEffect(() => {
+    let updateUser = async authState => {
+      try {
+         const value = await Auth.currentAuthenticatedUser()
+        const place = await callPlace(value.attributes.sub)
+        setPlace(place[0])
+        if(place){
+        const val = await fetchItems(place[0]._id)
+        const sol = val.filter(v=> v.eventSchedule!==null)
+        eventManage(sol)
+        }
+      } catch (err){
+         console.log(err)
+      }
+    }
+    updateUser()
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+ 
+  const eventManage= (sol)=> {
+    let eventArr = []
+      // eslint-disable-next-line array-callback-return
+      sol.map(v => {
+        console.log(v)
+        if(v.eventSchedule.recurring==='weekly'){
+        const weeklyStartRule =new RRule({
+        freq: RRule.WEEKLY,
+       dtstart: new Date(v.eventSchedule.start_time),
+       count: 30,
+       interval: 1
+       })
+       const weeklyEndRule =new RRule({
+        freq: RRule.WEEKLY,
+       dtstart: new Date(v.eventSchedule.end_time),
+       count: 30,
+       interval: 1
+       })
+       weeklyStartRule.all().forEach((num1, index) => {
+        const num2 = weeklyEndRule.all()[index];
+        eventArr.push({
+          id:v._id,
+          title:v.name,
+          start:num1,
+          end: num2,
+        })
+      });
+     setEvent(eventArr)
+      }
+     else if(v.eventSchedule.recurring==='daily'){
+      const dailyStartRule =new RRule({
+        freq: RRule.DAILY,
+       dtstart: new Date(v.eventSchedule.start_time),
+       count: 30,
+       interval: 1
+       })
+       const dailyEndRule =new RRule({
+        freq: RRule.DAILY,
+       dtstart: new Date(v.eventSchedule.end_time),
+       count: 30,
+       interval: 1
+       })
+       dailyStartRule.all().forEach((num1, index) => {
+        const num2 = dailyEndRule.all()[index];
+        eventArr.push({
+          id:v._id,
+          title:v.name,
+          start:num1,
+          end: num2,
+        })
+      });
+     setEvent(eventArr)
+     }
+    else if(v.eventSchedule.recurring==='mondayFriday'){
+      const weekDayStartRule = new RRule({
+        freq: RRule.WEEKLY,
+        dtstart: new Date(v.eventSchedule.start_time),
+        count: 60,
+        interval: 1,
+        byweekday: [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR]
+      })
+      const weekDayEndRule = new RRule({
+        freq: RRule.WEEKLY,
+        dtstart: new Date(v.eventSchedule.end_time),
+        count: 60,
+        interval: 1,
+        byweekday: [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR]
+      })
+      weekDayStartRule.all().forEach((num1, index) => {
+        const num2 = weekDayEndRule.all()[index];
+        eventArr.push({
+          id:v._id,
+          title:v.name,
+          start:num1,
+          end: num2,
+        })
+      });
+     setEvent(eventArr)
+    }
+  })
+}
+
+  
   return (
     <RightSection>
       <Card>
@@ -96,26 +208,38 @@ const RightSide = () => {
         <button type="submit" onClick = {() => (
                     Auth.signOut() )} className="btn btn-primary">  <Link to ='/business/login' >Logout</Link></button>
         <Events />
+        <AddModalBox editValue={edit} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={()=> (setEdit(false),setIsOpen(false))} />
        <div>
+         {typeof event !== 'undefined' ?
     <Calendar
       localizer={localizer}
-      events={[
-        {
-          'title': 'My event',
-          'allDay': true,
-          'start': new Date(2020, 0, 7, 10, 0),
-          'end': new Date(2020, 0, 7, 14, 0),
-        }
-      ]}
+      events={event}
       startAccessor="start"
       endAccessor="end"
+      onSelectEvent={(e)=> (
+        // eslint-disable-next-line no-sequences
+        setEdit(true),
+        setIsOpen(true),
+        setDetails(e)
+      ) }
       step={60}
       view='week'
       views={['week']}
       style={{ height: 400, width:800 }}
-    />
+    /> : <ValueLoader height="100" width="100"/>
+         }
   </div>
       </Card>
+      <Card >
+        <Button onClick ={() => setIsOpen(true)}>Add Events</Button>
+    </Card>
+    <Card >
+        <h2>All Events</h2>
+          <h3>Discussion</h3>
+          <h4>9th july- 10th July</h4>
+          <h3>New event</h3>
+          <h4>12th july- 13th July</h4>
+    </Card>
 
       <Row>
         {/* Left card */}
@@ -127,7 +251,7 @@ const RightSide = () => {
           <TextArea placeholder="Type your post here" />
           <FlexRow>
             <LineButton name="Public" />
-            <Anchor>cancle</Anchor>
+            <Anchor>cancel</Anchor>
             <Button buttontext="Publish"><BsChevronDown /></Button>
           </FlexRow>
 
