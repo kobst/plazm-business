@@ -19,8 +19,9 @@ padding: 0 10px;
 min-width: 95px;
 cursor:pointer;
 border:none;
-:hover{
+:hover,:focus{
   background: rgba(0,0,0,0.9);
+  outline:none;
 }
 `
 
