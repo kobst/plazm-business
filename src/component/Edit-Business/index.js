@@ -132,33 +132,33 @@ const handleSubmit = () => {
         htmlOpenClassName="ReactModal__Html--open"
       >
         <div className="ModalHeader">
-          <button onClick={closeModal}>
+          {/* <button onClick={closeModal}>
             <img src={closeIcon} alt="Close" />
-          </button>
+          </button> */}
           <h3>Edit Business Profile</h3>
         </div>
         <div className="ContentModal">
-          <label>Business Name</label>
-        <Input type="text" id='company' value={company}  onChange={ (e) => handleChange(e)} />
-        <label>Address</label>
+
+        <Input type="text" id='company' placeholder="Business Name" value={company}  onChange={ (e) => handleChange(e)} />
         <Input type="text" id='add' placeholder="Address" value={userAddress}  onChange={ (e) => handleChange(e)} />
-        <label>Website</label>
         <Input type="text" id='website' placeholder="Website" value={website}  onChange={ (e) => handleChange(e)} />
-        <label>Phone Number</label>
+
         <Input type="text" id='phone' placeholder="Phone Number" value={phone}  onChange={ (e) => handleChange(e)} />
-        <label>Rating</label>
+
         <Input type="text" id='rating' placeholder="Rating" value={rating}  onChange={ (e) => handleChange(e)} />
-        <label>Map Link</label>
+
         <Input type="text" id='map' placeholder="Map Link" value={map}  onChange={ (e) => handleChange(e)} />
-        <label>Type</label>
+
         <Input type="text" id='type' placeholder="Type" value={type}  onChange={ (e) => handleChange(e)} />
-        <label>Status</label>
+
         <Input type="text" id='status' placeholder="Status" value={status}  onChange={ (e) => handleChange(e)} />
-        <label>Latitude</label>
+
         <Input type="text" id='lat' placeholder="Latitude" value={latitude}  onChange={ (e) => handleChange(e)} />
-        <label>Longitude</label>
         <Input type="text" id='long' placeholder="Longitude" value={longitude}  onChange={ (e) => handleChange(e)} />
-        <Button onClick={() => handleSubmit()} type="submit" className="btn btn-primary">Save</Button>
+        <div className="modalButton">
+          <Button onClick={closeModal} type="submit" className="btn btn-primary cancel">Cancel</Button>
+          <Button onClick={() => handleSubmit()} type="submit" className="btn btn-primary">Save</Button>
+          </div>
         </div>
       </Modal>
     </div>
