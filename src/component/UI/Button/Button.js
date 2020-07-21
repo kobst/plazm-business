@@ -1,7 +1,7 @@
 
 import React from 'react'
 import styled from 'styled-components'
-import PlusIcon from '../../../Public/images/plus.svg'
+// import PlusIcon from '../../../Public/images/plus.svg'
 
 const ButtonText = styled.button`
 height: 37px;
@@ -19,8 +19,9 @@ padding: 0 10px;
 min-width: 95px;
 cursor:pointer;
 border:none;
-:hover{
+:hover,:focus{
   background: rgba(0,0,0,0.9);
+  outline:none;
 }
 `
 

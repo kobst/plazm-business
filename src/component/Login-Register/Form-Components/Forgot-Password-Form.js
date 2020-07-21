@@ -12,6 +12,9 @@ margin-bottom:35px;
 h6{
     color: red;
   }
+  h5{
+    color: green;
+  }
 
   @media(max-width:899px){
     margin-bottom: 25px;
@@ -20,7 +23,7 @@ h6{
 
 
 const renderMessage = getMessage()
-const ForgotPasswordForm = ({type,email,loader, submitPassword,codeErr,error,passErr,newPassErr,emailError, confirmPassErr,verificationErr,handleChange,submitEmail}) => {
+const ForgotPasswordForm = ({type,email,con,loader,emError, submitPassword,codeErr,error,passErr,newPassErr,emailError, confirmPassErr,verificationErr,handleChange,submitEmail}) => {
   
     return (
       <>
@@ -38,6 +41,7 @@ const ForgotPasswordForm = ({type,email,loader, submitPassword,codeErr,error,pas
                  <Button type="submit" className="btn btn-primary">{renderMessage.Submit}</Button>
                 {error ?<FormGroup><br /><h6> {verificationErr}</h6></FormGroup>: null}
                 {passErr ?<FormGroup><br /><h6> {renderMessage.Pass_Err} </h6></FormGroup>: null}
+                {con ?<FormGroup><br /><h5> {renderMessage.con} </h5></FormGroup>: null}
                 <Links>
                 { type.includes('business') ?
                 <Link to ='/business/login' className="link-btn">{renderMessage.Log_Link} </Link> :
@@ -51,7 +55,7 @@ const ForgotPasswordForm = ({type,email,loader, submitPassword,codeErr,error,pas
 
         <form onSubmit = {e => submitEmail(e)}>
                 <FormGroup>
-                    <Input type="email" id="username" onChange={e => handleChange(e)} placeholder="Email address"/>
+                    <Input type="text" id="username" onChange={e => handleChange(e)} error={emError} placeholder="Email address"/>
                 </FormGroup>
                 <Button type="submit" className="btn btn-primary">{loader && !emailError ? <ValueLoader />: 'Reset'}</Button>
 

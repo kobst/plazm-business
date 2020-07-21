@@ -39,10 +39,13 @@ const Login = (props) => {
             username: user,
             password: password
         })
+        // eslint-disable-next-line no-sequences
         .then(() =>( history.push('/dashboard'),
         window.location.reload() 
         ))
-        .catch((err) => setmessage(err.message),setError(true))
+        .catch((err) =>{ 
+        if(err){
+            return(setmessage(err.message),setError(true))}})
     }
 
     function validateEmail(user) {
@@ -54,6 +57,7 @@ const Login = (props) => {
     const handleSubmit = e => {
         e.preventDefault()
         setError(false)
+        setmessage()
         if(Validation()){
          setLoader(true)
          signIn()
@@ -80,7 +84,7 @@ const Validation = () => {
        setuserError(false)
        setPasswordError(false)
         if (e.target.id === 'username') {
-          setUser(e.target.value)
+          setUser(e.target.value.trim())
           
         } else if (e.target.id === 'password') {
           setPassword(e.target.value)
