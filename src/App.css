@@ -130,3 +130,6 @@ min-width: inherit;
   color: #000 !important;
   padding: 0;
 }
+.CalenderSec .rbc-row-content{
+  z-index: inherit;
+  }

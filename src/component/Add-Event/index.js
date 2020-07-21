@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Modal from 'react-modal'
-import closeIcon from '../../images/close-icon.svg'
+// import closeIcon from '../../images/close-icon.svg'
 import Input from '../UI/Input/Input'
 import Button from '../UI/Button/Button'
 import DateTimePicker from 'react-datetime-picker';
@@ -29,10 +29,12 @@ const AddModalBox = ({ isOpen, value, data, editValue, setEdit, setIsOpen, close
   const [id, setId] = useState()
   const [start, setStart] = useState()
   const [end, setEnd] = useState()
-  const [recurring, setRecurring] = useState('daily')
-  // const [titleError,setTitleError]= useState()
-  // const [startError,setStartError]= useState()
-  // const [endError,setEndError]= useState()
+  const [recurring, setRecurring] = useState()
+  const [valid,setValid]= useState(true)
+  // const[dateError,setDateError]= useState()
+  const [titleError,setTitleError]= useState()
+  const [startError,setStartError]= useState()
+  const [endError,setEndError]= useState()
 
   useEffect(() => {
     if (typeof value !== 'undefined') {
@@ -51,8 +53,18 @@ const AddModalBox = ({ isOpen, value, data, editValue, setEdit, setIsOpen, close
     }
   }, [value])
 
+  useEffect(() => {
+   if(editValue===false){
+    setTitle('')
+    setDescription('')
+    setStart('')
+    setEnd('')
+     }
+  }, [editValue])
+
 
   const addEvent = async () => {
+    if(Validation()){
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/items`, {
       method: 'POST',
       headers: {
@@ -68,11 +80,15 @@ const AddModalBox = ({ isOpen, value, data, editValue, setEdit, setIsOpen, close
       })
     });
     const body = await response.text();
+    setIsOpen(false)
+    setEdit(false)
     window.location.reload()
     return body
+  }
 
 }
 const handleEdit= async () => {
+  if(Validation()){
   const response= await fetch(`${process.env.REACT_APP_API_URL}/api/items`, {
       method: 'PUT',
       headers: {
@@ -89,9 +105,12 @@ const handleEdit= async () => {
     })
   });
     const body = await response.text();
+    setIsOpen(false)
+    setEdit(false)
     window.location.reload() 
     console.log(body)
     return body
+}
   }
 
   const handleDelete = async () => {
@@ -105,34 +124,33 @@ const handleEdit= async () => {
       })
     });
     const body = await response.text();
-    window.location.reload()
+    setIsOpen(false)
+    setEdit(false)
+   window.location.reload()
     return body
 
   }
 
 
-  const handleSubmit = () => {
-    setIsOpen(false)
-    setEdit(false)
-    addEvent()
+  const Validation = () => {
+    if(!title){
+        setTitleError(true)
+        setValid(true)
+    }
+    if(!start){
+        setStartError(true)
+        setValid(true)
+    }
+    if(!end){
+      setEndError(true)
+      setValid(true)
+    }
+    if(start && end && title){
+      setValid(false)
+        return true
+    }
 
   }
-
-  // const Validation = () => {
-  //   if(!title){
-  //       setTitleError(true)
-  //   }
-  //   if(!start){
-  //       setStartError(true)
-  //   }
-  //   if(!end){
-  //     setEndError(true)
-  //   }
-  //   if(start && end && title){
-  //       return true
-  //   }
-
-  // }
 
 
   const handleChange = (e) => {
@@ -150,6 +168,7 @@ const handleEdit= async () => {
     } else if (e.target.id === 'recurring') {
       setRecurring(e.target.value)
     }
+    Validation()
   }
   const onChange = (e, val) => {
     if (val === 'start') {
@@ -160,6 +179,12 @@ const handleEdit= async () => {
       setEnd(e)
     }
   }
+  const onCancel= ()=>{
+    setTitle('')
+    setStart('')
+    setEnd('')
+    closeModal()
+  }
 
 
   return (
@@ -167,7 +192,7 @@ const handleEdit= async () => {
       <Modal
         isOpen={isOpen}
         // onAfterOpen={this.afterOpenModal}
-        onRequestClose={closeModal}
+        onRequestClose={()=> onCancel()}
         className="Modal"
         overlayClassName="Overlay"
         htmlOpenClassName="ReactModal__Html--open"
@@ -181,7 +206,7 @@ const handleEdit= async () => {
             <h3>Add New Event</h3>}
         </div>
         <div className="ContentModal">
-          <Input type="text" id='title' placeholder="Add Title" value={title} onChange={(e) => handleChange(e)} />
+          <Input type="text" id='title' placeholder="Add Title" error={titleError} value={title} onChange={(e) => handleChange(e)} />
           <Input type="text" id='desc' placeholder="Description" value={description} onChange={(e) => handleChange(e)} />
           <DatePicker>
             <label>Start Date</label>
@@ -217,8 +242,8 @@ const handleEdit= async () => {
           {!editValue ?
             <>
               <div className="modalButton">
-              <Button onClick={closeModal} type="submit" className="btn btn-primary cancel">Cancel</Button>
-              <Button onClick={() => handleSubmit()} type="submit" className="btn btn-primary">Save</Button>
+              <Button onClick={() => onCancel()} type="submit" className="btn btn-primary cancel">Cancel</Button>
+              <Button disabled={valid} onClick={() => addEvent()} type="submit" className="btn btn-primary">Save</Button>
             </div>
         </>:
         <>

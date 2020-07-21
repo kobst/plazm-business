@@ -32,9 +32,6 @@ font-family: 'Roboto',sans-serif;
   margin-top: 30px;
 }
 `
-const Events = styled.div`
-height: 100px;
-`
 const Row = styled.div`
 display:flex;
 margin-top:30px;
@@ -121,6 +118,7 @@ padding:15px 0;
 margin-top: 20px;
 background:#F5F5F5;
 float: left;
+width:100%;
 
 h2{
   padding: 0 15px;
@@ -153,7 +151,7 @@ p{
 `
 const EventList = styled.div`
 padding:0px;
-height: 150px;
+height: 95%;
 overflow-y: auto;
 > div{
   border-bottom:1px solid #ddd;
@@ -175,6 +173,7 @@ const RightSide = () => {
   const [event, setEvent] = useState()
   const [details, setDetails] = useState()
   const [edit, setEdit] = useState(false)
+  const [eventList,setEventList]= useState()
   useEffect(() => {
     let updateUser = async authState => {
       try {
@@ -184,6 +183,7 @@ const RightSide = () => {
         if (place) {
           const val = await fetchItems(place[0]._id)
           const sol = val.filter(v => v.eventSchedule !== null)
+          setEventList(sol)
           eventManage(sol)
         }
       } catch (err) {
@@ -198,6 +198,7 @@ const RightSide = () => {
   const eventManage = (sol) => {
     let eventArr = []
     // eslint-disable-next-line array-callback-return
+    setEvent(eventArr)
     sol.map(v => {
       console.log(v)
       if (v.eventSchedule.recurring === 'weekly') {
@@ -276,6 +277,17 @@ const RightSide = () => {
       }
     })
   }
+  const ConvertNumberToTwoDigitString = (n) => {
+    return n > 9 ? "" + n : "0" + n;
+}
+
+const getDate = (value) =>{
+  const date = new Date(value);
+  const time = ConvertNumberToTwoDigitString(date.getHours()) + 
+           ":" + ConvertNumberToTwoDigitString(date.getMinutes());
+      return time
+
+}
 
 
   return (
@@ -286,11 +298,11 @@ const RightSide = () => {
             <Heading name="Event" />
             <button type="submit" onClick={() => (
               Auth.signOut())} className="btn btn-primary">  <Link to='/business/login' >Logout</Link></button>
-            <Events />
             <AddModalBox editValue={edit} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
-            <div>
+            <div >
               {typeof event !== 'undefined' ?
                 <Calendar
+                  className="CalenderSec"
                   localizer={localizer}
                   events={event}
                   startAccessor="start"
@@ -304,7 +316,7 @@ const RightSide = () => {
                   step={60}
                   view='week'
                   views={['week']}
-                  style={{ height: 400, width: 800 }}
+                  style={{ height: 400, width:"95%", marginTop:"15px" }}
                 /> : <ValueLoader height="100" width="100" />
               }
             </div>
@@ -314,26 +326,17 @@ const RightSide = () => {
             <EventOuter>
               <Heading name="All Events" />
               <EventList>
+                { eventList? eventList.map(v=>
+                <>
+                { v.name ?
               <div>
-              <h3>Discussion</h3>
-              <span>9th july- 10th July</span>
-              <p>50% Sale event with my team members at the head office.</p>
-              </div>
-              <div>
-              <h3>New event</h3>
-              <span>12th july- 13th July</span>
-              <p>50% Sale event with my team members at the head office.</p>
-              </div>
-              <div>
-              <h3>Discussion</h3>
-              <span>9th july- 10th July</span>
-              <p>50% Sale event with my team members at the head office.</p>
-              </div>
-              <div>
-              <h3>New event</h3>
-              <span>12th july- 13th July</span>
-              <p>50% Sale event with my team members at the head office.</p>
-              </div>
+                <h3>{v.name}</h3>
+                <span>{getDate(v.eventSchedule.start_time)} to {getDate(v.eventSchedule.end_time)}</span>
+                <p>{v.eventSchedule.recurring}</p>
+              </div>:null
+            }
+              </> ): null
+           }
               </EventList>
             </EventOuter>
           </EventRight>

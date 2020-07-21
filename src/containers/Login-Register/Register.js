@@ -131,7 +131,11 @@ const Register = (props) => {
         if(!password){
             setPasswordError(true)
         }
-        if(username && loc && username.length>3 && phone_number && validateEmail(email) && password && name ){
+        if(password.length<=7){
+            setError(true)
+            setMessage(renderMessage.pass_length)
+    }
+        if(username && loc && username.length>3 && phone_number && validateEmail(email) && password && name && password.length>7 ){
             return true
         }
 
@@ -207,6 +211,8 @@ const Register = (props) => {
           setconfirmationCode(e.target.value)
         }
         else if (e.target.id === 'location') {
+            setName('')
+            setBusinessInfo('')
             setLoc(e.target.value)
           }
     }

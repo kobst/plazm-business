@@ -23,7 +23,7 @@ h6{
 
 
 const renderMessage = getMessage()
-const ForgotPasswordForm = ({type,email,con,loader, submitPassword,codeErr,error,passErr,newPassErr,emailError, confirmPassErr,verificationErr,handleChange,submitEmail}) => {
+const ForgotPasswordForm = ({type,email,con,loader,emError, submitPassword,codeErr,error,passErr,newPassErr,emailError, confirmPassErr,verificationErr,handleChange,submitEmail}) => {
   
     return (
       <>
@@ -55,7 +55,7 @@ const ForgotPasswordForm = ({type,email,con,loader, submitPassword,codeErr,error
 
         <form onSubmit = {e => submitEmail(e)}>
                 <FormGroup>
-                    <Input type="email" id="username" onChange={e => handleChange(e)} placeholder="Email address"/>
+                    <Input type="text" id="username" onChange={e => handleChange(e)} error={emError} placeholder="Email address"/>
                 </FormGroup>
                 <Button type="submit" className="btn btn-primary">{loader && !emailError ? <ValueLoader />: 'Reset'}</Button>
 
