@@ -1,11 +1,11 @@
-import React, {useState} from 'react'
+import React, {useState,useEffect} from 'react'
 import './style.css'
 import { Auth } from 'aws-amplify';
 import history from '../../utils/history'
 import Wrapper from '../../component/Login-Register/Wrapper'
 import RegisterForm from '../../component/Login-Register/Form-Components/Register-Form'
 import {getMessage} from '../../config'
-
+import {callApi,addBusiness, updateBusiness} from '../../Api'
 
 const renderMessage= getMessage()
 
@@ -31,6 +31,19 @@ const Register = (props) => {
     const [locationError,setLocError]= useState(false)
     const [business,setbusiness] = useState(false)
     const [loader,setLoader] = useState(false)
+    useEffect(() => {
+        let updateUser = async authState => {
+          try {
+             await Auth.currentAuthenticatedUser()
+             history.push('/dashboard')
+             window.location.reload() 
+            
+          } catch {
+          }
+        }
+        updateUser()
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, []);
     
 
     const signUp = () => {
@@ -44,31 +57,38 @@ const Register = (props) => {
             }
         })
         .then(async(res) => {
-        
-            if(await checkBusiness(res.userSub)){
+            if(res.userSub){
+         if(await checkUser(res.userSub)){
             setVerified(true)
             setError(false)
+            setLoader(false)
+            }
+        }
+        })
+        .catch((err) => {
+            if(err.message.includes('phone'))
+            {  
+                return(setMessage(renderMessage.phone_Err) , setError(true)) 
             }
             else{
-                setError(true)
-                setMessage(renderMessage.Busi_Err) 
-
+                return(setMessage(err.message) , setError(true))
+                
             }
-        })
-        .catch((err) => setMessage(err.message) , setError(true) )
+    })
     }
   
-    const confirmSignUp = () => {
+    const confirmSignUp =() => {
         Auth.confirmSignUp(email, confirmationCode)
         .then(() => {
-            if(type.includes('business')){
-            return (history.push(`/business/login`),
-            window.location.reload() )
-            }
-            else{
-                return( history.push(`/curator/login`),
-                window.location.reload())  
-            }
+            Auth.signIn({
+                username: email,
+                password: password
+            })
+            // eslint-disable-next-line no-sequences
+            .then(() =>( history.push('/dashboard'),
+            window.location.reload() 
+            ))
+            .catch((err) => console.log(err))
         })
         .catch((err) => setCodeError(true))
     }
@@ -84,13 +104,24 @@ const Register = (props) => {
             setFirstNameError(true)
         }
         if(username){
-            if(username.length<3){
+            if(username.length<=3){
             setFirstError(true)
             }
         }
         if(!loc){
             setLocError(true)
         }
+        if(loc){
+        if(!name){
+            setError(true)
+            setMessage(renderMessage.Err)
+
+        } else if(!businessInfo){
+            setError(true)
+            setMessage(renderMessage.Err)
+
+        }
+    }
         if(!phone_number){
             setPhoneError(true)
         }
@@ -100,99 +131,63 @@ const Register = (props) => {
         if(!password){
             setPasswordError(true)
         }
-        else if(username && loc && phone_number && validateEmail(email) && password ){
+        if(password.length<=7){
+            setError(true)
+            setMessage(renderMessage.pass_length)
+    }
+        if(username && loc && username.length>3 && phone_number && validateEmail(email) && password && name && password.length>7 ){
             return true
         }
 
     }
   
-   const handleSubmit = (e) => {
+   const handleSubmit = async (e) => {
         e.preventDefault();
         setMessage()
         if (verified) {
             setMessage()
             confirmSignUp();
+            setLoader(true)
           }
         if(!verified && Validation()){
+            setLoader(true)
+            if(await checkBusiness()){
            setMessage()
            setError(false)
            signUp()
-           setLoader(true)
+            }
+            else{
+                setError(true)
+                setMessage(renderMessage.Busi_Err)
+
+            }
         
     }
 }
-    const callApi = async() => {
-        const response= await fetch(`${process.env.REACT_APP_API_URL}/api/place/${name}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const body = await response.text();
-      return JSON.parse(body)
-    }
 
-    const addBusiness = async (userSub) => {
-        const response= await fetch(`${process.env.REACT_APP_API_URL}/api/place`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                
-                    status: businessInfo.business_status,
-                    userAddress: businessInfo.formatted_address,
-                    telephone: businessInfo.international_phone_number,
-                    companyName:businessInfo.name,
-                    placeId: businessInfo.place_id,
-                    mapLink:businessInfo.url,
-                    rating: businessInfo.rating,
-                    website: businessInfo.website,
-                    userSub: userSub,
-                    latitude: businessInfo.geometry.location.lat(),
-                    longitude: businessInfo.geometry.location.lng(),
-                
-          })
-        });
-          const body = await response.text();
-          return body
-
-    }
-    const updateBusiness = async (id,userSub) => {
-        const response= await fetch(`${process.env.REACT_APP_API_URL}/api/place`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({  
-                _id:id,
-                userSub: userSub,
-                    
-                
-          })
-        });
-          const body = await response.text();
-          console.log(body)
-          return body
-
-    }
-
-    const checkBusiness = async(userSub) => {
-        const val = await callApi()
+    const checkBusiness = async() => {
+        
+        const val = await callApi(name)
         if(val.length!==0 && val[0].userSub){
            return false
 
         }
-        else if(val.length === 0){
-            await addBusiness(userSub)
+        else{
             return true
         }
-        else if(val.length!==0 && !val[0].userSub){
-            await updateBusiness(val[0]._id,userSub)
-            return true
-
-    }
+        
 }
+  const checkUser = async(userSub) => {
+     const val = await callApi(name)
+     if(val.length === 0){
+     await addBusiness(userSub,businessInfo)
+     return true
+  }
+  else if(val.length!==0 && !val[0].userSub){
+     await updateBusiness(val[0],userSub)
+     return true
+}
+ }
     const handleChange = (e) => {
         setFirstNameError(false)
         setFirstError(false)
@@ -211,11 +206,13 @@ const Register = (props) => {
         } else if (e.target.id === 'phone_number') {
           setPhoneNumber(e.target.value)
         } else if (e.target.id === 'email') {
-          setEmail(e.target.value)
+          setEmail(e.target.value.trim())
         } else if (e.target.id === 'confirmationCode') {
           setconfirmationCode(e.target.value)
         }
         else if (e.target.id === 'location') {
+            setName('')
+            setBusinessInfo('')
             setLoc(e.target.value)
           }
     }
