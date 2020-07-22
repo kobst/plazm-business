@@ -23,15 +23,14 @@ Modal.setAppElement('#root')
 
 
 
-const AddModalBox = ({ isOpen, value, data, editValue, setEdit, setIsOpen, closeModal }) => {
+const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen, closeModal }) => {
   const [title, setTitle] = useState()
   const [description, setDescription] = useState()
   const [id, setId] = useState()
   const [start, setStart] = useState()
   const [end, setEnd] = useState()
-  const [recurring, setRecurring] = useState()
+  const [recurring, setRecurring] = useState('daily')
   const [valid,setValid]= useState(true)
-  // const[dateError,setDateError]= useState()
   const [titleError,setTitleError]= useState()
   const [startError,setStartError]= useState()
   const [endError,setEndError]= useState()
@@ -40,6 +39,7 @@ const AddModalBox = ({ isOpen, value, data, editValue, setEdit, setIsOpen, close
     if (typeof value !== 'undefined') {
       if (value.id) {
         setId(value.id)
+        findContent(value.id)
       }
       if (value.title) {
         setTitle(value.title)
@@ -51,20 +51,28 @@ const AddModalBox = ({ isOpen, value, data, editValue, setEdit, setIsOpen, close
         setEnd(value.end)
       }
     }
-  }, [value])
+  }, [value,closeModal])
 
   useEffect(() => {
    if(editValue===false){
     setTitle('')
     setDescription('')
     setStart('')
+    setRecurring('daily')
     setEnd('')
      }
-  }, [editValue])
+  }, [editValue,isOpen])
+ 
+  const findContent=(id)=> {
 
+   const val = events.find(v=>v._id===id)
+   setDescription(val.content)
+   setRecurring(val.eventSchedule.recurring)
+  }
 
   const addEvent = async () => {
     if(Validation()){
+      setValid(true)
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/items`, {
       method: 'POST',
       headers: {
@@ -73,6 +81,7 @@ const AddModalBox = ({ isOpen, value, data, editValue, setEdit, setIsOpen, close
       body: JSON.stringify({
         name: title,
         place_id: data._id,
+        content:description,
         scheduledEvent: "yes",
         recurring: recurring,
         start_time: start,
@@ -89,6 +98,7 @@ const AddModalBox = ({ isOpen, value, data, editValue, setEdit, setIsOpen, close
 }
 const handleEdit= async () => {
   if(Validation()){
+    setValid(true)
   const response= await fetch(`${process.env.REACT_APP_API_URL}/api/items`, {
       method: 'PUT',
       headers: {
@@ -99,6 +109,7 @@ const handleEdit= async () => {
         name:title,
         place_id:data._id,
         scheduledEvent:"yes",
+        content:description,
         recurring:recurring,
         start_time:start,
         end_time:end
@@ -108,7 +119,6 @@ const handleEdit= async () => {
     setIsOpen(false)
     setEdit(false)
     window.location.reload() 
-    console.log(body)
     return body
 }
   }
@@ -145,7 +155,10 @@ const handleEdit= async () => {
       setEndError(true)
       setValid(true)
     }
-    if(start && end && title){
+    if(start>end){
+      setValid(true)
+    }
+    if(start && end && title && end>start){
       setValid(false)
         return true
     }
@@ -178,9 +191,12 @@ const handleEdit= async () => {
     else {
       setEnd(e)
     }
+    Validation()
   }
   const onCancel= ()=>{
     setTitle('')
+    setDescription('')
+    setRecurring('daily')
     setStart('')
     setEnd('')
     closeModal()
@@ -233,7 +249,6 @@ const handleEdit= async () => {
             />
           </DatePicker>
           <select id='recurring' value={recurring} onChange={e => handleChange(e)}>
-            <option value="">Recurring</option>
             <option value="daily">Daily</option>
             <option value="weekly">Weekly</option>
             <option value="mondayFriday">Monday-Friday</option>
