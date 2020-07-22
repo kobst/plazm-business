@@ -298,7 +298,7 @@ const getDate = (value) =>{
             <Heading name="Event" />
             <button type="submit" onClick={() => (
               Auth.signOut())} className="btn btn-primary">  <Link to='/business/login' >Logout</Link></button>
-            <AddModalBox editValue={edit} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
+            <AddModalBox editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
             <div >
               {typeof event !== 'undefined' ?
                 <Calendar
@@ -331,8 +331,9 @@ const getDate = (value) =>{
                 { v.name ?
               <div>
                 <h3>{v.name}</h3>
-                <span>{getDate(v.eventSchedule.start_time)} to {getDate(v.eventSchedule.end_time)}</span>
                 <p>{v.eventSchedule.recurring}</p>
+                <span>{getDate(v.eventSchedule.start_time)} to {getDate(v.eventSchedule.end_time)}</span>
+                 <p>{v.content}</p>
               </div>:null
             }
               </> ): null
