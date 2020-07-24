@@ -38,6 +38,9 @@ body, html{font-family: 'Roboto',sans-serif; height: 100%; background-color:#eee
   border-bottom: 1px solid #dddd;
   margin-bottom: 15px;
 }
+.Modal input.active{
+  border-color: red;
+}
 .Modal select {
   word-wrap: normal;
   background: no-repeat;

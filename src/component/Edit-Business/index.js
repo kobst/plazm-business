@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import Modal from 'react-modal'
-import closeIcon from '../../images/close-icon.svg'
 import Input from '../UI/Input/Input'
 import Button from '../UI/Button/Button'
 
@@ -22,6 +21,7 @@ const ModalBox = ({value, isOpen,setIsOpen,closeModal }) => {
   const [userAddress,setAddress] = useState()
 
   useEffect(()=> {
+    if(typeof value!=='undefined'){
     if(value.company_name){
       setCompany(value.company_name)
     }
@@ -52,9 +52,10 @@ const ModalBox = ({value, isOpen,setIsOpen,closeModal }) => {
     if(value.address){
       setAddress(value.address)
     }
+  }
 
 
-  },[value])
+  },[value,isOpen])
 
   const updateBusiness = async () => {
     const response= await fetch(`${process.env.REACT_APP_API_URL}/api/place`, {
@@ -119,6 +120,19 @@ const handleSubmit = () => {
           setLongitude(e.target.value)
    } 
 }
+// const onClose = ()=>{
+//   setCompany('')
+//   setWebsite('')
+//   setAddress('')
+//   setPhone('')
+//   setRating('')
+//   setType('')
+//   setStatus('')
+//   setMap('')
+//   setLatitude('')
+//   setLongitude('')
+
+// }
 
 
   return (
