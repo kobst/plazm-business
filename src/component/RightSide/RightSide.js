@@ -180,11 +180,17 @@ const RightSide = () => {
         const value = await Auth.currentAuthenticatedUser()
         const place = await callPlace(value.attributes.sub)
         setPlace(place[0])
-        if (place) {
+        if (place && place.length!==0) {
+          console.log('okkay')
           const val = await fetchItems(place[0]._id)
           const sol = val.filter(v => v.eventSchedule !== null)
           setEventList(sol)
           eventManage(sol)
+        }
+        else{
+          console.log('okkay1')
+          let eventArr = []
+          setEvent(eventArr)
         }
       } catch (err) {
         console.log(err)
@@ -201,7 +207,7 @@ const RightSide = () => {
     setEvent(eventArr)
     sol.map(v => {
       console.log(v)
-      if (v.eventSchedule.recurring === 'weekly') {
+      if (v.eventSchedule.recurring === 'weekly'&&v.eventSchedule.recurring === 'Weekly') {
         const weeklyStartRule = new RRule({
           freq: RRule.WEEKLY,
           dtstart: new Date(v.eventSchedule.start_time),
@@ -225,7 +231,7 @@ const RightSide = () => {
         });
         setEvent(eventArr)
       }
-      else if (v.eventSchedule.recurring === 'daily') {
+      else if (v.eventSchedule.recurring === 'daily'||v.eventSchedule.recurring === 'Daily') {
         const dailyStartRule = new RRule({
           freq: RRule.DAILY,
           dtstart: new Date(v.eventSchedule.start_time),
@@ -249,7 +255,7 @@ const RightSide = () => {
         });
         setEvent(eventArr)
       }
-      else if (v.eventSchedule.recurring === 'mondayFriday') {
+      else if (v.eventSchedule.recurring === 'mondayFriday'||v.eventSchedule.recurring === 'Monday-Friday') {
         const weekDayStartRule = new RRule({
           freq: RRule.WEEKLY,
           dtstart: new Date(v.eventSchedule.start_time),
@@ -314,8 +320,7 @@ const getDate = (value) =>{
                     setDetails(e)
                   )}
                   step={60}
-                  view='week'
-                  views={['week']}
+                  views={['month','week','day']}
                   style={{ height: 400, width:"95%", marginTop:"15px" }}
                 /> : <ValueLoader height="100" width="100" />
               }
