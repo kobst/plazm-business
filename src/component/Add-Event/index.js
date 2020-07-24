@@ -11,11 +11,13 @@ const DatePicker = styled.div`
 padding:0px;
 border-bottom: 1px solid #dddd;
 margin-bottom:15px;
+border-color: ${props => (props.active ? 'red':null)};
 label{
   color: #757575;
   font-size: 14px;
   margin:0 10px 0 0;
 }
+
 `
 
 Modal.setAppElement('#root')
@@ -167,6 +169,9 @@ const handleEdit= async () => {
 
 
   const handleChange = (e) => {
+    setTitleError(false)
+    setStartError(false)
+    setEndError(false)
     if (e.target.id === 'title') {
       setTitle(e.target.value)
     }
@@ -184,6 +189,9 @@ const handleEdit= async () => {
     Validation()
   }
   const onChange = (e, val) => {
+    setTitleError(false)
+    setStartError(false)
+    setEndError(false)
     if (val === 'start') {
       setStart(e)
     }
@@ -222,9 +230,9 @@ const handleEdit= async () => {
             <h3>Add New Event</h3>}
         </div>
         <div className="ContentModal">
-          <Input type="text" id='title' placeholder="Add Title" error={titleError} value={title} onChange={(e) => handleChange(e)} />
+          <Input type="text" className={titleError?'active':null} id='title' placeholder="Add Title" value={title} onChange={(e) => handleChange(e)} />
           <Input type="text" id='desc' placeholder="Description" value={description} onChange={(e) => handleChange(e)} />
-          <DatePicker>
+          <DatePicker active={startError?true:null}>
             <label>Start Date</label>
             <DateTimePicker
               yearPlaceholder="YYYY"
@@ -236,7 +244,7 @@ const handleEdit= async () => {
               value={start}
             />
           </DatePicker>
-          <DatePicker>
+          <DatePicker active={endError?true:null}>
             <label>End Date</label>
             <DateTimePicker
               yearPlaceholder="YYYY"
@@ -249,9 +257,9 @@ const handleEdit= async () => {
             />
           </DatePicker>
           <select id='recurring' value={recurring} onChange={e => handleChange(e)}>
-            <option value="daily">Daily</option>
-            <option value="weekly">Weekly</option>
-            <option value="mondayFriday">Monday-Friday</option>
+            <option value="Daily">Daily</option>
+            <option value="Weekly">Weekly</option>
+            <option value="Monday-Friday">Monday-Friday</option>
           </select>
           <br />
           {!editValue ?

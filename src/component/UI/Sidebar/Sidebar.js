@@ -81,29 +81,28 @@ const Sidebar = () => {
   }, []);
  
   return (
-
     <LeftSidebar>
-      <ProfileImage name={placeValue.company_name?placeValue.company_name:'-'} setIsOpen={setIsOpen} />
+      <ProfileImage name={typeof placeValue !== 'undefined'&& placeValue.company_name?placeValue.company_name:'-'} setIsOpen={setIsOpen} />
       <Listing>
         <SubHeading name="Address" />
-        <p>{placeValue.address}</p>
+        <p>{typeof placeValue !== 'undefined'?placeValue.address:null}</p>
         <ModalBox value={placeValue} isOpen={isOpen} setIsOpen={setIsOpen} data='' closeModal={()=> setIsOpen(false)} />
       </Listing>
       <Listing>
         <SubHeading name="Website" />
-        <p>{placeValue.web_site?placeValue.web_site:'-'}</p>
+        <p>{typeof placeValue !== 'undefined'&& placeValue.web_site?placeValue.web_site:'-'}</p>
       </Listing>
       <Listing>
         <SubHeading name="Type" />
-        <p>{placeValue.type?placeValue.type:'-'}</p>
+        <p>{typeof placeValue !== 'undefined'&& placeValue.type?placeValue.type:'-'}</p>
       </Listing>
       <Listing>
         <SubHeading name="Status" />
-        <p>{placeValue.status?placeValue.status:'-'}</p>
+        <p>{typeof placeValue !== 'undefined'&& placeValue.status?placeValue.status:'-'}</p>
       </Listing>
       <Listing>
         <SubHeading name="Phone" />
-        <p>{placeValue.telephone?placeValue.telephone:'-'}</p>
+        <p>{typeof placeValue !== 'undefined'&&placeValue.telephone?placeValue.telephone:'-'}</p>
       </Listing>
       <Listing>
         <SubHeading name="Opening Hours" />
