@@ -86,6 +86,10 @@ body, html{font-family: 'Roboto',sans-serif; height: 100%; background-color:#eee
 .ModalHeader h3{
   font-size: 22px;
 }
+.ModalHeader h4{
+  font-size: 16px;
+  color: red;
+}
 
 .react-datetime-picker__wrapper{
   border:none !important;
@@ -102,6 +106,15 @@ body, html{font-family: 'Roboto',sans-serif; height: 100%; background-color:#eee
   color: #757575 !important;
   margin-bottom: 0px !important;
   border-bottom:none !important;
+}
+span.react-datetime-picker__inputGroup__leadingZero {
+  color: #757575 !important;
+  font-size: 14px;
+}
+
+.rbc-day-slot .rbc-event-content{
+  font-size: 80%;
+  line-height: inherit !important;
 }
 .react-calendar__tile{
   font-size:12px !important;
@@ -133,6 +146,22 @@ min-width: inherit;
   color: #000 !important;
   padding: 0;
 }
+
+.react-calendar__navigation button{
+  min-width: 35px !important;
+}
+.rbc-day-slot .rbc-events-container{
+  margin-right:0px !important;
+}
+.ReactModalPortal{
+  z-index:3;
+  position: relative;
+}
 .CalenderSec .rbc-row-content{
   z-index: inherit;
-  }
+}
+
+.loader{
+  margin-top: 15px;
+  text-align: center;
+}
