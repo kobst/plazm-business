@@ -25,6 +25,9 @@ return{
     "phone_Err":"Phone number format should contain country code, Example:- +917599xxxxxx or +1257xxxx ",
     "Err":"You need to select your business to register.",
     "con":"Your password succesfully changed.",
-    "pass_length":"Password does not conform to policy: Password not long enough"
+    "pass_length":"Password does not conform to policy: Password not long enough",
+    "title_error":"Length of title should be less then 50.",
+    "description_error": "Length of description should be less then 200.",
+    "date_err": "Start date should be less then end date."
 }
 }

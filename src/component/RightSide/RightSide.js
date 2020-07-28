@@ -165,7 +165,7 @@ overflow-y: auto;
   }
 
 `
-
+moment.locale('en-GB')
 const localizer = momentLocalizer(moment)
 const RightSide = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -181,14 +181,12 @@ const RightSide = () => {
         const place = await callPlace(value.attributes.sub)
         setPlace(place[0])
         if (place && place.length!==0) {
-          console.log('okkay')
           const val = await fetchItems(place[0]._id)
           const sol = val.filter(v => v.eventSchedule !== null)
           setEventList(sol)
           eventManage(sol)
         }
         else{
-          console.log('okkay1')
           let eventArr = []
           setEvent(eventArr)
         }
@@ -203,10 +201,9 @@ const RightSide = () => {
 
   const eventManage = (sol) => {
     let eventArr = []
-    // eslint-disable-next-line array-callback-return
     setEvent(eventArr)
+    // eslint-disable-next-line array-callback-return
     sol.map(v => {
-      console.log(v)
       if (v.eventSchedule.recurring === 'weekly'&&v.eventSchedule.recurring === 'Weekly') {
         const weeklyStartRule = new RRule({
           freq: RRule.WEEKLY,
