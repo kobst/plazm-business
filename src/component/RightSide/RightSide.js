@@ -146,12 +146,13 @@ p{
 }
 @media (max-width:767px){
   width:100%;
+  height: auto;
 }
 
 `
 const EventList = styled.div`
 padding:0px;
-height: 95%;
+max-height: 344px;
 overflow-y: auto;
 > div{
   border-bottom:1px solid #ddd;
@@ -165,7 +166,7 @@ overflow-y: auto;
   }
 
 `
-
+moment.locale('en-GB')
 const localizer = momentLocalizer(moment)
 const RightSide = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -181,14 +182,12 @@ const RightSide = () => {
         const place = await callPlace(value.attributes.sub)
         setPlace(place[0])
         if (place && place.length!==0) {
-          console.log('okkay')
           const val = await fetchItems(place[0]._id)
           const sol = val.filter(v => v.eventSchedule !== null)
           setEventList(sol)
           eventManage(sol)
         }
         else{
-          console.log('okkay1')
           let eventArr = []
           setEvent(eventArr)
         }
@@ -203,10 +202,9 @@ const RightSide = () => {
 
   const eventManage = (sol) => {
     let eventArr = []
-    // eslint-disable-next-line array-callback-return
     setEvent(eventArr)
+    // eslint-disable-next-line array-callback-return
     sol.map(v => {
-      console.log(v)
       if (v.eventSchedule.recurring === 'weekly'&&v.eventSchedule.recurring === 'Weekly') {
         const weeklyStartRule = new RRule({
           freq: RRule.WEEKLY,
@@ -305,7 +303,7 @@ const getDate = (value) =>{
             <button type="submit" onClick={() => (
               Auth.signOut())} className="btn btn-primary">  <Link to='/business/login' >Logout</Link></button>
             <AddModalBox editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
-            <div >
+            <div>
               {typeof event !== 'undefined' ?
                 <Calendar
                   className="CalenderSec"
@@ -322,7 +320,8 @@ const getDate = (value) =>{
                   step={60}
                   views={['month','week','day']}
                   style={{ height: 400, width:"95%", marginTop:"15px" }}
-                /> : <ValueLoader height="100" width="100" />
+                /> : <div className="loader"> <ValueLoader  height="70" width="70" /></div>
+
               }
             </div>
           </EventLeft>
