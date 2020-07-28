@@ -146,12 +146,13 @@ p{
 }
 @media (max-width:767px){
   width:100%;
+  height: auto;
 }
 
 `
 const EventList = styled.div`
 padding:0px;
-height: 95%;
+max-height: 344px;
 overflow-y: auto;
 > div{
   border-bottom:1px solid #ddd;
@@ -302,7 +303,7 @@ const getDate = (value) =>{
             <button type="submit" onClick={() => (
               Auth.signOut())} className="btn btn-primary">  <Link to='/business/login' >Logout</Link></button>
             <AddModalBox editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
-            <div >
+            <div>
               {typeof event !== 'undefined' ?
                 <Calendar
                   className="CalenderSec"
@@ -319,7 +320,8 @@ const getDate = (value) =>{
                   step={60}
                   views={['month','week','day']}
                   style={{ height: 400, width:"95%", marginTop:"15px" }}
-                /> : <ValueLoader height="100" width="100" />
+                /> : <div className="loader"> <ValueLoader  height="70" width="70" /></div>
+
               }
             </div>
           </EventLeft>
