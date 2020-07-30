@@ -175,6 +175,7 @@ const RightSide = () => {
   const [details, setDetails] = useState()
   const [edit, setEdit] = useState(false)
   const [eventList,setEventList]= useState()
+  const [feed,setFeed]= useState()
   useEffect(() => {
     let updateUser = async authState => {
       try {
@@ -184,7 +185,9 @@ const RightSide = () => {
         if (place && place.length!==0) {
           const val = await fetchItems(place[0]._id)
           const sol = val.filter(v => v.eventSchedule !== null)
+          const feed = val.filter(v => v.eventSchedule === null)
           setEventList(sol)
+          setFeed(feed)
           eventManage(sol)
         }
         else{
@@ -205,7 +208,7 @@ const RightSide = () => {
     setEvent(eventArr)
     // eslint-disable-next-line array-callback-return
     sol.map(v => {
-      if (v.eventSchedule.recurring === 'weekly'&&v.eventSchedule.recurring === 'Weekly') {
+      if (v.eventSchedule.recurring === 'weekly'|| v.eventSchedule.recurring === 'Weekly') {
         const weeklyStartRule = new RRule({
           freq: RRule.WEEKLY,
           dtstart: new Date(v.eventSchedule.start_time),
@@ -317,8 +320,9 @@ const getDate = (value) =>{
                     setIsOpen(true),
                     setDetails(e)
                   )}
+                  defaultView="day"
                   step={60}
-                  views={['month','week','day']}
+                  views={['day','week','month',]}
                   style={{ height: 400, width:"95%", marginTop:"15px" }}
                 /> : <div className="loader"> <ValueLoader  height="70" width="70" /></div>
 
@@ -380,14 +384,11 @@ const getDate = (value) =>{
           </FlexRow>
           <Search />
           <ListingOuter>
-            <Listing />
-            <Listing />
-            <Listing />
+            <Listing value={feed} />
           </ListingOuter>
           {/* Messages Section */}
           <Messages />
           {/* Chat Section */}
-
           <ChatBox />
         </Card>
       </Row>
