@@ -115,6 +115,11 @@ span.react-datetime-picker__inputGroup__leadingZero {
 .rbc-day-slot .rbc-event-content{
   font-size: 80%;
   line-height: inherit !important;
+  /* display: block;
+  white-space: nowrap;
+  width: 32px !important;
+  text-overflow: ellipsis;
+  overflow: hidden; */
 }
 .react-calendar__tile{
   font-size:12px !important;

@@ -5,6 +5,7 @@ import Input from '../UI/Input/Input'
 import Button from '../UI/Button/Button'
 import DateTimePicker from 'react-datetime-picker';
 import {getMessage} from '../../config'
+import moment from 'moment'
 
 import styled from 'styled-components'
 
@@ -22,8 +23,16 @@ label{
 `
 
 Modal.setAppElement('#root')
-
-
+moment.updateLocale('en-gb', {
+  calendar : {
+      lastDay : '[Yesterday at] HH:mm',
+      sameDay : '[Today at] HH:mm',
+      nextDay : '[Tomorrow at] HH:mm',
+      lastWeek : '[last] dddd [at] HH:mm',
+      nextWeek : 'dddd [at] HH:mm',
+      sameElse : 'L'
+  }
+})
 
 const renderMessage = getMessage()
 const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen, closeModal }) => {
@@ -263,6 +272,7 @@ const handleEdit= async () => {
               dayPlaceholder="DD"
               monthPlaceholder="MM"
               hourPlaceholder="HH"
+              locale={moment.locale('en-gb')}
               minutePlaceholder="MM"
               onChange={(e) => onChange(e, 'start')}
               value={start}
@@ -272,6 +282,7 @@ const handleEdit= async () => {
             <label>End Date</label>
             <DateTimePicker
               yearPlaceholder="YYYY"
+              locale={moment.locale('en-gb')}
               dayPlaceholder="DD"
               monthPlaceholder="MM"
               hourPlaceholder="HH"
