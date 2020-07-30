@@ -48,23 +48,32 @@ img{
 `
 
 
-const Listing = (props,children) => {
+const Listing = ({value}) => {
+    if(typeof value !== 'undefined'){
     return(
+        <>
+        {value.map(v => (
         <ListContainer>
         <ImgSec/>
         <TextSec>
             <FlexRow>
-                <h4>Steve’s Pizza</h4>
+                <h4>VT Netzwelt Pvt Ltd</h4>
                 <span>2 hours ago</span>
             </FlexRow>
-            <p>The situation here in Boston is better than other states. We have so far 46 confirmed cases and the quarantined places took...</p>
+            <p>{v.content}</p>
             <Icon>
             <img src={LikeIcon} alt={LikeIcon} />
             <img src={CommentIcon} alt={CommentIcon} />
             </Icon>
         </TextSec>
         </ListContainer>
+        ))}
+        </>
     )
+    }
+    else{
+        return null
+    }
 }
 
 export default Listing
