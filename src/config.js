@@ -29,6 +29,7 @@ return{
     "title_error":"Length of title should be less then 50.",
     "description_error": "Length of description should be less then 200.",
     "date_err": "Start date should be less then end date.",
-    "time_err": "start time should not be equal to end time."
+    "time_err": "Start time should not be equal to end time.",
+    "diff_err": "Start time should be less then end time."
 }
 }

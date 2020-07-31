@@ -41,13 +41,14 @@ const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen,
   const [id, setId] = useState()
   const [start, setStart] = useState()
   const [end, setEnd] = useState()
-  const [recurring, setRecurring] = useState('Daily')
+  const [recurring, setRecurring] = useState('')
   // const [valid,setValid]= useState(true)
   const [error,setError]= useState(false)
   const [message,setMessageError]= useState()
   const [titleError,setTitleError]= useState(false)
   const [startError,setStartError]= useState(false)
   const [endError,setEndError]= useState(false)
+  const [disableReccuring,setDisableReccuring] = useState(false)
 
   useEffect(() => {
     if (typeof value !== 'undefined') {
@@ -154,6 +155,31 @@ const handleEdit= async () => {
 
   }
 
+  const checkMultiDayEvent=(e,val)=> {
+    if(val==='start'){
+    if(end>e){
+    if(((new Date(e).getDate() < new Date(end).getDate()))
+       ||(new Date(e).getMonth() < new Date(end).getMonth())
+       ||(new Date(e).getFullYear() < new Date(end).getFullYear())){
+           setDisableReccuring(true)
+           setRecurring('')
+          }
+
+  }
+}
+else{
+  if(e>start){
+    if(((new Date(start).getDate() < new Date(e).getDate()))
+    ||(new Date(start).getMonth() < new Date(e).getMonth())
+    ||(new Date(start).getFullYear() < new Date(e).getFullYear())){
+           setDisableReccuring(true)
+           setRecurring('')
+          }
+
+  }
+
+}
+}
 
   const Validation = () => {
     if(!title){
@@ -180,7 +206,21 @@ const handleEdit= async () => {
       }
     }
     if(start && end){
-      if(start>end){
+      if(new Date(start).toString()=== new Date(end).toString()){
+        setError(true)
+        setMessageError(renderMessage.time_err)
+        return false
+      }
+      if((new Date(start).getDate() === new Date(end).getDate()) 
+         && (new Date(start).getMonth()=== new Date(end).getMonth())
+         &&(new Date(start).getFullYear()=== new Date(end).getFullYear())){
+           if(new Date(start).getTime() > new Date(end).getTime()){
+        setError(true)
+        setMessageError(renderMessage.diff_err)
+        return false
+           }
+      }
+      if(new Date(start) > new Date(end)){
         setError(true)
         setMessageError(renderMessage.date_err)
         return false
@@ -220,13 +260,17 @@ const handleEdit= async () => {
     setEndError(false)
     setError(false)
     setMessageError('')
+    setDisableReccuring(false)
     if (val === 'start') {
       setStart(e)
+
     }
 
     else {
       setEnd(e)
     }
+    checkMultiDayEvent(e,val)
+
   }
   const onCancel= ()=>{
     setError(false)
@@ -279,7 +323,7 @@ const handleEdit= async () => {
             />
           </DatePicker>
           <DatePicker active={endError?true:null}>
-            <label>End Date</label>
+            <label>End Date &nbsp;</label>
             <DateTimePicker
               yearPlaceholder="YYYY"
               locale={moment.locale('en-gb')}
@@ -291,7 +335,7 @@ const handleEdit= async () => {
               value={end}
             />
           </DatePicker>
-          <select id='recurring' value={recurring} onChange={e => handleChange(e)}>
+          <select id='recurring' value={recurring} onChange={e => handleChange(e)} disabled={disableReccuring}>
             <option value="Daily">Daily</option>
             <option value="Weekly">Weekly</option>
             <option value="Monday-Friday">Monday-Friday</option>

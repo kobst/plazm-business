@@ -152,7 +152,7 @@ p{
 `
 const EventList = styled.div`
 padding:0px;
-max-height: 344px;
+max-height: 426px;
 overflow-y: auto;
 > div{
   border-bottom:1px solid #ddd;
@@ -282,6 +282,17 @@ const RightSide = () => {
         });
         setEvent(eventArr)
       }
+      else{
+        eventArr.push({
+          id: v._id,
+          title: v.name,
+          start: v.eventSchedule.start_time,
+          end: v.eventSchedule.end_time,
+          allDay:true
+        })
+        setEvent(eventArr)
+
+      }
     })
   }
   const ConvertNumberToTwoDigitString = (n) => {
@@ -323,7 +334,7 @@ const getDate = (value) =>{
                   defaultView="day"
                   step={60}
                   views={['day','week','month',]}
-                  style={{ height: 400, width:"95%", marginTop:"15px" }}
+                  style={{ height: 480, width:"95%", marginTop:"15px" }}
                 /> : <div className="loader"> <ValueLoader  height="70" width="70" /></div>
 
               }
