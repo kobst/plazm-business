@@ -12,14 +12,13 @@ import styled from 'styled-components'
 const DatePicker = styled.div`
 padding:0px;
 border-bottom: 1px solid #dddd;
-margin-bottom:15px;
+margin-bottom: 15px;
 border-color: ${props => (props.active ? 'red':null)};
 label{
   color: #757575;
   font-size: 14px;
   margin:0 10px 0 0;
 }
-
 `
 
 Modal.setAppElement('#root')
@@ -273,6 +272,7 @@ else{
 
   }
   const onCancel= ()=>{
+    setDisableReccuring(false)
     setError(false)
     setMessageError('')
     setStartError(false)
@@ -320,7 +320,7 @@ else{
               minutePlaceholder="MM"
               onChange={(e) => onChange(e, 'start')}
               value={start}
-            />
+               />
           </DatePicker>
           <DatePicker active={endError?true:null}>
             <label>End Date &nbsp;</label>
