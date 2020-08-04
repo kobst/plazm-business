@@ -26,6 +26,9 @@ const RightSection = styled.div`
 margin-left: 30px;
 width: calc(100% - 300px);
 font-family: 'Roboto',sans-serif;
+@media (min-width:768px) and (max-width:1024px){
+  width:calc(100% - 325px);
+}
 @media (max-width:767px){
   margin-left: 0;
   width: 100%;
@@ -42,7 +45,7 @@ justify-content: space-between;
     margin-right:30px;
   }
 }
-@media (max-width:767px){
+@media (max-width:991px){
   flex-direction: column;
   > div{
     width:100%;
@@ -91,14 +94,14 @@ overflow-y: auto;
 `
 const EventSection = styled.div`
 display:flex;
-@media (max-width:767px){
+@media (max-width:991px){
   flex-direction: column;
 }
 `
 const EventLeft = styled.div`
 padding:0px;
 width:calc(100% - 300px);
-@media (max-width:767px){
+@media (max-width:991px){
   width:100%;
 }
 `
@@ -109,8 +112,9 @@ width:270px;
 button{
   float:right;
 }
-@media (max-width:767px){
+@media (max-width:991px){
   width:100%;
+  margin-top: 15px;
 }
 `
 const EventOuter = styled.div`
@@ -144,7 +148,7 @@ p{
   padding: 0 15px;
   line-height:16px;
 }
-@media (max-width:767px){
+@media (max-width:991px){
   width:100%;
   height: auto;
 }
