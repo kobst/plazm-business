@@ -116,11 +116,7 @@ span.react-datetime-picker__inputGroup__leadingZero {
 .rbc-day-slot .rbc-event-content{
   font-size: 80%;
   line-height: inherit !important;
-  /* display: block;
   white-space: nowrap;
-  width: 32px !important;
-  text-overflow: ellipsis;
-  overflow: hidden; */
 }
 
 .react-calendar__tile{
@@ -243,13 +239,14 @@ font-family: 'Roboto',sans-serif;
 .rbc-btn-group button:hover{
   background: transparent !important;
   color:#000 !important;
+@media (max-width:991px){
+  .rbc-calendar{
+    width:100% !important;
+  }
 }
-.rbc-btn-group{
-  border:1px solid #ccc;
-  border-radius:4px;
-} */
 
-
-/* .rbc-btn-group button:focus{
-  outline:none !important;
-} */
+@media (max-width:1024px){
+  .rbc-btn-group{
+    margin:10px 0;
+  }
+}
