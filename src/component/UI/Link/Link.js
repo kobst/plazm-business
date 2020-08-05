@@ -18,6 +18,7 @@ justify-content: space-between;
 -webkit-justify-content: space-between; 
 -ms-justify-content: space-between; 
 -moz-justify-content: space-between;
+flex-wrap:wrap;
  a{
      color: #000;
     }

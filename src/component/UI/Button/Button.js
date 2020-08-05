@@ -27,7 +27,7 @@ border:none;
 
 const Button = props => {
     return(
-      <ButtonText {...props} />
+      <ButtonText  {...props} />
     )
 }
 
