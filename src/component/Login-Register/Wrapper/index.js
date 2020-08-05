@@ -29,9 +29,17 @@ display: table-row;
 `
 const LoginFormWrapper = styled.div`
 padding:65px 50px 50px 50px;
+@media (max-width:1024px){
+    width:100%;
+    padding:25px;
+a{
+    margin:5px 5px 5px 0;
+}
+}
 button{
     min-width: 180px;
 }
+
 
 `
 
@@ -47,6 +55,13 @@ p{
 }
 
 `
+const LoginOuter =styled.div`
+display:flex;
+align-items: center;
+height: 100%;
+justify-content: center;
+width:100%;
+`
 
 const Wrapper = (props) => {
 return(
@@ -55,6 +70,7 @@ return(
     <Row>			
         <div className="col-md-6"> </div>
         <div className="col-md-6">
+            <LoginOuter>
             <LoginFormWrapper>
                 <LoginFormHeader>
                     <h1>{props.heading}</h1>
@@ -64,6 +80,7 @@ return(
                  {props.children}
                 </div>
                </LoginFormWrapper>
+               </LoginOuter>
 
         </div>			
     </Row>

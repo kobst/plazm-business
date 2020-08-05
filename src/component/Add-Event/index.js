@@ -47,6 +47,7 @@ const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen,
   const [titleError,setTitleError]= useState(false)
   const [startError,setStartError]= useState(false)
   const [endError,setEndError]= useState(false)
+  const [saveDisable,setSaveDisable]= useState(false)
   const [disableReccuring,setDisableReccuring] = useState(false)
 
   useEffect(() => {
@@ -86,6 +87,7 @@ const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen,
   }
 
   const addEvent = async () => {
+    setSaveDisable(true)
     if(Validation()){
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/items`, {
       method: 'POST',
@@ -111,6 +113,7 @@ const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen,
 
 }
 const handleEdit= async () => {
+  setSaveDisable(true)
   if(Validation()){
   const response= await fetch(`${process.env.REACT_APP_API_URL}/api/items`, {
       method: 'PUT',
@@ -345,7 +348,7 @@ else{
             <>
               <div className="modalButton">
               <Button onClick={() => onCancel()} type="submit" className="btn btn-primary cancel">Cancel</Button>
-              <Button onClick={() => addEvent()} type="submit" className="btn btn-primary">Save</Button>
+              <Button disabled={saveDisable} onClick={() => addEvent()} type="submit" className="btn btn-primary">Save</Button>
             </div>
         </>:
         <>

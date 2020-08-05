@@ -5,7 +5,7 @@ return{
     "Sign":"Signup",
     "Login_Mess": "Login to start working on your business profile page",
     "Remember":"Remember me",
-    "No_Account":"Don't have an account?",
+    "No_Account":"Don't have an account? ",
     "Forgot":"Forgot Password",
     "Reg":"Register to Get Started",
     "New_Reg":"Start working on your business profile page",

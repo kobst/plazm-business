@@ -52,7 +52,7 @@ margin: 10px 10px 0px 0;
 line-height:26px;
 cursor:pointer;
 
-` 
+`
 const SocialIcon = styled.div`
 display:flex;
 margin-top: 10px;
@@ -61,6 +61,7 @@ img{
   margin-right:10px;
 }
 `
+
 const Sidebar = () => {
   const [placeValue,setPlace] = useState({})
   const [isOpen, setIsOpen] = useState(false)

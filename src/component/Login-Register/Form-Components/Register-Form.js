@@ -22,10 +22,16 @@ height: 100%;
 display: table-row;
 display: flex;
 justify-content: space-between;
-
 > div{
     display: table-cell; 
     width: 48%;
+}
+@media (max-width:767px){
+    display: block;
+    > div{
+        display: block;
+        width:100%;
+    }
 }
 `
 const FindYourBusinessWrapper = styled.div`
