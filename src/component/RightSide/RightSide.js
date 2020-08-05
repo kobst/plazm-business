@@ -379,9 +379,7 @@ const getDate = (value) =>{
           <BottomSection>
             <Heading name="Feed" />
             <ListingOuter>
-              <Listing />
-              <Listing />
-              <Listing />
+              <Listing value={feed}/>
             </ListingOuter>
           </BottomSection>
 
@@ -395,7 +393,7 @@ const getDate = (value) =>{
           </FlexRow>
           <Search />
           <ListingOuter>
-            <Listing value={feed} />
+            <Listing/>
           </ListingOuter>
           {/* Messages Section */}
           <Messages />

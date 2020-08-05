@@ -219,6 +219,11 @@ font-family: 'Roboto',sans-serif;
   box-shadow: none !important;
 }
 
+.rbc-day-slot .rbc-event.rbc-selected{
+  border-color: #3174ad !important;
+  background-color: #3174ad !important;
+}
+
 /* .rbc-btn-group button:nth-child(2){
   border-left:1px solid #ccc!important;
   border-right:1px solid #ccc!important;

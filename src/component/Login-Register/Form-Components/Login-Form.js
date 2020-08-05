@@ -44,10 +44,6 @@ return(
 
                         <Input type="password" id='password' onChange={(e) => handleChange(e)}
                           error={passwordError} placeholder="Password" />
-							  </FormGroup>
-							  <FormGroup>
-								        <input type="checkbox" id="rememberMe" />
-                        <label htmlFor="rememberMe">{renderMessage.Remember}</label>
 							  </FormGroup>	
                 <Button type="submit" className="btn btn-primary">{loader && !message? <ValueLoader /> : renderMessage.Log}</Button>
     

@@ -50,6 +50,7 @@ img{
 
 const Listing = ({value}) => {
     if(typeof value !== 'undefined'){
+
     return(
         <>
         {value.map(v => (
@@ -58,7 +59,7 @@ const Listing = ({value}) => {
         <TextSec>
             <FlexRow>
                 <h4>VT Netzwelt Pvt Ltd</h4>
-                <span>2 hours ago</span>
+            <span>{(new Date(v.updatedAt).toISOString()).substring(0, 10)}</span>
             </FlexRow>
             <p>{v.content}</p>
             <Icon>
