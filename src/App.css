@@ -134,6 +134,12 @@ span.react-datetime-picker__inputGroup__leadingZero {
   justify-content: flex-end;
   margin-top:auto;
 }
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  .modalButton{
+    margin-bottom:20px;
+  }
+}
+
 .modalButton button{
   margin-left:15px;
 }
@@ -218,6 +224,11 @@ font-family: 'Roboto',sans-serif;
 .rbc-day-slot .rbc-event.rbc-selected{
   border-color: #3174ad !important;
   background-color: #3174ad !important;
+}
+
+.ReactModal__Body--open{
+  position: fixed;
+  width:100%;
 }
 
 /* .rbc-btn-group button:nth-child(2){
