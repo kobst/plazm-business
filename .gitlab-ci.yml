@@ -6,6 +6,9 @@ sonar-scanner:
  script:
    - source /etc/environment
    - sonar-scanner -Dsonar.projectKey=metagon-curator-business -Dsonar.sources=. -Dsonar.host.url=$SONAR_HOST -Dsonar.login=$SONAR_KEY
+ only:
+   - development
+   - master
 deploy:
  stage: deploy
  script:
