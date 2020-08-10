@@ -57,10 +57,13 @@ p{
 `
 const LoginOuter =styled.div`
 display:flex;
-align-items: center;
 height: 100%;
-justify-content: center;
+
 width:100%;
+@media (max-width:1024px){
+justify-content: center;
+align-items: center;
+}
 `
 
 const Wrapper = (props) => {
