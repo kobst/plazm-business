@@ -370,7 +370,7 @@ const getDate = (value) =>{
         {/* Left card */}
         <Card>
           <FlexRow>
-            <Heading name="Post" />
+            <Heading name="Posts" />
             <Heading name="Mentions" />
           </FlexRow>
           <TextArea placeholder="Type your post here" />
@@ -392,7 +392,7 @@ const getDate = (value) =>{
         {/* Right Card */}
         <Card>
           <FlexRow>
-            <Heading name="Messages" />
+            <Heading name="Message" />
             <Button buttontext="New"></Button>
           </FlexRow>
           <Search />
