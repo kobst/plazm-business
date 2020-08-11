@@ -7,11 +7,12 @@ const Title = styled.h2`
  color:#000;
  font-weight:500;
  font-family: 'Roboto', sans-serif;
+ cursor: pointer;
 `
 
 const Heading = props => {
     return(
-      <Title>{props.name}</Title>
+      <Title onClick={()=>props.setMentions(props.name)}>{props.name}</Title>
     )
 }
 

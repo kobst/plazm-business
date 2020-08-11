@@ -87,8 +87,8 @@ const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen,
   }
 
   const addEvent = async () => {
-    setSaveDisable(true)
     if(Validation()){
+      setSaveDisable(true)
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/items`, {
       method: 'POST',
       headers: {
@@ -107,14 +107,15 @@ const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen,
     const body = await response.text();
     setIsOpen(false)
     setEdit(false)
+    setSaveDisable(false)
     window.location.reload()
     return body
   }
 
 }
 const handleEdit= async () => {
-  setSaveDisable(true)
   if(Validation()){
+    setSaveDisable(true)
   const response= await fetch(`${process.env.REACT_APP_API_URL}/api/items`, {
       method: 'PUT',
       headers: {
@@ -134,6 +135,7 @@ const handleEdit= async () => {
     const body = await response.text();
     setIsOpen(false)
     setEdit(false)
+    setSaveDisable(false)
     window.location.reload() 
     return body
 }

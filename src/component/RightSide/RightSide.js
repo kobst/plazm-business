@@ -180,6 +180,11 @@ const RightSide = () => {
   const [edit, setEdit] = useState(false)
   const [eventList,setEventList]= useState()
   const [feed,setFeed]= useState()
+  const [posts,setPosts]= useState()
+  const [mentions,setMention]= useState()
+  const [allFeed,setAllFeed]= useState()
+  const [description,setDescription]= useState()
+  const [saveDisable, setSaveDisable]= useState(false)
   useEffect(() => {
     let updateUser = async authState => {
       try {
@@ -189,9 +194,12 @@ const RightSide = () => {
         if (place && place.length!==0) {
           const val = await fetchItems(place[0]._id)
           const sol = val.filter(v => v.eventSchedule !== null)
-          const feed = val.filter(v => v.eventSchedule === null)
+          const feed = val.filter(v => !v.eventSchedule || v.eventSchedule === null)
+          setMention('post')
+          setPosts(val)
           setEventList(sol)
           setFeed(feed)
+          setAllFeed(feed)
           eventManage(sol)
         }
         else{
@@ -206,6 +214,19 @@ const RightSide = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useEffect(()=>{
+    const checkMentions = ()=> {
+    if(mentions==='post'){
+      setAllFeed(feed)
+    }
+    else{
+      setAllFeed(posts)
+    }
+  }
+  checkMentions()
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[mentions])
 
   const eventManage = (sol) => {
     let eventArr = []
@@ -310,7 +331,47 @@ const getDate = (value) =>{
       return time
 
 }
+const setMentions = (val) => {
+  if(val==='Posts'){
+    setMention('post')
+  }
+  else{
+    setMention('mention')
+  }
+}
 
+const Validation= ()=> {
+  if(!description){
+    return false
+  }
+  else{
+    return true
+  }
+}
+const addPost = async () => {
+  if(Validation()){
+    setSaveDisable(true)
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/api/items`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      place_id: place._id,
+      content:description,
+      scheduledEvent: "no",
+    })
+  });
+  const body = await response.text();
+  setSaveDisable(false)
+  window.location.reload()
+  return body
+}
+
+}
+const handleChange=(e)=>{
+setDescription(e.target.value)
+}
 
   return (
     <RightSection>
@@ -370,20 +431,24 @@ const getDate = (value) =>{
         {/* Left card */}
         <Card>
           <FlexRow>
-            <Heading name="Posts" />
-            <Heading name="Mentions" />
+            <Heading setMentions={setMentions} name="Posts" />
+            <Heading setMentions={setMentions} name="Mentions" />
           </FlexRow>
-          <TextArea placeholder="Type your post here" />
+          {mentions==='post'?
+          <>
+          <TextArea onChange={(e) => handleChange(e)} placeholder="Type your post here" />
           <FlexRow>
             <LineButton name="Public" />
             <Anchor>cancel</Anchor>
-            <Button buttontext="Publish"><BsChevronDown /></Button>
+            <Button disabled={saveDisable} onClick={()=> addPost()} buttontext="Publish" >{'Publish'}<BsChevronDown /></Button>
           </FlexRow>
+          </>: null
+}
 
           <BottomSection>
             <Heading name="Feed" />
             <ListingOuter>
-              <Listing value={feed}/>
+              <Listing value={allFeed}/>
             </ListingOuter>
           </BottomSection>
 
