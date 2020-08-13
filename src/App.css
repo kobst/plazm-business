@@ -230,34 +230,6 @@ font-family: 'Roboto',sans-serif;
   position: fixed;
   width:100%;
 }
-
-/* .rbc-btn-group button:nth-child(2){
-  border-left:1px solid #ccc!important;
-  border-right:1px solid #ccc!important;
+.active{
+  color: #C4C4C4;
 }
-.rbc-btn-group button{
-  border:none !important;
-  border-radius: 0px !important;
- 
-}
-.rbc-btn-group button:focus{
-  border-radius: 0px !important;
-  border:none !important;
-  outline:none !important;
-  background-color: #000;
-  color:#fff;
-}
-.rbc-btn-group button:hover{
-  background: transparent !important;
-  color:#000 !important;
-@media (max-width:991px){
-  .rbc-calendar{
-    width:100% !important;
-  }
-}
-
-@media (max-width:1024px){
-  .rbc-btn-group{
-    margin:10px 0;
-  }
-}*/
