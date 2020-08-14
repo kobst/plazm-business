@@ -5,7 +5,7 @@ import Heading from '../UI/Heading/Heading'
 import Card from '../UI/Card/Card'
 import LineButton from '../UI/LineButton/LineButton'
 import Button from '../UI/Button/Button'
-import { BsChevronDown } from "react-icons/bs";
+import DownArrow from '../../Public/images/white-down-arrow.svg'
 import Listing from '../UI/Listing/Listing'
 import Search from '../UI/Search/Search'
 import Messages from '../UI/Messages/Messages'
@@ -90,8 +90,8 @@ margin-top:30px;
 const ListingOuter = styled.div`
 padding: 0px;
 margin-top: 20px;
-height: 300px;
 overflow-y: auto;
+height: calc(100vh - 50px);
 `
 const EventSection = styled.div`
 display:flex;
@@ -462,7 +462,7 @@ setDescription(e.target.value)
           <Multiselect options={curators} displayValue="name" />: null
             } 
             <Anchor>cancel</Anchor>
-            <Button disabled={saveDisable} onClick={()=> addPost()} buttontext="Publish" >{'Publish'}<BsChevronDown /></Button>
+            <Button disabled={saveDisable} onClick={()=> addPost()} buttontext="Publish" >{'Publish'}<img src={DownArrow} alt="Down Arrow" /></Button>
           </FlexRow>
           </>: null
 }
@@ -483,9 +483,7 @@ setDescription(e.target.value)
             <Button buttontext="New"></Button>
           </FlexRow>
           <Search />
-          <ListingOuter>
-            <Listing/>
-          </ListingOuter>
+         
           {/* Messages Section */}
           <Messages />
           {/* Chat Section */}
