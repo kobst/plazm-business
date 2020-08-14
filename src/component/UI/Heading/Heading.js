@@ -10,9 +10,9 @@ const Title = styled.h2`
  cursor: pointer;
 `
 
-const Heading = props => {
+const Heading = ({setMentions,name}) => {
     return(
-      <Title onClick={()=>props.setMentions(props.name)}>{props.name}</Title>
+      <Title onClick={()=>setMentions(name)}>{name}</Title>
     )
 }
 

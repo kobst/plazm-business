@@ -1,7 +1,7 @@
 
 import React from 'react'
 import styled from 'styled-components'
-import DownArrow from '../../../Public/images/down-arrow.svg'
+// import DownArrow from '../../../Public/images/down-arrow.svg'
 
 const ButtonText = styled.div`
 height: 37px;
@@ -22,7 +22,7 @@ img{
 
 const LineButton = props => {
     return(
-      <ButtonText>{props.name}<img src={DownArrow} alt={DownArrow} /></ButtonText>
+      <ButtonText onClick={()=>props.setShowTag(true)}>{props.name}</ButtonText>
     )
 }
 

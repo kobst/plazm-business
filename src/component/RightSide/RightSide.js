@@ -15,10 +15,11 @@ import { Link } from "react-router-dom";
 import AddModalBox from '../Add-Event/index'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
-import { callPlace, fetchItems } from '../../Api'
+import { callPlace, fetchItems, fetchUsers } from '../../Api'
 import ValueLoader from '../../utils/loader'
 import { RRule } from 'rrule'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+ import { Multiselect } from 'multiselect-react-dropdown';
 
 
 
@@ -185,17 +186,28 @@ const RightSide = () => {
   const [allFeed,setAllFeed]= useState()
   const [description,setDescription]= useState()
   const [saveDisable, setSaveDisable]= useState(false)
+  const [showTag,setShowTag]= useState(false)
+  const [curators,setCurators]= useState([])
   useEffect(() => {
     let updateUser = async authState => {
       try {
         const value = await Auth.currentAuthenticatedUser()
         const place = await callPlace(value.attributes.sub)
+        const users = await fetchUsers()
+        if(users){
+          const userVal=[]
+         users.map(v=>{
+           return userVal.push( {name: v.name})
+          })
+          setCurators(userVal)
+    
+        }
         setPlace(place[0])
         if (place && place.length!==0) {
           const val = await fetchItems(place[0]._id)
           const sol = val.filter(v => v.eventSchedule !== null)
           const feed = val.filter(v => !v.eventSchedule || v.eventSchedule === null)
-          setMention('post')
+          setMention('Public')
           setPosts(val)
           setEventList(sol)
           setFeed(feed)
@@ -215,11 +227,12 @@ const RightSide = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(()=>{
+
     const checkMentions = ()=> {
-    if(mentions==='post'){
+    if(mentions==='Public'){
       setAllFeed(feed)
     }
-    else{
+    else if(mentions==='All Mentions'){
       setAllFeed(posts)
     }
   }
@@ -331,12 +344,15 @@ const getDate = (value) =>{
       return time
 
 }
-const setMentions = (val) => {
-  if(val==='Posts'){
-    setMention('post')
+  const setMentions = (val) => {
+  if(val==='Public'){
+     setMention('Public')
+   }
+   else if(val=== 'All Mentions'){
+    setMention('All Mentions')
   }
   else{
-    setMention('mention')
+    setMention('Messages')
   }
 }
 
@@ -372,6 +388,8 @@ const addPost = async () => {
 const handleChange=(e)=>{
 setDescription(e.target.value)
 }
+
+// const options = [{name: 'John Watson', id: 1},{name: 'Marie Curie', id: 2}]
 
   return (
     <RightSection>
@@ -431,14 +449,18 @@ setDescription(e.target.value)
         {/* Left card */}
         <Card>
           <FlexRow>
-            <Heading setMentions={setMentions} name="Posts" />
-            <Heading setMentions={setMentions} name="Mentions" />
+            <Heading setMentions={setMentions} name="Public" />
+            <Heading setMentions={setMentions} name="All Mentions" />
+            <Heading setMentions={setMentions} name="Messages" />
           </FlexRow>
-          {mentions==='post'?
+          {mentions==='Public'?
           <>
           <TextArea onChange={(e) => handleChange(e)} placeholder="Type your post here" />
           <FlexRow>
-            <LineButton name="Public" />
+          <LineButton setShowTag={setShowTag} name="Add Tags" />
+          { showTag ?
+          <Multiselect options={curators} displayValue="name" />: null
+            } 
             <Anchor>cancel</Anchor>
             <Button disabled={saveDisable} onClick={()=> addPost()} buttontext="Publish" >{'Publish'}<BsChevronDown /></Button>
           </FlexRow>
