@@ -231,5 +231,41 @@ font-family: 'Roboto',sans-serif;
   width:100%;
 }
 .active{
-  color: #C4C4C4;
+  color: #9c9c9c !important;
+}
+
+#multiselectContainerReact{
+    padding: 0;
+    height: 37px;
+    width: 43%;
+    margin-left: 10px;
+    border: 1px solid #A8A8A8;
+    line-height: 31px;
+    border-radius:4px;
+}
+#multiselectContainerReact > div{
+  border:none !important;
+  min-height:inherit !important;
+  padding:0px !important;
+}
+#multiselectContainerReact input{
+  padding: 0 5px;
+}
+#multiselectContainerReact .optionContainer li{
+padding:3px 5px !important;
+}
+
+@media (max-width:767px){
+  #multiselectContainerReact{
+    line-height:28px;
+  }
+}
+
+@media (max-width:520px){
+  #multiselectContainerReact{
+    order: 4;
+    margin: 15px 0 0 0;
+    width: 100%;
+    max-width: 270px;
+  }
 }

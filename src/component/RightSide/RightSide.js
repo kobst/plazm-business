@@ -61,6 +61,7 @@ const FlexRow = styled.div`
 display: flex;
 justify-content: space-between;
 align-items:center;
+flex-wrap:wrap;
 `
 const TextArea = styled.textarea`
 background-color: #F2F2F2;
@@ -480,15 +481,17 @@ setDescription(e.target.value)
           <Multiselect options={curators} displayValue="name" />: null
             } 
             <Anchor onClick={()=>setDescription('')}>cancel</Anchor>
-            <Button disabled={saveDisable} onClick={()=> addPost()} buttontext="Publish" >{'Publish'}<img src={DownArrow} alt="Down Arrow" /></Button>
+            <Button disabled={saveDisable} onClick={()=> addPost()} buttontext="Publish" >{'Publish'}</Button>
           </FlexRow>
           </>: null
 }
 
           <BottomSection>
             <Heading name="Feed" />
+            <Search />
             <ListingOuter>
               <Listing value={allFeed}/>
+              
             </ListingOuter>
           </BottomSection>
 
