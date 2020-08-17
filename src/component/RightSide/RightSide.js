@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Heading from '../UI/Heading/Heading'
+import Tabs from '../UI/Tabs/Tabs'
 import Card from '../UI/Card/Card'
 import LineButton from '../UI/LineButton/LineButton'
 import Button from '../UI/Button/Button'
@@ -77,7 +78,7 @@ margin-bottom:7px;
   outline:none;
 }
 `
-const Anchor = styled.a`
+const Anchor = styled.div`
 margin-left:auto;
 font-size:14px;
 font-weight:500px;
@@ -188,6 +189,10 @@ const RightSide = () => {
   const [saveDisable, setSaveDisable]= useState(false)
   const [showTag,setShowTag]= useState(false)
   const [curators,setCurators]= useState([])
+  const [activePublic,setActivePublic]= useState(false)
+  const [activeMentions,setActiveMentions]= useState(false)
+  const [mess,setActiveMess]= useState(false)
+
   useEffect(() => {
     let updateUser = async authState => {
       try {
@@ -208,6 +213,7 @@ const RightSide = () => {
           const sol = val.filter(v => v.eventSchedule !== null)
           const feed = val.filter(v => !v.eventSchedule || v.eventSchedule === null)
           setMention('Public')
+          setActivePublic(true)
           setPosts(val)
           setEventList(sol)
           setFeed(feed)
@@ -231,9 +237,21 @@ const RightSide = () => {
     const checkMentions = ()=> {
     if(mentions==='Public'){
       setAllFeed(feed)
+      setActiveMentions(false)
+      setActiveMess(false)
+      setActivePublic(true)
     }
     else if(mentions==='All Mentions'){
       setAllFeed(posts)
+      setActiveMentions(true)
+      setActiveMess(false)
+      setActivePublic(false)
+    }
+    else{
+      setAllFeed(posts)
+      setActiveMentions(false)
+      setActiveMess(true)
+      setActivePublic(false)
     }
   }
   checkMentions()
@@ -449,19 +467,19 @@ setDescription(e.target.value)
         {/* Left card */}
         <Card>
           <FlexRow>
-            <Heading setMentions={setMentions} name="Public" />
-            <Heading setMentions={setMentions} name="All Mentions" />
-            <Heading setMentions={setMentions} name="Messages" />
+            <Tabs isActive={activePublic} setMentions={setMentions} name="Public" />
+            <Tabs isActive={activeMentions} setMentions={setMentions} name="All Mentions" />
+            <Tabs isActive={mess}  setMentions={setMentions} name="Messages" />
           </FlexRow>
           {mentions==='Public'?
           <>
-          <TextArea onChange={(e) => handleChange(e)} placeholder="Type your post here" />
+          <TextArea value={description} onChange={(e) => handleChange(e)} placeholder="Type your post here" />
           <FlexRow>
           <LineButton setShowTag={setShowTag} name="Add Tags" />
           { showTag ?
           <Multiselect options={curators} displayValue="name" />: null
             } 
-            <Anchor>cancel</Anchor>
+            <Anchor onClick={()=>setDescription('')}>cancel</Anchor>
             <Button disabled={saveDisable} onClick={()=> addPost()} buttontext="Publish" >{'Publish'}<img src={DownArrow} alt="Down Arrow" /></Button>
           </FlexRow>
           </>: null
