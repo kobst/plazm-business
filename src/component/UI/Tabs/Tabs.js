@@ -1,4 +1,3 @@
-
 import React from 'react'
 import styled from 'styled-components'
 
@@ -7,12 +6,13 @@ const Title = styled.h2`
  color:#000;
  font-weight:500;
  font-family: 'Roboto', sans-serif;
+ cursor: pointer;
 `
 
-const Heading = props => {
+const Tabs = ({setMentions,name,isActive}) => {
     return(
-      <Title {...props}>{props.name}</Title>
+      <Title className={isActive? 'active' : null} onClick={()=>setMentions(name)}>{name}</Title>
     )
 }
 
-export default Heading
+export default Tabs

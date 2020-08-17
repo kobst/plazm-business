@@ -2,10 +2,11 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Heading from '../UI/Heading/Heading'
+import Tabs from '../UI/Tabs/Tabs'
 import Card from '../UI/Card/Card'
 import LineButton from '../UI/LineButton/LineButton'
 import Button from '../UI/Button/Button'
-import { BsChevronDown } from "react-icons/bs";
+import DownArrow from '../../Public/images/white-down-arrow.svg'
 import Listing from '../UI/Listing/Listing'
 import Search from '../UI/Search/Search'
 import Messages from '../UI/Messages/Messages'
@@ -15,10 +16,11 @@ import { Link } from "react-router-dom";
 import AddModalBox from '../Add-Event/index'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
-import { callPlace, fetchItems } from '../../Api'
+import { callPlace, fetchItems, fetchUsers } from '../../Api'
 import ValueLoader from '../../utils/loader'
 import { RRule } from 'rrule'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+ import { Multiselect } from 'multiselect-react-dropdown';
 
 
 
@@ -59,6 +61,7 @@ const FlexRow = styled.div`
 display: flex;
 justify-content: space-between;
 align-items:center;
+flex-wrap:wrap;
 `
 const TextArea = styled.textarea`
 background-color: #F2F2F2;
@@ -76,7 +79,7 @@ margin-bottom:7px;
   outline:none;
 }
 `
-const Anchor = styled.a`
+const Anchor = styled.div`
 margin-left:auto;
 font-size:14px;
 font-weight:500px;
@@ -89,8 +92,8 @@ margin-top:30px;
 const ListingOuter = styled.div`
 padding: 0px;
 margin-top: 20px;
-height: 300px;
 overflow-y: auto;
+height: calc(100vh - 50px);
 `
 const EventSection = styled.div`
 display:flex;
@@ -185,17 +188,33 @@ const RightSide = () => {
   const [allFeed,setAllFeed]= useState()
   const [description,setDescription]= useState()
   const [saveDisable, setSaveDisable]= useState(false)
+  const [showTag,setShowTag]= useState(false)
+  const [curators,setCurators]= useState([])
+  const [activePublic,setActivePublic]= useState(false)
+  const [activeMentions,setActiveMentions]= useState(false)
+  const [mess,setActiveMess]= useState(false)
+
   useEffect(() => {
     let updateUser = async authState => {
       try {
         const value = await Auth.currentAuthenticatedUser()
         const place = await callPlace(value.attributes.sub)
+        const users = await fetchUsers()
+        if(users){
+          const userVal=[]
+         users.map(v=>{
+           return userVal.push( {name: v.name})
+          })
+          setCurators(userVal)
+    
+        }
         setPlace(place[0])
         if (place && place.length!==0) {
           const val = await fetchItems(place[0]._id)
           const sol = val.filter(v => v.eventSchedule !== null)
           const feed = val.filter(v => !v.eventSchedule || v.eventSchedule === null)
-          setMention('post')
+          setMention('Public')
+          setActivePublic(true)
           setPosts(val)
           setEventList(sol)
           setFeed(feed)
@@ -215,12 +234,25 @@ const RightSide = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(()=>{
+
     const checkMentions = ()=> {
-    if(mentions==='post'){
+    if(mentions==='Public'){
       setAllFeed(feed)
+      setActiveMentions(false)
+      setActiveMess(false)
+      setActivePublic(true)
+    }
+    else if(mentions==='All Mentions'){
+      setAllFeed(posts)
+      setActiveMentions(true)
+      setActiveMess(false)
+      setActivePublic(false)
     }
     else{
       setAllFeed(posts)
+      setActiveMentions(false)
+      setActiveMess(true)
+      setActivePublic(false)
     }
   }
   checkMentions()
@@ -331,12 +363,15 @@ const getDate = (value) =>{
       return time
 
 }
-const setMentions = (val) => {
-  if(val==='Posts'){
-    setMention('post')
+  const setMentions = (val) => {
+  if(val==='Public'){
+     setMention('Public')
+   }
+   else if(val=== 'All Mentions'){
+    setMention('All Mentions')
   }
   else{
-    setMention('mention')
+    setMention('Messages')
   }
 }
 
@@ -372,6 +407,8 @@ const addPost = async () => {
 const handleChange=(e)=>{
 setDescription(e.target.value)
 }
+
+// const options = [{name: 'John Watson', id: 1},{name: 'Marie Curie', id: 2}]
 
   return (
     <RightSection>
@@ -431,24 +468,30 @@ setDescription(e.target.value)
         {/* Left card */}
         <Card>
           <FlexRow>
-            <Heading setMentions={setMentions} name="Posts" />
-            <Heading setMentions={setMentions} name="Mentions" />
+            <Tabs isActive={activePublic} setMentions={setMentions} name="Public" />
+            <Tabs isActive={activeMentions} setMentions={setMentions} name="All Mentions" />
+            <Tabs isActive={mess}  setMentions={setMentions} name="Messages" />
           </FlexRow>
-          {mentions==='post'?
+          {mentions==='Public'?
           <>
-          <TextArea onChange={(e) => handleChange(e)} placeholder="Type your post here" />
+          <TextArea value={description} onChange={(e) => handleChange(e)} placeholder="Type your post here" />
           <FlexRow>
-            <LineButton name="Public" />
-            <Anchor>cancel</Anchor>
-            <Button disabled={saveDisable} onClick={()=> addPost()} buttontext="Publish" >{'Publish'}<BsChevronDown /></Button>
+          <LineButton setShowTag={setShowTag} name="Add Tags" />
+          { showTag ?
+          <Multiselect options={curators} displayValue="name" />: null
+            } 
+            <Anchor onClick={()=>setDescription('')}>cancel</Anchor>
+            <Button disabled={saveDisable} onClick={()=> addPost()} buttontext="Publish" >{'Publish'}</Button>
           </FlexRow>
           </>: null
 }
 
           <BottomSection>
             <Heading name="Feed" />
+            <Search />
             <ListingOuter>
               <Listing value={allFeed}/>
+              
             </ListingOuter>
           </BottomSection>
 
@@ -461,9 +504,7 @@ setDescription(e.target.value)
             <Button buttontext="New"></Button>
           </FlexRow>
           <Search />
-          <ListingOuter>
-            <Listing/>
-          </ListingOuter>
+         
           {/* Messages Section */}
           <Messages />
           {/* Chat Section */}

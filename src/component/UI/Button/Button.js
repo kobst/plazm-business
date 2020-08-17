@@ -8,7 +8,7 @@ height: 37px;
 background: #000;
 border-radius: 5px;
 font-size: 14px;
-margin-top: 10px;
+// margin-top: 10px;
 color: #fff;
 font-weight: 500;
 font-family: 'Roboto',sans-serif;
@@ -22,6 +22,9 @@ border:none;
 :hover,:focus{
   background: rgba(0,0,0,0.9);
   outline:none;
+}
+svg,img{
+  margin-left:5px;
 }
 `
 
