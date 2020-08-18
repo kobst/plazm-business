@@ -11,10 +11,12 @@ font-size: 12px;
 color: #848484;
 font-family: 'Roboto',sans-serif;
 display: inline-flex;
+font-weight:500;
 align-items: center;
 justify-content: center;
 padding: 0 10px;
 max-width:83px;
+line-height: 37px;
 width:100%;
 cursor:pointer;
 :hover,:focus{

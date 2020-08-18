@@ -71,7 +71,7 @@ resize: none;
 height: 85px;
 margin-top: 20px;
 font-size: 14px;
-color: #8b8b8b;
+color: #000;
 padding: 10px;
 margin-bottom:7px;
 :focus{
@@ -81,7 +81,7 @@ margin-bottom:7px;
 const Anchor = styled.div`
 margin-left:auto;
 font-size:14px;
-font-weight:500px;
+font-weight:500;
 margin-right:20px;
 cursor:pointer;
 `
