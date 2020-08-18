@@ -256,7 +256,7 @@ font-family: 'Roboto',sans-serif;
   font-weight: 500;
   font-family: 'Roboto',sans-serif;
 }
-#multiselectContainerReact .optionContainer {
+#multiselectContainerReact .optionContainer ul{
   width:178px;
 }
 #multiselectContainerReact .optionContainer li{
@@ -277,7 +277,7 @@ padding:3px 5px !important;
   height: 10px;
   content: "" !important;
   position: relative;
-  top: 0px;
+  top: 1.5px;
 }
 /* #multiselectContainerReact > div i::after{
   background: url(./images/cross1.svg);
