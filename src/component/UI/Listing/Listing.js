@@ -48,24 +48,27 @@ img{
 `
 
 
-const Listing = ({value}) => {
+const Listing = ({mentions,value,data}) => {
     if(typeof value !== 'undefined'){
-
+      const valueArray= value.reverse()
     return(
         <>
-        {value.map(v => (
+        
+        {valueArray.map(v => (
         <ListContainer>
         <ImgSec/>
         <TextSec>
             <FlexRow>
-                <h4>VT Netzwelt Pvt Ltd</h4>
-            <span>{(new Date(v.updatedAt).toISOString()).substring(0, 10)}</span>
+            <h4>{v.name? v.name:data.company_name}</h4>
+            <span>{(new Date(v.updatedAt).toLocaleString()).substring(0, 10)}</span>
             </FlexRow>
             <p>{v.content}</p>
+            {mentions==='All Mentions'||(v.name!==data.company_name&& v.name)?
             <Icon>
             <img src={LikeIcon} alt={LikeIcon} />
             <img src={CommentIcon} alt={CommentIcon} />
-            </Icon>
+            </Icon>: null
+    }
         </TextSec>
         </ListContainer>
         ))}
