@@ -50,11 +50,10 @@ img{
 
 const Listing = ({mentions,value,data}) => {
     if(typeof value !== 'undefined'){
-      const valueArray= value.reverse()
     return(
         <>
         
-        {valueArray.map(v => (
+        {value.map(v => (
         <ListContainer>
         <ImgSec/>
         <TextSec>
