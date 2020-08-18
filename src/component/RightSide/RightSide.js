@@ -192,6 +192,7 @@ const RightSide = () => {
   const [activePublic,setActivePublic]= useState(false)
   const [activeMentions,setActiveMentions]= useState(false)
   const [mess,setActiveMess]= useState(false)
+  const [allMentions,setAllMentions]= useState()
 
   useEffect(() => {
     let updateUser = async authState => {
@@ -209,15 +210,18 @@ const RightSide = () => {
         }
         setPlace(place[0])
         if (place && place.length!==0) {
+  
           const val = await fetchItems(place[0]._id)
-          const sol = val.filter(v => v.eventSchedule !== null)
-          const feed = val.filter(v => !v.eventSchedule || v.eventSchedule === null)
+          const sol = val.filter(v => v.eventSchedule !== null && v.eventSchedule)
+          const feed = val.filter(v => (!v.eventSchedule || v.eventSchedule === null))
+          const allMentions = val.filter(v => (!v.eventSchedule || v.eventSchedule === null)&&(v.name!==place[0].company_name)&& v.name)
           setMention('Public')
           setActivePublic(true)
           setPosts(val)
           setEventList(sol)
           setFeed(feed)
-          setAllFeed(feed.reverse())
+          setAllFeed(feed)
+          setAllMentions(allMentions)
           eventManage(sol)
         }
         else{
@@ -242,7 +246,7 @@ const RightSide = () => {
       setActivePublic(true)
     }
     else if(mentions==='All Mentions'){
-      setAllFeed(posts)
+      setAllFeed(allMentions)
       setActiveMentions(true)
       setActiveMess(false)
       setActivePublic(false)
@@ -492,7 +496,7 @@ setDescription(e.target.value)
             <Search />: null
              }
             <ListingOuter>
-              <Listing value={allFeed}/>
+              <Listing mentions={mentions} data={place} value={allFeed}/>
             </ListingOuter>
           </BottomSection>
 
