@@ -65,7 +65,7 @@ margin-top:30px;
 const Anchor = styled.a`
 margin-left:auto;
 font-size:14px;
-font-weight:500px;
+font-weight:500;
 margin-right:20px;
 cursor:pointer;
 `

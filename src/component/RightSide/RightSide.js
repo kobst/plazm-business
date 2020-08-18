@@ -6,7 +6,6 @@ import Tabs from '../UI/Tabs/Tabs'
 import Card from '../UI/Card/Card'
 import LineButton from '../UI/LineButton/LineButton'
 import Button from '../UI/Button/Button'
-import DownArrow from '../../Public/images/white-down-arrow.svg'
 import Listing from '../UI/Listing/Listing'
 import Search from '../UI/Search/Search'
 import Messages from '../UI/Messages/Messages'
@@ -72,7 +71,7 @@ resize: none;
 height: 85px;
 margin-top: 20px;
 font-size: 14px;
-color: #8b8b8b;
+color: #000;
 padding: 10px;
 margin-bottom:7px;
 :focus{
@@ -82,7 +81,7 @@ margin-bottom:7px;
 const Anchor = styled.div`
 margin-left:auto;
 font-size:14px;
-font-weight:500px;
+font-weight:500;
 margin-right:20px;
 cursor:pointer;
 `
@@ -193,6 +192,7 @@ const RightSide = () => {
   const [activePublic,setActivePublic]= useState(false)
   const [activeMentions,setActiveMentions]= useState(false)
   const [mess,setActiveMess]= useState(false)
+  const [allMentions,setAllMentions]= useState()
 
   useEffect(() => {
     let updateUser = async authState => {
@@ -210,15 +210,18 @@ const RightSide = () => {
         }
         setPlace(place[0])
         if (place && place.length!==0) {
+  
           const val = await fetchItems(place[0]._id)
-          const sol = val.filter(v => v.eventSchedule !== null)
-          const feed = val.filter(v => !v.eventSchedule || v.eventSchedule === null)
+          const sol = val.filter(v => v.eventSchedule !== null && v.eventSchedule)
+          const feed = val.filter(v => (!v.eventSchedule || v.eventSchedule === null))
+          const allMentions = val.filter(v => (!v.eventSchedule || v.eventSchedule === null)&&(v.name!==place[0].company_name)&& v.name)
           setMention('Public')
           setActivePublic(true)
           setPosts(val)
           setEventList(sol)
           setFeed(feed)
           setAllFeed(feed)
+          setAllMentions(allMentions)
           eventManage(sol)
         }
         else{
@@ -243,7 +246,7 @@ const RightSide = () => {
       setActivePublic(true)
     }
     else if(mentions==='All Mentions'){
-      setAllFeed(posts)
+      setAllFeed(allMentions)
       setActiveMentions(true)
       setActiveMess(false)
       setActivePublic(false)
@@ -376,7 +379,7 @@ const getDate = (value) =>{
 }
 
 const Validation= ()=> {
-  if(!description){
+  if(!(description.trim())){
     return false
   }
   else{
@@ -398,7 +401,6 @@ const addPost = async () => {
     })
   });
   const body = await response.text();
-  setSaveDisable(false)
   window.location.reload()
   return body
 }
@@ -481,17 +483,20 @@ setDescription(e.target.value)
           <Multiselect options={curators} displayValue="name" />: null
             } 
             <Anchor onClick={()=>setDescription('')}>cancel</Anchor>
-            <Button disabled={saveDisable} onClick={()=> addPost()} buttontext="Publish" >{'Publish'}</Button>
+            <Button className="btn btn-primary" disabled={saveDisable} onClick={()=> addPost()} buttontext="Publish" >{'Publish'}</Button>
           </FlexRow>
           </>: null
 }
 
           <BottomSection>
-            <Heading name="Feed" />
-            <Search />
+          {mentions==='Public'?
+            <Heading name="Feed" />: null
+             }
+          {mentions==='Messages'?
+            <Search />: null
+             }
             <ListingOuter>
-              <Listing value={allFeed}/>
-              
+              <Listing mentions={mentions} data={place} value={allFeed}/>
             </ListingOuter>
           </BottomSection>
 
