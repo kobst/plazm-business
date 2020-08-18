@@ -236,7 +236,7 @@ font-family: 'Roboto',sans-serif;
 
 #multiselectContainerReact{
     padding: 0;
-margin-top:10px;
+    margin-top:10px;
     order: 4;
     width: 100%;
 
@@ -247,15 +247,46 @@ margin-top:10px;
   padding:0px !important;
 }
 #multiselectContainerReact input{
-  padding: 0 5px;
+  padding: 0 10px;
   border: 1px solid #A8A8A8;
-  border-radius:4px;
+  border-radius: 4px;
   line-height: 31px;
   height: 37px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'Roboto',sans-serif;
+}
+#multiselectContainerReact .optionContainer ul{
+  width:178px;
 }
 #multiselectContainerReact .optionContainer li{
 padding:3px 5px !important;
 }
+#multiselectContainerReact .optionContainer li:first-child{
+  background: transparent;
+  color: #000;
+}
+#multiselectContainerReact .optionContainer li:first-child:hover{
+  background: #0096fb;
+    color: #fff;
+}
+
+#multiselectContainerReact > div i::before{
+  background: url(./images/close-icon_1.svg);
+  width: 10px;
+  height: 10px;
+  content: "" !important;
+  position: relative;
+  top: 0px;
+}
+/* #multiselectContainerReact > div i::after{
+  background: url(./images/cross1.svg);
+  width: 14px;
+  height: 14px;
+  content: "" !important;
+  position: relative;
+  top: 2px;
+} */
 
 @media (max-width:767px){
   #multiselectContainerReact{
