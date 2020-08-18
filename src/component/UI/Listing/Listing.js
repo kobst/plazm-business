@@ -50,16 +50,16 @@ img{
 
 const Listing = ({value}) => {
     if(typeof value !== 'undefined'){
-
+      const valueArray= value.reverse()
     return(
         <>
-        {value.map(v => (
+        {valueArray.map(v => (
         <ListContainer>
         <ImgSec/>
         <TextSec>
             <FlexRow>
                 <h4>VT Netzwelt Pvt Ltd</h4>
-            <span>{(new Date(v.updatedAt).toISOString()).substring(0, 10)}</span>
+            <span>{(new Date(v.updatedAt).toLocaleString()).substring(0, 10)}</span>
             </FlexRow>
             <p>{v.content}</p>
             <Icon>

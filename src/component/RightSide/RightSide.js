@@ -6,7 +6,6 @@ import Tabs from '../UI/Tabs/Tabs'
 import Card from '../UI/Card/Card'
 import LineButton from '../UI/LineButton/LineButton'
 import Button from '../UI/Button/Button'
-import DownArrow from '../../Public/images/white-down-arrow.svg'
 import Listing from '../UI/Listing/Listing'
 import Search from '../UI/Search/Search'
 import Messages from '../UI/Messages/Messages'
@@ -218,7 +217,7 @@ const RightSide = () => {
           setPosts(val)
           setEventList(sol)
           setFeed(feed)
-          setAllFeed(feed)
+          setAllFeed(feed.reverse())
           eventManage(sol)
         }
         else{
@@ -376,7 +375,7 @@ const getDate = (value) =>{
 }
 
 const Validation= ()=> {
-  if(!description){
+  if(!(description.trim())){
     return false
   }
   else{
@@ -398,7 +397,6 @@ const addPost = async () => {
     })
   });
   const body = await response.text();
-  setSaveDisable(false)
   window.location.reload()
   return body
 }
@@ -481,17 +479,20 @@ setDescription(e.target.value)
           <Multiselect options={curators} displayValue="name" />: null
             } 
             <Anchor onClick={()=>setDescription('')}>cancel</Anchor>
-            <Button disabled={saveDisable} onClick={()=> addPost()} buttontext="Publish" >{'Publish'}</Button>
+            <Button className="btn btn-primary" disabled={saveDisable} onClick={()=> addPost()} buttontext="Publish" >{'Publish'}</Button>
           </FlexRow>
           </>: null
 }
 
           <BottomSection>
-            <Heading name="Feed" />
-            <Search />
+          {mentions==='Public'?
+            <Heading name="Feed" />: null
+             }
+          {mentions==='Messages'?
+            <Search />: null
+             }
             <ListingOuter>
               <Listing value={allFeed}/>
-              
             </ListingOuter>
           </BottomSection>
 
