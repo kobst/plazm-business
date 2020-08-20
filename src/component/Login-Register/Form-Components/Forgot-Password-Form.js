@@ -6,9 +6,10 @@ import Button from '../../UI/Button/Button'
 import Input from '../../UI/Input/Input'
 import ValueLoader from '../../../utils/loader'
 import {getMessage} from '../../../config'
+import ResetImg from '../../../images/resetimg.jpg'
 
 const FormGroup = styled.div `
-margin-bottom:35px;
+margin-bottom:0px;
 h6{
     color: red;
   }
@@ -16,8 +17,6 @@ h6{
     color: green;
   }
 
-  @media(max-width:899px){
-    margin-bottom: 25px;
 
 `
 

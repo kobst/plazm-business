@@ -4,23 +4,19 @@ import styled from 'styled-components'
 // import PlusIcon from '../../../Public/images/plus.svg'
 
 const ButtonText = styled.button`
-height: 37px;
-background: #000;
-border-radius: 5px;
-font-size: 14px;
-// margin-top: 10px;
-color: #fff;
-font-weight: 500;
-font-family: 'Roboto',sans-serif;
-display: inline-flex;
-align-items: center;
-justify-content: center;
-padding: 0 10px;
-min-width: 95px;
+background: #280A33;
+border-radius: 7px;
+height:53px;
+font-size:18px;
+line-height:21px;
 cursor:pointer;
 border:none;
+color:#fff;
+font-weight:500;
+width:100%;
+font-family: 'Roboto', sans-serif;
 :hover,:focus{
-  background: rgba(0,0,0,0.9);
+  background: #280A33;
   outline:none;
 }
 svg,img{

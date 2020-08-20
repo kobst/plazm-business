@@ -1,61 +1,48 @@
 import React from 'react'
 import styled from 'styled-components'
+import PlazmText from '../../../images/plazm.svg'
+import ResetImg from '../../../images/resetimg.jpg'
 
 const LoginWrapper = styled.div`
-height: 100%
+height: 100%;
+background: linear-gradient(313.15deg, #FF479D 8.23%, #FF7171 95.51%);
+display:flex; 
+align-items:center;
+width:100%;
 `
 
 const LoginContainer = styled.div`
-height: 100%;
-padding: 0;
-display: table;
-width: 100%;
+background:#fff;
+display:flex;
+padding: 3.2vw 0 3.5vw;
+width:100%;
 `
-const Row = styled.div`
-height: 100%;
-display: table-row;
-> div{
-    display: table-cell; 
-    width: 50%;
-}
-> div:first-child{
-    background-color: #f2f2f2;  
-    text-align: center; 
-    vertical-align: middle; 
-}
-> div:last-child{
-    background-color: #fff;
-}
-`
+
 const LoginFormWrapper = styled.div`
-padding:65px 50px 50px 50px;
-@media (max-width:1024px){
-    width:100%;
-    padding:25px;
-a{
-    margin:5px 5px 5px 0;
-}
-}
-button{
-    min-width: 180px;
-}
-
-
+padding:0px;
 `
 
-const LoginFormHeader = styled.div `
-padding-bottom: 30px;
-h1{
-    font-size:25px; font-weight: 800; margin: 0;
+const LoginFormHeader = styled.div`
+padding-bottom: 26px;
+h2{
+    font-weight: bold;
+    font-size: 34px;
+    line-height: 40px;
+    color: #2C2738;
+    font-family: 'IBM Plex Sans', sans-serif;
+    margin:0px 0 10px;
 }
 p{
-    font-size: 12px; 
-    font-weight: 400; 
-    margin: 10px 0 0 0;
+    font-size: 16px;
+    line-height: 22px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    margin:0px;
+    color:#2C2738;
+}
 }
 
 `
-const LoginOuter =styled.div`
+const LoginOuter = styled.div`
 display:flex;
 height: 100%;
 
@@ -65,31 +52,66 @@ justify-content: center;
 align-items: center;
 }
 `
+const LoginInner = styled.div`
+max-width:1440px;
+padding: 0 15px;
+width:100%;
+margin:0 auto;
+display: flex;
+justify-content: space-around;
+align-items: center;
+`
+const RightSide = styled.div`
+max-width:440px;
+width:100%;
+button{
+    margin-top: 12px;
+}
+`
+const LeftSide = styled.div`
+img {
+    margin-bottom: 15px;
+}
+p{
+    font-size: 16px;
+    line-height: 22px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    margin:12px 0px; 
+    color:#2C2738;
+    max-width:385px;
+    width:100%;
+}
+`
 
 const Wrapper = (props) => {
-return(
-<LoginWrapper>
-  <LoginContainer>
-    <Row>			
-        <div className="col-md-6"> </div>
-        <div className="col-md-6">
-            <LoginOuter>
-            <LoginFormWrapper>
-                <LoginFormHeader>
-                    <h1>{props.heading}</h1>
-                    <p>{props.welcomeMessage}</p>
-                </LoginFormHeader>
-                <div className="login-form-nested-wrapper">
-                 {props.children}
-                </div>
-               </LoginFormWrapper>
-               </LoginOuter>
-
-        </div>			
-    </Row>
-  </LoginContainer>
-</LoginWrapper>
-)
+    return (
+        <LoginWrapper>
+            <LoginContainer>
+                <LoginInner>
+                    <LeftSide>
+                        <img src={PlazmText} alt="Plazm" />
+                        <p>Claim and Customize your spot on Plazm Map</p>
+                        <p>Connect & engage your nearby audience</p>
+                        <p>Make Announcement, share photos, schedule events and moderate your board</p>
+                        {/* <img src={ResetImg} alt="" /> */}
+                    </LeftSide>
+                    <RightSide>
+                        <LoginOuter>
+                            <LoginFormWrapper>
+                                <LoginFormHeader>
+                                    <h2>{props.heading}</h2>
+                                    <p>{props.welcomeMessage}</p>
+                                </LoginFormHeader>
+                                <div className="login-form-nested-wrapper">
+                                    {props.children}
+                                </div>
+                            </LoginFormWrapper>
+                        </LoginOuter>
+                    </RightSide>
+                </LoginInner>
+            </LoginContainer>
+        </LoginWrapper>
+    )
 }
 
 export default Wrapper

@@ -8,7 +8,7 @@ import SearchLocationInput  from '../../../utils/findYourBusiness'
 import ValueLoader from '../../../utils/loader'
 
 const FormGroup = styled.div `
-margin-bottom:35px;
+margin-bottom:22px;
 h6{
     color: red;
   }

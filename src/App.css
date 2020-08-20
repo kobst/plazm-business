@@ -1,3 +1,6 @@
+*{
+  box-sizing: border-box;
+}
 body, html{font-family: 'Roboto',sans-serif; height: 100%; background-color:#eee; color:#000;}
 .input-error{
   border-color: red;

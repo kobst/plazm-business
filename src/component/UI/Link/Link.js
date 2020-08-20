@@ -2,28 +2,25 @@ import React from 'react'
 import styled from 'styled-components'
 
 const LoginLink = styled.div`
-font-size: 14px;
-margin-top: 20px;
+font-size: 16px;
+line-height:21px;
+margin-top: 25px;
 display: -webkit-box; 
 display: -moz-box; 
 display: -ms-flexbox; 
 display: -webkit-flex; 
 display: flex; 
--webkit-box-align: center; 
--moz-box-align: center; 
--ms-flex-align: center; 
--webkit-align-items: center; 
 align-items: center; 
 justify-content: space-between; 
--webkit-justify-content: space-between; 
--ms-justify-content: space-between; 
--moz-justify-content: space-between;
 flex-wrap:wrap;
+font-family: 'IBM Plex Sans', sans-serif;
  a{
-     color: #000;
+     color: #2C2738;
+     text-decoration: none;
+     margin:0 auto;
     }
  a:hover{
-     color: rgba(0,0,0,.80); text-decoration: none;
+    color: #2C2738; text-decoration:underline;
     }
 `
 
