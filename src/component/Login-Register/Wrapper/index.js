@@ -9,6 +9,9 @@ background: linear-gradient(313.15deg, #FF479D 8.23%, #FF7171 95.51%);
 display:flex; 
 align-items:center;
 width:100%;
+@media (max-width:991px){
+    display: block;
+}
 `
 
 const LoginContainer = styled.div`
@@ -16,6 +19,10 @@ background:#fff;
 display:flex;
 padding: 3.2vw 0 3.5vw;
 width:100%;
+min-height:485px;
+@media (max-width:1024px){
+    min-height:inherit;
+}
 `
 
 const LoginFormWrapper = styled.div`
@@ -60,6 +67,9 @@ margin:0 auto;
 display: flex;
 justify-content: space-around;
 align-items: center;
+@media (max-width:991px){
+    flex-direction:column;  
+  }
 `
 const RightSide = styled.div`
 max-width:440px;
@@ -69,6 +79,7 @@ button{
 }
 `
 const LeftSide = styled.div`
+
 img {
     margin-bottom: 15px;
 }
@@ -81,6 +92,20 @@ p{
     max-width:385px;
     width:100%;
 }
+@media (max-width:991px){
+    max-width:435px;
+    width:100%;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+img{
+    max-width:200px;
+}
+p{
+    margin:5px 0; 
+    max-width: inherit;
+}
+  }
 `
 
 const Wrapper = (props) => {

@@ -1,5 +1,7 @@
 *{
   box-sizing: border-box;
+  margin:0px;
+  padding:0px;
 }
 body, html{font-family: 'Roboto',sans-serif; height: 100%; background-color:#eee; color:#000;}
 .input-error{
@@ -234,7 +236,8 @@ font-family: 'Roboto',sans-serif;
   width:100%;
 }
 .active{
-  color: #9c9c9c !important;
+  border-bottom: 2px solid #f4479d !important;
+  opacity:1 !important;
 }
 
 #multiselectContainerReact{
@@ -305,3 +308,65 @@ padding:3px 5px !important;
     max-width: 270px;
   }
 }
+
+.mt-10{margin-top:10px;}
+.mt-15{margin-top:15px;}
+hr{
+  border:none;
+  border-bottom: 1px solid rgba(255, 71, 157, 0.3);
+  margin: 10px 15px;
+}
+.upload{
+background: #F2FBFF;
+border: 1px solid rgba(219, 226, 234, 0.2);
+box-sizing: border-box;
+border-radius: 13px;
+max-width: 153px;
+min-height: 153px;
+display: flex;
+align-items: center;
+justify-content: center;
+width:100%;
+margin: 5px;
+}
+.upload p{
+  font-size: 14px;
+  line-height: 36px;
+  color: #7C9CBF;
+  display: flex;
+  flex-direction: column;
+  cursor:pointer;
+}
+.galleryImage{
+  margin:5px;
+}
+
+.rbc-toolbar .rbc-toolbar-label {
+  flex-grow: 1;
+  padding: 0 10px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: #FF479D;
+}
+
+.rbc-btn-group{
+  background: #F2FBFF;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.rbc-btn-group button{
+  border-radius:0px !important;
+  border:none !important;
+  color:#000 !important;
+}
+.rbc-toolbar button:active:hover, .rbc-toolbar button:active:focus, .rbc-toolbar button.rbc-active:hover, .rbc-toolbar button.rbc-active:focus,.rbc-toolbar button:active, .rbc-toolbar button.rbc-active{
+  background-color:#FF4F94 !important;
+  color:#fff !important;
+}
+
+.rbc-time-content > .rbc-time-gutter {
+  flex: none;
+  background: #DBE2EA;
+}
+.rbc-btn-group button:first-child{border:none !important}

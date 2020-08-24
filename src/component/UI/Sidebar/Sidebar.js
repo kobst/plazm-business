@@ -2,8 +2,7 @@
 import React, {useEffect, useState} from 'react'
 import { Auth } from 'aws-amplify';
 import styled from 'styled-components'
-import ProfileImage from '../ProfileImage/ProfileImage'
-import SubHeading from '../SubHeading/SubHeading'
+import SubHeading from '../SubHeading'
 import Facebook from '../../../Public/images/facebook.svg'
 import Twitter from '../../../Public/images/twitter.svg'
 import Instagram from '../../../Public/images/instagram.svg'
@@ -13,21 +12,58 @@ import {callPlace} from '../../../Api'
 
 
 const LeftSidebar = styled.div`
-  width:270px;
-  background: #fff;
+  width:100%;
+  max-width:520px;
+  background: #f1fbff;
   padding:15px 0;
+  border: 2px solid #dae2e9;
+  border-radius:25px;
+  position: absolute;
+  top: 110px;
+  right:0px;
+  z-index: 9;
+  visibilty:hidden;
+  :after,:before{
+    bottom: 100%;
+    right: 37px;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+  }
+  :after{
+    border-color: rgba(136, 183, 213, 0);
+    border-bottom-color: #f1fbff;
+    border-width: 7px;
+    right: 39px;
+  }
+  :before{
+    border-color: rgba(194,225,245,0);
+    border-bottom-color: #dae2e9;
+    border-width: 9px;
+  }
   @media (max-width:767px){
     width:100%; 
   }
 `
 const Listing = styled.div`
-padding:15px;
-border-bottom: 1px solid #ddd;
+width: 95%;
+margin: 0 auto;
+padding: 15px;
+border-bottom: 1px solid #e5e9eb;
+:last-child{
+  border:none;
+}
 h2{
   margin:0px;
+  color: #2C2738 !important;
 }
 p{
-font-size:14px;
+font-size:12px;
+line-height:18px;
+color:#2C2738;
 margin-bottom:0px;
 margin-top:5px;
 display:flex;
@@ -40,7 +76,7 @@ width: 33%;
 `
 const Badges = styled.div`
 height: 26px;
-background: #E4E4E4;
+background: #f3f1f5;
 font-size: 14px;
 display: inline-flex;
 border-radius: 4px;
@@ -48,9 +84,16 @@ justify-content: center;
 align-items: center;
 padding: 0 10px;
 margin-right: 10px;
+color:462a4d;
 margin: 10px 10px 0px 0;
 line-height:26px;
 cursor:pointer;
+box-shadow: 0px 2px 4px rgba(44, 39, 56, 0.08);
+border-radius: 17px;
+border:1px solid #facdd0;
+::empty{
+  display:none;
+}
 
 `
 const SocialIcon = styled.div`
@@ -83,7 +126,7 @@ const Sidebar = () => {
  
   return (
     <LeftSidebar>
-      <ProfileImage name={typeof placeValue !== 'undefined'&& placeValue.company_name?placeValue.company_name:'-'} setIsOpen={setIsOpen} />
+      {/* <ProfileImage name={typeof placeValue !== 'undefined'&& placeValue.company_name?placeValue.company_name:'-'} setIsOpen={setIsOpen} /> */}
       <Listing>
         <SubHeading name="Address" />
         <p>{typeof placeValue !== 'undefined'?placeValue.address:null}</p>
@@ -113,19 +156,16 @@ const Sidebar = () => {
 
       <Listing>
         <SubHeading name="Hashtags" />
-          <Badges></Badges>
-          <Badges></Badges>
-          <Badges></Badges>
-          <Badges></Badges>
+          <Badges>Burger</Badges>
+          <Badges>Happy Hours</Badges>
+          <Badges>Triple Ham Burger</Badges>
       </Listing>
       <Listing>
-        <SubHeading name="Social Media" />
         <SocialIcon>
         <img src={Facebook} alt={Facebook} />
         <img src={Twitter} alt={Twitter} />
         <img src={Instagram} alt={Instagram} />
         <img src={Linkedin} alt={Linkedin} />
-
         </SocialIcon>
       </Listing>
     </LeftSidebar>

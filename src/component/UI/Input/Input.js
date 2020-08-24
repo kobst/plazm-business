@@ -22,6 +22,11 @@ border-radius: 6px;
 ::placeholder{
 color:#7C9CBF
 }
+@media (max-width:991px){
+    height: 40px;
+    font-size: 14px;
+    line-height:19px 
+}
 
 `
 

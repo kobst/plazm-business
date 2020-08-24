@@ -6,7 +6,7 @@ import Button from '../../UI/Button/Button'
 import Input from '../../UI/Input/Input'
 import ValueLoader from '../../../utils/loader'
 import {getMessage} from '../../../config'
-import ResetImg from '../../../images/resetimg.jpg'
+
 
 const FormGroup = styled.div `
 margin-bottom:0px;

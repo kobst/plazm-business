@@ -1,7 +1,7 @@
 
 import React from 'react'
 import styled from 'styled-components'
-import SubHeading from '../SubHeading/SubHeading'
+import SubHeading from '../SubHeading'
 import PinIcon from '../../../Public/images/pin.svg'
 import SendIcon from '../../../Public/images/send.svg'
 import ArrowLeft from '../../../Public/images/arrow-left.svg'

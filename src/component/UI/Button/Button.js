@@ -19,8 +19,10 @@ font-family: 'Roboto', sans-serif;
   background: #280A33;
   outline:none;
 }
-svg,img{
-  margin-left:5px;
+@media (max-width:991px){
+  height:45px;
+font-size:16px;
+line-height:19px;
 }
 `
 

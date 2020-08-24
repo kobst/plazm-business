@@ -3,10 +3,10 @@ import React from 'react'
 import styled from 'styled-components'
 
 const Title = styled.h2`
-font-size:18px;
-font-weight:500;
-margin-top:10px;
-font-family: 'Roboto', sans-serif;
+font-size: 22px;
+line-height: 36px;
+color: #FF4F94;
+font-weight:normal;
 `
 
 const SubHeading = props => {

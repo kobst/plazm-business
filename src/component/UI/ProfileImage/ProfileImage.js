@@ -3,7 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Heading from '../Heading/Heading'
 import Button from '../Button/Button'
-import SubHeading from '../SubHeading/SubHeading'
+import SubHeading from '../SubHeading/'
 
 const ProfileSection = styled.div`
 margin-bottom:25px;

@@ -22,6 +22,11 @@ font-family: 'IBM Plex Sans', sans-serif;
  a:hover{
     color: #2C2738; text-decoration:underline;
     }
+@media (max-width:991px){
+font-size: 14px;
+line-height:19px;
+margin-top: 15px
+}
 `
 
 const Links = (props) => {
