@@ -27,6 +27,9 @@ color:#7C9CBF
     font-size: 14px;
     line-height:19px 
 }
+@media (max-width:767px){
+    height: 35px;
+}
 
 `
 

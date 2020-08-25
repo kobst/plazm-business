@@ -9,7 +9,10 @@ line-height: 21px;
 color: #756F86;
 font-family: 'IBM Plex Sans', sans-serif;
 margin:0px;
-
+@media (max-width:767px){
+    font-size:14px;
+    line-height: 19px;   
+}
 `
 
 const Label = (props) => {

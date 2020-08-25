@@ -16,10 +16,16 @@ cursor:pointer;
 border:none;
 color:#fff;
 width:100%;
+display: flex;
+align-items: center;
+justify-content: center;
 font-family: 'Roboto', sans-serif;
 :hover,:focus{
   background: #280A33;
   outline:none;
+}
+img{
+  margin-right:10px;
 }
 @media (max-width:991px){
 height:30px;

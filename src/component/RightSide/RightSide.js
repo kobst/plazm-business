@@ -30,7 +30,10 @@ import WishlistIcon from '../../images/wishlist-icon.svg'
 import CommentIcon from '../../images/comment.svg'
 import SortIcon from '../../images/sort.svg'
 import PlusIcon from '../../images/plus.svg'
+import CloseIcon from '../../images/close.svg'
 import GalleryImg from '../../images/gallery-img.png'
+import GalleryImg1 from '../../images/gallery-img1.png'
+import GalleryWishlist from '../../images/wishlist-gallery.svg'
 
 const RightSection = styled.div`
 
@@ -673,11 +676,16 @@ const RightSide = () => {
           <hr></hr>
           {/* Gallery section */}
           <Gallery>
-            <div class="upload">
+            <div class="galleryImage">
               <p><img src={PlusIcon} alt="" /> Photo</p>
             </div>
             <div className="galleryImage">
+              <img src={GalleryImg1} alt="" />
+              <img src={GalleryWishlist} alt="Wishlist" className="wishlistGalery" />
+            </div>
+            <div className="galleryImage">
               <img src={GalleryImg} alt="" />
+              <img src={CloseIcon} alt="Close" className="close" />
             </div>
             <div className="galleryImage">
               <img src={GalleryImg} alt="" />
@@ -690,15 +698,14 @@ const RightSide = () => {
             </div>
             <div className="galleryImage">
               <img src={GalleryImg} alt="" />
+              <img src={GalleryWishlist} alt="Wishlist" className="wishlistGalery" />
             </div>
             <div className="galleryImage">
               <img src={GalleryImg} alt="" />
             </div>
             <div className="galleryImage">
               <img src={GalleryImg} alt="" />
-            </div>
-            <div className="galleryImage">
-              <img src={GalleryImg} alt="" />
+              <img src={CloseIcon} alt="Close" className="close" />
             </div>
             <div className="galleryImage">
               <img src={GalleryImg} alt="" />

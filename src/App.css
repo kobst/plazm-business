@@ -167,6 +167,12 @@ min-width: inherit;
 .rbc-day-slot .rbc-events-container{
   margin-right:0px !important;
 }
+.rbc-day-slot .rbc-event{
+  background: linear-gradient(151.13deg, #C643FC 0%, #FF7171 114.93%) !important;
+border: 1px solid #FFFFFF;
+box-sizing: border-box;
+border-radius: 5px;
+}
 .ReactModalPortal{
   z-index:3;
   position: relative;
@@ -198,13 +204,25 @@ font-family: 'Roboto',sans-serif;
 
 .rbc-day-slot .rbc-event{
   line-height: 16.5px !important;
-  border-right: 5px solid #3174ad !important;
+  /* border-right: 5px solid #3174ad !important; */
 }
 .react-calendar__navigation{
   margin-bottom:5px !important;
 }
+.rbc-time-view .rbc-row{
+  min-height: inherit !important;
+}
 
-
+.rbc-time-header{
+  margin-right:0px !important
+}
+.rbc-header{
+  background: #e0f1f7;
+  font-weight: 500 !important;
+  font-size: 10px !important;
+  min-height: 50px !important;
+  line-height: 50px !important;
+}
 
 .rbc-time-slot{
   text-align:right;
@@ -240,6 +258,7 @@ font-family: 'Roboto',sans-serif;
   opacity:1 !important;
 }
 
+.rbc-event{background: linear-gradient(151.13deg, #C643FC 0%, #FF7171 114.93%) !important;}
 #multiselectContainerReact{
     padding: 0;
     margin-top:10px;
@@ -316,7 +335,7 @@ hr{
   border-bottom: 1px solid rgba(255, 71, 157, 0.3);
   margin: 10px 15px;
 }
-.upload{
+.galleryImage{
 background: #F2FBFF;
 border: 1px solid rgba(219, 226, 234, 0.2);
 box-sizing: border-box;
@@ -327,9 +346,10 @@ display: flex;
 align-items: center;
 justify-content: center;
 width:100%;
-margin: 5px;
+margin: 7px;
+position: relative;
 }
-.upload p{
+.galleryImage p{
   font-size: 14px;
   line-height: 36px;
   color: #7C9CBF;
@@ -337,8 +357,18 @@ margin: 5px;
   flex-direction: column;
   cursor:pointer;
 }
-.galleryImage{
-  margin:5px;
+.close{
+  position: absolute;
+  top: -10px;
+  right: -13px;
+  border-radius:0px !important;
+}
+
+.wishlistGalery{
+  position: absolute;
+    top: 10px;
+    right: 10px;
+    border-radius:0px !important;
 }
 
 .rbc-toolbar .rbc-toolbar-label {
@@ -355,6 +385,20 @@ margin: 5px;
   border-radius: 3px;
   overflow: hidden;
 }
+.rbc-day-slot .rbc-event{
+  border:none !important
+}
+.rbc-time-slot {
+  font-size: 10px !important;
+  width: 77px;
+  text-align: center;
+  align-items: center;
+  line-height: 39px;
+  border-bottom: 0.5px solid #fff;
+}
+.rbc-timeslot-group .rbc-time-slot:last-child{
+  display:none;
+} 
 .rbc-btn-group button{
   border-radius:0px !important;
   border:none !important;
@@ -370,3 +414,9 @@ margin: 5px;
   background: #DBE2EA;
 }
 .rbc-btn-group button:first-child{border:none !important}
+
+.rbc-time-view{
+  border-radius:10px;
+  border: 1px solid rgba(239,77,182,0.5) !important;
+  overflow:hidden;
+}

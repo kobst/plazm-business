@@ -4,7 +4,7 @@ import Login from '../containers/Login-Register/Login'
 import Register from '../containers/Login-Register/Register'
 import ForgotPassword from '../containers/Login-Register/Forgot-Password'
 import Dashboard from '../containers/Dashboard/Dashboard'
-
+import EditProfile from '../containers/Profile/'
 
 
 
@@ -18,6 +18,7 @@ const Routes = () => (
           <Route path="/business/forgot-password" component={ForgotPassword} />
           <Route path="/curator/forgot-password" component={ForgotPassword} />
           <Route path="/dashboard" component={Dashboard} />
+          <Route path="/edit-profile" component={EditProfile} />
           <Redirect exact from="/*" to="/business/login" />
       </Switch>
     
