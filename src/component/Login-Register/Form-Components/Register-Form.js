@@ -70,7 +70,7 @@ return (
             <FormGroup>
                 <Input type="text" id="username" onChange={ (e) => handleChange(e) }
                  error = {firstNameError} placeholder="First Name"/>
-                 {firstError ?<h6>Username length should be greater then 3.</h6>: null}
+                 {firstError ?<h6>Username length should be greater than 3.</h6>: null}
                                
             </FormGroup>									
 
@@ -87,7 +87,7 @@ return (
 	
             <FormGroup>
                 <Input type="text" id='email' onChange={ (e) => handleChange(e) } 
-                error={emailError} placeholder="Email address"/>
+                error={emailError} placeholder="Email Address"/>
         
             </FormGroup>									
 

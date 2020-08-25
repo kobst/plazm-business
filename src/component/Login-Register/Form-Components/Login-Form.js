@@ -38,7 +38,7 @@ return(
       <form onSubmit={ (e) => handleSubmit(e) }>
 							  <FormGroup>
                       <Input type="text" id='username' onChange={(e) => handleChange(e)} 
-                        error={userError}  placeholder="Email address"/>
+                        error={userError}  placeholder="Email Address"/>
 							  </FormGroup>
                 <FormGroup>
 
