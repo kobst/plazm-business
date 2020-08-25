@@ -1,125 +1,143 @@
-
-import React, { useState, useEffect } from 'react'
+/* eslint-disable no-sequences */
+import React, {
+  useState,
+  useEffect
+} from 'react'
 import styled from 'styled-components'
 import Heading from '../UI/Heading/Heading'
 import Tabs from '../UI/Tabs/Tabs'
 import Card from '../UI/Card/Card'
-import LineButton from '../UI/LineButton/LineButton'
+// import LineButton from '../UI/LineButton/LineButton'
 import Button from '../UI/Button/Button'
 import Listing from '../UI/Listing/Listing'
 import Search from '../UI/Search/Search'
 import Messages from '../UI/Messages/Messages'
 import ChatBox from '../UI/ChatBox/ChatBox'
-import { Auth } from 'aws-amplify';
-import { Link } from "react-router-dom";
+import {
+  Auth
+} from 'aws-amplify';
+import {
+  Link
+} from "react-router-dom";
 import AddModalBox from '../Add-Event/index'
-import { Calendar, momentLocalizer } from 'react-big-calendar'
+import {
+  Calendar,
+  momentLocalizer
+} from 'react-big-calendar'
 import moment from 'moment'
-import { callPlace, fetchItems, fetchUsers } from '../../Api'
+import {
+  callPlace,
+  fetchItems,
+  fetchUsers
+} from '../../Api'
 import ValueLoader from '../../utils/loader'
-import { RRule } from 'rrule'
+import {
+  RRule
+} from 'rrule'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
- import { Multiselect } from 'multiselect-react-dropdown';
+// import {
+//   Multiselect
+// } from 'multiselect-react-dropdown';
+import Mention from 'react-textarea-mention';
 
 
-
-const RightSection = styled.div`
-margin-left: 30px;
-width: calc(100% - 300px);
-font-family: 'Roboto',sans-serif;
-@media (min-width:768px) and (max-width:1024px){
+const RightSection = styled.div `
+ margin-left: 30px;
+ width: calc(100% - 300px);
+ font-family: 'Roboto',sans-serif;
+ @media (min-width:768px) and (max-width:1024px){
   width:calc(100% - 325px);
-}
-@media (max-width:767px){
+  }
+  @media (max-width:767px){
   margin-left: 0;
   width: 100%;
   margin-top: 30px;
-}
+  }
 `
-const Row = styled.div`
-display:flex;
-margin-top:30px;
-justify-content: space-between;
-> div{
+const Row = styled.div `
+  display:flex;
+  margin-top:30px;
+  justify-content: space-between;
+  > div{
   width:50%;
   :first-child{
-    margin-right:30px;
+  margin-right:30px;
+   }
   }
-}
-@media (max-width:991px){
+  @media (max-width:991px){
   flex-direction: column;
   > div{
-    width:100%;
-    :first-child{
-      margin-right:0px;
-      margin-bottom: 30px;
-    }
-}
+  width:100%;
+  :first-child{
+  margin-right:0px;
+  margin-bottom: 30px;
+   }
+  }
 `
-const FlexRow = styled.div`
-display: flex;
-justify-content: space-between;
-align-items:center;
-flex-wrap:wrap;
+const FlexRow = styled.div `
+  display: flex;
+  justify-content: space-between;
+  align-items:center;
+  flex-wrap:wrap;
 `
-const TextArea = styled.textarea`
-background-color: #F2F2F2;
-border-radius: 6px;
-width: 100%;
-border: none;
-resize: none;
-height: 85px;
-margin-top: 20px;
-font-size: 14px;
-color: #000;
-padding: 10px;
-margin-bottom:7px;
-:focus{
-  outline:none;
-}
-`
-const Anchor = styled.div`
+// const TextArea = styled.textarea `
+// background-color: #F2F2F2;
+// border-radius: 6px;
+// width: 100%;
+// border: none;
+// resize: none;
+// height: 85px;
+// margin-top: 20px;
+// font-size: 14px;
+// color: #000;
+// padding: 10px;
+// margin-bottom:7px;
+// :focus{
+// outline:none;
+// }
+// `
+const Anchor = styled.div `
 margin-left:auto;
 font-size:14px;
 font-weight:500;
 margin-right:20px;
 cursor:pointer;
 `
-const BottomSection = styled.div`
+const BottomSection = styled.div `
 margin-top:30px;
 `
-const ListingOuter = styled.div`
+const ListingOuter = styled.div `
 padding: 0px;
 margin-top: 20px;
 overflow-y: auto;
 height: calc(100vh - 50px);
 `
-const EventSection = styled.div`
+const EventSection = styled.div `
 display:flex;
 @media (max-width:991px){
-  flex-direction: column;
+flex-direction: column;
 }
 `
-const EventLeft = styled.div`
+const EventLeft = styled.div `
 padding:0px;
 width:calc(100% - 300px);
 @media (max-width:991px){
-  width:100%;
+width:100%;
 }
 `
 
-const EventRight = styled.div`
+const EventRight = styled.div `
 padding:0px;
 width:270px;
 button{
-  float:right;
+float:right;
 }
 @media (max-width:991px){
-  width:100%;
-  margin-top: 15px;
+width:100%;
+margin-top: 15px;
 }
 `
-const EventOuter = styled.div`
+const EventOuter = styled.div `
 padding:15px 0;
 margin-top: 20px;
 background:#F5F5F5;
@@ -127,49 +145,49 @@ float: left;
 width:100%;
 
 h2{
-  padding: 0 15px;
-  margin-bottom:15px;
+padding: 0 15px;
+margin-bottom:15px;
 }
 h3{
-  font-size:16px;
-  color:#000;
-  margin-bottom:0px;
-  padding: 0 15px;
+font-size:16px;
+color:#000;
+margin-bottom:0px;
+padding: 0 15px;
 }
 span{
-  font-size:10px;
-  color:#7D7D7D;
-  padding: 0 15px;
-  position:relative;
-  top:-5px;
+font-size:10px;
+color:#7D7D7D;
+padding: 0 15px;
+position:relative;
+top:-5px;
 }
 p{
-  font-size:14px;
-  color:#000;
-  margin:0 0 10px 0;
-  padding: 0 15px;
-  line-height:16px;
+font-size:14px;
+color:#000;
+margin:0 0 10px 0;
+padding: 0 15px;
+line-height:16px;
 }
 @media (max-width:991px){
-  width:100%;
-  height: auto;
+width:100%;
+height: auto;
 }
 
 `
-const EventList = styled.div`
+const EventList = styled.div `
 padding:0px;
 max-height: 545px;
 overflow-y: auto;
 > div{
-  border-bottom:1px solid #ddd;
-  margin-bottom:10px;
-  :last-child{
-    border:none; 
-    margin-bottom:0px;
-    p{
-      margin-bottom:5px;
-    }
-  }
+border-bottom:1px solid #ddd;
+margin-bottom:10px;
+:last-child{
+border:none; 
+margin-bottom:0px;
+p{
+margin-bottom:5px;
+}
+}
 
 `
 moment.locale('en-GB')
@@ -180,19 +198,18 @@ const RightSide = () => {
   const [event, setEvent] = useState()
   const [details, setDetails] = useState()
   const [edit, setEdit] = useState(false)
-  const [eventList,setEventList]= useState()
-  const [feed,setFeed]= useState()
-  const [posts,setPosts]= useState()
-  const [mentions,setMention]= useState()
-  const [allFeed,setAllFeed]= useState()
-  const [description,setDescription]= useState()
-  const [saveDisable, setSaveDisable]= useState(false)
-  const [showTag,setShowTag]= useState(false)
-  const [curators,setCurators]= useState([])
-  const [activePublic,setActivePublic]= useState(false)
-  const [activeMentions,setActiveMentions]= useState(false)
-  const [mess,setActiveMess]= useState(false)
-  const [allMentions,setAllMentions]= useState()
+  const [eventList, setEventList] = useState()
+  const [feed, setFeed] = useState()
+  const [posts, setPosts] = useState()
+  const [mentions, setMention] = useState()
+  const [allFeed, setAllFeed] = useState()
+  const [description, setDescription] = useState()
+  const [saveDisable, setSaveDisable] = useState(false)
+  const [curators, setCurators] = useState([])
+  const [activePublic, setActivePublic] = useState(false)
+  const [activeMentions, setActiveMentions] = useState(false)
+  const [mess, setActiveMess] = useState(false)
+  const [allMentions, setAllMentions] = useState()
 
   useEffect(() => {
     let updateUser = async authState => {
@@ -200,22 +217,22 @@ const RightSide = () => {
         const value = await Auth.currentAuthenticatedUser()
         const place = await callPlace(value.attributes.sub)
         const users = await fetchUsers()
-        if(users){
-          const userVal=[]
-         users.map(v=>{
-           return userVal.push( {name: v.name})
+        if (users) {
+          const userVal = []
+          users.map(v => {
+            return userVal.push({
+              name: v.name
+            })
           })
-         const val = userVal.sort(dynamicSort("name"))
+          const val = userVal.sort(dynamicSort("name"))
           setCurators(val)
-    
         }
         setPlace(place[0])
-        if (place && place.length!==0) {
-  
+        if (place && place.length !== 0) {
           const val = await fetchItems(place[0]._id)
           const sol = val.filter(v => v.eventSchedule !== null && v.eventSchedule)
-          const feed = val.filter(v => (!v.eventSchedule || v.eventSchedule === null))
-          const allMentions = val.filter(v => (!v.eventSchedule || v.eventSchedule === null)&&(v.name!==place[0].company_name)&& v.name)
+          const feed = val.filter(v => (v.type==='na' || v.eventSchedule === null))
+          const allMentions = val.filter(v => v.type==='na' &&(v.name !== place[0].company_name) && v.name)
           setMention('Public')
           setActivePublic(true)
           setPosts(val)
@@ -224,8 +241,7 @@ const RightSide = () => {
           setAllFeed(feed)
           setAllMentions(allMentions)
           eventManage(sol)
-        }
-        else{
+        } else {
           let eventArr = []
           setEvent(eventArr)
         }
@@ -237,39 +253,37 @@ const RightSide = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  useEffect(()=>{
+  useEffect(() => {
 
-    const checkMentions = ()=> {
-    if(mentions==='Public'){
-      setAllFeed(feed)
-      setActiveMentions(false)
-      setActiveMess(false)
-      setActivePublic(true)
+    const checkMentions = () => {
+      if (mentions === 'Public') {
+        setAllFeed(feed)
+        setActiveMentions(false)
+        setActiveMess(false)
+        setActivePublic(true)
+      } else if (mentions === 'All Mentions') {
+        setAllFeed(allMentions)
+        setActiveMentions(true)
+        setActiveMess(false)
+        setActivePublic(false)
+      } else {
+        setAllFeed(posts)
+        setActiveMentions(false)
+        setActiveMess(true)
+        setActivePublic(false)
+      }
     }
-    else if(mentions==='All Mentions'){
-      setAllFeed(allMentions)
-      setActiveMentions(true)
-      setActiveMess(false)
-      setActivePublic(false)
-    }
-    else{
-      setAllFeed(posts)
-      setActiveMentions(false)
-      setActiveMess(true)
-      setActivePublic(false)
-    }
-  }
-  checkMentions()
+    checkMentions()
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[mentions])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mentions])
 
   const eventManage = (sol) => {
     let eventArr = []
     setEvent(eventArr)
     // eslint-disable-next-line array-callback-return
     sol.map(v => {
-      if (v.eventSchedule.recurring === 'weekly'|| v.eventSchedule.recurring === 'Weekly') {
+      if (v.eventSchedule.recurring === 'weekly' || v.eventSchedule.recurring === 'Weekly') {
         const weeklyStartRule = new RRule({
           freq: RRule.WEEKLY,
           dtstart: new Date(v.eventSchedule.start_time),
@@ -292,8 +306,7 @@ const RightSide = () => {
           })
         });
         setEvent(eventArr)
-      }
-      else if (v.eventSchedule.recurring === 'daily'||v.eventSchedule.recurring === 'Daily') {
+      } else if (v.eventSchedule.recurring === 'daily' || v.eventSchedule.recurring === 'Daily') {
         const dailyStartRule = new RRule({
           freq: RRule.DAILY,
           dtstart: new Date(v.eventSchedule.start_time),
@@ -316,8 +329,7 @@ const RightSide = () => {
           })
         });
         setEvent(eventArr)
-      }
-      else if (v.eventSchedule.recurring === 'mondayFriday'||v.eventSchedule.recurring === 'Monday-Friday') {
+      } else if (v.eventSchedule.recurring === 'mondayFriday' || v.eventSchedule.recurring === 'Monday-Friday') {
         const weekDayStartRule = new RRule({
           freq: RRule.WEEKLY,
           dtstart: new Date(v.eventSchedule.start_time),
@@ -342,14 +354,13 @@ const RightSide = () => {
           })
         });
         setEvent(eventArr)
-      }
-      else{
+      } else {
         eventArr.push({
           id: v._id,
           title: v.name,
           start: v.eventSchedule.start_time,
           end: v.eventSchedule.end_time,
-          allDay:true
+          allDay: true
         })
         setEvent(eventArr)
 
@@ -358,184 +369,182 @@ const RightSide = () => {
   }
   const ConvertNumberToTwoDigitString = (n) => {
     return n > 9 ? "" + n : "0" + n;
-}
-const dynamicSort = (property)=> {
-  var sortOrder = 1;
+  }
+  const dynamicSort = (property) => {
+    var sortOrder = 1;
 
-  if(property[0] === "-") {
+    if (property[0] === "-") {
       sortOrder = -1;
       property = property.substr(1);
+    }
+
+    return function (a, b) {
+      // eslint-disable-next-line eqeqeq
+      if (sortOrder == -1) {
+        return b[property].localeCompare(a[property]);
+      } else {
+        return a[property].localeCompare(b[property]);
+      }
+    }
   }
 
-  return function (a,b) {
-      if(sortOrder == -1){
-          return b[property].localeCompare(a[property]);
-      }else{
-          return a[property].localeCompare(b[property]);
-      }        
+  const getDate = (value) => {
+    const date = new Date(value);
+    const time = ConvertNumberToTwoDigitString(date.getHours()) +
+      ":" + ConvertNumberToTwoDigitString(date.getMinutes());
+    return time
+
   }
-}
-
-const getDate = (value) =>{
-  const date = new Date(value);
-  const time = ConvertNumberToTwoDigitString(date.getHours()) + 
-           ":" + ConvertNumberToTwoDigitString(date.getMinutes());
-      return time
-
-}
   const setMentions = (val) => {
-  if(val==='Public'){
-     setMention('Public')
-   }
-   else if(val=== 'All Mentions'){
-    setMention('All Mentions')
+    if (val === 'Public') {
+      setMention('Public')
+    } else if (val === 'All Mentions') {
+      setMention('All Mentions')
+    } else {
+      setMention('Messages')
+    }
   }
-  else{
-    setMention('Messages')
+
+  const Validation = () => {
+    if (!(description.trim())) {
+      return false
+    } else {
+      return true
+    }
   }
-}
+  const addPost = async () => {
+    if (Validation()) {
+      setSaveDisable(true)
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/items`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          place_id: place._id,
+          content: description,
+          scheduledEvent: "no",
+        })
+      });
+      const body = await response.text();
+      window.location.reload()
+      return body
+    }
 
-const Validation= ()=> {
-  if(!(description.trim())){
-    return false
   }
-  else{
-    return true
+  const handleChange = (e) => {
+    setDescription(e)
   }
-}
-const addPost = async () => {
-  if(Validation()){
-    setSaveDisable(true)
-  const response = await fetch(`${process.env.REACT_APP_API_URL}/api/items`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      place_id: place._id,
-      content:description,
-      scheduledEvent: "no",
-    })
-  });
-  const body = await response.text();
-  window.location.reload()
-  return body
-}
-
-}
-const handleChange=(e)=>{
-setDescription(e.target.value)
-}
-
-// const options = [{name: 'John Watson', id: 1},{name: 'Marie Curie', id: 2}]
-
   return (
     <RightSection>
-      <Card>
+       <Card>
         <EventSection>
-          <EventLeft>
-            <Heading name="Event" />
-            <button type="submit" onClick={() => (
-              Auth.signOut())} className="btn btn-primary">  <Link to='/business/login' >Logout</Link></button>
-            <AddModalBox editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
-            <div>
-              {typeof event !== 'undefined' ?
-                <Calendar
-                  className="CalenderSec"
-                  localizer={localizer}
-                  events={event}
-                  startAccessor="start"
-                  endAccessor="end"
-                  onSelectEvent={(e) => (
-                    // eslint-disable-next-line no-sequences
-                    setEdit(true),
-                    setIsOpen(true),
-                    setDetails(e)
-                  )}
-                  defaultView="day"
-                  step={60}
-                  views={['day','week','month',]}
-                  style={{ height: 600, width:"95%", marginTop:"15px" }}
-                /> : <div className="loader"> <ValueLoader  height="70" width="70" /></div>
-
-              }
-            </div>
-          </EventLeft>
-          <EventRight>
-            <Button onClick={() => setIsOpen(true)}>Add Events</Button>
-            <EventOuter>
-              <Heading name="All Events" />
-              <EventList>
-                { eventList? eventList.map(v=>
-                <>
-                { v.name ?
-              <div>
-                <h3>{v.name}</h3>
-                <p>{v.eventSchedule.recurring}</p>
-                <span>{getDate(v.eventSchedule.start_time)} to {getDate(v.eventSchedule.end_time)}</span>
-                 <p>{v.content}</p>
-              </div>:null
-            }
-              </> ): null
+        <EventLeft>
+        <Heading name="Event" />
+         <button type="submit" onClick={() => (
+          Auth.signOut())} className="btn btn-primary"> <Link to='/business/login' >Logout</Link></button>
+          <AddModalBox editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
+         <div>
+          {typeof event !== 'undefined' ?
+          <Calendar
+           className="CalenderSec"
+           localizer={localizer}
+           events={event}
+           startAccessor="start"
+           endAccessor="end"
+           onSelectEvent={(e) => (
+           // eslint-disable-next-line no-sequences
+           setEdit(true),
+           setIsOpen(true),
+           setDetails(e)
+           )}
+           defaultView="day"
+           step={60}
+           views={['day','week','month',]}
+           style={{ height: 600, width:"95%", marginTop:"15px" }}
+           /> : <div className="loader"> <ValueLoader height="70" width="70" /></div>
+ 
            }
-              </EventList>
-            </EventOuter>
-          </EventRight>
-        </EventSection>
-      </Card>
-      <Row>
-        {/* Left card */}
-        <Card>
-          <FlexRow>
-            <Tabs isActive={activePublic} setMentions={setMentions} name="Public" />
-            <Tabs isActive={activeMentions} setMentions={setMentions} name="All Mentions" />
-            <Tabs isActive={mess}  setMentions={setMentions} name="Messages" />
-          </FlexRow>
-          {mentions==='Public'?
+          </div>
+         </EventLeft>
+           
+         <EventRight>
+           <Button onClick={() => setIsOpen(true)}>Add Events</Button>
+           <EventOuter>
+           <Heading name="All Events" />
+           <EventList>
+          { eventList? eventList.map(v=>
           <>
-          <TextArea value={description} onChange={(e) => handleChange(e)} placeholder="Type your post here" />
-          <FlexRow>
-          <LineButton setShowTag={setShowTag} name="Add Tags" />
-          { showTag ?
-          <Multiselect options={curators} displayValue="name" />: null
-            } 
-            <Anchor onClick={()=>setDescription('')}>Cancel</Anchor>
-            <Button className="btn btn-primary" disabled={saveDisable} onClick={()=> addPost()} buttontext="Publish" >{'Publish'}</Button>
-          </FlexRow>
-          </>: null
-}
-
-          <BottomSection>
-          {mentions==='Public'?
-            <Heading name="Feed" />: null
-             }
-          {mentions==='Messages'?
-            <Search />: null
-             }
-            <ListingOuter>
-              <Listing mentions={mentions} data={place} value={allFeed}/>
-            </ListingOuter>
-          </BottomSection>
-
-        </Card>
-
-        {/* Right Card */}
-        <Card>
-          <FlexRow>
-            <Heading name="Message" />
-            <Button buttontext="New"></Button>
-          </FlexRow>
-          <Search />
-         
-          {/* Messages Section */}
-          <Messages />
-          {/* Chat Section */}
-          <ChatBox />
-        </Card>
-      </Row>
-
-    </RightSection>
+           { v.name ?
+         <div>
+          <h3>{v.name}</h3>
+          <p>{v.eventSchedule.recurring}</p>
+          <span>{getDate(v.eventSchedule.start_time)} to {getDate(v.eventSchedule.end_time)}</span>
+          <p>{v.content}</p>
+          </div>:null
+          }
+          </> ): null
+          }
+       </EventList>
+       </EventOuter>
+       </EventRight>
+       </EventSection>
+       </Card>
+   <Row>
+   {/* Left card */}
+   <Card>
+    <FlexRow>
+    <Tabs isActive={activePublic} setMentions={setMentions} name="Public" />
+    <Tabs isActive={activeMentions} setMentions={setMentions} name="All Mentions" />
+    <Tabs isActive={mess} setMentions={setMentions} name="Messages" />
+    </FlexRow>
+    {mentions==='Public'?
+      <>
+     {/* <TextArea value={description} onChange={(e) => handleChange(e)} placeholder="Type your post here" /> */}
+      <Mention
+      onChange={handleChange}
+      field="name"
+      data={curators}
+      />
+   <FlexRow>
+     <Anchor onClick={()=>setDescription('')}>Cancel</Anchor>
+     <Button className="btn btn-primary" disabled={saveDisable} onClick={()=> addPost()} buttontext="Publish" >{'Publish'}</Button>
+   </FlexRow>
+     </>: null
+     }
+ 
+    <BottomSection>
+    {mentions==='Public'?
+     <Heading name="Feed" />: null
+     }
+     {mentions==='Messages'?
+    <Search />: null
+    }
+    <ListingOuter>
+    <Listing mentions={mentions} data={place} users={curators} value={allFeed}/>
+    </ListingOuter>
+    </BottomSection>
+ 
+ </Card>
+ 
+ {/* Right Card */}
+ <Card>
+   <FlexRow>
+   <Heading name="Message" />
+   <Button buttontext="New"></Button>
+    </FlexRow>
+     <Search />
+  {/* Messages Section */}
+    <Messages />
+   {/* Chat Section */}
+   <ChatBox />
+ </Card>
+   </Row>
+ 
+  </RightSection>
   )
+
+
 }
 
 export default RightSide

@@ -11,7 +11,7 @@ const Title = styled.h2`
 
 const Tabs = ({setMentions,name,isActive}) => {
     return(
-      <Title className={isActive? 'active' : null} onClick={()=>setMentions(name)}>{name}</Title>
+      <Title className={isActive? null : 'active'} onClick={()=>setMentions(name)}>{name}</Title>
     )
 }
 

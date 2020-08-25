@@ -1,8 +1,10 @@
 
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import LikeIcon from '../../../Public/images/like.svg'
 import CommentIcon from '../../../Public/images/comment.svg'
+import EditModalBox from '../../Edit-Post'
+import DeleteModalBox from '../../Delete-Post'
 
 const ListContainer = styled.div`
 display:flex;
@@ -33,6 +35,17 @@ p{
     margin-bottom:0px;
     margin-top:5px;
 }
+button{
+    background: #000;
+    color: white;
+    font-weight: 500;
+    font-family: 'Roboto',sans-serif;
+    border-radius: 5px;
+    align-items: center;
+    padding: 0 10px;
+    border: none;
+    margin-right: 4px;
+}
 `
 const FlexRow = styled.div`
 display: flex;
@@ -48,11 +61,24 @@ img{
 `
 
 
-const Listing = ({mentions,value,data}) => {
+const Listing = ({mentions,value,data,users}) => {
+    const [isOpen,setIsOpen]= useState(false)
+    const [deleteOpen,setDeleteOpen]= useState(false)
+    const [content,setContent]= useState()
+    const [id,setId]= useState()
+    const handleEdit= (v)=> {
+        setIsOpen(true)
+        setContent(v)
+   }
+    const handleDelete= (v)=> {
+    setDeleteOpen(true)
+    setId(v._id)
+    }
     if(typeof value !== 'undefined'){
     return(
         <>
-        
+          <EditModalBox setIsOpen={setIsOpen} isOpen={isOpen} closeModal={() => setIsOpen(false)} users={users} value={content}/>
+          <DeleteModalBox setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)}/>
         {value.map(v => (
         <ListContainer>
         <ImgSec/>
@@ -67,7 +93,13 @@ const Listing = ({mentions,value,data}) => {
             <img src={LikeIcon} alt={LikeIcon} />
             <img src={CommentIcon} alt={CommentIcon} />
             </Icon>: null
-    }
+             }
+             <FlexRow>
+            <span>
+                <button onClick={()=> handleEdit(v)}>Edit</button>
+                <button onClick={()=> handleDelete(v)}>Delete</button>
+            </span>
+          </FlexRow>
         </TextSec>
         </ListContainer>
         ))}

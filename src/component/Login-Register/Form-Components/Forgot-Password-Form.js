@@ -55,7 +55,7 @@ const ForgotPasswordForm = ({type,email,con,loader,emError, submitPassword,codeE
 
         <form onSubmit = {e => submitEmail(e)}>
                 <FormGroup>
-                    <Input type="text" id="username" onChange={e => handleChange(e)} error={emError} placeholder="Email address"/>
+                    <Input type="text" id="username" onChange={e => handleChange(e)} error={emError} placeholder="Email Address"/>
                 </FormGroup>
                 <Button type="submit" className="btn btn-primary">{loader && !emailError ? <ValueLoader />: 'Reset'}</Button>
 
