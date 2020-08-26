@@ -85,7 +85,7 @@ const Listing = ({mentions,value,data,users}) => {
         <TextSec>
             <FlexRow>
             <h4>{v.name? v.name:data.company_name}</h4>
-            <span>{(new Date(v.updatedAt).toLocaleString()).substring(0, 10)}</span>
+            <span>{(new Date(v.updatedAt).toLocaleString()).substring(0,new Date(v.updatedAt).toLocaleString().indexOf(","))}</span>
             </FlexRow>
             <p>{v.content}</p>
             {mentions==='All Mentions'||(v.name!==data.company_name&& v.name)?
