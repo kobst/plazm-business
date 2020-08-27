@@ -25,23 +25,25 @@ import SubHeading from '../UI/SubHeading'
 import ButtonSmall from '../UI/ButtonSmall'
 import Textarea from '../UI/Textarea'
 import CrossIcon from '../../images/cross-icon.svg'
+import UploadImg from '../../images/upload-img1.png'
 import UserIcon from '../../images/user.svg'
 import WishlistIcon from '../../images/wishlist-icon.svg'
 import CommentIcon from '../../images/comment.svg'
 import SortIcon from '../../images/sort.svg'
+import UploadIocn from '../../images/upload.svg'
 import PlusIcon from '../../images/plus.svg'
 import CloseIcon from '../../images/close.svg'
-import GalleryImg from '../../images/gallery-img.png'
-import GalleryImg1 from '../../images/gallery-img1.png'
-import GalleryWishlist from '../../images/wishlist-gallery.svg'
+import GallerySec from '../UI/Gallery'
 
 const RightSection = styled.div`
 
 `
 const Row = styled.div`
 display:flex;
-margin-top:30px;
 justify-content: space-between;
+@media (max-width:767px){
+  margin-top:10px; 
+}
 `
 const FlexRow = styled.div`
 display: flex;
@@ -49,58 +51,65 @@ justify-content: space-between;
 align-items:center;
 flex-wrap:wrap;
 padding:0 15px;
-`
-const TextArea = styled.textarea`
-background-color: #F2F2F2;
-border-radius: 6px;
-width: 100%;
-border: none;
-resize: none;
-height: 85px;
-margin-top: 20px;
-font-size: 14px;
-color: #000;
-padding: 10px;
-margin-bottom:7px;
-:focus{
-  outline:none;
+@media (max-width:767px){
+  padding:0px;
 }
 `
-const Anchor = styled.div`
-margin-left:auto;
-font-size:14px;
-font-weight:500;
-margin-right:20px;
-cursor:pointer;
-`
-const BottomSection = styled.div`
-margin-top:30px;
-`
-const ListingOuter = styled.div`
-padding: 0px;
-margin-top: 20px;
-overflow-y: auto;
-height: calc(100vh - 50px);
-`
+
 const EventLeft = styled.div`
 display:flex;
 max-width:804px;
+margin-right: 5px;
 width:100%;
-@media (max-width:991px){
-  flex-direction: column;
+position:relative;
+&:after{
+  background: linear-gradient(180deg,rgba(255,255,255,0) -51.89%,#FFFFFF 79.25%);
+  border-radius: 0px 0px 24px 24px;
+  position: absolute;
+  width: 100%;
+  left: 0px;
+  bottom: 10px;
+  content: '';
+  height:92px;
+
+@media (max-width:767px){
+max-width:inherit;
 }
 `
 const CalenderSection = styled.div`
 margin-top:50px;
+@media (max-width:767px){
+  margin-top:20px;
+}
 `
 const EventRight = styled.div`
 padding:0px;
 max-width: 550px;
 width:100%;
-margin-left:10px;
+margin-left:5px;
+position:relative;
+&:after{
+  background: linear-gradient(180deg,rgba(255,255,255,0) -51.89%,#FFFFFF 79.25%);
+  border-radius: 0px 0px 24px 24px;
+  position: absolute;
+  width: 100%;
+  left: 0px;
+  bottom: 10px;
+  content: '';
+  height:92px;
+}
+@media (max-width:767px){
+  max-width:inherit;
+  margin-left:0px;
+  button{
+    margin:3px 0;
+  }
+}
 `
 const AllEvent = styled.div`
 margin-top:20px;
+position:relative;
+}
 h2{
   font-size: 15px;
   line-height: 36px;
@@ -109,12 +118,23 @@ h2{
   border-radius: 10px;
   font-weight: normal;
   padding: 3px 19px;
+  
 }
-
+`
+const EventOuter = styled.div`
+display:flex;
+width:100%;
+@media (max-width:767px){
+  flex-direction: column;
+}
 `
 
 const EventList = styled.div`
 padding:0px;
+max-height:566px;
+overflow-y:auto;
+position:relative;
+
 `
 const EventListing = styled.div`
 padding: 15px;
@@ -161,10 +181,13 @@ const Icon = styled.div`
 display: flex;
 align-items: center;
 justify-content: flex-end;
+margin-top: 10px;
 div{
   margin-left: 13px;
   position:relative;
   cursor:pointer;
+  display:flex;
+  align-items: center;
 }
 sup{
   background: #FF479D;
@@ -242,14 +265,31 @@ color: #979797;
 margin-right:38px;
 }
 `
-const Gallery = styled.div`
-margin-top: 20px;
-display: flex;
-padding: 0 10px;
-flex-wrap: wrap;
-img{
-  border-radius: 13px;
+const UploadImage = styled.div`
+width: 31px;
+height: 33px;
+border-radius: 5px;
+overflow:hidden;
+margin-right:3px;
+position:relative;
+cursor:pointer;
+:hover{
+  :after{
+    content:"";
+    position: absolute;
+    background: rgba(0,0,0,0.7) url(${CrossIcon});
+    width: 31px;
+    height: 33px;
+    left: 0;
+    top: 0;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
 }
+`
+const UploadOuter = styled.div`
+display:flex;
+margin:0 10px;
 `
 
 moment.locale('en-GB')
@@ -512,156 +552,177 @@ const RightSide = () => {
   return (
     <RightSection>
       <Row>
-        <EventLeft>
-          <Card>
-            {/* Claender Section */}
-            <FlexRow>
-              <SubHeading name="Events" />
-              <ButtonSmall onClick={() => setIsOpen(true)}>Add Events</ButtonSmall>
-            </FlexRow>
+        <EventOuter>
+          <EventLeft>
+            <Card>
+              {/* Claender Section */}
+              <FlexRow>
+                <SubHeading name="Events" />
+                <ButtonSmall onClick={() => setIsOpen(true)}>Add Events</ButtonSmall>
+              </FlexRow>
 
-            <AddModalBox editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
-            <CalenderSection>
-              {typeof event !== 'undefined' ?
-                <Calendar
-                  className="CalenderSec"
-                  localizer={localizer}
-                  events={event}
-                  startAccessor="start"
-                  endAccessor="end"
-                  onSelectEvent={(e) => (
-                    // eslint-disable-next-line no-sequences
-                    setEdit(true),
-                    setIsOpen(true),
-                    setDetails(e)
-                  )}
-                  defaultView="day"
-                  step={60}
-                  views={['day', 'week', 'month',]}
-                  style={{ height: 600, width: "100%", }}
-                /> : <div className="loader"> <ValueLoader height="70" width="70" /></div>
+              <AddModalBox editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
+              <CalenderSection>
+                {typeof event !== 'undefined' ?
+                  <Calendar
+                    className="CalenderSec"
+                    localizer={localizer}
+                    events={event}
+                    startAccessor="start"
+                    endAccessor="end"
+                    onSelectEvent={(e) => (
+                      // eslint-disable-next-line no-sequences
+                      setEdit(true),
+                      setIsOpen(true),
+                      setDetails(e)
+                    )}
+                    defaultView="day"
+                    step={60}
+                    views={['day', 'week', 'month',]}
+                    style={{ height: 463, width: "100%", }}
+                  /> : <div className="loader"> <ValueLoader height="70" width="70" /></div>
 
-              }
-            </CalenderSection>
-
-
-            {/* All Events */}
-
-            <AllEvent>
-              <h2>All Events</h2>
-              <EventList>
-                {eventList ? eventList.map(v =>
-                  <>
-                    {v.name ?
-                      <EventListing>
-                        <EventText>
-                          <h3>{v.name}</h3>
-                          {/* <p>{v.eventSchedule.recurring}</p> */}
-                          <span>{getDate(v.eventSchedule.start_time)} to {getDate(v.eventSchedule.end_time)}</span>
-                          <p>{v.content}</p>
-                        </EventText>
-                        <EventImage><img src={EventImg} alt="Event" /></EventImage>
-                      </EventListing> : null
-                    }
-                  </>) : null
                 }
-              </EventList>
-            </AllEvent>
-          </Card>
-        </EventLeft>
-        <EventRight>
-          <Card>
-            <SubHeading name="Write a Post" />
-            <div className="mt-15">
-              <Textarea />
-              <div className="mt-10">
-                <FlexRow>
-                  <ButtonSmall bgColor="#0FB1D2">Upload</ButtonSmall>
-                  <ButtonSmall
-                    maxWidth="34px"
-                    bgColor="#FF7171"
-                    style={{ marginLeft: 'auto', marginRight: '9px' }}>
-                    <img src={CrossIcon} alt="Cross Icon" />
-                  </ButtonSmall>
-                  <ButtonSmall>Publish</ButtonSmall>
-                </FlexRow>
+              </CalenderSection>
+
+
+              {/* All Events */}
+
+              <AllEvent>
+                <h2>All Events</h2>
+                <EventList>
+                  {eventList ? eventList.map(v =>
+                    <>
+                      {v.name ?
+                        <EventListing>
+                          <EventText>
+                            <h3>{v.name}</h3>
+                            {/* <p>{v.eventSchedule.recurring}</p> */}
+                            <span>{getDate(v.eventSchedule.start_time)} to {getDate(v.eventSchedule.end_time)}</span>
+                            <p>{v.content}</p>
+                          </EventText>
+                          <EventImage><img src={EventImg} alt="Event" /></EventImage>
+                        </EventListing> : null
+                      }
+                    </>) : null
+                  }
+                </EventList>
+              </AllEvent>
+            </Card>
+          </EventLeft>
+          <EventRight>
+            <Card>
+              <SubHeading name="Write a Post" />
+              <div className="mt-15">
+                <Textarea />
+                <div className="mt-10">
+                  <FlexRow style={{ padding: '0px' }}>
+                    <ButtonSmall bgColor="#0FB1D2"><img src={UploadIocn} alt="Upload" />Upload</ButtonSmall>
+                    <UploadOuter>
+                      <UploadImage><img src={UploadImg} alt="Upload" /></UploadImage>
+                      <UploadImage><img src={UploadImg} alt="Upload" /></UploadImage>
+                      <UploadImage><img src={UploadImg} alt="Upload" /></UploadImage>
+                    </UploadOuter>
+                    <ButtonSmall
+                      maxWidth="34px"
+                      bgColor="#FF7171"
+                      style={{ marginLeft: 'auto', marginRight: '9px' }}>
+                      <img src={CrossIcon} alt="Cross Icon" style={{ marginRight: '0px' }} />
+                    </ButtonSmall>
+                    <ButtonSmall>Publish</ButtonSmall>
+                  </FlexRow>
+                </div>
               </div>
-            </div>
-          </Card>
-          <Card>
-            <FlexRow>
+            </Card>
+            <Card>
+              <FlexRow>
+                <SubHeading name="Feed" />
+                <TabsOuter>
+                  <Tabs isActive={activePublic} setMentions={setMentions} name="Public" image={UserIcon} />
+                  <Tabs isActive={mess} setMentions={setMentions} name="Message" image={CommentIcon} />
+                </TabsOuter>
+              </FlexRow>
 
-              <SubHeading name="Feed" />
-              <TabsOuter>
-                <Tabs isActive={activePublic} setMentions={setMentions} name="Public" image={UserIcon} />
-                <Tabs isActive={mess} setMentions={setMentions} name="Message" image={CommentIcon} />
-              </TabsOuter>
-            </FlexRow>
+              {mentions === 'Public' ?
+                <>
+                <div class="mt-25">
+                  <FeedListing>
+                    <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
+                    <EventText>
+                      <span>08:35 AM, 12 - 08 - 12</span>
+                      <h3>Marcus George</h3>
+                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Imperdiet sed eget eros, viverra erat morbi. Nulla eleifend a elit sapien. Feugiat orci ullamcorper elit malesuada lacus. Pulvinar convallis rutrum accumsan pulvinar in sodales nullam velit.</p>
+                      <Icon>
+                        <div><img src={WishlistIcon} alt="" /><sup>3</sup></div>
+                        <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
+                      </Icon>
+                    </EventText>
+                  </FeedListing>
 
-            {mentions === 'Public' ?
-              <>
-                <FeedListing>
-                  <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
-                  <EventText>
-                    <span>08:35 AM, 12 - 08 - 12</span>
-                    <h3>Marcus George</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Imperdiet sed eget eros, viverra erat morbi. Nulla eleifend a elit sapien. Feugiat orci ullamcorper elit malesuada lacus. Pulvinar convallis rutrum accumsan pulvinar in sodales nullam velit.</p>
-                    <Icon>
-                      <div><img src={WishlistIcon} alt="" /><sup>3</sup></div>
-                      <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
-                    </Icon>
-                  </EventText>
-                </FeedListing>
+                  <FeedListing>
+                    <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
+                    <EventText>
+                      <span>08:35 AM, 12 - 08 - 12</span>
+                      <h3>Marcus George</h3>
+                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Imperdiet sed eget eros, viverra erat morbi. Nulla eleifend a elit sapien. Feugiat orci ullamcorper elit malesuada lacus. Pulvinar convallis rutrum accumsan pulvinar in sodales nullam velit.</p>
+                      <Icon>
+                        <div><img src={WishlistIcon} alt="" /><sup>3</sup></div>
+                        <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
+                      </Icon>
+                    </EventText>
+                  </FeedListing>
 
-                <FeedListing>
-                  <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
-                  <EventText>
-                    <span>08:35 AM, 12 - 08 - 12</span>
-                    <h3>Marcus George</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Imperdiet sed eget eros, viverra erat morbi. Nulla eleifend a elit sapien. Feugiat orci ullamcorper elit malesuada lacus. Pulvinar convallis rutrum accumsan pulvinar in sodales nullam velit.</p>
-                    <Icon>
-                      <div><img src={WishlistIcon} alt="" /><sup>3</sup></div>
-                      <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
-                    </Icon>
-                  </EventText>
-                </FeedListing>
+                  <FeedListing>
+                    <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
+                    <EventText>
+                      <span>08:35 AM, 12 - 08 - 12</span>
+                      <h3>Marcus George</h3>
+                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Imperdiet sed eget eros, viverra erat morbi. Nulla eleifend a elit sapien. Feugiat orci ullamcorper elit malesuada lacus. Pulvinar convallis rutrum accumsan pulvinar in sodales nullam velit.</p>
+                      <Icon>
+                        <div><img src={WishlistIcon} alt="" /><sup>3</sup></div>
+                        <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
+                      </Icon>
+                    </EventText>
+                  </FeedListing>
 
-                <FeedListing>
-                  <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
-                  <EventText>
-                    <span>08:35 AM, 12 - 08 - 12</span>
-                    <h3>Marcus George</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Imperdiet sed eget eros, viverra erat morbi. Nulla eleifend a elit sapien. Feugiat orci ullamcorper elit malesuada lacus. Pulvinar convallis rutrum accumsan pulvinar in sodales nullam velit.</p>
-                    <Icon>
-                      <div><img src={WishlistIcon} alt="" /><sup>3</sup></div>
-                      <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
-                    </Icon>
-                  </EventText>
-                </FeedListing>
+                  <FeedListing>
+                    <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
+                    <EventText>
+                      <span>08:35 AM, 12 - 08 - 12</span>
+                      <h3>Marcus George</h3>
+                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Imperdiet sed eget eros, viverra erat morbi. Nulla eleifend a elit sapien. Feugiat orci ullamcorper elit malesuada lacus. Pulvinar convallis rutrum accumsan pulvinar in sodales nullam velit.</p>
+                      <Icon>
+                        <div><img src={WishlistIcon} alt="" /><sup>3</sup></div>
+                        <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
+                      </Icon>
+                    </EventText>
+                  </FeedListing>
 
-                <FeedListing>
-                  <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
-                  <EventText>
-                    <span>08:35 AM, 12 - 08 - 12</span>
-                    <h3>Marcus George</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Imperdiet sed eget eros, viverra erat morbi. Nulla eleifend a elit sapien. Feugiat orci ullamcorper elit malesuada lacus. Pulvinar convallis rutrum accumsan pulvinar in sodales nullam velit.</p>
-                    <Icon>
-                      <div><img src={WishlistIcon} alt="" /><sup>3</sup></div>
-                      <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
-                    </Icon>
-                  </EventText>
-                </FeedListing>
-              </> : null
-            }
+                  <FeedListing>
+                    <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
+                    <EventText>
+                      <span>08:35 AM, 12 - 08 - 12</span>
+                      <h3>Marcus George</h3>
+                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Imperdiet sed eget eros, viverra erat morbi. Nulla eleifend a elit sapien. Feugiat orci ullamcorper elit malesuada lacus. Pulvinar convallis rutrum accumsan pulvinar in sodales nullam velit.</p>
+                      <Icon>
+                        <div><img src={WishlistIcon} alt="" /><sup>3</sup></div>
+                        <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
+                      </Icon>
+                    </EventText>
+                  </FeedListing>
+                  </div>
+                </> : null
+              }
 
-            {mentions === 'Messages' ?
-              <ChatBox /> : null
-            }
-
+              {mentions === 'Messages' ?
+                <div class="mt-25"><ChatBox /></div> : null
+              }
 
 
-          </Card>
-        </EventRight>
+
+            </Card>
+          </EventRight>
+        </EventOuter>
       </Row>
       <Row>
         <Card>
@@ -675,51 +736,11 @@ const RightSide = () => {
           </FlexRow>
           <hr></hr>
           {/* Gallery section */}
-          <Gallery>
-            <div class="galleryImage">
-              <p><img src={PlusIcon} alt="" /> Photo</p>
-            </div>
-            <div className="galleryImage">
-              <img src={GalleryImg1} alt="" />
-              <img src={GalleryWishlist} alt="Wishlist" className="wishlistGalery" />
-            </div>
-            <div className="galleryImage">
-              <img src={GalleryImg} alt="" />
-              <img src={CloseIcon} alt="Close" className="close" />
-            </div>
-            <div className="galleryImage">
-              <img src={GalleryImg} alt="" />
-            </div>
-            <div className="galleryImage">
-              <img src={GalleryImg} alt="" />
-            </div>
-            <div className="galleryImage">
-              <img src={GalleryImg} alt="" />
-            </div>
-            <div className="galleryImage">
-              <img src={GalleryImg} alt="" />
-              <img src={GalleryWishlist} alt="Wishlist" className="wishlistGalery" />
-            </div>
-            <div className="galleryImage">
-              <img src={GalleryImg} alt="" />
-            </div>
-            <div className="galleryImage">
-              <img src={GalleryImg} alt="" />
-              <img src={CloseIcon} alt="Close" className="close" />
-            </div>
-            <div className="galleryImage">
-              <img src={GalleryImg} alt="" />
-            </div>
-            <div className="galleryImage">
-              <img src={GalleryImg} alt="" />
-            </div>
+          <GallerySec />
 
-
-          </Gallery>
         </Card>
       </Row>
-      <Row>
-        {/* Left card */}
+      {/* <Row>
         <Card>
           <FlexRow>
             <Tabs isActive={activePublic} setMentions={setMentions} name="Public" />
@@ -753,8 +774,6 @@ const RightSide = () => {
           </BottomSection>
 
         </Card>
-
-        {/* Right Card */}
         <Card>
           <FlexRow>
             <Heading name="Message" />
@@ -762,12 +781,11 @@ const RightSide = () => {
           </FlexRow>
           <Search />
 
-          {/* Messages Section */}
           <Messages />
-          {/* Chat Section */}
+    
           <ChatBox />
         </Card>
-      </Row>
+      </Row> */}
 
     </RightSection>
   )

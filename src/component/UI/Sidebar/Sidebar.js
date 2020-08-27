@@ -3,20 +3,25 @@ import React, {useEffect, useState} from 'react'
 import { Auth } from 'aws-amplify';
 import styled from 'styled-components'
 import SubHeading from '../SubHeading'
-import Facebook from '../../../Public/images/facebook.svg'
-import Twitter from '../../../Public/images/twitter.svg'
-import Instagram from '../../../Public/images/instagram.svg'
-import Linkedin from '../../../Public/images/linkedin.svg'
+import Facebook from '../../../images/facebook.svg'
+import Twitter from '../../../images/Twitter.svg'
+import Instagram from '../../../images/Instagram.svg'
+import linkedIn from '../../../images/linkedIn.svg'
 import ModalBox from '../../Edit-Business/index'
 import {callPlace} from '../../../Api'
+import Badges from '../../UI/Badges'
+import MapImage from '../../../images/profile-map.png'
+import ButtonSmall from '../../UI/ButtonSmall'
 
 
 const LeftSidebar = styled.div`
   width:100%;
-  max-width:520px;
-  background: #f1fbff;
-  padding:15px 0;
-  border: 2px solid #dae2e9;
+  max-width: 614px;
+  background: #F2FBFF;;
+  padding: 10px 10px 15px;
+  border: 1px solid #DBE2EA;
+  box-shadow:  0px 56px 63px rgba(255, 82, 117, 0.19), 0px 23.3955px 26.3199px rgba(255, 82, 117, 0.136582), 0px 12.5083px 14.0719px rgba(255, 82, 117, 0.11326), 0px 7.01207px 7.88858px rgba(255, 82, 117, 0.095), 0px 3.72406px 4.18956px rgba(255, 82, 117, 0.0767396), 0px 1.54966px 1.74337px rgba(255, 82, 117, 0.0534177);
+}
   border-radius:25px;
   position: absolute;
   top: 110px;
@@ -46,19 +51,28 @@ const LeftSidebar = styled.div`
   }
   @media (max-width:767px){
     width:100%; 
+    top:62px;
+    :after{
+      right:21px;
+    }
+    :before{
+      right:19px;
+    }
   }
 `
 const Listing = styled.div`
-width: 95%;
+width: 94%;
 margin: 0 auto;
-padding: 15px;
+padding: 15px 0;
 border-bottom: 1px solid #e5e9eb;
-:last-child{
-  border:none;
+&:last-child{
+  border-bottom:none;
 }
+
 h2{
   margin:0px;
   color: #2C2738 !important;
+  font-size: 17px !important;
 }
 p{
 font-size:12px;
@@ -74,36 +88,47 @@ width: 33%;
 }
 }
 `
-const Badges = styled.div`
-height: 26px;
-background: #f3f1f5;
-font-size: 14px;
-display: inline-flex;
-border-radius: 4px;
-justify-content: center;
-align-items: center;
-padding: 0 10px;
-margin-right: 10px;
-color:462a4d;
-margin: 10px 10px 0px 0;
-line-height:26px;
-cursor:pointer;
-box-shadow: 0px 2px 4px rgba(44, 39, 56, 0.08);
-border-radius: 17px;
-border:1px solid #facdd0;
-::empty{
-  display:none;
-}
 
-`
 const SocialIcon = styled.div`
 display:flex;
 margin-top: 10px;
 align-items: center;
+justify-content: space-between;
 img{
   margin-right:10px;
 }
 `
+const Map = styled.div`
+img{
+  max-width:100%;
+}
+`
+const CompanyAddress = styled.div`
+width: 94%;
+margin: 30px auto 20px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+h3{
+font-size: 20px;
+line-height: 28px;
+color: #FF479D;
+font-weight:normal;
+}
+p{
+font-size: 12px;
+line-height: 18px;
+color: #2C2738;
+}
+`
+const SocialOuter = styled.div`
+width: 94%;
+margin:40px auto 0;
+@media (max-width:767px){
+  margin:15px auto 0;
+}
+`
+
 
 const Sidebar = () => {
   const [placeValue,setPlace] = useState({})
@@ -127,6 +152,14 @@ const Sidebar = () => {
   return (
     <LeftSidebar>
       {/* <ProfileImage name={typeof placeValue !== 'undefined'&& placeValue.company_name?placeValue.company_name:'-'} setIsOpen={setIsOpen} /> */}
+      <Map><img src={MapImage} alt="map" /></Map>
+      <CompanyAddress>
+        <div>
+          <h3>Greg's Food Hut</h3>
+          <p>250 Followers</p>
+        </div>
+        <ButtonSmall>Edit Profile</ButtonSmall>
+      </CompanyAddress>
       <Listing>
         <SubHeading name="Address" />
         <p>{typeof placeValue !== 'undefined'?placeValue.address:null}</p>
@@ -154,20 +187,25 @@ const Sidebar = () => {
         <p><span>Saturday - Sunday</span><span> </span></p>
       </Listing>
 
-      <Listing>
+      <Listing style={{borderBottom:'none'}}>
         <SubHeading name="Hashtags" />
-          <Badges>Burger</Badges>
-          <Badges>Happy Hours</Badges>
-          <Badges>Triple Ham Burger</Badges>
+          <Badges name="Burger" />
+          <Badges name="Happy Hours" />
+          <Badges name="Triple Ham Burger" />
       </Listing>
-      <Listing>
+
+      <SocialOuter>
         <SocialIcon>
+          <div>
         <img src={Facebook} alt={Facebook} />
         <img src={Twitter} alt={Twitter} />
         <img src={Instagram} alt={Instagram} />
-        <img src={Linkedin} alt={Linkedin} />
+        <img src={linkedIn} alt={linkedIn} />
+        </div>
+        <ButtonSmall bgColor="#FF7171" maxWidth="139px">Logout</ButtonSmall>
         </SocialIcon>
-      </Listing>
+        
+      </SocialOuter>
     </LeftSidebar>
 
   )

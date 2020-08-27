@@ -6,8 +6,10 @@ import Button from '../UI/Button/Button'
 import DateTimePicker from 'react-datetime-picker';
 import {getMessage} from '../../config'
 import moment from 'moment'
-
+import Label from '../UI/Label/label'
+import crossIocn from '../../images/cross-black.svg'
 import styled from 'styled-components'
+import Gallery from '../UI/Gallery'
 
 const DatePicker = styled.div`
 padding:0px;
@@ -19,6 +21,19 @@ label{
   font-size: 14px;
   margin:0 10px 0 0;
 }
+`
+const FormGroup = styled.div`
+margin-bottom: 22px;
+@media (max-wiwth:767px){
+  margin-bottom: 15px;
+}
+`
+const P = styled.p`
+font-size: 12px;
+line-height: 14px;
+color: #979797;
+margin: 10px auto 40px;
+
 `
 
 Modal.setAppElement('#root')
@@ -309,11 +324,21 @@ else{
           {editValue ?
             <h3>Edit Event</h3> :
             <h3>Add New Event</h3>}
+            
+            <Button onClick={() => onCancel()} type="submit" className="btn btn-primary cancel"><img src={crossIocn} alt="Delete" /></Button>
+
             {error? <h4>{message}</h4>:null}
         </div>
         <div className="ContentModal">
-          <Input type="text" className={titleError?'active':null} id='title' placeholder="Add Title" value={title} onChange={(e) => handleChange(e)} />
-          <Input type="text" id='desc' placeholder="Description" value={description} onChange={(e) => handleChange(e)} />
+          <FormGroup>
+            <Label name="Add Title"/>
+            <Input type="text" className={titleError?'active':null} id='title' value={title} onChange={(e) => handleChange(e)} />
+          </FormGroup>
+          <FormGroup>
+          <Label name="Description"/>
+          <Input type="text" id='desc'  value={description} onChange={(e) => handleChange(e)} />
+          </FormGroup>
+          <Label name="Event Time"/>
           <DatePicker active={startError?true:null}>
             <label>Start Date</label>
             <DateTimePicker
@@ -346,10 +371,11 @@ else{
             <option value="Monday-Friday">Monday-Friday</option>
           </select>
           <br />
+          {/* <Gallery /> */}
+          <P>You may upload images under the size of 2 MB each. Any dimension related message goes here</P>
           {!editValue ?
             <>
               <div className="modalButton">
-              <Button onClick={() => onCancel()} type="submit" className="btn btn-primary cancel">Cancel</Button>
               <Button disabled={saveDisable} onClick={() => addEvent()} type="submit" className="btn btn-primary">Save</Button>
             </div>
         </>:

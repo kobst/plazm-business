@@ -8,7 +8,7 @@ body, html{font-family: 'Roboto',sans-serif; height: 100%; background-color:#eee
   border-color: red;
 }
 .Modal {
-  max-width:500px;
+  max-width:685px;
   border-radius: 5px;
   width:100%;
   background-color: #fff;
@@ -18,10 +18,13 @@ body, html{font-family: 'Roboto',sans-serif; height: 100%; background-color:#eee
   border-radius: 5px;
   top:0px;
   position: relative;
-  height:500px;
+  max-height:863px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  background: #FFFFFF;
+  box-shadow: 0px 16px 32px rgba(44, 39, 56, 0.04), 0px 32px 64px rgba(44, 39, 56, 0.08);
+  border-radius: 16px;
 }
 @media (max-width:767px){
   .Modal{
@@ -33,16 +36,7 @@ body, html{font-family: 'Roboto',sans-serif; height: 100%; background-color:#eee
   outline: none;
 }
 
-.Modal input{
-  height: 38px;
-  font-size: 14px;
-  border-radius: 0;
-  width: 100%;
-  padding: 0 0;
-  border: none;
-  border-bottom: 1px solid #dddd;
-  margin-bottom: 15px;
-}
+
 .Modal input.active{
   border-color: red;
 }
@@ -64,7 +58,7 @@ body, html{font-family: 'Roboto',sans-serif; height: 100%; background-color:#eee
   left: 0;
   right: 0;
   bottom: 0;
-  background:rgba(0,0,0,0.4);
+  background: rgba(40, 10, 51, 0.59);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -75,21 +69,24 @@ body, html{font-family: 'Roboto',sans-serif; height: 100%; background-color:#eee
 }
 .ModalHeader {
   padding: 0px;
+  margin-bottom:20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .ContentModal{
-  margin-top: 10px;
   height: 100%;
   margin-bottom:0px;
   display: flex;
   flex-direction: column;
 }
 
-.ContentModal label{
-  margin-top: 15px;
-  margin-bottom: 15px;
-  }
+
 .ModalHeader h3{
-  font-size: 22px;
+  font-size: 28px;
+  line-height: 33px;
+  color: #FF479D;
+  font-weight: 700;
 }
 .ModalHeader h4{
   font-size: 16px;
@@ -146,15 +143,21 @@ span.react-datetime-picker__inputGroup__leadingZero {
 }
 
 .modalButton button{
-  margin-left:15px;
+  margin-left: 15px;
+  height: 48px;
+  width: 140px;
+  font-size: 16px;
+  border-radius: 6px;
 }
-.modalButton button.cancel{
+button.cancel{
 background: transparent;
 color: #000;
 padding: 0;
 min-width: inherit;
+width:auto;
+height:auto;
 }
-.modalButton button.cancel:focus,.modalButton button.cancel:active{
+button.cancel:focus,button.cancel:active,button.cancel:hover{
   box-shadow: none !important;
   background: transparent !important;
   color: #000 !important;
@@ -257,8 +260,50 @@ font-family: 'Roboto',sans-serif;
   border-bottom: 2px solid #f4479d !important;
   opacity:1 !important;
 }
+.rbc-toolbar{
+  margin-bottom: 20px !important;
+}
+.rbc-toolbar span:first-child button:first-child {
+  background: #FF4F94 !important;
+    color: #fff !important;
+    border-radius: 5px !important;
+}
+.rbc-btn-group button{
+  cursor: pointer;
+}
+.rbc-toolbar span:first-child button:nth-child(2){
+  color: #0880AE !important;
+  margin-left: 15px !important;
+    border-radius: 3px 0px 0px 3px !important;
+    background: #E2F1F8 url(/static/media/left-arrow.0bcc2d9e.svg) no-repeat left 12px center;
+    background-size: 7px;
+    padding-left: 31px !important;
+}
+.rbc-toolbar span:first-child button:nth-child(2):active{
+  background: #E2F1F8 url(/static/media/left-arrow.0bcc2d9e.svg) no-repeat left 12px center !important;
+  background-size: 7px !important;
+}
+.rbc-toolbar span:first-child button:nth-child(3){
+  color: #0880AE !important;
+    background: #E2F1F8;
+    border-radius: 0px 3px 3px 0px !important;
+    background: #E2F1F8 url(/static/media/left-arrow.0bcc2d9e.svg) no-repeat right 12px center;
+    background-size: 7px;
+    padding-right: 31px !important;
 
+}
+
+.rbc-toolbar span:first-child button:nth-child(3):active{
+  background: #E2F1F8 url(/static/media/left-arrow.0bcc2d9e.svg) no-repeat right 12px center !important;
+  background-size: 7px !important;
+}
 .rbc-event{background: linear-gradient(151.13deg, #C643FC 0%, #FF7171 114.93%) !important;}
+.rbc-row-segment .rbc-event-content{
+  font-size:13px;
+}
+.rbc-show-more{
+  font-size:11px !important
+}
 #multiselectContainerReact{
     padding: 0;
     margin-top:10px;
@@ -419,4 +464,24 @@ position: relative;
   border-radius:10px;
   border: 1px solid rgba(239,77,182,0.5) !important;
   overflow:hidden;
+}
+.mt-25{
+  margin-top:25px;
+  max-height: 796px;
+  overflow-y: auto;
+}
+
+@media (max-width:767px){
+  .rbc-toolbar span {
+    margin: 5px 0;
+}
+.galleryImage{
+  border-radius:8px;
+  max-width: 94px;
+  min-height: 94px;
+  margin: 5px;
+  }
+  .mt-25{
+    margin-top:15px;
+  }
 }

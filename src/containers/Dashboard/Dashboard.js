@@ -17,6 +17,10 @@ max-width:1440px;
 width:100%;
 padding:0 30px;
 margin:35px auto 0;
+@media{
+  padding:0 15px;
+   margin:15px auto 0;
+}
 `
 
 

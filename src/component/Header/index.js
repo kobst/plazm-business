@@ -11,6 +11,9 @@ justify-content: space-between;
 align-items: center;
 margin-bottom:100px;
 position:relative;
+@media (max-width:1024px){
+  margin-bottom:50px;
+}
 @media (max-width:767px){
   margin-bottom:30px;
 }

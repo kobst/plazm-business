@@ -41,7 +41,10 @@ line-height: 21px;
 color: #979797;
 }
 div{
-  width:100%;
+  width: auto;
+  max-width: 340px;
+  padding-right: 15px;
+  min-width: 160px;
 }
 `
 const GreyBox = styled.div`
@@ -51,8 +54,6 @@ border-radius: 0px 19px 19px 19px;
     font-weight: 500;
     font-size: 11px;
     line-height: 15px;
-    width: 100%;
-    max-width:345px;
     color: #fff;
     display: flex;
     align-items: center;
@@ -84,8 +85,13 @@ line-height: 21px;
 color: #979797;
 }
 div{
-  width:100%;
+  width: auto;
+  max-width: 340px;
+  min-width: 160px;
   text-align: right;
+  display: flex;
+    flex-direction: column;
+    margin-left: auto;
 }
 `
 const BlackBox = styled.div`

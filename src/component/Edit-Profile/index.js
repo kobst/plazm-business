@@ -6,6 +6,7 @@ import PinIcon from '../../images/location.svg'
 import Label from '../UI/Label/label'
 import Input from '../UI/Input/Input'
 import ButtonSmall from '../UI/ButtonSmall'
+import Badges from '../UI/Badges'
 
 const ProfileOuter = styled.div`
 display:flex;
@@ -91,12 +92,68 @@ margin-bottom: 10px;
 }
 
 `
-
 const LabelRight = styled.div`
 padfing:0px;
 width: calc(100% - 146px);
 @media (max-width:767px){
   width: calc(100% - 65px); 
+}
+`
+const HashTags = styled.div`
+padding:0px;
+display: flex;
+
+>div:first-child{
+  margin-right:5px;
+}
+>div:last-child{
+  margin-left:5px;
+}
+@media (max-width:767px){
+  flex-direction:column;
+  >div:first-child{
+    margin-right:0px;
+  }
+  >div:last-child{
+    margin-left:0px;
+  }
+}
+`
+const HashTagsSearch = styled.div`
+background: rgba(226, 241, 248, 0.4);
+border-radius: 7px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 5px 10px 5px 15px;
+margin-bottom:15px;
+h3{
+font-size: 16px;
+line-height: 44px;
+color: #156064;
+font-weight:normal;
+}
+input{
+  background: #FFFFFF;
+border: 1px solid #DBE2EA;
+box-sizing: border-box;
+box-shadow: 0px 2px 4px rgba(44, 39, 56, 0.08);
+border-radius: 17px;
+height:34px;
+padding:0 15px;
+width: calc(100% - 195px);
+:focus{
+  outline:none;
+}
+}
+@media (max-width:767px){
+  margin-bottom:10px;
+  h3{
+    font-size:14px;
+  } 
+  input{
+    width: calc(100% - 119px);
+  }
 }
 `
 
@@ -160,6 +217,25 @@ const EditProfile = () => {
           </Card>
         </RightProfile>
       </ProfileInner>
+      <HashTags>
+      <Card>
+        <HashTagsSearch>
+          <h3>Select HashTags</h3>
+          <input type="search" />
+        </HashTagsSearch>
+        <Badges name="Burger"/>
+        <Badges name="Happy Hours"/>
+        <Badges name="Triple Ham Burger"/>
+        <Badges name="Burger"/>
+        <Badges name="Happy Hours"/>
+        <Badges name="Triple Ham Burger"/>
+      </Card>
+      <Card>
+      <HashTagsSearch>
+          <h3>Opening Hours</h3>
+        </HashTagsSearch>
+      </Card>
+      </HashTags>
       <row>
         <Card>
           <FlexRow>
