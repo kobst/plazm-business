@@ -70,6 +70,18 @@ const Listing = ({mentions,value,data,users}) => {
         setIsOpen(true)
         setContent(v)
    }
+//    const changeColor = (str)=> {
+//     for (let i = 0; i < str.length; i++) {
+//        if(str.charAt(i)==='@'){
+//         for (let j= i){
+//           if(str.charAt(j)===' ')
+//           {
+//               break
+//           }
+//         }
+//        }
+//       }
+//    }
     const handleDelete= (v)=> {
     setDeleteOpen(true)
     setId(v._id)
