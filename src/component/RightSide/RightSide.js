@@ -1,14 +1,10 @@
 
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import Heading from '../UI/Heading/Heading'
 import Tabs from '../UI/Tabs/Tabs'
 import Card from '../UI/Card/Card'
-import LineButton from '../UI/LineButton/LineButton'
-import Button from '../UI/Button/Button'
 import Listing from '../UI/Listing/Listing'
 import Search from '../UI/Search/Search'
-import Messages from '../UI/Messages/Messages'
 import ChatBox from '../UI/ChatBox/ChatBox'
 import { Auth } from 'aws-amplify';
 import { Link } from "react-router-dom";
@@ -20,6 +16,7 @@ import ValueLoader from '../../utils/loader'
 import { RRule } from 'rrule'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { Multiselect } from 'multiselect-react-dropdown';
+import UserImage from '../../images/user-img.png'
 import EventImg from '../../images/eventimg.png'
 import SubHeading from '../UI/SubHeading'
 import ButtonSmall from '../UI/ButtonSmall'
@@ -31,9 +28,9 @@ import WishlistIcon from '../../images/wishlist-icon.svg'
 import CommentIcon from '../../images/comment.svg'
 import SortIcon from '../../images/sort.svg'
 import UploadIocn from '../../images/upload.svg'
-import PlusIcon from '../../images/plus.svg'
 import CloseIcon from '../../images/close.svg'
 import GallerySec from '../UI/Gallery'
+import Tooltip from '../UI/Tooltip'
 
 const RightSection = styled.div`
 
@@ -71,7 +68,7 @@ position:relative;
   bottom: 10px;
   content: '';
   height:92px;
-
+}
 @media (max-width:767px){
 max-width:inherit;
 }
@@ -84,7 +81,7 @@ margin-top:50px;
 `
 const EventRight = styled.div`
 padding:0px;
-max-width: 550px;
+max-width: 595px;
 width:100%;
 margin-left:5px;
 position:relative;
@@ -153,7 +150,7 @@ border: 1px solid #FF479D;
 }
 `
 const FeedListing = styled.div`
-padding: 15px;
+padding: 15px 15px 0;
 background: #FAFDFF;
 border: 1px solid #E2F1F8;
 box-sizing: border-box;
@@ -182,12 +179,24 @@ display: flex;
 align-items: center;
 justify-content: flex-end;
 margin-top: 10px;
+div:first-child{
+  div{
+    visibility:hidden;
+    margin-left: 0;
+  }
+  :hover{
+    div{
+      visibility:visible;
+    }
+  }
+}
 div{
   margin-left: 13px;
   position:relative;
   cursor:pointer;
   display:flex;
   align-items: center;
+  padding-bottom:10px;
 }
 sup{
   background: #FF479D;
@@ -290,6 +299,17 @@ cursor:pointer;
 const UploadOuter = styled.div`
 display:flex;
 margin:0 10px;
+`
+const UserListing = styled.div`
+padding:0px;
+max-height: 772px;
+overflow-y: auto;
+`
+const UserList = styled.div`
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-top:15px;
 `
 
 moment.locale('en-GB')
@@ -653,7 +673,21 @@ const RightSide = () => {
                       <h3>Marcus George</h3>
                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Imperdiet sed eget eros, viverra erat morbi. Nulla eleifend a elit sapien. Feugiat orci ullamcorper elit malesuada lacus. Pulvinar convallis rutrum accumsan pulvinar in sodales nullam velit.</p>
                       <Icon>
-                        <div><img src={WishlistIcon} alt="" /><sup>3</sup></div>
+                        <div><img src={WishlistIcon} alt="" /><sup>3</sup>
+                        <Tooltip>
+                          <ul>
+                            <li>Ahmad Mango</li>
+                            <li>Dulce Workman</li>
+                            <li>Hanna Donin</li>
+                            <li>Lincoln Botosh</li>
+                            <li>Haylie Donin</li>
+                            <li>Nolan Aminoff</li>
+                            <li>Madelyn Lipshutz</li>
+                            <li>Ashlynn Siphron</li>
+                            <li><strong>More...</strong></li>
+                          </ul>
+                        </Tooltip>
+                        </div>
                         <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
                       </Icon>
                     </EventText>
@@ -715,7 +749,139 @@ const RightSide = () => {
               }
 
               {mentions === 'Messages' ?
-                <div class="mt-25"><ChatBox /></div> : null
+               <>
+                  <Search />
+                  <UserListing>
+                    <UserList>
+                      <div className="leftText">
+                        <div class="imgSection">
+                            <img src={UserImage} alt="user" />
+                            <span></span>
+                        </div>
+                        <div className="text">
+                          <h2>Madelyn Mango</h2>
+                          <div class="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
+                        </div>
+                      </div>
+                    </UserList>
+                    <UserList>
+                      <div className="leftText">
+                        <div class="imgSection">
+                            <img src={UserImage} alt="user" />
+                        </div>
+                        <div className="text">
+                          <h2>Madelyn Mango</h2>
+                          <div class="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span class="active">Just Now</span></div>
+                        </div>
+                      </div>
+                    </UserList>
+                    <UserList>
+                      <div className="leftText">
+                        <div class="imgSection">
+                            <img src={UserImage} alt="user" />
+                            <span></span>
+                        </div>
+                        <div className="text">
+                          <h2>Madelyn Mango</h2>
+                          <div class="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
+                        </div>
+                      </div>
+                    </UserList>
+                    <UserList>
+                      <div className="leftText">
+                        <div class="imgSection">
+                            <img src={UserImage} alt="user" />
+                        </div>
+                        <div className="text">
+                          <h2>Madelyn Mango</h2>
+                          <div class="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span class="active">Just Now</span></div>
+                        </div>
+                      </div>
+                    </UserList>
+                    <UserList>
+                      <div className="leftText">
+                        <div class="imgSection">
+                            <img src={UserImage} alt="user" />
+                            <span></span>
+                        </div>
+                        <div className="text">
+                          <h2>Madelyn Mango</h2>
+                          <div class="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
+                        </div>
+                      </div>
+                    </UserList>
+                    <UserList>
+                      <div className="leftText">
+                        <div class="imgSection">
+                            <img src={UserImage} alt="user" />
+                        </div>
+                        <div className="text">
+                          <h2>Madelyn Mango</h2>
+                          <div class="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span class="active">Just Now</span></div>
+                        </div>
+                      </div>
+                    </UserList>
+                    <UserList>
+                      <div className="leftText">
+                        <div class="imgSection">
+                            <img src={UserImage} alt="user" />
+                            <span></span>
+                        </div>
+                        <div className="text">
+                          <h2>Madelyn Mango</h2>
+                          <div class="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
+                        </div>
+                      </div>
+                    </UserList>
+                    <UserList>
+                      <div className="leftText">
+                        <div class="imgSection">
+                            <img src={UserImage} alt="user" />
+                        </div>
+                        <div className="text">
+                          <h2>Madelyn Mango</h2>
+                          <div class="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span class="active">Just Now</span></div>
+                        </div>
+                      </div>
+                    </UserList>
+                    <UserList>
+                      <div className="leftText">
+                        <div class="imgSection">
+                            <img src={UserImage} alt="user" />
+                            <span></span>
+                        </div>
+                        <div className="text">
+                          <h2>Madelyn Mango</h2>
+                          <div class="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
+                        </div>
+                      </div>
+                    </UserList>
+                    <UserList>
+                      <div className="leftText">
+                        <div class="imgSection">
+                            <img src={UserImage} alt="user" />
+                            <span></span>
+                        </div>
+                        <div className="text">
+                          <h2>Madelyn Mango</h2>
+                          <div class="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
+                        </div>
+                      </div>
+                    </UserList>
+                    <UserList>
+                      <div className="leftText">
+                        <div class="imgSection">
+                            <img src={UserImage} alt="user" />
+                        </div>
+                        <div className="text">
+                          <h2>Madelyn Mango</h2>
+                          <div class="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
+                        </div>
+                      </div>
+                    </UserList>
+                  </UserListing>
+                  {/* <ChatBox /> */}
+               </> : null
               }
 
 

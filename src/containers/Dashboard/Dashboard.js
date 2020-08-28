@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react'
-import Sidebar from '../../component/UI/Sidebar/Sidebar'
 import styled from 'styled-components'
 import RightSide from '../../component/RightSide/RightSide'
 import { Auth } from 'aws-amplify';

@@ -1,8 +1,8 @@
 
 import React from 'react'
 import styled from 'styled-components'
-import LikeIcon from '../../../Public/images/like.svg'
-import CommentIcon from '../../../Public/images/comment.svg'
+import LikeIcon from '../../../images/wishlist-icon.svg'
+import CommentIcon from '../../../images/comment.svg'
 
 const ListContainer = styled.div`
 display:flex;

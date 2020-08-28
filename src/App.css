@@ -275,26 +275,26 @@ font-family: 'Roboto',sans-serif;
   color: #0880AE !important;
   margin-left: 15px !important;
     border-radius: 3px 0px 0px 3px !important;
-    background: #E2F1F8 url(/static/media/left-arrow.0bcc2d9e.svg) no-repeat left 12px center;
+    background: #E2F1F8 url(./images/left-arrow.svg) no-repeat left 12px center;
     background-size: 7px;
     padding-left: 31px !important;
 }
 .rbc-toolbar span:first-child button:nth-child(2):active{
-  background: #E2F1F8 url(/static/media/left-arrow.0bcc2d9e.svg) no-repeat left 12px center !important;
+  background: #E2F1F8 url(./images/left-arrow.svg) no-repeat left 12px center !important;
   background-size: 7px !important;
 }
 .rbc-toolbar span:first-child button:nth-child(3){
   color: #0880AE !important;
     background: #E2F1F8;
     border-radius: 0px 3px 3px 0px !important;
-    background: #E2F1F8 url(/static/media/left-arrow.0bcc2d9e.svg) no-repeat right 12px center;
+    background: #E2F1F8 url(./images/right-arrow.svg) no-repeat right 12px center;
     background-size: 7px;
     padding-right: 31px !important;
 
 }
 
 .rbc-toolbar span:first-child button:nth-child(3):active{
-  background: #E2F1F8 url(/static/media/left-arrow.0bcc2d9e.svg) no-repeat right 12px center !important;
+  background: #E2F1F8 url(./images/right-arrow.svg) no-repeat right 12px center !important;
   background-size: 7px !important;
 }
 .rbc-event{background: linear-gradient(151.13deg, #C643FC 0%, #FF7171 114.93%) !important;}
@@ -466,7 +466,7 @@ position: relative;
   overflow:hidden;
 }
 .mt-25{
-  margin-top:25px;
+  margin-top:11px;
   max-height: 796px;
   overflow-y: auto;
 }
@@ -481,7 +481,37 @@ position: relative;
   min-height: 94px;
   margin: 5px;
   }
-  .mt-25{
-    margin-top:15px;
-  }
+
 }
+.leftText{
+padding:0px;
+display: flex;
+align-items: center;
+width:100%;
+
+}
+.leftText .imgSection span{
+  width: 14px;
+  height: 14px;
+  background: #FF479D;
+  border-radius: 100%;
+  position: absolute;
+  bottom: 12px;
+  right: 7px;
+}
+.leftText .text{
+  width: calc(100% - 85px);
+}
+.leftText .imgSection{ position:relative; margin-right:15px; width:63px; height:63px; border-radius:100%; overflow: hidden; border:1px solid #C4C4C4;}
+.leftText .text h2{font-size: 12px; margin-bottom: 3px;  color: #626262;  line-height: 15px; font-weight:normal;}
+.leftText .content p{font-size: 9px;
+  color: #979797;
+  line-height: 15px;
+  max-width: 280px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  overflow: hidden;}
+.leftText .content span{ font-size:9px; color: #979797;}
+.leftText .content span.active{color:#FF479D; border: none !important;}
+.leftText .content{display:flex; justify-content: space-between; align-items: center;}

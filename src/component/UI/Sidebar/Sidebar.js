@@ -151,14 +151,14 @@ const Sidebar = () => {
  
   return (
     <LeftSidebar>
-      {/* <ProfileImage name={typeof placeValue !== 'undefined'&& placeValue.company_name?placeValue.company_name:'-'} setIsOpen={setIsOpen} /> */}
+      {/* <div name={typeof placeValue !== 'undefined'&& placeValue.company_name?placeValue.company_name:'-'} setIsOpen={setIsOpen} /> */}
       <Map><img src={MapImage} alt="map" /></Map>
       <CompanyAddress>
         <div>
           <h3>Greg's Food Hut</h3>
           <p>250 Followers</p>
         </div>
-        <ButtonSmall>Edit Profile</ButtonSmall>
+        <ButtonSmall setIsOpen={setIsOpen}>Edit Profile</ButtonSmall>
       </CompanyAddress>
       <Listing>
         <SubHeading name="Address" />
