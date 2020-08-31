@@ -1,11 +1,12 @@
 
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import PlusIcon from '../../../images/plus.svg'
 import CloseIcon from '../../../images/close.svg'
 import GalleryImg from '../../../images/gallery-img.png'
 import GalleryImg1 from '../../../images/gallery-img1.png'
 import GalleryWishlist from '../../../images/wishlist-gallery.svg'
+import GallerModalBox from '../../Add-Gallery/index'
 
 const GallerySection = styled.div`
 margin-top: 20px;
@@ -21,11 +22,19 @@ img{
 }
 `
 
-const Gallery = (props) => {
+const Gallery = () => {
+  const [isOpen,setIsOpen]= useState(false)
+
+
+
+
     return(
         <GallerySection>
         <div class="galleryImage">
-          <p><img src={PlusIcon} alt="" /> Photo</p>
+          <p onClick={() => setIsOpen(true)}><img src={PlusIcon} alt="" /> Photo</p>
+          <GallerModalBox  isOpen={isOpen} closeModal={() => setIsOpen(false)}/>
+
+
         </div>
         <div className="galleryImage">
           <img src={GalleryImg1} alt="" />

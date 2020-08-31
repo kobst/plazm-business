@@ -14,11 +14,11 @@ import Gallery from '../UI/Gallery'
 const DatePicker = styled.div`
 padding:0px;
 border-bottom: 1px solid #dddd;
-margin-bottom: 15px;
+margin:5px 0 15px;
 border-color: ${props => (props.active ? 'red':null)};
 label{
   color: #757575;
-  font-size: 14px;
+  font-size: 13px;
   margin:0 10px 0 0;
 }
 `

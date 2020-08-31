@@ -12,6 +12,8 @@ padding:0 15px;
 position:relative;
 border-top: 1px solid rgba(255, 71, 157, 0.25);
 border-bottom: 1px solid rgba(255, 71, 157, 0.25);
+margin: 10px -15px 0;
+padding: 0 32px;
 input{
     border:none;
     background: transparent;
@@ -26,7 +28,10 @@ input{
 :focus{
     outline:none;
 }
-
+@media (max-width:767px){
+    height:40px; 
+    padding: 0 15px;
+}
 `
 
 const Search = (props,children) => {

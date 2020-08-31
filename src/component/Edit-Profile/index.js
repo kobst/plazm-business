@@ -7,6 +7,7 @@ import Label from '../UI/Label/label'
 import Input from '../UI/Input/Input'
 import ButtonSmall from '../UI/ButtonSmall'
 import Badges from '../UI/Badges'
+import PlusIcon from '../../images/plus-img.svg'
 
 const ProfileOuter = styled.div`
 display:flex;
@@ -133,6 +134,7 @@ line-height: 44px;
 color: #156064;
 font-weight:normal;
 }
+
 input{
   background: #FFFFFF;
 border: 1px solid #DBE2EA;
@@ -141,9 +143,16 @@ box-shadow: 0px 2px 4px rgba(44, 39, 56, 0.08);
 border-radius: 17px;
 height:34px;
 padding:0 15px;
+font-family: 'IBM Plex Sans',sans-serif;
 width: calc(100% - 195px);
 :focus{
   outline:none;
+}
+::placeholder{
+  font-weight: 500;
+font-size: 14px;
+line-height: 18px;
+color: #7C9CBF;
 }
 }
 @media (max-width:767px){
@@ -155,6 +164,33 @@ width: calc(100% - 195px);
     width: calc(100% - 119px);
   }
 }
+`
+const Button = styled.button`
+  background: #FF479D;
+  box-shadow: 0px 1px 2px rgba(44, 39, 56, 0.0001), 0px 2px 4px rgba(44, 39, 56, 0.08);
+  border-radius: 17px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+  color: #FFFFFF;
+  font-family: 'IBM Plex Sans',sans-serif;
+  border:none;
+  max-width:197px;
+  height:34px;
+  width:100%;
+  text-align:left;
+  cursor:pointer;
+  padding:0 20px;
+  display: flex;
+  float:right;
+    align-items: center;
+    justify-content: space-between;
+  :focus{
+    outline:none;
+  }
+  img{
+    float:right;
+  }
 `
 
 const EditProfile = () => {
@@ -221,7 +257,7 @@ const EditProfile = () => {
       <Card>
         <HashTagsSearch>
           <h3>Select HashTags</h3>
-          <input type="search" />
+          <input placeholder="label" type="search" />
         </HashTagsSearch>
         <Badges name="Burger"/>
         <Badges name="Happy Hours"/>
@@ -234,6 +270,7 @@ const EditProfile = () => {
       <HashTagsSearch>
           <h3>Opening Hours</h3>
         </HashTagsSearch>
+        <Button>Add New Time Slot <img src={PlusIcon} alt="plus icon" /></Button>
       </Card>
       </HashTags>
       <row>

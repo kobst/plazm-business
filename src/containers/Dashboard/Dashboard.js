@@ -4,6 +4,7 @@ import RightSide from '../../component/RightSide/RightSide'
 import { Auth } from 'aws-amplify';
 import history from '../../utils/history'
 import Header from '../../component/Header'
+import Footer from '../../component/Footer'
 const DashboardContainer = styled.div`
 display:flex;
 background: linear-gradient(157.1deg, #FF7171 -1.1%, #FF479D 100%);
@@ -41,7 +42,8 @@ const Dashboard = () => {
        <DashboardContainer>
          <Container>
           <Header />
-       <RightSide/>
+          <RightSide/>
+          <Footer />
        </Container>
        </DashboardContainer>
 

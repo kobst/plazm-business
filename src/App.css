@@ -97,6 +97,10 @@ body, html{font-family: 'Roboto',sans-serif; height: 100%; background-color:#eee
   border:none !important;
 }
 
+.rbc-toolbar button{
+  padding: .28rem 1rem !important;
+  font-size:6px;
+}
 .react-datetime-picker__inputGroup__divider{
   color: #757575 !important;
 }
@@ -136,14 +140,13 @@ span.react-datetime-picker__inputGroup__leadingZero {
   justify-content: flex-end;
   margin-top:auto;
 }
-@media screen and (-webkit-min-device-pixel-ratio:0) {
+/* @media screen and (-webkit-min-device-pixel-ratio:0) {
   .modalButton{
     margin-bottom:20px;
   }
-}
+} */
 
 .modalButton button{
-  margin-left: 15px;
   height: 48px;
   width: 140px;
   font-size: 16px;
@@ -276,26 +279,32 @@ font-family: 'Roboto',sans-serif;
   margin-left: 15px !important;
     border-radius: 3px 0px 0px 3px !important;
     background: #E2F1F8 url(./images/left-arrow.svg) no-repeat left 12px center;
-    background-size: 7px;
-    padding-left: 31px !important;
+    background-size: 4px;
+    padding-left: 25px !important;
 }
 .rbc-toolbar span:first-child button:nth-child(2):active{
   background: #E2F1F8 url(./images/left-arrow.svg) no-repeat left 12px center !important;
-  background-size: 7px !important;
+  background-size: 4px !important;
 }
 .rbc-toolbar span:first-child button:nth-child(3){
   color: #0880AE !important;
     background: #E2F1F8;
     border-radius: 0px 3px 3px 0px !important;
     background: #E2F1F8 url(./images/right-arrow.svg) no-repeat right 12px center;
-    background-size: 7px;
-    padding-right: 31px !important;
+    background-size: 4px;
+    padding-right: 25px !important;
 
 }
 
 .rbc-toolbar span:first-child button:nth-child(3):active{
   background: #E2F1F8 url(./images/right-arrow.svg) no-repeat right 12px center !important;
-  background-size: 7px !important;
+  background-size: 4px !important;
+}
+.rbc-btn-group button:first-child {
+  border-radius: 3px 0 0 3px !important;
+}
+.rbc-btn-group button:last-child {
+  border-radius: 0 3px 3px 0!important;
 }
 .rbc-event{background: linear-gradient(151.13deg, #C643FC 0%, #FF7171 114.93%) !important;}
 .rbc-row-segment .rbc-event-content{
@@ -358,10 +367,21 @@ padding:3px 5px !important;
   top: 2px;
 } */
 
+.react-datetime-picker__inputGroup__input{
+  font-size:13px !important;
+}
+
 @media (max-width:767px){
   #multiselectContainerReact{
     line-height:28px;
   }
+  .modalButton button {
+    height: 42px;
+    margin-bottom: 25px;
+}
+.ModalHeader h3{
+  font-size: 22px;
+}
 }
 
 @media (max-width:520px){
@@ -420,7 +440,7 @@ position: relative;
   flex-grow: 1;
   padding: 0 10px;
   text-align: center;
-  font-size: 13px;
+  font-size: 10px;
   font-weight: 500;
   color: #FF479D;
 }
@@ -470,6 +490,9 @@ position: relative;
   max-height: 796px;
   overflow-y: auto;
 }
+button a{
+  text-decoration: none;
+}
 
 @media (max-width:767px){
   .rbc-toolbar span {
@@ -515,3 +538,320 @@ width:100%;
 .leftText .content span{ font-size:9px; color: #979797;}
 .leftText .content span.active{color:#FF479D; border: none !important;}
 .leftText .content{display:flex; justify-content: space-between; align-items: center;}
+
+.Modal.galleryModal{
+max-width:515px;
+}
+
+.Modal.galleryModal h3{
+  font-style: normal;
+font-weight: normal;
+font-size: 16px;
+line-height:12px;
+}
+.GallerySection{
+  display: flex;
+  flex-wrap: wrap;
+  max-height: 329px;
+  overflow-y: auto;
+}
+
+.GallerySection .list{
+  width:111px;
+  height:111px;
+  border: 2px solid rgba(219, 226, 234, 0.2);
+  box-sizing: border-box;
+  border-radius: 13px;
+  overflow: hidden;
+  margin:2px;
+}
+.GallerySection .list.active{
+  border-color:#FF479D;
+
+}
+.Modal.galleryModal .ModalHeader{margin-bottom:15px;}
+.Modal.galleryModal button{height: 34px; font-size:14px; margin-top:15px;}
+.uploadimg{
+background: #FFFFFF;
+border: 1px dashed #FF479D;
+border-radius: 14px;
+height:46px;
+display: flex;
+align-items: center;
+justify-content: center;
+margin-top:15px;
+}
+.uploadimg p{
+  font-style: normal;
+font-weight: normal;
+font-size: 12px;
+line-height: 36px;
+color: #ABABAB;
+}
+.uploadimg p span{
+  color:#FF479D
+}
+.Modal.galleryModal ul{
+  list-style:none;
+  margin-top:20px;
+}
+.Modal.galleryModal li{
+  font-size: 12px;
+line-height: 18px;
+color: #979797;
+}
+.Modal.galleryModal li img{
+  width:8px;
+  margin-left:10px;
+  cursor:pointer;
+}
+@media (max-width:1024px){
+  .GallerySection .list{
+    width:75px;
+    height:75px;
+  }
+  .GallerySection{
+    max-height: 157px;
+  }
+  .Modal.galleryModal{
+    height:auto;
+  }
+}
+
+.Modal.postModal{
+  max-width: 1307px;
+  padding:0px;
+  border-radius: 24px;
+}
+
+.postOuter{
+  padding: 25px 25px 0;
+}
+.postOuter button{
+  cursor: pointer;
+  float: right;
+  margin-bottom: 10px;
+  border:none;
+  background: transparent;
+}
+.postOuter button:focus{
+  outline:none;
+}
+.postDetails{
+  clear:both;
+}
+.postOuter button img{
+  width:14px;
+}
+.imageSlider{
+  margin-right:25px;
+  background: #2f2f2f;
+    border-radius: 25px;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+}
+.Modal.postModal .ContentModal{
+flex-direction: row;
+}
+.messageSec {
+  display: flex;
+  border-bottom:1px solid #FF479D;
+}
+
+.messageSec .text {
+  width: calc(100% - 74px);
+}
+.messageSec .image{
+  width:55px;
+  height:55px;
+  border-radius: 100%;
+   position:relative;
+   overflow:hidden;
+   margin-right:20px;
+}
+.messageSec .image span{
+position: absolute;
+width: 14px;
+height: 14px;
+background: #14A38B;
+border: 2px solid #FFFFFF;
+box-sizing: border-box;
+left: 41px;
+top: 36px;
+}
+.messageSec h2{
+font-weight: normal;
+font-size: 12px;
+line-height:4px;
+color:#000;
+}
+.messageSec span{
+font-size: 8px;
+line-height: 12px;
+color: #979797;
+}
+.messageSec p{
+font-size: 9px;
+line-height: 12px;
+color: #280A33;
+margin-top:5px;
+}
+
+.Icon{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;;
+}
+
+.Icon div{
+  margin-right: 20px;
+  position:relative;
+  cursor:pointer;
+  display:flex;
+  align-items: center;
+  padding-bottom:10px;
+}
+.Icon sup{
+  background: #FF479D;
+  width: 14px;
+  height: 14px;
+  color: #fff;
+  border-radius: 100%;
+  font-size: 9px;
+  font-weight: 700;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: -7px;
+  right: -7px;
+}
+.Icon div:last-child sup{
+    top: -2px;
+    right: -3px;
+}
+.postBottom{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top:15px;
+}
+.postBottom p{
+  color:#FF479D;
+  font-size: 10px;
+line-height: 12px;
+}
+
+.commentSec {
+  margin-top: 25px;
+}
+
+.left{
+background: #F8F8F8;
+border-radius: 19px;
+padding:15px;
+margin-right:10px;
+}
+.ml-55{
+  margin-left:55px;
+}
+.commentLeft {
+  display: flex;
+  margin-bottom:15px;
+}
+.commentLeft:last-child{
+  margin-bottom:0px;
+}
+
+.topHeading {
+  display: flex;
+  justify-content: space-between;
+}
+.commentText {
+  width: calc(100% - 40px);
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+}
+.commentText h3{
+  font-size: 11px;
+line-height: 12px;
+font-weight: normal;
+color: #000000;
+}
+.commentText p{
+  font-weight: normal;
+font-size: 11px;
+line-height: 12px;
+color: #979797;
+margin-top:10px;
+}
+.commentText span{
+  font-weight: normal;
+font-size: 9px;
+line-height: 12px;
+color: #979797;
+}
+.commentimg{
+  width:31px;
+  height:31px;
+  overflow: hidden;
+  border-radius:100%;
+}
+
+.commenticon img:first-child{
+  width:14px;
+}
+.commenticon img:last-child{
+  width:16px;
+}
+@media (max-width:1399px){
+  .Modal.postModal {
+    max-width: 1000px;
+}
+  .imageSlider{
+    max-width:500px;
+  }
+  .imageSlider img{max-width:100%;}
+  .commentSec {
+    height: 180px;
+    overflow-y: auto;
+}
+}
+
+@media (max-width:991px){
+  .commentSec {
+    height:90px;
+}
+.Modal.postModal {
+  max-width: 665px;
+  margin-right: 15px;
+}
+}
+@media (max-width:767px){
+  .Modal.postModal .ContentModal {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height:auto;
+}
+.imageSlider{
+  max-width:inherit;
+  margin-right: 0px;
+}
+}
+.react-datetime-picker__calendar-button svg{
+  display:none !important;
+}
+.react-datetime-picker__calendar-button::after{
+  content: url(./images/calander.svg);
+  position: relative;
+  width:25px;
+  height:25px;
+  top: 3px;
+}
+
+.rbc-current-time-indicator{
+  background-color: transparent !important;
+}

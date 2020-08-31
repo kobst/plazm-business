@@ -1,14 +1,15 @@
 
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { Auth } from 'aws-amplify';
 import styled from 'styled-components'
+import { Link } from "react-router-dom";
 import SubHeading from '../SubHeading'
 import Facebook from '../../../images/facebook.svg'
 import Twitter from '../../../images/Twitter.svg'
 import Instagram from '../../../images/Instagram.svg'
 import linkedIn from '../../../images/linkedIn.svg'
 import ModalBox from '../../Edit-Business/index'
-import {callPlace} from '../../../Api'
+import { callPlace } from '../../../Api'
 import Badges from '../../UI/Badges'
 import MapImage from '../../../images/profile-map.png'
 import ButtonSmall from '../../UI/ButtonSmall'
@@ -123,7 +124,7 @@ color: #2C2738;
 `
 const SocialOuter = styled.div`
 width: 94%;
-margin:40px auto 0;
+margin:40px auto 10px;
 @media (max-width:767px){
   margin:15px auto 0;
 }
@@ -131,24 +132,24 @@ margin:40px auto 0;
 
 
 const Sidebar = () => {
-  const [placeValue,setPlace] = useState({})
+  const [placeValue, setPlace] = useState({})
   const [isOpen, setIsOpen] = useState(false)
 
 
   useEffect(() => {
     let updateUser = async authState => {
       try {
-         const value = await Auth.currentAuthenticatedUser()
+        const value = await Auth.currentAuthenticatedUser()
         const place = await callPlace(value.attributes.sub)
         setPlace(place[0])
-      } catch (err){
-         console.log(err)
+      } catch (err) {
+        console.log(err)
       }
     }
     updateUser()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
- 
+
   return (
     <LeftSidebar>
       {/* <div name={typeof placeValue !== 'undefined'&& placeValue.company_name?placeValue.company_name:'-'} setIsOpen={setIsOpen} /> */}
@@ -162,24 +163,24 @@ const Sidebar = () => {
       </CompanyAddress>
       <Listing>
         <SubHeading name="Address" />
-        <p>{typeof placeValue !== 'undefined'?placeValue.address:null}</p>
-        <ModalBox value={placeValue} isOpen={isOpen} setIsOpen={setIsOpen} data='' closeModal={()=> setIsOpen(false)} />
+        <p>{typeof placeValue !== 'undefined' ? placeValue.address : null}</p>
+        <ModalBox value={placeValue} isOpen={isOpen} setIsOpen={setIsOpen} data='' closeModal={() => setIsOpen(false)} />
       </Listing>
       <Listing>
         <SubHeading name="Website" />
-        <p>{typeof placeValue !== 'undefined'&& placeValue.web_site?placeValue.web_site:'-'}</p>
+        <p>{typeof placeValue !== 'undefined' && placeValue.web_site ? placeValue.web_site : '-'}</p>
       </Listing>
       <Listing>
         <SubHeading name="Type" />
-        <p>{typeof placeValue !== 'undefined'&& placeValue.type?placeValue.type:'-'}</p>
+        <p>{typeof placeValue !== 'undefined' && placeValue.type ? placeValue.type : '-'}</p>
       </Listing>
       <Listing>
         <SubHeading name="Status" />
-        <p>{typeof placeValue !== 'undefined'&& placeValue.status?placeValue.status:'-'}</p>
+        <p>{typeof placeValue !== 'undefined' && placeValue.status ? placeValue.status : '-'}</p>
       </Listing>
       <Listing>
         <SubHeading name="Phone" />
-        <p>{typeof placeValue !== 'undefined'&&placeValue.telephone?placeValue.telephone:'-'}</p>
+        <p>{typeof placeValue !== 'undefined' && placeValue.telephone ? placeValue.telephone : '-'}</p>
       </Listing>
       <Listing>
         <SubHeading name="Opening Hours" />
@@ -187,26 +188,27 @@ const Sidebar = () => {
         <p><span>Saturday - Sunday</span><span> </span></p>
       </Listing>
 
-      <Listing style={{borderBottom:'none'}}>
+      <Listing style={{ borderBottom: 'none' }}>
         <SubHeading name="Hashtags" />
-          <Badges name="Burger" />
-          <Badges name="Happy Hours" />
-          <Badges name="Triple Ham Burger" />
+        <Badges name="Burger" />
+        <Badges name="Happy Hours" />
+        <Badges name="Triple Ham Burger" />
       </Listing>
 
       <SocialOuter>
         <SocialIcon>
           <div>
-        <img src={Facebook} alt={Facebook} />
-        <img src={Twitter} alt={Twitter} />
-        <img src={Instagram} alt={Instagram} />
-        <img src={linkedIn} alt={linkedIn} />
-        </div>
-        <ButtonSmall bgColor="#FF7171" maxWidth="139px">Logout</ButtonSmall>
+            <img src={Facebook} alt={Facebook} />
+            <img src={Twitter} alt={Twitter} />
+            <img src={Instagram} alt={Instagram} />
+            <img src={linkedIn} alt={linkedIn} />
+          </div>
+          <ButtonSmall bgColor="#FF7171" maxWidth="139px" type="submit" onClick={() => (
+            Auth.signOut())} className="btn btn-primary"> <Link to='/business/login' >Logout</Link></ButtonSmall>
         </SocialIcon>
-        
+
       </SocialOuter>
-    </LeftSidebar>
+    </LeftSidebar >
 
   )
 }

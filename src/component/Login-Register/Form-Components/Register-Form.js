@@ -6,6 +6,7 @@ import Button from '../../UI/Button/Button'
 import Input from '../../UI/Input/Input'
 import SearchLocationInput  from '../../../utils/findYourBusiness'
 import ValueLoader from '../../../utils/loader'
+import Label from '../../UI/Label/label'
 
 const FormGroup = styled.div `
 margin-bottom:22px;
@@ -37,14 +38,16 @@ justify-content: space-between;
 const FindYourBusinessWrapper = styled.div`
 h2{
     font-size:20px; 
-    font-weight: 800; 
+    font-weight: 500; 
     margin: 0;
     cursor: pointer;
+    font-family: 'IBM Plex Sans',sans-serif;
 }
 p{
-    font-size: 10px; 
-    color:#808080; 
+    font-size: 13px;
+    color: #979797;
     margin: 10px 0 30px 0;
+    line-height: 16px;
 }
 ` 
 
@@ -58,7 +61,8 @@ return (
         <div className="col-md-12">
         <p> Enter the Confirmation code sent to your Registered Email</p>
             <FormGroup>
-              <Input id='confirmationCode' type='text' onChange={ (e) => handleChange(e)} placeholder="Confirmation Code"/>
+                <Label name="Confirmation Code" />
+                <Input id='confirmationCode' type='text' onChange={ (e) => handleChange(e)} placeholder=""/>
             </FormGroup>
             <Button type="submit" className="btn btn-primary">{loader && !codeError? <ValueLoader /> : 'Confirm Sign up'}</Button>
             {codeError ?<div className="form-group"><br /><h6>Confirmation code does not match</h6></div>: null}
@@ -68,32 +72,37 @@ return (
 <form onSubmit={ (e)=> handleSubmit(e) }>
     <Row>
             <FormGroup>
+            <Label name="First Name" />
                 <Input type="text" id="username" onChange={ (e) => handleChange(e) }
-                 error = {firstNameError} placeholder="First Name"/>
+                 error = {firstNameError} placeholder=""/>
                  {firstError ?<h6>Username length should be greater then 3.</h6>: null}
                                
             </FormGroup>									
 
             <FormGroup>
-                <Input id="last_name" onChange={ (e) => handleChange(e)} type="text" placeholder="Last Name"/>
+            <Label name="Last Name" />
+                <Input id="last_name" onChange={ (e) => handleChange(e)} type="text" placeholder=""/>
             </FormGroup>									
 							
     </Row>
            <FormGroup>
+           <Label name="Phone Number" />
                 <Input id='phone_number' onChange={ (e) => handleChange(e) } 
-                error={phoneError} placeholder="Phone Number"/>
+                error={phoneError} placeholder=""/>
             </FormGroup>									
 
 	
             <FormGroup>
+            <Label name="Email address" />
                 <Input type="text" id='email' onChange={ (e) => handleChange(e) } 
-                error={emailError} placeholder="Email address"/>
+                error={emailError} placeholder=""/>
         
             </FormGroup>									
 
             <FormGroup>
+            <Label name="Password" />
                 <Input type="password" id="password" onChange={ (e) => handleChange(e) } 
-                error={passwordError} placeholder="Password"/>
+                error={passwordError} placeholder=""/>
             </FormGroup>									
         
 

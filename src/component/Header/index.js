@@ -9,7 +9,7 @@ const Container = styled.div`
 display: flex;
 justify-content: space-between;
 align-items: center;
-margin-bottom:100px;
+margin-bottom:60px;
 position:relative;
 @media (max-width:1024px){
   margin-bottom:50px;
@@ -27,7 +27,7 @@ padding:0px;
 const ProfileSection = styled.div`
 display: flex;
 align-items: center;
-
+padding-bottom:40px;
 h2{
   font-size: 16px;
   line-height: 17px;
@@ -42,6 +42,9 @@ h2{
     font-size: 12px;
     margin-right:10px;
   }
+}
+@media (max-width:1024px){
+  padding-bottom:0px; 
 }
 .profileHover{
   visibility:hidden;

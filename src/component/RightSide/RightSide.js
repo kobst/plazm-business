@@ -9,6 +9,7 @@ import ChatBox from '../UI/ChatBox/ChatBox'
 import { Auth } from 'aws-amplify';
 import { Link } from "react-router-dom";
 import AddModalBox from '../Add-Event/index'
+import PostModalBox from '../Post-Modal'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
 import { callPlace, fetchItems, fetchUsers } from '../../Api'
@@ -31,6 +32,8 @@ import UploadIocn from '../../images/upload.svg'
 import CloseIcon from '../../images/close.svg'
 import GallerySec from '../UI/Gallery'
 import Tooltip from '../UI/Tooltip'
+import EventSkeleton from '../UI/Skeleton/EventsSkeleton'
+import PostSkeleton from '../UI/Skeleton/PostSkeleton'
 
 const RightSection = styled.div`
 
@@ -55,9 +58,9 @@ padding:0 15px;
 
 const EventLeft = styled.div`
 display:flex;
-max-width:804px;
+//max-width:804px;
 margin-right: 5px;
-width:100%;
+width:61%;
 position:relative;
 &:after{
   background: linear-gradient(180deg,rgba(255,255,255,0) -51.89%,#FFFFFF 79.25%);
@@ -71,6 +74,8 @@ position:relative;
 }
 @media (max-width:767px){
 max-width:inherit;
+width:100%;
+margin-right:0px;
 }
 `
 const CalenderSection = styled.div`
@@ -81,8 +86,8 @@ margin-top:50px;
 `
 const EventRight = styled.div`
 padding:0px;
-max-width: 595px;
-width:100%;
+//max-width: 595px;
+width:38%;
 margin-left:5px;
 position:relative;
 &:after{
@@ -97,6 +102,7 @@ position:relative;
 }
 @media (max-width:767px){
   max-width:inherit;
+  width:100%;
   margin-left:0px;
   button{
     margin:3px 0;
@@ -252,7 +258,8 @@ margin: 3px 0 0 0;
 `
 
 const EventImage = styled.div`
-
+border-radius: 9px;
+overflow:hidden;
 
 `
 const TabsOuter = styled.div`
@@ -314,7 +321,8 @@ margin-top:15px;
 
 moment.locale('en-GB')
 const localizer = momentLocalizer(moment)
-const RightSide = () => {
+const RightSide = (props) => {
+  const { loading } = props;
   const [isOpen, setIsOpen] = useState(false)
   const [place, setPlace] = useState({})
   const [event, setEvent] = useState()
@@ -622,9 +630,9 @@ const RightSide = () => {
                             <p>{v.content}</p>
                           </EventText>
                           <EventImage><img src={EventImg} alt="Event" /></EventImage>
-                        </EventListing> : null
+                        </EventListing> :  null
                       }
-                    </>) : null
+                    </>) : <><EventSkeleton /><EventSkeleton /><EventSkeleton /><EventSkeleton /></>
                   }
                 </EventList>
               </AllEvent>
@@ -665,98 +673,98 @@ const RightSide = () => {
 
               {mentions === 'Public' ?
                 <>
-                <div class="mt-25">
-                  <FeedListing>
-                    <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
-                    <EventText>
-                      <span>08:35 AM, 12 - 08 - 12</span>
-                      <h3>Marcus George</h3>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Imperdiet sed eget eros, viverra erat morbi. Nulla eleifend a elit sapien. Feugiat orci ullamcorper elit malesuada lacus. Pulvinar convallis rutrum accumsan pulvinar in sodales nullam velit.</p>
-                      <Icon>
-                        <div><img src={WishlistIcon} alt="" /><sup>3</sup>
-                        <Tooltip>
-                          <ul>
-                            <li>Ahmad Mango</li>
-                            <li>Dulce Workman</li>
-                            <li>Hanna Donin</li>
-                            <li>Lincoln Botosh</li>
-                            <li>Haylie Donin</li>
-                            <li>Nolan Aminoff</li>
-                            <li>Madelyn Lipshutz</li>
-                            <li>Ashlynn Siphron</li>
-                            <li><strong>More...</strong></li>
-                          </ul>
-                        </Tooltip>
-                        </div>
-                        <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
-                      </Icon>
-                    </EventText>
-                  </FeedListing>
+                  <div class="mt-25">
+                    <FeedListing onClick={() => setIsOpen(true)}>
+                      <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
+                      <EventText>
+                        <span>08:35 AM, 12 - 08 - 12</span>
+                        <h3>Marcus George</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Imperdiet sed eget eros, viverra erat morbi. Nulla eleifend a elit sapien. Feugiat orci ullamcorper elit malesuada lacus. Pulvinar convallis rutrum accumsan pulvinar in sodales nullam velit.</p>
+                        <Icon>
+                          <div><img src={WishlistIcon} alt="" /><sup>3</sup>
+                            <Tooltip>
+                              <ul>
+                                <li>Ahmad Mango</li>
+                                <li>Dulce Workman</li>
+                                <li>Hanna Donin</li>
+                                <li>Lincoln Botosh</li>
+                                <li>Haylie Donin</li>
+                                <li>Nolan Aminoff</li>
+                                <li>Madelyn Lipshutz</li>
+                                <li>Ashlynn Siphron</li>
+                                <li><strong>More...</strong></li>
+                              </ul>
+                            </Tooltip>
+                          </div>
+                          <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
+                        </Icon>
+                      </EventText>
+                    </FeedListing>
+                    {/* <PostModalBox isOpen={isOpen} closeModal={() => setIsOpen(false)} /> */}
+                    <FeedListing>
+                      <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
+                      <EventText>
+                        <span>08:35 AM, 12 - 08 - 12</span>
+                        <h3>Marcus George</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Imperdiet sed eget eros, viverra erat morbi. Nulla eleifend a elit sapien. Feugiat orci ullamcorper elit malesuada lacus. Pulvinar convallis rutrum accumsan pulvinar in sodales nullam velit.</p>
+                        <Icon>
+                          <div><img src={WishlistIcon} alt="" /><sup>3</sup></div>
+                          <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
+                        </Icon>
+                      </EventText>
+                    </FeedListing>
 
-                  <FeedListing>
-                    <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
-                    <EventText>
-                      <span>08:35 AM, 12 - 08 - 12</span>
-                      <h3>Marcus George</h3>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Imperdiet sed eget eros, viverra erat morbi. Nulla eleifend a elit sapien. Feugiat orci ullamcorper elit malesuada lacus. Pulvinar convallis rutrum accumsan pulvinar in sodales nullam velit.</p>
-                      <Icon>
-                        <div><img src={WishlistIcon} alt="" /><sup>3</sup></div>
-                        <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
-                      </Icon>
-                    </EventText>
-                  </FeedListing>
+                    <FeedListing>
+                      <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
+                      <EventText>
+                        <span>08:35 AM, 12 - 08 - 12</span>
+                        <h3>Marcus George</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Imperdiet sed eget eros, viverra erat morbi. Nulla eleifend a elit sapien. Feugiat orci ullamcorper elit malesuada lacus. Pulvinar convallis rutrum accumsan pulvinar in sodales nullam velit.</p>
+                        <Icon>
+                          <div><img src={WishlistIcon} alt="" /><sup>3</sup></div>
+                          <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
+                        </Icon>
+                      </EventText>
+                    </FeedListing>
 
-                  <FeedListing>
-                    <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
-                    <EventText>
-                      <span>08:35 AM, 12 - 08 - 12</span>
-                      <h3>Marcus George</h3>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Imperdiet sed eget eros, viverra erat morbi. Nulla eleifend a elit sapien. Feugiat orci ullamcorper elit malesuada lacus. Pulvinar convallis rutrum accumsan pulvinar in sodales nullam velit.</p>
-                      <Icon>
-                        <div><img src={WishlistIcon} alt="" /><sup>3</sup></div>
-                        <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
-                      </Icon>
-                    </EventText>
-                  </FeedListing>
+                    <FeedListing>
+                      <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
+                      <EventText>
+                        <span>08:35 AM, 12 - 08 - 12</span>
+                        <h3>Marcus George</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Imperdiet sed eget eros, viverra erat morbi. Nulla eleifend a elit sapien. Feugiat orci ullamcorper elit malesuada lacus. Pulvinar convallis rutrum accumsan pulvinar in sodales nullam velit.</p>
+                        <Icon>
+                          <div><img src={WishlistIcon} alt="" /><sup>3</sup></div>
+                          <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
+                        </Icon>
+                      </EventText>
+                    </FeedListing>
 
-                  <FeedListing>
-                    <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
-                    <EventText>
-                      <span>08:35 AM, 12 - 08 - 12</span>
-                      <h3>Marcus George</h3>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Imperdiet sed eget eros, viverra erat morbi. Nulla eleifend a elit sapien. Feugiat orci ullamcorper elit malesuada lacus. Pulvinar convallis rutrum accumsan pulvinar in sodales nullam velit.</p>
-                      <Icon>
-                        <div><img src={WishlistIcon} alt="" /><sup>3</sup></div>
-                        <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
-                      </Icon>
-                    </EventText>
-                  </FeedListing>
-
-                  <FeedListing>
-                    <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
-                    <EventText>
-                      <span>08:35 AM, 12 - 08 - 12</span>
-                      <h3>Marcus George</h3>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Imperdiet sed eget eros, viverra erat morbi. Nulla eleifend a elit sapien. Feugiat orci ullamcorper elit malesuada lacus. Pulvinar convallis rutrum accumsan pulvinar in sodales nullam velit.</p>
-                      <Icon>
-                        <div><img src={WishlistIcon} alt="" /><sup>3</sup></div>
-                        <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
-                      </Icon>
-                    </EventText>
-                  </FeedListing>
+                    <FeedListing>
+                      <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
+                      <EventText>
+                        <span>08:35 AM, 12 - 08 - 12</span>
+                        <h3>Marcus George</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Imperdiet sed eget eros, viverra erat morbi. Nulla eleifend a elit sapien. Feugiat orci ullamcorper elit malesuada lacus. Pulvinar convallis rutrum accumsan pulvinar in sodales nullam velit.</p>
+                        <Icon>
+                          <div><img src={WishlistIcon} alt="" /><sup>3</sup></div>
+                          <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
+                        </Icon>
+                      </EventText>
+                    </FeedListing>
                   </div>
-                </> : null
+                </> : <><PostSkeleton /><PostSkeleton /><PostSkeleton /></>
               }
 
               {mentions === 'Messages' ?
-               <>
+                <>
                   <Search />
                   <UserListing>
                     <UserList>
                       <div className="leftText">
                         <div class="imgSection">
-                            <img src={UserImage} alt="user" />
-                            <span></span>
+                          <img src={UserImage} alt="user" />
+                          <span></span>
                         </div>
                         <div className="text">
                           <h2>Madelyn Mango</h2>
@@ -767,7 +775,7 @@ const RightSide = () => {
                     <UserList>
                       <div className="leftText">
                         <div class="imgSection">
-                            <img src={UserImage} alt="user" />
+                          <img src={UserImage} alt="user" />
                         </div>
                         <div className="text">
                           <h2>Madelyn Mango</h2>
@@ -778,8 +786,8 @@ const RightSide = () => {
                     <UserList>
                       <div className="leftText">
                         <div class="imgSection">
-                            <img src={UserImage} alt="user" />
-                            <span></span>
+                          <img src={UserImage} alt="user" />
+                          <span></span>
                         </div>
                         <div className="text">
                           <h2>Madelyn Mango</h2>
@@ -790,7 +798,7 @@ const RightSide = () => {
                     <UserList>
                       <div className="leftText">
                         <div class="imgSection">
-                            <img src={UserImage} alt="user" />
+                          <img src={UserImage} alt="user" />
                         </div>
                         <div className="text">
                           <h2>Madelyn Mango</h2>
@@ -801,8 +809,8 @@ const RightSide = () => {
                     <UserList>
                       <div className="leftText">
                         <div class="imgSection">
-                            <img src={UserImage} alt="user" />
-                            <span></span>
+                          <img src={UserImage} alt="user" />
+                          <span></span>
                         </div>
                         <div className="text">
                           <h2>Madelyn Mango</h2>
@@ -813,7 +821,7 @@ const RightSide = () => {
                     <UserList>
                       <div className="leftText">
                         <div class="imgSection">
-                            <img src={UserImage} alt="user" />
+                          <img src={UserImage} alt="user" />
                         </div>
                         <div className="text">
                           <h2>Madelyn Mango</h2>
@@ -824,8 +832,8 @@ const RightSide = () => {
                     <UserList>
                       <div className="leftText">
                         <div class="imgSection">
-                            <img src={UserImage} alt="user" />
-                            <span></span>
+                          <img src={UserImage} alt="user" />
+                          <span></span>
                         </div>
                         <div className="text">
                           <h2>Madelyn Mango</h2>
@@ -836,7 +844,7 @@ const RightSide = () => {
                     <UserList>
                       <div className="leftText">
                         <div class="imgSection">
-                            <img src={UserImage} alt="user" />
+                          <img src={UserImage} alt="user" />
                         </div>
                         <div className="text">
                           <h2>Madelyn Mango</h2>
@@ -847,8 +855,8 @@ const RightSide = () => {
                     <UserList>
                       <div className="leftText">
                         <div class="imgSection">
-                            <img src={UserImage} alt="user" />
-                            <span></span>
+                          <img src={UserImage} alt="user" />
+                          <span></span>
                         </div>
                         <div className="text">
                           <h2>Madelyn Mango</h2>
@@ -859,8 +867,8 @@ const RightSide = () => {
                     <UserList>
                       <div className="leftText">
                         <div class="imgSection">
-                            <img src={UserImage} alt="user" />
-                            <span></span>
+                          <img src={UserImage} alt="user" />
+                          <span></span>
                         </div>
                         <div className="text">
                           <h2>Madelyn Mango</h2>
@@ -871,7 +879,7 @@ const RightSide = () => {
                     <UserList>
                       <div className="leftText">
                         <div class="imgSection">
-                            <img src={UserImage} alt="user" />
+                          <img src={UserImage} alt="user" />
                         </div>
                         <div className="text">
                           <h2>Madelyn Mango</h2>
@@ -881,7 +889,7 @@ const RightSide = () => {
                     </UserList>
                   </UserListing>
                   {/* <ChatBox /> */}
-               </> : null
+                </> : null
               }
 
 
@@ -906,6 +914,7 @@ const RightSide = () => {
 
         </Card>
       </Row>
+
       {/* <Row>
         <Card>
           <FlexRow>
