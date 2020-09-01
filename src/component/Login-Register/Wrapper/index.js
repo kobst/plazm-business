@@ -133,10 +133,11 @@ const ResetImage = styled.div`
 position: absolute;
 left: 50%;
 margin-left: -230px;
-bottom: -19px;
+bottom:0px;
 img{
-    margin-bottom: 15px;
+    margin-bottom:0px;
     max-width: 65%;
+    display:block;
 }
 @media (max-width:1024px){
     display:none;
