@@ -16,6 +16,8 @@ h6{
 
   @media(max-width:899px){
     margin-bottom: 25px;
+  }
+
 
 `
 const Row = styled.div`
@@ -37,18 +39,19 @@ justify-content: space-between;
 `
 const FindYourBusinessWrapper = styled.div`
 h2{
-    font-size:20px; 
-    font-weight: 500; 
-    margin: 0;
-    cursor: pointer;
-    font-family: 'IBM Plex Sans',sans-serif;
+    font-weight: 700; 
+    font-size: 16px;
+    line-height: 19px;
+    color: #280A33;
 }
 p{
-    font-size: 13px;
-    color: #979797;
-    margin: 10px 0 30px 0;
-    line-height: 16px;
+    font-size: 11px;
+    line-height: 10px;
+    margin:20px 0 30px;
+    color:#000;
 }
+
+
 ` 
 
 
@@ -70,21 +73,20 @@ return (
 </Row>
 </form> ) :
 <form onSubmit={ (e)=> handleSubmit(e) }>
-    <Row>
+
             <FormGroup>
-            <Label name="First Name" />
+            <Label name="Business Name" />
                 <Input type="text" id="username" onChange={ (e) => handleChange(e) }
                  error = {firstNameError} placeholder=""/>
                  {firstError ?<h6>Username length should be greater then 3.</h6>: null}
                                
             </FormGroup>									
 
-            <FormGroup>
+            {/* <FormGroup>
             <Label name="Last Name" />
                 <Input id="last_name" onChange={ (e) => handleChange(e)} type="text" placeholder=""/>
-            </FormGroup>									
-							
-    </Row>
+            </FormGroup>									 */}
+
            <FormGroup>
            <Label name="Phone Number" />
                 <Input id='phone_number' onChange={ (e) => handleChange(e) } 
@@ -112,17 +114,16 @@ return (
         {type.includes('business') ?
         <>
         <h2 onClick= {()=> setbusiness(true)}> Find Your Business</h2>
-        <br />
-        <FormGroup>
+        {/* <FormGroup>
         <SearchLocationInput id="location" error={locationError} handleChange={handleChange} setBusinessInfo={setBusinessInfo} setName={setName} /> 
-            </FormGroup>
+            </FormGroup> */}
             </>
          : null}
         <p>By clicking register, I represent I have read, understand, and agree to the Postmates Privacy Policy and Terms of Service. This site is protected bt reCAPTCHA and google Privacy Policy and Terms of Service apply.</p>
     </FindYourBusinessWrapper>
 
 
-    <Button type="submit" className="btn btn-primary">{loader && !message? <ValueLoader /> : 'Register'}</Button>
+    <Button type="submit" maxWidth="183px" className="btnRegister">{loader && !message? <ValueLoader /> : 'Sign In'}</Button>
     <Links>
     { type.includes('business') ?
      <Link to ='/business/login' className="link-btn">Already have an account? <strong>Log In</strong></Link> :

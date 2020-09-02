@@ -10,6 +10,7 @@ import Label from '../../UI/Label/label'
 
 const FormGroup = styled.div `
 margin-bottom:22px;
+position:relative;
 `
 const ForgotPassword = styled.div`
 margin-top: 10px;
@@ -23,8 +24,29 @@ color:#156064;
   color: #156064; text-decoration:underline;
   }
 }
-
 `
+const ErrorMessage = styled.div`
+font-style: normal;
+font-weight: normal;
+font-size: 14px;
+line-height: 18px;
+text-align: right;
+color: #FF7171;
+position: absolute;
+right: 0;
+bottom: -25px;
+`
+const SuccessMessage = styled.div`
+font-style: normal;
+font-weight: normal;
+font-size: 14px;
+line-height: 18px;
+text-align: right;
+color: #1483Ab;
+position: absolute;
+right: 0;
+bottom: -25px;
+`  
 const renderMessage =getMessage()
 const LoginForm = ({type,userError,error,passwordError,loader,message,handleChange,handleSubmit}) => {
 return(
@@ -35,11 +57,13 @@ return(
                   <Label name="Enter Your Login ID" />
                       <Input type="text" id='username' onChange={(e) => handleChange(e)} 
                         error={userError}  placeholder="Email address"/>
+                        <ErrorMessage>Validation Error Message</ErrorMessage>
 							  </FormGroup>
                 <FormGroup>
                     <Label name="Password" />
                         <Input type="password" id='password' onChange={(e) => handleChange(e)}
                           error={passwordError} placeholder="Password" />
+                          <SuccessMessage>Validation Success Message</SuccessMessage>
 							  </FormGroup>	
                 <Button type="submit" className="btn btn-primary">{loader && !message? <ValueLoader /> : renderMessage.Log}</Button>
     

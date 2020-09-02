@@ -6,14 +6,15 @@ import styled from 'styled-components'
 const ButtonText = styled.button`
 background: #280A33;
 border-radius: 7px;
-height:53px;
-font-size:18px;
-line-height:21px;
+height:50px;
+font-size: 18px;
+line-height: 21px;
 cursor:pointer;
 border:none;
 color:#fff;
 font-weight:500;
 width:100%;
+max-width:${props => props.maxWidth ? props.maxWidth : 'inherit'};
 font-family: 'Roboto', sans-serif;
 :hover,:focus{
   background: #280A33;
@@ -27,8 +28,9 @@ line-height:19px;
 `
 
 const Button = props => {
+  const { maxWidth} = props
     return(
-      <ButtonText  {...props} />
+      <ButtonText  maxWidth={maxWidth} {...props} />
     )
 }
 

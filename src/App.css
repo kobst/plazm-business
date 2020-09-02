@@ -99,7 +99,7 @@ body, html{font-family: 'Roboto',sans-serif; height: 100%; background-color:#eee
 
 .rbc-toolbar button{
   padding: .28rem 1rem !important;
-  font-size:6px;
+  font-size:12px;
 }
 .react-datetime-picker__inputGroup__divider{
   color: #757575 !important;
@@ -279,26 +279,26 @@ font-family: 'Roboto',sans-serif;
   margin-left: 15px !important;
     border-radius: 3px 0px 0px 3px !important;
     background: #E2F1F8 url(./images/left-arrow.svg) no-repeat left 12px center;
-    background-size: 4px;
-    padding-left: 25px !important;
+    background-size: 7px;
+    padding-left: 30px !important;
 }
 .rbc-toolbar span:first-child button:nth-child(2):active{
   background: #E2F1F8 url(./images/left-arrow.svg) no-repeat left 12px center !important;
-  background-size: 4px !important;
+  background-size: 7px !important;
 }
 .rbc-toolbar span:first-child button:nth-child(3){
   color: #0880AE !important;
     background: #E2F1F8;
     border-radius: 0px 3px 3px 0px !important;
     background: #E2F1F8 url(./images/right-arrow.svg) no-repeat right 12px center;
-    background-size: 4px;
-    padding-right: 25px !important;
+    background-size: 7px;
+    padding-right: 30px !important;
 
 }
 
 .rbc-toolbar span:first-child button:nth-child(3):active{
   background: #E2F1F8 url(./images/right-arrow.svg) no-repeat right 12px center !important;
-  background-size: 4px !important;
+  background-size: 7px !important;
 }
 .rbc-btn-group button:first-child {
   border-radius: 3px 0 0 3px !important;
@@ -440,7 +440,7 @@ position: relative;
   flex-grow: 1;
   padding: 0 10px;
   text-align: center;
-  font-size: 10px;
+  font-size: 15px;
   font-weight: 500;
   color: #FF479D;
 }
@@ -854,4 +854,11 @@ color: #979797;
 
 .rbc-current-time-indicator{
   background-color: transparent !important;
+}
+
+.btnRegister{
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

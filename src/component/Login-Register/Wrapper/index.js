@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import PlazmText from '../../../images/plazm.svg'
 import ResetImg from '../../../images/resetimg.png'
+import Line from '../../../images/line.png'
 
 const LoginWrapper = styled.div`
 height: 100%;
@@ -17,7 +18,7 @@ display:flex;
 padding: 3.2vw 0 3.5vw;
 width:100%;
 min-height:485px;
-max-height: 70%;
+max-height: 90%;
 flex-direction: column;
 overflow-y: auto;
 flex: 1 1 auto;
@@ -35,6 +36,7 @@ position:relative;
 
 const LoginFormWrapper = styled.div`
 padding:0px;
+width:100%;
 `
 
 const LoginFormHeader = styled.div`
@@ -98,6 +100,9 @@ width:100%;
 button{
     margin-top: 12px;
 }
+@media (max-width:767px){
+    max-width:inherit;
+}
 `
 const LeftSide = styled.div`
 
@@ -106,15 +111,14 @@ img {
 }
 p{
     font-size: 16px;
-    line-height: 22px;
+    line-height:20px;
     font-family: 'IBM Plex Sans', sans-serif;
-    margin:12px 0px; 
+    margin:10px 0px; 
     color:#2C2738;
     max-width:385px;
     width:100%;
 }
 @media (max-width:991px){
-    display:none;
     max-width:435px;
     width:100%;
     border-bottom: 1px solid #eee;
@@ -128,6 +132,10 @@ p{
     max-width: inherit;
 }
 }
+@media (max-width:767px){
+    max-width:inherit;
+
+}
 `
 const ResetImage = styled.div`
 position: absolute;
@@ -139,9 +147,60 @@ img{
     max-width: 65%;
     display:block;
 }
-@media (max-width:1024px){
-    display:none;
+
+@media (max-width:767px){
+    position:relative;
+    margin-top:10px;
+    left: 0px;
+     margin-left:0px;
+    img{
+        max-width:250px;
+    }
 }
+`
+const RegisterLeft = styled.div`
+margin:10px 0 50px;
+h2{
+font-weight: 700;
+font-size: 28px;
+line-height: 33px;
+color: #FF479D;
+}
+p{
+font-size: 14px;
+line-height: inherit;
+color: #2C2738;
+margin: 0px;
+}
+@media (max-width:767px){
+    margin:10px 0 30px;
+    h2{
+        font-size: 22px;
+        line-height: 28px;
+     }   
+}
+`
+const SignIn = styled.div`
+margin-top:30px;
+span{
+font-size: 13px;
+line-height: 22px;
+color: #FF479D;
+}
+a{
+font-weight: 700;
+font-size: 16px;
+line-height: 17px;
+color: #280A33;
+text-decoration:none;
+margin-left:5px;
+}
+@media (max-width:767px){
+    margin-top:15px;  
+}
+`
+const LineImage = styled.div`
+position:absolute;
 `
 
 const Wrapper = (props) => {
@@ -149,11 +208,17 @@ const Wrapper = (props) => {
         <LoginWrapper>
             <LoginContainer>
                 <LoginInner>
-                    <LeftSide>
+                    <LineImage><img src={Line} alt="" /></LineImage>
+                     <LeftSide>
                         <img src={PlazmText} alt="Plazm" />
+                        <RegisterLeft>
+                            <h2>Howdy! Let's get you started</h2>
+                            <p>Login to start working on your business profile page</p>
+                        </RegisterLeft>
                         <p>Claim and Customize your spot on Plazm Map</p>
                         <p>Connect & engage your nearby audience</p>
                         <p>Make Announcement, share photos, schedule events and moderate your board</p>
+                        <SignIn><span>Already On Plazm?</span><a href="">Sign In</a></SignIn>
                         <ResetImage><img  src={ResetImg} alt="" /></ResetImage>
                     </LeftSide>
                     <RightSide>
