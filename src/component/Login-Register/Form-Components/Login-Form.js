@@ -14,6 +14,7 @@ position:relative;
 `
 const ForgotPassword = styled.div`
 margin-top: 10px;
+text-align:right;
 a{
 font-family: 'IBM Plex Sans', sans-serif;
 font-size: 16px;
