@@ -15,7 +15,7 @@ return{
     "Business":"Find Your Business",
     "Reg_Message": "By clicking register, I represent I have read, understand, and agree to the Postmates Privacy Policy and Terms of Service. This site is protected bt reCAPTCHA and google Privacy Policy and Terms of Service apply.",
     "Reset":"Reset Password",
-    "Res_Message":"Enter the code sent to your Registered Email and also Enter your new password",
+    "Res_Message":"Choose the new password for your account",
     "Pass_Err":"Password Does not match",
     "Log_Link":"Back to Login",
     "Submit":"Submit",

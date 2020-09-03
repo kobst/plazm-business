@@ -10,6 +10,7 @@ import Label from '../../UI/Label/label'
 
 const FormGroup = styled.div `
 margin-bottom:22px;
+position:relative;
 h6{
     color: red;
   }
@@ -53,12 +54,22 @@ p{
 
 
 ` 
+const ErrorMessage = styled.div`
+font-style: normal;
+font-weight: normal;
+font-size: 14px;
+line-height: 18px;
+text-align: right;
+color: #FF7171;
+position: relative;
+right: 0;
+margin-top: 6px;
+`
 
 
 const RegisterForm = ({verified,err,firstError, business,loader,setbusiness,setBusinessInfo,setName, message,type,locationError,codeError,firstNameError,phoneError,emailError,passwordError,handleChange,handleSubmit}) => {
 return (
     <>
-    {err ?<FormGroup><br /><h6>{message}</h6></FormGroup>: null}
 { verified ? ( <form onSubmit={ (e)=> handleSubmit(e) }>
 <Row>
         <div className="col-md-12">
@@ -66,9 +77,10 @@ return (
             <FormGroup>
                 <Label name="Confirmation Code" />
                 <Input id='confirmationCode' type='text' onChange={ (e) => handleChange(e)} placeholder=""/>
+                {codeError ?<ErrorMessage>Confirmation code does not match</ErrorMessage>: null}
             </FormGroup>
             <Button type="submit" className="btn btn-primary">{loader && !codeError? <ValueLoader /> : 'Confirm Sign up'}</Button>
-            {codeError ?<div className="form-group"><br /><h6>Confirmation code does not match</h6></div>: null}
+    
          </div>
 </Row>
 </form> ) :
@@ -78,19 +90,15 @@ return (
             <Label name="Business Name" />
                 <Input type="text" id="username" onChange={ (e) => handleChange(e) }
                  error = {firstNameError} placeholder=""/>
-                 {firstError ?<h6>Username length should be greater then 3.</h6>: null}
+                 {firstError ?<ErrorMessage>Username length should be greater then 3.</ErrorMessage>: null}
                                
             </FormGroup>									
-
-            {/* <FormGroup>
-            <Label name="Last Name" />
-                <Input id="last_name" onChange={ (e) => handleChange(e)} type="text" placeholder=""/>
-            </FormGroup>									 */}
 
            <FormGroup>
            <Label name="Phone Number" />
                 <Input id='phone_number' onChange={ (e) => handleChange(e) } 
                 error={phoneError} placeholder=""/>
+                {err && message&& message.includes("number") ?<ErrorMessage>{message}</ErrorMessage>: null}
             </FormGroup>									
 
 	
@@ -98,13 +106,14 @@ return (
             <Label name="Email address" />
                 <Input type="text" id='email' onChange={ (e) => handleChange(e) } 
                 error={emailError} placeholder=""/>
-        
+              {err&&message&& message.includes("email") ?<ErrorMessage>{message}</ErrorMessage>: null}
             </FormGroup>									
 
             <FormGroup>
             <Label name="Password" />
                 <Input type="password" id="password" onChange={ (e) => handleChange(e) } 
                 error={passwordError} placeholder=""/>
+                {err&&message&& message.includes("Password") ?<ErrorMessage>{message}</ErrorMessage>: null}
             </FormGroup>									
         
 
@@ -114,16 +123,17 @@ return (
         {type.includes('business') ?
         <>
         <h2 onClick= {()=> setbusiness(true)}> Find Your Business</h2>
-        {/* <FormGroup>
+         <FormGroup>
         <SearchLocationInput id="location" error={locationError} handleChange={handleChange} setBusinessInfo={setBusinessInfo} setName={setName} /> 
-            </FormGroup> */}
+            </FormGroup> 
             </>
          : null}
+         {err &&message&& message.includes("business")?<ErrorMessage>{message}</ErrorMessage>: null}
         <p>By clicking register, I represent I have read, understand, and agree to the Postmates Privacy Policy and Terms of Service. This site is protected bt reCAPTCHA and google Privacy Policy and Terms of Service apply.</p>
     </FindYourBusinessWrapper>
 
 
-    <Button type="submit" maxWidth="183px" className="btnRegister">{loader && !message? <ValueLoader /> : 'Sign In'}</Button>
+    <Button type="submit" maxWidth="183px" className="btnRegister">{loader && !message? <ValueLoader /> : 'Sign Up'}</Button>
                           
 
     
