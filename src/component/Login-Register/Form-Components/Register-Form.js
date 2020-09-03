@@ -89,13 +89,8 @@ return (
             <FormGroup>
             <Label name="Business Name" />
                 <Input type="text" id="username" onChange={ (e) => handleChange(e) }
-<<<<<<< HEAD
                  error = {firstNameError} placeholder=""/>
                  {firstError ?<ErrorMessage>Username length should be greater then 3.</ErrorMessage>: null}
-=======
-                 error = {firstNameError} placeholder="First Name"/>
-                 {firstError ?<h6>Username length should be greater than 3.</h6>: null}
->>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
                                
             </FormGroup>									
 
@@ -110,13 +105,8 @@ return (
             <FormGroup>
             <Label name="Email address" />
                 <Input type="text" id='email' onChange={ (e) => handleChange(e) } 
-<<<<<<< HEAD
                 error={emailError} placeholder=""/>
               {err&&message&& message.includes("email") ?<ErrorMessage>{message}</ErrorMessage>: null}
-=======
-                error={emailError} placeholder="Email Address"/>
-        
->>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
             </FormGroup>									
 
             <FormGroup>

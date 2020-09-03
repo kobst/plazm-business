@@ -6,11 +6,6 @@ import React, {
 import styled from 'styled-components'
 import Tabs from '../UI/Tabs/Tabs'
 import Card from '../UI/Card/Card'
-<<<<<<< HEAD
-=======
-// import LineButton from '../UI/LineButton/LineButton'
-import Button from '../UI/Button/Button'
->>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
 import Listing from '../UI/Listing/Listing'
 import Search from '../UI/Search/Search'
 import ChatBox from '../UI/ChatBox/ChatBox'
@@ -21,15 +16,8 @@ import {
   Link
 } from "react-router-dom";
 import AddModalBox from '../Add-Event/index'
-<<<<<<< HEAD
 import PostModalBox from '../Post-Modal'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
-=======
-import {
-  Calendar,
-  momentLocalizer
-} from 'react-big-calendar'
->>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
 import moment from 'moment'
 import {
   callPlace,
@@ -41,7 +29,6 @@ import {
   RRule
 } from 'rrule'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-<<<<<<< HEAD
 import { Multiselect } from 'multiselect-react-dropdown';
 import UserImage from '../../images/user-img.png'
 import EventImg from '../../images/eventimg.png'
@@ -153,115 +140,6 @@ h2{
 `
 const EventOuter = styled.div`
 display:flex;
-=======
-// import {
-//   Multiselect
-// } from 'multiselect-react-dropdown';
-import Mention from 'react-textarea-mention';
-
-
-const RightSection = styled.div `
- margin-left: 30px;
- width: calc(100% - 300px);
- font-family: 'Roboto',sans-serif;
- @media (min-width:768px) and (max-width:1024px){
-  width:calc(100% - 325px);
-  }
-  @media (max-width:767px){
-  margin-left: 0;
-  width: 100%;
-  margin-top: 30px;
-  }
-`
-const Row = styled.div `
-  display:flex;
-  margin-top:30px;
-  justify-content: space-between;
-  > div{
-  width:50%;
-  :first-child{
-  margin-right:30px;
-   }
-  }
-  @media (max-width:991px){
-  flex-direction: column;
-  > div{
-  width:100%;
-  :first-child{
-  margin-right:0px;
-  margin-bottom: 30px;
-   }
-  }
-`
-const FlexRow = styled.div `
-  display: flex;
-  justify-content: space-between;
-  align-items:center;
-  flex-wrap:wrap;
-`
-// const TextArea = styled.textarea `
-// background-color: #F2F2F2;
-// border-radius: 6px;
-// width: 100%;
-// border: none;
-// resize: none;
-// height: 85px;
-// margin-top: 20px;
-// font-size: 14px;
-// color: #000;
-// padding: 10px;
-// margin-bottom:7px;
-// :focus{
-// outline:none;
-// }
-// `
-const Anchor = styled.div `
-margin-left:auto;
-font-size:14px;
-font-weight:500;
-margin-right:20px;
-cursor:pointer;
-`
-const BottomSection = styled.div `
-margin-top:30px;
-`
-const ListingOuter = styled.div `
-padding: 0px;
-margin-top: 20px;
-overflow-y: auto;
-height: calc(100vh - 50px);
-`
-const EventSection = styled.div `
-display:flex;
-@media (max-width:991px){
-flex-direction: column;
-}
-`
-const EventLeft = styled.div `
-padding:0px;
-width:calc(100% - 300px);
-@media (max-width:991px){
-width:100%;
-}
-`
-
-const EventRight = styled.div `
-padding:0px;
-width:270px;
-button{
-float:right;
-}
-@media (max-width:991px){
-width:100%;
-margin-top: 15px;
-}
-`
-const EventOuter = styled.div `
-padding:15px 0;
-margin-top: 20px;
-background:#F5F5F5;
-float: left;
->>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
 width:100%;
 @media (max-width:767px){
   flex-direction: column;
@@ -297,7 +175,6 @@ justify-content: space-between;
   background: rgba(255, 79, 148, 0.05);
 border: 1px solid #FF479D;
 
-<<<<<<< HEAD
 }
 `
 const FeedListing = styled.div`
@@ -348,35 +225,6 @@ div{
   display:flex;
   align-items: center;
   padding-bottom:10px;
-=======
-h2{
-padding: 0 15px;
-margin-bottom:15px;
-}
-h3{
-font-size:16px;
-color:#000;
-margin-bottom:0px;
-padding: 0 15px;
-}
-span{
-font-size:10px;
-color:#7D7D7D;
-padding: 0 15px;
-position:relative;
-top:-5px;
-}
-p{
-font-size:14px;
-color:#000;
-margin:0 0 10px 0;
-padding: 0 15px;
-line-height:16px;
-}
-@media (max-width:991px){
-width:100%;
-height: auto;
->>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
 }
 sup{
   background: #FF479D;
@@ -436,7 +284,6 @@ border-radius: 9px;
 overflow:hidden;
 
 `
-<<<<<<< HEAD
 const TabsOuter = styled.div`
 margin-left:auto;
 display:flex;
@@ -483,26 +330,9 @@ display:flex;
 margin:0 10px;
 `
 const UserListing = styled.div`
-=======
-const EventList = styled.div `
->>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
 padding:0px;
 max-height: 772px;
 overflow-y: auto;
-<<<<<<< HEAD
-=======
-> div{
-border-bottom:1px solid #ddd;
-margin-bottom:10px;
-:last-child{
-border:none; 
-margin-bottom:0px;
-p{
-margin-bottom:5px;
-}
-}
-
->>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
 `
 const UserList = styled.div`
 display: flex;
@@ -527,19 +357,13 @@ const RightSide = (props) => {
   const [allFeed, setAllFeed] = useState()
   const [description, setDescription] = useState()
   const [saveDisable, setSaveDisable] = useState(false)
-<<<<<<< HEAD
   const [showTag, setShowTag] = useState(false)
-=======
->>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
   const [curators, setCurators] = useState([])
   const [activePublic, setActivePublic] = useState(false)
   const [activeMentions, setActiveMentions] = useState(false)
   const [mess, setActiveMess] = useState(false)
   const [allMentions, setAllMentions] = useState()
-<<<<<<< HEAD
   const [calenderView,setCalenderView]= useState()
-=======
->>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
 
   useEffect(() => {
     let updateUser = async authState => {
@@ -550,7 +374,6 @@ const RightSide = (props) => {
         if (users) {
           const userVal = []
           users.map(v => {
-<<<<<<< HEAD
             return userVal.push({ name: v.name })
           })
           const val = userVal.sort(dynamicSort("name"))
@@ -564,21 +387,6 @@ const RightSide = (props) => {
           const sol = val.filter(v => v.eventSchedule !== null && v.eventSchedule)
           const feed = val.filter(v => (!v.eventSchedule || v.eventSchedule === null))
           const allMentions = val.filter(v => (!v.eventSchedule || v.eventSchedule === null) && (v.name !== place[0].company_name) && v.name)
-=======
-            return userVal.push({
-              name: v.name
-            })
-          })
-          const val = userVal.sort(dynamicSort("name"))
-          setCurators(val)
-        }
-        setPlace(place[0])
-        if (place && place.length !== 0) {
-          const val = await fetchItems(place[0]._id)
-          const sol = val.filter(v => v.eventSchedule !== null && v.eventSchedule)
-          const feed = val.filter(v => (v.type==='na' || v.eventSchedule === null))
-          const allMentions = val.filter(v => v.type==='na' &&(v.name !== place[0].company_name) && v.name)
->>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
           setMention('Public')
           setActivePublic(true)
           setPosts(val)
@@ -587,12 +395,8 @@ const RightSide = (props) => {
           setAllFeed(feed)
           setAllMentions(allMentions)
           eventManage(sol)
-<<<<<<< HEAD
         }
         else {
-=======
-        } else {
->>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
           let eventArr = []
           setEvent(eventArr)
         }
@@ -612,22 +416,14 @@ const RightSide = (props) => {
         setActiveMentions(false)
         setActiveMess(false)
         setActivePublic(true)
-<<<<<<< HEAD
       }
       else if (mentions === 'All Mentions') {
-=======
-      } else if (mentions === 'All Mentions') {
->>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
         setAllFeed(allMentions)
         setActiveMentions(true)
         setActiveMess(false)
         setActivePublic(false)
-<<<<<<< HEAD
       }
       else {
-=======
-      } else {
->>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
         setAllFeed(posts)
         setActiveMentions(false)
         setActiveMess(true)
@@ -667,12 +463,8 @@ const RightSide = (props) => {
           })
         });
         setEvent(eventArr)
-<<<<<<< HEAD
       }
       else if (v.eventSchedule.recurring === 'daily' || v.eventSchedule.recurring === 'Daily') {
-=======
-      } else if (v.eventSchedule.recurring === 'daily' || v.eventSchedule.recurring === 'Daily') {
->>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
         const dailyStartRule = new RRule({
           freq: RRule.DAILY,
           dtstart: new Date(v.eventSchedule.start_time),
@@ -695,12 +487,8 @@ const RightSide = (props) => {
           })
         });
         setEvent(eventArr)
-<<<<<<< HEAD
       }
       else if (v.eventSchedule.recurring === 'mondayFriday' || v.eventSchedule.recurring === 'Monday-Friday') {
-=======
-      } else if (v.eventSchedule.recurring === 'mondayFriday' || v.eventSchedule.recurring === 'Monday-Friday') {
->>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
         const weekDayStartRule = new RRule({
           freq: RRule.WEEKLY,
           dtstart: new Date(v.eventSchedule.start_time),
@@ -725,12 +513,8 @@ const RightSide = (props) => {
           })
         });
         setEvent(eventArr)
-<<<<<<< HEAD
       }
       else {
-=======
-      } else {
->>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
         eventArr.push({
           id: v._id,
           title: v.name,
@@ -755,10 +539,6 @@ const RightSide = (props) => {
     }
 
     return function (a, b) {
-<<<<<<< HEAD
-=======
-      // eslint-disable-next-line eqeqeq
->>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
       if (sortOrder == -1) {
         return b[property].localeCompare(a[property]);
       } else {
@@ -777,17 +557,11 @@ const RightSide = (props) => {
   const setMentions = (val) => {
     if (val === 'Public') {
       setMention('Public')
-<<<<<<< HEAD
     }
     else if (val === 'All Mentions') {
       setMention('All Mentions')
     }
     else {
-=======
-    } else if (val === 'All Mentions') {
-      setMention('All Mentions')
-    } else {
->>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
       setMention('Messages')
     }
   }
@@ -795,12 +569,8 @@ const RightSide = (props) => {
   const Validation = () => {
     if (!(description.trim())) {
       return false
-<<<<<<< HEAD
     }
     else {
-=======
-    } else {
->>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
       return true
     }
   }
@@ -825,7 +595,6 @@ const RightSide = (props) => {
 
   }
   const handleChange = (e) => {
-<<<<<<< HEAD
     setDescription(e.target.value)
   }
 
@@ -846,48 +615,6 @@ const RightSide = (props) => {
               <AddModalBox editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
               { calenderView ==='month'?
            <EventMenu>
-=======
-    setDescription(e)
-  }
-  return (
-    <RightSection>
-       <Card>
-        <EventSection>
-        <EventLeft>
-        <Heading name="Event" />
-         <button type="submit" onClick={() => (
-          Auth.signOut())} className="btn btn-primary"> <Link to='/business/login' >Logout</Link></button>
-          <AddModalBox editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
-         <div>
-          {typeof event !== 'undefined' ?
-          <Calendar
-           className="CalenderSec"
-           localizer={localizer}
-           events={event}
-           startAccessor="start"
-           endAccessor="end"
-           onSelectEvent={(e) => (
-           // eslint-disable-next-line no-sequences
-           setEdit(true),
-           setIsOpen(true),
-           setDetails(e)
-           )}
-           defaultView="day"
-           step={60}
-           views={['day','week','month',]}
-           style={{ height: 600, width:"95%", marginTop:"15px" }}
-           /> : <div className="loader"> <ValueLoader height="70" width="70" /></div>
- 
-           }
-          </div>
-         </EventLeft>
-           
-         <EventRight>
-           <Button onClick={() => setIsOpen(true)}>Add Events</Button>
-           <EventOuter>
-           <Heading name="All Events" />
-           <EventList>
->>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
           { eventList? eventList.map(v=>
           <>
            { v.name ?
@@ -900,7 +627,6 @@ const RightSide = (props) => {
           }
           </> ): null
           }
-<<<<<<< HEAD
        </EventMenu>:null
          }
 
@@ -1245,67 +971,7 @@ const RightSide = (props) => {
           <ChatBox />
         </Card>
       </Row> */}
-=======
-       </EventList>
-       </EventOuter>
-       </EventRight>
-       </EventSection>
-       </Card>
-   <Row>
-   {/* Left card */}
-   <Card>
-    <FlexRow>
-    <Tabs isActive={activePublic} setMentions={setMentions} name="Public" />
-    <Tabs isActive={activeMentions} setMentions={setMentions} name="All Mentions" />
-    <Tabs isActive={mess} setMentions={setMentions} name="Messages" />
-    </FlexRow>
-    {mentions==='Public'?
-      <>
-     {/* <TextArea value={description} onChange={(e) => handleChange(e)} placeholder="Type your post here" /> */}
-      <Mention
-      onChange={handleChange}
-      field="name"
-      data={curators}
-      />
-   <FlexRow>
-     <Anchor onClick={()=>setDescription('')}>Cancel</Anchor>
-     <Button className="btn btn-primary" disabled={saveDisable} onClick={()=> addPost()} buttontext="Publish" >{'Publish'}</Button>
-   </FlexRow>
-     </>: null
-     }
- 
-    <BottomSection>
-    {mentions==='Public'?
-     <Heading name="Feed" />: null
-     }
-     {mentions==='Messages'?
-    <Search />: null
-    }
-    <ListingOuter>
-    <Listing mentions={mentions} data={place} users={curators} value={allFeed}/>
-    </ListingOuter>
-    </BottomSection>
- 
- </Card>
- 
- {/* Right Card */}
- <Card>
-   <FlexRow>
-   <Heading name="Message" />
-   <Button buttontext="New"></Button>
-    </FlexRow>
-     <Search />
-  {/* Messages Section */}
-    <Messages />
-   {/* Chat Section */}
-   <ChatBox />
- </Card>
-   </Row>
- 
-  </RightSection>
-  )
-
->>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
+     </RightSection>)
 
 }
 

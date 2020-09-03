@@ -18,11 +18,7 @@ body, html{font-family: 'Roboto',sans-serif; height: 100%; background-color:#eee
   border-radius: 5px;
   top:0px;
   position: relative;
-<<<<<<< HEAD
   max-height:863px;
-=======
-  max-height:500px;
->>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -397,7 +393,6 @@ padding:3px 5px !important;
   }
 }
 
-<<<<<<< HEAD
 .mt-10{margin-top:10px;}
 .mt-15{margin-top:15px;}
 hr{
@@ -866,18 +861,4 @@ color: #979797;
   display: flex;
   align-items: center;
   justify-content: center;
-=======
-textarea{
-  width: 100%;
-  height: 150px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  margin-bottom: 10px;
-  white-space: inherit;
-}
-
-textarea:focus{
-  border: 1px solid #ccc;
-  outline: none;
->>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
 }
