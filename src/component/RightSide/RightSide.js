@@ -111,6 +111,7 @@ position:relative;
 `
 const AllEvent = styled.div`
 margin-top:20px;
+clear:both;
 position:relative;
 }
 h2{
@@ -138,6 +139,14 @@ max-height:566px;
 overflow-y:auto;
 position:relative;
 
+`
+const EventMenu = styled.div`
+padding:0px;
+max-height:566px;
+overflow-y:auto;
+position:relative;
+width:200px;
+float:left;
 `
 const EventListing = styled.div`
 padding: 15px;
@@ -319,7 +328,7 @@ align-items: center;
 margin-top:15px;
 `
 
-moment.locale('en-GB')
+ moment.locale('en-GB')
 const localizer = momentLocalizer(moment)
 const RightSide = (props) => {
   const { loading } = props;
@@ -341,6 +350,7 @@ const RightSide = (props) => {
   const [activeMentions, setActiveMentions] = useState(false)
   const [mess, setActiveMess] = useState(false)
   const [allMentions, setAllMentions] = useState()
+  const [calenderView,setCalenderView]= useState()
 
   useEffect(() => {
     let updateUser = async authState => {
@@ -590,6 +600,23 @@ const RightSide = (props) => {
               </FlexRow>
 
               <AddModalBox editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
+              { calenderView ==='month'?
+           <EventMenu>
+          { eventList? eventList.map(v=>
+          <>
+           { v.name ?
+         <div>
+          <h3>{v.name}</h3>
+          <p>{v.eventSchedule.recurring}</p>
+          <span>{getDate(v.eventSchedule.start_time)} to {getDate(v.eventSchedule.end_time)}</span>
+          <p>{v.content}</p>
+          </div>:null
+          }
+          </> ): null
+          }
+       </EventMenu>:null
+         }
+
               <CalenderSection>
                 {typeof event !== 'undefined' ?
                   <Calendar
@@ -598,6 +625,7 @@ const RightSide = (props) => {
                     events={event}
                     startAccessor="start"
                     endAccessor="end"
+                    // onNavigate={}
                     onSelectEvent={(e) => (
                       // eslint-disable-next-line no-sequences
                       setEdit(true),
@@ -606,8 +634,9 @@ const RightSide = (props) => {
                     )}
                     defaultView="day"
                     step={60}
+                    onView={(e)=>setCalenderView(e)}
                     views={['day', 'week', 'month',]}
-                    style={{ height: 463, width: "100%", }}
+                    style={{ height: 463, width:calenderView === 'month'? '600px':'100%' }}
                   /> : <div className="loader"> <ValueLoader height="70" width="70" /></div>
 
                 }
@@ -646,17 +675,17 @@ const RightSide = (props) => {
                 <div className="mt-10">
                   <FlexRow style={{ padding: '0px' }}>
                     <ButtonSmall bgColor="#0FB1D2"><img src={UploadIocn} alt="Upload" />Upload</ButtonSmall>
-                    <UploadOuter>
+                    {/* <UploadOuter>
                       <UploadImage><img src={UploadImg} alt="Upload" /></UploadImage>
                       <UploadImage><img src={UploadImg} alt="Upload" /></UploadImage>
                       <UploadImage><img src={UploadImg} alt="Upload" /></UploadImage>
-                    </UploadOuter>
-                    <ButtonSmall
+                    </UploadOuter> */}
+                    {/* <ButtonSmall
                       maxWidth="34px"
                       bgColor="#FF7171"
                       style={{ marginLeft: 'auto', marginRight: '9px' }}>
                       <img src={CrossIcon} alt="Cross Icon" style={{ marginRight: '0px' }} />
-                    </ButtonSmall>
+                    </ButtonSmall> */}
                     <ButtonSmall>Publish</ButtonSmall>
                   </FlexRow>
                 </div>
@@ -674,7 +703,7 @@ const RightSide = (props) => {
               {mentions === 'Public' ?
                 <>
                   <div class="mt-25">
-                    <FeedListing onClick={() => setIsOpen(true)}>
+                    {/* <FeedListing onClick={() => setIsOpen(true)}>
                       <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
                       <EventText>
                         <span>08:35 AM, 12 - 08 - 12</span>
@@ -699,59 +728,27 @@ const RightSide = (props) => {
                           <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
                         </Icon>
                       </EventText>
-                    </FeedListing>
+                    </FeedListing> */}
                     {/* <PostModalBox isOpen={isOpen} closeModal={() => setIsOpen(false)} /> */}
+                    {typeof allFeed !== 'undefined' ?
+                    allFeed.map( v=> (
                     <FeedListing>
                       <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
                       <EventText>
-                        <span>08:35 AM, 12 - 08 - 12</span>
-                        <h3>Marcus George</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Imperdiet sed eget eros, viverra erat morbi. Nulla eleifend a elit sapien. Feugiat orci ullamcorper elit malesuada lacus. Pulvinar convallis rutrum accumsan pulvinar in sodales nullam velit.</p>
+                        <span>{(new Date(v.updatedAt).toLocaleString()).substring(0, 10)}</span>
+                        <h3>{v.name? v.name:place.company_name}</h3>
+                        <p>{v.content}</p>
                         <Icon>
                           <div><img src={WishlistIcon} alt="" /><sup>3</sup></div>
                           <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
                         </Icon>
                       </EventText>
-                    </FeedListing>
+                    </FeedListing>)):null
+                    }
 
-                    <FeedListing>
-                      <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
-                      <EventText>
-                        <span>08:35 AM, 12 - 08 - 12</span>
-                        <h3>Marcus George</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Imperdiet sed eget eros, viverra erat morbi. Nulla eleifend a elit sapien. Feugiat orci ullamcorper elit malesuada lacus. Pulvinar convallis rutrum accumsan pulvinar in sodales nullam velit.</p>
-                        <Icon>
-                          <div><img src={WishlistIcon} alt="" /><sup>3</sup></div>
-                          <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
-                        </Icon>
-                      </EventText>
-                    </FeedListing>
+                    
 
-                    <FeedListing>
-                      <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
-                      <EventText>
-                        <span>08:35 AM, 12 - 08 - 12</span>
-                        <h3>Marcus George</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Imperdiet sed eget eros, viverra erat morbi. Nulla eleifend a elit sapien. Feugiat orci ullamcorper elit malesuada lacus. Pulvinar convallis rutrum accumsan pulvinar in sodales nullam velit.</p>
-                        <Icon>
-                          <div><img src={WishlistIcon} alt="" /><sup>3</sup></div>
-                          <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
-                        </Icon>
-                      </EventText>
-                    </FeedListing>
-
-                    <FeedListing>
-                      <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
-                      <EventText>
-                        <span>08:35 AM, 12 - 08 - 12</span>
-                        <h3>Marcus George</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Imperdiet sed eget eros, viverra erat morbi. Nulla eleifend a elit sapien. Feugiat orci ullamcorper elit malesuada lacus. Pulvinar convallis rutrum accumsan pulvinar in sodales nullam velit.</p>
-                        <Icon>
-                          <div><img src={WishlistIcon} alt="" /><sup>3</sup></div>
-                          <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
-                        </Icon>
-                      </EventText>
-                    </FeedListing>
+                  
                   </div>
                 </> : <><PostSkeleton /><PostSkeleton /><PostSkeleton /></>
               }

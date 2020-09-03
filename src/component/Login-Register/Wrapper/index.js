@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import PlazmText from '../../../images/plazm.svg'
 import ResetImg from '../../../images/resetimg.png'
 import Line from '../../../images/line.png'
+import {Link} from 'react-router-dom'
 
 const LoginWrapper = styled.div`
 height: 100%;
@@ -10,6 +11,10 @@ background: linear-gradient(313.15deg, #FF479D 8.23%, #FF7171 95.51%);
 display:flex; 
 align-items:center;
 width:100%;
+flex-wrap:wrap;
+`
+const OuterWrapper= styled.div `
+width:100%
 `
 
 const LoginContainer = styled.div`
@@ -206,27 +211,42 @@ position:absolute;
 const Wrapper = (props) => {
     return (
         <LoginWrapper>
+            <OuterWrapper>
             <LoginContainer>
                 <LoginInner>
-                    <LineImage><img src={Line} alt="" /></LineImage>
+                   { props.page === 'register' ? 
+                   <LineImage><img src={Line} alt="" /></LineImage>: null 
+                   }
                      <LeftSide>
                         <img src={PlazmText} alt="Plazm" />
+                        { props.page === 'register' ?
                         <RegisterLeft>
                             <h2>Howdy! Let's get you started</h2>
                             <p>Login to start working on your business profile page</p>
-                        </RegisterLeft>
+                        </RegisterLeft> : null
+                         }
                         <p>Claim and Customize your spot on Plazm Map</p>
                         <p>Connect & engage your nearby audience</p>
                         <p>Make Announcement, share photos, schedule events and moderate your board</p>
-                        <SignIn><span>Already On Plazm?</span><a href="">Sign In</a></SignIn>
+                        { props.page === 'register' ?
+                        <SignIn><span>Already On Plazm?</span>{ props.type.includes('business') ?
+                        <Link to ='/business/login' className="link-btn"><strong>Sign In</strong></Link> :
+                        <Link to ='/curator/login' className="link-btn"><strong>Sign In</strong></Link>
+                      }</SignIn>
+                            :null}
+                            {props.page === 'forgot' ?
                         <ResetImage><img  src={ResetImg} alt="" /></ResetImage>
+                        :null}
                     </LeftSide>
                     <RightSide>
                         <LoginOuter>
                             <LoginFormWrapper>
                                 <LoginFormHeader>
                                     <h2>{props.heading}</h2>
+                                    { props.page === 'register' ?
+                                    <h3>{props.welcomeMessage}</h3>:
                                     <p>{props.welcomeMessage}</p>
+                                    }
                                 </LoginFormHeader>
                                 <div className="login-form-nested-wrapper">
                                     {props.children}
@@ -236,6 +256,14 @@ const Wrapper = (props) => {
                     </RightSide>
                 </LoginInner>
             </LoginContainer>
+            {props.page==='login'?
+                ( props.type.includes('business') ?
+                         <Link to ='/business/register' >Don't have an account?<strong>Signup</strong></Link> :
+                         <Link to ='/curator/register' >Don't have an account?<strong>Signup</strong></Link>
+                )
+                          :null
+                        }
+            </OuterWrapper>
         </LoginWrapper>
     )
 }

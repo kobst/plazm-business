@@ -82,7 +82,7 @@ const Header = props => {
     <Container>
       <LogoWrapper><img src={Logo} alt="logo" /></LogoWrapper>
       <ProfileSection>
-        <h2>Welcome Edward,</h2>
+        <h2>Welcome VT Netzwelt Pvt Ltd,</h2>
         <ProfileImg><img src={ProfileImage} alt="Profile" /></ProfileImg>
         <div className="profileHover">
           <Sidebar />

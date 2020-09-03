@@ -6,7 +6,7 @@ return{
     "Login_Mess": "Login to start working on your business profile page",
     "Remember":"Remember me",
     "No_Account":"Don't have an account? ",
-    "Forgot":"Forgot Password",
+    "Forgot":"Forgot password?",
     "Reg":"Register to Get Started",
     "New_Reg":"Start working on your business profile page",
     "Conf_Code":"Enter the Confirmation code sent to your Registered Email",

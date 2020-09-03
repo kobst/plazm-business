@@ -124,12 +124,6 @@ return (
 
 
     <Button type="submit" maxWidth="183px" className="btnRegister">{loader && !message? <ValueLoader /> : 'Sign In'}</Button>
-    <Links>
-    { type.includes('business') ?
-     <Link to ='/business/login' className="link-btn">Already have an account? <strong>Log In</strong></Link> :
-     <Link to ='/curator/login' className="link-btn">Already have an account? <strong>Log In</strong></Link>
-   }
-    </Links>
                           
 
     

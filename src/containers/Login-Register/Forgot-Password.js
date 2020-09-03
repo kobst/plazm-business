@@ -129,7 +129,7 @@ function validateEmail(user) {
 }
 
  return(
-     <Wrapper heading={renderMessage.Reset} welcomeMessage={email?renderMessage.Res_Message:renderMessage.Email_Msg}>
+     <Wrapper type ={type} page='forgot' heading={renderMessage.Reset} welcomeMessage={email?renderMessage.Res_Message:renderMessage.Email_Msg}>
          <ForgotPasswordForm 
          type = {type}
          con={con}

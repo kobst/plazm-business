@@ -69,10 +69,6 @@ return(
     
                 <ForgotPassword>
                         { type.includes('business') ?
-                         <Link to ='/business/register' >{renderMessage.No_Account}<strong>Signup</strong></Link> :
-                         <Link to ='/curator/register' >{renderMessage.No_Account}<strong>Signup</strong></Link>
-                          }
-                        { type.includes('business') ?
                          <Link to ='/business/forgot-password' >{renderMessage.Forgot}</Link> :
                          <Link to ='/curator/forgot-password' >{renderMessage.Forgot}</Link>
                           }

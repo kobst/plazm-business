@@ -218,7 +218,7 @@ const Register = (props) => {
     }
 
     return(
-        <Wrapper heading={renderMessage.Reg} welcomeMessage={renderMessage.New_Reg}>
+        <Wrapper type ={type} page='register' welcomeMessage={renderMessage.New_Reg}>
             <RegisterForm
                   type ={type}
                   err={err}

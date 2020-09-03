@@ -94,7 +94,7 @@ const Validation = () => {
 
 
     return(
-        <Wrapper heading={renderMessage.Welcome} welcomeMessage={renderMessage.Login_Mess} >
+        <Wrapper type ={type} page='login' heading={renderMessage.Welcome} welcomeMessage={renderMessage.Login_Mess} >
             <LoginForm
                   type ={type}
                   error={error}
