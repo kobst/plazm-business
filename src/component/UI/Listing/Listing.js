@@ -1,8 +1,15 @@
 
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
+<<<<<<< HEAD
 import LikeIcon from '../../../images/wishlist-icon.svg'
 import CommentIcon from '../../../images/comment.svg'
+=======
+import LikeIcon from '../../../Public/images/like.svg'
+import CommentIcon from '../../../Public/images/comment.svg'
+import EditModalBox from '../../Edit-Post'
+import DeleteModalBox from '../../Delete-Post'
+>>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
 
 const ListContainer = styled.div`
 display:flex;
@@ -33,6 +40,17 @@ p{
     margin-bottom:0px;
     margin-top:5px;
 }
+button{
+    background: #000;
+    color: white;
+    font-weight: 500;
+    font-family: 'Roboto',sans-serif;
+    border-radius: 5px;
+    align-items: center;
+    padding: 0 10px;
+    border: none;
+    margin-right: 4px;
+}
 `
 const FlexRow = styled.div`
 display: flex;
@@ -48,18 +66,43 @@ img{
 `
 
 
-const Listing = ({mentions,value,data}) => {
+const Listing = ({mentions,value,data,users}) => {
+    const [isOpen,setIsOpen]= useState(false)
+    const [deleteOpen,setDeleteOpen]= useState(false)
+    const [content,setContent]= useState()
+    const [id,setId]= useState()
+    const handleEdit= (v)=> {
+        setIsOpen(true)
+        setContent(v)
+   }
+//    const changeColor = (str)=> {
+//     for (let i = 0; i < str.length; i++) {
+//        if(str.charAt(i)==='@'){
+//         for (let j= i){
+//           if(str.charAt(j)===' ')
+//           {
+//               break
+//           }
+//         }
+//        }
+//       }
+//    }
+    const handleDelete= (v)=> {
+    setDeleteOpen(true)
+    setId(v._id)
+    }
     if(typeof value !== 'undefined'){
     return(
         <>
-        
+          <EditModalBox setIsOpen={setIsOpen} isOpen={isOpen} closeModal={() => setIsOpen(false)} users={users} value={content}/>
+          <DeleteModalBox setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)}/>
         {value.map(v => (
         <ListContainer>
         <ImgSec/>
         <TextSec>
             <FlexRow>
             <h4>{v.name? v.name:data.company_name}</h4>
-            <span>{(new Date(v.updatedAt).toLocaleString()).substring(0, 10)}</span>
+            <span>{(new Date(v.updatedAt).toLocaleString()).substring(0,new Date(v.updatedAt).toLocaleString().indexOf(","))}</span>
             </FlexRow>
             <p>{v.content}</p>
             {mentions==='All Mentions'||(v.name!==data.company_name&& v.name)?
@@ -67,7 +110,13 @@ const Listing = ({mentions,value,data}) => {
             <img src={LikeIcon} alt={LikeIcon} />
             <img src={CommentIcon} alt={CommentIcon} />
             </Icon>: null
-    }
+             }
+             <FlexRow>
+            <span>
+                <button onClick={()=> handleEdit(v)}>Edit</button>
+                <button onClick={()=> handleDelete(v)}>Delete</button>
+            </span>
+          </FlexRow>
         </TextSec>
         </ListContainer>
         ))}

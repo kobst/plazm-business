@@ -56,8 +56,12 @@ return(
 							  <FormGroup>
                   <Label name="Enter Your Login ID" />
                       <Input type="text" id='username' onChange={(e) => handleChange(e)} 
+<<<<<<< HEAD
                         error={userError}  placeholder="Email address"/>
                         {error && message ==='User does not exist.' ?<ErrorMessage>{message}</ErrorMessage>: null}
+=======
+                        error={userError}  placeholder="Email Address"/>
+>>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
 							  </FormGroup>
                 <FormGroup>
                     <Label name="Password" />

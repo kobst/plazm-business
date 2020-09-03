@@ -15,7 +15,11 @@ const Title = styled.div`
 
 const Tabs = ({setMentions,name,isActive,image}) => {
     return(
+<<<<<<< HEAD
     <Title className={isActive? 'active' : null} onClick={()=>setMentions(name)}><h2>{name}</h2><img src={image} /></Title>
+=======
+      <Title className={isActive? null : 'active'} onClick={()=>setMentions(name)}>{name}</Title>
+>>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
     )
 }
 
