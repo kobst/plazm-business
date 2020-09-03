@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import PlazmText from '../../../images/plazm.svg'
 import ResetImg from '../../../images/resetimg.png'
 import Line from '../../../images/line.png'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 const LoginWrapper = styled.div`
 height: 100%;
@@ -13,7 +13,7 @@ align-items:center;
 width:100%;
 flex-wrap:wrap;
 `
-const OuterWrapper= styled.div `
+const OuterWrapper = styled.div`
 width:100%
 `
 
@@ -61,6 +61,14 @@ p{
     margin:0px;
     color:#2C2738;
 }
+h3{
+    font-weight: 500;
+font-size: 16px;
+line-height: 19px;
+color: #FF479D;
+padding-top:80px;
+
+}
 }
 @media (max-width:991px){
     h2{
@@ -70,6 +78,9 @@ p{
     p{
         font-size: 14px;
         line-height: 18px;
+    }
+    h3{
+        padding-top:0px;
     }
 }
 `
@@ -127,14 +138,13 @@ p{
     max-width:435px;
     width:100%;
     border-bottom: 1px solid #eee;
-    padding-bottom: 15px;
+    padding-bottom: 0px;
     margin-bottom: 15px;
 img{
-    max-width:200px;
+    max-width:150px;
 }
 p{
-    margin:5px 0; 
-    max-width: inherit;
+display:none;
 }
 }
 @media (max-width:767px){
@@ -153,14 +163,8 @@ img{
     display:block;
 }
 
-@media (max-width:767px){
-    position:relative;
-    margin-top:10px;
-    left: 0px;
-     margin-left:0px;
-    img{
-        max-width:250px;
-    }
+@media (max-width:991px){
+display:none;
 }
 `
 const RegisterLeft = styled.div`
@@ -177,12 +181,9 @@ line-height: inherit;
 color: #2C2738;
 margin: 0px;
 }
-@media (max-width:767px){
-    margin:10px 0 30px;
-    h2{
-        font-size: 22px;
-        line-height: 28px;
-     }   
+
+@media (max-width:991px){
+display:none;
 }
 `
 const SignIn = styled.div`
@@ -200,70 +201,150 @@ color: #280A33;
 text-decoration:none;
 margin-left:5px;
 }
-@media (max-width:767px){
-    margin-top:15px;  
+@media (max-width:991px){
+    margin:0px 0 15px;  
 }
 `
 const LineImage = styled.div`
 position:absolute;
+@media (max-width:991px){
+    display:none;
+}
+
+`
+const SignUpOuter = styled.div`
+text-align: right;
+max-width: 1140px;
+padding:0 25px;
+margin: 20px auto 0;
+a{
+color:#fff;
+font-size: 13px;
+line-height: 22px;
+text-decoration:none;
+margin-right: 140px;
+strong{
+font-weight: 500;
+font-size: 16px;
+line-height: 17px;
+margin-left:10px;
+}
+}
+@media (max-width:767px){
+    margin: 15px auto 0;
+    a{
+        margin-right: 0;   
+    }
+
+}
 `
 
 const Wrapper = (props) => {
     return (
         <LoginWrapper>
+              {props.page === 'login' ?
             <OuterWrapper>
-            <LoginContainer>
-                <LoginInner>
-                   { props.page === 'register' ? 
-                   <LineImage><img src={Line} alt="" /></LineImage>: null 
-                   }
-                     <LeftSide>
-                        <img src={PlazmText} alt="Plazm" />
-                        { props.page === 'register' ?
-                        <RegisterLeft>
-                            <h2>Howdy! Let's get you started</h2>
-                            <p>Login to start working on your business profile page</p>
-                        </RegisterLeft> : null
-                         }
-                        <p>Claim and Customize your spot on Plazm Map</p>
-                        <p>Connect & engage your nearby audience</p>
-                        <p>Make Announcement, share photos, schedule events and moderate your board</p>
-                        { props.page === 'register' ?
-                        <SignIn><span>Already On Plazm?</span>{ props.type.includes('business') ?
-                        <Link to ='/business/login' className="link-btn"><strong>Sign In</strong></Link> :
-                        <Link to ='/curator/login' className="link-btn"><strong>Sign In</strong></Link>
-                      }</SignIn>
-                            :null}
-                            {props.page === 'forgot' ?
-                        <ResetImage><img  src={ResetImg} alt="" /></ResetImage>
-                        :null}
-                    </LeftSide>
-                    <RightSide>
-                        <LoginOuter>
-                            <LoginFormWrapper>
-                                <LoginFormHeader>
-                                    <h2>{props.heading}</h2>
-                                    { props.page === 'register' ?
-                                    <h3>{props.welcomeMessage}</h3>:
-                                    <p>{props.welcomeMessage}</p>
-                                    }
-                                </LoginFormHeader>
-                                <div className="login-form-nested-wrapper">
-                                    {props.children}
-                                </div>
-                            </LoginFormWrapper>
-                        </LoginOuter>
-                    </RightSide>
-                </LoginInner>
-            </LoginContainer>
-            {props.page==='login'?
-                ( props.type.includes('business') ?
-                         <Link to ='/business/register' >Don't have an account?<strong>Signup</strong></Link> :
-                         <Link to ='/curator/register' >Don't have an account?<strong>Signup</strong></Link>
-                )
-                          :null
+                <LoginContainer>
+                    <LoginInner>
+                        {props.page === 'register' ?
+                            <LineImage><img src={Line} alt="" /></LineImage> : null
                         }
-            </OuterWrapper>
+                        <LeftSide>
+                            <img src={PlazmText} alt="Plazm" />
+                            {props.page === 'register' ?
+                                <RegisterLeft>
+                                    <h2>Howdy! Let's get you started</h2>
+                                    <p>Login to start working on your business profile page</p>
+                                </RegisterLeft> : null
+                            }
+                            <p>Claim and Customize your spot on Plazm Map</p>
+                            <p>Connect & engage your nearby audience</p>
+                            <p>Make Announcement, share photos, schedule events and moderate your board</p>
+                            {props.page === 'register' ?
+                                <SignIn><span>Already On Plazm?</span>{props.type.includes('business') ?
+                                    <Link to='/business/login' className="link-btn"><strong>Sign In</strong></Link> :
+                                    <Link to='/curator/login' className="link-btn"><strong>Sign In</strong></Link>
+                                }</SignIn>
+                                : null}
+                            {props.page === 'forgot' ?
+                                <ResetImage><img src={ResetImg} alt="" /></ResetImage>
+                                : null}
+                        </LeftSide>
+                        <RightSide>
+                            <LoginOuter>
+                                <LoginFormWrapper>
+                                    <LoginFormHeader>
+                                        <h2>{props.heading}</h2>
+                                        {props.page === 'register' ?
+                                            <h3>{props.welcomeMessage}</h3> :
+                                            <p>{props.welcomeMessage}</p>
+                                        }
+                                    </LoginFormHeader>
+                                    <div className="login-form-nested-wrapper">
+                                        {props.children}
+                                    </div>
+                                </LoginFormWrapper>
+                            </LoginOuter>
+                        </RightSide>
+                    </LoginInner>
+                </LoginContainer>
+                <SignUpOuter>
+                    {props.page === 'login' ?
+                        (props.type.includes('business') ?
+                            <Link to='/business/register' >Don't have an account?<strong>Signup</strong></Link> :
+                            <Link to='/curator/register' >Don't have an account?<strong>Signup</strong></Link>
+                        )
+                        : null
+                    }
+                </SignUpOuter>
+            </OuterWrapper>: <> 
+                            <LoginContainer>
+                            <LoginInner>
+                                {props.page === 'register' ?
+                                    <LineImage><img src={Line} alt="" /></LineImage> : null
+                                }
+                                <LeftSide>
+                                    <img src={PlazmText} alt="Plazm" />
+                                    {props.page === 'register' ?
+                                        <RegisterLeft>
+                                            <h2>Howdy! Let's get you started</h2>
+                                            <p>Login to start working on your business profile page</p>
+                                        </RegisterLeft> : null
+                                    }
+                                    <p>Claim and Customize your spot on Plazm Map</p>
+                                    <p>Connect & engage your nearby audience</p>
+                                    <p>Make Announcement, share photos, schedule events and moderate your board</p>
+                                    {props.page === 'register' ?
+                                        <SignIn><span>Already On Plazm?</span>{props.type.includes('business') ?
+                                            <Link to='/business/login' className="link-btn"><strong>Sign In</strong></Link> :
+                                            <Link to='/curator/login' className="link-btn"><strong>Sign In</strong></Link>
+                                        }</SignIn>
+                                        : null}
+                                    {props.page === 'forgot' ?
+                                        <ResetImage><img src={ResetImg} alt="" /></ResetImage>
+                                        : null}
+                                </LeftSide>
+                                <RightSide>
+                                    <LoginOuter>
+                                        <LoginFormWrapper>
+                                            <LoginFormHeader>
+                                                <h2>{props.heading}</h2>
+                                                {props.page === 'register' ?
+                                                    <h3>{props.welcomeMessage}</h3> :
+                                                    <p>{props.welcomeMessage}</p>
+                                                }
+                                            </LoginFormHeader>
+                                            <div className="login-form-nested-wrapper">
+                                                {props.children}
+                                            </div>
+                                        </LoginFormWrapper>
+                                    </LoginOuter>
+                                </RightSide>
+                            </LoginInner>
+                        </LoginContainer>
+
+                        </>
+          }
         </LoginWrapper>
     )
 }
