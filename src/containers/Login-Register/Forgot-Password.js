@@ -86,10 +86,12 @@ const ForgotPassword = (props) => {
     if(!new_password){
         setNewPassErr(true)
     }
+    if(new_password && confirmPass){
     if(new_password.length<=7 && confirmPass.length<=7){
     setVerificationErr(renderMessage.pass_length)
     setError(true)
 }
+    }
     if(!confirmPass){
         setConfirmPassErr(true)
     }
@@ -129,7 +131,7 @@ function validateEmail(user) {
 }
 
  return(
-     <Wrapper heading={renderMessage.Reset} welcomeMessage={email?renderMessage.Res_Message:renderMessage.Email_Msg}>
+     <Wrapper type ={type} page='forgot' heading={renderMessage.Reset} welcomeMessage={email?renderMessage.Res_Message:renderMessage.Email_Msg}>
          <ForgotPasswordForm 
          type = {type}
          con={con}

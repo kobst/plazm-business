@@ -7,8 +7,10 @@ import Input from '../../UI/Input/Input'
 import ValueLoader from '../../../utils/loader'
 import {getMessage} from '../../../config'
 
+
 const FormGroup = styled.div `
-margin-bottom:35px;
+margin-bottom:22px;
+position:relative;
 h6{
     color: red;
   }
@@ -16,10 +18,30 @@ h6{
     color: green;
   }
 
-  @media(max-width:899px){
-    margin-bottom: 25px;
 
 `
+const ErrorMessage = styled.div`
+font-style: normal;
+font-weight: normal;
+font-size: 14px;
+line-height: 18px;
+text-align: right;
+color: #FF7171;
+position: absolute;
+right: 0;
+bottom: -25px;
+`
+const SuccessMessage = styled.div`
+font-style: normal;
+font-weight: normal;
+font-size: 14px;
+line-height: 18px;
+text-align: right;
+color: #1483Ab;
+position: absolute;
+right: 0;
+bottom: -25px;
+` 
 
 
 const renderMessage = getMessage()
@@ -31,23 +53,17 @@ const ForgotPasswordForm = ({type,email,con,loader,emError, submitPassword,codeE
         <form onSubmit = {e => submitPassword(e)}>
                 <FormGroup>
                     <Input type="text" id="code" error={codeErr} onChange={e => handleChange(e)} placeholder="Confirmation Code"/>
-                </FormGroup>
+                    {error ?<ErrorMessage> {verificationErr}</ErrorMessage>: null}
+                     </FormGroup>
                 <FormGroup>
                     <Input type="password" id="password" error={newPassErr} onChange={e => handleChange(e)} placeholder="New Password"/>
                 </FormGroup>
                 <FormGroup>
                     <Input type="password" id="conPassword" error={confirmPassErr} onChange={e => handleChange(e)} placeholder="Confirm Password"/>
+                    {passErr ?<ErrorMessage> {renderMessage.Pass_Err}/</ErrorMessage>: null}
+                    {con ?<SuccessMessage> {renderMessage.con} </SuccessMessage>: null}
                 </FormGroup>
                  <Button type="submit" className="btn btn-primary">{renderMessage.Submit}</Button>
-                {error ?<FormGroup><br /><h6> {verificationErr}</h6></FormGroup>: null}
-                {passErr ?<FormGroup><br /><h6> {renderMessage.Pass_Err} </h6></FormGroup>: null}
-                {con ?<FormGroup><br /><h5> {renderMessage.con} </h5></FormGroup>: null}
-                <Links>
-                { type.includes('business') ?
-                <Link to ='/business/login' className="link-btn">{renderMessage.Log_Link} </Link> :
-                <Link to ='/curator/login' className="link-btn">{renderMessage.Log_Link}</Link>
-                }
-                </Links>
 
 
         </form>
@@ -55,11 +71,15 @@ const ForgotPasswordForm = ({type,email,con,loader,emError, submitPassword,codeE
 
         <form onSubmit = {e => submitEmail(e)}>
                 <FormGroup>
+<<<<<<< HEAD
+                    <Input type="text" id="username" onChange={e => handleChange(e)} error={emError} placeholder="Email address"/>
+                    {emailError ?<ErrorMessage>{renderMessage.Email_Err}</ErrorMessage>: null}
+=======
                     <Input type="text" id="username" onChange={e => handleChange(e)} error={emError} placeholder="Email Address"/>
+>>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
                 </FormGroup>
                 <Button type="submit" className="btn btn-primary">{loader && !emailError ? <ValueLoader />: 'Reset'}</Button>
 
-                {emailError ?<FormGroup><br /><h6>{renderMessage.Email_Err}</h6></FormGroup>: null}
                 <Links>
                 { type.includes('business') ?
                 <Link to ='/business/login' className="link-btn">{renderMessage.Log_Link}</Link> :

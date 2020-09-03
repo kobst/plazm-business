@@ -131,10 +131,12 @@ const Register = (props) => {
         if(!password){
             setPasswordError(true)
         }
+        if(password){
         if(password.length<=7){
             setError(true)
             setMessage(renderMessage.pass_length)
     }
+}
         if(username && loc && username.length>3 && phone_number && validateEmail(email) && password && name && password.length>7 ){
             return true
         }
@@ -218,7 +220,7 @@ const Register = (props) => {
     }
 
     return(
-        <Wrapper heading={renderMessage.Reg} welcomeMessage={renderMessage.New_Reg}>
+        <Wrapper type ={type} page='register' welcomeMessage={renderMessage.New_Reg}>
             <RegisterForm
                   type ={type}
                   err={err}
