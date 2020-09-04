@@ -26,6 +26,8 @@ import CrossIcon from '../../images/cross-icon.svg'
 import UploadImg from '../../images/upload-img1.png'
 import UserIcon from '../../images/user.svg'
 import WishlistIcon from '../../images/wishlist-icon.svg'
+import WishlistGrey from '../../images/wishlist-grey.svg'
+import CommentGrey from '../../images/comment-grey.svg'
 import CommentIcon from '../../images/comment.svg'
 import SortIcon from '../../images/sort.svg'
 import UploadIocn from '../../images/upload.svg'
@@ -80,6 +82,7 @@ margin-right:0px;
 `
 const CalenderSection = styled.div`
 margin-top:50px;
+min-height:463px
 @media (max-width:767px){
   margin-top:20px;
 }
@@ -90,6 +93,9 @@ padding:0px;
 width:38%;
 margin-left:5px;
 position:relative;
+>div:last-child{
+  min-height:897px;
+}
 &:after{
   background: linear-gradient(180deg,rgba(255,255,255,0) -51.89%,#FFFFFF 79.25%);
   border-radius: 0px 0px 24px 24px;
@@ -212,27 +218,22 @@ div{
   display:flex;
   align-items: center;
   padding-bottom:10px;
+  img{
+    height: 16px;
+    width: 17px;
+  }
 }
 sup{
-  background: #FF479D;
-  width: 14px;
-  height: 14px;
-  color: #fff;
-  border-radius: 100%;
-  font-size: 9px;
-  font-weight: 700;
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  top: -7px;
-  right: -7px;
+  font-size: 18px;
+  line-height: 15px;
+  color: #D2D2D2;
+  margin-left: 10px;
 }
 div:last-child{
-  sup{
-    top: -2px;
-    right: -3px;
-  }
+img{
+  height: 16px;
+  width: 17px;
+}
 }
 `
 const FeedImage = styled.div`
@@ -242,9 +243,10 @@ border:2px solid #fff;
 overflow:hidden;
 margin-right:10px;
 border-radius:100%;
+box-shadow:0px 14px 10px rgba(0, 0, 0, 0.07);
 `
 const EventText = styled.div`
-padding-right:30px;
+
 h3{
 margin:0px;
 font-weight: normal;
@@ -269,7 +271,7 @@ margin: 3px 0 0 0;
 const EventImage = styled.div`
 border-radius: 9px;
 overflow:hidden;
-
+padding-left:30px;
 `
 const TabsOuter = styled.div`
 margin-left:auto;
@@ -696,7 +698,7 @@ const RightSide = (props) => {
                 <SubHeading name="Feed" />
                 <TabsOuter>
                   <Tabs isActive={activePublic} setMentions={setMentions} name="Public" image={UserIcon} />
-                  <Tabs isActive={mess} setMentions={setMentions} name="Message" image={CommentIcon} />
+                  <Tabs className="M2" isActive={mess} setMentions={setMentions} name="Message" image={CommentIcon} />
                 </TabsOuter>
               </FlexRow>
 
@@ -739,8 +741,8 @@ const RightSide = (props) => {
                         <h3>{v.name? v.name:place.company_name}</h3>
                         <p>{v.content}</p>
                         <Icon>
-                          <div><img src={WishlistIcon} alt="" /><sup>3</sup></div>
-                          <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
+                          <div><img src={WishlistGrey} alt="" /><sup>3</sup></div>
+                          <div><img src={CommentGrey} alt="" /><sup>3</sup></div>
                         </Icon>
                       </EventText>
                     </FeedListing>)):null
