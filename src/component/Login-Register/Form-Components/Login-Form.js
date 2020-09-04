@@ -37,34 +37,33 @@ position: absolute;
 right: 0;
 bottom: -25px;
 `
-const SuccessMessage = styled.div`
-font-style: normal;
-font-weight: normal;
-font-size: 14px;
-line-height: 18px;
-text-align: right;
-color: #1483Ab;
-position: absolute;
-right: 0;
-bottom: -25px;
-`  
+// const SuccessMessage = styled.div`
+// font-style: normal;
+// font-weight: normal;
+// font-size: 14px;
+// line-height: 18px;
+// text-align: right;
+// color: #1483Ab;
+// position: absolute;
+// right: 0;
+// bottom: -25px;
+// `  
 const renderMessage =getMessage()
 const LoginForm = ({type,userError,error,passwordError,loader,message,handleChange,handleSubmit}) => {
 return(
   <>
-  {error ?<FormGroup><br /><h6>{message}</h6></FormGroup>: null}
       <form onSubmit={ (e) => handleSubmit(e) }>
 							  <FormGroup>
                   <Label name="Enter Your Login ID" />
                       <Input type="text" id='username' onChange={(e) => handleChange(e)} 
                         error={userError}  placeholder="Email address"/>
-                        <ErrorMessage>Validation Error Message</ErrorMessage>
+                        {error && message ==='User does not exist.' ?<ErrorMessage>{message}</ErrorMessage>: null}
 							  </FormGroup>
                 <FormGroup>
                     <Label name="Password" />
                         <Input type="password" id='password' onChange={(e) => handleChange(e)}
                           error={passwordError} placeholder="Password" />
-                          <SuccessMessage>Validation Success Message</SuccessMessage>
+                          {error && message !=='User does not exist.' ?<ErrorMessage>{message}</ErrorMessage>: null}
 							  </FormGroup>	
                 <Button type="submit" className="btn btn-primary">{loader && !message? <ValueLoader /> : renderMessage.Log}</Button>
     

@@ -5,25 +5,22 @@ import Tabs from '../UI/Tabs/Tabs'
 import Card from '../UI/Card/Card'
 import Listing from '../UI/Listing/Listing'
 import Search from '../UI/Search/Search'
-import ChatBox from '../UI/ChatBox/ChatBox'
 import { Auth } from 'aws-amplify';
 import { Link } from "react-router-dom";
 import AddModalBox from '../Add-Event/index'
-import PostModalBox from '../Post-Modal'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
 import { callPlace, fetchItems, fetchUsers } from '../../Api'
 import ValueLoader from '../../utils/loader'
 import { RRule } from 'rrule'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { Multiselect } from 'multiselect-react-dropdown';
+// import { Multiselect } from 'multiselect-react-dropdown';
 import UserImage from '../../images/user-img.png'
 import EventImg from '../../images/eventimg.png'
 import SubHeading from '../UI/SubHeading'
 import ButtonSmall from '../UI/ButtonSmall'
 import Textarea from '../UI/Textarea'
 import CrossIcon from '../../images/cross-icon.svg'
-import UploadImg from '../../images/upload-img1.png'
 import UserIcon from '../../images/user.svg'
 import WishlistIcon from '../../images/wishlist-icon.svg'
 import WishlistGrey from '../../images/wishlist-grey.svg'
@@ -31,11 +28,11 @@ import CommentGrey from '../../images/comment-grey.svg'
 import CommentIcon from '../../images/comment.svg'
 import SortIcon from '../../images/sort.svg'
 import UploadIocn from '../../images/upload.svg'
-import CloseIcon from '../../images/close.svg'
 import GallerySec from '../UI/Gallery'
 import Tooltip from '../UI/Tooltip'
 import EventSkeleton from '../UI/Skeleton/EventsSkeleton'
 import PostSkeleton from '../UI/Skeleton/PostSkeleton'
+import Mention from 'react-textarea-mention';
 
 const RightSection = styled.div`
 
@@ -539,7 +536,7 @@ const RightSide = (props) => {
   const getDate = (value) => {
     const date = new Date(value);
     const time = ConvertNumberToTwoDigitString(date.getHours()) +
-      ":" + ConvertNumberToTwoDigitString(date.getMinutes());
+      ":" + ConvertNumberToTwoDigitString(date.getMinutes())+ "," + (date.toLocaleString()).substring(0, 10);
     return time
 
   }
@@ -584,9 +581,10 @@ const RightSide = (props) => {
 
   }
   const handleChange = (e) => {
-    setDescription(e.target.value)
+    setDescription(e)
   }
-
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  var today  = new Date();
   // const options = [{name: 'John Watson', id: 1},{name: 'Marie Curie', id: 2}]
 
   return (
@@ -604,14 +602,13 @@ const RightSide = (props) => {
               <AddModalBox editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
               { calenderView ==='month'?
            <EventMenu>
+             <h2>{today.toLocaleDateString("en-US", options)}</h2>
           { eventList? eventList.map(v=>
           <>
            { v.name ?
          <div>
           <h3>{v.name}</h3>
-          <p>{v.eventSchedule.recurring}</p>
-          <span>{getDate(v.eventSchedule.start_time)} to {getDate(v.eventSchedule.end_time)}</span>
-          <p>{v.content}</p>
+          <span>{getDate(v.eventSchedule.start_time)}</span>
           </div>:null
           }
           </> ): null
@@ -673,7 +670,13 @@ const RightSide = (props) => {
             <Card>
               <SubHeading name="Write a Post" />
               <div className="mt-15">
-                <Textarea />
+                {/* <Textarea /> */}
+                <Mention
+                 onChange={handleChange}
+                  field="name"
+                     data={curators}
+                    />
+
                 <div className="mt-10">
                   <FlexRow style={{ padding: '0px' }}>
                     <ButtonSmall bgColor="#0FB1D2"><img src={UploadIocn} alt="Upload" />Upload</ButtonSmall>
@@ -688,12 +691,12 @@ const RightSide = (props) => {
                       style={{ marginLeft: 'auto', marginRight: '9px' }}>
                       <img src={CrossIcon} alt="Cross Icon" style={{ marginRight: '0px' }} />
                     </ButtonSmall> */}
-                    <ButtonSmall>Publish</ButtonSmall>
+                    <ButtonSmall disabled={saveDisable} onClick={()=> addPost()}>Publish</ButtonSmall>
                   </FlexRow>
                 </div>
               </div>
             </Card>
-            <Card>
+            <Card style={{minHeight:'897px'}}>
               <FlexRow>
                 <SubHeading name="Feed" />
                 <TabsOuter>
