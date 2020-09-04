@@ -156,8 +156,8 @@ const Sidebar = () => {
       <Map><img src={MapImage} alt="map" /></Map>
       <CompanyAddress>
         <div>
-          <h3>Greg's Food Hut</h3>
-          <p>250 Followers</p>
+          <h3>VT Netzwelt Pvt Ltd</h3>
+          {/* <p>250 Followers</p> */}
         </div>
         <ButtonSmall setIsOpen={setIsOpen}>Edit Profile</ButtonSmall>
       </CompanyAddress>
@@ -190,18 +190,18 @@ const Sidebar = () => {
 
       <Listing style={{ borderBottom: 'none' }}>
         <SubHeading name="Hashtags" />
-        <Badges name="Burger" />
+        {/* <Badges name="Burger" />
         <Badges name="Happy Hours" />
-        <Badges name="Triple Ham Burger" />
+        <Badges name="Triple Ham Burger" /> */}
       </Listing>
 
       <SocialOuter>
         <SocialIcon>
           <div>
-            <img src={Facebook} alt={Facebook} />
+            {/* <img src={Facebook} alt={Facebook} />
             <img src={Twitter} alt={Twitter} />
             <img src={Instagram} alt={Instagram} />
-            <img src={linkedIn} alt={linkedIn} />
+            <img src={linkedIn} alt={linkedIn} /> */}
           </div>
           <ButtonSmall bgColor="#FF7171" maxWidth="139px" type="submit" onClick={() => (
             Auth.signOut())} className="btn btn-primary"> <Link to='/business/login' >Logout</Link></ButtonSmall>

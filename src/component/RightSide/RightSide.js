@@ -30,6 +30,7 @@ import GallerySec from '../UI/Gallery'
 import Tooltip from '../UI/Tooltip'
 import EventSkeleton from '../UI/Skeleton/EventsSkeleton'
 import PostSkeleton from '../UI/Skeleton/PostSkeleton'
+import Mention from 'react-textarea-mention';
 
 const RightSection = styled.div`
 
@@ -533,7 +534,7 @@ const RightSide = (props) => {
   const getDate = (value) => {
     const date = new Date(value);
     const time = ConvertNumberToTwoDigitString(date.getHours()) +
-      ":" + ConvertNumberToTwoDigitString(date.getMinutes());
+      ":" + ConvertNumberToTwoDigitString(date.getMinutes())+ "," + (date.toLocaleString()).substring(0, 10);
     return time
 
   }
@@ -578,9 +579,10 @@ const RightSide = (props) => {
 
   }
   const handleChange = (e) => {
-    setDescription(e.target.value)
+    setDescription(e)
   }
-
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  var today  = new Date();
   // const options = [{name: 'John Watson', id: 1},{name: 'Marie Curie', id: 2}]
 
   return (
@@ -598,14 +600,13 @@ const RightSide = (props) => {
               <AddModalBox editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
               { calenderView ==='month'?
            <EventMenu>
+             <h2>{today.toLocaleDateString("en-US", options)}</h2>
           { eventList? eventList.map(v=>
           <>
            { v.name ?
          <div>
           <h3>{v.name}</h3>
-          <p>{v.eventSchedule.recurring}</p>
-          <span>{getDate(v.eventSchedule.start_time)} to {getDate(v.eventSchedule.end_time)}</span>
-          <p>{v.content}</p>
+          <span>{getDate(v.eventSchedule.start_time)}</span>
           </div>:null
           }
           </> ): null
@@ -667,7 +668,13 @@ const RightSide = (props) => {
             <Card>
               <SubHeading name="Write a Post" />
               <div className="mt-15">
-                <Textarea />
+                {/* <Textarea /> */}
+                <Mention
+                 onChange={handleChange}
+                  field="name"
+                     data={curators}
+                    />
+
                 <div className="mt-10">
                   <FlexRow style={{ padding: '0px' }}>
                     <ButtonSmall bgColor="#0FB1D2"><img src={UploadIocn} alt="Upload" />Upload</ButtonSmall>
@@ -682,12 +689,12 @@ const RightSide = (props) => {
                       style={{ marginLeft: 'auto', marginRight: '9px' }}>
                       <img src={CrossIcon} alt="Cross Icon" style={{ marginRight: '0px' }} />
                     </ButtonSmall> */}
-                    <ButtonSmall>Publish</ButtonSmall>
+                    <ButtonSmall disabled={saveDisable} onClick={()=> addPost()}>Publish</ButtonSmall>
                   </FlexRow>
                 </div>
               </div>
             </Card>
-            <Card>
+            <Card style={{minHeight:'897px'}}>
               <FlexRow>
                 <SubHeading name="Feed" />
                 <TabsOuter>
