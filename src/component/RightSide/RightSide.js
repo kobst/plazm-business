@@ -35,6 +35,7 @@ import PostSkeleton from '../UI/Skeleton/PostSkeleton'
 import Mention from 'react-textarea-mention';
 import EditModalBox from '../Edit-Post'
 import DeleteModalBox from '../Delete-Post'
+import MoreIcon from '../../images/more.svg'
 
 const RightSection = styled.div`
 
@@ -170,7 +171,7 @@ border: 1px solid #FF479D;
 }
 `
 const FeedListing = styled.div`
-padding: 15px 15px 0;
+padding: 15px 15px 15px;
 background: #FAFDFF;
 border: 1px solid #E2F1F8;
 box-sizing: border-box;
@@ -194,46 +195,41 @@ p{
 }
 
 }`
+const WishlistImg = styled.div`
+margin-left: 13px;
+position:relative;
+cursor:pointer;
+display:flex;
+align-items: center;
+img{
+  height: 16px;
+  width: 17px;
+}
+`
+const CommentImg = styled.div`
+margin-left: 13px;
+position:relative;
+cursor:pointer;
+display:flex;
+align-items: center;
+img{
+  height: 16px;
+  width: 17px;
+}
+`
 const Icon = styled.div`
 display: flex;
 align-items: center;
 justify-content: flex-end;
 margin-top: 10px;
-div:first-child{
-  div{
-    visibility:hidden;
-    margin-left: 0;
-  }
-  :hover{
-    div{
-      visibility:visible;
-    }
-  }
-}
-div{
-  margin-left: 13px;
-  position:relative;
-  cursor:pointer;
-  display:flex;
-  align-items: center;
-  padding-bottom:10px;
-  img{
-    height: 16px;
-    width: 17px;
-  }
-}
+
 sup{
   font-size: 18px;
   line-height: 15px;
   color: #D2D2D2;
   margin-left: 10px;
 }
-div:last-child{
-img{
-  height: 16px;
-  width: 17px;
-}
-}
+
 `
 const FeedImage = styled.div`
 width:53px;
@@ -245,7 +241,7 @@ border-radius:100%;
 box-shadow:0px 14px 10px rgba(0, 0, 0, 0.07);
 `
 const EventText = styled.div`
-
+width:calc(100% - 200px;)
 h3{
 margin:0px;
 font-weight: normal;
@@ -265,6 +261,27 @@ line-height: 15px;
 color:#626262;
 margin: 3px 0 0 0;
 }
+@media (max-width:991px){
+  width:calc(100% - 100px;)
+}
+`
+const EditRomve = styled.div`
+position:relative;
+cursor:pointer;
+margin-right: auto;
+display:flex;
+align-items:center;
+div:first-child{
+  padding:0px;
+}
+div:empty{
+  display:none;
+}
+div{
+  padding:10px;
+}
+
+
 `
 
 const EventImage = styled.div`
@@ -329,7 +346,7 @@ align-items: center;
 margin-top:15px;
 `
 
- moment.locale('en-GB')
+moment.locale('en-GB')
 const localizer = momentLocalizer(moment)
 const RightSide = (props) => {
   const { loading } = props;
@@ -351,12 +368,12 @@ const RightSide = (props) => {
   const [activeMentions, setActiveMentions] = useState(false)
   const [mess, setActiveMess] = useState(false)
   const [allMentions, setAllMentions] = useState()
-  const [calenderView,setCalenderView]= useState()
-  const [toggle,setToggleMenu]=useState(false)
-  const [id,setId]= useState()
-  const [isModelOpen,setIsModelOpen]= useState(false)
-  const [deleteOpen,setDeleteOpen]= useState(false)
-  const [content,setContent]= useState()
+  const [calenderView, setCalenderView] = useState()
+  const [toggle, setToggleMenu] = useState(false)
+  const [id, setId] = useState()
+  const [isModelOpen, setIsModelOpen] = useState(false)
+  const [deleteOpen, setDeleteOpen] = useState(false)
+  const [content, setContent] = useState()
 
 
   useEffect(() => {
@@ -540,20 +557,20 @@ const RightSide = (props) => {
       }
     }
   }
-  const handleEdit= (v)=> {
+  const handleEdit = (v) => {
     setIsModelOpen(true)
     setContent(v)
-}
+  }
 
-const handleDelete= (v)=> {
-   setDeleteOpen(true)
-   setId(v._id)
-}
+  const handleDelete = (v) => {
+    setDeleteOpen(true)
+    setId(v._id)
+  }
 
   const getDate = (value) => {
     const date = new Date(value);
     const time = ConvertNumberToTwoDigitString(date.getHours()) +
-      ":" + ConvertNumberToTwoDigitString(date.getMinutes())+ "," + (date.toLocaleString()).substring(0, 10);
+      ":" + ConvertNumberToTwoDigitString(date.getMinutes()) + "," + (date.toLocaleString()).substring(0, 10);
     return time
 
   }
@@ -577,13 +594,13 @@ const handleDelete= (v)=> {
       return true
     }
   }
-  const setToggle= (v)=>{
-     setId(v)
-    if(toggle===true){
+  const setToggle = (v) => {
+    setId(v)
+    if (toggle === true) {
       console.log('okkay')
-         setToggleMenu(false)
+      setToggleMenu(false)
     }
-    else{
+    else {
       console.log('okkay1')
       setToggleMenu(true)
     }
@@ -612,7 +629,7 @@ const handleDelete= (v)=> {
     setDescription(e)
   }
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-  var today  = new Date();
+  var today = new Date();
   // const options = [{name: 'John Watson', id: 1},{name: 'Marie Curie', id: 2}]
 
   return (
@@ -628,21 +645,21 @@ const handleDelete= (v)=> {
               </FlexRow>
 
               <AddModalBox editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
-              { calenderView ==='month'?
-           <EventMenu>
-             <h2>{today.toLocaleDateString("en-US", options)}</h2>
-          { eventList? eventList.map(v=>
-          <>
-           { v.name ?
-         <div>
-          <h3>{v.name}</h3>
-          <span>{getDate(v.eventSchedule.start_time)}</span>
-          </div>:null
-          }
-          </> ): null
-          }
-       </EventMenu>:null
-         }
+              {calenderView === 'month' ?
+                <EventMenu>
+                  <h2>{today.toLocaleDateString("en-US", options)}</h2>
+                  {eventList ? eventList.map(v =>
+                    <>
+                      {v.name ?
+                        <div>
+                          <h3>{v.name}</h3>
+                          <span>{getDate(v.eventSchedule.start_time)}</span>
+                        </div> : null
+                      }
+                    </>) : null
+                  }
+                </EventMenu> : null
+              }
 
               <CalenderSection>
                 {typeof event !== 'undefined' ?
@@ -661,9 +678,9 @@ const handleDelete= (v)=> {
                     )}
                     defaultView="day"
                     step={60}
-                    onView={(e)=>setCalenderView(e)}
+                    onView={(e) => setCalenderView(e)}
                     views={['day', 'week', 'month',]}
-                    style={{ height: 463, width:calenderView === 'month'? '600px':'100%' }}
+                    style={{ height: 463, width: calenderView === 'month' ? '600px' : '100%' }}
                   /> : <div className="loader"> <ValueLoader height="70" width="70" /></div>
 
                 }
@@ -686,7 +703,7 @@ const handleDelete= (v)=> {
                             <p>{v.content}</p>
                           </EventText>
                           <EventImage><img src={EventImg} alt="Event" /></EventImage>
-                        </EventListing> :  null
+                        </EventListing> : null
                       }
                     </>) : <><EventSkeleton /><EventSkeleton /><EventSkeleton /><EventSkeleton /></>
                   }
@@ -700,10 +717,10 @@ const handleDelete= (v)=> {
               <div className="mt-15">
                 {/* <Textarea /> */}
                 <Mention
-                 onChange={handleChange}
+                  onChange={handleChange}
                   field="name"
-                     data={curators}
-                    />
+                  data={curators}
+                />
 
                 <div className="mt-10">
                   <FlexRow style={{ padding: '0px' }}>
@@ -719,12 +736,12 @@ const handleDelete= (v)=> {
                       style={{ marginLeft: 'auto', marginRight: '9px' }}>
                       <img src={CrossIcon} alt="Cross Icon" style={{ marginRight: '0px' }} />
                     </ButtonSmall> */}
-                    <ButtonSmall disabled={saveDisable} onClick={()=> addPost()}>Publish</ButtonSmall>
+                    <ButtonSmall disabled={saveDisable} onClick={() => addPost()}>Publish</ButtonSmall>
                   </FlexRow>
                 </div>
               </div>
             </Card>
-            <Card style={{minHeight:'897px'}}>
+            <Card style={{ minHeight: '897px' }}>
               <FlexRow>
                 <SubHeading name="Feed" />
                 <TabsOuter>
@@ -764,34 +781,40 @@ const handleDelete= (v)=> {
                     </FeedListing> */}
                     {/* <PostModalBox isOpen={isOpen} closeModal={() => setIsOpen(false)} /> */}
                     {typeof allFeed !== 'undefined' ?
-                    allFeed.map( v=> (
-                    <FeedListing>
-                      <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
-                      <EventText>
-                        <span>{(new Date(v.updatedAt).toLocaleString()).substring(0, 10)}</span>
-                        <h3>{v.name? v.name:place.company_name}</h3>
-                        <p>{v.content}</p>
-                        <div onClick={()=> setToggle(v._id)}>...</div>
+                      allFeed.map(v => (
+                        <FeedListing>
+                          <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
+                          <EventText>
+                            <span>{(new Date(v.updatedAt).toLocaleString()).substring(0, 10)}</span>
+                            <h3>{v.name ? v.name : place.company_name}</h3>
+                            <p>{v.content}</p>
+                            <Icon>
+                              <EditRomve>
+                            <img onClick={() => setToggle(v._id)} src={MoreIcon} alt="More" />
 
-                        {toggle && id===v._id ?
-                        <div>
-                          <EditModalBox setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={curators} value={content}/>
-                        <DeleteModalBox setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)}/>
-                          <p onClick={()=> handleEdit(v)}>Edit</p>
-                          <p onClick={()=> handleDelete(v)}>Delete</p>
-                        </div>:null
-                          }
-                        <Icon>
-                          <div><img src={WishlistGrey} alt="" /><sup>3</sup></div>
-                          <div><img src={CommentGrey} alt="" /><sup>3</sup></div>
-                        </Icon>
-                      </EventText>
-                    </FeedListing>)):null
+                              {toggle && id === v._id ?
+                                <Tooltip>
+                                  <EditModalBox setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={curators} value={content} />
+                                  <DeleteModalBox setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
+                                  <ul>
+                                  <li onClick={() => handleEdit(v)}>Edit</li>
+                                  <li onClick={() => handleDelete(v)}>Delete</li>
+                                  </ul>
+                                </Tooltip> : null
+                              }
+                              </EditRomve>
+
+                              <WishlistImg><img src={WishlistGrey} alt="" /><sup>3</sup></WishlistImg>
+                              <CommentImg><img src={CommentGrey} alt="" /><sup>3</sup></CommentImg>
+
+                            </Icon>
+                          </EventText>
+                        </FeedListing>)) : null
                     }
 
-                    
 
-                  
+
+
                   </div>
                 </> : <><PostSkeleton /><PostSkeleton /><PostSkeleton /></>
               }

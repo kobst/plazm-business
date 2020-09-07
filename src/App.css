@@ -895,3 +895,24 @@ textarea{
     font-size: 14px;
     color: #2C2738;
   }
+  .editModal .modalButton{
+    margin-top: 25px;
+  }
+  .editModal textarea{
+    margin-top:10px;
+  }
+  .loader{
+    min-height:463px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  @media (max-width: 767px){
+    .Modal.editModal {
+      height: inherit;
+  }
+  .Modal.editModal button{
+    margin-bottom:0px;
+  }
+  }
+
