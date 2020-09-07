@@ -33,6 +33,8 @@ import Tooltip from '../UI/Tooltip'
 import EventSkeleton from '../UI/Skeleton/EventsSkeleton'
 import PostSkeleton from '../UI/Skeleton/PostSkeleton'
 import Mention from 'react-textarea-mention';
+import EditModalBox from '../Edit-Post'
+import DeleteModalBox from '../Delete-Post'
 
 const RightSection = styled.div`
 
@@ -350,6 +352,12 @@ const RightSide = (props) => {
   const [mess, setActiveMess] = useState(false)
   const [allMentions, setAllMentions] = useState()
   const [calenderView,setCalenderView]= useState()
+  const [toggle,setToggleMenu]=useState(false)
+  const [id,setId]= useState()
+  const [isModelOpen,setIsModelOpen]= useState(false)
+  const [deleteOpen,setDeleteOpen]= useState(false)
+  const [content,setContent]= useState()
+
 
   useEffect(() => {
     let updateUser = async authState => {
@@ -532,6 +540,15 @@ const RightSide = (props) => {
       }
     }
   }
+  const handleEdit= (v)=> {
+    setIsModelOpen(true)
+    setContent(v)
+}
+
+const handleDelete= (v)=> {
+   setDeleteOpen(true)
+   setId(v._id)
+}
 
   const getDate = (value) => {
     const date = new Date(value);
@@ -558,6 +575,17 @@ const RightSide = (props) => {
     }
     else {
       return true
+    }
+  }
+  const setToggle= (v)=>{
+     setId(v)
+    if(toggle===true){
+      console.log('okkay')
+         setToggleMenu(false)
+    }
+    else{
+      console.log('okkay1')
+      setToggleMenu(true)
     }
   }
   const addPost = async () => {
@@ -743,6 +771,16 @@ const RightSide = (props) => {
                         <span>{(new Date(v.updatedAt).toLocaleString()).substring(0, 10)}</span>
                         <h3>{v.name? v.name:place.company_name}</h3>
                         <p>{v.content}</p>
+                        <div onClick={()=> setToggle(v._id)}>...</div>
+
+                        {toggle && id===v._id ?
+                        <div>
+                          <EditModalBox setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={curators} value={content}/>
+                        <DeleteModalBox setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)}/>
+                          <p onClick={()=> handleEdit(v)}>Edit</p>
+                          <p onClick={()=> handleDelete(v)}>Delete</p>
+                        </div>:null
+                          }
                         <Icon>
                           <div><img src={WishlistGrey} alt="" /><sup>3</sup></div>
                           <div><img src={CommentGrey} alt="" /><sup>3</sup></div>
