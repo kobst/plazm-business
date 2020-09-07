@@ -885,3 +885,13 @@ textarea{
   height: 100px;
   }
   }
+
+  .login-form-nested-wrapper{
+    margin-top: 10px;
+  }
+  .login-form-nested-wrapper .code{
+    position: relative;
+    top: -28px;
+    font-size: 14px;
+    color: #2C2738;
+  }

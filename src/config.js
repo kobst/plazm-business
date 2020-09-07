@@ -1,7 +1,7 @@
 exports.getMessage = () => {
 return{
     "Welcome":"Howdy! Welcome Back",
-    "Log":"Login",
+    "Log":"Sign In",
     "Sign":"Signup",
     "Login_Mess": "Login to start working on your business profile page",
     "Remember":"Remember me",
@@ -14,9 +14,9 @@ return{
     "Conf_Err":"Confirmation code does not match",
     "Business":"Find Your Business",
     "Reg_Message": "By clicking register, I represent I have read, understand, and agree to the Postmates Privacy Policy and Terms of Service. This site is protected bt reCAPTCHA and google Privacy Policy and Terms of Service apply.",
-    "Reset":"Reset Password",
+    "Reset":"Reset",
     "Res_Message":"Choose the new password for your account",
-    "Pass_Err":"Password Does not match",
+    "Pass_Err":"Password does not match.",
     "Log_Link":"Back to Login",
     "Submit":"Submit",
     "Email_Msg":"Enter the email address you registered with and we'll send you instruction to Reset your password",

@@ -23,12 +23,12 @@ display:flex;
 padding: 3.2vw 0 3.5vw;
 width:100%;
 min-height:485px;
-max-height: 90%;
 flex-direction: column;
 overflow-y: auto;
 flex: 1 1 auto;
-justify-content: center;
 position:relative;
+justify-content: center;
+// justify-content:${props => props.page === 'register' ? 'center' : 'start'};
 @media (max-width:1024px){
     min-height:inherit;
 }
@@ -52,7 +52,7 @@ h2{
     line-height: 40px;
     color: #2C2738;
     font-family: 'IBM Plex Sans', sans-serif;
-    margin:0px 0 10px;
+    margin:0px 0 5px;
 }
 p{
     font-size: 16px;
@@ -66,7 +66,8 @@ h3{
 font-size: 16px;
 line-height: 19px;
 color: #FF479D;
-padding-top:80px;
+
+}
 
 }
 }
@@ -259,7 +260,7 @@ const Wrapper = (props) => {
                             }
                             <p>Claim and Customize your spot on Plazm Map</p>
                             <p>Connect & engage your nearby audience</p>
-                            <p>Make Announcement, share photos, schedule events and moderate your board</p>
+                            <p>Make announcement, share photos, schedule events and moderate your board</p>
                             {props.page === 'register' ?
                                 <SignIn><span>Already On Plazm?</span>{props.type.includes('business') ?
                                     <Link to='/business/login' className="link-btn"><strong>Sign In</strong></Link> :
@@ -291,8 +292,8 @@ const Wrapper = (props) => {
                 <SignUpOuter>
                     {props.page === 'login' ?
                         (props.type.includes('business') ?
-                            <Link to='/business/register' >Don't have an account?<strong>Signup</strong></Link> :
-                            <Link to='/curator/register' >Don't have an account?<strong>Signup</strong></Link>
+                            <Link to='/business/register' >Don't have an account yet?<strong>Sign Up</strong></Link> :
+                            <Link to='/curator/register' >Don't have an account yet?<strong>Sign Up</strong></Link>
                         )
                         : null
                     }
@@ -313,7 +314,7 @@ const Wrapper = (props) => {
                                     }
                                     <p>Claim and Customize your spot on Plazm Map</p>
                                     <p>Connect & engage your nearby audience</p>
-                                    <p>Make Announcement, share photos, schedule events and moderate your board</p>
+                                    <p>Make announcement, share photos, schedule events and moderate your board</p>
                                     {props.page === 'register' ?
                                         <SignIn><span>Already On Plazm?</span>{props.type.includes('business') ?
                                             <Link to='/business/login' className="link-btn"><strong>Sign In</strong></Link> :

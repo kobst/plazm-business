@@ -54,7 +54,7 @@ return(
   <>
       <form onSubmit={ (e) => handleSubmit(e) }>
 							  <FormGroup>
-                  <Label name="Enter Your Login ID" />
+                  <Label name="Enter your login ID" />
                       <Input type="text" id='username' onChange={(e) => handleChange(e)} 
                         error={userError}  placeholder="Email address"/>
                         {error && message ==='User does not exist.' ?<ErrorMessage>{message}</ErrorMessage>: null}

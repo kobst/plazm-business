@@ -6,7 +6,7 @@ import Button from '../../UI/Button/Button'
 import Input from '../../UI/Input/Input'
 import ValueLoader from '../../../utils/loader'
 import {getMessage} from '../../../config'
-
+import Label from '../../UI/Label/label'
 
 const FormGroup = styled.div `
 margin-bottom:22px;
@@ -52,18 +52,21 @@ const ForgotPasswordForm = ({type,email,con,loader,emError, submitPassword,codeE
       {email ?
         <form onSubmit = {e => submitPassword(e)}>
                 <FormGroup>
-                    <Input type="text" id="code" error={codeErr} onChange={e => handleChange(e)} placeholder="Confirmation Code"/>
+                  <Label name="Confirmation Code" />
+                    <Input type="text" id="code" error={codeErr} onChange={e => handleChange(e)} />
                     {error ?<ErrorMessage> {verificationErr}</ErrorMessage>: null}
                      </FormGroup>
                 <FormGroup>
-                    <Input type="password" id="password" error={newPassErr} onChange={e => handleChange(e)} placeholder="New Password"/>
+                    <Label name="New Password" />
+                    <Input type="password" id="password" error={newPassErr} onChange={e => handleChange(e)} />
                 </FormGroup>
                 <FormGroup>
-                    <Input type="password" id="conPassword" error={confirmPassErr} onChange={e => handleChange(e)} placeholder="Confirm Password"/>
-                    {passErr ?<ErrorMessage> {renderMessage.Pass_Err}/</ErrorMessage>: null}
+                    <Label name="Confirm Password" />
+                    <Input type="password" id="conPassword" error={confirmPassErr} onChange={e => handleChange(e)} />
+                    {passErr ?<ErrorMessage> {renderMessage.Pass_Err}</ErrorMessage>: null}
                     {con ?<SuccessMessage> {renderMessage.con} </SuccessMessage>: null}
                 </FormGroup>
-                 <Button type="submit" className="btn btn-primary">{renderMessage.Submit}</Button>
+                 <Button type="submit" className="btn btn-primary">{renderMessage.Reset}</Button>
 
 
         </form>
@@ -71,7 +74,8 @@ const ForgotPasswordForm = ({type,email,con,loader,emError, submitPassword,codeE
 
         <form onSubmit = {e => submitEmail(e)}>
                 <FormGroup>
-                    <Input type="text" id="username" onChange={e => handleChange(e)} error={emError} placeholder="Email address"/>
+                    <Label name="Email address" />
+                    <Input type="text" id="username" onChange={e => handleChange(e)} error={emError} />
                     {emailError ?<ErrorMessage>{renderMessage.Email_Err}</ErrorMessage>: null}
                 </FormGroup>
                 <Button type="submit" className="btn btn-primary">{loader && !emailError ? <ValueLoader />: 'Reset'}</Button>
