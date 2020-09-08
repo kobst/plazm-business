@@ -374,6 +374,7 @@ const RightSide = (props) => {
   const [isModelOpen, setIsModelOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [content, setContent] = useState()
+  const [viewState,setViewState]= useState('month')
 
 
   useEffect(() => {
@@ -566,6 +567,152 @@ const RightSide = (props) => {
     setDeleteOpen(true)
     setId(v._id)
   }
+  const getCustomToolbar = (toolbar) => {
+    const toolbarDate = toolbar.date;
+    const goToDayView = () => {
+    toolbar.onView("day")
+    setViewState('day')
+    }
+    const goToWeekView = () => {
+    toolbar.onView("week")
+    setViewState('week')
+    };
+    const goToMonthView = () => {
+    toolbar.onView("month")
+    setViewState('month')
+    };
+    const goToBack = () => {
+    let view = viewState
+    let mDate = toolbar.date
+    let newDate
+    if (view === "month") {
+    newDate = new Date(mDate.getFullYear(), mDate.getMonth() - 1, 1);
+    } else if (view === "week") {
+    newDate = new Date(
+    mDate.getFullYear(),
+    mDate.getMonth(),
+    mDate.getDate() - 7,
+    1
+    );
+    } else {
+    newDate = new Date(
+    mDate.getFullYear(),
+    mDate.getMonth(),
+    mDate.getDate() - 1,
+    1
+    );
+    }
+    toolbar.onNavigate("prev", newDate);
+    };
+    const goToNext = () => {
+    let view = viewState;
+    let mDate = toolbar.date;
+    let newDate;
+    if (view === "month") {
+    newDate = new Date(mDate.getFullYear(), mDate.getMonth() + 1, 1);
+    } else if (view === "week") {
+    newDate = new Date(
+    mDate.getFullYear(),
+    mDate.getMonth(),
+    mDate.getDate() + 7,
+    1
+    );
+    } else {
+    newDate = new Date(
+    mDate.getFullYear(),
+    mDate.getMonth(),
+    mDate.getDate() + 1,
+    1
+    );
+    }
+    toolbar.onNavigate("next", newDate);
+    };
+    
+    const goToToday = () => {
+      const now = new Date();
+      toolbar.date.setMonth(now.getMonth());
+      toolbar.date.setYear(now.getFullYear());
+      toolbar.onNavigate("current");
+    };
+    
+    const goToBackYear = () => {
+      let mDate = toolbar.date;
+      let newDate = new Date(mDate.getFullYear() - 1, 1);
+      toolbar.onNavigate("prev", newDate);
+    };
+    
+    const goToNextYear = () => {
+      let mDate = toolbar.date;
+      let newDate = new Date(mDate.getFullYear() + 1, 1);
+      toolbar.onNavigate("next", newDate);
+    };
+    
+    const month = () => {
+      const date = moment(toolbar.date);
+      let month = date.format("MMMM");
+    
+      return <span className="rbc-toolbar-label">{month}</span>;
+    };
+    const year = () => {
+      const date = moment(toolbar.date);
+      let year = date.format("YYYY");
+    
+      return (
+        <span className="rbc-btn-group">
+          {viewState === "month" && (
+            <button type="button" onClick={goToBackYear}>
+              <span className="prev-icon">&#8249;&#8249;</span>
+            </button>
+          )}
+          <span className="rbc-toolbar-label">{year}</span>
+          {viewState === "month" && (
+            <button type="button" onClick={goToNextYear}>
+              <span className="prev-icon">&#8250;&#8250;</span>
+            </button>
+          )}
+        </span>
+      );
+    };
+    
+    const day = () => {
+      let view = viewState;
+      const date = moment(toolbar.date);
+      let day;
+      if (view === "day") {
+        day = date.format("ddd") + " " + date.format("Do");
+      }
+      return <span className="rbc-toolbar-label">{day}</span>;
+    };
+    return (
+      <div className="rbc-toolbar">
+        <span className="rbc-btn-group">
+        <button type="button" onClick={goToToday}>
+            <span className="next-icon">Today</span>
+          </button>
+          <button type="button" onClick={goToBack}>
+            <span className="prev-icon">&#8249; Back</span>
+          </button>
+          <button type="button" onClick={goToNext}>
+            <span className="next-icon">&#8250; Next</span>
+          </button>
+        </span>
+          {day()}
+          {month()}
+          {year()}
+        <span className="rbc-btn-group">
+        <button className="rbc-active" onClick={goToDayView}>
+            <span className="label-filter-off">Day</span>
+          </button>
+          <button className="" onClick={goToWeekView}>
+            <span className="label-filter-off">Week</span>
+          </button>
+          <button className="" onClick={goToMonthView}>
+            <span className="label-filter-off">Month</span>
+          </button>
+        </span>
+      </div>
+    );
+    };
 
   const getDate = (value) => {
     const date = new Date(value);
@@ -676,6 +823,9 @@ const RightSide = (props) => {
                       setIsOpen(true),
                       setDetails(e)
                     )}
+                     components={{
+                   toolbar: getCustomToolbar,
+                   }}
                     defaultView="day"
                     step={60}
                     onView={(e) => setCalenderView(e)}
