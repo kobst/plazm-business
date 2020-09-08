@@ -684,6 +684,7 @@ const RightSide = (props) => {
       return <span className="rbc-toolbar-label">{day}</span>;
     };
     return (
+      <>
       <div className="rbc-toolbar">
         <span className="rbc-btn-group">
         <button type="button" onClick={goToToday}>
@@ -711,6 +712,22 @@ const RightSide = (props) => {
           </button>
         </span>
       </div>
+      {calenderView === 'month' ?
+                <EventMenu>
+                  <h2>{today.toLocaleDateString("en-US", options)}</h2>
+                  {eventList ? eventList.map(v =>
+                    <>
+                      {v.name ?
+                        <div>
+                          <h3>{v.name}</h3>
+                          <span>{getDate(v.eventSchedule.start_time)}</span>
+                        </div> : null
+                      }
+                    </>) : null
+                  }
+                </EventMenu> : null
+              }
+      </>
     );
     };
 
@@ -792,21 +809,6 @@ const RightSide = (props) => {
               </FlexRow>
 
               <AddModalBox editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
-              {calenderView === 'month' ?
-                <EventMenu>
-                  <h2>{today.toLocaleDateString("en-US", options)}</h2>
-                  {eventList ? eventList.map(v =>
-                    <>
-                      {v.name ?
-                        <div>
-                          <h3>{v.name}</h3>
-                          <span>{getDate(v.eventSchedule.start_time)}</span>
-                        </div> : null
-                      }
-                    </>) : null
-                  }
-                </EventMenu> : null
-              }
 
               <CalenderSection>
                 {typeof event !== 'undefined' ?
