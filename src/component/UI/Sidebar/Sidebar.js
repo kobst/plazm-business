@@ -13,6 +13,7 @@ import { callPlace } from '../../../Api'
 import Badges from '../../UI/Badges'
 import MapImage from '../../../images/profile-map.png'
 import ButtonSmall from '../../UI/ButtonSmall'
+import history from '../../../utils/history'
 
 
 const LeftSidebar = styled.div`
@@ -159,7 +160,7 @@ const Sidebar = () => {
           <h3>VT Netzwelt Pvt Ltd</h3>
           {/* <p>250 Followers</p> */}
         </div>
-        <ButtonSmall setIsOpen={setIsOpen}>Edit Profile</ButtonSmall>
+        <ButtonSmall onClick={()=>(history.push(`/edit-profile`) ,window.location.reload())} setIsOpen={setIsOpen}>Edit Profile</ButtonSmall>
       </CompanyAddress>
       <Listing>
         <SubHeading name="Address" />
