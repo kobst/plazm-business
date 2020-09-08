@@ -10744,6 +10744,11 @@ react-scripts@3.4.1:
   optionalDependencies:
     fsevents "2.1.2"
 
+react-textarea-mention@^1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/react-textarea-mention/-/react-textarea-mention-1.0.11.tgz#2a8646560a18fe26826ddd30aad623d018c341e0"
+  integrity sha512-iUq30wW3kUDRyxw9L2OpH77NXZLPZHWy/hGVvfahxchPmekMmbthYy7cQL9tgWvB9nUbCAeeZPx4X364OTWpDg==
+
 react-time-picker@^4.0.0:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/react-time-picker/-/react-time-picker-4.0.1.tgz#ec3ee385377c8c6c8271a2dd1178452f6b11ad84"

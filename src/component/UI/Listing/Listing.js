@@ -1,16 +1,10 @@
 
 import React, { useState } from 'react'
 import styled from 'styled-components'
-<<<<<<< HEAD
 import LikeIcon from '../../../images/wishlist-icon.svg'
 import CommentIcon from '../../../images/comment.svg'
-=======
-import LikeIcon from '../../../Public/images/like.svg'
-import CommentIcon from '../../../Public/images/comment.svg'
 import EditModalBox from '../../Edit-Post'
 import DeleteModalBox from '../../Delete-Post'
->>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
-
 const ListContainer = styled.div`
 display:flex;
 font-family: 'Roboto',sans-serif;

@@ -54,20 +54,15 @@ return(
   <>
       <form onSubmit={ (e) => handleSubmit(e) }>
 							  <FormGroup>
-                  <Label name="Enter Your Login ID" />
-                      <Input type="text" id='username' onChange={(e) => handleChange(e)} 
-<<<<<<< HEAD
-                        error={userError}  placeholder="Email address"/>
-                        {error && message ==='User does not exist.' ?<ErrorMessage>{message}</ErrorMessage>: null}
-=======
-                        error={userError}  placeholder="Email Address"/>
->>>>>>> 2cf5563c6956513a02c10a8d0ef92d165115d25d
+                  <Label name="Enter your login ID" />
+                      <Input type="text" id='username' onChange={(e) => handleChange(e)} error={userError}  placeholder="Email address"/>
+                        {error && (message ==='User does not exist.'||message ==='Invalid Email') ?<ErrorMessage>{message}</ErrorMessage>: null}
 							  </FormGroup>
                 <FormGroup>
                     <Label name="Password" />
                         <Input type="password" id='password' onChange={(e) => handleChange(e)}
                           error={passwordError} placeholder="Password" />
-                          {error && message !=='User does not exist.' ?<ErrorMessage>{message}</ErrorMessage>: null}
+                          {error && message !=='User does not exist.' && message !=='Invalid Email' ?<ErrorMessage>{message}</ErrorMessage>: null}
 							  </FormGroup>	
                 <Button type="submit" className="btn btn-primary">{loader && !message? <ValueLoader /> : renderMessage.Log}</Button>
     

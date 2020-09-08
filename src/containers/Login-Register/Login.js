@@ -65,13 +65,19 @@ const Login = (props) => {
 }
 
 const Validation = () => {
-    if(!validateEmail(user)){
-        setuserError(true)
+    if(!user){
+      setuserError(true)
     }
+    if(user){
+    if(!validateEmail(user)){
+        setError(true)
+        setmessage(renderMessage.emErr)
+    }
+}
     if(!password){
         setPasswordError(true)
     }
-    else{
+    else if(user && password && validateEmail(user)){
         return true
     }
 

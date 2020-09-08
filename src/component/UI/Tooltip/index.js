@@ -4,16 +4,17 @@ import styled from 'styled-components'
 
 
 const TooltipInner = styled.div`
-width: 169px;
+max-width: 169px;
 background: rgba(0, 0, 0, 0.82);
 padding:15px;
+min-width: 100px;
 border-radius:12px;
 position: absolute !important;
 top: 31px;
 right: -17px;
 z-index: 9;
 color:#fff;
-visibilty:hidden;
+visibility:visible;
 display:block !important;
 :after{
   bottom: 100%;
@@ -34,8 +35,8 @@ display:block !important;
 ul{
     list-style:none;
     li{
-        font-size: 9px ;
-        line-height:15px ;
+        font-size: 11px ;
+        line-height:16px ;
         color:#fff ;
     }
 }

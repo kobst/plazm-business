@@ -31,6 +31,9 @@ const Register = (props) => {
     const [locationError,setLocError]= useState(false)
     const [business,setbusiness] = useState(false)
     const [loader,setLoader] = useState(false)
+    const [emptyCode,setEmptyCodeError]= useState(false)
+    const [phoneShort,setPhoneShort]= useState(false)
+    const [phoneLong,setPhoneLong]= useState(false)
     useEffect(() => {
         let updateUser = async authState => {
           try {
@@ -98,6 +101,14 @@ const Register = (props) => {
         const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(String(email).toLowerCase());
     }
+    const ValidateCode= ()=> {
+        if(!confirmationCode){
+            setEmptyCodeError(true)
+        }
+        else{
+            return true
+        }
+    }
 
     const Validation = () => {
         if(!username){
@@ -125,6 +136,14 @@ const Register = (props) => {
         if(!phone_number){
             setPhoneError(true)
         }
+        if(phone_number){
+            if(phone_number.length<=5){
+              setPhoneShort(true)
+            }
+            else if(phone_number.length>=50){
+                setPhoneLong(true)
+            }
+        }
         if(!validateEmail(email)){
             setEmailError(true)
         }
@@ -137,7 +156,8 @@ const Register = (props) => {
             setMessage(renderMessage.pass_length)
     }
 }
-        if(username && loc && username.length>3 && phone_number && validateEmail(email) && password && name && password.length>7 ){
+        if(username && loc && username.length>3 && phone_number && validateEmail(email) && password && name && password.length>7 && phone_number.length>=5 &&
+        phone_number.length<=50 ){
             return true
         }
 
@@ -146,7 +166,7 @@ const Register = (props) => {
    const handleSubmit = async (e) => {
         e.preventDefault();
         setMessage()
-        if (verified) {
+        if (verified && ValidateCode()) {
             setMessage()
             confirmSignUp();
             setLoader(true)
@@ -200,6 +220,9 @@ const Register = (props) => {
         setCodeError(false)
         setLocError(false)
         setLoader(false)
+        setEmptyCodeError(false)
+        setPhoneLong(false)
+        setPhoneShort(false)
         if (e.target.id === 'username') {
             setUser(e.target.value)
         }
@@ -240,6 +263,9 @@ const Register = (props) => {
                   phoneError={phoneError}
                   emailError={emailError}
                   locationError={locationError}
+                  emptyCode={emptyCode}
+                  phoneLong={phoneLong}
+                  phoneShort={phoneShort}
                   />
         </Wrapper>
    
