@@ -151,8 +151,49 @@ padding:0px;
 max-height:566px;
 overflow-y:auto;
 position:relative;
-width:200px;
+width:300px;
 float:left;
+padding:25px;
+background: #f7fdff;
+border: 1px solid #f2acaa;
+border-radius: 25px;
+h2{
+  color: #FF479D;
+  font-size: 24px;
+  line-height: 36px;
+  font-weight:normal;
+}
+h4{
+  border-top:1px solid rgba(157, 157, 157, 0.5);
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 36px;
+  color: #979797;
+  margin: 25px 0 7px;
+  padding-top: 15px;
+}
+`
+const MonthEventList = styled.div`
+background: linear-gradient(151.13deg, #C643FC 0%, #FF7171 114.93%);
+border: 1px solid #FFFFFF;
+box-sizing: border-box;
+border-radius: 5px;
+color:#fff;
+display: flex;
+justify-content: space-between;
+padding: 4px;
+margin-bottom:5px;
+p{
+font-weight: 500;
+font-size: 10px;
+line-height: inherit;
+}
+span{
+font-size: 9px;
+position: relative;
+top: 1px;
+margin-left:5px;
+}
 `
 const EventListing = styled.div`
 padding: 15px;
@@ -685,98 +726,96 @@ const RightSide = (props) => {
     setViewState('month')
     };
     const goToBack = () => {
-    let view = viewState
-    let mDate = toolbar.date
-    let newDate
-    if (view === "month") {
-    newDate = new Date(mDate.getFullYear(), mDate.getMonth() - 1, 1);
-    } else if (view === "week") {
-    newDate = new Date(
-    mDate.getFullYear(),
-    mDate.getMonth(),
-    mDate.getDate() - 7,
-    1
-    );
-    } else {
-    newDate = new Date(
-    mDate.getFullYear(),
-    mDate.getMonth(),
-    mDate.getDate() - 1,
-    1
-    );
-    }
-    toolbar.onNavigate("prev", newDate);
+      let view = viewState
+      let mDate = toolbar.date
+      let newDate
+      if (view === "month") {
+        newDate = new Date(mDate.getFullYear(), mDate.getMonth() - 1, 1);
+      } else if (view === "week") {
+        newDate = new Date(
+          mDate.getFullYear(),
+          mDate.getMonth(),
+          mDate.getDate() - 7,
+          1
+        );
+      } else {
+        newDate = new Date(
+          mDate.getFullYear(),
+          mDate.getMonth(),
+          mDate.getDate() - 1,
+          1
+        );
+      }
+      toolbar.onNavigate("prev", newDate);
     };
     const goToNext = () => {
-    let view = viewState;
-    let mDate = toolbar.date;
-    let newDate;
-    if (view === "month") {
-    newDate = new Date(mDate.getFullYear(), mDate.getMonth() + 1, 1);
-    } else if (view === "week") {
-    newDate = new Date(
-    mDate.getFullYear(),
-    mDate.getMonth(),
-    mDate.getDate() + 7,
-    1
-    );
-    } else {
-    newDate = new Date(
-    mDate.getFullYear(),
-    mDate.getMonth(),
-    mDate.getDate() + 1,
-    1
-    );
-    }
-    toolbar.onNavigate("next", newDate);
+      let view = viewState;
+      let mDate = toolbar.date;
+      let newDate;
+      if (view === "month") {
+        newDate = new Date(mDate.getFullYear(), mDate.getMonth() + 1, 1);
+      } else if (view === "week") {
+        newDate = new Date(
+          mDate.getFullYear(),
+          mDate.getMonth(),
+          mDate.getDate() + 7,
+          1
+        );
+      } else {
+        newDate = new Date(
+          mDate.getFullYear(),
+          mDate.getMonth(),
+          mDate.getDate() + 1,
+          1
+        );
+      }
+      toolbar.onNavigate("next", newDate);
     };
-    
+
     const goToToday = () => {
       const now = new Date();
       toolbar.date.setMonth(now.getMonth());
       toolbar.date.setYear(now.getFullYear());
       toolbar.onNavigate("current");
     };
-    
+
     const goToBackYear = () => {
       let mDate = toolbar.date;
       let newDate = new Date(mDate.getFullYear() - 1, 1);
       toolbar.onNavigate("prev", newDate);
     };
-    
+
     const goToNextYear = () => {
       let mDate = toolbar.date;
       let newDate = new Date(mDate.getFullYear() + 1, 1);
       toolbar.onNavigate("next", newDate);
     };
-    
+
     const month = () => {
       const date = moment(toolbar.date);
       let month = date.format("MMMM");
-    
+
       return <span className="rbc-toolbar-label">{month}</span>;
     };
     const year = () => {
       const date = moment(toolbar.date);
       let year = date.format("YYYY");
-    
+
       return (
         <span className="rbc-btn-group">
           {viewState === "month" && (
             <button type="button" onClick={goToBackYear}>
-              <span className="prev-icon">&#8249;&#8249;</span>
             </button>
           )}
           <span className="rbc-toolbar-label">{year}</span>
           {viewState === "month" && (
             <button type="button" onClick={goToNextYear}>
-              <span className="prev-icon">&#8250;&#8250;</span>
             </button>
           )}
         </span>
       );
     };
-    
+
     const day = () => {
       let view = viewState;
       const date = moment(toolbar.date);
@@ -787,52 +826,53 @@ const RightSide = (props) => {
       return <span className="rbc-toolbar-label">{day}</span>;
     };
     return (
-      <>
-      <div className="rbc-toolbar">
-        <span className="rbc-btn-group">
-        <button type="button" onClick={goToToday}>
-            <span className="next-icon">Today</span>
-          </button>
-          <button type="button" onClick={goToBack}>
-            <span className="prev-icon">&#8249; Back</span>
-          </button>
-          <button type="button" onClick={goToNext}>
-            <span className="next-icon">&#8250; Next</span>
-          </button>
-        </span>
-         {day()}
+        <div className="rbc-toolbar">
+          <span className="rbc-btn-group">
+            <button type="button" onClick={goToToday}>
+              <span className="next-icon">Today</span>
+            </button>
+            <button type="button" onClick={goToBack}>
+              <span className="prev-icon">Back</span>
+            </button>
+            <button type="button" onClick={goToNext}>
+              <span className="next-icon">Next</span>
+            </button>
+          </span>
+          {day()}
           {month()}
           {year()}
-        <span className="rbc-btn-group">
-        <button className="rbc-active" onClick={goToDayView}>
-            <span className="label-filter-off">Day</span>
-          </button>
-          <button className="" onClick={goToWeekView}>
-            <span className="label-filter-off">Week</span>
-          </button>
-          <button className="" onClick={goToMonthView}>
-            <span className="label-filter-off">Month</span>
-          </button>
-        </span>
-      </div>
-      {/* {calenderView === 'month' ?
-                <EventMenu>
-                  <h2>{today.toLocaleDateString("en-US", options)}</h2>
-                  {eventList ? eventList.map(v =>
-                    <>
-                      {v.name ?
-                        <div>
-                          <h3>{v.name}</h3>
-                          <span>{getDate(v.eventSchedule.start_time)}</span>
-                        </div> : null
-                      }
-                    </>) : null
-                  }
-                </EventMenu> : null */}
-              
-      </>
+          <span className="rbc-btn-group">
+            <button className="rbc-active" onClick={goToDayView}>
+              <span className="label-filter-off">Day</span>
+            </button>
+            <button className="" onClick={goToWeekView}>
+              <span className="label-filter-off">Week</span>
+            </button>
+            <button className="" onClick={goToMonthView}>
+              <span className="label-filter-off">Month</span>
+            </button>
+          </span>
+          {calenderView === 'month' ?
+          <EventMenu>
+            <h2>{today.toLocaleDateString("en-US", options)}</h2>
+            <h4>Upcoming Events in September</h4>
+            {eventList ? eventList.map(v =>
+              <>
+                {v.name ?
+                  <MonthEventList>
+                    <p>{v.name}</p>
+                    <span>{getDate(v.eventSchedule.start_time)}</span>
+                  </MonthEventList> : null
+                }
+              </>) : null
+            }
+          </EventMenu> : null
+        }
+        </div>
+        
+    
     );
-    };
+  };
 
   const getDate = (value) => {
     const date = new Date(value);
@@ -928,14 +968,14 @@ const RightSide = (props) => {
                       setIsOpen(true),
                       setDetails(e)
                     )}
-                     components={{
-                   toolbar: getCustomToolbar,
-                   }}
+                    components={{
+                      toolbar: getCustomToolbar,
+                    }}
                     defaultView="day"
                     step={60}
                     onView={(e) => setCalenderView(e)}
                     views={['day', 'week', 'month',]}
-                    style={{ height: 463, width: calenderView === 'month' ? '600px' : '100%' }}
+                    style={{ height: 463, width: calenderView === 'month' ? '100%' : '100%' }}
                   /> : <div className="loader"> <ValueLoader height="70" width="70" /></div>
 
                 }
@@ -1045,18 +1085,18 @@ const RightSide = (props) => {
                             <p>{v.content}</p>
                             <Icon>
                               <EditRomve>
-                            <img onClick={() => setToggle(v._id)} src={MoreIcon} alt="More" />
+                                <img onClick={() => setToggle(v._id)} src={MoreIcon} alt="More" />
 
-                              {toggle && id === v._id ?
-                                <Tooltip>
-                                  <EditModalBox setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={curators} value={content} />
-                                  <DeleteModalBox setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
-                                  <ul>
-                                  <li onClick={() => handleEdit(v)}>Edit</li>
-                                  <li onClick={() => handleDelete(v)}>Delete</li>
-                                  </ul>
-                                </Tooltip> : null
-                              }
+                                {toggle && id === v._id ?
+                                  <Tooltip>
+                                    <EditModalBox setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={curators} value={content} />
+                                    <DeleteModalBox setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
+                                    <ul>
+                                      <li onClick={() => handleEdit(v)}>Edit</li>
+                                      <li onClick={() => handleDelete(v)}>Delete</li>
+                                    </ul>
+                                  </Tooltip> : null
+                                }
                               </EditRomve>
 
                               <WishlistImg><img src={WishlistGrey} alt="" /><sup>3</sup></WishlistImg>
