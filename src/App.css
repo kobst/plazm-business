@@ -906,6 +906,7 @@ textarea{
     display: flex;
     align-items: center;
     justify-content: center;
+    
   }
   @media (max-width: 767px){
     .Modal.editModal {
@@ -915,4 +916,6 @@ textarea{
     margin-bottom:0px;
   }
   }
+
+
 
