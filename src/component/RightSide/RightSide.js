@@ -852,7 +852,7 @@ const RightSide = (props) => {
               <span className="label-filter-off">Month</span>
             </button>
           </span>
-          {calenderView === 'month' ?
+          {/* {calenderView === 'month' ?
           <EventMenu>
             <h2>{today.toLocaleDateString("en-US", options)}</h2>
             <h4>Upcoming Events in September</h4>
@@ -867,7 +867,7 @@ const RightSide = (props) => {
               </>) : null
             }
           </EventMenu> : null
-        }
+        } */}
         </div>
         
     
@@ -954,6 +954,20 @@ const RightSide = (props) => {
               <AddModalBox editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
 
               <CalenderSection>
+              <EventMenu>
+            <h2>{today.toLocaleDateString("en-US", options)}</h2>
+            <h4>Upcoming Events in September</h4>
+            {eventList ? eventList.map(v =>
+              <>
+                {v.name ?
+                  <MonthEventList>
+                    <p>{v.name}</p>
+                    <span>{getDate(v.eventSchedule.start_time)}</span>
+                  </MonthEventList> : null
+                }
+              </>) : null
+            }
+                </EventMenu>
                 {typeof event !== 'undefined' ?
                   <Calendar
                     className="CalenderSec"

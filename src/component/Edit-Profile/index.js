@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import styled from 'styled-components'
 import Card from '../UI/Card/Card'
 import MapImg from '../../images/map.png'
@@ -8,6 +8,7 @@ import Input from '../UI/Input/Input'
 import ButtonSmall from '../UI/ButtonSmall'
 import Badges from '../UI/Badges'
 import PlusIcon from '../../images/plus-img.svg'
+import history from '../../utils/history'
 
 const ProfileOuter = styled.div`
 display:flex;
@@ -193,7 +194,118 @@ const Button = styled.button`
   }
 `
 
-const EditProfile = () => {
+const EditProfile = ({value}) => {
+  const [company,setCompany] = useState()
+  const [website,setWebsite] = useState()
+  const [phone,setPhone] = useState()
+  const [rating,setRating] = useState()
+  const [type,setType] = useState()
+  const [status,setStatus] = useState()
+  const [map,setMap] = useState()
+  const [latitude,setLatitude] = useState()
+  const [longitude,setLongitude] = useState()
+  const [userAddress,setAddress] = useState()
+
+  useEffect(()=> {
+    if(typeof value!=='undefined'){
+    if(value.company_name){
+      setCompany(value.company_name)
+    }
+    if(value.web_site){
+      setWebsite(value.web_site)
+    }
+    if(value.telephone){
+      setPhone(value.telephone)
+    }
+    if(value.rating){
+      setRating(value.rating)
+    }
+    if(value.type){
+      setType(value.type)
+    }
+    if(value.status){
+      setStatus(value.status)
+    }
+    if(value.map_link){
+      setMap(value.map_link)
+    }
+    if(value.latitude){
+      setLatitude(value.latitude)
+    }
+    if(value.longitude){
+      setLongitude(value.longitude)
+    }
+    if(value.address){
+      setAddress(value.address)
+    }
+  }
+
+
+  },[value])
+
+  const updateBusiness = async () => {
+    const response= await fetch(`${process.env.REACT_APP_API_URL}/api/place`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({  
+            _id:value._id,
+            status: status,
+            userAddress: userAddress,
+            telephone: phone,
+            companyName:company,
+            placeId: value.place_id,
+            mapLink:map,
+            type:type,
+            rating: rating,
+            website: website,
+            userSub: value.userSub,
+            latitude: latitude,
+            longitude: longitude,
+                
+            
+      })
+    });
+      const body = await response.text();
+      window.location.reload() 
+      return body
+
+}
+
+const handleSubmit = () => {
+  updateBusiness()
+
+}
+  
+
+  const handleChange = (e) => {
+    if (e.target.id === 'company') {
+        setCompany(e.target.value)
+    }
+    else if (e.target.id === 'add') {
+      setAddress(e.target.value)
+}
+    else if (e.target.id === 'website') {
+        setWebsite(e.target.value)
+      }
+     else if (e.target.id === 'phone') {
+      setPhone(e.target.value)
+    } else if (e.target.id === 'rating') {
+      setRating(e.target.value)
+    } else if (e.target.id === 'type') {
+      setType(e.target.value)
+    } else if (e.target.id === 'status') {
+      setStatus(e.target.value)
+    }else if (e.target.id === 'map') {
+        setMap(e.target.value)
+    }else if (e.target.id === 'lat') {
+        setLatitude(e.target.value)
+    }else if (e.target.id === 'long') {
+          setLongitude(e.target.value)
+   } 
+}
+
   return (
     <ProfileOuter>
       <p>Edit Profile</p>
@@ -209,14 +321,14 @@ const EditProfile = () => {
                 <TopProfile>NK</TopProfile>
                 <LabelRight>
                   <Label name="Business Name"></Label>
-                  <Input />
+                  <Input type="text" id='company' placeholder="Business Name" value={company}  onChange={ (e) => handleChange(e)} />
                 </LabelRight>
               </FlexRow>
 
             </FormGroup>
             <FormGroup>
               <Label name="Address"></Label>
-              <Input />
+        <Input type="text" id='add' placeholder="Address" value={userAddress}  onChange={ (e) => handleChange(e)} />
 
               <div className="mt-15">
                 <FlexRow>
@@ -228,27 +340,27 @@ const EditProfile = () => {
             </FormGroup>
             <FormGroup>
               <Label name="Phone"></Label>
-              <Input />
+              <Input type="text" id='phone' placeholder="Phone Number" value={phone}  onChange={ (e) => handleChange(e)} />
             </FormGroup>
             <FormGroup>
               <Label name="Website"></Label>
-              <Input />
+              <Input type="text" id='website' placeholder="Website" value={website}  onChange={ (e) => handleChange(e)} />
             </FormGroup>
             <FormGroup>
-              <Label name="Facebook Profile"></Label>
-              <Input />
+              <Label name="Rating"></Label>
+              <Input type="text" id='rating' placeholder="Rating" value={rating}  onChange={ (e) => handleChange(e)} />
             </FormGroup>
             <FormGroup>
-              <Label name="Twiiter Profile"></Label>
-              <Input />
+              <Label name="Map Link"></Label>
+              <Input type="text" id='map' placeholder="Map Link" value={map}  onChange={ (e) => handleChange(e)} />
             </FormGroup>
             <FormGroup>
-              <Label name="LinkedIN Profile"></Label>
-              <Input />
+              <Label name="Type"></Label>
+              <Input type="text" id='type' placeholder="Type" value={type}  onChange={ (e) => handleChange(e)} />
             </FormGroup>
             <FormGroup>
-              <Label name="Instagtam Profile"></Label>
-              <Input />
+              <Label name="Status"></Label>
+              <Input type="text" id='status' placeholder="Status" value={status}  onChange={ (e) => handleChange(e)} />
             </FormGroup>
           </Card>
         </RightProfile>
@@ -276,8 +388,8 @@ const EditProfile = () => {
       <row>
         <Card>
           <FlexRow>
-            <ButtonSmall maxWidth="110px" bgColor="#FF7171" style={{ marginLeft: 'auto', marginRight: '10px' }}>Cancle</ButtonSmall>
-            <ButtonSmall maxWidth="110px" >Save</ButtonSmall>
+            <ButtonSmall onClick={()=>(history.push(`/dashboard`),window.location.reload())} maxWidth="110px" bgColor="#FF7171" style={{ marginLeft: 'auto', marginRight: '10px' }}>Cancle</ButtonSmall>
+            <ButtonSmall onClick={() => handleSubmit()} maxWidth="110px" >Save</ButtonSmall>
           </FlexRow>
         </Card>
       </row>
