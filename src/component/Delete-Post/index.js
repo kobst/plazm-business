@@ -1,5 +1,6 @@
 import React from 'react'
 import Modal from 'react-modal'
+import crossIocn from '../../images/cross-black.svg'
 
 // import closeIcon from '../../images/close-icon.svg'
 
@@ -25,26 +26,28 @@ const DeleteModalBox = ({ isOpen,closeModal,postId,setDeleteOpen}) => {
 
   }
 
+
+ const onCancel=()=>{
+     closeModal()
+ }
+
   return (
     <div>
       <Modal
         isOpen={isOpen}
         // onAfterOpen={this.afterOpenModal}
          onRequestClose={()=> closeModal()}
-        className="Modal"
+        className="Modal editModal"
         overlayClassName="Overlay"
         htmlOpenClassName="ReactModal__Html--open"
       >
         <div className="ModalHeader">
-          {/* <button onClick={closeModal}>
-            <img src={closeIcon} alt="Close" />
-          </button> */}
             <h3>Delete Post</h3> 
+            <Button onClick={() => onCancel()} type="submit" className="btn btn-primary cancel"><img src={crossIocn} alt="Delete" /></Button>
         </div>
         <div className="ContentModal">
         <label>Are you sure you want to delete the post?</label>
         <div className="modalButton">
-              <Button onClick={()=>closeModal()}  type="submit" className="btn btn-primary cancel">Cancel</Button>
               <Button onClick={()=>handleDelete()}  type="submit" className="btn btn-primary">Delete</Button>
             </div>
      </div>

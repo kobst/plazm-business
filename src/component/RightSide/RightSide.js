@@ -1,52 +1,43 @@
-/* eslint-disable no-sequences */
-import React, {
-  useState,
-  useEffect
-} from 'react'
+
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Tabs from '../UI/Tabs/Tabs'
 import Card from '../UI/Card/Card'
 import Listing from '../UI/Listing/Listing'
 import Search from '../UI/Search/Search'
-import ChatBox from '../UI/ChatBox/ChatBox'
-import {
-  Auth
-} from 'aws-amplify';
-import {
-  Link
-} from "react-router-dom";
+import { Auth } from 'aws-amplify';
+import { Link } from "react-router-dom";
 import AddModalBox from '../Add-Event/index'
 import PostModalBox from '../Post-Modal'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
-import {
-  callPlace,
-  fetchItems,
-  fetchUsers
-} from '../../Api'
+import { callPlace, fetchItems, fetchUsers } from '../../Api'
 import ValueLoader from '../../utils/loader'
-import {
-  RRule
-} from 'rrule'
+import { RRule } from 'rrule'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { Multiselect } from 'multiselect-react-dropdown';
+// import { Multiselect } from 'multiselect-react-dropdown';
 import UserImage from '../../images/user-img.png'
 import EventImg from '../../images/eventimg.png'
 import SubHeading from '../UI/SubHeading'
 import ButtonSmall from '../UI/ButtonSmall'
 import Textarea from '../UI/Textarea'
 import CrossIcon from '../../images/cross-icon.svg'
-import UploadImg from '../../images/upload-img1.png'
 import UserIcon from '../../images/user.svg'
 import WishlistIcon from '../../images/wishlist-icon.svg'
+import WishlistGrey from '../../images/wishlist-grey.svg'
+import CommentGrey from '../../images/comment-grey.svg'
 import CommentIcon from '../../images/comment.svg'
 import SortIcon from '../../images/sort.svg'
 import UploadIocn from '../../images/upload.svg'
-import CloseIcon from '../../images/close.svg'
 import GallerySec from '../UI/Gallery'
 import Tooltip from '../UI/Tooltip'
 import EventSkeleton from '../UI/Skeleton/EventsSkeleton'
 import PostSkeleton from '../UI/Skeleton/PostSkeleton'
+import Mention from 'react-textarea-mention';
+import EditModalBox from '../Edit-Post'
+import DeleteModalBox from '../Delete-Post'
+import MoreIcon from '../../images/more.svg'
 
 const RightSection = styled.div`
 
@@ -93,6 +84,7 @@ margin-right:0px;
 `
 const CalenderSection = styled.div`
 margin-top:50px;
+min-height:463px
 @media (max-width:767px){
   margin-top:20px;
 }
@@ -103,6 +95,9 @@ padding:0px;
 width:38%;
 margin-left:5px;
 position:relative;
+>div:last-child{
+  min-height:897px;
+}
 &:after{
   background: linear-gradient(180deg,rgba(255,255,255,0) -51.89%,#FFFFFF 79.25%);
   border-radius: 0px 0px 24px 24px;
@@ -158,8 +153,49 @@ padding:0px;
 max-height:566px;
 overflow-y:auto;
 position:relative;
-width:200px;
+width:300px;
 float:left;
+padding:25px;
+background: #f7fdff;
+border: 1px solid #f2acaa;
+border-radius: 25px;
+h2{
+  color: #FF479D;
+  font-size: 24px;
+  line-height: 36px;
+  font-weight:normal;
+}
+h4{
+  border-top:1px solid rgba(157, 157, 157, 0.5);
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 36px;
+  color: #979797;
+  margin: 25px 0 7px;
+  padding-top: 15px;
+}
+`
+const MonthEventList = styled.div`
+background: linear-gradient(151.13deg, #C643FC 0%, #FF7171 114.93%);
+border: 1px solid #FFFFFF;
+box-sizing: border-box;
+border-radius: 5px;
+color:#fff;
+display: flex;
+justify-content: space-between;
+padding: 4px;
+margin-bottom:5px;
+p{
+font-weight: 500;
+font-size: 10px;
+line-height: inherit;
+}
+span{
+font-size: 9px;
+position: relative;
+top: 1px;
+margin-left:5px;
+}
 `
 const EventListing = styled.div`
 padding: 15px;
@@ -178,7 +214,7 @@ border: 1px solid #FF479D;
 }
 `
 const FeedListing = styled.div`
-padding: 15px 15px 0;
+padding: 15px 15px 15px;
 background: #FAFDFF;
 border: 1px solid #E2F1F8;
 box-sizing: border-box;
@@ -202,51 +238,40 @@ p{
 }
 
 }`
+const WishlistImg = styled.div`
+margin-left: 13px;
+position:relative;
+cursor:pointer;
+display:flex;
+align-items: center;
+img{
+  height: 16px;
+  width: 17px;
+}
+`
+const CommentImg = styled.div`
+margin-left: 13px;
+position:relative;
+cursor:pointer;
+display:flex;
+align-items: center;
+img{
+  height: 16px;
+  width: 17px;
+}
+`
 const Icon = styled.div`
 display: flex;
 align-items: center;
 justify-content: flex-end;
 margin-top: 10px;
-div:first-child{
-  div{
-    visibility:hidden;
-    margin-left: 0;
-  }
-  :hover{
-    div{
-      visibility:visible;
-    }
-  }
-}
-div{
-  margin-left: 13px;
-  position:relative;
-  cursor:pointer;
-  display:flex;
-  align-items: center;
-  padding-bottom:10px;
-}
 sup{
-  background: #FF479D;
-  width: 14px;
-  height: 14px;
-  color: #fff;
-  border-radius: 100%;
-  font-size: 9px;
-  font-weight: 700;
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  top: -7px;
-  right: -7px;
+  font-size: 18px;
+  line-height: 15px;
+  color: #D2D2D2;
+  margin-left: 10px;
 }
-div:last-child{
-  sup{
-    top: -2px;
-    right: -3px;
-  }
-}
+
 `
 const FeedImage = styled.div`
 width:53px;
@@ -255,9 +280,10 @@ border:2px solid #fff;
 overflow:hidden;
 margin-right:10px;
 border-radius:100%;
+box-shadow:0px 14px 10px rgba(0, 0, 0, 0.07);
 `
 const EventText = styled.div`
-padding-right:30px;
+width:calc(100% - 200px;)
 h3{
 margin:0px;
 font-weight: normal;
@@ -277,12 +303,33 @@ line-height: 15px;
 color:#626262;
 margin: 3px 0 0 0;
 }
+@media (max-width:991px){
+  width:calc(100% - 100px;)
+}
+`
+const EditRomve = styled.div`
+position:relative;
+cursor:pointer;
+margin-right: auto;
+display:flex;
+align-items:center;
+div:first-child{
+  padding:0px;
+}
+div:empty{
+  display:none;
+}
+div{
+  padding:10px;
+}
+
+
 `
 
 const EventImage = styled.div`
 border-radius: 9px;
 overflow:hidden;
-
+padding-left:30px;
 `
 const TabsOuter = styled.div`
 margin-left:auto;
@@ -341,7 +388,7 @@ align-items: center;
 margin-top:15px;
 `
 
- moment.locale('en-GB')
+moment.locale('en-GB')
 const localizer = momentLocalizer(moment)
 const RightSide = (props) => {
   const { loading } = props;
@@ -363,7 +410,15 @@ const RightSide = (props) => {
   const [activeMentions, setActiveMentions] = useState(false)
   const [mess, setActiveMess] = useState(false)
   const [allMentions, setAllMentions] = useState()
-  const [calenderView,setCalenderView]= useState()
+  const [calenderView, setCalenderView] = useState()
+  const [toggle, setToggleMenu] = useState(false)
+  const [id, setId] = useState()
+  const [isModelOpen, setIsModelOpen] = useState(false)
+  const [deleteOpen, setDeleteOpen] = useState(false)
+  const [content, setContent] = useState()
+  const [viewState,setViewState]= useState('month')
+  const [monthEvent,setMonthEvent]= useState()
+  const [eventCopy,setEventCopy]= useState()
 
   useEffect(() => {
     let updateUser = async authState => {
@@ -395,6 +450,7 @@ const RightSide = (props) => {
           setAllFeed(feed)
           setAllMentions(allMentions)
           eventManage(sol)
+          monthEventManage(sol)
         }
         else {
           let eventArr = []
@@ -434,6 +490,10 @@ const RightSide = (props) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mentions])
+  function onlyUnique(value, index, self) { 
+    return self.indexOf(value) === index;
+}
+
 
   const eventManage = (sol) => {
     let eventArr = []
@@ -453,8 +513,8 @@ const RightSide = (props) => {
           count: 30,
           interval: 1
         })
-        weeklyStartRule.all().forEach((num1, index) => {
-          const num2 = weeklyEndRule.all()[index];
+        weeklyStartRule.all().filter(onlyUnique).forEach((num1, index) => {
+          const num2 = weeklyEndRule.all().filter(onlyUnique)[index];
           eventArr.push({
             id: v._id,
             title: v.name,
@@ -463,6 +523,7 @@ const RightSide = (props) => {
           })
         });
         setEvent(eventArr)
+        setEventCopy(eventArr)
       }
       else if (v.eventSchedule.recurring === 'daily' || v.eventSchedule.recurring === 'Daily') {
         const dailyStartRule = new RRule({
@@ -477,8 +538,8 @@ const RightSide = (props) => {
           count: 30,
           interval: 1
         })
-        dailyStartRule.all().forEach((num1, index) => {
-          const num2 = dailyEndRule.all()[index];
+        dailyStartRule.all().filter(onlyUnique).forEach((num1, index) => {
+          const num2 = dailyEndRule.all().filter(onlyUnique)[index];
           eventArr.push({
             id: v._id,
             title: v.name,
@@ -486,6 +547,8 @@ const RightSide = (props) => {
             end: num2,
           })
         });
+        console.log(dailyStartRule.all())
+        setEventCopy(eventArr)
         setEvent(eventArr)
       }
       else if (v.eventSchedule.recurring === 'mondayFriday' || v.eventSchedule.recurring === 'Monday-Friday') {
@@ -503,8 +566,8 @@ const RightSide = (props) => {
           interval: 1,
           byweekday: [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR]
         })
-        weekDayStartRule.all().forEach((num1, index) => {
-          const num2 = weekDayEndRule.all()[index];
+        weekDayStartRule.all().filter(onlyUnique).forEach((num1, index) => {
+          const num2 = weekDayEndRule.all().filter(onlyUnique)[index];
           eventArr.push({
             id: v._id,
             title: v.name,
@@ -512,6 +575,7 @@ const RightSide = (props) => {
             end: num2,
           })
         });
+        setEventCopy(eventArr)
         setEvent(eventArr)
       }
       else {
@@ -522,10 +586,100 @@ const RightSide = (props) => {
           end: v.eventSchedule.end_time,
           allDay: true
         })
+        setEventCopy(eventArr)
         setEvent(eventArr)
 
       }
     })
+  }
+  const monthEventManage= (sol)=> {
+    let eventArr = []
+    setMonthEvent(eventArr)
+    // eslint-disable-next-line array-callback-return
+    sol.map(v => {
+      if (v.eventSchedule.recurring === 'weekly' || v.eventSchedule.recurring === 'Weekly') {
+        const weeklyStartRule = new RRule({
+          freq: RRule.WEEKLY,
+          dtstart: new Date(v.eventSchedule.start_time),
+          count: 30,
+          interval: 1
+        })
+        const weeklyEndRule = new RRule({
+          freq: RRule.WEEKLY,
+          dtstart: new Date(v.eventSchedule.end_time),
+          count: 30,
+          interval: 1
+        })
+        weeklyStartRule.all().filter(onlyUnique).forEach((num1, index) => {
+          const num2 = weeklyEndRule.all().filter(onlyUnique)[index];
+          eventArr.push({
+            id: v._id,
+            start: num1,
+            end: num2,
+          })
+        });
+        setMonthEvent(eventArr)
+      }
+      else if (v.eventSchedule.recurring === 'daily' || v.eventSchedule.recurring === 'Daily') {
+        const dailyStartRule = new RRule({
+          freq: RRule.DAILY,
+          dtstart: new Date(v.eventSchedule.start_time),
+          count: 30,
+          interval: 1
+        })
+        const dailyEndRule = new RRule({
+          freq: RRule.DAILY,
+          dtstart: new Date(v.eventSchedule.end_time),
+          count: 30,
+          interval: 1
+        })
+        dailyStartRule.all().filter(onlyUnique).forEach((num1, index) => {
+          const num2 = dailyEndRule.all().filter(onlyUnique)[index];
+          eventArr.push({
+            id: v._id,
+            start: num1,
+            end: num2,
+          })
+        });
+        setMonthEvent(eventArr)
+      }
+      else if (v.eventSchedule.recurring === 'mondayFriday' || v.eventSchedule.recurring === 'Monday-Friday') {
+        const weekDayStartRule = new RRule({
+          freq: RRule.WEEKLY,
+          dtstart: new Date(v.eventSchedule.start_time),
+          count: 60,
+          interval: 1,
+          byweekday: [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR]
+        })
+        const weekDayEndRule = new RRule({
+          freq: RRule.WEEKLY,
+          dtstart: new Date(v.eventSchedule.end_time),
+          count: 60,
+          interval: 1,
+          byweekday: [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR]
+        })
+        weekDayStartRule.all().filter(onlyUnique).forEach((num1, index) => {
+          const num2 = weekDayEndRule.all().filter(onlyUnique)[index];
+          eventArr.push({
+            id: v._id,
+            start: num1,
+            end: num2,
+          })
+        });
+        setMonthEvent(eventArr)
+      }
+      else {
+        eventArr.push({
+          id: v._id,
+          start: v.eventSchedule.start_time,
+          end: v.eventSchedule.end_time,
+          allDay: true
+        })
+        setMonthEvent(eventArr)
+
+      }
+    })
+
   }
   const ConvertNumberToTwoDigitString = (n) => {
     return n > 9 ? "" + n : "0" + n;
@@ -546,11 +700,185 @@ const RightSide = (props) => {
       }
     }
   }
+  const handleEdit = (v) => {
+    setIsModelOpen(true)
+    setContent(v)
+  }
+
+  const handleDelete = (v) => {
+    setDeleteOpen(true)
+    setId(v._id)
+  }
+  const getCustomToolbar = (toolbar) => {
+   const toolbarDate = toolbar.date;
+    const goToDayView = () => {
+      setEvent(eventCopy)
+    toolbar.onView("day")
+    setViewState('day')
+    }
+    const goToWeekView = () => {
+      setEvent(eventCopy)
+    toolbar.onView("week")
+    setViewState('week')
+    };
+    const goToMonthView = () => {
+      setEvent(monthEvent)
+    toolbar.onView("month")
+    setViewState('month')
+    };
+    const goToBack = () => {
+      let view = viewState
+      let mDate = toolbar.date
+      let newDate
+      if (view === "month") {
+        newDate = new Date(mDate.getFullYear(), mDate.getMonth() - 1, 1);
+      } else if (view === "week") {
+        newDate = new Date(
+          mDate.getFullYear(),
+          mDate.getMonth(),
+          mDate.getDate() - 7,
+          1
+        );
+      } else {
+        newDate = new Date(
+          mDate.getFullYear(),
+          mDate.getMonth(),
+          mDate.getDate() - 1,
+          1
+        );
+      }
+      toolbar.onNavigate("prev", newDate);
+    };
+    const goToNext = () => {
+      let view = viewState;
+      let mDate = toolbar.date;
+      let newDate;
+      if (view === "month") {
+        newDate = new Date(mDate.getFullYear(), mDate.getMonth() + 1, 1);
+      } else if (view === "week") {
+        newDate = new Date(
+          mDate.getFullYear(),
+          mDate.getMonth(),
+          mDate.getDate() + 7,
+          1
+        );
+      } else {
+        newDate = new Date(
+          mDate.getFullYear(),
+          mDate.getMonth(),
+          mDate.getDate() + 1,
+          1
+        );
+      }
+      toolbar.onNavigate("next", newDate);
+    };
+
+    const goToToday = () => {
+      const now = new Date();
+      toolbar.date.setMonth(now.getMonth());
+      toolbar.date.setYear(now.getFullYear());
+      toolbar.onNavigate("current");
+    };
+
+    const goToBackYear = () => {
+      let mDate = toolbar.date;
+      let newDate = new Date(mDate.getFullYear() - 1, 1);
+      toolbar.onNavigate("prev", newDate);
+    };
+
+    const goToNextYear = () => {
+      let mDate = toolbar.date;
+      let newDate = new Date(mDate.getFullYear() + 1, 1);
+      toolbar.onNavigate("next", newDate);
+    };
+
+    const month = () => {
+      const date = moment(toolbar.date);
+      let month = date.format("MMMM");
+
+      return <span className="rbc-toolbar-label">{month}</span>;
+    };
+    const year = () => {
+      const date = moment(toolbar.date);
+      let year = date.format("YYYY");
+
+      return (
+        <span className="rbc-btn-group">
+          {viewState === "month" && (
+            <button type="button" onClick={goToBackYear}>
+            </button>
+          )}
+          <span className="rbc-toolbar-label">{year}</span>
+          {viewState === "month" && (
+            <button type="button" onClick={goToNextYear}>
+            </button>
+          )}
+        </span>
+      );
+    };
+
+    const day = () => {
+      let view = viewState;
+      const date = moment(toolbar.date);
+      let day;
+      if (view === "day") {
+        day = date.format("ddd") + " " + date.format("Do");
+      }
+      return <span className="rbc-toolbar-label">{day}</span>;
+    };
+    return (
+        <div className="rbc-toolbar">
+          <span className="rbc-btn-group">
+            <button type="button" onClick={goToToday}>
+              <span className="next-icon">Today</span>
+            </button>
+            <button type="button" onClick={goToBack}>
+              <span className="prev-icon">Back</span>
+            </button>
+            <button type="button" onClick={goToNext}>
+              <span className="next-icon">Next</span>
+            </button>
+          </span>
+          {day()}
+          {month()}
+          {year()}
+          <span className="rbc-btn-group">
+            <button className="rbc-active" onClick={goToDayView}>
+              <span className="label-filter-off">Day</span>
+            </button>
+            <button className="" onClick={goToWeekView}>
+              <span className="label-filter-off">Week</span>
+            </button>
+            <button className="" onClick={goToMonthView}>
+              <span className="label-filter-off">Month</span>
+            </button>
+          </span>
+          {calenderView === 'month' ?
+          <EventMenu>
+            <h2>{today.toLocaleDateString("en-US", options)}</h2>
+            <h4>Upcoming Events in September</h4>
+            {eventList ? eventList.map(v =>
+              <>
+                {v.name ?
+                  <MonthEventList>
+                    <p>{v.name}</p>
+                    <span>{getDate(v.eventSchedule.start_time)}</span>
+                  </MonthEventList> : null
+                }
+              </>) : null
+            }
+          </EventMenu> : null
+        }
+        </div>
+        
+    
+    );
+  };
 
   const getDate = (value) => {
     const date = new Date(value);
     const time = ConvertNumberToTwoDigitString(date.getHours()) +
-      ":" + ConvertNumberToTwoDigitString(date.getMinutes());
+      ":" + ConvertNumberToTwoDigitString(date.getMinutes()) + "," + (date.toLocaleString()).substring(0, 10);
     return time
 
   }
@@ -574,6 +902,17 @@ const RightSide = (props) => {
       return true
     }
   }
+  const setToggle = (v) => {
+    setId(v)
+    if (toggle === true) {
+      console.log('okkay')
+      setToggleMenu(false)
+    }
+    else {
+      console.log('okkay1')
+      setToggleMenu(true)
+    }
+  }
   const addPost = async () => {
     if (Validation()) {
       setSaveDisable(true)
@@ -595,9 +934,10 @@ const RightSide = (props) => {
 
   }
   const handleChange = (e) => {
-    setDescription(e.target.value)
+    setDescription(e)
   }
-
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  var today = new Date();
   // const options = [{name: 'John Watson', id: 1},{name: 'Marie Curie', id: 2}]
 
   return (
@@ -613,22 +953,6 @@ const RightSide = (props) => {
               </FlexRow>
 
               <AddModalBox editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
-              { calenderView ==='month'?
-           <EventMenu>
-          { eventList? eventList.map(v=>
-          <>
-           { v.name ?
-         <div>
-          <h3>{v.name}</h3>
-          <p>{v.eventSchedule.recurring}</p>
-          <span>{getDate(v.eventSchedule.start_time)} to {getDate(v.eventSchedule.end_time)}</span>
-          <p>{v.content}</p>
-          </div>:null
-          }
-          </> ): null
-          }
-       </EventMenu>:null
-         }
 
               <CalenderSection>
                 {typeof event !== 'undefined' ?
@@ -645,11 +969,14 @@ const RightSide = (props) => {
                       setIsOpen(true),
                       setDetails(e)
                     )}
+                    components={{
+                      toolbar: getCustomToolbar,
+                    }}
                     defaultView="day"
                     step={60}
-                    onView={(e)=>setCalenderView(e)}
+                    onView={(e) => setCalenderView(e)}
                     views={['day', 'week', 'month',]}
-                    style={{ height: 463, width:calenderView === 'month'? '600px':'100%' }}
+                    style={{ height: 463, width: calenderView === 'month' ? '100%' : '100%' }}
                   /> : <div className="loader"> <ValueLoader height="70" width="70" /></div>
 
                 }
@@ -672,7 +999,7 @@ const RightSide = (props) => {
                             <p>{v.content}</p>
                           </EventText>
                           <EventImage><img src={EventImg} alt="Event" /></EventImage>
-                        </EventListing> :  null
+                        </EventListing> : null
                       }
                     </>) : <><EventSkeleton /><EventSkeleton /><EventSkeleton /><EventSkeleton /></>
                   }
@@ -684,7 +1011,13 @@ const RightSide = (props) => {
             <Card>
               <SubHeading name="Write a Post" />
               <div className="mt-15">
-                <Textarea />
+                {/* <Textarea /> */}
+                <Mention
+                  onChange={handleChange}
+                  field="name"
+                  data={curators}
+                />
+
                 <div className="mt-10">
                   <FlexRow style={{ padding: '0px' }}>
                     <ButtonSmall bgColor="#0FB1D2"><img src={UploadIocn} alt="Upload" />Upload</ButtonSmall>
@@ -699,17 +1032,17 @@ const RightSide = (props) => {
                       style={{ marginLeft: 'auto', marginRight: '9px' }}>
                       <img src={CrossIcon} alt="Cross Icon" style={{ marginRight: '0px' }} />
                     </ButtonSmall> */}
-                    <ButtonSmall>Publish</ButtonSmall>
+                    <ButtonSmall disabled={saveDisable} onClick={() => addPost()}>Publish</ButtonSmall>
                   </FlexRow>
                 </div>
               </div>
             </Card>
-            <Card>
+            <Card style={{ minHeight: '897px' }}>
               <FlexRow>
                 <SubHeading name="Feed" />
                 <TabsOuter>
                   <Tabs isActive={activePublic} setMentions={setMentions} name="Public" image={UserIcon} />
-                  <Tabs isActive={mess} setMentions={setMentions} name="Message" image={CommentIcon} />
+                  <Tabs className="M2" isActive={mess} setMentions={setMentions} name="Message" image={CommentIcon} />
                 </TabsOuter>
               </FlexRow>
 
@@ -744,24 +1077,40 @@ const RightSide = (props) => {
                     </FeedListing> */}
                     {/* <PostModalBox isOpen={isOpen} closeModal={() => setIsOpen(false)} /> */}
                     {typeof allFeed !== 'undefined' ?
-                    allFeed.map( v=> (
-                    <FeedListing>
-                      <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
-                      <EventText>
-                        <span>{(new Date(v.updatedAt).toLocaleString()).substring(0, 10)}</span>
-                        <h3>{v.name? v.name:place.company_name}</h3>
-                        <p>{v.content}</p>
-                        <Icon>
-                          <div><img src={WishlistIcon} alt="" /><sup>3</sup></div>
-                          <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
-                        </Icon>
-                      </EventText>
-                    </FeedListing>)):null
+                      allFeed.map(v => (
+                        <FeedListing>
+                          <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
+                          <EventText>
+                            <span>{(new Date(v.updatedAt).toLocaleString()).substring(0, 10)}</span>
+                            <h3>{v.name ? v.name : place.company_name}</h3>
+                            <p>{v.content}</p>
+                            <Icon>
+                              <EditRomve>
+                                <img onClick={() => setToggle(v._id)} src={MoreIcon} alt="More" />
+
+                                {toggle && id === v._id ?
+                                  <Tooltip>
+                                    <EditModalBox setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={curators} value={content} />
+                                    <DeleteModalBox setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
+                                    <ul>
+                                      <li onClick={() => handleEdit(v)}>Edit</li>
+                                      <li onClick={() => handleDelete(v)}>Delete</li>
+                                    </ul>
+                                  </Tooltip> : null
+                                }
+                              </EditRomve>
+
+                              <WishlistImg><img src={WishlistGrey} alt="" /><sup>3</sup></WishlistImg>
+                              <CommentImg><img src={CommentGrey} alt="" /><sup>3</sup></CommentImg>
+
+                            </Icon>
+                          </EventText>
+                        </FeedListing>)) : null
                     }
 
-                    
 
-                  
+
+
                   </div>
                 </> : <><PostSkeleton /><PostSkeleton /><PostSkeleton /></>
               }
@@ -971,8 +1320,9 @@ const RightSide = (props) => {
           <ChatBox />
         </Card>
       </Row> */}
-     </RightSection>)
 
+    </RightSection>
+  )
 }
 
 export default RightSide

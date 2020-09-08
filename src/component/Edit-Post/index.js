@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import Modal from 'react-modal'
 import Mention from 'react-textarea-mention';
 import Button from '../UI/Button/Button'
+import crossIocn from '../../images/cross-black.svg'
+import Label from '../UI/Label/label'
 
 
 const EditModalBox = ({ isOpen,closeModal,users,value,setIsOpen}) => {
@@ -60,18 +62,16 @@ const handleChange = (e) => {
         isOpen={isOpen}
         // onAfterOpen={this.afterOpenModal}
          onRequestClose={()=> onCancel()}
-        className="Modal"
+        className="Modal editModal"
         overlayClassName="Overlay"
         htmlOpenClassName="ReactModal__Html--open"
       >
         <div className="ModalHeader">
-          {/* <button onClick={closeModal}>
-            <img src={closeIcon} alt="Close" />
-          </button> */}
             <h3>Edit Post</h3> 
+            <Button onClick={() => onCancel()} type="submit" className="btn btn-primary cancel"><img src={crossIocn} alt="Delete" /></Button>
         </div>
         <div className="ContentModal">
-        <label>Post Description</label>
+        <Label name="Post Description"/>
         <Mention
          textAreaProps={{defaultValue:description}}
         onChange={handleChange}
@@ -79,7 +79,6 @@ const handleChange = (e) => {
          data={users}
       />
         <div className="modalButton">
-              <Button onClick={()=>onCancel()} disabled={saveDisable} type="submit" className="btn btn-primary cancel">Cancel</Button>
               <Button onClick={()=>handleEdit()} type="submit" className="btn btn-primary">Save</Button>
             </div>
      </div>

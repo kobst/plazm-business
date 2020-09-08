@@ -1,14 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
 import Links from '../../UI/Link/Link'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Button from '../../UI/Button/Button'
 import Input from '../../UI/Input/Input'
-import SearchLocationInput  from '../../../utils/findYourBusiness'
+import SearchLocationInput from '../../../utils/findYourBusiness'
 import ValueLoader from '../../../utils/loader'
 import Label from '../../UI/Label/label'
 
-const FormGroup = styled.div `
+const FormGroup = styled.div`
 margin-bottom:22px;
 position:relative;
 h6{
@@ -20,23 +20,6 @@ h6{
   }
 
 
-`
-const Row = styled.div`
-height: 100%;
-display: table-row;
-display: flex;
-justify-content: space-between;
-> div{
-    display: table-cell; 
-    width: 48%;
-}
-@media (max-width:767px){
-    display: block;
-    > div{
-        display: block;
-        width:100%;
-    }
-}
 `
 const FindYourBusinessWrapper = styled.div`
 h2{
@@ -50,10 +33,11 @@ p{
     line-height: 10px;
     margin:20px 0 30px;
     color:#000;
+    line-height:14px;
 }
 
 
-` 
+`
 const ErrorMessage = styled.div`
 font-style: normal;
 font-weight: normal;
@@ -67,80 +51,81 @@ margin-top: 6px;
 `
 
 
-const RegisterForm = ({verified,err,firstError, business,loader,setbusiness,setBusinessInfo,setName, message,type,locationError,codeError,firstNameError,phoneError,emailError,passwordError,handleChange,handleSubmit}) => {
-return (
-    <>
-{ verified ? ( <form onSubmit={ (e)=> handleSubmit(e) }>
-<Row>
-        <div className="col-md-12">
-        <p> Enter the Confirmation code sent to your Registered Email</p>
-            <FormGroup>
-                <Label name="Confirmation Code" />
-                <Input id='confirmationCode' type='text' onChange={ (e) => handleChange(e)} placeholder=""/>
-                {codeError ?<ErrorMessage>Confirmation code does not match</ErrorMessage>: null}
-            </FormGroup>
-            <Button type="submit" className="btn btn-primary">{loader && !codeError? <ValueLoader /> : 'Confirm Sign up'}</Button>
-    
-         </div>
-</Row>
-</form> ) :
-<form onSubmit={ (e)=> handleSubmit(e) }>
-
-            <FormGroup>
-            <Label name="Business Name" />
-                <Input type="text" id="username" onChange={ (e) => handleChange(e) }
-                 error = {firstNameError} placeholder=""/>
-                 {firstError ?<ErrorMessage>Username length should be greater then 3.</ErrorMessage>: null}
-                               
-            </FormGroup>									
-
-           <FormGroup>
-           <Label name="Phone Number" />
-                <Input id='phone_number' onChange={ (e) => handleChange(e) } 
-                error={phoneError} placeholder=""/>
-                {err && message&& message.includes("number") ?<ErrorMessage>{message}</ErrorMessage>: null}
-            </FormGroup>									
-
-	
-            <FormGroup>
-            <Label name="Email address" />
-                <Input type="text" id='email' onChange={ (e) => handleChange(e) } 
-                error={emailError} placeholder=""/>
-              {err&&message&& message.includes("email") ?<ErrorMessage>{message}</ErrorMessage>: null}
-            </FormGroup>									
-
-            <FormGroup>
-            <Label name="Password" />
-                <Input type="password" id="password" onChange={ (e) => handleChange(e) } 
-                error={passwordError} placeholder=""/>
-                {err&&message&& message.includes("Password") ?<ErrorMessage>{message}</ErrorMessage>: null}
-            </FormGroup>									
-        
-
-
-
-    <FindYourBusinessWrapper>
-        {type.includes('business') ?
+const RegisterForm = ({ verified, err, phoneLong,phoneShort, firstError,emptyCode, business, loader, setbusiness, setBusinessInfo, setName, message, type, locationError, codeError, firstNameError, phoneError, emailError, passwordError, handleChange, handleSubmit }) => {
+    return (
         <>
-        <h2 onClick= {()=> setbusiness(true)}> Find Your Business</h2>
-         <FormGroup>
-        <SearchLocationInput id="location" error={locationError} handleChange={handleChange} setBusinessInfo={setBusinessInfo} setName={setName} /> 
-            </FormGroup> 
-            </>
-         : null}
-         {err &&message&& message.includes("business")?<ErrorMessage>{message}</ErrorMessage>: null}
-        <p>By clicking register, I represent I have read, understand, and agree to the Postmates Privacy Policy and Terms of Service. This site is protected bt reCAPTCHA and google Privacy Policy and Terms of Service apply.</p>
-    </FindYourBusinessWrapper>
+            {verified ? (<form onSubmit={(e) => handleSubmit(e)}>
+
+                    <>
+                        <p className="code"> Enter the Confirmation code sent to your Registered Email</p>
+                        <FormGroup>
+                            <Label name="Confirmation Code" />
+                            <Input id='confirmationCode' type='text' onChange={(e) => handleChange(e)} error={emptyCode} placeholder="" />
+                            {codeError ? <ErrorMessage>Confirmation code does not match</ErrorMessage> : null}
+                        </FormGroup>
+                        <Button type="submit" className="btn btn-primary">{loader && !codeError ? <ValueLoader /> : 'Confirm Sign up'}</Button>
+
+                    </>
+            </form>) :
+                <form onSubmit={(e) => handleSubmit(e)}>
+
+                    <FormGroup>
+                        <Label name="Business Name" />
+                        <Input type="text" id="username" onChange={(e) => handleChange(e)}
+                            error={firstNameError} placeholder="" />
+                        {firstError ? <ErrorMessage>Username length should be greater than 3.</ErrorMessage> : null}
+
+                    </FormGroup>
+
+                    <FormGroup>
+                        <Label name="Phone Number" />
+                        <Input id='phone_number' onChange={(e) => handleChange(e)}
+                            error={phoneError} placeholder="" />
+                            {phoneShort ? <ErrorMessage>Phone Number length should be greater than 5.</ErrorMessage> : null}
+                            {phoneLong ? <ErrorMessage>Phone Number length should be less than 50.</ErrorMessage> : null}
+                        {err && message && message.includes("number") ? <ErrorMessage>{message}</ErrorMessage> : null}
+                    </FormGroup>
 
 
-    <Button type="submit" maxWidth="183px" className="btnRegister">{loader && !message? <ValueLoader /> : 'Sign Up'}</Button>
-                          
+                    <FormGroup>
+                        <Label name="Email Address" />
+                        <Input type="text" id='email' onChange={(e) => handleChange(e)}
+                            error={emailError} placeholder="" />
+                        {err && message && message.includes("exists") ? <ErrorMessage>{message}</ErrorMessage> : null}
+                    </FormGroup>
 
-    
-  </form>
- }
- </>
- )
+                    <FormGroup>
+                        <Label name="Password" />
+                        <Input type="password" id="password" onChange={(e) => handleChange(e)}
+                            error={passwordError} placeholder="" />
+                        {err && message && message.includes("Password") ? <ErrorMessage>{message}</ErrorMessage> : null}
+                    </FormGroup>
+
+
+
+
+                    <FindYourBusinessWrapper>
+                        {type.includes('business') ?
+                            <>
+                                <h2 onClick={() => setbusiness(true)}> Find Your Business</h2>
+                                <FormGroup>
+                                    <SearchLocationInput id="location" error={locationError} handleChange={handleChange} setBusinessInfo={setBusinessInfo} setName={setName} />
+                                </FormGroup>
+                            </>
+                            : null}
+                        {err && message && message.includes("business") ? <ErrorMessage>{message}</ErrorMessage> : null}
+                        <p>By clicking sign up, I represent I have read, understand, and agree to the Postmates Privacy Policy and Terms of Service. This site is protected bt reCAPTCHA and google Privacy Policy and Terms of Service apply.</p>
+                    </FindYourBusinessWrapper>
+
+
+                    <Button type="submit" maxWidth="183px" className="btnRegister">{loader && !message ? <ValueLoader /> : 'Sign Up'}</Button>
+
+
+
+                </form>
+            }
+        </>
+    )
 }
 
 export default RegisterForm
