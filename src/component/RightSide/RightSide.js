@@ -375,7 +375,8 @@ const RightSide = (props) => {
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [content, setContent] = useState()
   const [viewState,setViewState]= useState('month')
-
+  const [monthEvent,setMonthEvent]= useState()
+  const [eventCopy,setEventCopy]= useState()
 
   useEffect(() => {
     let updateUser = async authState => {
@@ -407,6 +408,7 @@ const RightSide = (props) => {
           setAllFeed(feed)
           setAllMentions(allMentions)
           eventManage(sol)
+          monthEventManage(sol)
         }
         else {
           let eventArr = []
@@ -446,6 +448,10 @@ const RightSide = (props) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mentions])
+  function onlyUnique(value, index, self) { 
+    return self.indexOf(value) === index;
+}
+
 
   const eventManage = (sol) => {
     let eventArr = []
@@ -465,8 +471,8 @@ const RightSide = (props) => {
           count: 30,
           interval: 1
         })
-        weeklyStartRule.all().forEach((num1, index) => {
-          const num2 = weeklyEndRule.all()[index];
+        weeklyStartRule.all().filter(onlyUnique).forEach((num1, index) => {
+          const num2 = weeklyEndRule.all().filter(onlyUnique)[index];
           eventArr.push({
             id: v._id,
             title: v.name,
@@ -475,6 +481,7 @@ const RightSide = (props) => {
           })
         });
         setEvent(eventArr)
+        setEventCopy(eventArr)
       }
       else if (v.eventSchedule.recurring === 'daily' || v.eventSchedule.recurring === 'Daily') {
         const dailyStartRule = new RRule({
@@ -489,8 +496,8 @@ const RightSide = (props) => {
           count: 30,
           interval: 1
         })
-        dailyStartRule.all().forEach((num1, index) => {
-          const num2 = dailyEndRule.all()[index];
+        dailyStartRule.all().filter(onlyUnique).forEach((num1, index) => {
+          const num2 = dailyEndRule.all().filter(onlyUnique)[index];
           eventArr.push({
             id: v._id,
             title: v.name,
@@ -498,6 +505,8 @@ const RightSide = (props) => {
             end: num2,
           })
         });
+        console.log(dailyStartRule.all())
+        setEventCopy(eventArr)
         setEvent(eventArr)
       }
       else if (v.eventSchedule.recurring === 'mondayFriday' || v.eventSchedule.recurring === 'Monday-Friday') {
@@ -515,8 +524,8 @@ const RightSide = (props) => {
           interval: 1,
           byweekday: [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR]
         })
-        weekDayStartRule.all().forEach((num1, index) => {
-          const num2 = weekDayEndRule.all()[index];
+        weekDayStartRule.all().filter(onlyUnique).forEach((num1, index) => {
+          const num2 = weekDayEndRule.all().filter(onlyUnique)[index];
           eventArr.push({
             id: v._id,
             title: v.name,
@@ -524,6 +533,7 @@ const RightSide = (props) => {
             end: num2,
           })
         });
+        setEventCopy(eventArr)
         setEvent(eventArr)
       }
       else {
@@ -534,10 +544,100 @@ const RightSide = (props) => {
           end: v.eventSchedule.end_time,
           allDay: true
         })
+        setEventCopy(eventArr)
         setEvent(eventArr)
 
       }
     })
+  }
+  const monthEventManage= (sol)=> {
+    let eventArr = []
+    setMonthEvent(eventArr)
+    // eslint-disable-next-line array-callback-return
+    sol.map(v => {
+      if (v.eventSchedule.recurring === 'weekly' || v.eventSchedule.recurring === 'Weekly') {
+        const weeklyStartRule = new RRule({
+          freq: RRule.WEEKLY,
+          dtstart: new Date(v.eventSchedule.start_time),
+          count: 30,
+          interval: 1
+        })
+        const weeklyEndRule = new RRule({
+          freq: RRule.WEEKLY,
+          dtstart: new Date(v.eventSchedule.end_time),
+          count: 30,
+          interval: 1
+        })
+        weeklyStartRule.all().filter(onlyUnique).forEach((num1, index) => {
+          const num2 = weeklyEndRule.all().filter(onlyUnique)[index];
+          eventArr.push({
+            id: v._id,
+            start: num1,
+            end: num2,
+          })
+        });
+        setMonthEvent(eventArr)
+      }
+      else if (v.eventSchedule.recurring === 'daily' || v.eventSchedule.recurring === 'Daily') {
+        const dailyStartRule = new RRule({
+          freq: RRule.DAILY,
+          dtstart: new Date(v.eventSchedule.start_time),
+          count: 30,
+          interval: 1
+        })
+        const dailyEndRule = new RRule({
+          freq: RRule.DAILY,
+          dtstart: new Date(v.eventSchedule.end_time),
+          count: 30,
+          interval: 1
+        })
+        dailyStartRule.all().filter(onlyUnique).forEach((num1, index) => {
+          const num2 = dailyEndRule.all().filter(onlyUnique)[index];
+          eventArr.push({
+            id: v._id,
+            start: num1,
+            end: num2,
+          })
+        });
+        setMonthEvent(eventArr)
+      }
+      else if (v.eventSchedule.recurring === 'mondayFriday' || v.eventSchedule.recurring === 'Monday-Friday') {
+        const weekDayStartRule = new RRule({
+          freq: RRule.WEEKLY,
+          dtstart: new Date(v.eventSchedule.start_time),
+          count: 60,
+          interval: 1,
+          byweekday: [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR]
+        })
+        const weekDayEndRule = new RRule({
+          freq: RRule.WEEKLY,
+          dtstart: new Date(v.eventSchedule.end_time),
+          count: 60,
+          interval: 1,
+          byweekday: [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR]
+        })
+        weekDayStartRule.all().filter(onlyUnique).forEach((num1, index) => {
+          const num2 = weekDayEndRule.all().filter(onlyUnique)[index];
+          eventArr.push({
+            id: v._id,
+            start: num1,
+            end: num2,
+          })
+        });
+        setMonthEvent(eventArr)
+      }
+      else {
+        eventArr.push({
+          id: v._id,
+          start: v.eventSchedule.start_time,
+          end: v.eventSchedule.end_time,
+          allDay: true
+        })
+        setMonthEvent(eventArr)
+
+      }
+    })
+
   }
   const ConvertNumberToTwoDigitString = (n) => {
     return n > 9 ? "" + n : "0" + n;
@@ -568,16 +668,19 @@ const RightSide = (props) => {
     setId(v._id)
   }
   const getCustomToolbar = (toolbar) => {
-    const toolbarDate = toolbar.date;
+   const toolbarDate = toolbar.date;
     const goToDayView = () => {
+      setEvent(eventCopy)
     toolbar.onView("day")
     setViewState('day')
     }
     const goToWeekView = () => {
+      setEvent(eventCopy)
     toolbar.onView("week")
     setViewState('week')
     };
     const goToMonthView = () => {
+      setEvent(monthEvent)
     toolbar.onView("month")
     setViewState('month')
     };
@@ -697,7 +800,7 @@ const RightSide = (props) => {
             <span className="next-icon">&#8250; Next</span>
           </button>
         </span>
-          {day()}
+         {day()}
           {month()}
           {year()}
         <span className="rbc-btn-group">
@@ -712,7 +815,7 @@ const RightSide = (props) => {
           </button>
         </span>
       </div>
-      {calenderView === 'month' ?
+      {/* {calenderView === 'month' ?
                 <EventMenu>
                   <h2>{today.toLocaleDateString("en-US", options)}</h2>
                   {eventList ? eventList.map(v =>
@@ -725,8 +828,8 @@ const RightSide = (props) => {
                       }
                     </>) : null
                   }
-                </EventMenu> : null
-              }
+                </EventMenu> : null */}
+              
       </>
     );
     };
