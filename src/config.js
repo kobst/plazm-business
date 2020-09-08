@@ -3,6 +3,7 @@ return{
     "Welcome":"Howdy! Welcome Back",
     "Log":"Sign In",
     "Sign":"Signup",
+    "emErr":"Invalid Email",
     "Login_Mess": "Login to start working on your business profile page",
     "Remember":"Remember me",
     "No_Account":"Don't have an account? ",

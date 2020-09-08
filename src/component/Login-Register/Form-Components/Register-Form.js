@@ -51,7 +51,7 @@ margin-top: 6px;
 `
 
 
-const RegisterForm = ({ verified, err, firstError, business, loader, setbusiness, setBusinessInfo, setName, message, type, locationError, codeError, firstNameError, phoneError, emailError, passwordError, handleChange, handleSubmit }) => {
+const RegisterForm = ({ verified, err, phoneLong,phoneShort, firstError,emptyCode, business, loader, setbusiness, setBusinessInfo, setName, message, type, locationError, codeError, firstNameError, phoneError, emailError, passwordError, handleChange, handleSubmit }) => {
     return (
         <>
             {verified ? (<form onSubmit={(e) => handleSubmit(e)}>
@@ -60,7 +60,7 @@ const RegisterForm = ({ verified, err, firstError, business, loader, setbusiness
                         <p className="code"> Enter the Confirmation code sent to your Registered Email</p>
                         <FormGroup>
                             <Label name="Confirmation Code" />
-                            <Input id='confirmationCode' type='text' onChange={(e) => handleChange(e)} placeholder="" />
+                            <Input id='confirmationCode' type='text' onChange={(e) => handleChange(e)} error={emptyCode} placeholder="" />
                             {codeError ? <ErrorMessage>Confirmation code does not match</ErrorMessage> : null}
                         </FormGroup>
                         <Button type="submit" className="btn btn-primary">{loader && !codeError ? <ValueLoader /> : 'Confirm Sign up'}</Button>
@@ -81,6 +81,8 @@ const RegisterForm = ({ verified, err, firstError, business, loader, setbusiness
                         <Label name="Phone Number" />
                         <Input id='phone_number' onChange={(e) => handleChange(e)}
                             error={phoneError} placeholder="" />
+                            {phoneShort ? <ErrorMessage>Phone Number length should be greater than 5.</ErrorMessage> : null}
+                            {phoneLong ? <ErrorMessage>Phone Number length should be less than 50.</ErrorMessage> : null}
                         {err && message && message.includes("number") ? <ErrorMessage>{message}</ErrorMessage> : null}
                     </FormGroup>
 
@@ -89,7 +91,7 @@ const RegisterForm = ({ verified, err, firstError, business, loader, setbusiness
                         <Label name="Email Address" />
                         <Input type="text" id='email' onChange={(e) => handleChange(e)}
                             error={emailError} placeholder="" />
-                        {err && message && message.includes("email") ? <ErrorMessage>{message}</ErrorMessage> : null}
+                        {err && message && message.includes("exists") ? <ErrorMessage>{message}</ErrorMessage> : null}
                     </FormGroup>
 
                     <FormGroup>
