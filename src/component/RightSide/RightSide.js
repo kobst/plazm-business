@@ -952,9 +952,53 @@ const RightSide = (props) => {
               </FlexRow>
 
               <AddModalBox editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
+   {calenderView === 'month' ?
+        <div>
+        {calenderView === 'month' ?
+    <EventMenu>
+      <h2>{today.toLocaleDateString("en-US", options)}</h2>
+      <h4>Upcoming Events in September</h4>
+      {eventList ? eventList.map(v =>
+        <>
+          {v.name ?
+            <MonthEventList>
+              <p>{v.name}</p>
+              <span>{getDate(v.eventSchedule.start_time)}</span>
+            </MonthEventList> : null
+          }
+        </>) : null
+      }
+    </EventMenu> : null
+  }
+          {typeof event !== 'undefined' ?
+            <Calendar
+              className="CalenderSec"
+              localizer={localizer}
+              events={event}
+              startAccessor="start"
+              endAccessor="end"
+              // onNavigate={}
+              onSelectEvent={(e) => (
+                // eslint-disable-next-line no-sequences
+                setEdit(true),
+                setIsOpen(true),
+                setDetails(e)
+              )}
+              components={{
+                toolbar: getCustomToolbar,
+              }}
+              defaultView="day"
+              step={60}
+              onView={(e) => setCalenderView(e)}
+              views={['day', 'week', 'month',]}
+              style={{ height: 463, width: calenderView === 'month' ? '100%' : '100%' }}
+            /> : <div className="loader"> <ValueLoader height="70" width="70" /></div>
 
-              <CalenderSection>
-              <EventMenu>
+          }
+        </div>
+             : <CalenderSection>
+              {calenderView === 'month' ?
+          <EventMenu>
             <h2>{today.toLocaleDateString("en-US", options)}</h2>
             <h4>Upcoming Events in September</h4>
             {eventList ? eventList.map(v =>
@@ -967,7 +1011,8 @@ const RightSide = (props) => {
                 }
               </>) : null
             }
-                </EventMenu>
+          </EventMenu> : null
+        }
                 {typeof event !== 'undefined' ?
                   <Calendar
                     className="CalenderSec"
@@ -994,6 +1039,7 @@ const RightSide = (props) => {
 
                 }
               </CalenderSection>
+             }
 
 
               {/* All Events */}
