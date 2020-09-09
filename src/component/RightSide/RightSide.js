@@ -150,15 +150,13 @@ position:relative;
 `
 const EventMenu = styled.div`
 padding:0px;
-max-height:566px;
 overflow-y:auto;
-position:relative;
 width:300px;
 float:left;
 padding:25px;
 background: #f7fdff;
 border: 1px solid #f2acaa;
-border-radius: 25px;
+border-radius:10px;
 h2{
   color: #FF479D;
   font-size: 24px;
@@ -234,7 +232,7 @@ span{
     justify-content: flex-end;
 }
 p{
-  margin-top:5px !important;
+  margin-top:5px;
 }
 
 }`
@@ -264,7 +262,8 @@ const Icon = styled.div`
 display: flex;
 align-items: center;
 justify-content: flex-end;
-margin-top: 10px;
+margin-top: 20px;
+
 sup{
   font-size: 18px;
   line-height: 15px;
@@ -283,14 +282,15 @@ border-radius:100%;
 box-shadow:0px 14px 10px rgba(0, 0, 0, 0.07);
 `
 const EventText = styled.div`
-width:calc(100% - 200px;)
+padding:0px;
 h3{
 margin:0px;
 font-weight: normal;
 font-size: 18px;
 line-height: 20px;
 color: #FF479D;
-}sortSection
+}
+span{
   font-weight: normal;
 font-size: 12px;
 line-height:27px;
@@ -803,17 +803,7 @@ const RightSide = (props) => {
       let year = date.format("YYYY");
 
       return (
-        <span className="rbc-btn-group">
-          {viewState === "month" && (
-            <button type="button" onClick={goToBackYear}>
-            </button>
-          )}
           <span className="rbc-toolbar-label">{year}</span>
-          {viewState === "month" && (
-            <button type="button" onClick={goToNextYear}>
-            </button>
-          )}
-        </span>
       );
     };
 
@@ -839,9 +829,10 @@ const RightSide = (props) => {
               <span className="next-icon">Next</span>
             </button>
           </span>
-          {day()}
+          <div className="monthDayYear">{day()}
           {month()}
           {year()}
+          </div>
           <span className="rbc-btn-group">
             <button className="rbc-active" onClick={goToDayView}>
               <span className="label-filter-off">Day</span>
@@ -954,7 +945,7 @@ const RightSide = (props) => {
 
               <AddModalBox editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
    {calenderView === 'month' ?
-        <div>
+        <div className="monthView">
         {calenderView === 'month' ?
     <EventMenu>
       <h2>{today.toLocaleDateString("en-US", options)}</h2>
@@ -988,7 +979,7 @@ const RightSide = (props) => {
               components={{
                 toolbar: getCustomToolbar,
               }}
-              defaultView="day"
+              defaultView="month"
               step={60}
               onView={(e) => setCalenderView(e)}
               views={['day', 'week', 'month',]}
