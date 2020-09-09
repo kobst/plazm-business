@@ -8,12 +8,14 @@ import Search from '../UI/Search/Search'
 import { Auth } from 'aws-amplify';
 import { Link } from "react-router-dom";
 import AddModalBox from '../Add-Event/index'
+import PostModalBox from '../Post-Modal'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
 import { callPlace, fetchItems, fetchUsers } from '../../Api'
 import ValueLoader from '../../utils/loader'
 import { RRule } from 'rrule'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { Multiselect } from 'multiselect-react-dropdown';
 // import { Multiselect } from 'multiselect-react-dropdown';
 import UserImage from '../../images/user-img.png'
 import EventImg from '../../images/eventimg.png'
@@ -263,7 +265,6 @@ display: flex;
 align-items: center;
 justify-content: flex-end;
 margin-top: 10px;
-
 sup{
   font-size: 18px;
   line-height: 15px;
@@ -1085,12 +1086,12 @@ const RightSide = (props) => {
                       <UploadImage><img src={UploadImg} alt="Upload" /></UploadImage>
                       <UploadImage><img src={UploadImg} alt="Upload" /></UploadImage>
                     </UploadOuter> */}
-                    {/* <ButtonSmall
+                    <ButtonSmall
                       maxWidth="34px"
                       bgColor="#FF7171"
                       style={{ marginLeft: 'auto', marginRight: '9px' }}>
                       <img src={CrossIcon} alt="Cross Icon" style={{ marginRight: '0px' }} />
-                    </ButtonSmall> */}
+                    </ButtonSmall>
                     <ButtonSmall disabled={saveDisable} onClick={() => addPost()}>Publish</ButtonSmall>
                   </FlexRow>
                 </div>
@@ -1146,11 +1147,10 @@ const RightSide = (props) => {
                             <Icon>
                               <EditRomve>
                                 <img onClick={() => setToggle(v._id)} src={MoreIcon} alt="More" />
-
                                 {toggle && id === v._id ?
                                   <Tooltip>
-                                    <EditModalBox setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={curators} value={content} />
-                                    <DeleteModalBox setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
+                                    <EditModalBox setToggleMenu={setToggleMenu} setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={curators} value={content} />
+                                    <DeleteModalBox setToggleMenu={setToggleMenu} setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
                                     <ul>
                                       <li onClick={() => handleEdit(v)}>Edit</li>
                                       <li onClick={() => handleDelete(v)}>Delete</li>
