@@ -56,13 +56,13 @@ return(
 							  <FormGroup>
                   <Label name="Enter your login ID" />
                       <Input type="text" id='username' onChange={(e) => handleChange(e)} 
-                        error={userError}  placeholder="Email address"/>
+                        error={userError}/>
                         {error && (message ==='User does not exist.'||message ==='Invalid Email') ?<ErrorMessage>{message}</ErrorMessage>: null}
 							  </FormGroup>
                 <FormGroup>
                     <Label name="Password" />
                         <Input type="password" id='password' onChange={(e) => handleChange(e)}
-                          error={passwordError} placeholder="Password" />
+                          error={passwordError} />
                           {error && message !=='User does not exist.' && message !=='Invalid Email' ?<ErrorMessage>{message}</ErrorMessage>: null}
 							  </FormGroup>	
                 <Button type="submit" className="btn btn-primary">{loader && !message? <ValueLoader /> : renderMessage.Log}</Button>
