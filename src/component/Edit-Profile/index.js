@@ -268,6 +268,7 @@ const EditProfile = ({value}) => {
       })
     });
       const body = await response.text();
+      history.push(`/dashboard`)
       window.location.reload() 
       return body
 
@@ -318,7 +319,7 @@ const handleSubmit = () => {
             <FormGroup>
               <FlexRow>
 
-                <TopProfile>NK</TopProfile>
+                <TopProfile>VT</TopProfile>
                 <LabelRight>
                   <Label name="Business Name"></Label>
                   <Input type="text" id='company' placeholder="Business Name" value={company}  onChange={ (e) => handleChange(e)} />
@@ -371,12 +372,12 @@ const handleSubmit = () => {
           <h3>Select HashTags</h3>
           <input placeholder="label" type="search" />
         </HashTagsSearch>
-        <Badges name="Burger"/>
+        {/* <Badges name="Burger"/>
         <Badges name="Happy Hours"/>
         <Badges name="Triple Ham Burger"/>
         <Badges name="Burger"/>
         <Badges name="Happy Hours"/>
-        <Badges name="Triple Ham Burger"/>
+        <Badges name="Triple Ham Burger"/> */}
       </Card>
       <Card>
       <HashTagsSearch>
@@ -388,7 +389,7 @@ const handleSubmit = () => {
       <row>
         <Card>
           <FlexRow>
-            <ButtonSmall onClick={()=>(history.push(`/dashboard`),window.location.reload())} maxWidth="110px" bgColor="#FF7171" style={{ marginLeft: 'auto', marginRight: '10px' }}>Cancle</ButtonSmall>
+            <ButtonSmall onClick={()=>(history.push(`/dashboard`),window.location.reload())} maxWidth="110px" bgColor="#FF7171" style={{ marginLeft: 'auto', marginRight: '10px' }}>Cancel</ButtonSmall>
             <ButtonSmall onClick={() => handleSubmit()} maxWidth="110px" >Save</ButtonSmall>
           </FlexRow>
         </Card>

@@ -56,6 +56,7 @@ import Input from '../component/UI/Input/Input'
                 refs={autoCompleteRef}
                 // eslint-disable-next-line no-sequences
                 onChange={event => (setQuery(event.target.value), handleChange(event))}
+                placeholder=""
                 value={query}
             />
             
