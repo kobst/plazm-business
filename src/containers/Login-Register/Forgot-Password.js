@@ -148,6 +148,7 @@ function validateEmail(user) {
          verificationErr={verificationErr}
          handleChange={handleChange}
          submitEmail={submitEmail}
+         password={new_password}
          
          />
          </Wrapper>
