@@ -206,6 +206,9 @@ const EditProfile = ({value}) => {
   const [latitude,setLatitude] = useState()
   const [longitude,setLongitude] = useState()
   const [userAddress,setAddress] = useState()
+  const [twitter,setTwitter]= useState()
+  const [instagram,setInstagram]= useState()
+  const [facebook,setFacebook]= useState()
 
   useEffect(()=> {
     if(typeof value!=='undefined'){
@@ -239,6 +242,15 @@ const EditProfile = ({value}) => {
     if(value.address){
       setAddress(value.address)
     }
+    if(value.handles.twitter){
+      setTwitter(value.handles.twitter)
+    }
+    if(value.handles.instagram){
+      setInstagram(value.handles.instagram)
+    }
+    if(value.handles.facebook){
+      setFacebook(value.handles.facebook)
+    }
   }
 
 
@@ -264,9 +276,10 @@ const EditProfile = ({value}) => {
             userSub: value.userSub,
             latitude: latitude,
             longitude: longitude,
-                
-            
-      })
+            twitter:twitter,
+            instagram:instagram,
+            facebook:facebook
+                 })
     });
       const body = await response.text();
       history.push(`/dashboard`)
@@ -305,7 +318,13 @@ const handleSubmit = () => {
         setLatitude(e.target.value)
     }else if (e.target.id === 'long') {
           setLongitude(e.target.value)
-   } 
+   } else if (e.target.id === 'facebook') {
+    setFacebook(e.target.value)
+   }else if (e.target.id === 'twitter') {
+    setTwitter(e.target.value)
+   }else if (e.target.id === 'instagram') {
+      setInstagram(e.target.value)
+} 
 }
 
   return (
@@ -366,11 +385,11 @@ const handleSubmit = () => {
             </FormGroup>
             <FormGroup>
               <Label name="Facebook Profile"></Label>
-              <Input type="text" id='facebook'  onChange={ (e) => handleChange(e)} />
+              <Input type="text" id='facebook' value={facebook}  onChange={ (e) => handleChange(e)} />
             </FormGroup>
             <FormGroup>
               <Label name="Twitter Profile"></Label>
-              <Input type="text" id='twitter' onChange={ (e) => handleChange(e)} />
+              <Input type="text" id='twitter' value={twitter} onChange={ (e) => handleChange(e)} />
             </FormGroup>
             <FormGroup>
               <Label name="LinkedIN Profile"></Label>
@@ -378,7 +397,7 @@ const handleSubmit = () => {
             </FormGroup>
             <FormGroup>
               <Label name="Instagram Profile"></Label>
-              <Input type="text" id='instagram' onChange={ (e) => handleChange(e)} />
+              <Input type="text" id='instagram' value={instagram} onChange={ (e) => handleChange(e)} />
             </FormGroup>
           </Card>
         </RightProfile>
