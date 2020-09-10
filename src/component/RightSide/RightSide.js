@@ -144,16 +144,17 @@ position:relative;
 const EventMenu = styled.div`
 padding:0px;
 overflow-y:auto;
-width:300px;
+width:350px;
 float:left;
-padding:25px;
+padding:15px;
 background: #f7fdff;
 border: 1px solid #f2acaa;
 border-radius:10px;
+max-height: 413px;
 h2{
   color: #FF479D;
   font-size: 24px;
-  line-height: 36px;
+  line-height: 28px;
   font-weight:normal;
 }
 h4{

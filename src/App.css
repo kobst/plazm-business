@@ -926,7 +926,8 @@ textarea{
     display: flex;
     border-radius: 10px;
     border: 1px solid rgba(239,77,182,0.5) !important;
-    margin-top:50px;
+    margin-top:95px;
+    position: relative;
 }
 .monthView .rbc-month-view{
   border:none;
@@ -946,7 +947,8 @@ textarea{
 border-top:none;
 }
 .monthView .rbc-calendar{
-  padding:25px;
+  padding: 25px 25px 10px;
+  height: auto !important;
 }
 
 .monthView .rbc-calendar .rbc-date-cell {
@@ -983,4 +985,40 @@ border-top:none;
 .monthView .rbc-calendar .rbc-date-cell.rbc-now.rbc-current{
   color: #FFFFFF;
   background: #FF4F94;
+}
+
+.monthView .rbc-calendar .rbc-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 16px;
+  position: absolute;
+  top: -43.94px;
+  width: 100%;
+  max-width: 734px;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+}
+
+.monthView .rbc-calendar .rbc-month-row {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  flex: unset;
+  /* flex-basis: 0px; */
+  overflow: hidden;
+  max-height: 69px;
+  line-height: 17px;
+  height: 100%;
+}
+
+.monthView .rbc-calendar .rbc-event {
+  background: #FF4F94 !important;
+opacity: 0.5;
+}
+.monthView .rbc-calendar .rbc-event-continues-prior{
+  border-radius:5px;
 }
