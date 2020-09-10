@@ -7,6 +7,7 @@ import Input from '../../UI/Input/Input'
 import SearchLocationInput from '../../../utils/findYourBusiness'
 import ValueLoader from '../../../utils/loader'
 import Label from '../../UI/Label/label'
+import PasswordStrengthMeter from '../../PasswordStrenthMeter/PasswordStrengthMeter'
 
 const FormGroup = styled.div`
 margin-bottom:22px;
@@ -51,7 +52,7 @@ margin-top: 6px;
 `
 
 
-const RegisterForm = ({ verified, err, phoneLong,phoneShort, firstError,emptyCode, business, loader, setbusiness, setBusinessInfo, setName, message, type, locationError, codeError, firstNameError, phoneError, emailError, passwordError, handleChange, handleSubmit }) => {
+const RegisterForm = ({ verified, err,password,phoneLong,phoneShort, firstError,emptyCode, business, loader, setbusiness, setBusinessInfo, setName, message, type, locationError, codeError, firstNameError, phoneError, emailError, passwordError, handleChange, handleSubmit }) => {
     return (
         <>
             {verified ? (<form onSubmit={(e) => handleSubmit(e)}>
@@ -98,6 +99,7 @@ const RegisterForm = ({ verified, err, phoneLong,phoneShort, firstError,emptyCod
                         <Label name="Password" />
                         <Input type="password" id="password" onChange={(e) => handleChange(e)}
                             error={passwordError} placeholder="" />
+                            <PasswordStrengthMeter password={password} />
                         {err && message && message.includes("Password") ? <ErrorMessage>{message}</ErrorMessage> : null}
                     </FormGroup>
 

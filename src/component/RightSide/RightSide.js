@@ -3,10 +3,8 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Tabs from '../UI/Tabs/Tabs'
 import Card from '../UI/Card/Card'
-import Listing from '../UI/Listing/Listing'
 import Search from '../UI/Search/Search'
 import { Auth } from 'aws-amplify';
-import { Link } from "react-router-dom";
 import AddModalBox from '../Add-Event/index'
 import PostModalBox from '../Post-Modal'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
@@ -15,16 +13,12 @@ import { callPlace, fetchItems, fetchUsers } from '../../Api'
 import ValueLoader from '../../utils/loader'
 import { RRule } from 'rrule'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { Multiselect } from 'multiselect-react-dropdown';
-// import { Multiselect } from 'multiselect-react-dropdown';
 import UserImage from '../../images/user-img.png'
 import EventImg from '../../images/eventimg.png'
 import SubHeading from '../UI/SubHeading'
 import ButtonSmall from '../UI/ButtonSmall'
-import Textarea from '../UI/Textarea'
 import CrossIcon from '../../images/cross-icon.svg'
 import UserIcon from '../../images/user.svg'
-import WishlistIcon from '../../images/wishlist-icon.svg'
 import WishlistGrey from '../../images/wishlist-grey.svg'
 import CommentGrey from '../../images/comment-grey.svg'
 import CommentIcon from '../../images/comment.svg'
@@ -150,19 +144,18 @@ position:relative;
 `
 const EventMenu = styled.div`
 padding:0px;
-max-height:566px;
 overflow-y:auto;
-position:relative;
-width:300px;
+width:350px;
 float:left;
-padding:25px;
+padding:15px;
 background: #f7fdff;
 border: 1px solid #f2acaa;
-border-radius: 25px;
+border-radius:10px;
+max-height: 413px;
 h2{
   color: #FF479D;
   font-size: 24px;
-  line-height: 36px;
+  line-height: 28px;
   font-weight:normal;
 }
 h4{
@@ -234,7 +227,7 @@ span{
     justify-content: flex-end;
 }
 p{
-  margin-top:5px !important;
+  margin-top:5px;
 }
 
 }`
@@ -264,7 +257,8 @@ const Icon = styled.div`
 display: flex;
 align-items: center;
 justify-content: flex-end;
-margin-top: 10px;
+margin-top: 20px;
+
 sup{
   font-size: 18px;
   line-height: 15px;
@@ -283,14 +277,15 @@ border-radius:100%;
 box-shadow:0px 14px 10px rgba(0, 0, 0, 0.07);
 `
 const EventText = styled.div`
-width:calc(100% - 200px;)
+padding:0px;
 h3{
 margin:0px;
 font-weight: normal;
 font-size: 18px;
 line-height: 20px;
 color: #FF479D;
-}sortSection
+}
+span{
   font-weight: normal;
 font-size: 12px;
 line-height:27px;
@@ -803,17 +798,7 @@ const RightSide = (props) => {
       let year = date.format("YYYY");
 
       return (
-        <span className="rbc-btn-group">
-          {viewState === "month" && (
-            <button type="button" onClick={goToBackYear}>
-            </button>
-          )}
           <span className="rbc-toolbar-label">{year}</span>
-          {viewState === "month" && (
-            <button type="button" onClick={goToNextYear}>
-            </button>
-          )}
-        </span>
       );
     };
 
@@ -839,9 +824,10 @@ const RightSide = (props) => {
               <span className="next-icon">Next</span>
             </button>
           </span>
-          {day()}
+          <div className="monthDayYear">{day()}
           {month()}
           {year()}
+          </div>
           <span className="rbc-btn-group">
             <button className="rbc-active" onClick={goToDayView}>
               <span className="label-filter-off">Day</span>
@@ -954,7 +940,7 @@ const RightSide = (props) => {
 
               <AddModalBox editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
    {calenderView === 'month' ?
-        <div>
+        <div className="monthView">
         {calenderView === 'month' ?
     <EventMenu>
       <h2>{today.toLocaleDateString("en-US", options)}</h2>
@@ -988,7 +974,7 @@ const RightSide = (props) => {
               components={{
                 toolbar: getCustomToolbar,
               }}
-              defaultView="day"
+              defaultView="month"
               step={60}
               onView={(e) => setCalenderView(e)}
               views={['day', 'week', 'month',]}
@@ -1086,12 +1072,12 @@ const RightSide = (props) => {
                       <UploadImage><img src={UploadImg} alt="Upload" /></UploadImage>
                       <UploadImage><img src={UploadImg} alt="Upload" /></UploadImage>
                     </UploadOuter> */}
-                    {/* <ButtonSmall
+                    <ButtonSmall
                       maxWidth="34px"
                       bgColor="#FF7171"
                       style={{ marginLeft: 'auto', marginRight: '9px' }}>
                       <img src={CrossIcon} alt="Cross Icon" style={{ marginRight: '0px' }} />
-                    </ButtonSmall> */}
+                    </ButtonSmall>
                     <ButtonSmall disabled={saveDisable} onClick={() => addPost()}>Publish</ButtonSmall>
                   </FlexRow>
                 </div>
@@ -1147,11 +1133,10 @@ const RightSide = (props) => {
                             <Icon>
                               <EditRomve>
                                 <img onClick={() => setToggle(v._id)} src={MoreIcon} alt="More" />
-
                                 {toggle && id === v._id ?
                                   <Tooltip>
-                                    <EditModalBox setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={curators} value={content} />
-                                    <DeleteModalBox setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
+                                    <EditModalBox setToggleMenu={setToggleMenu} setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={curators} value={content} />
+                                    <DeleteModalBox setToggleMenu={setToggleMenu} setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
                                     <ul>
                                       <li onClick={() => handleEdit(v)}>Edit</li>
                                       <li onClick={() => handleDelete(v)}>Delete</li>

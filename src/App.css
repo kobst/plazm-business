@@ -266,6 +266,7 @@ font-family: 'Roboto',sans-serif;
 }
 .rbc-toolbar{
   margin-bottom: 20px !important;
+  justify-content: space-between !important;
 }
 .rbc-toolbar span:first-child button:first-child {
   background: #FF4F94 !important;
@@ -461,5 +462,107 @@ textarea{
     margin-bottom:0px;
   }
   }
+.monthDayYear span{
+  padding: 0 2px !important;
+}
+  .monthView {
+    padding: 0px;
+    display: flex;
+    border-radius: 10px;
+    border: 1px solid rgba(239,77,182,0.5) !important;
+    margin-top:95px;
+    position: relative;
+}
+.monthView .rbc-month-view{
+  border:none;
+}
+.monthView .rbc-header{
+  border:none;
+  background:transparent;
+  color: #727272;
+}
+.monthView .rbc-header + .rbc-header{
+  border-left: none;
+}
+.monthView .rbc-day-bg + .rbc-day-bg {
+  border-left: none;
+}
+.monthView .rbc-month-row + .rbc-month-row{
+border-top:none;
+}
+.monthView .rbc-calendar{
+  padding: 25px 25px 10px;
+  height: auto !important;
+}
 
+.monthView .rbc-calendar .rbc-date-cell {
+  flex: unset;
+  width: 30px;
+  height: 30px;
+  padding-right: 0px;
+  background: transparent;
+  border-radius:100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.monthView .rbc-calendar .rbc-today {
+  background-color: transparent;
+}
+.monthView .rbc-calendar .rbc-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
 
+.monthView .rbc-calendar .rbc-off-range-bg {
+  background: transparent;
+}
+
+.monthView .rbc-calendar .rbc-date-cell{
+  font-size:12px;
+  color: #2D5D92;
+}
+.monthView .rbc-calendar .rbc-date-cell.rbc-off-range{
+  color: #DADADA;
+}
+.monthView .rbc-calendar .rbc-date-cell.rbc-now.rbc-current{
+  color: #FFFFFF;
+  background: #FF4F94;
+}
+
+.monthView .rbc-calendar .rbc-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 16px;
+  position: absolute;
+  top: -43.94px;
+  width: 100%;
+  max-width: 734px;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+}
+
+.monthView .rbc-calendar .rbc-month-row {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  flex: unset;
+  /* flex-basis: 0px; */
+  overflow: hidden;
+  max-height: 69px;
+  line-height: 17px;
+  height: 100%;
+}
+
+.monthView .rbc-calendar .rbc-event {
+  background: #FF4F94 !important;
+opacity: 0.5;
+}
+.monthView .rbc-calendar .rbc-event-continues-prior{
+  border-radius:5px;
+}
