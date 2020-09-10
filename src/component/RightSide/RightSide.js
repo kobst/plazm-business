@@ -3,28 +3,21 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Tabs from '../UI/Tabs/Tabs'
 import Card from '../UI/Card/Card'
-import Listing from '../UI/Listing/Listing'
 import Search from '../UI/Search/Search'
 import { Auth } from 'aws-amplify';
-import { Link } from "react-router-dom";
 import AddModalBox from '../Add-Event/index'
-import PostModalBox from '../Post-Modal'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
 import { callPlace, fetchItems, fetchUsers } from '../../Api'
 import ValueLoader from '../../utils/loader'
 import { RRule } from 'rrule'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { Multiselect } from 'multiselect-react-dropdown';
-// import { Multiselect } from 'multiselect-react-dropdown';
 import UserImage from '../../images/user-img.png'
 import EventImg from '../../images/eventimg.png'
 import SubHeading from '../UI/SubHeading'
 import ButtonSmall from '../UI/ButtonSmall'
-import Textarea from '../UI/Textarea'
 import CrossIcon from '../../images/cross-icon.svg'
 import UserIcon from '../../images/user.svg'
-import WishlistIcon from '../../images/wishlist-icon.svg'
 import WishlistGrey from '../../images/wishlist-grey.svg'
 import CommentGrey from '../../images/comment-grey.svg'
 import CommentIcon from '../../images/comment.svg'
