@@ -7,6 +7,7 @@ import Input from '../../UI/Input/Input'
 import ValueLoader from '../../../utils/loader'
 import {getMessage} from '../../../config'
 import Label from '../../UI/Label/label'
+import PasswordStrengthMeter from '../../PasswordStrenthMeter/PasswordStrengthMeter'
 
 const FormGroup = styled.div `
 margin-bottom:22px;
@@ -45,7 +46,7 @@ bottom: -25px;
 
 
 const renderMessage = getMessage()
-const ForgotPasswordForm = ({type,email,con,loader,emError, submitPassword,codeErr,error,passErr,newPassErr,emailError, confirmPassErr,verificationErr,handleChange,submitEmail}) => {
+const ForgotPasswordForm = ({type,email,password,con,loader,emError, submitPassword,codeErr,error,passErr,newPassErr,emailError, confirmPassErr,verificationErr,handleChange,submitEmail}) => {
   
     return (
       <>
@@ -59,6 +60,7 @@ const ForgotPasswordForm = ({type,email,con,loader,emError, submitPassword,codeE
                 <FormGroup>
                     <Label name="New Password" />
                     <Input type="password" id="password" error={newPassErr} onChange={e => handleChange(e)} />
+                    <PasswordStrengthMeter password={password} />
                 </FormGroup>
                 <FormGroup>
                     <Label name="Confirm Password" />
