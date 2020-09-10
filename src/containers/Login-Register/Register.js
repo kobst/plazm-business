@@ -266,6 +266,7 @@ const Register = (props) => {
                   emptyCode={emptyCode}
                   phoneLong={phoneLong}
                   phoneShort={phoneShort}
+                  password={password}
                   />
         </Wrapper>
    

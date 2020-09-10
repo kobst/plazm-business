@@ -10,6 +10,7 @@ import Badges from '../UI/Badges'
 import PlusIcon from '../../images/plus-img.svg'
 import history from '../../utils/history'
 
+
 const ProfileOuter = styled.div`
 display:flex;
 flex-direction: column;
@@ -322,14 +323,14 @@ const handleSubmit = () => {
                 <TopProfile>VT</TopProfile>
                 <LabelRight>
                   <Label name="Business Name"></Label>
-                  <Input type="text" id='company' placeholder="Business Name" value={company}  onChange={ (e) => handleChange(e)} />
+                  <Input type="text" id='company' value={company}  onChange={ (e) => handleChange(e)} />
                 </LabelRight>
               </FlexRow>
 
             </FormGroup>
             <FormGroup>
               <Label name="Address"></Label>
-        <Input type="text" id='add' placeholder="Address" value={userAddress}  onChange={ (e) => handleChange(e)} />
+        <Input type="text" id='add' value={userAddress}  onChange={ (e) => handleChange(e)} />
 
               <div className="mt-15">
                 <FlexRow>
@@ -341,27 +342,43 @@ const handleSubmit = () => {
             </FormGroup>
             <FormGroup>
               <Label name="Phone"></Label>
-              <Input type="text" id='phone' placeholder="Phone Number" value={phone}  onChange={ (e) => handleChange(e)} />
+              <Input type="text" id='phone'  value={phone}  onChange={ (e) => handleChange(e)} />
             </FormGroup>
             <FormGroup>
               <Label name="Website"></Label>
-              <Input type="text" id='website' placeholder="Website" value={website}  onChange={ (e) => handleChange(e)} />
+              <Input type="text" id='website'  value={website}  onChange={ (e) => handleChange(e)} />
             </FormGroup>
-            <FormGroup>
+            {/* <FormGroup>
               <Label name="Rating"></Label>
               <Input type="text" id='rating' placeholder="Rating" value={rating}  onChange={ (e) => handleChange(e)} />
             </FormGroup>
             <FormGroup>
               <Label name="Map Link"></Label>
               <Input type="text" id='map' placeholder="Map Link" value={map}  onChange={ (e) => handleChange(e)} />
-            </FormGroup>
-            <FormGroup>
-              <Label name="Type"></Label>
-              <Input type="text" id='type' placeholder="Type" value={type}  onChange={ (e) => handleChange(e)} />
-            </FormGroup>
-            <FormGroup>
+            </FormGroup> */}
+             {/* <FormGroup>
               <Label name="Status"></Label>
               <Input type="text" id='status' placeholder="Status" value={status}  onChange={ (e) => handleChange(e)} />
+            </FormGroup> */}
+            <FormGroup>
+              <Label name="Type"></Label>
+              <Input type="text" id='type'  value={type}  onChange={ (e) => handleChange(e)} />
+            </FormGroup>
+            <FormGroup>
+              <Label name="Facebook Profile"></Label>
+              <Input type="text" id='facebook'  onChange={ (e) => handleChange(e)} />
+            </FormGroup>
+            <FormGroup>
+              <Label name="Twitter Profile"></Label>
+              <Input type="text" id='twitter' onChange={ (e) => handleChange(e)} />
+            </FormGroup>
+            <FormGroup>
+              <Label name="LinkedIN Profile"></Label>
+              <Input type="text" id='linkedin' onChange={ (e) => handleChange(e)} />
+            </FormGroup>
+            <FormGroup>
+              <Label name="Instagram Profile"></Label>
+              <Input type="text" id='instagram' onChange={ (e) => handleChange(e)} />
             </FormGroup>
           </Card>
         </RightProfile>
@@ -372,12 +389,12 @@ const handleSubmit = () => {
           <h3>Select HashTags</h3>
           <input placeholder="label" type="search" />
         </HashTagsSearch>
-        {/* <Badges name="Burger"/>
+         <Badges name="Burger"/>
         <Badges name="Happy Hours"/>
         <Badges name="Triple Ham Burger"/>
         <Badges name="Burger"/>
         <Badges name="Happy Hours"/>
-        <Badges name="Triple Ham Burger"/> */}
+        <Badges name="Triple Ham Burger"/>
       </Card>
       <Card>
       <HashTagsSearch>

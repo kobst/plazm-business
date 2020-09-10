@@ -6,7 +6,7 @@ import crossIocn from '../../images/cross-black.svg'
 import Label from '../UI/Label/label'
 
 
-const EditModalBox = ({ isOpen,closeModal,users,value,setIsOpen}) => {
+const EditModalBox = ({ isOpen,closeModal,users,value,setIsOpen,setToggleMenu}) => {
    const [description, setDescription] = useState()
    const [saveDisable, setSaveDisable] = useState(false)
 
@@ -53,6 +53,7 @@ const handleChange = (e) => {
   }
   const onCancel=()=>{
       setDescription('')
+      setToggleMenu(false)
       closeModal()
   }
 
