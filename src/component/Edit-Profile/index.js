@@ -11,7 +11,8 @@ import history from '../../utils/history'
 import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
 import TimePicker from 'react-bootstrap-time-picker';
-
+import GallerySec from '../UI/Gallery'
+import GoogleMapReact from 'google-map-react';
 
 const ProfileOuter = styled.div`
 display:flex;
@@ -34,9 +35,12 @@ width:100%;
 const LeftProfile = styled.div`
 padding:0px;
 width:50%;
+margin-bottom: 10px;
 margin-right:5px;
-div{
+position:relative;
+>div{
   padding:10px;
+  height:100%;
 }
 img{max-width:100%;}
 @media (max-width:767px){
@@ -216,6 +220,7 @@ const EditProfile = ({value}) => {
   const [end,setEnd]= useState()
   const [startDay,setStartDay]= useState()
   const [endDay,setEndDay]= useState()
+  const [centerValue,setCenter]= useState()
 
   useEffect(()=> {
     if(typeof value!=='undefined'){
@@ -261,6 +266,14 @@ const EditProfile = ({value}) => {
     if(value.handles.facebook){
       setFacebook(value.handles.facebook)
     }
+    if(value.latitude && value.longitude){
+      console.log(value.longitude)
+      const center= {
+        lat: value.latitude,
+        lng: value.longitude
+      }
+      setCenter(center)
+    }
   }
 
 
@@ -303,6 +316,22 @@ const handleSubmit = () => {
   updateBusiness()
 
 }
+const AnyReactComponent = ({ text }) => (
+  <div style={{
+    color: 'white', 
+    background: 'grey',
+    padding: '10px 5px',
+    display: 'inline-flex',
+    textAlign: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: '100%',
+    transform: 'translate(-50%, -50%)'
+  }}>
+    {text}
+  </div>
+);
+
   
 
   const handleChange = (e) => {
@@ -350,13 +379,29 @@ const handleStartChange = (time) => {
 const handleEndChange = (time) => {
   setEnd(time)
 }
-
+ const center= {
+  lat: 30.7092231,
+  lng: 76.68880390000004,
+}
+const zoom = 15
   return (
     <ProfileOuter>
       <p>Edit Profile</p>
       <ProfileInner>
         <LeftProfile>
-          <Card><img src={MapImg} alt="map" /></Card>
+          <Card>
+            {typeof value!=='undefined'?
+            <GoogleMapReact
+        defaultCenter={center}
+        defaultZoom={zoom}
+         >
+        <AnyReactComponent 
+          lat={value.latitude} 
+          lng={value.longitude} 
+          text={'VT Netzwelt'} 
+        />
+      </GoogleMapReact>:null}
+          </Card>
         </LeftProfile>
         <RightProfile>
           <Card>
@@ -467,6 +512,14 @@ const handleEndChange = (time) => {
         <Button>Add New Time Slot <img src={PlusIcon} alt="plus icon" /></Button>
       </Card>
       </HashTags>
+      <row>
+        <Card>
+        <HashTagsSearch>
+          <h3>Upload Highlight Images</h3>
+        </HashTagsSearch>
+        <GallerySec type="edit"/>
+        </Card>
+      </row>
       <row>
         <Card>
           <FlexRow>
