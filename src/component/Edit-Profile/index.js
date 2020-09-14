@@ -12,7 +12,12 @@ import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
 import TimePicker from 'react-bootstrap-time-picker';
 import GallerySec from '../UI/Gallery'
-import GoogleMapReact from 'google-map-react';
+ import GoogleMapReact from 'google-map-react';
+ import {GoogleApiWrapper} from 'google-maps-react';
+ import Geocode from "react-geocode";
+
+ Geocode.setApiKey("AIzaSyAYVZIvAZkQsaxLD3UdFH5EH3DvYmSYG6Q");
+ Geocode.setLanguage("en");
 
 const ProfileOuter = styled.div`
 display:flex;
@@ -221,6 +226,7 @@ const EditProfile = ({value}) => {
   const [startDay,setStartDay]= useState()
   const [endDay,setEndDay]= useState()
   const [centerValue,setCenter]= useState()
+  const[DropPin,setDropPin]= useState(false)
 
   useEffect(()=> {
     if(typeof value!=='undefined'){
@@ -384,6 +390,21 @@ const handleEndChange = (time) => {
   lng: 76.68880390000004,
 }
 const zoom = 15
+const renderMarkers = (val) => {
+  if(DropPin===true){
+  setLatitude(val.lat)
+  setLongitude(val.lng)
+  Geocode.fromLatLng(val.lat,val.lng).then(
+    response => {
+      const address = response.results[0].formatted_address;
+      setAddress(address)
+    },
+    error => {
+      console.error(error);
+    }
+  );
+  }
+ };
   return (
     <ProfileOuter>
       <p>Edit Profile</p>
@@ -392,12 +413,14 @@ const zoom = 15
           <Card>
             {typeof value!=='undefined'?
             <GoogleMapReact
-        defaultCenter={center}
-        defaultZoom={zoom}
+           defaultCenter={center}
+           defaultZoom={zoom}
+          onClick={(e)=>renderMarkers(e)}
+      
          >
         <AnyReactComponent 
-          lat={value.latitude} 
-          lng={value.longitude} 
+          lat={latitude} 
+          lng={longitude} 
           text={'VT Netzwelt'} 
         />
       </GoogleMapReact>:null}
@@ -422,7 +445,7 @@ const zoom = 15
 
               <div className="mt-15">
                 <FlexRow>
-                  <ButtonSmall maxWidth="103px" bgColor="#0FB1D2"><img src={PinIcon} alt="Drop Pin" />Drop Pin</ButtonSmall>
+                  <ButtonSmall onClick={()=>setDropPin(true)} maxWidth="103px" bgColor="#0FB1D2"><img src={PinIcon} alt="Drop Pin" />Drop Pin</ButtonSmall>
                   <ButtonSmall maxWidth="137px" style={{ marginLeft: 'auto' }}>Find Address</ButtonSmall>
                 </FlexRow>
               </div>
@@ -533,4 +556,6 @@ const zoom = 15
   )
 }
 
-export default EditProfile
+export default GoogleApiWrapper({
+  apiKey: "AIzaSyAYVZIvAZkQsaxLD3UdFH5EH3DvYmSYG6Q"
+})(EditProfile)
