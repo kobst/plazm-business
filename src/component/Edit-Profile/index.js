@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Card from '../UI/Card/Card'
-import MapImg from '../../images/map.png'
 import PinIcon from '../../images/location.svg'
 import Label from '../UI/Label/label'
 import Input from '../UI/Input/Input'
@@ -16,6 +15,7 @@ import GallerySec from '../UI/Gallery'
  import GoogleMapReact from 'google-map-react';
  import {GoogleApiWrapper} from 'google-maps-react';
  import Geocode from "react-geocode";
+ import FindAddressValue from '../../utils/findAddress'
 
  Geocode.setApiKey("AIzaSyAYVZIvAZkQsaxLD3UdFH5EH3DvYmSYG6Q");
  Geocode.setLanguage("en");
@@ -387,6 +387,7 @@ const EditProfile = ({ value }) => {
       setCompany(e.target.value)
     }
     else if (e.target.id === 'add') {
+      console.log(e.target.value)
       setAddress(e.target.value)
     }
     else if (e.target.id === 'website') {
@@ -447,6 +448,18 @@ const renderMarkers = (val) => {
   );
   }
  };
+const FindAddress = ()=>{
+ Geocode.fromAddress(userAddress).then(
+  response => {
+    const { lat, lng } = response.results[0].geometry.location;
+    setLatitude(lat)
+    setLongitude(lng)
+  },
+  error => {
+    console.error(error);
+  }
+);
+}
   return (
     <ProfileOuter>
       <p>Edit Profile</p>
@@ -483,12 +496,13 @@ const renderMarkers = (val) => {
             </FormGroup>
             <FormGroup>
               <Label name="Address"></Label>
-              <Input type="text" id='add' value={userAddress} onChange={(e) => handleChange(e)} />
+              {/* <Input type="text" id='add' value={userAddress} onChange={(e) => handleChange(e)} /> */}
+              <FindAddressValue id="add" setAddress={setAddress} handleChange={handleChange} addressValue={userAddress}  />
 
               <div className="mt-15">
                 <FlexRow>
                   <ButtonSmall onClick={()=>setDropPin(true)} maxWidth="103px" bgColor="#0FB1D2"><img src={PinIcon} alt="Drop Pin" />Drop Pin</ButtonSmall>
-                  <ButtonSmall maxWidth="137px" style={{ marginLeft: 'auto' }}>Find Address</ButtonSmall>
+                  <ButtonSmall onClick={()=>FindAddress()} maxWidth="137px" style={{ marginLeft: 'auto' }}>Find Address</ButtonSmall>
                 </FlexRow>
               </div>
 
