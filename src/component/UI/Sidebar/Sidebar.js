@@ -14,6 +14,7 @@ import Badges from '../../UI/Badges'
 import MapImage from '../../../images/profile-map.png'
 import ButtonSmall from '../../UI/ButtonSmall'
 import history from '../../../utils/history'
+import GoogleMapReact from 'google-map-react';
 
 
 const LeftSidebar = styled.div`
@@ -101,6 +102,7 @@ img{
 }
 `
 const Map = styled.div`
+height:250px;
 img{
   max-width:100%;
 }
@@ -150,11 +152,41 @@ const Sidebar = () => {
     updateUser()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const center= {
+    lat: 30.7092231,
+    lng: 76.68880390000004,
+  }
+  const zoom = 15
+  const AnyReactComponent = ({ text }) => (
+    <div style={{
+      color: 'white', 
+      background: 'grey',
+      padding: '10px 5px',
+      display: 'inline-flex',
+      textAlign: 'center',
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: '100%',
+      transform: 'translate(-50%, -50%)'
+    }}>
+      {text}
+    </div>
+  );
 
   return (
     <LeftSidebar>
       {/* <div name={typeof placeValue !== 'undefined'&& placeValue.company_name?placeValue.company_name:'-'} setIsOpen={setIsOpen} /> */}
-      <Map><img src={MapImage} alt="map" /></Map>
+      <Map>
+        <div style={{ height: '100%', width: '100%' }}><GoogleMapReact
+        defaultCenter={center}
+        defaultZoom={zoom}
+         >
+        <AnyReactComponent 
+          lat={placeValue.latitude} 
+          lng={placeValue.longitude} 
+          text={'VT Netzwelt'} 
+        />
+      </GoogleMapReact></div></Map>
       <CompanyAddress>
         <div>
           <h3>VT Netzwelt Pvt Ltd</h3>
@@ -185,8 +217,8 @@ const Sidebar = () => {
       </Listing>
       <Listing>
         <SubHeading name="Opening Hours" />
-        <p><span>Monday - Friday</span><span> </span></p>
-        <p><span>Saturday - Sunday</span><span> </span></p>
+        {/* <p><span>Monday - Friday</span><span> </span></p>
+        <p><span>Saturday - Sunday</span><span> </span></p> */}
       </Listing>
 
       <Listing style={{ borderBottom: 'none' }}>

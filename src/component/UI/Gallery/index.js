@@ -22,14 +22,36 @@ img{
 }
 `
 
-const Gallery = () => {
+const Gallery = (props) => {
   const [isOpen,setIsOpen]= useState(false)
 
 
 
 
     return(
-        <GallerySection>
+      <>
+      { props.type==='edit'?
+      <GallerySection>
+        <div class="galleryImage">
+          <p onClick={() => setIsOpen(true)}><img src={PlusIcon} alt="" /> Photo</p>
+          <GallerModalBox  isOpen={isOpen} closeModal={() => setIsOpen(false)}/>
+        </div>
+        <div className="galleryImage">
+          <img src={GalleryImg1} alt="" />
+          <img src={GalleryWishlist} alt="Wishlist" className="wishlistGalery" />
+        </div>
+        <div className="galleryImage">
+          <img src={GalleryImg} alt="" />
+          <img src={CloseIcon} alt="Close" className="close" />
+        </div>
+        <div className="galleryImage">
+          <img src={GalleryImg} alt="" />
+        </div>
+        <div className="galleryImage">
+          <img src={GalleryImg} alt="" />
+        </div>
+      </GallerySection>
+       : <GallerySection>
         <div class="galleryImage">
           <p onClick={() => setIsOpen(true)}><img src={PlusIcon} alt="" /> Photo</p>
           <GallerModalBox  isOpen={isOpen} closeModal={() => setIsOpen(false)}/>
@@ -71,6 +93,8 @@ const Gallery = () => {
           <img src={GalleryImg} alt="" />
         </div>
       </GallerySection>
+    }
+    </>
     )
 }
 
