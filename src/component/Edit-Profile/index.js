@@ -6,9 +6,12 @@ import PinIcon from '../../images/location.svg'
 import Label from '../UI/Label/label'
 import Input from '../UI/Input/Input'
 import ButtonSmall from '../UI/ButtonSmall'
-import Badges from '../UI/Badges'
+// import Badges from '../UI/Badges'
 import PlusIcon from '../../images/plus-img.svg'
 import history from '../../utils/history'
+import ReactTagInput from "@pathofdev/react-tag-input";
+import "@pathofdev/react-tag-input/build/index.css";
+import TimePicker from 'react-bootstrap-time-picker';
 
 
 const ProfileOuter = styled.div`
@@ -209,6 +212,11 @@ const EditProfile = ({value}) => {
   const [twitter,setTwitter]= useState()
   const [instagram,setInstagram]= useState()
   const [facebook,setFacebook]= useState()
+  const [tags, setTags] = useState([])
+  const [start,setStart]= useState()
+  const [end,setEnd]= useState()
+  const [startDay,setStartDay]= useState()
+  const [endDay,setEndDay]= useState()
 
   useEffect(()=> {
     if(typeof value!=='undefined'){
@@ -241,6 +249,9 @@ const EditProfile = ({value}) => {
     }
     if(value.address){
       setAddress(value.address)
+    }
+    if(value.filter_tags){
+      setTags(value.filter_tags)
     }
     if(value.handles.twitter){
       setTwitter(value.handles.twitter)
@@ -278,11 +289,12 @@ const EditProfile = ({value}) => {
             longitude: longitude,
             twitter:twitter,
             instagram:instagram,
-            facebook:facebook
+            facebook:facebook,
+            filterTags:tags,
+
                  })
     });
       const body = await response.text();
-      history.push(`/dashboard`)
       window.location.reload() 
       return body
 
@@ -325,6 +337,19 @@ const handleSubmit = () => {
    }else if (e.target.id === 'instagram') {
       setInstagram(e.target.value)
 } 
+     else if(e.target.id === 'start'){
+          setStartDay(e.target.value)
+    }
+    else if(e.target.id === 'end'){
+      setEndDay(e.target.value)
+}
+
+}
+const handleStartChange = (time) => {    
+  setStart(time)
+}
+const handleEndChange = (time) => {
+  setEnd(time)
 }
 
   return (
@@ -406,19 +431,40 @@ const handleSubmit = () => {
       <Card>
         <HashTagsSearch>
           <h3>Select HashTags</h3>
-          <input placeholder="label" type="search" />
+          <ReactTagInput 
+           tags={tags} 
+           onChange={(newTags) => (console.log(newTags),setTags(newTags))}
+         />
         </HashTagsSearch>
-         <Badges name="Burger"/>
-        <Badges name="Happy Hours"/>
-        <Badges name="Triple Ham Burger"/>
-        <Badges name="Burger"/>
-        <Badges name="Happy Hours"/>
-        <Badges name="Triple Ham Burger"/>
       </Card>
       <Card>
       <HashTagsSearch>
           <h3>Opening Hours</h3>
         </HashTagsSearch>
+        <Label name="Start Day"></Label>
+        <select id='start' value={startDay} onChange={e => handleChange(e)}>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+            <option value="Saturday">Saturday</option>
+            <option value="Sunday">Sunday</option>
+          </select>
+          <Label name="End Day"></Label>
+        <select id='end' value={endDay} onChange={e => handleChange(e)}>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+            <option value="Saturday">Saturday</option>
+            <option value="Sunday">Sunday</option>
+          </select>
+        <Label name="Start Time"></Label>
+        <TimePicker onChange={handleStartChange} value={start} />
+        <Label name="End Time"></Label>
+        <TimePicker onChange={handleEndChange} value={end} />
         <Button>Add New Time Slot <img src={PlusIcon} alt="plus icon" /></Button>
       </Card>
       </HashTags>
