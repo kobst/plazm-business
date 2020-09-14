@@ -6,7 +6,6 @@ import PinIcon from '../../images/location.svg'
 import Label from '../UI/Label/label'
 import Input from '../UI/Input/Input'
 import ButtonSmall from '../UI/ButtonSmall'
-// import Badges from '../UI/Badges'
 import PlusIcon from '../../images/plus-img.svg'
 import history from '../../utils/history'
 import ReactTagInput from "@pathofdev/react-tag-input";
