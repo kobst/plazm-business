@@ -15,6 +15,7 @@ import MapImage from '../../../images/profile-map.png'
 import ButtonSmall from '../../UI/ButtonSmall'
 import history from '../../../utils/history'
 import GoogleMapReact from 'google-map-react';
+import {GoogleApiWrapper} from 'google-maps-react';
 
 
 const LeftSidebar = styled.div`
@@ -137,6 +138,11 @@ margin:40px auto 10px;
 const Sidebar = () => {
   const [placeValue, setPlace] = useState({})
   const [isOpen, setIsOpen] = useState(false)
+  const [facebook,setFacebook]= useState()
+  const [instagram,setInstagram]= useState()
+  const [twitter,setTwitter]= useState()
+  const [linkedIn,setLinkedIn] = useState()
+  const [tags, setTags] = useState([])
 
 
   useEffect(() => {
@@ -144,6 +150,11 @@ const Sidebar = () => {
       try {
         const value = await Auth.currentAuthenticatedUser()
         const place = await callPlace(value.attributes.sub)
+        setFacebook(place[0].handles.facebook)
+        setInstagram(place[0].handles.instagram)
+        setTwitter(place[0].handles.twitter)
+        setLinkedIn(place[0].handles.linkedin)
+        setTags(place[0].filter_tags)
         setPlace(place[0])
       } catch (err) {
         console.log(err)
@@ -190,7 +201,7 @@ const Sidebar = () => {
       <CompanyAddress>
         <div>
           <h3>VT Netzwelt Pvt Ltd</h3>
-          {/* <p>250 Followers</p> */}
+           <p>0 Followers</p> 
         </div>
         <ButtonSmall onClick={()=>(history.push(`/edit-profile`) ,window.location.reload())} setIsOpen={setIsOpen}>Edit Profile</ButtonSmall>
       </CompanyAddress>
@@ -223,18 +234,28 @@ const Sidebar = () => {
 
       <Listing style={{ borderBottom: 'none' }}>
         <SubHeading name="Hashtags" />
-        {/* <Badges name="Burger" />
-        <Badges name="Happy Hours" />
-        <Badges name="Triple Ham Burger" /> */}
+        {typeof placeValue !== 'undefined'?
+        tags.map(v => 
+         <Badges name={v} />)
+        :null}
+        
       </Listing>
 
       <SocialOuter>
         <SocialIcon>
           <div>
-            {/* <img src={Facebook} alt={Facebook} />
+         {typeof placeValue !== 'undefined' && facebook ? <a href={facebook}>
+             <img src={Facebook} alt={Facebook} />
+             </a>  :null}
+            {typeof placeValue !== 'undefined' && twitter ? <a href={twitter}>
             <img src={Twitter} alt={Twitter} />
+            </a>:null}
+            {typeof placeValue !== 'undefined' && linkedIn ? <a href={linkedIn}>
+            <img src={linkedIn} alt={linkedIn} />
+            </a>:null}
+            {typeof placeValue !== 'undefined' && instagram ? <a href={instagram}>
             <img src={Instagram} alt={Instagram} />
-            <img src={linkedIn} alt={linkedIn} /> */}
+            </a>:null} 
           </div>
           <ButtonSmall bgColor="#FF7171" maxWidth="139px" type="submit" onClick={() => (
             Auth.signOut())} className="btn btn-primary"> <Link to='/business/login' >Logout</Link></ButtonSmall>
@@ -246,4 +267,6 @@ const Sidebar = () => {
   )
 }
 
-export default Sidebar
+export default GoogleApiWrapper({
+  apiKey: "AIzaSyAYVZIvAZkQsaxLD3UdFH5EH3DvYmSYG6Q"
+})(Sidebar)

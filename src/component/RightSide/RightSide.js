@@ -542,7 +542,6 @@ const RightSide = (props) => {
             end: num2,
           })
         });
-        console.log(dailyStartRule.all())
         setEventCopy(eventArr)
         setEvent(eventArr)
       }
@@ -891,11 +890,9 @@ const RightSide = (props) => {
   const setToggle = (v) => {
     setId(v)
     if (toggle === true) {
-      console.log('okkay')
       setToggleMenu(false)
     }
     else {
-      console.log('okkay1')
       setToggleMenu(true)
     }
   }
