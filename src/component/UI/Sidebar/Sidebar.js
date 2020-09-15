@@ -11,7 +11,6 @@ import linkedIn from '../../../images/linkedIn.svg'
 import ModalBox from '../../Edit-Business/index'
 import { callPlace } from '../../../Api'
 import Badges from '../../UI/Badges'
-import MapImage from '../../../images/profile-map.png'
 import ButtonSmall from '../../UI/ButtonSmall'
 import history from '../../../utils/history'
 import GoogleMapReact from 'google-map-react';
@@ -141,7 +140,7 @@ const Sidebar = () => {
   const [facebook,setFacebook]= useState()
   const [instagram,setInstagram]= useState()
   const [twitter,setTwitter]= useState()
-  const [linkedIn,setLinkedIn] = useState()
+  const [LinkedIn,setLinkedIn] = useState()
   const [tags, setTags] = useState([])
 
 
@@ -228,8 +227,7 @@ const Sidebar = () => {
       </Listing>
       <Listing>
         <SubHeading name="Opening Hours" />
-        {/* <p><span>Monday - Friday</span><span> </span></p>
-        <p><span>Saturday - Sunday</span><span> </span></p> */}
+        { <p><span>{typeof placeValue !== 'undefined' && placeValue.hours ? placeValue.hours:null}</span><span> </span></p> }
       </Listing>
 
       <Listing style={{ borderBottom: 'none' }}>
@@ -250,7 +248,7 @@ const Sidebar = () => {
             {typeof placeValue !== 'undefined' && twitter ? <a href={twitter}>
             <img src={Twitter} alt={Twitter} />
             </a>:null}
-            {typeof placeValue !== 'undefined' && linkedIn ? <a href={linkedIn}>
+            {typeof placeValue !== 'undefined' && LinkedIn? <a href={LinkedIn}>
             <img src={linkedIn} alt={linkedIn} />
             </a>:null}
             {typeof placeValue !== 'undefined' && instagram ? <a href={instagram}>

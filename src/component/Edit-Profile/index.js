@@ -12,12 +12,25 @@ import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
 import TimePicker from 'react-bootstrap-time-picker';
 import GallerySec from '../UI/Gallery'
- import GoogleMapReact from 'google-map-react';
- import {GoogleApiWrapper} from 'google-maps-react';
- import Geocode from "react-geocode";
- import FindAddressValue from '../../utils/findAddress'
+import GoogleMapReact from 'google-map-react';
+import {GoogleApiWrapper} from 'google-maps-react';
+import Geocode from "react-geocode";
+import FindAddressValue from '../../utils/findAddress'
+import reactS3 from 'react-s3'
+const bucket = process.env.REACT_APP_BUCKET_NAME
+const dir = process.env.REACT_APP_DIRNAME
+const region = process.env.REACT_APP_REGION
+const accessKey = process.env.REACT_APP_ACCESS_KEY_ID
+const Secret = process.env.REACT_APP_SECRET_ACCESS_KEY
 
- Geocode.setApiKey("AIzaSyAYVZIvAZkQsaxLD3UdFH5EH3DvYmSYG6Q");
+const config = {
+  bucketName: bucket,
+  dirName: dir,
+  region: region,
+  accessKeyId: accessKey,
+  secretAccessKey:Secret,
+}
+ Geocode.setApiKey(process.env.REACT_APP_GOOGLE_API_KEY);
  Geocode.setLanguage("en");
 
 const ProfileOuter = styled.div`
@@ -83,6 +96,9 @@ const FlexRow = styled.div`
 display:flex;
 `
 const TopProfile = styled.div`
+overflow: hidden;
+img{max-width:100%;}
+cursor:pointer;
 width:111px;
 height:111px;
 border-radius:100%;
@@ -99,6 +115,7 @@ justify-content: center;
 color: #fff;
 margin-right:35px;
 margin-bottom: 10px;
+img
 
 @media (max-width:767px){
   width:50px;
@@ -267,8 +284,9 @@ const EditProfile = ({ value }) => {
   const [end,setEnd]= useState()
   const [startDay,setStartDay]= useState()
   const [endDay,setEndDay]= useState()
-  const [centerValue,setCenter]= useState()
   const[DropPin,setDropPin]= useState(false)
+  const [image,setImage]= useState()
+  const [imageUrl,setImageUrl]= useState()
 
   useEffect(() => {
     if (typeof value !== 'undefined') {
@@ -314,20 +332,25 @@ const EditProfile = ({ value }) => {
       if (value.handles.facebook) {
         setFacebook(value.handles.facebook)
       }
-      if (value.latitude && value.longitude) {
-        console.log(value.longitude)
-        const center = {
-          lat: value.latitude,
-          lng: value.longitude
-        }
-        setCenter(center)
+      if(value.default_image_url){
+        setImageUrl(value.default_image_url)
+      }
+      if(value.hours){
+        const timeLine = value.hours
+        const timeArr = timeLine.split(',')
+        const dayArr = timeArr[0].split('-')
+        const timeValueArr = timeArr[1].split('-')
+        setStartDay(dayArr[0])
+        setEndDay(dayArr[1])
+        setStart(timeValueArr[0])
+        setEnd(timeValueArr[1]) 
       }
     }
 
 
   }, [value])
 
-  const updateBusiness = async () => {
+  const updateBusiness = async (format) => {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/place`, {
       method: 'PUT',
       headers: {
@@ -351,6 +374,8 @@ const EditProfile = ({ value }) => {
         instagram: instagram,
         facebook: facebook,
         filterTags: tags,
+        openingHours: format,
+        file:image,
 
       })
     });
@@ -361,7 +386,12 @@ const EditProfile = ({ value }) => {
   }
 
   const handleSubmit = () => {
-    updateBusiness()
+    if(start && end && startDay && endDay && (end>start)){
+      const format = startDay+'-'+endDay+','+start+'-'+end
+         updateBusiness(format)
+        
+    }
+    
 
   }
   const AnyReactComponent = ({ text }) => (
@@ -387,7 +417,6 @@ const EditProfile = ({ value }) => {
       setCompany(e.target.value)
     }
     else if (e.target.id === 'add') {
-      console.log(e.target.value)
       setAddress(e.target.value)
     }
     else if (e.target.id === 'website') {
@@ -422,11 +451,23 @@ const EditProfile = ({ value }) => {
     }
 
 }
+const updateTime = (time)=>{
+  const timePointer = time/1800
+  if(timePointer===1){
+    return ("00:30")
+  }
+ else if(timePointer%2===0){
+     return (timePointer/2+':00')
+}
+ else{
+  return ((timePointer-1)/2+':30')
+ }
+}
 const handleStartChange = (time) => {    
-  setStart(time)
+  setStart(updateTime(time))
 }
 const handleEndChange = (time) => {
-  setEnd(time)
+   setEnd(updateTime(time))
 }
  const center= {
   lat: 30.7092231,
@@ -460,6 +501,11 @@ const FindAddress = ()=>{
   }
 );
 }
+const upload =(e)=> {
+reactS3.uploadFile(e.target.files[0],config).then(data => (setImageUrl(data.location),setImage(data.location)))
+.catch(err => console.error(err))
+}
+let myInput
   return (
     <ProfileOuter>
       <p>Edit Profile</p>
@@ -485,8 +531,12 @@ const FindAddress = ()=>{
           <Card>
             <FormGroup>
               <FlexRow>
-
-                <TopProfile>VT</TopProfile>
+              <input id="myInput" onChange={(e)=> upload(e)} type="file"  ref={(ref) => myInput = ref} style={{ display: 'none' }} />
+                <TopProfile onClick={(e) => myInput.click() }>
+                  {typeof value !== 'undefined'&& value.default_image_url?
+                    <img src={imageUrl} alt='vt'/>: 'VT'
+                  }
+              </TopProfile>
                 <LabelRight>
                   <Label name="Business Name"></Label>
                   <Input type="text" id='company' value={company} onChange={(e) => handleChange(e)} />
@@ -515,18 +565,6 @@ const FindAddress = ()=>{
               <Label name="Website"></Label>
               <Input type="text" id='website' value={website} onChange={(e) => handleChange(e)} />
             </FormGroup>
-            {/* <FormGroup>
-              <Label name="Rating"></Label>
-              <Input type="text" id='rating' placeholder="Rating" value={rating}  onChange={ (e) => handleChange(e)} />
-            </FormGroup>
-            <FormGroup>
-              <Label name="Map Link"></Label>
-              <Input type="text" id='map' placeholder="Map Link" value={map}  onChange={ (e) => handleChange(e)} />
-            </FormGroup> */}
-            {/* <FormGroup>
-              <Label name="Status"></Label>
-              <Input type="text" id='status' placeholder="Status" value={status}  onChange={ (e) => handleChange(e)} />
-            </FormGroup> */}
             <FormGroup>
               <Label name="Type"></Label>
               <Input type="text" id='type' value={type} onChange={(e) => handleChange(e)} />
@@ -558,7 +596,7 @@ const FindAddress = ()=>{
           <HashSearch>
             <ReactTagInput
               tags={tags}
-              onChange={(newTags) => (console.log(newTags), setTags(newTags))}
+              onChange={(newTags) => setTags(newTags)}
             />
           </HashSearch>
         </Card>
@@ -625,5 +663,5 @@ const FindAddress = ()=>{
 }
 
 export default GoogleApiWrapper({
-  apiKey: "AIzaSyAYVZIvAZkQsaxLD3UdFH5EH3DvYmSYG6Q"
+  apiKey: process.env.REACT_APP_GOOGLE_API_KEY
 })(EditProfile)

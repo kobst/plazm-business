@@ -9,7 +9,7 @@ import moment from 'moment'
 import Label from '../UI/Label/label'
 import crossIocn from '../../images/cross-black.svg'
 import styled from 'styled-components'
-import Gallery from '../UI/Gallery'
+// import Gallery from '../UI/Gallery'
 
 const DatePicker = styled.div`
 padding:0px;
