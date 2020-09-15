@@ -6,7 +6,6 @@ import Card from '../UI/Card/Card'
 import Search from '../UI/Search/Search'
 import { Auth } from 'aws-amplify';
 import AddModalBox from '../Add-Event/index'
-import PostModalBox from '../Post-Modal'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
 import { callPlace, fetchItems, fetchUsers } from '../../Api'
@@ -345,32 +344,32 @@ color: #979797;
 margin-right:38px;
 }
 `
-const UploadImage = styled.div`
-width: 31px;
-height: 33px;
-border-radius: 5px;
-overflow:hidden;
-margin-right:3px;
-position:relative;
-cursor:pointer;
-:hover{
-  :after{
-    content:"";
-    position: absolute;
-    background: rgba(0,0,0,0.7) url(${CrossIcon});
-    width: 31px;
-    height: 33px;
-    left: 0;
-    top: 0;
-    background-repeat: no-repeat;
-    background-position: center;
-  }
-}
-`
-const UploadOuter = styled.div`
-display:flex;
-margin:0 10px;
-`
+// const UploadImage = styled.div`
+// width: 31px;
+// height: 33px;
+// border-radius: 5px;
+// overflow:hidden;
+// margin-right:3px;
+// position:relative;
+// cursor:pointer;
+// :hover{
+//   :after{
+//     content:"";
+//     position: absolute;
+//     background: rgba(0,0,0,0.7) url(${CrossIcon});
+//     width: 31px;
+//     height: 33px;
+//     left: 0;
+//     top: 0;
+//     background-repeat: no-repeat;
+//     background-position: center;
+//   }
+// }
+// `
+// const UploadOuter = styled.div`
+// display:flex;
+// margin:0 10px;
+// `
 const UserListing = styled.div`
 padding:0px;
 max-height: 772px;
@@ -386,7 +385,7 @@ margin-top:15px;
 moment.locale('en-GB')
 const localizer = momentLocalizer(moment)
 const RightSide = (props) => {
-  const { loading } = props;
+  // const { loading } = props;
   const [isOpen, setIsOpen] = useState(false)
   const [place, setPlace] = useState({})
   const [event, setEvent] = useState()
@@ -399,7 +398,7 @@ const RightSide = (props) => {
   const [allFeed, setAllFeed] = useState()
   const [description, setDescription] = useState()
   const [saveDisable, setSaveDisable] = useState(false)
-  const [showTag, setShowTag] = useState(false)
+  // const [showTag, setShowTag] = useState(false)
   const [curators, setCurators] = useState([])
   const [activePublic, setActivePublic] = useState(false)
   const [activeMentions, setActiveMentions] = useState(false)
@@ -687,6 +686,7 @@ const RightSide = (props) => {
     }
 
     return function (a, b) {
+      // eslint-disable-next-line eqeqeq
       if (sortOrder == -1) {
         return b[property].localeCompare(a[property]);
       } else {
@@ -704,7 +704,7 @@ const RightSide = (props) => {
     setId(v._id)
   }
   const getCustomToolbar = (toolbar) => {
-   const toolbarDate = toolbar.date;
+  //  const toolbarDate = toolbar.date;
     const goToDayView = () => {
       setEvent(eventCopy)
     toolbar.onView("day")
@@ -1306,7 +1306,7 @@ const RightSide = (props) => {
             <SubHeading name="Gallery" />
             <SortSection>
               <p>You may upload images under the size of 2 MB each. Any dimension related message goes here*</p>
-              <a href="javascript:;"> <img src={SortIcon} alt="" /></a>
+              <a href=" "> <img src={SortIcon} alt="" /></a>
             </SortSection>
           </FlexRow>
           <hr></hr>
