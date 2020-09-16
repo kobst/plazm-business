@@ -149,10 +149,12 @@ const Sidebar = () => {
       try {
         const value = await Auth.currentAuthenticatedUser()
         const place = await callPlace(value.attributes.sub)
+        if(typeof place[0].handles!=='undefined'){
         setFacebook(place[0].handles.facebook)
         setInstagram(place[0].handles.instagram)
         setTwitter(place[0].handles.twitter)
         setLinkedIn(place[0].handles.linkedin)
+        }
         setTags(place[0].filter_tags)
         setPlace(place[0])
       } catch (err) {

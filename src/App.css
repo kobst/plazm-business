@@ -999,7 +999,6 @@ border-top:none;
   position: absolute;
   top: -43.94px;
   width: 100%;
-  max-width: 734px;
   margin: 0 auto;
   left: 0;
   right: 0;
@@ -1072,3 +1071,11 @@ margin-bottom: 10px !important;
   height: 11px !important;
   border-radius: 0px !important;
 }
+
+.rbc-time-view{
+  overflow-y: auto !important;
+  }
+  .rbc-time-content{
+  overflow-y: initial !important;
+  border-top: 1px solid #DDD !important;
+  }

@@ -323,6 +323,7 @@ const EditProfile = ({ value }) => {
       if (value.filter_tags) {
         setTags(value.filter_tags)
       }
+      if(typeof value.handles!=='undefined'){
       if (value.handles.twitter) {
         setTwitter(value.handles.twitter)
       }
@@ -332,6 +333,7 @@ const EditProfile = ({ value }) => {
       if (value.handles.facebook) {
         setFacebook(value.handles.facebook)
       }
+    }
       if(value.default_image_url){
         setImageUrl(value.default_image_url)
       }
@@ -386,11 +388,8 @@ const EditProfile = ({ value }) => {
   }
 
   const handleSubmit = () => {
-    if(start && end && startDay && endDay && (end>start)){
       const format = startDay+'-'+endDay+','+start+'-'+end
          updateBusiness(format)
-        
-    }
     
 
   }
