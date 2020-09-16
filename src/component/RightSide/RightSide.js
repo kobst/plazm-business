@@ -410,7 +410,7 @@ const RightSide = (props) => {
   const [isModelOpen, setIsModelOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [content, setContent] = useState()
-  const [viewState,setViewState]= useState('month')
+  const [viewState,setViewState]= useState('day')
   const [monthEvent,setMonthEvent]= useState()
   const [eventCopy,setEventCopy]= useState()
 
@@ -774,18 +774,6 @@ const RightSide = (props) => {
       toolbar.onNavigate("current");
     };
 
-    const goToBackYear = () => {
-      let mDate = toolbar.date;
-      let newDate = new Date(mDate.getFullYear() - 1, 1);
-      toolbar.onNavigate("prev", newDate);
-    };
-
-    const goToNextYear = () => {
-      let mDate = toolbar.date;
-      let newDate = new Date(mDate.getFullYear() + 1, 1);
-      toolbar.onNavigate("next", newDate);
-    };
-
     const month = () => {
       const date = moment(toolbar.date);
       let month = date.format("MMMM");
@@ -828,32 +816,16 @@ const RightSide = (props) => {
           {year()}
           </div>
           <span className="rbc-btn-group">
-            <button className="rbc-active" onClick={goToDayView}>
+            <button className= {viewState==='day' ?"rbc-active": null} onClick={goToDayView}>
               <span className="label-filter-off">Day</span>
             </button>
-            <button className="" onClick={goToWeekView}>
+            <button className={viewState==='week' ?"rbc-active": null}  onClick={goToWeekView}>
               <span className="label-filter-off">Week</span>
             </button>
-            <button className="" onClick={goToMonthView}>
+            <button className={viewState==='month' ?"rbc-active": null}  onClick={goToMonthView}>
               <span className="label-filter-off">Month</span>
             </button>
           </span>
-          {/* {calenderView === 'month' ?
-          <EventMenu>
-            <h2>{today.toLocaleDateString("en-US", options)}</h2>
-            <h4>Upcoming Events in September</h4>
-            {eventList ? eventList.map(v =>
-              <>
-                {v.name ?
-                  <MonthEventList>
-                    <p>{v.name}</p>
-                    <span>{getDate(v.eventSchedule.start_time)}</span>
-                  </MonthEventList> : null
-                }
-              </>) : null
-            }
-          </EventMenu> : null
-        } */}
         </div>
         
     
@@ -936,8 +908,8 @@ const RightSide = (props) => {
               </FlexRow>
 
               <AddModalBox editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
-   {calenderView === 'month' ?
-        <div className="monthView">
+              <CalenderSection>
+        <div className={ calenderView === 'month'? "monthView": null}>
         {calenderView === 'month' ?
     <EventMenu>
       <h2>{today.toLocaleDateString("en-US", options)}</h2>
@@ -964,6 +936,7 @@ const RightSide = (props) => {
               // onNavigate={}
               onSelectEvent={(e) => (
                 // eslint-disable-next-line no-sequences
+                setEvent(monthEvent),
                 setEdit(true),
                 setIsOpen(true),
                 setDetails(e)
@@ -971,7 +944,7 @@ const RightSide = (props) => {
               components={{
                 toolbar: getCustomToolbar,
               }}
-              defaultView="month"
+              defaultView={viewState}
               step={60}
               onView={(e) => setCalenderView(e)}
               views={['day', 'week', 'month',]}
@@ -980,51 +953,7 @@ const RightSide = (props) => {
 
           }
         </div>
-             : <CalenderSection>
-              {calenderView === 'month' ?
-          <EventMenu>
-            <h2>{today.toLocaleDateString("en-US", options)}</h2>
-            <h4>Upcoming Events in September</h4>
-            {eventList ? eventList.map(v =>
-              <>
-                {v.name ?
-                  <MonthEventList>
-                    <p>{v.name}</p>
-                    <span>{getDate(v.eventSchedule.start_time)}</span>
-                  </MonthEventList> : null
-                }
-              </>) : null
-            }
-          </EventMenu> : null
-        }
-                {typeof event !== 'undefined' ?
-                  <Calendar
-                    className="CalenderSec"
-                    localizer={localizer}
-                    events={event}
-                    startAccessor="start"
-                    endAccessor="end"
-                    // onNavigate={}
-                    onSelectEvent={(e) => (
-                      // eslint-disable-next-line no-sequences
-                      setEdit(true),
-                      setIsOpen(true),
-                      setDetails(e)
-                    )}
-                    components={{
-                      toolbar: getCustomToolbar,
-                    }}
-                    defaultView="day"
-                    step={60}
-                    onView={(e) => setCalenderView(e)}
-                    views={['day', 'week', 'month',]}
-                    style={{ height: 463, width: calenderView === 'month' ? '100%' : '100%' }}
-                  /> : <div className="loader"> <ValueLoader height="70" width="70" /></div>
-
-                }
-              </CalenderSection>
-             }
-
+        </CalenderSection>
 
               {/* All Events */}
 
