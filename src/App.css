@@ -1019,6 +1019,7 @@ border-top:none;
 .monthView .rbc-calendar .rbc-event {
   background: #FF4F94 !important;
 opacity: 0.5;
+border-radius:15px;
 }
 .monthView .rbc-calendar .rbc-event-continues-prior{
   border-radius:5px;
@@ -1079,3 +1080,24 @@ margin-bottom: 10px !important;
   overflow-y: initial !important;
   border-top: 1px solid #DDD !important;
   }
+
+.monthView .rbc-row-segment .rbc-event-content {
+    font-size: 0px;
+}
+
+.monthView .rbc-row-segment .rbc-event-content:focus{
+       outline: none;
+  }
+
+  .monthView .CalenderSec .rbc-row-content {
+    z-index: inherit;
+    height: 50px;
+    overflow: hidden;
+}
+
+.rbc-day-slot .rbc-event-label {
+  flex: none;
+  padding-right: 5px;
+  width: auto;
+  display: none;
+}

@@ -184,6 +184,9 @@ const Sidebar = () => {
       {text}
     </div>
   );
+  const mapOptions = {
+    disableDefaultUI: true
+  };
 
   return (
     <LeftSidebar>
@@ -192,16 +195,17 @@ const Sidebar = () => {
         <div style={{ height: '100%', width: '100%' }}><GoogleMapReact
         defaultCenter={center}
         defaultZoom={zoom}
+        options={mapOptions}
          >
         <AnyReactComponent 
           lat={placeValue.latitude} 
           lng={placeValue.longitude} 
-          text={'VT Netzwelt'} 
+          text={typeof placeValue !== 'undefined' ? placeValue.company_name : null} 
         />
       </GoogleMapReact></div></Map>
       <CompanyAddress>
         <div>
-          <h3>VT Netzwelt Pvt Ltd</h3>
+          <h3>{typeof placeValue !== 'undefined' ? placeValue.company_name : null}</h3>
            <p>0 Followers</p> 
         </div>
         <ButtonSmall onClick={()=>(history.push(`/edit-profile`) ,window.location.reload())} setIsOpen={setIsOpen}>Edit Profile</ButtonSmall>

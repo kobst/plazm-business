@@ -9,6 +9,24 @@ import moment from 'moment'
 import Label from '../UI/Label/label'
 import crossIocn from '../../images/cross-black.svg'
 import styled from 'styled-components'
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+
+const useStyles = makeStyles((theme) => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: 200,
+  },
+}));
 // import Gallery from '../UI/Gallery'
 
 const DatePicker = styled.div`
@@ -55,6 +73,8 @@ const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen,
   const [id, setId] = useState()
   const [start, setStart] = useState()
   const [end, setEnd] = useState()
+  const [startCopy,setStartCopy]= useState()
+  const [endCopy,setEndCopy]= useState()
   const [recurring, setRecurring] = useState('')
   // const [valid,setValid]= useState(true)
   const [error,setError]= useState(false)
@@ -64,6 +84,7 @@ const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen,
   const [endError,setEndError]= useState(false)
   const [saveDisable,setSaveDisable]= useState(false)
   const [disableReccuring,setDisableReccuring] = useState(false)
+  const classes = useStyles();
 
   useEffect(() => {
     if (typeof value !== 'undefined') {
@@ -75,10 +96,13 @@ const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen,
         setTitle(value.title)
       }
       if (value.start) {
-        setStart(value.start)
+        console.log(value.start)
+         const startDate = new Date(value.start).toISOString().split('.')
+        setStart(startDate[0])
       }
       if (value.end) {
-        setEnd(value.end)
+         const endDate = new Date(value.end).toISOString().split('.')
+        setEnd(endDate[0])
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -143,8 +167,8 @@ const handleEdit= async () => {
         scheduledEvent:"yes",
         content:description,
         recurring:recurring,
-        start_time:start,
-        end_time:end
+        start_time:startCopy,
+        end_time:endCopy
     })
   });
     const body = await response.text();
@@ -174,12 +198,12 @@ const handleEdit= async () => {
 
   }
 
-  const checkMultiDayEvent=(e,val)=> {
-    if(val==='start'){
-    if(end>e){
-    if(((new Date(e).getDate() < new Date(end).getDate()))
-       ||(new Date(e).getMonth() < new Date(end).getMonth())
-       ||(new Date(e).getFullYear() < new Date(end).getFullYear())){
+  const checkMultiDayEvent=(e)=> {
+    if(e.target.id==='start'){
+    if(end>e.target.value){
+    if(((new Date(e.target.value).getDate() < new Date(end).getDate()))
+       ||(new Date(e.target.value).getMonth() < new Date(end).getMonth())
+       ||(new Date(e.target.value).getFullYear() < new Date(end).getFullYear())){
            setDisableReccuring(true)
            setRecurring('')
           }
@@ -187,10 +211,10 @@ const handleEdit= async () => {
   }
 }
 else{
-  if(e>start){
-    if(((new Date(start).getDate() < new Date(e).getDate()))
-    ||(new Date(start).getMonth() < new Date(e).getMonth())
-    ||(new Date(start).getFullYear() < new Date(e).getFullYear())){
+  if(e.target.value>start){
+    if(((new Date(start).getDate() < new Date(e.target.value).getDate()))
+    ||(new Date(start).getMonth() < new Date(e.target.value).getMonth())
+    ||(new Date(start).getFullYear() < new Date(e.target.value).getFullYear())){
            setDisableReccuring(true)
            setRecurring('')
           }
@@ -269,26 +293,28 @@ else{
     }
     else if (e.target.id === 'end') {
       setEnd(e.target.value)
-    } else if (e.target.id === 'recurring') {
-      setRecurring(e.target.value)
     }
   }
-  const onChange = (e, val) => {
+  const onChange = (e) => {
     setTitleError(false)
     setStartError(false)
     setEndError(false)
     setError(false)
     setMessageError('')
     setDisableReccuring(false)
-    if (val === 'start') {
-      setStart(e)
+    if (e.target.id === 'start') {
+      console.log(e.target.value)
+      console.log(new Date(e.target.value))
+      setStart(e.target.value)
+      setStartCopy(new Date(e.target.value))
 
     }
 
     else {
-      setEnd(e)
+      setEnd(e.target.value)
+      setEndCopy(new Date(e.target.value))
     }
-    checkMultiDayEvent(e,val)
+    checkMultiDayEvent(e)
 
   }
   const onCancel= ()=>{
@@ -304,6 +330,9 @@ else{
     setStart('')
     setEnd('')
     closeModal()
+  }
+  const InputChange = (e)=>{
+      setRecurring(e.target.value)
   }
 
 
@@ -341,35 +370,52 @@ else{
           <Label name="Event Time"/>
           <DatePicker active={startError?true:null}>
             <label>Start Date</label>
-            <DateTimePicker
-              yearPlaceholder="YYYY"
-              dayPlaceholder="DD"
-              monthPlaceholder="MM"
-              hourPlaceholder="HH"
-              locale={moment.locale('en-gb')}
-              minutePlaceholder="MM"
-              onChange={(e) => onChange(e, 'start')}
-              value={start}
-               />
-          </DatePicker>
+            <form className={classes.container} noValidate>
+            <TextField
+            id="start"
+           type="datetime-local"
+           value= {start}
+            className={classes.textField}
+            InputLabelProps={{
+             shrink: true,
+             }}
+             onChange={(e)=>onChange(e)}
+          />
+           </form>
+          </DatePicker >
           <DatePicker active={endError?true:null}>
-            <label>End Date &nbsp;</label>
-            <DateTimePicker
-              yearPlaceholder="YYYY"
-              locale={moment.locale('en-gb')}
-              dayPlaceholder="DD"
-              monthPlaceholder="MM"
-              hourPlaceholder="HH"
-              minutePlaceholder="MM"
-              onChange={(e) => onChange(e, 'end')}
-              value={end}
-            />
+          <label>End Date</label>
+            <form className={classes.container} noValidate>
+            <TextField
+            id="end"
+           type="datetime-local"
+           value= {end}
+            className={classes.textField}
+            InputLabelProps={{
+             shrink: true,
+             }}
+             onChange={(e)=>onChange(e)}
+          />
+           </form>
           </DatePicker>
-          <select id='recurring' value={recurring} onChange={e => handleChange(e)} disabled={disableReccuring}>
+          <FormControl>
+        <InputLabel id="demo-simple-select-label">Reccuring</InputLabel>
+        <Select
+          id='recurring'
+          value={recurring}
+          onChange={InputChange}
+          disabled={disableReccuring}
+        >
+          <MenuItem value="Daily">Daily</MenuItem>
+          <MenuItem value="Weekly">Weekly</MenuItem>
+          <MenuItem value="Monday-Friday">Monday-Friday</MenuItem>
+        </Select>
+      </FormControl>
+          {/* <select id='recurring' value={recurring} onChange={e => handleChange(e)} disabled={disableReccuring}>
             <option value="Daily">Daily</option>
             <option value="Weekly">Weekly</option>
             <option value="Monday-Friday">Monday-Friday</option>
-          </select>
+          </select> */}
           <br />
           {/* <Gallery /> */}
           <P>You may upload images under the size of 2 MB each. Any dimension related message goes here</P>
