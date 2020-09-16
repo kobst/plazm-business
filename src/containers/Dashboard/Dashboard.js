@@ -1,10 +1,11 @@
-import React, {useEffect} from 'react'
+import React, {useEffect,useState} from 'react'
 import styled from 'styled-components'
 import RightSide from '../../component/RightSide/RightSide'
 import { Auth } from 'aws-amplify';
 import history from '../../utils/history'
 import Header from '../../component/Header'
 import Footer from '../../component/Footer'
+import { callPlace } from '../../Api'
 const DashboardContainer = styled.div`
 display:flex;
 background: linear-gradient(157.1deg, #FF7171 -1.1%, #FF479D 100%);
@@ -25,10 +26,13 @@ margin:35px auto 0;
 
 
 const Dashboard = () => {
+  const [placeValue,setPlace]=useState()
     useEffect(() => {
         let updateUser = async authState => {
           try {
-             await Auth.currentAuthenticatedUser()
+            const value = await Auth.currentAuthenticatedUser()
+            const place = await callPlace(value.attributes.sub)
+                setPlace(place[0])
         } catch {
             history.push('/business/login')
             window.location.reload() 
@@ -41,7 +45,7 @@ const Dashboard = () => {
     return(
        <DashboardContainer>
          <Container>
-          <Header />
+          <Header value={placeValue} />
           <RightSide/>
           <Footer />
        </Container>

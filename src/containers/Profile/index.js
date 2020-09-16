@@ -45,7 +45,7 @@ const Profile = () => {
     return(
        <ProfileSection>
          <Container>
-          <Header />
+          <Header value={placeValue} />
           <EditProfile value={placeValue} />
        </Container>
        </ProfileSection>

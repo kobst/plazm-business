@@ -82,8 +82,8 @@ const Header = props => {
     <Container>
       <LogoWrapper><img src={Logo} alt="logo" /></LogoWrapper>
       <ProfileSection>
-        <h2>Welcome VT Netzwelt Pvt Ltd,</h2>
-        <ProfileImg><img src={ProfileImage} alt="Profile" /></ProfileImg>
+          <h2>Welcome { typeof props.value!=='undefined'?props.value.company_name:null}</h2>
+        <ProfileImg><img src={typeof props.value!=='undefined'?props.value.default_image_url:ProfileImage} alt="Profile" /></ProfileImg>
         <div className="profileHover">
           <Sidebar />
         </div>
