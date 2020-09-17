@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/static/css/main.9147e964.chunk.css",
-    "main.js": "/static/js/main.6c9325e0.chunk.js",
-    "main.js.map": "/static/js/main.6c9325e0.chunk.js.map",
+    "main.css": "/static/css/main.6c5a4ddc.chunk.css",
+    "main.js": "/static/js/main.aa13a76a.chunk.js",
+    "main.js.map": "/static/js/main.aa13a76a.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.b89d9217.js",
     "runtime-main.js.map": "/static/js/runtime-main.b89d9217.js.map",
-    "static/css/2.507970f7.chunk.css": "/static/css/2.507970f7.chunk.css",
-    "static/js/2.bb559fd1.chunk.js": "/static/js/2.bb559fd1.chunk.js",
-    "static/js/2.bb559fd1.chunk.js.map": "/static/js/2.bb559fd1.chunk.js.map",
+    "static/css/2.a20a2368.chunk.css": "/static/css/2.a20a2368.chunk.css",
+    "static/js/2.899a02b0.chunk.js": "/static/js/2.899a02b0.chunk.js",
+    "static/js/2.899a02b0.chunk.js.map": "/static/js/2.899a02b0.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.d2cb3c998b1f7f4dfb234fe0c4099ede.js": "/precache-manifest.d2cb3c998b1f7f4dfb234fe0c4099ede.js",
+    "precache-manifest.db24539836d94df0a963e8ac7771ca9a.js": "/precache-manifest.db24539836d94df0a963e8ac7771ca9a.js",
     "service-worker.js": "/service-worker.js",
-    "static/css/2.507970f7.chunk.css.map": "/static/css/2.507970f7.chunk.css.map",
-    "static/css/main.9147e964.chunk.css.map": "/static/css/main.9147e964.chunk.css.map",
-    "static/js/2.bb559fd1.chunk.js.LICENSE.txt": "/static/js/2.bb559fd1.chunk.js.LICENSE.txt",
+    "static/css/2.a20a2368.chunk.css.map": "/static/css/2.a20a2368.chunk.css.map",
+    "static/css/main.6c5a4ddc.chunk.css.map": "/static/css/main.6c5a4ddc.chunk.css.map",
+    "static/js/2.899a02b0.chunk.js.LICENSE.txt": "/static/js/2.899a02b0.chunk.js.LICENSE.txt",
     "static/media/Instagram.svg": "/static/media/Instagram.ff9b6ac3.svg",
     "static/media/Twitter.svg": "/static/media/Twitter.c04e1330.svg",
     "static/media/App.css": "/static/media/right-arrow.501c02fa.svg",
@@ -31,6 +31,7 @@
     "static/media/linkedIn.svg": "/static/media/linkedIn.fff567f0.svg",
     "static/media/location.svg": "/static/media/location.55485d22.svg",
     "static/media/logo.svg": "/static/media/logo.d4fe3835.svg",
+    "static/media/map-pin.svg": "/static/media/map-pin.880d2e11.svg",
     "static/media/more.svg": "/static/media/more.cff37130.svg",
     "static/media/plazm.svg": "/static/media/plazm.44934565.svg",
     "static/media/plus-img.svg": "/static/media/plus-img.b1bd7163.svg",
@@ -46,9 +47,9 @@
   },
   "entrypoints": [
     "static/js/runtime-main.b89d9217.js",
-    "static/css/2.507970f7.chunk.css",
-    "static/js/2.bb559fd1.chunk.js",
-    "static/css/main.9147e964.chunk.css",
-    "static/js/main.6c9325e0.chunk.js"
+    "static/css/2.a20a2368.chunk.css",
+    "static/js/2.899a02b0.chunk.js",
+    "static/css/main.6c5a4ddc.chunk.css",
+    "static/js/main.aa13a76a.chunk.js"
   ]
 }
