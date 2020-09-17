@@ -57,7 +57,7 @@ const ProfileImg = styled.div`
 display: flex;
 justify-content: center;
 background: #7C9CBF;
-border:2px solid #FFFFFF;
+border:8px solid #FFFFFF;
 width:96px;
 height:96px;
 border-radius:100%;

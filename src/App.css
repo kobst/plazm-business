@@ -971,6 +971,7 @@ border-top:none;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  padding-bottom: 2px;
 }
 
 .monthView .rbc-calendar .rbc-off-range-bg {
@@ -1085,13 +1086,14 @@ margin-bottom: 10px !important;
     font-size: 0px;
 }
 
-.monthView .rbc-row-segment .rbc-event-content:focus{
+.monthView .rbc-row-segment .rbc-event-content:focus
+,.monthView .rbc-row-segment:focus,.monthView .rbc-calendar .rbc-event:focus{
        outline: none;
   }
 
   .monthView .CalenderSec .rbc-row-content {
     z-index: inherit;
-    height: 50px;
+    height: 54px;
     overflow: hidden;
 }
 
@@ -1100,4 +1102,24 @@ margin-bottom: 10px !important;
   padding-right: 5px;
   width: auto;
   display: none;
+}
+
+.mapText{
+background: #fff;
+color:#280A33;
+font-weight:600;
+padding:3px 4px;
+font-size: 13px;
+max-width:150px;
+min-width: 80px;
+
+}
+.mapTextOuter img{
+  width: 37.5px;
+}
+.openingHrs div:before,.openingHrs div:after{
+display: none;
+}
+.openingHrs input:focus,.openingHrs div:focus{
+  background: transparent;
 }

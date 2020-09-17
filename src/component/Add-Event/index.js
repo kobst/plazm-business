@@ -20,11 +20,12 @@ const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
+    focused: {
+      border: '1px solid #4A90E2'
+},
   },
   textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 200,
+    width: 224,
   },
 }));
 // import Gallery from '../UI/Gallery'
@@ -370,14 +371,19 @@ else{
           <Label name="Event Time"/>
           <DatePicker active={startError?true:null}>
             <label>Start Date</label>
-            <form className={classes.container} noValidate>
+            <form className="openingHrs" noValidate>
             <TextField
             id="start"
            type="datetime-local"
+           autoFocus= "flase"
+           color="red"
            value= {start}
-            className={classes.textField}
+      
+
             InputLabelProps={{
              shrink: true,
+             focused: false,
+             color: 'red'
              }}
              onChange={(e)=>onChange(e)}
           />
@@ -385,7 +391,7 @@ else{
           </DatePicker >
           <DatePicker active={endError?true:null}>
           <label>End Date</label>
-            <form className={classes.container} noValidate>
+            <form className="openingHrs" noValidate>
             <TextField
             id="end"
            type="datetime-local"

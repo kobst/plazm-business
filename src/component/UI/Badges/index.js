@@ -16,7 +16,6 @@ margin-right: 10px;
 color:#280A33;
 margin: 10px 10px 0px 0;
 line-height:26px;
-cursor:pointer;
 box-shadow: 0px 2px 4px rgba(44, 39, 56, 0.08);
 border-radius: 17px;
 border:1px solid #facdd0;
