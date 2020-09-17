@@ -26,12 +26,15 @@ margin:35px auto 0;
 
 const Profile = () => {
   const [placeValue,setPlace]=useState()
+  const [center,setCenter]= useState()
     useEffect(() => {
         let updateUser = async authState => {
           try {
             const value = await Auth.currentAuthenticatedUser()
              const place = await callPlace(value.attributes.sub)
             setPlace(place[0])
+            const centerValue={lat:place[0].latitude,lng:place[0].longitude}
+            setCenter(centerValue)
         } catch {
             history.push('/business/login')
             window.location.reload() 
@@ -46,7 +49,7 @@ const Profile = () => {
        <ProfileSection>
          <Container>
           <Header value={placeValue} />
-          <EditProfile value={placeValue} />
+          <EditProfile center={center} value={placeValue} />
        </Container>
        </ProfileSection>
 

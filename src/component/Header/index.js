@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import Logo from '../../images/logo.svg'
 import ProfileImage from '../../images/profile-img.png'
 import Sidebar from '../UI/Sidebar/Sidebar'
+import {GoogleApiWrapper} from 'google-maps-react';
 
 const Container = styled.div`
 display: flex;
@@ -85,7 +86,7 @@ const Header = props => {
           <h2>Welcome { typeof props.value!=='undefined'?props.value.company_name:null}</h2>
         <ProfileImg><img src={typeof props.value!=='undefined'?props.value.default_image_url:ProfileImage} alt="Profile" /></ProfileImg>
         <div className="profileHover">
-          <Sidebar />
+          <Sidebar value={props.value} />
         </div>
 
       </ProfileSection>
@@ -93,4 +94,6 @@ const Header = props => {
   )
 }
 
-export default Header
+export default GoogleApiWrapper({
+  apiKey: process.env.REACT_APP_GOOGLE_API_KEY
+})(Header)

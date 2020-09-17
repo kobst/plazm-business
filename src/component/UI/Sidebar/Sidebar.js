@@ -9,12 +9,10 @@ import Twitter from '../../../images/Twitter.svg'
 import Instagram from '../../../images/Instagram.svg'
 import linkedIn from '../../../images/linkedIn.svg'
 import ModalBox from '../../Edit-Business/index'
-import { callPlace } from '../../../Api'
 import Badges from '../../UI/Badges'
 import ButtonSmall from '../../UI/ButtonSmall'
 import history from '../../../utils/history'
 import GoogleMapReact from 'google-map-react';
-import {GoogleApiWrapper} from 'google-maps-react';
 
 
 const LeftSidebar = styled.div`
@@ -134,7 +132,7 @@ margin:40px auto 10px;
 `
 
 
-const Sidebar = () => {
+const Sidebar = ({value}) => {
   const [placeValue, setPlace] = useState({})
   const [isOpen, setIsOpen] = useState(false)
   const [facebook,setFacebook]= useState()
@@ -147,23 +145,21 @@ const Sidebar = () => {
   useEffect(() => {
     let updateUser = async authState => {
       try {
-        const value = await Auth.currentAuthenticatedUser()
-        const place = await callPlace(value.attributes.sub)
-        if(typeof place[0].handles!=='undefined'){
-        setFacebook(place[0].handles.facebook)
-        setInstagram(place[0].handles.instagram)
-        setTwitter(place[0].handles.twitter)
-        setLinkedIn(place[0].handles.linkedin)
+        if(typeof value.handles!=='undefined'){
+        setFacebook(value.handles.facebook)
+        setInstagram(value.handles.instagram)
+        setTwitter(value.handles.twitter)
+        setLinkedIn(value.handles.linkedin)
         }
-        setTags(place[0].filter_tags)
-        setPlace(place[0])
+        setTags(value.filter_tags)
+        setPlace(value)
       } catch (err) {
         console.log(err)
       }
     }
     updateUser()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [value]);
   const center= {
     lat: 30.7092231,
     lng: 76.68880390000004,
@@ -185,17 +181,22 @@ const Sidebar = () => {
     </div>
   );
   const mapOptions = {
-    disableDefaultUI: true
+    disableDefaultUI: true,
+    scrollwheel: false,
+    
   };
 
   return (
     <LeftSidebar>
       {/* <div name={typeof placeValue !== 'undefined'&& placeValue.company_name?placeValue.company_name:'-'} setIsOpen={setIsOpen} /> */}
+      {typeof placeValue !== 'undefined'?
+      <>
       <Map>
-        <div style={{ height: '100%', width: '100%' }}><GoogleMapReact
+        <div style={{ height: '100%', width: '100%' }}>
+          <GoogleMapReact
         defaultCenter={center}
         defaultZoom={zoom}
-        options={mapOptions}
+         options={mapOptions}
          >
         <AnyReactComponent 
           lat={placeValue.latitude} 
@@ -266,11 +267,11 @@ const Sidebar = () => {
         </SocialIcon>
 
       </SocialOuter>
+      </>:null}
     </LeftSidebar >
+  
 
   )
 }
 
-export default GoogleApiWrapper({
-  apiKey: "AIzaSyAYVZIvAZkQsaxLD3UdFH5EH3DvYmSYG6Q"
-})(Sidebar)
+export default (Sidebar)

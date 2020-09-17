@@ -287,6 +287,7 @@ const EditProfile = ({ value }) => {
   const[DropPin,setDropPin]= useState(false)
   const [image,setImage]= useState()
   const [imageUrl,setImageUrl]= useState()
+  const [changeCenter,setChangeCenter]= useState()
 
   useEffect(() => {
     if (typeof value !== 'undefined') {
@@ -472,9 +473,12 @@ const handleEndChange = (time) => {
   lat: 30.7092231,
   lng: 76.68880390000004,
 }
+
 const zoom = 15
 const renderMarkers = (val) => {
   if(DropPin===true){
+    setChangeCenter({lat: val.lat,
+      lng: val.lng,})
   setLatitude(val.lat)
   setLongitude(val.lng)
   Geocode.fromLatLng(val.lat,val.lng).then(
@@ -492,6 +496,8 @@ const FindAddress = ()=>{
  Geocode.fromAddress(userAddress).then(
   response => {
     const { lat, lng } = response.results[0].geometry.location;
+    setChangeCenter({lat,
+      lng: lng,})
     setLatitude(lat)
     setLongitude(lng)
   },
@@ -511,9 +517,10 @@ let myInput
       <ProfileInner>
         <LeftProfile>
           <Card>
-            {typeof value!=='undefined'?
+            {typeof value!=='undefined' && value.latitude!=='undefined'?
             <GoogleMapReact
-           defaultCenter={center}
+           defaultCenter={{lat:value.latitude,lng:value.longitude}}
+            center={typeof changeCenter==='undefined'?center:changeCenter}
            defaultZoom={zoom}
           onClick={(e)=>renderMarkers(e)}
       
@@ -521,7 +528,7 @@ let myInput
         <AnyReactComponent 
           lat={latitude} 
           lng={longitude} 
-          text={'VT Netzwelt'} 
+          text={ company }
         />
       </GoogleMapReact>:null}
           </Card>
@@ -661,6 +668,4 @@ let myInput
   )
 }
 
-export default GoogleApiWrapper({
-  apiKey: process.env.REACT_APP_GOOGLE_API_KEY
-})(EditProfile)
+export default EditProfile
