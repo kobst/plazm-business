@@ -10,6 +10,7 @@ import Instagram from '../../../images/Instagram.svg'
 import linkedIn from '../../../images/linkedIn.svg'
 import ModalBox from '../../Edit-Business/index'
 import Badges from '../../UI/Badges'
+import MapPin from '../../../images/map-pin.svg'
 import ButtonSmall from '../../UI/ButtonSmall'
 import history from '../../../utils/history'
 import GoogleMapReact from 'google-map-react';
@@ -167,17 +168,16 @@ const Sidebar = ({value}) => {
   const zoom = 15
   const AnyReactComponent = ({ text }) => (
     <div style={{
-      color: 'white', 
-      background: 'grey',
+      color: 'white',
       padding: '10px 5px',
       display: 'inline-flex',
       textAlign: 'center',
       alignItems: 'center',
       justifyContent: 'center',
-      borderRadius: '100%',
       transform: 'translate(-50%, -50%)'
     }}>
-      {text}
+      <div className="mapTextOuter"><img src={MapPin} alt=""/> <div className="mapText">{text}</div></div>
+     
     </div>
   );
   const mapOptions = {
@@ -234,7 +234,7 @@ const Sidebar = ({value}) => {
       </Listing>
       <Listing>
         <SubHeading name="Opening Hours" />
-        { <p><span>{typeof placeValue !== 'undefined' && placeValue.hours ? placeValue.hours:null}</span><span> </span></p> }
+        { <p><span>{typeof placeValue !== 'undefined' && placeValue.hours ? placeValue.hours:null}</span> <span style={{marginLeft:'auto'}}> </span></p> }
       </Listing>
 
       <Listing style={{ borderBottom: 'none' }}>
