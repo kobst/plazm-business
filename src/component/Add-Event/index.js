@@ -440,7 +440,7 @@ else{
         <>
           <div className="modalButton">
             <Button onClick={() => handleEdit()} type="submit" className="btn btn-primary">Save</Button>
-            <Button onClick={() => handleDelete()} type="submit" className="btn btn-primary">Delete</Button>
+            <Button style={{marginLeft:"15px"}} onClick={() => handleDelete()} type="submit" className="btn btn-primary">Delete</Button>
           </div>
         </>}
         </div>

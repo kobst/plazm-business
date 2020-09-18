@@ -69,7 +69,7 @@ const Gallery = (props) => {
         </div>
         {imageUrl ?(imageUrl.map(v => 
                     <div className="galleryImage">
-                    <img src={v} alt="" className="wishlistGalery" />
+                    <img src={v} alt="" />
                   </div>)): null
                   }
         

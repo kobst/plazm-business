@@ -323,7 +323,12 @@ div{
 const EventImage = styled.div`
 border-radius: 9px;
 overflow:hidden;
-padding-left:30px;
+margin-left:30px;
+max-width:172px;
+img{
+  max-width:100%;
+  display:block;
+}
 `
 const TabsOuter = styled.div`
 margin-left:auto;
