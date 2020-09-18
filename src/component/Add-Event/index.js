@@ -15,6 +15,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import Gallery from '../UI/Gallery'
+
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -85,6 +87,7 @@ const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen,
   const [endError,setEndError]= useState(false)
   const [saveDisable,setSaveDisable]= useState(false)
   const [disableReccuring,setDisableReccuring] = useState(false)
+  const [image,setImage] = useState([])
   const classes = useStyles();
 
   useEffect(() => {
@@ -124,6 +127,7 @@ const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen,
    const val = events.find(v=>v._id===id)
    setDescription(val.content)
    setRecurring(val.eventSchedule.recurring)
+   setImage(val.item_photo)
   }
 
   const addEvent = async () => {
@@ -141,7 +145,8 @@ const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen,
         scheduledEvent: "yes",
         recurring: recurring,
         start_time: start,
-        end_time: end
+        end_time: end,
+        item_photo:image
       })
     });
     const body = await response.text();
@@ -169,7 +174,10 @@ const handleEdit= async () => {
         content:description,
         recurring:recurring,
         start_time:startCopy,
-        end_time:endCopy
+        end_time:endCopy,
+        item_photo:image,
+
+
     })
   });
     const body = await response.text();
@@ -304,8 +312,6 @@ else{
     setMessageError('')
     setDisableReccuring(false)
     if (e.target.id === 'start') {
-      console.log(e.target.value)
-      console.log(new Date(e.target.value))
       setStart(e.target.value)
       setStartCopy(new Date(e.target.value))
 
@@ -423,7 +429,7 @@ else{
             <option value="Monday-Friday">Monday-Friday</option>
           </select> */}
           <br />
-          {/* <Gallery /> */}
+          <Gallery type="edit" image={image} setImage={setImage}/>
           <P>You may upload images under the size of 2 MB each. Any dimension related message goes here</P>
           {!editValue ?
             <>

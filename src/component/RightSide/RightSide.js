@@ -882,7 +882,9 @@ const RightSide = (props) => {
                             <span>{getDate(v.eventSchedule.start_time)} to {getDate(v.eventSchedule.end_time)}</span>
                             <p>{v.content}</p>
                           </EventText>
-                          <EventImage><img src={EventImg} alt="Event" /></EventImage>
+                          {v.item_photo.length>0?
+                          <EventImage><img src={v.item_photo[0]} alt=""/></EventImage>
+                            :null }
                         </EventListing> : null
                       }
                     </>) : <><EventSkeleton /><EventSkeleton /><EventSkeleton /><EventSkeleton /></>
