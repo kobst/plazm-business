@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/static/css/main.6c5a4ddc.chunk.css",
-    "main.js": "/static/js/main.aa13a76a.chunk.js",
-    "main.js.map": "/static/js/main.aa13a76a.chunk.js.map",
+    "main.css": "/static/css/main.95bb576b.chunk.css",
+    "main.js": "/static/js/main.b6cda33d.chunk.js",
+    "main.js.map": "/static/js/main.b6cda33d.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.b89d9217.js",
     "runtime-main.js.map": "/static/js/runtime-main.b89d9217.js.map",
-    "static/css/2.a20a2368.chunk.css": "/static/css/2.a20a2368.chunk.css",
-    "static/js/2.899a02b0.chunk.js": "/static/js/2.899a02b0.chunk.js",
-    "static/js/2.899a02b0.chunk.js.map": "/static/js/2.899a02b0.chunk.js.map",
+    "static/css/2.d0cc6a4c.chunk.css": "/static/css/2.d0cc6a4c.chunk.css",
+    "static/js/2.26ba4a20.chunk.js": "/static/js/2.26ba4a20.chunk.js",
+    "static/js/2.26ba4a20.chunk.js.map": "/static/js/2.26ba4a20.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.db24539836d94df0a963e8ac7771ca9a.js": "/precache-manifest.db24539836d94df0a963e8ac7771ca9a.js",
+    "precache-manifest.a697ff7eb1a6aaa412b3f23ca7c5e7f6.js": "/precache-manifest.a697ff7eb1a6aaa412b3f23ca7c5e7f6.js",
     "service-worker.js": "/service-worker.js",
-    "static/css/2.a20a2368.chunk.css.map": "/static/css/2.a20a2368.chunk.css.map",
-    "static/css/main.6c5a4ddc.chunk.css.map": "/static/css/main.6c5a4ddc.chunk.css.map",
-    "static/js/2.899a02b0.chunk.js.LICENSE.txt": "/static/js/2.899a02b0.chunk.js.LICENSE.txt",
+    "static/css/2.d0cc6a4c.chunk.css.map": "/static/css/2.d0cc6a4c.chunk.css.map",
+    "static/css/main.95bb576b.chunk.css.map": "/static/css/main.95bb576b.chunk.css.map",
+    "static/js/2.26ba4a20.chunk.js.LICENSE.txt": "/static/js/2.26ba4a20.chunk.js.LICENSE.txt",
     "static/media/Instagram.svg": "/static/media/Instagram.ff9b6ac3.svg",
     "static/media/Twitter.svg": "/static/media/Twitter.c04e1330.svg",
     "static/media/App.css": "/static/media/right-arrow.501c02fa.svg",
@@ -47,9 +47,9 @@
   },
   "entrypoints": [
     "static/js/runtime-main.b89d9217.js",
-    "static/css/2.a20a2368.chunk.css",
-    "static/js/2.899a02b0.chunk.js",
-    "static/css/main.6c5a4ddc.chunk.css",
-    "static/js/main.aa13a76a.chunk.js"
+    "static/css/2.d0cc6a4c.chunk.css",
+    "static/js/2.26ba4a20.chunk.js",
+    "static/css/main.95bb576b.chunk.css",
+    "static/js/main.b6cda33d.chunk.js"
   ]
 }
