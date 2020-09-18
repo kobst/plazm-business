@@ -84,7 +84,7 @@ const Header = props => {
       <LogoWrapper><img src={Logo} alt="logo" /></LogoWrapper>
       <ProfileSection>
           <h2>Welcome { typeof props.value!=='undefined'?props.value.company_name:null}</h2>
-        <ProfileImg><img src={typeof props.value!=='undefined'?props.value.default_image_url:ProfileImage} alt="Profile" /></ProfileImg>
+        <ProfileImg><img src={typeof props.value!=='undefined'?props.value.default_image_url:null} alt="" /></ProfileImg>
         <div className="profileHover">
           <Sidebar value={props.value} />
         </div>

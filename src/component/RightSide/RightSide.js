@@ -31,6 +31,7 @@ import Mention from 'react-textarea-mention';
 import EditModalBox from '../Edit-Post'
 import DeleteModalBox from '../Delete-Post'
 import MoreIcon from '../../images/more.svg'
+import PostModalBox from '../Post-Modal'
 
 const RightSection = styled.div`
 
@@ -389,6 +390,7 @@ margin-top:15px;
 
 moment.locale('en-GB')
 const localizer = momentLocalizer(moment)
+let myInput
 const RightSide = (props) => {
   // const { loading } = props;
   const [isOpen, setIsOpen] = useState(false)
@@ -419,6 +421,7 @@ const RightSide = (props) => {
   const [monthEvent,setMonthEvent]= useState()
   const [eventCopy,setEventCopy]= useState()
   const [upComingEvents,setUpcomingEvents]= useState()
+  const [postOpen,setPostOpen]= useState(false)
 
   useEffect(() => {
     let updateUser = async authState => {
@@ -460,6 +463,7 @@ const RightSide = (props) => {
       } catch (err) {
         console.log(err)
       }
+      window.scrollTo(0, 0)
     }
     updateUser()
 
@@ -814,6 +818,13 @@ const RightSide = (props) => {
   var today = new Date();
   // const options = [{name: 'John Watson', id: 1},{name: 'Marie Curie', id: 2}]
 
+  // const upload =async(e)=> {
+  //  const data = await reactS3.uploadFile(e.target.files[0],config)
+  //   setImageCopy(data.location)
+  //   setImageUrl([...imageArr])
+  //   props.setImage([...imageArr])
+  //   }
+
   return (
     <RightSection>
       <Row>
@@ -911,7 +922,8 @@ const RightSide = (props) => {
 
                 <div className="mt-10">
                   <FlexRow style={{ padding: '0px' }}>
-                    <ButtonSmall bgColor="#0FB1D2"><img src={UploadIocn} alt="Upload" />Upload</ButtonSmall>
+                  <input id="myInput" onChange={(e)=>  console.log(e)} type="file"  ref={(ref) => myInput = ref} style={{ display: 'none' }} />
+                    <ButtonSmall onClick={(e) => myInput.click()} bgColor="#0FB1D2"><img src={UploadIocn} alt="Upload" />Upload</ButtonSmall>
                     {/* <UploadOuter>
                       <UploadImage><img src={UploadImg} alt="Upload" /></UploadImage>
                       <UploadImage><img src={UploadImg} alt="Upload" /></UploadImage>
@@ -966,12 +978,12 @@ const RightSide = (props) => {
                         </Icon>
                       </EventText>
                     </FeedListing> */}
-                    {/* <PostModalBox isOpen={isOpen} closeModal={() => setIsOpen(false)} /> */}
+         {/* <PostModalBox isOpen={postOpen} closeModal={() => setPostOpen(false)} /> */}
                     {typeof allFeed !== 'undefined' ?
                       allFeed.map(v => (
                         <FeedListing>
                           <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
-                          <EventText>
+                          <EventText onClick={() => setPostOpen(true)}>
                             <span>{(new Date(v.updatedAt).toLocaleString()).substring(0, 10)}</span>
                             <h3>{v.name ? v.name : place.company_name}</h3>
                             <p>{v.content}</p>

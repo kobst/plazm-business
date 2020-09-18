@@ -14,6 +14,10 @@ import MapPin from '../../../images/map-pin.svg'
 import ButtonSmall from '../../UI/ButtonSmall'
 import history from '../../../utils/history'
 import GoogleMapReact from 'google-map-react';
+import Geocode from "react-geocode";
+
+Geocode.setApiKey(process.env.REACT_APP_GOOGLE_API_KEY);
+ Geocode.setLanguage("en");
 
 
 const LeftSidebar = styled.div`
@@ -141,6 +145,7 @@ const Sidebar = ({value}) => {
   const [twitter,setTwitter]= useState()
   const [LinkedIn,setLinkedIn] = useState()
   const [tags, setTags] = useState([])
+  const [changeCenter,setChangeCenter]= useState()
 
 
   useEffect(() => {
@@ -154,6 +159,7 @@ const Sidebar = ({value}) => {
         }
         setTags(value.filter_tags)
         setPlace(value)
+        FindAddress(value.address)
       } catch (err) {
         console.log(err)
       }
@@ -185,6 +191,17 @@ const Sidebar = ({value}) => {
     scrollwheel: false,
     
   };
+  const FindAddress = (userAddress)=>{
+    Geocode.fromAddress(userAddress).then(
+     response => {
+       const { lat, lng } = response.results[0].geometry.location;
+       setChangeCenter({lat, lng})
+     },
+     error => {
+       console.error(error);
+     }
+   );
+   }
 
   return (
     <LeftSidebar>
@@ -194,7 +211,7 @@ const Sidebar = ({value}) => {
       <Map>
         <div style={{ height: '100%', width: '100%' }}>
           <GoogleMapReact
-        defaultCenter={center}
+          center={typeof changeCenter==='undefined'?center:changeCenter}
         defaultZoom={zoom}
          options={mapOptions}
          >

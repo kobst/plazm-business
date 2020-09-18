@@ -35,7 +35,6 @@ const config = {
   secretAccessKey:Secret,
 }
 const Gallery = (props) => {
-  console.log(props.image)
   const [isOpen,setIsOpen]= useState(false)
   const [imageUrl,setImageUrl]= useState([])
   const [imageCopy,setImageCopy]= useState([])
@@ -43,6 +42,7 @@ const Gallery = (props) => {
   useEffect(() => {
     if (typeof props.image!== 'undefined') {
         setImageUrl(props.image)
+        setImageCopy(props.image)
       }
       
     },[props.image,imageUrl])
@@ -57,7 +57,6 @@ const Gallery = (props) => {
     setImageUrl([...imageArr])
     props.setImage([...imageArr])
     }
-   console.log(imageUrl)
     return(
       <>
       { props.type==='edit'?

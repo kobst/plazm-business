@@ -3,9 +3,8 @@ import Modal from 'react-modal'
 // import closeIcon from '../../images/close-icon.svg'
 import Input from '../UI/Input/Input'
 import Button from '../UI/Button/Button'
-import DateTimePicker from 'react-datetime-picker';
+// import DateTimePicker from 'react-datetime-picker';
 import {getMessage} from '../../config'
-import moment from 'moment'
 import Label from '../UI/Label/label'
 import crossIocn from '../../images/cross-black.svg'
 import styled from 'styled-components'
@@ -13,23 +12,25 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
+// import { makeStyles } from '@material-ui/core/styles';
+// import TextField from '@material-ui/core/TextField';
 import Gallery from '../UI/Gallery'
+import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import DateFnsUtils from '@date-io/date-fns';
 
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    focused: {
-      border: '1px solid #4A90E2'
-},
-  },
-  textField: {
-    width: 224,
-  },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   container: {
+//     display: 'flex',
+//     flexWrap: 'wrap',
+//     focused: {
+//       border: '1px solid #4A90E2'
+// },
+//   },
+//   textField: {
+//     width: 224,
+//   },
+// }));
 // import Gallery from '../UI/Gallery'
 
 const DatePicker = styled.div`
@@ -58,16 +59,6 @@ margin: 10px auto 40px;
 `
 
 Modal.setAppElement('#root')
-moment.updateLocale('en-gb', {
-  calendar : {
-      lastDay : '[Yesterday at] HH:mm',
-      sameDay : '[Today at] HH:mm',
-      nextDay : '[Tomorrow at] HH:mm',
-      lastWeek : '[last] dddd [at] HH:mm',
-      nextWeek : 'dddd [at] HH:mm',
-      sameElse : 'L'
-  }
-})
 
 const renderMessage = getMessage()
 const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen, closeModal }) => {
@@ -88,7 +79,7 @@ const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen,
   const [saveDisable,setSaveDisable]= useState(false)
   const [disableReccuring,setDisableReccuring] = useState(false)
   const [image,setImage] = useState([])
-  const classes = useStyles();
+  // const classes = useStyles();
 
   useEffect(() => {
     if (typeof value !== 'undefined') {
@@ -100,13 +91,10 @@ const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen,
         setTitle(value.title)
       }
       if (value.start) {
-        console.log(value.start)
-         const startDate = new Date(value.start).toISOString().split('.')
-        setStart(startDate[0])
+        setStart(value.start)
       }
       if (value.end) {
-         const endDate = new Date(value.end).toISOString().split('.')
-        setEnd(endDate[0])
+        setEnd(value.end)
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -116,9 +104,9 @@ const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen,
    if(editValue===false){
     setTitle('')
     setDescription('')
-    setStart('')
+    setStart(new Date())
     setRecurring('Daily')
-    setEnd('')
+    setEnd(new Date())
      }
   }, [editValue,isOpen])
  
@@ -207,12 +195,12 @@ const handleEdit= async () => {
 
   }
 
-  const checkMultiDayEvent=(e)=> {
-    if(e.target.id==='start'){
-    if(end>e.target.value){
-    if(((new Date(e.target.value).getDate() < new Date(end).getDate()))
-       ||(new Date(e.target.value).getMonth() < new Date(end).getMonth())
-       ||(new Date(e.target.value).getFullYear() < new Date(end).getFullYear())){
+  const checkMultiDayEvent=(e,val)=> {
+    if(val==='start'){
+    if(end>e){
+    if(((new Date(e).getDate() < new Date(end).getDate()))
+       ||(new Date(e).getMonth() < new Date(end).getMonth())
+       ||(new Date(e).getFullYear() < new Date(end).getFullYear())){
            setDisableReccuring(true)
            setRecurring('')
           }
@@ -220,10 +208,10 @@ const handleEdit= async () => {
   }
 }
 else{
-  if(e.target.value>start){
-    if(((new Date(start).getDate() < new Date(e.target.value).getDate()))
-    ||(new Date(start).getMonth() < new Date(e.target.value).getMonth())
-    ||(new Date(start).getFullYear() < new Date(e.target.value).getFullYear())){
+  if(e>start){
+    if(((new Date(start).getDate() < new Date(e).getDate()))
+    ||(new Date(start).getMonth() < new Date(e).getMonth())
+    ||(new Date(start).getFullYear() < new Date(e).getFullYear())){
            setDisableReccuring(true)
            setRecurring('')
           }
@@ -304,24 +292,24 @@ else{
       setEnd(e.target.value)
     }
   }
-  const onChange = (e) => {
+  const onChange = (e,val) => {
     setTitleError(false)
     setStartError(false)
     setEndError(false)
     setError(false)
     setMessageError('')
     setDisableReccuring(false)
-    if (e.target.id === 'start') {
-      setStart(e.target.value)
-      setStartCopy(new Date(e.target.value))
+    if (val === 'start') {
+      setStart(e)
+      setStartCopy(e)
 
     }
 
     else {
-      setEnd(e.target.value)
-      setEndCopy(new Date(e.target.value))
+      setEnd(e)
+      setEndCopy(e)
     }
-    checkMultiDayEvent(e)
+     checkMultiDayEvent(e,val)
 
   }
   const onCancel= ()=>{
@@ -378,36 +366,38 @@ else{
           <DatePicker active={startError?true:null}>
             <label>Start Date</label>
             <form className="openingHrs" noValidate>
-            <TextField
+            {/* <TextField
             id="start"
            type="datetime-local"
-           autoFocus= "flase"
-           color="red"
+           ampm={false}
            value= {start}
-      
-
-            InputLabelProps={{
+      InputLabelProps={{
              shrink: true,
-             focused: false,
-             color: 'red'
              }}
              onChange={(e)=>onChange(e)}
-          />
+          /> */}
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <DateTimePicker value={start} onChange={(e)=>onChange(e,'start')}  />
+    </MuiPickersUtilsProvider>
            </form>
           </DatePicker >
           <DatePicker active={endError?true:null}>
           <label>End Date</label>
             <form className="openingHrs" noValidate>
-            <TextField
+            {/* <TextField
             id="end"
            type="datetime-local"
            value= {end}
+           ampm={false}
             className={classes.textField}
             InputLabelProps={{
              shrink: true,
              }}
              onChange={(e)=>onChange(e)}
-          />
+          /> */}
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <DateTimePicker value={end} onChange={(e)=>onChange(e,'end')}  />
+    </MuiPickersUtilsProvider>
            </form>
           </DatePicker>
           <FormControl>

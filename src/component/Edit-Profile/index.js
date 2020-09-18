@@ -280,18 +280,19 @@ const EditProfile = ({ value }) => {
   const [twitter, setTwitter] = useState()
   const [instagram, setInstagram] = useState()
   const [facebook, setFacebook] = useState()
+  const [linkedin,setLinkedIn]= useState()
   const [tags, setTags] = useState([])
   const [start,setStart]= useState()
   const [end,setEnd]= useState()
   const [startDay,setStartDay]= useState()
   const [endDay,setEndDay]= useState()
-  const[DropPin,setDropPin]= useState(false)
-  const [image,setImage]= useState()
+  const [DropPin,setDropPin]= useState(false)
   const [imageUrl,setImageUrl]= useState()
   const [changeCenter,setChangeCenter]= useState()
 
   useEffect(() => {
     if (typeof value !== 'undefined') {
+      window.scrollTo(0, 0)
       if (value.company_name) {
         setCompany(value.company_name)
       }
@@ -321,6 +322,7 @@ const EditProfile = ({ value }) => {
       }
       if (value.address) {
         setAddress(value.address)
+        FindAddress(value.address)
       }
       if (value.filter_tags) {
         setTags(value.filter_tags)
@@ -334,6 +336,9 @@ const EditProfile = ({ value }) => {
       }
       if (value.handles.facebook) {
         setFacebook(value.handles.facebook)
+      }
+      if (value.handles.linkedin) {
+        setLinkedIn(value.handles.linkedin)
       }
     }
       if(value.default_image_url){
@@ -377,9 +382,10 @@ const EditProfile = ({ value }) => {
         twitter: twitter,
         instagram: instagram,
         facebook: facebook,
+        linkedin:linkedin,
         filterTags: tags,
         openingHours: format,
-        file:image,
+        file:imageUrl,
 
       })
     });
@@ -443,6 +449,9 @@ const EditProfile = ({ value }) => {
     } else if (e.target.id === 'instagram') {
       setInstagram(e.target.value)
     }
+    else if (e.target.id === 'linkedin') {
+      setLinkedIn(e.target.value)
+    }
     else if (e.target.id === 'start') {
       setStartDay(e.target.value)
     }
@@ -492,12 +501,11 @@ const renderMarkers = (val) => {
   );
   }
  };
-const FindAddress = ()=>{
+const FindAddress = (userAddress)=>{
  Geocode.fromAddress(userAddress).then(
   response => {
     const { lat, lng } = response.results[0].geometry.location;
-    setChangeCenter({lat,
-      lng: lng,})
+    setChangeCenter({lat, lng})
     setLatitude(lat)
     setLongitude(lng)
   },
@@ -507,7 +515,7 @@ const FindAddress = ()=>{
 );
 }
 const upload =(e)=> {
-reactS3.uploadFile(e.target.files[0],config).then(data => (setImageUrl(data.location),setImage(data.location)))
+reactS3.uploadFile(e.target.files[0],config).then(data => setImageUrl(data.location))
 .catch(err => console.error(err))
 }
 let myInput
@@ -519,7 +527,6 @@ let myInput
           <Card>
             {typeof value!=='undefined' && value.latitude!=='undefined'?
             <GoogleMapReact
-           defaultCenter={{lat:value.latitude,lng:value.longitude}}
             center={typeof changeCenter==='undefined'?center:changeCenter}
            defaultZoom={zoom}
           onClick={(e)=>renderMarkers(e)}
@@ -558,7 +565,7 @@ let myInput
               <div className="mt-15">
                 <FlexRow>
                   <ButtonSmall onClick={()=>setDropPin(true)} maxWidth="103px" bgColor="#0FB1D2"><img src={PinIcon} alt="Drop Pin" />Drop Pin</ButtonSmall>
-                  <ButtonSmall onClick={()=>FindAddress()} maxWidth="137px" style={{ marginLeft: 'auto' }}>Find Address</ButtonSmall>
+                  <ButtonSmall onClick={()=>FindAddress(userAddress)} maxWidth="137px" style={{ marginLeft: 'auto' }}>Find Address</ButtonSmall>
                 </FlexRow>
               </div>
 
@@ -585,7 +592,7 @@ let myInput
             </FormGroup>
             <FormGroup>
               <Label name="LinkedIN Profile"></Label>
-              <Input type="text" id='linkedin' onChange={(e) => handleChange(e)} />
+              <Input type="text" id='linkedin' value={linkedin} onChange={(e) => handleChange(e)} />
             </FormGroup>
             <FormGroup>
               <Label name="Instagram Profile"></Label>
