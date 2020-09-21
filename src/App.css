@@ -417,18 +417,24 @@ justify-content: center;
 width:100%;
 margin: 7px;
 position: relative;
+max-height: 153px;
 }
 .galleryImage img{
   max-width: 100%;
+  max-height: 100%;
 }
 
 .galleryImage p{
   font-size: 14px;
-  line-height: 36px;
+  line-height: normal;
   color: #7C9CBF;
   display: flex;
   flex-direction: column;
   cursor:pointer;
+  margin-top: 3px;
+}
+.galleryImage p img{
+  margin-bottom: 10px;
 }
 .close{
   position: absolute;
@@ -1053,16 +1059,20 @@ border-radius: 17px;
 border:1px solid #facdd0;
 min-width:110px;
 margin-bottom: 10px !important;
+text-align: left;
+justify-content: flex-start;
 }
 .react-tag-input__tag__remove{
   background: transparent !important;
 }
 .react-tag-input__tag__content{
-  font-weight: 500 !important;
+  font-weight: 600 !important;
   font-size: 14px !important;
   line-height: 18px !important;
   font-family: IBM Plex Sans;
   color: #280A33;
+  text-align: left;
+  padding-left: 0 !important;
 }
 .react-tag-input__tag__remove::before{
   display: none;
@@ -1072,10 +1082,11 @@ margin-bottom: 10px !important;
  
 }
 .react-tag-input__tag__remove{
-  background: url(/static/media/cross-brown.1daaea2c.svg) no-repeat center !important;
+  background: url(/static/media/cross-brown.f229adf9.svg) no-repeat center !important;
   width: 12px !important;
   height: 11px !important;
   border-radius: 0px !important;
+  margin-left: auto;
 }
 
 .rbc-time-view{
@@ -1126,4 +1137,18 @@ display: none;
 }
 .openingHrs input:focus,.openingHrs div:focus{
   background: transparent;
+}
+
+.rbc-event:focus {
+  outline: 0 !important;
+}
+
+.error_msg_popup{
+  color: #ff0000;
+  font-size: 16px;
+  margin: 0 0 10px;
+}
+
+.MuiFormControl-root{
+  width: 100%;
 }

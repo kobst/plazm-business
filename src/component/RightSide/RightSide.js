@@ -200,6 +200,7 @@ border-radius: 16px;
 margin-top:10px;
 display: flex;
 justify-content: space-between;
+min-height: 172px;
 :hover{
   background: rgba(255, 79, 148, 0.05);
 border: 1px solid #FF479D;
