@@ -350,8 +350,9 @@ else{
             
             <Button onClick={() => onCancel()} type="submit" className="btn btn-primary cancel"><img src={crossIocn} alt="Delete" /></Button>
 
-            {error? <h4>{message}</h4>:null}
+            
         </div>
+        {error? <h4 className="error_msg_popup">{message}</h4>:null}
         <div className="ContentModal">
           <FormGroup>
             <Label name="Add Title"/>
