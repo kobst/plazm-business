@@ -649,17 +649,15 @@ const RightSide = (props) => {
       }
     }
   }
-  const handleEdit = (v) => {
+  const handleEdit = () => {
     handleClose()
     setIsModelOpen(true)
-    setContent(v)
 
   }
 
-  const handleDelete = (v) => {
+  const handleDelete = () => {
     handleClose()
     setDeleteOpen(true)
-    setId(v._id)
   }
   const getCustomToolbar = (toolbar) => {
   //  const toolbarDate = toolbar.date;
@@ -847,7 +845,9 @@ const RightSide = (props) => {
     }
 
   }
-  const handleClick = (event) => {
+  const handleClick = (event,v) => {
+    setContent(v)
+    setId(v._id)
     setAnchorEl(event.currentTarget);
   };
 
@@ -1044,6 +1044,8 @@ const RightSide = (props) => {
                       </EventText>
                     </FeedListing> */}
          {/* <PostModalBox isOpen={postOpen} closeModal={() => setPostOpen(false)} /> */}
+         <EditModalBox setToggleMenu={setToggleMenu} setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={curators} value={content} />
+                                    <DeleteModalBox setToggleMenu={setToggleMenu} setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
                     {typeof allFeed !== 'undefined' ?
                       allFeed.map(v => (
                         <FeedListing>
@@ -1055,22 +1057,20 @@ const RightSide = (props) => {
                             <Icon>
                             <EditRomve>
               
-                                  <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                                  <Button aria-controls="simple-menu" aria-haspopup="true" onClick={(e)=>handleClick(e,v)}>
                                   ...
                                 </Button>
                           
-                                   
+                      
                                 <Menu
-                                  id="simple-menu"
+                                  id={v._id}
                                   anchorEl={anchorEl}
                                   keepMounted
                                   open={Boolean(anchorEl)}
                                   onClose={handleClose}
                                 >
-                                    <EditModalBox setToggleMenu={setToggleMenu} setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={curators} value={content} />
-                                    <DeleteModalBox setToggleMenu={setToggleMenu} setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
-                                  <MenuItem onClick={()=>handleEdit(v)}>Edit</MenuItem>
-                                  <MenuItem onClick={() => handleDelete(v)}>Delete</MenuItem>
+                                  <MenuItem onClick={()=>handleEdit()}>Edit</MenuItem>
+                                  <MenuItem onClick={() => handleDelete()}>Delete</MenuItem>
                                 
                                 </Menu>
                                 </EditRomve>

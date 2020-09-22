@@ -107,6 +107,7 @@ const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen,
     setStart(new Date())
     setRecurring('Daily')
     setEnd(new Date())
+    setImage([])
      }
   }, [editValue,isOpen])
  
@@ -311,6 +312,7 @@ else{
 
   }
   const onCancel= ()=>{
+    setId('')
     setDisableReccuring(false)
     setError(false)
     setMessageError('')
