@@ -32,6 +32,7 @@ import EditModalBox from '../Edit-Post'
 import DeleteModalBox from '../Delete-Post'
 import MoreIcon from '../../images/more.svg'
 import PostModalBox from '../Post-Modal'
+import reactS3 from 'react-s3'
 
 const RightSection = styled.div`
 
@@ -269,6 +270,7 @@ sup{
 
 `
 const FeedImage = styled.div`
+display: flex;
 width:53px;
 height:53px;
 border:2px solid #fff;
@@ -276,6 +278,9 @@ overflow:hidden;
 margin-right:10px;
 border-radius:100%;
 box-shadow:0px 14px 10px rgba(0, 0, 0, 0.07);
+img{
+  max-width:100%
+}
 `
 const EventText = styled.div`
 padding:0px;
@@ -353,32 +358,36 @@ color: #979797;
 margin-right:38px;
 }
 `
-// const UploadImage = styled.div`
-// width: 31px;
-// height: 33px;
-// border-radius: 5px;
-// overflow:hidden;
-// margin-right:3px;
-// position:relative;
-// cursor:pointer;
-// :hover{
-//   :after{
-//     content:"";
-//     position: absolute;
-//     background: rgba(0,0,0,0.7) url(${CrossIcon});
-//     width: 31px;
-//     height: 33px;
-//     left: 0;
-//     top: 0;
-//     background-repeat: no-repeat;
-//     background-position: center;
-//   }
-// }
-// `
-// const UploadOuter = styled.div`
-// display:flex;
-// margin:0 10px;
-// `
+const UploadImage = styled.div`
+width: 31px;
+height: 33px;
+border-radius: 5px;
+overflow:hidden;
+margin-right:3px;
+display: flex;
+position:relative;
+cursor:pointer;
+img{
+  max-width:100%
+}
+:hover{
+  :after{
+    content:"";
+    position: absolute;
+    background: rgba(0,0,0,0.7) url(${CrossIcon});
+    width: 31px;
+    height: 33px;
+    left: 0;
+    top: 0;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+}
+`
+const UploadOuter = styled.div`
+display:flex;
+margin:0 10px;
+`
 const UserListing = styled.div`
 padding:0px;
 max-height: 772px;
@@ -393,6 +402,18 @@ margin-top:15px;
 
 moment.locale('en-GB')
 const localizer = momentLocalizer(moment)
+const bucket = process.env.REACT_APP_BUCKET_NAME
+const dir = process.env.REACT_APP_DIRNAME
+const region = process.env.REACT_APP_REGION
+const accessKey = process.env.REACT_APP_ACCESS_KEY_ID
+const Secret = process.env.REACT_APP_SECRET_ACCESS_KEY
+const config = {
+  bucketName: bucket,
+  dirName: dir,
+  region: region,
+  accessKeyId: accessKey,
+  secretAccessKey:Secret,
+}
 let myInput
 const RightSide = (props) => {
   // const { loading } = props;
@@ -425,6 +446,10 @@ const RightSide = (props) => {
   const [eventCopy,setEventCopy]= useState()
   const [upComingEvents,setUpcomingEvents]= useState()
   const [postOpen,setPostOpen]= useState(false)
+  const [imageUrl,setImageUrl]=useState([])
+  const [imageCopy,setImageCopy]=useState([])
+  const [imageUpload,setImageUpload]=useState([])
+  const [imageUploadCopy,setImageUploadCopy]=useState([])
 
   useEffect(() => {
     let updateUser = async authState => {
@@ -446,14 +471,14 @@ const RightSide = (props) => {
 
           const val = await fetchItems(place[0]._id)
           const sol = val.filter(v => v.eventSchedule !== null && v.eventSchedule && v.eventSchedule.start_time!== null)
-          const feed = val.filter(v => (!v.eventSchedule || v.eventSchedule === null))
+          const feed = val.filter(v => (!v.eventSchedule || v.eventSchedule === null)).reverse()
           const allMentions = val.filter(v => (!v.eventSchedule || v.eventSchedule === null) && (v.name !== place[0].company_name) && v.name)
           const upEvent = sol.filter(v=>(new Date(v.eventSchedule.start_time)>=new Date()))
           setUpcomingEvents(upEvent)
           setMention('Public')
           setActivePublic(true)
           setPosts(val)
-          setEventList(sol)
+          setEventList(sol.reverse())
           setFeed(feed)
           setAllFeed(feed)
           setAllMentions(allMentions)
@@ -761,7 +786,7 @@ const RightSide = (props) => {
   const getDate = (value) => {
     const date = new Date(value);
     const time = ConvertNumberToTwoDigitString(date.getHours()) +
-      ":" + ConvertNumberToTwoDigitString(date.getMinutes()) + "," + (date.toLocaleString()).substring(0, 10);
+      ":" + ConvertNumberToTwoDigitString(date.getMinutes()) + "," + (date.toLocaleString()).substring(0,new Date(date).toLocaleString().indexOf(","));
     return time
 
   }
@@ -806,6 +831,7 @@ const RightSide = (props) => {
           place_id: place._id,
           content: description,
           scheduledEvent: "no",
+          item_photo:imageUpload,
         })
       });
       const body = await response.text();
@@ -817,16 +843,34 @@ const RightSide = (props) => {
   const handleChange = (e) => {
     setDescription(e)
   }
+  const CancelPost= ()=>{
+    setImageUrl([])
+    setImageUpload([])
+  }
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   var today = new Date();
   // const options = [{name: 'John Watson', id: 1},{name: 'Marie Curie', id: 2}]
 
-  // const upload =async(e)=> {
-  //  const data = await reactS3.uploadFile(e.target.files[0],config)
-  //   setImageCopy(data.location)
-  //   setImageUrl([...imageArr])
-  //   props.setImage([...imageArr])
-  //   }
+  const upload =async(e)=> {
+    const imageArr= imageCopy
+    const imgUpload= imageUploadCopy
+   const data = await reactS3.uploadFile(e.target.files[0],config)
+    imageArr.push({id:(imageCopy.length)+1,value:data.location})
+    imgUpload.push(data.location)
+    setImageUpload([...imgUpload])
+    setImageUploadCopy([...imgUpload])
+    setImageCopy([...imageArr])
+    setImageUrl([...imageArr])
+    }
+
+    const deleteImage = (v)=> {
+      const deleteImage = imageUrl.filter((item) => item.id !== v.id)
+      const deleteImageUpload = imageUploadCopy.filter((item) => item !== v.value)
+      setImageUpload([...deleteImageUpload])
+      setImageUploadCopy([...deleteImageUpload])
+      setImageCopy([...deleteImage])
+      setImageUrl([...deleteImage])
+    }
 
   return (
     <RightSection>
@@ -918,24 +962,26 @@ const RightSide = (props) => {
               <div className="mt-15">
                 {/* <Textarea /> */}
                 <Mention
-                  onChange={handleChange}
+                 onChange={handleChange}
                   field="name"
                   data={curators}
                 />
 
                 <div className="mt-10">
                   <FlexRow style={{ padding: '0px' }}>
-                  <input id="myInput" onChange={(e)=>  console.log(e)} type="file"  ref={(ref) => myInput = ref} style={{ display: 'none' }} />
+                  <input id="myInput" onChange={(e)=> upload(e)} type="file"  ref={(ref) => myInput = ref} style={{ display: 'none' }} />
                     <ButtonSmall onClick={(e) => myInput.click()} bgColor="#0FB1D2"><img src={UploadIocn} alt="Upload" />Upload</ButtonSmall>
-                    {/* <UploadOuter>
-                      <UploadImage><img src={UploadImg} alt="Upload" /></UploadImage>
-                      <UploadImage><img src={UploadImg} alt="Upload" /></UploadImage>
-                      <UploadImage><img src={UploadImg} alt="Upload" /></UploadImage>
-                    </UploadOuter> */}
+                    {imageUrl ? <UploadOuter>{imageUrl.map(v=>
+                     
+                 <UploadImage id={v.id} onClick={()=>deleteImage(v)}><img src={v.value} alt="Upload" /></UploadImage>
+                    )}
+                    </UploadOuter>:null}
                     <ButtonSmall
                       maxWidth="34px"
                       bgColor="#FF7171"
-                      style={{ marginLeft: 'auto', marginRight: '9px' }}>
+                      style={{ marginLeft: 'auto', marginRight: '9px' }}
+                      onClick={()=>CancelPost()}
+                      >
                       <img src={CrossIcon} alt="Cross Icon" style={{ marginRight: '0px' }} />
                     </ButtonSmall>
                     <ButtonSmall disabled={saveDisable} onClick={() => addPost()}>Publish</ButtonSmall>
@@ -985,9 +1031,9 @@ const RightSide = (props) => {
                     {typeof allFeed !== 'undefined' ?
                       allFeed.map(v => (
                         <FeedListing>
-                          <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
+                          <FeedImage><img src={v.item_photo.length!==0? v.item_photo[0]:EventImg} alt="Event" /></FeedImage>
                           <EventText onClick={() => setPostOpen(true)}>
-                            <span>{(new Date(v.updatedAt).toLocaleString()).substring(0, 10)}</span>
+                            <span>{(new Date(v.updatedAt).toLocaleString()).substring(0,new Date(v.updatedAt).toLocaleString().indexOf(","))}</span>
                             <h3>{v.name ? v.name : place.company_name}</h3>
                             <p>{v.content}</p>
                             <Icon>

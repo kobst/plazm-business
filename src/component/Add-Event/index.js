@@ -161,8 +161,8 @@ const handleEdit= async () => {
         scheduledEvent:"yes",
         content:description,
         recurring:recurring,
-        start_time:startCopy,
-        end_time:endCopy,
+        start_time:start,
+        end_time:end,
         item_photo:image,
 
 
@@ -301,13 +301,11 @@ else{
     setDisableReccuring(false)
     if (val === 'start') {
       setStart(e)
-      setStartCopy(e)
 
     }
 
     else {
       setEnd(e)
-      setEndCopy(e)
     }
      checkMultiDayEvent(e,val)
 
@@ -320,6 +318,7 @@ else{
     setEndError(false)
     setTitleError(false)
     setTitle('')
+    setImage([])
     setDescription('')
     setRecurring('Daily')
     setStart('')
@@ -378,7 +377,7 @@ else{
              onChange={(e)=>onChange(e)}
           /> */}
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <DateTimePicker value={start} onChange={(e)=>onChange(e,'start')}  />
+      <DateTimePicker format="dd/MM/yyyy HH:mm" value={start} onChange={(e)=>onChange(e,'start')}  />
     </MuiPickersUtilsProvider>
            </form>
           </DatePicker >
@@ -397,7 +396,7 @@ else{
              onChange={(e)=>onChange(e)}
           /> */}
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <DateTimePicker value={end} onChange={(e)=>onChange(e,'end')}  />
+      <DateTimePicker format="dd/MM/yyyy HH:mm" value={end} onChange={(e)=>onChange(e,'end')}  />
     </MuiPickersUtilsProvider>
            </form>
           </DatePicker>
