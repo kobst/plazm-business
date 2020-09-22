@@ -18,6 +18,7 @@ import {GoogleApiWrapper} from 'google-maps-react';
 import Geocode from "react-geocode";
 import FindAddressValue from '../../utils/findAddress'
 import reactS3 from 'react-s3'
+import TagInputCross from '../../images/Mask.svg'
 const bucket = process.env.REACT_APP_BUCKET_NAME
 const dir = process.env.REACT_APP_DIRNAME
 const region = process.env.REACT_APP_REGION
@@ -214,9 +215,10 @@ box-sizing: border-box;
 box-shadow: 0px 2px 4px rgba(44, 39, 56, 0.08);
 border-radius: 17px;
 height:34px;
-padding:0 15px;
+padding:0 35px 0 15px;
 font-family: 'IBM Plex Sans',sans-serif;
 width: calc(100% - 195px);
+background:#ffffff url(${TagInputCross}) no-repeat top 10px right 15px;
 :focus{
   outline:none;
   border: 1px solid #DBE2EA;
