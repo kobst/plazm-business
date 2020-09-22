@@ -327,9 +327,11 @@ border-radius: 9px;
 overflow:hidden;
 margin-left:30px;
 max-width:172px;
+max-height: 118px;
 img{
   max-width:100%;
   display:block;
+  border-radius: 9px;
 }
 `
 const TabsOuter = styled.div`

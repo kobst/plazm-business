@@ -420,7 +420,9 @@ else{
             <option value="Monday-Friday">Monday-Friday</option>
           </select> */}
           <br />
+          <div className="Image_wrap">
           <Gallery type="edit" image={image} setImage={setImage}/>
+          </div>
           <P>You may upload images under the size of 2 MB each. Any dimension related message goes here</P>
           {!editValue ?
             <>
