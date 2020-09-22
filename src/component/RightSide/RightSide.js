@@ -844,6 +844,8 @@ const RightSide = (props) => {
   const CancelPost= ()=>{
     setImageUrl([])
     setImageUpload([])
+    setImageUploadCopy([])
+    setImageCopy([])
   }
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   var today = new Date();

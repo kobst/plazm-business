@@ -57,6 +57,12 @@ const Gallery = (props) => {
     setImageUrl([...imageArr])
     props.setImage([...imageArr])
     }
+    const CancelPost= (v)=>{
+      const deleteImage = imageUrl.filter((item) => item !== v)
+      setImageUrl([...deleteImage])
+      setImageCopy([...deleteImage])
+      props.setImage([...deleteImage])
+    }
     return(
       <>
       { props.type==='edit'?
@@ -67,7 +73,7 @@ const Gallery = (props) => {
           {/* <GallerModalBox  isOpen={isOpen} closeModal={() => setIsOpen(false)}/> */}
         </div>
         {imageUrl ?(imageUrl.map(v => 
-                    <div className="galleryImage">
+                    <div onClick={()=>CancelPost(v)} className="galleryImage">
                     <img src={v} alt="" />
                   </div>)): null
                   }

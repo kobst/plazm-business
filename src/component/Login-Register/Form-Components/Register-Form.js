@@ -71,7 +71,7 @@ const RegisterForm = ({ verified, err,password,phoneLong,phoneShort, firstError,
                 <form onSubmit={(e) => handleSubmit(e)}>
 
                     <FormGroup>
-                        <Label name="User Name" />
+                        <Label name="Business Name" />
                         <Input type="text" id="username" onChange={(e) => handleChange(e)}
                             error={firstNameError} placeholder="" />
                         {firstError ? <ErrorMessage>Username length should be greater than 3.</ErrorMessage> : null}
