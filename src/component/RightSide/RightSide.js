@@ -870,6 +870,7 @@ const RightSide = (props) => {
   const upload =async(e)=> {
     const imageArr= imageCopy
     const imgUpload= imageUploadCopy
+    if(imageCopy.length<5){
    const data = await reactS3.uploadFile(e.target.files[0],config)
     imageArr.push({id:(imageCopy.length)+1,value:data.location})
     imgUpload.push(data.location)
@@ -877,6 +878,7 @@ const RightSide = (props) => {
     setImageUploadCopy([...imgUpload])
     setImageCopy([...imageArr])
     setImageUrl([...imageArr])
+    }
     }
 
     const deleteImage = (v)=> {
