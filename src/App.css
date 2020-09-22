@@ -414,6 +414,7 @@ min-height: 153px;
 display: flex;
 align-items: center;
 justify-content: center;
+cursor:pointer;
 width:100%;
 margin: 7px;
 position: relative;
@@ -436,6 +437,20 @@ max-height: 153px;
 .galleryImage p img{
   margin-bottom: 10px;
 }
+
+.Image_wrap .galleryImage:hover::after {
+  content: "";
+  position: absolute;
+  background: url(./images/cross-icon.svg) center center no-repeat rgba(0, 0, 0, 0.7);
+  width: 100%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+}
+.Image_wrap .galleryImage:nth-child(1):hover::after{
+  display: none;
+}
+
 .close{
   position: absolute;
   top: -10px;
@@ -1082,7 +1097,7 @@ justify-content: flex-start;
  
 }
 .react-tag-input__tag__remove{
-  background: url(/static/media/cross-brown.f229adf9.svg) no-repeat center !important;
+  background: url(./images/cross-brown.svg) no-repeat center !important;
   width: 12px !important;
   height: 11px !important;
   border-radius: 0px !important;
@@ -1152,3 +1167,42 @@ display: none;
 .MuiFormControl-root{
   width: 100%;
 }
+
+@media not all and (min-resolution:.001dpcm) {
+  .Image_wrap{
+  overflow: scroll;
+  }
+  .MuiSelect-select.MuiSelect-select{
+  padding-bottom: 15px;
+  }
+  .rbc-timeslot-group{
+  min-height: 42px;
+  }
+  .monthView .rbc-calendar .rbc-month-row{
+  height: 55px;
+  }
+  }
+  
+  .MuiButtonBase-root.MuiButton-root.MuiButton-text{
+  padding: 0;
+  line-height: normal;
+  }
+  
+  .MuiButtonBase-root.MuiButton-root.MuiButton-text:hover, .MuiButtonBase-root.MuiButton-root.MuiButton-text:focus{
+  background: transparent;
+  }
+  
+  .MuiButtonBase-root.MuiButton-root.MuiButton-text span.MuiButton-label {
+  font-size: 24px !important;
+  justify-content: flex-start !important;
+  color: #d2d2d2 !important;
+  }
+  
+  .MuiPaper-root.MuiMenu-paper {
+  box-shadow: 2px 2px 2px #e5e5e5 !important;
+  border-radius: 4px !important;
+  border: 1px solid #e5e5e5;
+  }
+
+
+

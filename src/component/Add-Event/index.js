@@ -107,6 +107,7 @@ const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen,
     setStart(new Date())
     setRecurring('Daily')
     setEnd(new Date())
+    setImage([])
      }
   }, [editValue,isOpen])
  
@@ -311,6 +312,7 @@ else{
 
   }
   const onCancel= ()=>{
+    setId('')
     setDisableReccuring(false)
     setError(false)
     setMessageError('')
@@ -419,7 +421,9 @@ else{
             <option value="Monday-Friday">Monday-Friday</option>
           </select> */}
           <br />
+          <div className="Image_wrap">
           <Gallery type="edit" image={image} setImage={setImage}/>
+          </div>
           <P>You may upload images under the size of 2 MB each. Any dimension related message goes here</P>
           {!editValue ?
             <>
