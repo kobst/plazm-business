@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/static/css/main.3169cb0e.chunk.css",
-    "main.js": "/static/js/main.7d8bca15.chunk.js",
-    "main.js.map": "/static/js/main.7d8bca15.chunk.js.map",
+    "main.css": "/static/css/main.b6406a62.chunk.css",
+    "main.js": "/static/js/main.755f292f.chunk.js",
+    "main.js.map": "/static/js/main.755f292f.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.b89d9217.js",
     "runtime-main.js.map": "/static/js/runtime-main.b89d9217.js.map",
     "static/css/2.a4059b32.chunk.css": "/static/css/2.a4059b32.chunk.css",
-    "static/js/2.7e8543dd.chunk.js": "/static/js/2.7e8543dd.chunk.js",
-    "static/js/2.7e8543dd.chunk.js.map": "/static/js/2.7e8543dd.chunk.js.map",
+    "static/js/2.5f47d2cb.chunk.js": "/static/js/2.5f47d2cb.chunk.js",
+    "static/js/2.5f47d2cb.chunk.js.map": "/static/js/2.5f47d2cb.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.2542c1e83c3482b46586e2ab3f96cf31.js": "/precache-manifest.2542c1e83c3482b46586e2ab3f96cf31.js",
+    "precache-manifest.02ddaf56f987eccc21f7632285833349.js": "/precache-manifest.02ddaf56f987eccc21f7632285833349.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.a4059b32.chunk.css.map": "/static/css/2.a4059b32.chunk.css.map",
-    "static/css/main.3169cb0e.chunk.css.map": "/static/css/main.3169cb0e.chunk.css.map",
-    "static/js/2.7e8543dd.chunk.js.LICENSE.txt": "/static/js/2.7e8543dd.chunk.js.LICENSE.txt",
+    "static/css/main.b6406a62.chunk.css.map": "/static/css/main.b6406a62.chunk.css.map",
+    "static/js/2.5f47d2cb.chunk.js.LICENSE.txt": "/static/js/2.5f47d2cb.chunk.js.LICENSE.txt",
     "static/media/Instagram.svg": "/static/media/Instagram.ff9b6ac3.svg",
     "static/media/Mask.svg": "/static/media/Mask.dffb6f67.svg",
     "static/media/Twitter.svg": "/static/media/Twitter.c04e1330.svg",
@@ -22,8 +22,6 @@
     "static/media/comment-grey.svg": "/static/media/comment-grey.2494fb46.svg",
     "static/media/comment.svg": "/static/media/comment.b6002278.svg",
     "static/media/cross-black.svg": "/static/media/cross-black.bac9fe78.svg",
-    "static/media/cross-brown.svg": "/static/media/cross-brown.1daaea2c.svg",
-    "static/media/cross-icon.svg": "/static/media/cross-icon.50dd4897.svg",
     "static/media/cross-modal.svg": "/static/media/cross-modal.19e77601.svg",
     "static/media/cross-pink.svg": "/static/media/cross-pink.cabe27cf.svg",
     "static/media/eventimg.png": "/static/media/eventimg.72a5ec4f.png",
@@ -53,8 +51,8 @@
   "entrypoints": [
     "static/js/runtime-main.b89d9217.js",
     "static/css/2.a4059b32.chunk.css",
-    "static/js/2.7e8543dd.chunk.js",
-    "static/css/main.3169cb0e.chunk.css",
-    "static/js/main.7d8bca15.chunk.js"
+    "static/js/2.5f47d2cb.chunk.js",
+    "static/css/main.b6406a62.chunk.css",
+    "static/js/main.755f292f.chunk.js"
   ]
 }
