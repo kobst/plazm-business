@@ -49,7 +49,7 @@ const Register = (props) => {
       }, []);
     
 
-    const signUp = () => {
+    const signUp = (form) => {
         Auth.signUp({
             username: email,
             password: password,
@@ -62,6 +62,7 @@ const Register = (props) => {
         .then(async(res) => {
             if(res.userSub){
          if(await checkUser(res.userSub)){
+             form.reset()
             setVerified(true)
             setError(false)
             setLoader(false)
@@ -165,6 +166,7 @@ const Register = (props) => {
   
    const handleSubmit = async (e) => {
         e.preventDefault();
+        const form = e.target
         setMessage()
         if (verified && ValidateCode()) {
             setMessage()
@@ -176,7 +178,7 @@ const Register = (props) => {
             if(await checkBusiness()){
            setMessage()
            setError(false)
-           signUp()
+           signUp(form)
             }
             else{
                 setError(true)

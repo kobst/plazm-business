@@ -52,7 +52,7 @@ margin-top: 6px;
 `
 
 
-const RegisterForm = ({ verified, err,password,phoneLong,phoneShort, firstError,emptyCode, business, loader, setbusiness, setBusinessInfo, setName, message, type, locationError, codeError, firstNameError, phoneError, emailError, passwordError, handleChange, handleSubmit }) => {
+const RegisterForm = ({ verified, err,confirmationCode,password,phoneLong,phoneShort, firstError,emptyCode, business, loader, setbusiness, setBusinessInfo, setName, message, type, locationError, codeError, firstNameError, phoneError, emailError, passwordError, handleChange, handleSubmit }) => {
     return (
         <>
             {verified ? (<form onSubmit={(e) => handleSubmit(e)}>
@@ -61,7 +61,7 @@ const RegisterForm = ({ verified, err,password,phoneLong,phoneShort, firstError,
                         <p className="code"> Enter the Confirmation code sent to your Registered Email</p>
                         <FormGroup>
                             <Label name="Confirmation Code" />
-                            <Input id='confirmationCode' type='text' onChange={(e) => handleChange(e)} error={emptyCode} placeholder="" />
+                            <Input value={confirmationCode} id='confirmationCode' type='text' onChange={(e) => handleChange(e)} error={emptyCode} />
                             {codeError ? <ErrorMessage>Confirmation code does not match</ErrorMessage> : null}
                         </FormGroup>
                         <Button type="submit" className="btn btn-primary">{loader && !codeError ? <ValueLoader /> : 'Confirm Sign up'}</Button>

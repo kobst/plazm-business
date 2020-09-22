@@ -90,7 +90,7 @@ display:flex;
 width:100%;
 span:last-child{
 margin-left: auto;
-width: 33%;
+width: auto;
 }
 }
 `
@@ -146,6 +146,8 @@ const Sidebar = ({value}) => {
   const [LinkedIn,setLinkedIn] = useState()
   const [tags, setTags] = useState([])
   const [changeCenter,setChangeCenter]= useState()
+  const [day,setDay]= useState()
+  const [hours,setHours]= useState()
 
 
   useEffect(() => {
@@ -157,6 +159,10 @@ const Sidebar = ({value}) => {
         setTwitter(value.handles.twitter)
         setLinkedIn(value.handles.linkedin)
         }
+        const val= value.hours
+       const timeValue= val.split(',')
+        setDay(timeValue[0])
+        setHours(timeValue[1])
         setTags(value.filter_tags)
         setPlace(value)
         FindAddress(value.address)
@@ -251,7 +257,7 @@ const Sidebar = ({value}) => {
       </Listing>
       <Listing>
         <SubHeading name="Opening Hours" />
-        { <p><span>{typeof placeValue !== 'undefined' && placeValue.hours ? placeValue.hours:null}</span> <span style={{marginLeft:'auto'}}> </span></p> }
+        { <p><span>{typeof placeValue !== 'undefined' && placeValue.hours ? day:null}</span> <span style={{marginLeft:'auto'}}>{typeof placeValue !== 'undefined' && placeValue.hours ? hours:null}</span></p> }
       </Listing>
 
       <Listing style={{ borderBottom: 'none' }}>
