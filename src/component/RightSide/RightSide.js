@@ -33,6 +33,9 @@ import DeleteModalBox from '../Delete-Post'
 import MoreIcon from '../../images/more.svg'
 import PostModalBox from '../Post-Modal'
 import reactS3 from 'react-s3'
+import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const RightSection = styled.div`
 
@@ -450,6 +453,7 @@ const RightSide = (props) => {
   const [imageCopy,setImageCopy]=useState([])
   const [imageUpload,setImageUpload]=useState([])
   const [imageUploadCopy,setImageUploadCopy]=useState([])
+  const [anchorEl, setAnchorEl]= useState(null)
 
   useEffect(() => {
     let updateUser = async authState => {
@@ -646,11 +650,14 @@ const RightSide = (props) => {
     }
   }
   const handleEdit = (v) => {
+    handleClose()
     setIsModelOpen(true)
     setContent(v)
+
   }
 
   const handleDelete = (v) => {
+    handleClose()
     setDeleteOpen(true)
     setId(v._id)
   }
@@ -840,6 +847,13 @@ const RightSide = (props) => {
     }
 
   }
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   const handleChange = (e) => {
     setDescription(e)
   }
@@ -1039,7 +1053,29 @@ const RightSide = (props) => {
                             <h3>{v.name ? v.name : place.company_name}</h3>
                             <p>{v.content}</p>
                             <Icon>
-                              <EditRomve>
+                            <EditRomve>
+              
+                                  <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                                  ...
+                                </Button>
+                          
+                                   
+                                <Menu
+                                  id="simple-menu"
+                                  anchorEl={anchorEl}
+                                  keepMounted
+                                  open={Boolean(anchorEl)}
+                                  onClose={handleClose}
+                                >
+                                    <EditModalBox setToggleMenu={setToggleMenu} setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={curators} value={content} />
+                                    <DeleteModalBox setToggleMenu={setToggleMenu} setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
+                                  <MenuItem onClick={()=>handleEdit(v)}>Edit</MenuItem>
+                                  <MenuItem onClick={() => handleDelete(v)}>Delete</MenuItem>
+                                
+                                </Menu>
+                                </EditRomve>
+                              
+                              {/* <EditRomve>
                                 <img onClick={() => setToggle(v._id)} src={MoreIcon} alt="More" />
                                 {toggle && id === v._id ?
                                   <Tooltip>
@@ -1048,10 +1084,9 @@ const RightSide = (props) => {
                                     <ul>
                                       <li onClick={() => handleEdit(v)}>Edit</li>
                                       <li onClick={() => handleDelete(v)}>Delete</li>
-                                    </ul>
-                                  </Tooltip> : null
+                                    </ul> </Tooltip> : null
                                 }
-                              </EditRomve>
+                              </EditRomve> */}
 
                               <WishlistImg><img src={WishlistGrey} alt="" /><sup>3</sup></WishlistImg>
                               <CommentImg><img src={CommentGrey} alt="" /><sup>3</sup></CommentImg>
