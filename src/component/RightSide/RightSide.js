@@ -311,7 +311,7 @@ h4, h2{
 }
 h2{
   margin:0 5px 0 0;
-  color:#0FB1D2;
+  color:rgb(255, 71, 157);
 }
 p{
 font-weight: normal;
