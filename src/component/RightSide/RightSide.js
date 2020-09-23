@@ -301,6 +301,17 @@ font-size: 12px;
 line-height:27px;
 color: #280A33;
 }
+h4, h2{
+  display:inline;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 15px;
+  color: #626262;
+}
+h2{
+  margin:0 5px 0 0;
+  color:#0FB1D2;
+}
 p{
 font-weight: normal;
 font-size: 13px;
