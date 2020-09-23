@@ -478,7 +478,7 @@ const RightSide = (props) => {
         if (users) {
           const userVal = []
           users.map(v => {
-            return userVal.push({ name: v.name })
+            return userVal.push({_id:v._id, name: v.name })
           })
           const val = userVal.sort(dynamicSort("name"))
           setCurators(val)
@@ -937,9 +937,9 @@ const RightSide = (props) => {
         name: { first: 'Ryan', last: 'Williams' }
       }
     ]
-    const userMentionData = users.map(myUser => ({
+    const userMentionData = curators.map(myUser => ({
       id: myUser._id,
-      display: `${myUser.name.first} ${myUser.name.last}`
+      display: `${myUser.name}`
     }))
   return (
     <RightSection>
