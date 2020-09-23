@@ -739,6 +739,7 @@ const RightSide = (props) => {
       const now = new Date();
       toolbar.date.setMonth(now.getMonth());
       toolbar.date.setYear(now.getFullYear());
+      toolbar.date.setDate(now.getDate());
       toolbar.onNavigate("current");
     };
 
@@ -967,7 +968,7 @@ const RightSide = (props) => {
               }}
               defaultView={viewState}
               step={60}
-              onView={(e) => setCalenderView(e)}
+              onView={(e) => (setCalenderView(e),setViewState(e))}
               views={['day', 'week', 'month',]}
               style={{ height: 463, width: calenderView === 'month' ? '100%' : '100%' }}
             /> : <div className="loader"> <ValueLoader height="70" width="70" /></div>
