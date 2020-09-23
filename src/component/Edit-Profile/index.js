@@ -284,18 +284,18 @@ const EditProfile = ({ value }) => {
   const [facebook, setFacebook] = useState()
   const [linkedin,setLinkedIn]= useState()
   const [tags, setTags] = useState([])
-  const [start,setStart]= useState()
-  const [end,setEnd]= useState()
-  const [startDay,setStartDay]= useState()
-  const [endDay,setEndDay]= useState()
   const [DropPin,setDropPin]= useState(false)
   const [imageUrl,setImageUrl]= useState()
   const [changeCenter,setChangeCenter]= useState()
+  const [inputList, setInputList] = useState([
+    { StartDay: "Monday", EndDay: "Monday", Start: "00:00", End: "00:00"}
+  ]);
 
   useEffect(() => {
     if (typeof value !== 'undefined') {
       window.scrollTo(0, 0)
       if (value.company_name) {
+        console.log(value)
         setCompany(value.company_name)
       }
       if (value.web_site) {
@@ -326,6 +326,9 @@ const EditProfile = ({ value }) => {
         setAddress(value.address)
         FindAddress(value.address)
       }
+      if(value.hours_format){
+        setInputList(value.hours_format)
+      }
       if (value.filter_tags) {
         setTags(value.filter_tags)
       }
@@ -346,22 +349,12 @@ const EditProfile = ({ value }) => {
       if(value.default_image_url){
         setImageUrl(value.default_image_url)
       }
-      if(value.hours){
-        const timeLine = value.hours
-        const timeArr = timeLine.split(',')
-        const dayArr = timeArr[0].split('-')
-        const timeValueArr = timeArr[1].split('-')
-        setStartDay(dayArr[0])
-        setEndDay(dayArr[1])
-        setStart(timeValueArr[0])
-        setEnd(timeValueArr[1]) 
-      }
     }
 
 
   }, [value])
 
-  const updateBusiness = async (format) => {
+  const updateBusiness = async () => {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/place`, {
       method: 'PUT',
       headers: {
@@ -386,8 +379,8 @@ const EditProfile = ({ value }) => {
         facebook: facebook,
         linkedin:linkedin,
         filterTags: tags,
-        openingHours: format,
         file:imageUrl,
+        hoursFormat:inputList,
 
       })
     });
@@ -397,12 +390,6 @@ const EditProfile = ({ value }) => {
 
   }
 
-  const handleSubmit = () => {
-      const format = startDay+'-'+endDay+','+start+'-'+end
-         updateBusiness(format)
-    
-
-  }
   const AnyReactComponent = ({ text }) => (
     <div style={{
       color: 'white',
@@ -454,12 +441,6 @@ const EditProfile = ({ value }) => {
     else if (e.target.id === 'linkedin') {
       setLinkedIn(e.target.value)
     }
-    else if (e.target.id === 'start') {
-      setStartDay(e.target.value)
-    }
-    else if (e.target.id === 'end') {
-      setEndDay(e.target.value)
-    }
 
 }
 const updateTime = (time)=>{
@@ -474,11 +455,15 @@ const updateTime = (time)=>{
   return ((timePointer-1)/2+':30')
  }
 }
-const handleStartChange = (time) => {    
-  setStart(updateTime(time))
+const handleStartChange = (time,index,name) => {    
+  const list = [...inputList];
+  list[index][name] = updateTime(time);
+  setInputList(list);
 }
-const handleEndChange = (time) => {
-   setEnd(updateTime(time))
+const handleEndChange = (time,index,name) => {
+   const list = [...inputList];
+   list[index][name] = updateTime(time);
+   setInputList(list);
 }
  const center= {
   lat: 30.7092231,
@@ -520,6 +505,18 @@ const upload =(e)=> {
 reactS3.uploadFile(e.target.files[0],config).then(data => setImageUrl(data.location))
 .catch(err => console.error(err))
 }
+
+const handleInputChange = (e, index) => {
+  const { name, value } = e.target;
+  const list = [...inputList];
+  list[index][name] = value;
+  setInputList(list);
+};
+
+const handleAddClick = () => {
+  console.log(inputList)
+  setInputList([...inputList, { StartDay: "Monday", EndDay: "Monday", Start: "00:00", End: "00:00"}]);
+};
 let myInput
   return (
     <ProfileOuter>
@@ -619,10 +616,12 @@ let myInput
           <HashTagsSearch>
             <h3>Opening Hours</h3>
           </HashTagsSearch>
+          {inputList.map((x,i) => {
+            return(
           <SelectSection>
             <div>
               <Label name="Start Day"></Label>
-              <select id='start' value={startDay} onChange={e => handleChange(e)}>
+              <select name="StartDay" value={x.StartDay} onChange={e => handleInputChange(e,i)}>
                 <option value="Monday">Monday</option>
                 <option value="Tuesday">Tuesday</option>
                 <option value="Wednesday">Wednesday</option>
@@ -634,7 +633,7 @@ let myInput
             </div>
             <div>
               <Label name="End Day"></Label>
-              <select id='end' value={endDay} onChange={e => handleChange(e)}>
+              <select name="EndDay" value={x.EndDay} onChange={e => handleInputChange(e,i)}>
                 <option value="Monday">Monday</option>
                 <option value="Tuesday">Tuesday</option>
                 <option value="Wednesday">Wednesday</option>
@@ -646,14 +645,15 @@ let myInput
             </div>
             <div>
               <Label name="Start Time"></Label>
-              <TimePicker onChange={handleStartChange} value={start} />
+              <TimePicker onChange={(e)=>handleStartChange(e,i,'Start')} value={x.Start} />
             </div>
             <div>
               <Label name="End Time"></Label>
-              <TimePicker onChange={handleEndChange} value={end} />
+              <TimePicker onChange={(e)=>handleEndChange(e,i,'End')} value={x.End} />
             </div>
-          </SelectSection>
-          <Button>Add New Time Slot <img src={PlusIcon} alt="plus icon" /></Button>
+          </SelectSection>)
+          })}
+          <Button onClick={handleAddClick}>Add New Time Slot <img src={PlusIcon} alt="plus icon" /></Button>
         </Card>
       </HashTags>
       <row>
@@ -668,7 +668,7 @@ let myInput
         <Card>
           <FlexRow>
             <ButtonSmall onClick={() => (history.push(`/dashboard`), window.location.reload())} maxWidth="110px" bgColor="#FF7171" style={{ marginLeft: 'auto', marginRight: '10px' }}>Cancel</ButtonSmall>
-            <ButtonSmall onClick={() => handleSubmit()} maxWidth="110px" >Save</ButtonSmall>
+            <ButtonSmall onClick={() => updateBusiness()} maxWidth="110px" >Save</ButtonSmall>
           </FlexRow>
         </Card>
       </row>

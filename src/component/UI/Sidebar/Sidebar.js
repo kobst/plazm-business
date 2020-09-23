@@ -90,7 +90,7 @@ display:flex;
 width:100%;
 span:last-child{
 margin-left: auto;
-width: 33%;
+width: auto;
 }
 }
 `
@@ -146,6 +146,9 @@ const Sidebar = ({value}) => {
   const [LinkedIn,setLinkedIn] = useState()
   const [tags, setTags] = useState([])
   const [changeCenter,setChangeCenter]= useState()
+  const [openingHours,setOpeningHours]= useState([])
+  const [latitude,setLatitude]= useState()
+  const [longitude,setLongitude]= useState()
 
 
   useEffect(() => {
@@ -156,7 +159,10 @@ const Sidebar = ({value}) => {
         setInstagram(value.handles.instagram)
         setTwitter(value.handles.twitter)
         setLinkedIn(value.handles.linkedin)
+        setOpeningHours(value.hours_format)
         }
+        setLatitude(value.latitude)
+        setLongitude(value.longitude)
         setTags(value.filter_tags)
         setPlace(value)
         FindAddress(value.address)
@@ -216,8 +222,8 @@ const Sidebar = ({value}) => {
          options={mapOptions}
          >
         <AnyReactComponent 
-          lat={placeValue.latitude} 
-          lng={placeValue.longitude} 
+          lat={latitude} 
+          lng={longitude} 
           text={typeof placeValue !== 'undefined' ? placeValue.company_name : null} 
         />
       </GoogleMapReact></div></Map>
@@ -251,7 +257,10 @@ const Sidebar = ({value}) => {
       </Listing>
       <Listing>
         <SubHeading name="Opening Hours" />
-        { <p><span>{typeof placeValue !== 'undefined' && placeValue.hours ? placeValue.hours:null}</span> <span style={{marginLeft:'auto'}}> </span></p> }
+        {typeof placeValue !== 'undefined' && openingHours?
+        openingHours.map(v=>
+        ( <p><span>{v.StartDay} - {v.EndDay}</span> <span style={{marginLeft:'auto'}}>{v.Start}-{v.End}</span></p> )
+        ):null}
       </Listing>
 
       <Listing style={{ borderBottom: 'none' }}>

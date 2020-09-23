@@ -52,19 +52,21 @@ margin-top: 6px;
 `
 
 
-const RegisterForm = ({ verified, err,password,phoneLong,phoneShort, firstError,emptyCode, business, loader, setbusiness, setBusinessInfo, setName, message, type, locationError, codeError, firstNameError, phoneError, emailError, passwordError, handleChange, handleSubmit }) => {
+const RegisterForm = ({ verified, err,confirmationCode,password,phoneLong,phoneShort, firstError,emptyCode, business, loader, setbusiness, setBusinessInfo, setName, message, type, locationError, codeError, firstNameError, phoneError, emailError, passwordError, handleChange, handleSubmit }) => {
     return (
         <>
-            {verified ? (<form onSubmit={(e) => handleSubmit(e)}>
+            {verified ? (<form>
 
                     <>
-                        <p className="code"> Enter the Confirmation code sent to your Registered Email</p>
-                        <FormGroup>
+                        <p className="code"> We have send you a verification link on your registered email, 
+                        Please Verify your email then you can Click on Sign In to login into the Plazm </p>
+
+                        {/* <FormGroup>
                             <Label name="Confirmation Code" />
-                            <Input id='confirmationCode' type='text' onChange={(e) => handleChange(e)} error={emptyCode} placeholder="" />
+                            <Input value={confirmationCode} id='confirmationCode' type='text' onChange={(e) => handleChange(e)} error={emptyCode} />
                             {codeError ? <ErrorMessage>Confirmation code does not match</ErrorMessage> : null}
-                        </FormGroup>
-                        <Button type="submit" className="btn btn-primary">{loader && !codeError ? <ValueLoader /> : 'Confirm Sign up'}</Button>
+                        </FormGroup> */}
+                         <Link to='/business/login' className="link-btn"><strong>Sign In</strong></Link>
 
                     </>
             </form>) :

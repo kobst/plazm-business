@@ -650,17 +650,15 @@ const RightSide = (props) => {
       }
     }
   }
-  const handleEdit = (v) => {
+  const handleEdit = () => {
     handleClose()
     setIsModelOpen(true)
-    setContent(v)
 
   }
 
-  const handleDelete = (v) => {
+  const handleDelete = () => {
     handleClose()
     setDeleteOpen(true)
-    setId(v._id)
   }
   const getCustomToolbar = (toolbar) => {
   //  const toolbarDate = toolbar.date;
@@ -848,7 +846,9 @@ const RightSide = (props) => {
     }
 
   }
-  const handleClick = (event) => {
+  const handleClick = (event,v) => {
+    setContent(v)
+    setId(v._id)
     setAnchorEl(event.currentTarget);
   };
 
@@ -864,6 +864,22 @@ const RightSide = (props) => {
     setImageUploadCopy([])
     setImageCopy([])
   }
+ const findDesc = (value)=>{
+   if(value.includes('@')){
+  const Val= value.split('@')
+  const final = Val[1].split(' ')
+ const last =  Val[1].substr(Val[1].indexOf(' ')+1)
+   return (<>
+   <h4>{Val[0]}</h4> 
+   <h2>@{final[0]}</h2>
+   {final.length>1?
+   <h4>{last}</h4>:null}
+   </>)
+  }
+  else{
+    return value
+  }
+  }
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   var today = new Date();
   // const options = [{name: 'John Watson', id: 1},{name: 'Marie Curie', id: 2}]
@@ -871,6 +887,7 @@ const RightSide = (props) => {
   const upload =async(e)=> {
     const imageArr= imageCopy
     const imgUpload= imageUploadCopy
+    if(imageCopy.length<5){
    const data = await reactS3.uploadFile(e.target.files[0],config)
     imageArr.push({id:(imageCopy.length)+1,value:data.location})
     imgUpload.push(data.location)
@@ -878,6 +895,7 @@ const RightSide = (props) => {
     setImageUploadCopy([...imgUpload])
     setImageCopy([...imageArr])
     setImageUrl([...imageArr])
+    }
     }
 
     const deleteImage = (v)=> {
@@ -1045,6 +1063,8 @@ const RightSide = (props) => {
                       </EventText>
                     </FeedListing> */}
          {/* <PostModalBox isOpen={postOpen} closeModal={() => setPostOpen(false)} /> */}
+         <EditModalBox setToggleMenu={setToggleMenu} setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={curators} value={content} />
+                                    <DeleteModalBox setToggleMenu={setToggleMenu} setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
                     {typeof allFeed !== 'undefined' ?
                       allFeed.map(v => (
                         <FeedListing>
@@ -1052,26 +1072,24 @@ const RightSide = (props) => {
                           <EventText onClick={() => setPostOpen(true)}>
                             <span>{(new Date(v.updatedAt).toLocaleString()).substring(0,new Date(v.updatedAt).toLocaleString().indexOf(","))}</span>
                             <h3>{v.name ? v.name : place.company_name}</h3>
-                            <p>{v.content}</p>
+                            <p>{findDesc(v.content)}</p>
                             <Icon>
                             <EditRomve>
               
-                                  <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                                  <Button aria-controls="simple-menu" aria-haspopup="true" onClick={(e)=>handleClick(e,v)}>
                                   ...
                                 </Button>
                           
-                                   
+                      
                                 <Menu
-                                  id="simple-menu"
+                                  id={v._id}
                                   anchorEl={anchorEl}
                                   keepMounted
                                   open={Boolean(anchorEl)}
                                   onClose={handleClose}
                                 >
-                                    <EditModalBox setToggleMenu={setToggleMenu} setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={curators} value={content} />
-                                    <DeleteModalBox setToggleMenu={setToggleMenu} setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
-                                  <MenuItem onClick={()=>handleEdit(v)}>Edit</MenuItem>
-                                  <MenuItem onClick={() => handleDelete(v)}>Delete</MenuItem>
+                                  <MenuItem onClick={()=>handleEdit()}>Edit</MenuItem>
+                                  <MenuItem onClick={() => handleDelete()}>Delete</MenuItem>
                                 
                                 </Menu>
                                 </EditRomve>

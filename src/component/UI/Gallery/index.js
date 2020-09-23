@@ -36,31 +36,15 @@ const config = {
 }
 const Gallery = (props) => {
   const [isOpen,setIsOpen]= useState(false)
-  const [imageUrl,setImageUrl]= useState([])
-  const [imageCopy,setImageCopy]= useState([])
-
-  useEffect(() => {
-    if (typeof props.image!== 'undefined') {
-        setImageUrl(props.image)
-        setImageCopy(props.image)
-      }
-      
-    },[props.image,imageUrl])
-
-
   let myInput
   const upload =async(e)=> {
-    const imageArr= imageCopy
+    const imageArr= props.image
    const data = await reactS3.uploadFile(e.target.files[0],config)
     imageArr.push(data.location)
-    setImageCopy([...imageArr])
-    setImageUrl([...imageArr])
     props.setImage([...imageArr])
     }
     const CancelPost= (v)=>{
-      const deleteImage = imageUrl.filter((item) => item !== v)
-      setImageUrl([...deleteImage])
-      setImageCopy([...deleteImage])
+      const deleteImage = props.image.filter((item) => item !== v)
       props.setImage([...deleteImage])
     }
     return(
@@ -72,22 +56,11 @@ const Gallery = (props) => {
           <p onClick={(e) => myInput.click()}><img src={PlusIcon} alt="" /> Photo</p>
           {/* <GallerModalBox  isOpen={isOpen} closeModal={() => setIsOpen(false)}/> */}
         </div>
-        {imageUrl ?(imageUrl.map(v => 
+        {typeof props.image!=='undefined' ?(props.image.map(v => 
                     <div onClick={()=>CancelPost(v)} className="galleryImage">
                     <img src={v} alt="" />
                   </div>)): null
                   }
-        
-        {/* <div className="galleryImage">
-          <img src={GalleryImg} alt="" />
-          <img src={CloseIcon} alt="Close" className="close" />
-        </div>
-        <div className="galleryImage">
-          <img src={GalleryImg} alt="" />
-        </div>
-        <div className="galleryImage">
-          <img src={GalleryImg} alt="" />
-        </div>  */}
       </GallerySection>
        : <GallerySection>
         <div class="galleryImage">
@@ -103,32 +76,6 @@ const Gallery = (props) => {
         <div className="galleryImage">
           <img src={GalleryImg} alt="" />
           <img src={CloseIcon} alt="Close" className="close" />
-        </div>
-        <div className="galleryImage">
-          <img src={GalleryImg} alt="" />
-        </div>
-        <div className="galleryImage">
-          <img src={GalleryImg} alt="" />
-        </div>
-        <div className="galleryImage">
-          <img src={GalleryImg} alt="" />
-        </div>
-        <div className="galleryImage">
-          <img src={GalleryImg} alt="" />
-          <img src={GalleryWishlist} alt="Wishlist" className="wishlistGalery" />
-        </div>
-        <div className="galleryImage">
-          <img src={GalleryImg} alt="" />
-        </div>
-        <div className="galleryImage">
-          <img src={GalleryImg} alt="" />
-          <img src={CloseIcon} alt="Close" className="close" />
-        </div>
-        <div className="galleryImage">
-          <img src={GalleryImg} alt="" />
-        </div>
-        <div className="galleryImage">
-          <img src={GalleryImg} alt="" />
         </div>
       </GallerySection>
     }

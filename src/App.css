@@ -414,6 +414,7 @@ min-height: 153px;
 display: flex;
 align-items: center;
 justify-content: center;
+cursor:pointer;
 width:100%;
 margin: 7px;
 position: relative;
@@ -1168,20 +1169,25 @@ display: none;
   width: 100%;
 }
 
-@media not all and (min-resolution:.001dpcm) { 
-    .Image_wrap{
-      overflow: scroll;
-    }
-    .MuiSelect-select.MuiSelect-select{
-      padding-bottom: 15px;
-    }
-    .rbc-timeslot-group{
-      min-height: 42px;
-    }
-    .monthView .rbc-calendar .rbc-month-row{
-      height: 55px;
-    }
-}
+
+@media not all and (min-resolution:.001dpcm) {
+  .Image_wrap{
+  overflow: scroll;
+  }
+  .MuiSelect-select.MuiSelect-select{
+  padding-bottom: 15px;
+  }
+  .rbc-timeslot-group{
+  min-height: 42px;
+  }
+  .monthView .rbc-calendar .rbc-month-row{
+  height: 55px;
+  }
+  }
+  
+
+  
+
 
 .MuiButtonBase-root.MuiButton-root.MuiButton-text{
   padding: 0;
