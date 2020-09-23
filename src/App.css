@@ -1261,3 +1261,17 @@ display: none;
   }
   
 
+  .mentions--multiLine .mentions__control{
+    background: #fff;
+    border: .25px solid rgba(239,77,182,.5);
+    box-shadow: inset 0 0 8px rgba(124,156,191,.1);
+    border-radius: 5px;
+    height: 171px;
+    font-family: "Roboto",sans-serif;
+    width: 100%;
+    padding: 15px;
+    font-size: 12px;
+    line-height: 18px;
+    color: #6c6c6c;
+    resize: none;
+  }
