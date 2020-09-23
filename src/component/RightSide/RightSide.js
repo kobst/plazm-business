@@ -863,6 +863,22 @@ const RightSide = (props) => {
     setImageUploadCopy([])
     setImageCopy([])
   }
+ const findDesc = (value)=>{
+   if(value.includes('@')){
+  const Val= value.split('@')
+  const final = Val[1].split(' ')
+ const last =  Val[1].substr(Val[1].indexOf(' ')+1)
+   return (<>
+   <h4>{Val[0]}</h4> 
+   <h2>@{final[0]}</h2>
+   {final.length>1?
+   <h4>{last}</h4>:null}
+   </>)
+  }
+  else{
+    return value
+  }
+  }
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   var today = new Date();
   // const options = [{name: 'John Watson', id: 1},{name: 'Marie Curie', id: 2}]
@@ -1055,7 +1071,7 @@ const RightSide = (props) => {
                           <EventText onClick={() => setPostOpen(true)}>
                             <span>{(new Date(v.updatedAt).toLocaleString()).substring(0,new Date(v.updatedAt).toLocaleString().indexOf(","))}</span>
                             <h3>{v.name ? v.name : place.company_name}</h3>
-                            <p>{v.content}</p>
+                            <p>{findDesc(v.content)}</p>
                             <Icon>
                             <EditRomve>
               
