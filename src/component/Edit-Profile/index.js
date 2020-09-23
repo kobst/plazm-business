@@ -288,7 +288,7 @@ const EditProfile = ({ value }) => {
   const [imageUrl,setImageUrl]= useState()
   const [changeCenter,setChangeCenter]= useState()
   const [inputList, setInputList] = useState([
-    { StartDay: "", EndDay: "", Start: "", End: ""}
+    { StartDay: "Monday", EndDay: "Monday", Start: "00:00", End: "00:00"}
   ]);
 
   useEffect(() => {
@@ -515,7 +515,7 @@ const handleInputChange = (e, index) => {
 
 const handleAddClick = () => {
   console.log(inputList)
-  setInputList([...inputList, { StartDay: "", EndDay: "", Start: "", End: ""}]);
+  setInputList([...inputList, { StartDay: "Monday", EndDay: "Monday", Start: "00:00", End: "00:00"}]);
 };
 let myInput
   return (

@@ -39,9 +39,11 @@ const Gallery = (props) => {
   let myInput
   const upload =async(e)=> {
     const imageArr= props.image
+    if(imageArr.length<5){
    const data = await reactS3.uploadFile(e.target.files[0],config)
     imageArr.push(data.location)
     props.setImage([...imageArr])
+    }
     }
     const CancelPost= (v)=>{
       const deleteImage = props.image.filter((item) => item !== v)

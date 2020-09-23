@@ -144,6 +144,7 @@ padding:0px;
 max-height:566px;
 overflow-y:auto;
 position:relative;
+padding-bottom: 70px;
 
 `
 const EventMenu = styled.div`
@@ -299,6 +300,17 @@ span{
 font-size: 12px;
 line-height:27px;
 color: #280A33;
+}
+h4, h2{
+  display:inline;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 15px;
+  color: #626262;
+}
+h2{
+  margin:0 5px 0 0;
+  color:#0FB1D2;
 }
 p{
 font-weight: normal;
@@ -727,6 +739,7 @@ const RightSide = (props) => {
       const now = new Date();
       toolbar.date.setMonth(now.getMonth());
       toolbar.date.setYear(now.getFullYear());
+      toolbar.date.setDate(now.getDate());
       toolbar.onNavigate("current");
     };
 
@@ -863,6 +876,22 @@ const RightSide = (props) => {
     setImageUploadCopy([])
     setImageCopy([])
   }
+ const findDesc = (value)=>{
+   if(value.includes('@')){
+  const Val= value.split('@')
+  const final = Val[1].split(' ')
+ const last =  Val[1].substr(Val[1].indexOf(' ')+1)
+   return (<>
+   <h4>{Val[0]}</h4> 
+   <h2>@{final[0]}</h2>
+   {final.length>1?
+   <h4>{last}</h4>:null}
+   </>)
+  }
+  else{
+    return value
+  }
+  }
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   var today = new Date();
   // const options = [{name: 'John Watson', id: 1},{name: 'Marie Curie', id: 2}]
@@ -939,7 +968,7 @@ const RightSide = (props) => {
               }}
               defaultView={viewState}
               step={60}
-              onView={(e) => setCalenderView(e)}
+              onView={(e) => (setCalenderView(e),setViewState(e))}
               views={['day', 'week', 'month',]}
               style={{ height: 463, width: calenderView === 'month' ? '100%' : '100%' }}
             /> : <div className="loader"> <ValueLoader height="70" width="70" /></div>
@@ -1055,7 +1084,7 @@ const RightSide = (props) => {
                           <EventText onClick={() => setPostOpen(true)}>
                             <span>{(new Date(v.updatedAt).toLocaleString()).substring(0,new Date(v.updatedAt).toLocaleString().indexOf(","))}</span>
                             <h3>{v.name ? v.name : place.company_name}</h3>
-                            <p>{v.content}</p>
+                            <p>{findDesc(v.content)}</p>
                             <Icon>
                             <EditRomve>
               
