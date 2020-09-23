@@ -144,6 +144,7 @@ padding:0px;
 max-height:566px;
 overflow-y:auto;
 position:relative;
+padding-bottom: 70px;
 
 `
 const EventMenu = styled.div`

@@ -517,6 +517,7 @@ max-height: 153px;
   margin-top:11px;
   max-height: 796px;
   overflow-y: auto;
+  padding-bottom: 50px;
 }
 button a{
   text-decoration: none;
@@ -1167,7 +1168,7 @@ display: none;
   width: 100%;
 }
 
-@media not all and (min-resolution:.001dpcm) { @media {
+@media not all and (min-resolution:.001dpcm) { 
     .Image_wrap{
       overflow: scroll;
     }
@@ -1180,8 +1181,26 @@ display: none;
     .monthView .rbc-calendar .rbc-month-row{
       height: 55px;
     }
-  }
 }
 
+.MuiButtonBase-root.MuiButton-root.MuiButton-text{
+  padding: 0;
+  line-height: normal;
+}
 
+.MuiButtonBase-root.MuiButton-root.MuiButton-text:hover, .MuiButtonBase-root.MuiButton-root.MuiButton-text:focus{
+  background: transparent;
+}
+
+.MuiButtonBase-root.MuiButton-root.MuiButton-text span.MuiButton-label {
+  font-size: 24px !important;
+  justify-content: flex-start !important;
+  color: #d2d2d2 !important;
+}
+
+.MuiPaper-root.MuiMenu-paper {
+  box-shadow: 2px 2px 2px #e5e5e5 !important;
+  border-radius: 4px !important;
+  border: 1px solid #e5e5e5;
+}
 
