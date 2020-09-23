@@ -467,7 +467,7 @@ const RightSide = (props) => {
   const [imageUpload,setImageUpload]=useState([])
   const [imageUploadCopy,setImageUploadCopy]=useState([])
   const [anchorEl, setAnchorEl]= useState(null)
-  const [mentionarray,setMentionArray]= useState()
+  const [mentionarray,setMentionArray]= useState([])
 
   useEffect(() => {
     let updateUser = async authState => {
@@ -852,6 +852,7 @@ const RightSide = (props) => {
           content: description,
           scheduledEvent: "no",
           item_photo:imageUpload,
+          mentions:mentionarray,
         })
       });
       const body = await response.text();
@@ -870,8 +871,12 @@ const RightSide = (props) => {
     setAnchorEl(null);
   };
   const handleChange = (event, newValue, newPlainTextValue, mentions) => {
+    if(mentions.length!==0){
+    const Arrayvalue= mentionarray
+    Arrayvalue.push(mentions[0])
+    setMentionArray(Arrayvalue)
+    }
     setDescription(newPlainTextValue)
-    setMentionArray(mentions)
     }
   
   const CancelPost= ()=>{
@@ -881,22 +886,32 @@ const RightSide = (props) => {
     setImageUploadCopy([])
     setImageCopy([])
   }
- const findDesc = (value)=>{
-   if(value.includes('@')){
-  const Val= value.split('@')
-  const final = Val[1].split(' ')
- const last =  Val[1].substr(Val[1].indexOf(' ')+1)
-   return (<>
-   <h4>{Val[0]}</h4> 
-   <h2>@{final[0]}</h2>
-   {final.length>1?
-   <h4>{last}</h4>:null}
-   </>)
-  }
-  else{
-    return value
-  }
-  }
+//  const findDesc = (value,mentions)=>{
+//   let divContent=value
+//     let regexMetachars = /[(){[*+?.\\^$|]/g;
+
+//     for (var i = 0; i < mentions.length; i++) {
+//         mentions[i].display = mentions[i].display.replace(regexMetachars, "\\$&");
+//     }
+
+//     var regex = new RegExp("\\b(?:" + mentions.map(e=>e.display).join("|") + ")\\b", "gi");
+
+//     //  subject.match(regex) || [];
+
+//    mentions.map(v=>{
+//    let re = new RegExp(v.display, 'g');
+//    divContent = divContent.replace(re, '<span style="color:yellow;">' + v.display + '</span>');
+//    })
+//    if(mentions.length!==0){
+//      console.log(divContent)
+//    return (<>
+//    `divContent`
+//    </>)
+//   }
+//   else{
+//     return value
+//   }
+//   }
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   var today = new Date();
   // const options = [{name: 'John Watson', id: 1},{name: 'Marie Curie', id: 2}]
@@ -1036,8 +1051,9 @@ const RightSide = (props) => {
                   field="name"
                   data={curators}
                 /> */}
-                <MentionsInput markup="@{{__type__||__id__||__display__}}" value={description} onChange={handleChange} className="mentions">
+                <MentionsInput markup='@(__id__)[__display__]' value={description} onChange={handleChange} className="mentions">
                 <Mention
+                  markup='@__id__'
                   type="user"
                   trigger="@"
                   data={userMentionData}
@@ -1106,7 +1122,7 @@ const RightSide = (props) => {
                       </EventText>
                     </FeedListing> */}
          {/* <PostModalBox isOpen={postOpen} closeModal={() => setPostOpen(false)} /> */}
-         <EditModalBox setToggleMenu={setToggleMenu} setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={curators} value={content} />
+         <EditModalBox setToggleMenu={setToggleMenu} setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={userMentionData} value={content} />
                                     <DeleteModalBox setToggleMenu={setToggleMenu} setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
                     {typeof allFeed !== 'undefined' ?
                       allFeed.map(v => (
@@ -1115,7 +1131,7 @@ const RightSide = (props) => {
                           <EventText onClick={() => setPostOpen(true)}>
                             <span>{(new Date(v.updatedAt).toLocaleString()).substring(0,new Date(v.updatedAt).toLocaleString().indexOf(","))}</span>
                             <h3>{v.name ? v.name : place.company_name}</h3>
-                            <p>{findDesc(v.content)}</p>
+                            <p>{v.content}</p>
                             <Icon>
                             <EditRomve>
               
