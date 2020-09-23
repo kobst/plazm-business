@@ -27,7 +27,7 @@ import GallerySec from '../UI/Gallery'
 import Tooltip from '../UI/Tooltip'
 import EventSkeleton from '../UI/Skeleton/EventsSkeleton'
 import PostSkeleton from '../UI/Skeleton/PostSkeleton'
-import Mention from 'react-textarea-mention';
+// import Mention from 'react-textarea-mention';
 import EditModalBox from '../Edit-Post'
 import DeleteModalBox from '../Delete-Post'
 import MoreIcon from '../../images/more.svg'
@@ -36,6 +36,7 @@ import reactS3 from 'react-s3'
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import { MentionsInput, Mention } from 'react-mentions'
 
 const RightSection = styled.div`
 
@@ -466,6 +467,7 @@ const RightSide = (props) => {
   const [imageUpload,setImageUpload]=useState([])
   const [imageUploadCopy,setImageUploadCopy]=useState([])
   const [anchorEl, setAnchorEl]= useState(null)
+  const [mentionarray,setMentionArray]= useState()
 
   useEffect(() => {
     let updateUser = async authState => {
@@ -867,10 +869,13 @@ const RightSide = (props) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const handleChange = (e) => {
-    setDescription(e)
-  }
+  const handleChange = (event, newValue, newPlainTextValue, mentions) => {
+    setDescription(newPlainTextValue)
+    setMentionArray(mentions)
+    }
+  
   const CancelPost= ()=>{
+    setDescription('')
     setImageUrl([])
     setImageUpload([])
     setImageUploadCopy([])
@@ -918,7 +923,24 @@ const RightSide = (props) => {
       setImageCopy([...deleteImage])
       setImageUrl([...deleteImage])
     }
-
+    const  users = [
+      {
+        _id: '1',
+        name: { first: 'John', last: 'Reynolds' }
+      },
+      {
+        _id: '2',
+        name: { first: 'Holly', last: 'Reynolds' }
+      },
+      {
+        _id: '3',
+        name: { first: 'Ryan', last: 'Williams' }
+      }
+    ]
+    const userMentionData = users.map(myUser => ({
+      id: myUser._id,
+      display: `${myUser.name.first} ${myUser.name.last}`
+    }))
   return (
     <RightSection>
       <Row>
@@ -1008,11 +1030,20 @@ const RightSide = (props) => {
               <SubHeading name="Write a Post" />
               <div className="mt-15">
                 {/* <Textarea /> */}
-                <Mention
+                {/* <Mention
+                // textAreaProps={{value:description}}
                  onChange={handleChange}
                   field="name"
                   data={curators}
+                /> */}
+                <MentionsInput markup="@{{__type__||__id__||__display__}}" value={description} onChange={handleChange} className="mentions">
+                <Mention
+                  type="user"
+                  trigger="@"
+                  data={userMentionData}
+                  className="mentions__mention"
                 />
+                  </MentionsInput>
 
                 <div className="mt-10">
                   <FlexRow style={{ padding: '0px' }}>
