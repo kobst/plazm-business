@@ -4,15 +4,18 @@ import Mention from 'react-textarea-mention';
 import Button from '../UI/Button/Button'
 import crossIocn from '../../images/cross-black.svg'
 import Label from '../UI/Label/label'
+import Gallery from '../UI/Gallery'
 
 
 const EditModalBox = ({ isOpen,closeModal,users,value,setIsOpen,setToggleMenu}) => {
    const [description, setDescription] = useState()
    const [saveDisable, setSaveDisable] = useState(false)
+   const [image,setImage]= useState([])
 
   useEffect(() => {
       if(value){
        setDescription(value.content)
+       setImage(value.item_photo)
       }
      
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -39,6 +42,7 @@ const handleEdit= async () => {
         name:value.name,
         place_id:value.place_id,
         content:description,
+        item_photo:image,
     })
   });
     const body = await response.text();
@@ -79,6 +83,9 @@ const handleChange = (e) => {
          field="name"
          data={users}
       />
+      <div className="Image_wrap">
+      <Gallery type="edit" image={image} setImage={setImage}/>
+      </div>
         <div className="modalButton">
               <Button onClick={()=>handleEdit()} type="submit" className="btn btn-primary">Save</Button>
             </div>
