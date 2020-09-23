@@ -1,26 +1,31 @@
 import React, { useState, useEffect } from 'react'
 import Modal from 'react-modal'
-import Mention from 'react-textarea-mention';
+// import Mention from 'react-textarea-mention';
 import Button from '../UI/Button/Button'
 import crossIocn from '../../images/cross-black.svg'
 import Label from '../UI/Label/label'
 import Gallery from '../UI/Gallery'
+import { MentionsInput, Mention } from 'react-mentions'
 
 
 const EditModalBox = ({ isOpen,closeModal,users,value,setIsOpen,setToggleMenu}) => {
    const [description, setDescription] = useState()
    const [saveDisable, setSaveDisable] = useState(false)
    const [image,setImage]= useState([])
+   const [mentionArray,setMentionArray]= useState([])
 
   useEffect(() => {
       if(value){
        setDescription(value.content)
        setImage(value.item_photo)
+       if(value.mentions){
+         setMentionArray(value.mentions)
+       }
       }
      
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value,closeModal])
-
+console.log(mentionArray)
   const Validation = () => {
     if (!(description.trim())) {
       return false
@@ -43,6 +48,7 @@ const handleEdit= async () => {
         place_id:value.place_id,
         content:description,
         item_photo:image,
+        mentions:mentionArray,
     })
   });
     const body = await response.text();
@@ -52,9 +58,14 @@ const handleEdit= async () => {
     }
   }
 
-const handleChange = (e) => {
-     setDescription(e)
-  }
+  const handleChange = (event, newValue, newPlainTextValue, mentions) => {
+    const valueArr= mentionArray
+    if(mentions.length!==0){
+    valueArr.push(mentions[0])
+    setMentionArray(valueArr)
+    }
+    setDescription(newPlainTextValue)
+    }
   const onCancel=()=>{
       setDescription('')
       setToggleMenu(false)
@@ -77,12 +88,20 @@ const handleChange = (e) => {
         </div>
         <div className="ContentModal">
         <Label name="Post Description"/>
-        <Mention
+        <MentionsInput markup="@{{__type__||__id__||__display__}}" value={description} onChange={handleChange} className="mentions">
+                <Mention
+                  type="user"
+                  trigger="@"
+                  data={users}
+                  className="mentions__mention"
+                />
+                  </MentionsInput>
+        {/* <Mention
          textAreaProps={{defaultValue:description}}
         onChange={handleChange}
          field="name"
          data={users}
-      />
+      /> */}
       <div className="Image_wrap">
       <Gallery type="edit" image={image} setImage={setImage}/>
       </div>
