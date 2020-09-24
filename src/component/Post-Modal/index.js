@@ -1,6 +1,5 @@
 import React, {useState,useEffect}from 'react'
 import Modal from 'react-modal'
-import UploadImage from '../../images/upload-img.jpg'
 import Image from '../../images/user.png'
 import WishlistIcon from '../../images/wishlist-icon.svg'
 import CommentIcon from '../../images/comment.svg'

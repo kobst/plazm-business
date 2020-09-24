@@ -1112,7 +1112,7 @@ const RightSide = (props) => {
                     {typeof allFeed !== 'undefined' ?
                       allFeed.map(v => (
                         <FeedListing>
-                          <FeedImage><img src={v.item_photo.length!==0? v.item_photo[0]:EventImg} alt="Event" /></FeedImage>
+                          <FeedImage><img src={place.default_image_url?place.default_image_url:EventImg} alt="Event" /></FeedImage>
                           <EventText>
                             <span>{(new Date(v.updatedAt).toLocaleString()).substring(0,new Date(v.updatedAt).toLocaleString().indexOf(","))}</span>
                             <h3 onClick={() => postOpenFunc(v)}>{v.name ? v.name : place.company_name}</h3>
