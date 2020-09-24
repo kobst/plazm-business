@@ -38,6 +38,7 @@ h2{
   @media (max-width:767px){
     font-size: 14px;
     margin-right:15px;
+    margin-left: 15px;
   }
   @media (max-width:370px){
     font-size: 12px;

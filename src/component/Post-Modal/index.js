@@ -7,6 +7,9 @@ import CommentIcon from '../../images/comment.svg'
 import CloseIcon from '../../images/cross-modal.svg'
 import CommnentImg from '../../images/comment-img.png'
 import ReplyIcon from '../../images/reply.svg'
+import Wishlistgrey from '../../images/wishlist-grey.svg'
+import Commentgrey from '../../images/comment-grey.svg'
+import rightarrowblack from '../../images/right-arrow-black.svg'
 
 const PostModalBox = ({ isOpen, closeModal, value, place}) => {
   const [description, setDescription] = useState()
@@ -38,7 +41,9 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
         <div className="ContentModal">
           {image.length>0?
           <div class="imageSlider">
+            <div className="postsliderbtnbg"><img src={rightarrowblack} alt="" /></div>
             <img src={image[0]} alt="" />
+            <div className="postsliderbtnrtbg"><img src={rightarrowblack} alt="" /></div>
           </div>:null}
           <div className="postOuter">
             <button onClick={closeModal}>
@@ -53,8 +58,8 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
                     <p>{value ? description:null}</p>
                   <div className="postBottom">
                     <div className="Icon">
-                      <div><img src={WishlistIcon} alt="" /><sup>3</sup></div>
-                      <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
+                      <div><img src={Wishlistgrey} alt="" /><sup>3</sup></div>
+                      <div><img src={Commentgrey} alt="" /><sup>3</sup></div>
                     </div>
                     <p>2 Comments</p>
                   </div>
