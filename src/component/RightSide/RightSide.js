@@ -870,6 +870,12 @@ const RightSide = (props) => {
     setAnchorEl(null);
   };
   const handleChange = (event, newValue, newPlainTextValue, mentions) => {
+    const valueArr= mentionarray
+    console.log(mentions)
+    if(mentions.length!==0){
+    valueArr.push(mentions[0])
+    setMentionArray(valueArr)
+    }
     setDescription(newPlainTextValue)
     }
   
@@ -924,12 +930,6 @@ const RightSide = (props) => {
       setImageUploadCopy([...deleteImageUpload])
       setImageCopy([...deleteImage])
       setImageUrl([...deleteImage])
-    }
-
-    const addMentions =(id,display)=>{
-        const Arrayvalue= mentionarray
-        Arrayvalue.push({id:id,display:display})
-        setMentionArray(Arrayvalue)
     }
    
     const userMentionData = curators.map(myUser => ({
@@ -1034,10 +1034,8 @@ const RightSide = (props) => {
                 /> */}
                 <MentionsInput markup='@(__id__)[__display__]' value={description} onChange={handleChange} className="mentions">
                 <Mention
-                  markup='@__id__'
                   type="user"
                   trigger="@"
-                  onAdd={addMentions}
                   data={userMentionData}
                   className="mentions__mention"
                 />
@@ -1103,12 +1101,12 @@ const RightSide = (props) => {
                         </Icon>
                       </EventText>
                     </FeedListing> */}
-         {/* <PostModalBox isOpen={postOpen} closeModal={() => setPostOpen(false)} /> */}
+         <PostModalBox isOpen={postOpen} closeModal={() => setPostOpen(false)} value={content} place={place} />
          <EditModalBox setToggleMenu={setToggleMenu} setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={userMentionData} value={content} />
-                                    <DeleteModalBox setToggleMenu={setToggleMenu} setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
+          <DeleteModalBox setToggleMenu={setToggleMenu} setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
                     {typeof allFeed !== 'undefined' ?
                       allFeed.map(v => (
-                        <FeedListing>
+                        <FeedListing onClick={()=>setContent(v)}>
                           <FeedImage><img src={v.item_photo.length!==0? v.item_photo[0]:EventImg} alt="Event" /></FeedImage>
                           <EventText onClick={() => setPostOpen(true)}>
                             <span>{(new Date(v.updatedAt).toLocaleString()).substring(0,new Date(v.updatedAt).toLocaleString().indexOf(","))}</span>

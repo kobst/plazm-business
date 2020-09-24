@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState,useEffect}from 'react'
 import Modal from 'react-modal'
 import UploadImage from '../../images/upload-img.jpg'
 import Image from '../../images/user.png'
@@ -8,7 +8,19 @@ import CloseIcon from '../../images/cross-modal.svg'
 import CommnentImg from '../../images/comment-img.png'
 import ReplyIcon from '../../images/reply.svg'
 
-const PostModalBox = ({ isOpen, closeModal }) => {
+const PostModalBox = ({ isOpen, closeModal, value, place}) => {
+  const [description, setDescription] = useState()
+  const [image,setImage]= useState([])
+
+ useEffect(() => {
+     if(value){
+      setDescription(value.content)
+      setImage(value.item_photo)
+     }
+    
+ // eslint-disable-next-line react-hooks/exhaustive-deps
+ }, [value,closeModal])
+ 
 
 
 
@@ -24,9 +36,10 @@ const PostModalBox = ({ isOpen, closeModal }) => {
       >
 
         <div className="ContentModal">
+          {image.length>0?
           <div class="imageSlider">
-            <img src={UploadImage} alt="" />
-          </div>
+            <img src={image[0]} alt="" />
+          </div>:null}
           <div className="postOuter">
             <button onClick={closeModal}>
               <img src={CloseIcon} alt="Close" />
@@ -35,10 +48,9 @@ const PostModalBox = ({ isOpen, closeModal }) => {
               <div className="messageSec">
                 <div className="image"><img src={Image} alt="" /></div>
                 <div className="text">
-                  <h2>Ahmad Torff</h2>
-                  <span>wed 16th Aug 2020</span>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Molestie sed eget nisi, quam erat massa morbi. Ultrices sapien, magna pellentesque eget vulputate tortor augue massa lorem. Scelerisque diam proin in aliquet nulla blandit vitae penatibus. Aenean laoreet varius non tempus at ut mi mauris.
-                  </p>
+                   <h2>{value&&value.name ? value.name : place.company_name }</h2>
+                   <span>{value ?(new Date(value.updatedAt).toLocaleString()).substring(0,new Date(value.updatedAt).toLocaleString().indexOf(",")):null}</span>
+                    <p>{value ? description:null}</p>
                   <div className="postBottom">
                     <div className="Icon">
                       <div><img src={WishlistIcon} alt="" /><sup>3</sup></div>
