@@ -310,7 +310,7 @@ h4, h2{
   color: #626262;
 }
 h2{
-  margin:0 5px 0 0;
+  margin:0 2px 0 0;
   color:rgb(255, 71, 157);
 }
 p{
@@ -458,7 +458,6 @@ const RightSide = (props) => {
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [content, setContent] = useState()
   const [viewState,setViewState]= useState('day')
-  const [monthEvent,setMonthEvent]= useState()
   const [eventCopy,setEventCopy]= useState()
   const [upComingEvents,setUpcomingEvents]= useState()
   const [postOpen,setPostOpen]= useState(false)
@@ -871,11 +870,6 @@ const RightSide = (props) => {
     setAnchorEl(null);
   };
   const handleChange = (event, newValue, newPlainTextValue, mentions) => {
-    if(mentions.length!==0){
-    const Arrayvalue= mentionarray
-    Arrayvalue.push(mentions[0])
-    setMentionArray(Arrayvalue)
-    }
     setDescription(newPlainTextValue)
     }
   
@@ -886,32 +880,25 @@ const RightSide = (props) => {
     setImageUploadCopy([])
     setImageCopy([])
   }
-//  const findDesc = (value,mentions)=>{
-//   let divContent=value
-//     let regexMetachars = /[(){[*+?.\\^$|]/g;
 
-//     for (var i = 0; i < mentions.length; i++) {
-//         mentions[i].display = mentions[i].display.replace(regexMetachars, "\\$&");
-//     }
+  const findDesc = (value,mentions)=>{
+  let divContent=value
+   // eslint-disable-next-line array-callback-return
+   mentions.map(v=>{
+   let re = new RegExp(v.display, 'g');
+   divContent = divContent.replace(re, '<h2>' + v.display + '</h2>');
+   })
+   if(mentions.length!==0){
+   return (<>
+   <div dangerouslySetInnerHTML={{ __html: divContent }}>
+     </div>
 
-//     var regex = new RegExp("\\b(?:" + mentions.map(e=>e.display).join("|") + ")\\b", "gi");
-
-//     //  subject.match(regex) || [];
-
-//    mentions.map(v=>{
-//    let re = new RegExp(v.display, 'g');
-//    divContent = divContent.replace(re, '<span style="color:yellow;">' + v.display + '</span>');
-//    })
-//    if(mentions.length!==0){
-//      console.log(divContent)
-//    return (<>
-//    `divContent`
-//    </>)
-//   }
-//   else{
-//     return value
-//   }
-//   }
+   </>)
+  }
+  else{
+    return value
+  }
+  }
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   var today = new Date();
   // const options = [{name: 'John Watson', id: 1},{name: 'Marie Curie', id: 2}]
@@ -938,24 +925,18 @@ const RightSide = (props) => {
       setImageCopy([...deleteImage])
       setImageUrl([...deleteImage])
     }
-    const  users = [
-      {
-        _id: '1',
-        name: { first: 'John', last: 'Reynolds' }
-      },
-      {
-        _id: '2',
-        name: { first: 'Holly', last: 'Reynolds' }
-      },
-      {
-        _id: '3',
-        name: { first: 'Ryan', last: 'Williams' }
-      }
-    ]
+
+    const addMentions =(id,display)=>{
+        const Arrayvalue= mentionarray
+        Arrayvalue.push({id:id,display:display})
+        setMentionArray(Arrayvalue)
+    }
+   
     const userMentionData = curators.map(myUser => ({
       id: myUser._id,
       display: `${myUser.name}`
     }))
+
   return (
     <RightSection>
       <Row>
@@ -1056,6 +1037,7 @@ const RightSide = (props) => {
                   markup='@__id__'
                   type="user"
                   trigger="@"
+                  onAdd={addMentions}
                   data={userMentionData}
                   className="mentions__mention"
                 />
@@ -1131,7 +1113,7 @@ const RightSide = (props) => {
                           <EventText onClick={() => setPostOpen(true)}>
                             <span>{(new Date(v.updatedAt).toLocaleString()).substring(0,new Date(v.updatedAt).toLocaleString().indexOf(","))}</span>
                             <h3>{v.name ? v.name : place.company_name}</h3>
-                            <p>{v.content}</p>
+                            <p>{findDesc(v.content,v.mentions)}</p>
                             <Icon>
                             <EditRomve>
               
