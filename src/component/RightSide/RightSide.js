@@ -295,6 +295,7 @@ font-weight: normal;
 font-size: 18px;
 line-height: 20px;
 color: #FF479D;
+cursor:pointer;
 }
 span{
   font-weight: normal;
@@ -886,6 +887,10 @@ const RightSide = (props) => {
     setImageUploadCopy([])
     setImageCopy([])
   }
+  const postOpenFunc= (v)=> {
+    setPostOpen(true)
+    setContent(v)
+  }
 
   const findDesc = (value,mentions)=>{
   let divContent=value
@@ -1106,11 +1111,11 @@ const RightSide = (props) => {
           <DeleteModalBox setToggleMenu={setToggleMenu} setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
                     {typeof allFeed !== 'undefined' ?
                       allFeed.map(v => (
-                        <FeedListing onClick={()=>setContent(v)}>
+                        <FeedListing>
                           <FeedImage><img src={v.item_photo.length!==0? v.item_photo[0]:EventImg} alt="Event" /></FeedImage>
-                          <EventText onClick={() => setPostOpen(true)}>
+                          <EventText>
                             <span>{(new Date(v.updatedAt).toLocaleString()).substring(0,new Date(v.updatedAt).toLocaleString().indexOf(","))}</span>
-                            <h3>{v.name ? v.name : place.company_name}</h3>
+                            <h3 onClick={() => postOpenFunc(v)}>{v.name ? v.name : place.company_name}</h3>
                             <p>{findDesc(v.content,v.mentions)}</p>
                             <Icon>
                             <EditRomve>
