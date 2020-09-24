@@ -25,7 +25,7 @@ const EditModalBox = ({ isOpen,closeModal,users,value,setIsOpen,setToggleMenu}) 
      
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value,closeModal])
-console.log(mentionArray)
+  
   const Validation = () => {
     if (!(description.trim())) {
       return false
