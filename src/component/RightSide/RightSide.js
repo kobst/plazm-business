@@ -1034,7 +1034,6 @@ const RightSide = (props) => {
                 /> */}
                 <MentionsInput markup='@(__id__)[__display__]' value={description} onChange={handleChange} className="mentions">
                 <Mention
-                  markup='@__id__'
                   type="user"
                   trigger="@"
                   onAdd={addMentions}
