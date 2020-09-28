@@ -718,7 +718,14 @@ flex-direction: row;
    position:relative;
    overflow:hidden;
    margin-right:20px;
+   display: flex;
 }
+
+.messageSec .image img{
+  max-width: 100%;
+    max-height: 100%;
+}
+
 .messageSec .image span{
 position: absolute;
 width: 14px;
