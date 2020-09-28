@@ -551,7 +551,7 @@ let myInput
               </TopProfile>
                 <LabelRight>
                   <Label name="Business Name"></Label>
-                  <Input type="text" id='company' value={company} onChange={(e) => handleChange(e)} />
+                  <Input type="text" id='company' value={company} />
                 </LabelRight>
               </FlexRow>
 
