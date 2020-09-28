@@ -686,7 +686,7 @@ const RightSide = (props) => {
     setViewState('week')
     };
     const goToMonthView = () => {
-      setEvent(eventCopy)
+      setEvent([])
     toolbar.onView("month")
     setViewState('month')
     };
@@ -988,6 +988,24 @@ const RightSide = (props) => {
               )}
               components={{
                 toolbar: getCustomToolbar,
+                month: {
+                  dateHeader: (props) => {
+                    let highlightDate =
+                      eventCopy.find(event =>
+                        moment(props.date).isBetween(
+                          moment(event.start),
+                          moment(event.end),
+                          null,
+                          "[]"
+                        )||moment(props.date)===moment(event.start)||moment(props.date)===moment(event.end)
+                      ) != undefined;
+                    return (
+                      <div {...props} className="monthHeader" style={highlightDate ? { backgroundColor: "#f9a9d1", color: "#fff"} : null}>
+                      <span>{props.label}</span>
+                      </div>
+                    );
+                  }
+                }
               }}
               defaultView={viewState}
               step={60}

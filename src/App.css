@@ -1044,7 +1044,7 @@ border-top:none;
 }
 .monthView .rbc-calendar .rbc-date-cell.rbc-now.rbc-current{
   color: #FFFFFF;
-  background: #FF4F94;
+  background: #87dce5;
 }
 
 .monthView .rbc-calendar .rbc-toolbar {
@@ -1413,3 +1413,17 @@ display: none;
 .alice-carousel__stage-item{
   vertical-align: middle !important;
 }
+
+.monthHeader{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* .monthView .rbc-calendar .rbc-date-cell.rbc-now.rbc-current .monthHeader{
+  color: #FFFFFF;
+  background: black;
+} */
