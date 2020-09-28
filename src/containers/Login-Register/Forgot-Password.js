@@ -9,7 +9,7 @@ import {getMessage} from '../../config'
 const renderMessage= getMessage()
 
 const ForgotPassword = (props) => {
-    console.log(props)
+    const ResponseValue=Object.keys(props.match.params).length
     const type = props.match.url
     const [username,setUserName] = useState()
     const [code,setCode] = useState()
@@ -62,7 +62,7 @@ const ForgotPassword = (props) => {
         setError(false)
         setPassErr(false)
     if(new_password === confirmPass && Validation()){
-    Auth.forgotPasswordSubmit(username, code, new_password)
+    Auth.forgotPasswordSubmit(props.match.params.id, props.match.params.code, new_password)
     .then(data => {if(type.includes('business')){
         setCon(true)
         return (history.push(`/business/login`),
@@ -150,6 +150,7 @@ function validateEmail(user) {
          handleChange={handleChange}
          submitEmail={submitEmail}
          password={new_password}
+         ResponseValue={ResponseValue}
          
          />
          </Wrapper>

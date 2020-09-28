@@ -15,6 +15,7 @@ const Routes = () => (
           <Route path="/curator/login" component={Login} />
           <Route path="/business/register" component={Register} />
           <Route path="/curator/register" component={Register} />
+          <Route path="/business/forgot-password/:code/:id" component={ForgotPassword} />
           <Route path="/business/forgot-password" component={ForgotPassword} />
           <Route path="/curator/forgot-password" component={ForgotPassword} />
           <Route path="/dashboard" component={Dashboard} />

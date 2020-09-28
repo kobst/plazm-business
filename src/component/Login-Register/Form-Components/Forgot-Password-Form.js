@@ -46,17 +46,12 @@ bottom: -25px;
 
 
 const renderMessage = getMessage()
-const ForgotPasswordForm = ({type,email,password,con,loader,emError, submitPassword,codeErr,error,passErr,newPassErr,emailError, confirmPassErr,verificationErr,handleChange,submitEmail}) => {
+const ForgotPasswordForm = ({type,ResponseValue,email,password,con,loader,emError, submitPassword,codeErr,error,passErr,newPassErr,emailError, confirmPassErr,verificationErr,handleChange,submitEmail}) => {
   
     return (
       <>
-      {email ?
+      {ResponseValue===2 ?
         <form onSubmit = {e => submitPassword(e)}>
-                <FormGroup>
-                  <Label name="Confirmation Code" />
-                    <Input type="text" id="code" error={codeErr} onChange={e => handleChange(e)} />
-                    {error ?<ErrorMessage> {verificationErr}</ErrorMessage>: null}
-                     </FormGroup>
                 <FormGroup>
                     <Label name="New Password" />
                     <Input type="password" id="password" error={newPassErr} onChange={e => handleChange(e)} />
