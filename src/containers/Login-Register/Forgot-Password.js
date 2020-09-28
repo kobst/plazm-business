@@ -9,6 +9,7 @@ import {getMessage} from '../../config'
 const renderMessage= getMessage()
 
 const ForgotPassword = (props) => {
+    console.log(props.match.params)
     const type = props.match.url
     const [username,setUserName] = useState()
     const [code,setCode] = useState()
