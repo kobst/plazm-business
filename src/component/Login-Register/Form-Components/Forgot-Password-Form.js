@@ -70,6 +70,12 @@ const ForgotPasswordForm = ({type,ResponseValue,email,password,con,loader,emErro
    :
 
         <form onSubmit = {e => submitEmail(e)}>
+          { email?
+          <>
+        <p className="code"> We have send you a Reset Password link on your registered email, 
+                        Please click on the reset link to reset your password. </p>
+           </> :
+                 <>
                 <FormGroup>
                     <Label name="Email address" />
                     <Input type="text" id="username" onChange={e => handleChange(e)} error={emError} />
@@ -83,6 +89,7 @@ const ForgotPasswordForm = ({type,ResponseValue,email,password,con,loader,emErro
                 <Link to ='/curator/login' className="link-btn">{renderMessage.Log_Link}</Link>
                 }
                 </Links>
+                 </>   }
 
 
          </form>

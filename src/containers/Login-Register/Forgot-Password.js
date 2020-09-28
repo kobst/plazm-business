@@ -81,9 +81,6 @@ const ForgotPassword = (props) => {
     }
    }
    const Validation = () => {
-    if(!code){
-        setcodeErr(true)
-    }
     if(!new_password){
         setNewPassErr(true)
     }
@@ -96,7 +93,7 @@ const ForgotPassword = (props) => {
     if(!confirmPass){
         setConfirmPassErr(true)
     }
-    if(code && new_password && confirmPass && new_password.length>7 && confirmPass.length>7){
+    if(new_password && confirmPass && new_password.length>7 && confirmPass.length>7){
         return true
     }
 
