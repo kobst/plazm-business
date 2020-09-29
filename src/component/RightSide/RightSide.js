@@ -37,6 +37,7 @@ import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { MentionsInput, Mention } from 'react-mentions'
+import { Scrollbars } from 'react-custom-scrollbars';
 
 const RightSection = styled.div`
 
@@ -864,6 +865,22 @@ const formats = {
     }
 
   }
+  const renderThumb = ({ style, ...props }) => {
+    const thumbStyle = {
+      borderRadius: 6,
+      backgroundColor: 'rgba(35, 49, 86, 0.8)'
+    };
+    return <div style={{ ...style, ...thumbStyle }} {...props} />;
+  };
+  
+  const CustomScrollbars = props => (
+    <Scrollbars
+      renderThumbHorizontal={renderThumb}
+      renderThumbVertical={renderThumb}
+      {...props}
+    />
+  );
+  
   const handleClick = (event,v) => {
     setContent(v)
     setId(v._id)
@@ -994,7 +1011,6 @@ const formats = {
                 toolbar: getCustomToolbar,
                 month: {
                   dateHeader: (props) => {
-                   console.log(moment(props.date).format('YYYY-MM-DD'))
                     let highlightDate =
                       eventCopy.find(event =>
                         moment(props.date).isBetween(
@@ -1037,6 +1053,7 @@ const formats = {
 
               <AllEvent>
                 <h2>All Events</h2>
+                <Scrollbars style={{ width: 500, height: 500 }}>
                 <EventList>
                   {eventList ? eventList.map(v =>
                     <>
@@ -1056,6 +1073,7 @@ const formats = {
                     </>) : <><EventSkeleton /><EventSkeleton /><EventSkeleton /><EventSkeleton /></>
                   }
                 </EventList>
+                </Scrollbars>
               </AllEvent>
             </Card>
           </EventLeft>
@@ -1111,8 +1129,9 @@ const formats = {
               </FlexRow>
 
               {mentions === 'Public' ?
-                <>
+                       <>
                   <div class="mt-25">
+                  <Scrollbars style={{ width: 500, height: 500 }}>
                     {/* <FeedListing onClick={() => setIsOpen(true)}>
                       <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
                       <EventText>
@@ -1191,12 +1210,12 @@ const formats = {
                           </EventText>
                         </FeedListing>)) : null
                     }
+                   
 
 
-
-
+                   </Scrollbars>
                   </div>
-                </> : <><PostSkeleton /><PostSkeleton /><PostSkeleton /></>
+                         </> : <><PostSkeleton /><PostSkeleton /><PostSkeleton /></>
               }
 
               {mentions === 'Messages' ?
