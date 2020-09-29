@@ -14,7 +14,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 // import { makeStyles } from '@material-ui/core/styles';
 // import TextField from '@material-ui/core/TextField';
-import Gallery from '../UI/Gallery'
+import Gallery from '../UI/EventGallery'
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
 
