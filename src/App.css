@@ -951,6 +951,11 @@ textarea{
   .login-form-nested-wrapper{
     margin-top: 10px;
   }
+
+  .login-form-nested-wrapper .link-btn{
+  text-decoration: none;
+}
+  
   .login-form-nested-wrapper .code{
     position: relative;
     top: -28px;
