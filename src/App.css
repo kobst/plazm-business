@@ -483,12 +483,13 @@ max-height: 153px;
   border:none !important
 }
 .rbc-time-slot {
-  font-size: 10px !important;
+  font-size: 11px !important;
   width: 77px;
   text-align: center;
   align-items: center;
-  line-height: 39px;
+  line-height: 45px;
   border-bottom: 0.5px solid #fff;
+  font-weight: 500;
 }
 .rbc-timeslot-group .rbc-time-slot:last-child{
   display:none;
@@ -694,7 +695,7 @@ color: #979797;
 .imageSlider img{
   text-align: center;
   margin: 0 auto;
-  max-width:100%;
+  max-width:90%;
   max-height: 100%;
   width: auto;
   height: auto;
@@ -707,6 +708,7 @@ width: auto;
 .messageSec {
   display: flex;
   border-bottom:1px solid #FF479D;
+  padding-bottom: 15px;
 }
 
 .messageSec .text {
@@ -738,10 +740,10 @@ left: 41px;
 top: 36px;
 }
 .messageSec h2{
-font-weight: normal;
-font-size: 12px;
-line-height:4px;
-color:#000;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 12px;
+  color: #000;
 }
 .messageSec span{
 font-size: 8px;
@@ -1433,3 +1435,12 @@ display: none;
   color: #FFFFFF;
   background: black;
 } */
+
+
+.alice-carousel__dots{
+  display: none;
+}
+
+.Image_wrap .GallerySection{
+  justify-content: center;
+}
