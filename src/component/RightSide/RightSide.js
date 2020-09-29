@@ -144,7 +144,7 @@ width:100%;
 const EventList = styled.div`
 padding:0px;
 max-height:566px;
-overflow-y:auto;
+//  overflow-y:auto;
 position:relative;
 padding-bottom: 70px;
 
@@ -1053,8 +1053,9 @@ const formats = {
 
               <AllEvent>
                 <h2>All Events</h2>
-                <Scrollbars style={{ width: 500, height: 500 }}>
+                
                 <EventList>
+                <Scrollbars autoHeight autoHeightMax={566}>
                   {eventList ? eventList.map(v =>
                     <>
                       {v.name ?
@@ -1072,8 +1073,8 @@ const formats = {
                       }
                     </>) : <><EventSkeleton /><EventSkeleton /><EventSkeleton /><EventSkeleton /></>
                   }
+                  </Scrollbars>
                 </EventList>
-                </Scrollbars>
               </AllEvent>
             </Card>
           </EventLeft>
@@ -1131,7 +1132,7 @@ const formats = {
               {mentions === 'Public' ?
                        <>
                   <div class="mt-25">
-                  <Scrollbars style={{ width: 500, height: 500 }}>
+                  <Scrollbars autoHeight autoHeightMax={736} style={{ }}>
                     {/* <FeedListing onClick={() => setIsOpen(true)}>
                       <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
                       <EventText>
