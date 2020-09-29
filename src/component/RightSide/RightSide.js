@@ -544,6 +544,9 @@ const RightSide = (props) => {
   function onlyUnique(value, index, self) { 
     return self.indexOf(value) === index;
 }
+const formats = {
+  dayFormat: (date, culture, localizer) => localizer.format(date, 'DD dddd', culture),
+}
 
 
   const eventManage = (sol) => {
@@ -806,7 +809,7 @@ const RightSide = (props) => {
   const getDate = (value) => {
     const date = new Date(value);
     const time = ConvertNumberToTwoDigitString(date.getHours()) +
-      ":" + ConvertNumberToTwoDigitString(date.getMinutes()) + "," + (date.toLocaleString()).substring(0,new Date(date).toLocaleString().indexOf(","));
+      ":" + ConvertNumberToTwoDigitString(date.getMinutes()) + ", " + ((date.toLocaleString()).substring(0,new Date(date).toLocaleString().indexOf(",")).replace(/\//g,'-'));
     return time
 
   }
@@ -976,6 +979,7 @@ const RightSide = (props) => {
           {typeof event !== 'undefined' ?
             <Calendar
               className="CalenderSec"
+              formats={formats}
               localizer={localizer}
               events={event}
               startAccessor="start"
@@ -990,6 +994,7 @@ const RightSide = (props) => {
                 toolbar: getCustomToolbar,
                 month: {
                   dateHeader: (props) => {
+                   console.log(moment(props.date).format('YYYY-MM-DD'))
                     let highlightDate =
                       eventCopy.find(event =>
                         moment(props.date).isBetween(
@@ -997,7 +1002,7 @@ const RightSide = (props) => {
                           moment(event.end),
                           null,
                           "[]"
-                        )||moment(props.date)===moment(event.start)||moment(props.date)===moment(event.end)
+                        )||(moment(props.date).format('YYYY-MM-DD')===moment(event.start).format('YYYY-MM-DD'))||(moment(props.date).format('YYYY-MM-DD')===moment(event.end).format('YYYY-MM-DD'))
                       ) != undefined;
                     return (
                       <div {...props} className="monthHeader" style={highlightDate ? { backgroundColor: "#f9a9d1", color: "#fff"} : null}>
@@ -1005,7 +1010,17 @@ const RightSide = (props) => {
                       </div>
                     );
                   }
-                }
+                },
+
+                // week:{ 
+                //   header:(props)=>{
+                //     console.log(props)
+                //     return (
+                //       <span>{props.label}</span>
+                //     );
+                //   }
+
+                // }
               }}
               defaultView={viewState}
               step={60}
@@ -1030,7 +1045,7 @@ const RightSide = (props) => {
                           <EventText>
                             <h3>{v.name}</h3>
                             {/* <p>{v.eventSchedule.recurring}</p> */}
-                            <span>{getDate(v.eventSchedule.start_time)} to {getDate(v.eventSchedule.end_time)}</span>
+                            <span>{getDate(v.eventSchedule.start_time)}</span>
                             <p>{v.content}</p>
                           </EventText>
                           {v.item_photo.length>0?

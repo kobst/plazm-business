@@ -96,6 +96,14 @@ const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen,
       if (value.end) {
         setEnd(value.end)
       }
+      if(value.start && value.end){
+      if(((new Date(value.start).getDate() < new Date(value.end).getDate()))
+       ||(new Date(value.start).getMonth() < new Date(value.end).getMonth())
+       ||(new Date(value.start).getFullYear() < new Date(value.end).getFullYear())){
+           setDisableReccuring(true)
+           setRecurring('')
+          }
+        }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value,closeModal])
@@ -267,7 +275,7 @@ else{
         return false
       }
     }
-    if(start && end && title && end>start){
+    if(start && end && title && new Date(end)>new Date(start)){
         return true
     }
 
