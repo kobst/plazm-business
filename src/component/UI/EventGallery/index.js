@@ -51,10 +51,10 @@ const Gallery = (props) => {
     console.log(props.image)
     return(
     
-      <GallerySection>
+      <GallerySection className="Imgcontent">
         {props.image.length!==0 ?(props.image.map(v => 
-                    <div onClick={()=>CancelPost(v)} className="galleryImage">
-                    <img src={v} alt="" />
+                    <div onClick={()=>CancelPost(v)} className="EventsImage">
+                    <img className="" src={v} alt="" />
                   </div>)): <div class="galleryImage">
         <input id="myInput" onChange={(e)=> upload(e)} type="file"  ref={(ref) => myInput = ref} style={{ display: 'none' }} />
           <p onClick={(e) => myInput.click()}><img src={PlusIcon} alt="" /> Photo</p>
