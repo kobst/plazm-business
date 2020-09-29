@@ -1132,7 +1132,7 @@ const RightSide = (props) => {
                         <FeedListing>
                           <FeedImage><img src={place.default_image_url?place.default_image_url:EventImg} alt="Event" /></FeedImage>
                           <EventText>
-                            <span>{(new Date(v.updatedAt).toLocaleString()).substring(0,new Date(v.updatedAt).toLocaleString().indexOf(","))}</span>
+                            <span>{(getDate(v.updatedAt))}</span>
                             <h3 onClick={() => postOpenFunc(v)}>{v.name ? v.name : place.company_name}</h3>
                             <p>{findDesc(v.content,v.mentions)}</p>
                             <Icon>
@@ -1169,8 +1169,8 @@ const RightSide = (props) => {
                                 }
                               </EditRomve> */}
 
-                              <WishlistImg><img src={WishlistGrey} alt="" /><sup>3</sup></WishlistImg>
-                              <CommentImg><img src={CommentGrey} alt="" /><sup>3</sup></CommentImg>
+                              {/* <WishlistImg><img src={WishlistGrey} alt="" /><sup>3</sup></WishlistImg>
+                              <CommentImg><img src={CommentGrey} alt="" /><sup>3</sup></CommentImg> */}
 
                             </Icon>
                           </EventText>

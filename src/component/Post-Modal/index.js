@@ -15,6 +15,17 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
   const [description, setDescription] = useState()
   const [image,setImage]= useState([])
 
+  const ConvertNumberToTwoDigitString = (n) => {
+    return n > 9 ? "" + n : "0" + n;
+  }
+  const getDate = (value) => {
+    const date = new Date(value);
+    const time = ConvertNumberToTwoDigitString(date.getHours()) +
+      ":" + ConvertNumberToTwoDigitString(date.getMinutes()) + "," + (date.toLocaleString()).substring(0,new Date(date).toLocaleString().indexOf(","));
+    return time
+
+  }
+
  useEffect(() => {
      if(value){
       setDescription(value.content)
@@ -38,7 +49,7 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
         htmlOpenClassName="ReactModal__Html--open"
       >
 
-        <div className="ContentModal">
+        <div style={ image.length>0?{maxWidth:'1000px'}:{maxWidth:'600px'}} className="ContentModal">
           {image.length>0?
           <div class="imageSlider">
             <SlideShow image={image} />
@@ -52,15 +63,15 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
                 <div className="image"><img src={place.default_image_url?place.default_image_url:null} alt="" /></div>
                 <div className="text">
                    <h2>{value&&value.name ? value.name : place.company_name }</h2>
-                   <span>{value ?(new Date(value.updatedAt).toLocaleString()).substring(0,new Date(value.updatedAt).toLocaleString().indexOf(",")):null}</span>
+                   <span>{value ?(getDate(value.updatedAt)):null}</span>
                     <p>{value ? description:null}</p>
-                  <div className="postBottom">
+                  {/* <div className="postBottom">
                     <div className="Icon">
                       <div><img src={Wishlistgrey} alt="" /><sup>3</sup></div>
                       <div><img src={Commentgrey} alt="" /><sup>3</sup></div>
                     </div>
                     <p>2 Comments</p>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
@@ -114,31 +125,13 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
                           </div>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In quis aliquam adipiscing aliquam est arcu quis facilisi. Sed id feugiat felis porttitor pharetra.</p>
                         </div>
-                        <div className="commenticon">
+                        {/* <div className="commenticon">
                           <img src={WishlistIcon} alt=""  />
                           <img src={ReplyIcon} alt=""  />
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 
-                <div className="commentLeft ml-55">
-                    <div class="commentimg">
-                      <img src={CommnentImg} alt="" />
-                    </div>
-                    <div className="commentText">
-                      <div className="left">
-                        <div class="topHeading">
-                          <h3>Kevin Nash</h3>
-                          <span>23m</span>
-                          </div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In quis aliquam adipiscing aliquam est arcu quis facilisi. Sed id feugiat felis porttitor pharetra.</p>
-                        </div>
-                        <div className="commenticon">
-                          <img src={WishlistIcon} alt=""  />
-                          <img src={ReplyIcon} alt=""  />
-                        </div>
-                    </div>
-                </div>
             </div>
           </div>
         </div>
