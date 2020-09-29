@@ -1477,3 +1477,6 @@ display: none;
   top: 0px;
 }
 
+.rbc-event{
+  border-radius: 5px !important;
+}
