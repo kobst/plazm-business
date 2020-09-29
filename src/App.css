@@ -231,6 +231,7 @@ font-family: 'Roboto',sans-serif;
   font-size: 10px !important;
   min-height: 50px !important;
   line-height: 50px !important;
+  font-size: 11px !important;
 }
 
 .rbc-time-slot{
@@ -483,12 +484,13 @@ max-height: 153px;
   border:none !important
 }
 .rbc-time-slot {
-  font-size: 10px !important;
+  font-size: 11px !important;
   width: 77px;
   text-align: center;
   align-items: center;
-  line-height: 39px;
+  line-height: 45px;
   border-bottom: 0.5px solid #fff;
+  font-weight: 500;
 }
 .rbc-timeslot-group .rbc-time-slot:last-child{
   display:none;
@@ -694,7 +696,7 @@ color: #979797;
 .imageSlider img{
   text-align: center;
   margin: 0 auto;
-  max-width:100%;
+  max-width:90%;
   max-height: 100%;
   width: auto;
   height: auto;
@@ -707,6 +709,7 @@ width: auto;
 .messageSec {
   display: flex;
   border-bottom:1px solid #FF479D;
+  padding-bottom: 15px;
 }
 
 .messageSec .text {
@@ -738,10 +741,10 @@ left: 41px;
 top: 36px;
 }
 .messageSec h2{
-font-weight: normal;
-font-size: 12px;
-line-height:4px;
-color:#000;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 12px;
+  color: #000;
 }
 .messageSec span{
 font-size: 8px;
@@ -1433,3 +1436,44 @@ display: none;
   color: #FFFFFF;
   background: black;
 } */
+
+
+.alice-carousel__dots{
+  display: none;
+}
+
+.Image_wrap .Imgcontent{
+  justify-content: center;
+}
+
+.EventsImage{
+  background: #f2fbff;
+    border: 1px solid rgba(219,226,234,.2);
+    box-sizing: border-box;
+    border-radius: 13px;
+    max-width: 153px;
+    min-height: 153px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: 100%;
+    margin: 7px;
+    position: relative;
+    max-height: 153px;
+}
+.EventsImage img{
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.Image_wrap .Imgcontent .EventsImage:hover::after {
+  content: "";
+  position: absolute;
+  background: url(/static/media/cross-icon.34efcc3a.svg) center center no-repeat rgba(0, 0, 0, 0.7);
+  width: 100%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+}
+
