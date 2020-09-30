@@ -658,6 +658,8 @@ color: #979797;
 
 .postOuter{
   padding: 25px 25px 0;
+  max-width: 50%;
+  width: 100%;
 }
 .postOuter button{
   cursor: pointer;
@@ -692,6 +694,7 @@ color: #979797;
     max-width: 50%;
     width: 100%;
     text-align: center;
+    min-height: 600px;
 }
 .imageSlider img{
   text-align: center;
@@ -704,7 +707,7 @@ color: #979797;
 }
 .Modal.postModal .ContentModal{
 flex-direction: row;
-width: auto;
+width: 1000px;
 }
 .messageSec {
   display: flex;

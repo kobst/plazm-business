@@ -21,7 +21,7 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
   const getDate = (value) => {
     const date = new Date(value);
     const time = ConvertNumberToTwoDigitString(date.getHours()) +
-      ":" + ConvertNumberToTwoDigitString(date.getMinutes()) + "," + (date.toLocaleString()).substring(0,new Date(date).toLocaleString().indexOf(","));
+      ":" + ConvertNumberToTwoDigitString(date.getMinutes()) + ", " + ((date.toLocaleString()).substring(0,new Date(date).toLocaleString().indexOf(",")).replace(/\//g,'-'));
     return time
 
   }
@@ -76,7 +76,7 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
               </div>
             </div>
             <div className="commentSec">
-                <div className="commentLeft">
+                {/* <div className="commentLeft">
                     <div class="commentimg">
                       <img src={CommnentImg} alt="" />
                     </div>
@@ -125,12 +125,12 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
                           </div>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In quis aliquam adipiscing aliquam est arcu quis facilisi. Sed id feugiat felis porttitor pharetra.</p>
                         </div>
-                        {/* <div className="commenticon">
+                        <div className="commenticon">
                           <img src={WishlistIcon} alt=""  />
                           <img src={ReplyIcon} alt=""  />
-                        </div> */}
+                        </div>
                     </div>
-                </div>
+                </div> */}
 
             </div>
           </div>
