@@ -363,14 +363,7 @@ padding:3px 5px !important;
   position: relative;
   top: 1.5px;
 }
-/* #multiselectContainerReact > div i::after{
-  background: url(./images/cross1.svg);
-  width: 14px;
-  height: 14px;
-  content: "" !important;
-  position: relative;
-  top: 2px;
-} */
+
 
 .react-datetime-picker__inputGroup__input{
   font-size:13px !important;
@@ -658,7 +651,6 @@ color: #979797;
 
 .postOuter{
   padding: 25px 25px 0;
-  max-width: 50%;
   width: 100%;
 }
 .postOuter button{
@@ -674,6 +666,10 @@ color: #979797;
     right: 15px;
     top: 10px;
   }
+  .postOuter{
+    max-width: inherit;
+    width: 100%;
+  }
 }
 .postOuter button:focus{
   outline:none;
@@ -685,8 +681,7 @@ color: #979797;
   width:14px;
 }
 .imageSlider{
-  /* margin-right:25px; */
-  background: #2f2f2f;
+    background: #2f2f2f;
     border-radius: 20px;
     padding: 25px;
     display: flex;
@@ -694,7 +689,7 @@ color: #979797;
     max-width: 50%;
     width: 100%;
     text-align: center;
-    min-height: 600px;
+    
 }
 .imageSlider img{
   text-align: center;
@@ -707,7 +702,7 @@ color: #979797;
 }
 .Modal.postModal .ContentModal{
 flex-direction: row;
-width: 1000px;
+width: auto;
 }
 .messageSec {
   display: flex;
@@ -887,11 +882,14 @@ color: #979797;
   .commentSec {
     height:90px;
   }
-.Modal.postModal {
-  max-width: 665px;
-  margin-right: 15px;
+  .Modal.postModal {
+    max-width: 665px;
+    margin-right: 15px;
     margin-left: 15px;
+   
   }
+
+  
 }
 @media (max-width:767px){
   .commentSec {
@@ -903,11 +901,20 @@ color: #979797;
     align-items: center;
     height:auto;
     padding: 30px 15px 15px;
-}
-.imageSlider{
-  max-width:inherit;
-  margin-right: 0px;
-}
+  }
+  .imageSlider img {
+    max-width: 100%;
+  }
+  .imageSlider{
+    max-width:inherit;
+    margin-right: 0px;
+  }
+  .alice-carousel__stage-item{
+    width: 100% !important;
+  }
+  .alice-carousel__wrapper{
+    width: 260px !important;
+  }
 }
 .react-datetime-picker__calendar-button svg{
   display:none !important;
@@ -1345,30 +1352,7 @@ display: none;
   right: inherit;
 }
 
-/* .postsliderbtnbg, .postsliderbtnrtbg{
-  background: #fff;
-  border-radius: 6px;
-  width: 28px;
-  height: 28px;
-  left: -15px;
-  position: relative;
-  cursor: pointer;
-}
 
-.postsliderbtnrtbg{
-  right: -15px;
-  left: inherit;
-}
-
-.postsliderbtnbg img{
-  transform: rotate(180deg);
-}
-
-.postsliderbtnbg img, .postsliderbtnrtbg img{
-  max-width: 8px;
-  top: 6px;
-  position: relative;
-} */
 
 .MuiPickersModal-dialogRootWider .MuiButtonBase-root.MuiButton-root.MuiButton-text span.MuiButton-label {
   font-size: inherit !important;
@@ -1435,10 +1419,7 @@ display: none;
   justify-content: center;
   align-items: center;
 }
-/* .monthView .rbc-calendar .rbc-date-cell.rbc-now.rbc-current .monthHeader{
-  color: #FFFFFF;
-  background: black;
-} */
+
 
 
 .alice-carousel__dots{
@@ -1482,4 +1463,13 @@ display: none;
 
 .rbc-event{
   border-radius: 5px !important;
+}
+
+@media (min-width: 1199px){
+  .Modal.postModal .ContentModal{
+    width: 1000px;
+  }
+  .imageSlider{
+    min-height: 600px;
+  }
 }
