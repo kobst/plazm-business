@@ -547,7 +547,7 @@ const RightSide = (props) => {
     return self.indexOf(value) === index;
 }
 const formats = {
-  dayFormat: (date, culture, localizer) => localizer.format(date, 'DD dddd', culture),
+  dayFormat: (date, culture, localizer) => localizer.format(date, 'Do dddd', culture),
 }
 
 
