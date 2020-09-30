@@ -1,6 +1,16 @@
 stages:
+  - lint
   - sonar-scanner
   - deploy
+eslint:
+ stage: lint
+ script:
+ - npm install -g eslint
+ - eslint --init
+ - eslint *.js,*.ts
+ allow_failure: true
+ only:
+  - merge_requests
 sonar-scanner:
  stage: sonar-scanner
  script:
