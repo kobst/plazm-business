@@ -985,7 +985,7 @@ const formats = {
               {/* Claender Section */}
               <FlexRow>
                 <SubHeading name="Events" />
-                <ButtonSmall onClick={() => setIsOpen(true)}>Add Events</ButtonSmall>
+                <ButtonSmall onClick={() => setIsOpen(true)}>Add Event</ButtonSmall>
               </FlexRow>
 
               <AddModalBox editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
