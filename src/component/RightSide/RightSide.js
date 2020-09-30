@@ -469,6 +469,7 @@ const RightSide = (props) => {
   const [imageUploadCopy,setImageUploadCopy]=useState([])
   const [anchorEl, setAnchorEl]= useState(null)
   const [mentionarray,setMentionArray]= useState([])
+  const [toolbarRef, setToolbarRef] = useState(null);
 
   useEffect(() => {
     let updateUser = async authState => {
@@ -677,6 +678,18 @@ const formats = {
     handleClose()
     setDeleteOpen(true)
   }
+
+  const goToDateFromMonthView = (date) => {
+    if (!toolbarRef) return false
+    toolbarRef.date.setMonth(date.getMonth());
+    toolbarRef.date.setYear(date.getFullYear());
+    toolbarRef.date.setDate(date.getDate());
+    toolbarRef.onView("day")
+    setViewState('day')
+    setEvent(eventCopy)
+    toolbarRef.onNavigate("current",date);
+  }
+
   const getCustomToolbar = (toolbar) => {
   //  const toolbarDate = toolbar.date;
     const goToDayView = () => {
@@ -693,6 +706,7 @@ const formats = {
       setEvent([])
     toolbar.onView("month")
     setViewState('month')
+    setToolbarRef(toolbar)
     };
     const goToBack = () => {
       let view = viewState
@@ -1021,7 +1035,7 @@ const formats = {
                         )||(moment(props.date).format('YYYY-MM-DD')===moment(event.start).format('YYYY-MM-DD'))||(moment(props.date).format('YYYY-MM-DD')===moment(event.end).format('YYYY-MM-DD'))
                       ) != undefined;
                     return (
-                      <div {...props} className="monthHeader" style={highlightDate ? { backgroundColor: "#f9a9d1", color: "#fff"} : null}>
+                      <div {...props} onClick={() => goToDateFromMonthView(props.date)} className="monthHeader" style={highlightDate ? { backgroundColor: "#f9a9d1", color: "#fff"} : null}>
                       <span>{props.label}</span>
                       </div>
                     );
