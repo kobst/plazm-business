@@ -35,6 +35,25 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
  // eslint-disable-next-line react-hooks/exhaustive-deps
  }, [value,closeModal])
  
+ const returnSlider=()=>{
+  if(image.length>1)
+  {return(
+  <div class="imageSlider">
+    <SlideShow image={image} />
+  </div>
+  )
+  }
+  else if(image.length===1){
+    return(
+      <div class="imageSlider">
+   <img src={image[0]} alt="img" />
+  </div>
+    )
+  }
+  else{
+    return null
+  }
+ }
 
 
 
@@ -50,10 +69,7 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
       >
 
         <div style={ image.length>0?{maxWidth:'1000px'}:{maxWidth:'600px'}} className="ContentModal">
-          {image.length>0?
-          <div class="imageSlider">
-            <SlideShow image={image} />
-          </div>:null}
+          {returnSlider()}
           <div className="postOuter">
             <button onClick={closeModal}>
               <img src={CloseIcon} alt="Close" />
