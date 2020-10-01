@@ -1473,6 +1473,10 @@ display: none;
 .rbc-day-slot .rbc-timeslot-group .rbc-time-slot{
   border-bottom: 0 !important;
 }
+.monthView .rbc-calendar .rbc-date-cell.rbc-now.rbc-current .monthHeader {
+  font-weight: bold;
+  color: #564a4a !important;
+  }
 
 @media (min-width: 1199px){
   .Modal.postModal .ContentModal{
