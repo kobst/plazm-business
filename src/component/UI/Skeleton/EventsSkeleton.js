@@ -5,7 +5,7 @@ import './skeleton.css';
 const EventsSkeleton = () => (
 
   <div className="skelton">
-    <div class="eventskelton">
+    <div className="eventskelton">
       <div className="eventText">
         <div className="title">
           <Skeleton count={1} height={12} width={200} />

@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import Links from '../../UI/Link/Link'
 import {Link} from 'react-router-dom'
 import Button from '../../UI/Button/Button'
 import Input from '../../UI/Input/Input'

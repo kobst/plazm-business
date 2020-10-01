@@ -10,7 +10,6 @@ import { MentionsInput, Mention } from 'react-mentions'
 
 const EditModalBox = ({ isOpen,closeModal,users,value,setIsOpen,setToggleMenu}) => {
    const [description, setDescription] = useState()
-   const [saveDisable, setSaveDisable] = useState(false)
    const [image,setImage]= useState([])
    const [mentionArray,setMentionArray]= useState([])
 
@@ -36,7 +35,6 @@ const EditModalBox = ({ isOpen,closeModal,users,value,setIsOpen,setToggleMenu}) 
 
 const handleEdit= async () => {
   if(Validation()){
-      setSaveDisable(true)
   const response= await fetch(`${process.env.REACT_APP_API_URL}/api/items`, {
       method: 'PUT',
       headers: {

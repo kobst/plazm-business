@@ -12,7 +12,6 @@ const ForgotPassword = (props) => {
     const ResponseValue=Object.keys(props.match.params).length
     const type = props.match.url
     const [username,setUserName] = useState()
-    const [code,setCode] = useState()
     const [new_password,setPassword] = useState()
     const [confirmPass,setConfirmPass] = useState()
     const [email,setEmail] = useState(false)
@@ -120,9 +119,6 @@ function validateEmail(user) {
     } else if (e.target.id === 'password') {
       setPassword(e.target.value)
     }
-    else if (e.target.id === 'code') {
-        setCode(e.target.value)
-      }
       else if (e.target.id === 'conPassword') {
         setConfirmPass(e.target.value)
       }

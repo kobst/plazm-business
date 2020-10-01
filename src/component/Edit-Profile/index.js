@@ -1,3 +1,4 @@
+/* eslint-disable no-sequences */
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Card from '../UI/Card/Card'
@@ -12,9 +13,8 @@ import history from '../../utils/history'
 import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
 import TimePicker from 'react-bootstrap-time-picker';
-import GallerySec from '../UI/Gallery'
+// import GallerySec from '../UI/Gallery'
 import GoogleMapReact from 'google-map-react';
-import {GoogleApiWrapper} from 'google-maps-react';
 import Geocode from "react-geocode";
 import FindAddressValue from '../../utils/findAddress'
 import reactS3 from 'react-s3'
@@ -559,7 +559,7 @@ let myInput
               <input id="myInput" onChange={(e)=> upload(e)} type="file"  ref={(ref) => myInput = ref} style={{ display: 'none' }} />
                 <TopProfile onClick={(e) => myInput.click() }>
                   {typeof value !== 'undefined'&& value.default_image_url?
-                    <img src={imageUrl} alt='vt'/>: 'VT'
+                    <img src={imageUrl} alt='img'/>: null
                   }
               </TopProfile>
                 <LabelRight>
@@ -618,7 +618,7 @@ let myInput
           <HashTagsSearch>
             <h3>Select Hashtags</h3>
           </HashTagsSearch>
-          <HashSearch>
+          <HashSearch onClick={(e)=> e.target.reset}>
             <ReactTagInput
               tags={tags} placeholder="Label"
               onChange={(newTags) => setTags(newTags)}
@@ -670,12 +670,12 @@ let myInput
         </Card>
       </HashTags>
       <row>
-        <Card>
+        {/* <Card>
           <HashTagsSearch>
             <h3>Upload Highlight Images</h3>
           </HashTagsSearch>
           <GallerySec type="edit" />
-        </Card>
+        </Card> */}
       </row>
       <row>
         <Card>

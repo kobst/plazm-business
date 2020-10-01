@@ -1,9 +1,10 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable no-sequences */
 
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Tabs from '../UI/Tabs/Tabs'
 import Card from '../UI/Card/Card'
-import Search from '../UI/Search/Search'
 import { Auth } from 'aws-amplify';
 import AddModalBox from '../Add-Event/index'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
@@ -12,25 +13,26 @@ import { callPlace, fetchItems, fetchUsers } from '../../Api'
 import ValueLoader from '../../utils/loader'
 import { RRule } from 'rrule'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import UserImage from '../../images/user-img.png'
 import EventImg from '../../images/eventimg.png'
 import SubHeading from '../UI/SubHeading'
 import ButtonSmall from '../UI/ButtonSmall'
 import CrossIcon from '../../images/cross-icon.svg'
 import UserIcon from '../../images/user.svg'
-import WishlistGrey from '../../images/wishlist-grey.svg'
-import CommentGrey from '../../images/comment-grey.svg'
 import CommentIcon from '../../images/comment.svg'
-import SortIcon from '../../images/sort.svg'
 import UploadIocn from '../../images/upload.svg'
-import GallerySec from '../UI/Gallery'
-import Tooltip from '../UI/Tooltip'
 import EventSkeleton from '../UI/Skeleton/EventsSkeleton'
 import PostSkeleton from '../UI/Skeleton/PostSkeleton'
+// import Search from '../UI/Search/Search'
+// import UserImage from '../../images/user-img.png'
+// import SortIcon from '../../images/sort.svg'
+// import GallerySec from '../UI/Gallery'
+// import MoreIcon from '../../images/more.svg'
+// import Tooltip from '../UI/Tooltip'
+// import WishlistGrey from '../../images/wishlist-grey.svg'
+// import CommentGrey from '../../images/comment-grey.svg'
 // import Mention from 'react-textarea-mention';
 import EditModalBox from '../Edit-Post'
 import DeleteModalBox from '../Delete-Post'
-import MoreIcon from '../../images/more.svg'
 import PostModalBox from '../Post-Modal'
 import reactS3 from 'react-s3'
 import Button from '@material-ui/core/Button';
@@ -244,28 +246,28 @@ p{
 }
 
 }`
-const WishlistImg = styled.div`
-margin-left: 13px;
-position:relative;
-cursor:pointer;
-display:flex;
-align-items: center;
-img{
-  height: 16px;
-  width: 17px;
-}
-`
-const CommentImg = styled.div`
-margin-left: 13px;
-position:relative;
-cursor:pointer;
-display:flex;
-align-items: center;
-img{
-  height: 16px;
-  width: 17px;
-}
-`
+// const WishlistImg = styled.div`
+// margin-left: 13px;
+// position:relative;
+// cursor:pointer;
+// display:flex;
+// align-items: center;
+// img{
+//   height: 16px;
+//   width: 17px;
+// }
+// `
+// const CommentImg = styled.div`
+// margin-left: 13px;
+// position:relative;
+// cursor:pointer;
+// display:flex;
+// align-items: center;
+// img{
+//   height: 16px;
+//   width: 17px;
+// }
+// `
 const Icon = styled.div`
 display: flex;
 align-items: center;
@@ -372,17 +374,17 @@ div{
   margin-left:20px;
 }
 `
-const SortSection = styled.div`
-margin-left:auto;
-display:flex;
-align-items: center;
-p{
-font-size: 12px;
-line-height: 14px;
-color: #979797;
-margin-right:38px;
-}
-`
+// const SortSection = styled.div`
+// margin-left:auto;
+// display:flex;
+// align-items: center;
+// p{
+// font-size: 12px;
+// line-height: 14px;
+// color: #979797;
+// margin-right:38px;
+// }
+// `
 const UploadImage = styled.div`
 width: 31px;
 height: 33px;
@@ -413,17 +415,17 @@ const UploadOuter = styled.div`
 display:flex;
 margin:0 10px;
 `
-const UserListing = styled.div`
-padding:0px;
-max-height: 772px;
-overflow-y: auto;
-`
-const UserList = styled.div`
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-top:15px;
-`
+// const UserListing = styled.div`
+// padding:0px;
+// max-height: 772px;
+// overflow-y: auto;
+// `
+// const UserList = styled.div`
+// display: flex;
+// justify-content: space-between;
+// align-items: center;
+// margin-top:15px;
+// `
 
 moment.locale('en-GB')
 const localizer = momentLocalizer(moment)
@@ -457,17 +459,15 @@ const RightSide = (props) => {
   // const [showTag, setShowTag] = useState(false)
   const [curators, setCurators] = useState([])
   const [activePublic, setActivePublic] = useState(false)
-  const [activeMentions, setActiveMentions] = useState(false)
   const [mess, setActiveMess] = useState(false)
   const [allMentions, setAllMentions] = useState()
   const [calenderView, setCalenderView] = useState()
-  const [toggle, setToggleMenu] = useState(false)
   const [id, setId] = useState()
   const [isModelOpen, setIsModelOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [content, setContent] = useState()
   const [viewState,setViewState]= useState('day')
-  const [eventCopy,setEventCopy]= useState()
+  const [eventCopy,setEventCopy]= useState([])
   const [upComingEvents,setUpcomingEvents]= useState()
   const [postOpen,setPostOpen]= useState(false)
   const [imageUrl,setImageUrl]=useState([])
@@ -529,19 +529,16 @@ const RightSide = (props) => {
     const checkMentions = () => {
       if (mentions === 'Public') {
         setAllFeed(feed)
-        setActiveMentions(false)
         setActiveMess(false)
         setActivePublic(true)
       }
       else if (mentions === 'All Mentions') {
         setAllFeed(allMentions)
-        setActiveMentions(true)
         setActiveMess(false)
         setActivePublic(false)
       }
       else {
         setAllFeed(posts)
-        setActiveMentions(false)
         setActiveMess(true)
         setActivePublic(false)
       }
@@ -867,15 +864,7 @@ const formats = {
       return true
     }
   }
-  const setToggle = (v) => {
-    setId(v)
-    if (toggle === true) {
-      setToggleMenu(false)
-    }
-    else {
-      setToggleMenu(true)
-    }
-  }
+  
   const addPost = async () => {
     if (Validation()) {
       setSaveDisable(true)
@@ -898,21 +887,8 @@ const formats = {
     }
 
   }
-  const renderThumb = ({ style, ...props }) => {
-    const thumbStyle = {
-      borderRadius: 6,
-      backgroundColor: 'rgba(35, 49, 86, 0.8)'
-    };
-    return <div style={{ ...style, ...thumbStyle }} {...props} />;
-  };
   
-  const CustomScrollbars = props => (
-    <Scrollbars
-      renderThumbHorizontal={renderThumb}
-      renderThumbVertical={renderThumb}
-      {...props}
-    />
-  );
+
   
   const handleClick = (event,v) => {
     setContent(v)
@@ -964,7 +940,6 @@ const formats = {
   }
   }
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-  var today = new Date();
   // const options = [{name: 'John Watson', id: 1},{name: 'Marie Curie', id: 2}]
 
   const upload =async(e)=> {
@@ -1075,7 +1050,7 @@ const formats = {
               step={60}
               onView={(e) => (setCalenderView(e),setViewState(e))}
               views={['day', 'week', 'month',]}
-              style={{ height: 463, width: calenderView === 'month' ? '100%' : '100%' }}
+              style={{ height: 463, width:'100%'}}
             /> : <div className="loader"> <ValueLoader height="70" width="70" /></div>
 
           }
@@ -1158,13 +1133,13 @@ const formats = {
                 <SubHeading name="Feed" />
                 <TabsOuter>
                   <Tabs isActive={activePublic} setMentions={setMentions} name="Public" image={UserIcon} />
-                  <Tabs className="M2" isActive={mess} setMentions={setMentions} name="Message" image={CommentIcon} />
+                  <Tabs className="M2" isActive={mess} setMentions={setMentions} name="Public" image={CommentIcon} />
                 </TabsOuter>
               </FlexRow>
 
               {mentions === 'Public' ?
                        <>
-                  <div class="mt-25">
+                  <div className="mt-25">
                   <Scrollbars autoHeight autoHeightMax={736} style={{ }}>
                     {/* <FeedListing onClick={() => setIsOpen(true)}>
                       <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
@@ -1193,8 +1168,8 @@ const formats = {
                       </EventText>
                     </FeedListing> */}
          <PostModalBox isOpen={postOpen} closeModal={() => setPostOpen(false)} value={content} place={place} />
-         <EditModalBox setToggleMenu={setToggleMenu} setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={userMentionData} value={content} />
-          <DeleteModalBox setToggleMenu={setToggleMenu} setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
+         <EditModalBox setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={userMentionData} value={content} />
+          <DeleteModalBox  setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
                     {typeof allFeed !== 'undefined' ?
                       allFeed.map(v => (
                         <FeedListing>
@@ -1252,141 +1227,140 @@ const formats = {
                          </> : <><PostSkeleton /><PostSkeleton /><PostSkeleton /></>
               }
 
-              {mentions === 'Messages' ?
+              {/* {mentions === 'Messages' ?
                 <>
                   <Search />
                   <UserListing>
                     <UserList>
                       <div className="leftText">
-                        <div class="imgSection">
+                        <div className="imgSection">
                           <img src={UserImage} alt="user" />
                           <span></span>
                         </div>
                         <div className="text">
                           <h2>Madelyn Mango</h2>
-                          <div class="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
+                          <div className="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
                         </div>
                       </div>
                     </UserList>
                     <UserList>
                       <div className="leftText">
-                        <div class="imgSection">
+                        <div className="imgSection">
                           <img src={UserImage} alt="user" />
                         </div>
                         <div className="text">
                           <h2>Madelyn Mango</h2>
-                          <div class="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span class="active">Just Now</span></div>
+                          <div className="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span className="active">Just Now</span></div>
                         </div>
                       </div>
                     </UserList>
                     <UserList>
                       <div className="leftText">
-                        <div class="imgSection">
-                          <img src={UserImage} alt="user" />
-                          <span></span>
-                        </div>
-                        <div className="text">
-                          <h2>Madelyn Mango</h2>
-                          <div class="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
-                        </div>
-                      </div>
-                    </UserList>
-                    <UserList>
-                      <div className="leftText">
-                        <div class="imgSection">
-                          <img src={UserImage} alt="user" />
-                        </div>
-                        <div className="text">
-                          <h2>Madelyn Mango</h2>
-                          <div class="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span class="active">Just Now</span></div>
-                        </div>
-                      </div>
-                    </UserList>
-                    <UserList>
-                      <div className="leftText">
-                        <div class="imgSection">
+                        <div className="imgSection">
                           <img src={UserImage} alt="user" />
                           <span></span>
                         </div>
                         <div className="text">
                           <h2>Madelyn Mango</h2>
-                          <div class="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
+                          <div className="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
                         </div>
                       </div>
                     </UserList>
                     <UserList>
                       <div className="leftText">
-                        <div class="imgSection">
+                        <div className="imgSection">
                           <img src={UserImage} alt="user" />
                         </div>
                         <div className="text">
                           <h2>Madelyn Mango</h2>
-                          <div class="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span class="active">Just Now</span></div>
+                          <div className="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span className="active">Just Now</span></div>
                         </div>
                       </div>
                     </UserList>
                     <UserList>
                       <div className="leftText">
-                        <div class="imgSection">
-                          <img src={UserImage} alt="user" />
-                          <span></span>
-                        </div>
-                        <div className="text">
-                          <h2>Madelyn Mango</h2>
-                          <div class="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
-                        </div>
-                      </div>
-                    </UserList>
-                    <UserList>
-                      <div className="leftText">
-                        <div class="imgSection">
-                          <img src={UserImage} alt="user" />
-                        </div>
-                        <div className="text">
-                          <h2>Madelyn Mango</h2>
-                          <div class="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span class="active">Just Now</span></div>
-                        </div>
-                      </div>
-                    </UserList>
-                    <UserList>
-                      <div className="leftText">
-                        <div class="imgSection">
+                        <div className="imgSection">
                           <img src={UserImage} alt="user" />
                           <span></span>
                         </div>
                         <div className="text">
                           <h2>Madelyn Mango</h2>
-                          <div class="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
+                          <div className="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
                         </div>
                       </div>
                     </UserList>
                     <UserList>
                       <div className="leftText">
-                        <div class="imgSection">
+                        <div className="imgSection">
+                          <img src={UserImage} alt="user" />
+                        </div>
+                        <div className="text">
+                          <h2>Madelyn Mango</h2>
+                          <div className="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span className="active">Just Now</span></div>
+                        </div>
+                      </div>
+                    </UserList>
+                    <UserList>
+                      <div className="leftText">
+                        <div className="imgSection">
                           <img src={UserImage} alt="user" />
                           <span></span>
                         </div>
                         <div className="text">
                           <h2>Madelyn Mango</h2>
-                          <div class="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
+                          <div className="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
                         </div>
                       </div>
                     </UserList>
                     <UserList>
                       <div className="leftText">
-                        <div class="imgSection">
+                        <div className="imgSection">
                           <img src={UserImage} alt="user" />
                         </div>
                         <div className="text">
                           <h2>Madelyn Mango</h2>
-                          <div class="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
+                          <div className="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span className="active">Just Now</span></div>
+                        </div>
+                      </div>
+                    </UserList>
+                    <UserList>
+                      <div className="leftText">
+                        <div className="imgSection">
+                          <img src={UserImage} alt="user" />
+                          <span></span>
+                        </div>
+                        <div className="text">
+                          <h2>Madelyn Mango</h2>
+                          <div className="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
+                        </div>
+                      </div>
+                    </UserList>
+                    <UserList>
+                      <div className="leftText">
+                        <div className="imgSection">
+                          <img src={UserImage} alt="user" />
+                          <span></span>
+                        </div>
+                        <div className="text">
+                          <h2>Madelyn Mango</h2>
+                          <div className="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
+                        </div>
+                      </div>
+                    </UserList>
+                    <UserList>
+                      <div className="leftText">
+                        <div className="imgSection">
+                          <img src={UserImage} alt="user" />
+                        </div>
+                        <div className="text">
+                          <h2>Madelyn Mango</h2>
+                          <div className="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
                         </div>
                       </div>
                     </UserList>
                   </UserListing>
-                  {/* <ChatBox /> */}
                 </> : null
-              }
+              } */}
 
 
 
@@ -1394,7 +1368,7 @@ const formats = {
           </EventRight>
         </EventOuter>
       </Row>
-      <Row>
+      {/* <Row>
         <Card>
           <FlexRow>
 
@@ -1405,11 +1379,10 @@ const formats = {
             </SortSection>
           </FlexRow>
           <hr></hr>
-          {/* Gallery section */}
           <GallerySec />
 
         </Card>
-      </Row>
+      </Row> */}
 
       {/* <Row>
         <Card>
