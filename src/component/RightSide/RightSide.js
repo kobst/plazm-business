@@ -5,7 +5,6 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Tabs from '../UI/Tabs/Tabs'
 import Card from '../UI/Card/Card'
-import Search from '../UI/Search/Search'
 import { Auth } from 'aws-amplify';
 import AddModalBox from '../Add-Event/index'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
@@ -14,18 +13,19 @@ import { callPlace, fetchItems, fetchUsers } from '../../Api'
 import ValueLoader from '../../utils/loader'
 import { RRule } from 'rrule'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import UserImage from '../../images/user-img.png'
 import EventImg from '../../images/eventimg.png'
 import SubHeading from '../UI/SubHeading'
 import ButtonSmall from '../UI/ButtonSmall'
 import CrossIcon from '../../images/cross-icon.svg'
 import UserIcon from '../../images/user.svg'
 import CommentIcon from '../../images/comment.svg'
-import SortIcon from '../../images/sort.svg'
 import UploadIocn from '../../images/upload.svg'
-import GallerySec from '../UI/Gallery'
 import EventSkeleton from '../UI/Skeleton/EventsSkeleton'
 import PostSkeleton from '../UI/Skeleton/PostSkeleton'
+// import Search from '../UI/Search/Search'
+// import UserImage from '../../images/user-img.png'
+// import SortIcon from '../../images/sort.svg'
+// import GallerySec from '../UI/Gallery'
 // import MoreIcon from '../../images/more.svg'
 // import Tooltip from '../UI/Tooltip'
 // import WishlistGrey from '../../images/wishlist-grey.svg'
@@ -374,17 +374,17 @@ div{
   margin-left:20px;
 }
 `
-const SortSection = styled.div`
-margin-left:auto;
-display:flex;
-align-items: center;
-p{
-font-size: 12px;
-line-height: 14px;
-color: #979797;
-margin-right:38px;
-}
-`
+// const SortSection = styled.div`
+// margin-left:auto;
+// display:flex;
+// align-items: center;
+// p{
+// font-size: 12px;
+// line-height: 14px;
+// color: #979797;
+// margin-right:38px;
+// }
+// `
 const UploadImage = styled.div`
 width: 31px;
 height: 33px;
@@ -415,17 +415,17 @@ const UploadOuter = styled.div`
 display:flex;
 margin:0 10px;
 `
-const UserListing = styled.div`
-padding:0px;
-max-height: 772px;
-overflow-y: auto;
-`
-const UserList = styled.div`
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-top:15px;
-`
+// const UserListing = styled.div`
+// padding:0px;
+// max-height: 772px;
+// overflow-y: auto;
+// `
+// const UserList = styled.div`
+// display: flex;
+// justify-content: space-between;
+// align-items: center;
+// margin-top:15px;
+// `
 
 moment.locale('en-GB')
 const localizer = momentLocalizer(moment)
@@ -467,7 +467,7 @@ const RightSide = (props) => {
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [content, setContent] = useState()
   const [viewState,setViewState]= useState('day')
-  const [eventCopy,setEventCopy]= useState()
+  const [eventCopy,setEventCopy]= useState([])
   const [upComingEvents,setUpcomingEvents]= useState()
   const [postOpen,setPostOpen]= useState(false)
   const [imageUrl,setImageUrl]=useState([])
@@ -1133,7 +1133,7 @@ const formats = {
                 <SubHeading name="Feed" />
                 <TabsOuter>
                   <Tabs isActive={activePublic} setMentions={setMentions} name="Public" image={UserIcon} />
-                  <Tabs className="M2" isActive={mess} setMentions={setMentions} name="Message" image={CommentIcon} />
+                  <Tabs className="M2" isActive={mess} setMentions={setMentions} name="Public" image={CommentIcon} />
                 </TabsOuter>
               </FlexRow>
 
@@ -1227,7 +1227,7 @@ const formats = {
                          </> : <><PostSkeleton /><PostSkeleton /><PostSkeleton /></>
               }
 
-              {mentions === 'Messages' ?
+              {/* {mentions === 'Messages' ?
                 <>
                   <Search />
                   <UserListing>
@@ -1359,9 +1359,8 @@ const formats = {
                       </div>
                     </UserList>
                   </UserListing>
-                  {/* <ChatBox /> */}
                 </> : null
-              }
+              } */}
 
 
 
@@ -1369,7 +1368,7 @@ const formats = {
           </EventRight>
         </EventOuter>
       </Row>
-      <Row>
+      {/* <Row>
         <Card>
           <FlexRow>
 
@@ -1380,11 +1379,10 @@ const formats = {
             </SortSection>
           </FlexRow>
           <hr></hr>
-          {/* Gallery section */}
           <GallerySec />
 
         </Card>
-      </Row>
+      </Row> */}
 
       {/* <Row>
         <Card>

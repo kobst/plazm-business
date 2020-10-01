@@ -13,7 +13,7 @@ import history from '../../utils/history'
 import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
 import TimePicker from 'react-bootstrap-time-picker';
-import GallerySec from '../UI/Gallery'
+// import GallerySec from '../UI/Gallery'
 import GoogleMapReact from 'google-map-react';
 import Geocode from "react-geocode";
 import FindAddressValue from '../../utils/findAddress'
@@ -667,12 +667,12 @@ let myInput
         </Card>
       </HashTags>
       <row>
-        <Card>
+        {/* <Card>
           <HashTagsSearch>
             <h3>Upload Highlight Images</h3>
           </HashTagsSearch>
           <GallerySec type="edit" />
-        </Card>
+        </Card> */}
       </row>
       <row>
         <Card>
