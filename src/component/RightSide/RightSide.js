@@ -679,6 +679,18 @@ const formats = {
     setDeleteOpen(true)
   }
 
+  const returnTodayDate = ()=> {
+    let today = new Date();
+    console.log(today.toLocaleDateString("en-US", options))
+    const dateArr = today.toLocaleDateString("en-US", options).split(',')
+    return(
+    <>
+    <h4>{dateArr[0]}</h4>
+    <h3>{dateArr[1]}</h3>
+    <h4>{dateArr[2]}</h4>
+    </>
+    )
+    }
   const goToDateFromMonthView = (date) => {
     if (!toolbarRef) return false
     toolbarRef.date.setMonth(date.getMonth());
@@ -782,8 +794,8 @@ const formats = {
       let view = viewState;
       const date = moment(toolbar.date);
       let day;
-      if (view === "day") {
-        day = date.format("ddd") + " " + date.format("Do");
+      if (view === "day"|| view==="week") {
+        day = date.format("Do");
       }
       return <span className="rbc-toolbar-label">{day}</span>;
     };
@@ -824,7 +836,7 @@ const formats = {
   const getDate = (value) => {
     const date = new Date(value);
     const time = ConvertNumberToTwoDigitString(date.getHours()) +
-      ":" + ConvertNumberToTwoDigitString(date.getMinutes()) + ", " + ((date.toLocaleString()).substring(0,new Date(date).toLocaleString().indexOf(",")).replace(/\//g,'-'));
+      ":" + ConvertNumberToTwoDigitString(date.getMinutes()) + ", " + ((date.toLocaleString()).substring(0,new Date(date).toLocaleString().indexOf(",")).replace(/\//g,' - '));
     return time
 
   }
@@ -993,7 +1005,7 @@ const formats = {
         <div className={ calenderView === 'month'? "monthView": null}>
         {calenderView === 'month' ?
     <EventMenu>
-      <h2>{today.toLocaleDateString("en-US", options)}</h2>
+      <h2>{returnTodayDate()}</h2>
       <h4>Upcoming Events in September</h4>
       {upComingEvents ? upComingEvents.map(v =>
         <>

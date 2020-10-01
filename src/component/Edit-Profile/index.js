@@ -218,10 +218,11 @@ height:34px;
 padding:0 35px 0 15px;
 font-family: 'IBM Plex Sans',sans-serif;
 width: calc(100% - 195px);
-background:#ffffff url(${TagInputCross}) no-repeat top 10px right 15px;
 :focus{
   outline:none;
   border: 1px solid #DBE2EA;
+  background:#ffffff url(${TagInputCross}) no-repeat top 10px right 15px;
+  cursor:pointer;
 }
 ::placeholder{
   font-weight: 500;

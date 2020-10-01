@@ -259,7 +259,7 @@ const Sidebar = ({value}) => {
         <SubHeading name="Opening Hours" />
         {typeof placeValue !== 'undefined' && openingHours?
         openingHours.map(v=>
-        ( <p><span>{v.StartDay} - {v.EndDay}</span> <span style={{marginLeft:'auto'}}>{v.Start}-{v.End}</span></p> )
+        ( <p><span>{v.StartDay} - {v.EndDay}</span> <span style={{marginLeft:'auto'}}>{v.Start} to {v.End}</span></p> )
         ):null}
       </Listing>
 
