@@ -80,6 +80,9 @@ h2{
   margin:0px;
   color: #2C2738 !important;
   font-size: 17px !important;
+  @media (max-width:767px){
+    margin-left:0px !important;
+  }
 }
 p{
 font-size:12px;
@@ -107,6 +110,9 @@ img{
 `
 const Map = styled.div`
 height:250px;
+border-radius:20px;
+overflow:hidden;
+border:1px solid #dadada;
 img{
   max-width:100%;
 }

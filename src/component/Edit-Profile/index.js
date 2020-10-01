@@ -62,6 +62,12 @@ position:relative;
 >div{
   padding:10px;
   height:100%;
+  border-radius: 20px;
+  overflow: hidden;
+  >div{
+    border-radius: 20px;
+    overflow: hidden; 
+  }
 }
 img{max-width:100%;}
 @media (max-width:767px){
@@ -117,6 +123,9 @@ justify-content: center;
 color: #fff;
 margin-right:35px;
 margin-bottom: 10px;
+@media (max-width:767px){
+  height: 85px;
+}
 img
 
 @media (max-width:767px){
@@ -552,7 +561,7 @@ let myInput
               </TopProfile>
                 <LabelRight>
                   <Label name="Business Name"></Label>
-                  <Input type="text" id='company' value={company} />
+                  <Input className="disabledCompanyname" disabled type="text" id='company' value={company} />
                 </LabelRight>
               </FlexRow>
 
@@ -604,11 +613,11 @@ let myInput
       <HashTags>
         <Card>
           <HashTagsSearch>
-            <h3>Select HashTags</h3>
+            <h3>Select Hashtags</h3>
           </HashTagsSearch>
           <HashSearch onClick={(e)=> e.target.reset}>
             <ReactTagInput
-              tags={tags}
+              tags={tags} placeholder="Label"
               onChange={(newTags) => setTags(newTags)}
             />
           </HashSearch>
