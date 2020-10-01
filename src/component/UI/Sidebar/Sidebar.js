@@ -106,6 +106,9 @@ img{
 `
 const Map = styled.div`
 height:250px;
+border-radius:20px;
+overflow:hidden;
+border:1px solid #dadada;
 img{
   max-width:100%;
 }

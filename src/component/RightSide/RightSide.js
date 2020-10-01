@@ -207,7 +207,7 @@ border-radius: 16px;
 margin-top:10px;
 display: flex;
 justify-content: space-between;
-min-height: 172px;
+min-height:151px;
 :hover{
   background: rgba(255, 79, 148, 0.05);
 border: 1px solid #FF479D;
@@ -351,6 +351,8 @@ overflow:hidden;
 margin-left:30px;
 max-width:172px;
 max-height: 118px;
+display: flex;
+width: 100%;
 img{
   max-width:100%;
   display:block;
@@ -1115,7 +1117,7 @@ const formats = {
                 <div className="mt-10">
                   <FlexRow style={{ padding: '0px' }}>
                   <input id="myInput" onChange={(e)=> upload(e)} type="file"  ref={(ref) => myInput = ref} style={{ display: 'none' }} />
-                    <ButtonSmall onClick={(e) => myInput.click()} bgColor="#0FB1D2"><img src={UploadIocn} alt="Upload" />Upload</ButtonSmall>
+                    <ButtonSmall className="btnhover" onClick={(e) => myInput.click()} bgColor="#0FB1D2"><img src={UploadIocn} alt="Upload" />Upload</ButtonSmall>
                     {imageUrl ? <UploadOuter>{imageUrl.map(v=>
                      
                  <UploadImage id={v.id} onClick={()=>deleteImage(v)}><img src={v.value} alt="Upload" /></UploadImage>

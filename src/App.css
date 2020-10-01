@@ -725,7 +725,7 @@ width: auto;
 
 .messageSec .image img{
   max-width: 100%;
-    max-height: 100%;
+    /* max-height: 100%; */
 }
 
 .messageSec .image span{
@@ -1464,6 +1464,14 @@ display: none;
 
 .rbc-event{
   border-radius: 5px !important;
+}
+
+.btnhover:hover, .btnhover:focus{
+  background: #0FB1D2 !important;
+}
+
+.rbc-day-slot .rbc-timeslot-group .rbc-time-slot{
+  border-bottom: 0 !important;
 }
 
 @media (min-width: 1199px){

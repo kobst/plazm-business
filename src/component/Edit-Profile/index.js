@@ -603,7 +603,7 @@ let myInput
       <HashTags>
         <Card>
           <HashTagsSearch>
-            <h3>Select HashTags</h3>
+            <h3>Select Hashtags</h3>
           </HashTagsSearch>
           <HashSearch>
             <ReactTagInput
