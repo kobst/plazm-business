@@ -159,6 +159,9 @@ background: #f7fdff;
 border: 1px solid #f2acaa;
 border-radius:10px;
 max-height: 413px;
+@media (max-width:767px){
+  width: auto;
+}
 h2{
   color: #FF479D;
   font-size: 24px;
@@ -171,7 +174,7 @@ h4{
   font-size: 12px;
   line-height: 36px;
   color: #979797;
-  margin: 25px 0 7px;
+  margin: 15px 0 7px;
   padding-top: 15px;
 }
 `
@@ -208,6 +211,7 @@ margin-top:10px;
 display: flex;
 justify-content: space-between;
 min-height:151px;
+margin-right:10px;
 :hover{
   background: rgba(255, 79, 148, 0.05);
 border: 1px solid #FF479D;
@@ -222,6 +226,7 @@ box-sizing: border-box;
 box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.03);
 border-radius: 16px;
 margin-top:10px;
+margin-right:10px;
 display: flex;
 > div:last-child{
   width: calc(100% - 70px);
@@ -689,7 +694,7 @@ const formats = {
     <>
     <h4>{dateArr[0]}</h4>
     <h3>{dateArr[1]}</h3>
-    <h4>{dateArr[2]}</h4>
+    <h2>{dateArr[2]}</h2>
     </>
     )
     }
@@ -1007,7 +1012,7 @@ const formats = {
         <div className={ calenderView === 'month'? "monthView": null}>
         {calenderView === 'month' ?
     <EventMenu>
-      <h2>{returnTodayDate()}</h2>
+      <div className="dateWrap">{returnTodayDate()}</div>
       <h4>Upcoming Events in September</h4>
       {upComingEvents ? upComingEvents.map(v =>
         <>

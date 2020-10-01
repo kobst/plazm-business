@@ -79,6 +79,9 @@ h2{
   margin:0px;
   color: #2C2738 !important;
   font-size: 17px !important;
+  @media (max-width:767px){
+    margin-left:0px !important;
+  }
 }
 p{
 font-size:12px;
