@@ -1,3 +1,4 @@
+/* eslint-disable no-sequences */
 
 import React, { useEffect, useState } from 'react'
 import { Auth } from 'aws-amplify';
@@ -79,6 +80,9 @@ h2{
   margin:0px;
   color: #2C2738 !important;
   font-size: 17px !important;
+  @media (max-width:767px){
+    margin-left:0px !important;
+  }
 }
 p{
 font-size:12px;
@@ -106,6 +110,9 @@ img{
 `
 const Map = styled.div`
 height:250px;
+border-radius:20px;
+overflow:hidden;
+border:1px solid #dadada;
 img{
   max-width:100%;
 }
@@ -167,7 +174,6 @@ const Sidebar = ({value}) => {
         setPlace(value)
         FindAddress(value.address)
       } catch (err) {
-        console.log(err)
       }
     }
     updateUser()
@@ -259,7 +265,7 @@ const Sidebar = ({value}) => {
         <SubHeading name="Opening Hours" />
         {typeof placeValue !== 'undefined' && openingHours?
         openingHours.map(v=>
-        ( <p><span>{v.StartDay} - {v.EndDay}</span> <span style={{marginLeft:'auto'}}>{v.Start}-{v.End}</span></p> )
+        ( <p><span>{v.StartDay} - {v.EndDay}</span> <span style={{marginLeft:'auto'}}>{v.Start} to {v.End}</span></p> )
         ):null}
       </Listing>
 

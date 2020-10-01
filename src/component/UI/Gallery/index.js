@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import PlusIcon from '../../../images/plus.svg'
 import CloseIcon from '../../../images/close.svg'
@@ -53,7 +53,7 @@ const Gallery = (props) => {
       <>
       { props.type==='edit'?
       <GallerySection>
-        <div class="galleryImage">
+        <div className="galleryImage">
         <input id="myInput" onChange={(e)=> upload(e)} type="file"  ref={(ref) => myInput = ref} style={{ display: 'none' }} />
           <p onClick={(e) => myInput.click()}><img src={PlusIcon} alt="" /> Photo</p>
           {/* <GallerModalBox  isOpen={isOpen} closeModal={() => setIsOpen(false)}/> */}
@@ -65,7 +65,7 @@ const Gallery = (props) => {
                   }
       </GallerySection>
        : <GallerySection>
-        <div class="galleryImage">
+        <div className="galleryImage">
           <p onClick={() => setIsOpen(true)}><img src={PlusIcon} alt="" /> Photo</p>
           <GallerModalBox  isOpen={isOpen} closeModal={() => setIsOpen(false)}/>
 

@@ -2,7 +2,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Logo from '../../images/logo.svg'
-import ProfileImage from '../../images/profile-img.png'
+// import ProfileImage from '../../images/profile-img.png'
 import Sidebar from '../UI/Sidebar/Sidebar'
 import {GoogleApiWrapper} from 'google-maps-react';
 

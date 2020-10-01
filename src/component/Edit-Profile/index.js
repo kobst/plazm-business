@@ -1,3 +1,4 @@
+/* eslint-disable no-sequences */
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Card from '../UI/Card/Card'
@@ -12,9 +13,8 @@ import history from '../../utils/history'
 import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
 import TimePicker from 'react-bootstrap-time-picker';
-import GallerySec from '../UI/Gallery'
+// import GallerySec from '../UI/Gallery'
 import GoogleMapReact from 'google-map-react';
-import {GoogleApiWrapper} from 'google-maps-react';
 import Geocode from "react-geocode";
 import FindAddressValue from '../../utils/findAddress'
 import reactS3 from 'react-s3'
@@ -62,6 +62,12 @@ position:relative;
 >div{
   padding:10px;
   height:100%;
+  border-radius: 20px;
+  overflow: hidden;
+  >div{
+    border-radius: 20px;
+    overflow: hidden; 
+  }
 }
 img{max-width:100%;}
 @media (max-width:767px){
@@ -117,6 +123,9 @@ justify-content: center;
 color: #fff;
 margin-right:35px;
 margin-bottom: 10px;
+@media (max-width:767px){
+  height: 85px;
+}
 img
 
 @media (max-width:767px){
@@ -218,10 +227,11 @@ height:34px;
 padding:0 35px 0 15px;
 font-family: 'IBM Plex Sans',sans-serif;
 width: calc(100% - 195px);
-background:#ffffff url(${TagInputCross}) no-repeat top 10px right 15px;
 :focus{
   outline:none;
   border: 1px solid #DBE2EA;
+  background:#ffffff url(${TagInputCross}) no-repeat top 10px right 15px;
+  cursor:pointer;
 }
 ::placeholder{
   font-weight: 500;
@@ -546,12 +556,12 @@ let myInput
               <input id="myInput" onChange={(e)=> upload(e)} type="file"  ref={(ref) => myInput = ref} style={{ display: 'none' }} />
                 <TopProfile onClick={(e) => myInput.click() }>
                   {typeof value !== 'undefined'&& value.default_image_url?
-                    <img src={imageUrl} alt='vt'/>: 'VT'
+                    <img src={imageUrl} alt='img'/>: null
                   }
               </TopProfile>
                 <LabelRight>
                   <Label name="Business Name"></Label>
-                  <Input type="text" id='company' value={company} />
+                  <Input className="disabledCompanyname" disabled type="text" id='company' value={company} />
                 </LabelRight>
               </FlexRow>
 
@@ -603,11 +613,11 @@ let myInput
       <HashTags>
         <Card>
           <HashTagsSearch>
-            <h3>Select HashTags</h3>
+            <h3>Select Hashtags</h3>
           </HashTagsSearch>
-          <HashSearch>
+          <HashSearch onClick={(e)=> e.target.reset}>
             <ReactTagInput
-              tags={tags}
+              tags={tags} placeholder="Label"
               onChange={(newTags) => setTags(newTags)}
             />
           </HashSearch>
@@ -657,12 +667,12 @@ let myInput
         </Card>
       </HashTags>
       <row>
-        <Card>
+        {/* <Card>
           <HashTagsSearch>
             <h3>Upload Highlight Images</h3>
           </HashTagsSearch>
           <GallerySec type="edit" />
-        </Card>
+        </Card> */}
       </row>
       <row>
         <Card>
