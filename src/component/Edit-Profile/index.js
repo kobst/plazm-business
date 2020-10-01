@@ -64,6 +64,9 @@ position:relative;
   height:100%;
   border-radius: 20px;
   overflow: hidden;
+  @media (max-width:767px){
+    height: 350px;
+  }
   >div{
     border-radius: 20px;
     overflow: hidden; 
