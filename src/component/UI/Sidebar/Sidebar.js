@@ -1,3 +1,4 @@
+/* eslint-disable no-sequences */
 
 import React, { useEffect, useState } from 'react'
 import { Auth } from 'aws-amplify';
@@ -167,7 +168,6 @@ const Sidebar = ({value}) => {
         setPlace(value)
         FindAddress(value.address)
       } catch (err) {
-        console.log(err)
       }
     }
     updateUser()

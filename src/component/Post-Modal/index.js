@@ -1,14 +1,14 @@
 import React, {useState,useEffect}from 'react'
 import Modal from 'react-modal'
-import Image from '../../images/user.png'
-import WishlistIcon from '../../images/wishlist-icon.svg'
-import CommentIcon from '../../images/comment.svg'
 import CloseIcon from '../../images/cross-modal.svg'
-import CommnentImg from '../../images/comment-img.png'
-import ReplyIcon from '../../images/reply.svg'
-import Wishlistgrey from '../../images/wishlist-grey.svg'
-import Commentgrey from '../../images/comment-grey.svg'
-import rightarrowblack from '../../images/right-arrow-black.svg'
+// import Image from '../../images/user.png'
+// import WishlistIcon from '../../images/wishlist-icon.svg'
+// import CommentIcon from '../../images/comment.svg'
+// import CommnentImg from '../../images/comment-img.png'
+// import ReplyIcon from '../../images/reply.svg'
+// import Wishlistgrey from '../../images/wishlist-grey.svg'
+// import Commentgrey from '../../images/comment-grey.svg'
+// import rightarrowblack from '../../images/right-arrow-black.svg'
 import SlideShow from '../UI/SlideShow'
 
 const PostModalBox = ({ isOpen, closeModal, value, place}) => {
@@ -38,14 +38,14 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
  const returnSlider=()=>{
   if(image.length>1)
   {return(
-  <div class="imageSlider">
+  <div className="imageSlider">
     <SlideShow image={image} />
   </div>
   )
   }
   else if(image.length===1){
     return(
-      <div class="imageSlider">
+      <div className="imageSlider">
    <img src={image[0]} alt="img" />
   </div>
     )

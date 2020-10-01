@@ -67,8 +67,8 @@ const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen,
   const [id, setId] = useState()
   const [start, setStart] = useState()
   const [end, setEnd] = useState()
-  const [startCopy,setStartCopy]= useState()
-  const [endCopy,setEndCopy]= useState()
+  // const [startCopy,setStartCopy]= useState()
+  // const [endCopy,setEndCopy]= useState()
   const [recurring, setRecurring] = useState('')
   // const [valid,setValid]= useState(true)
   const [error,setError]= useState(false)
@@ -97,7 +97,7 @@ const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen,
         setEnd(value.end)
       }
       if(value.start && value.end){
-      if(((new Date(value.start).getDate() < new Date(value.end).getDate()))
+      if((new Date(value.start).getDate() < new Date(value.end).getDate())
        ||(new Date(value.start).getMonth() < new Date(value.end).getMonth())
        ||(new Date(value.start).getFullYear() < new Date(value.end).getFullYear())){
            setDisableReccuring(true)
@@ -207,7 +207,7 @@ const handleEdit= async () => {
   const checkMultiDayEvent=(e,val)=> {
     if(val==='start'){
     if(end>e){
-    if(((new Date(e).getDate() < new Date(end).getDate()))
+    if((new Date(e).getDate() < new Date(end).getDate())
        ||(new Date(e).getMonth() < new Date(end).getMonth())
        ||(new Date(e).getFullYear() < new Date(end).getFullYear())){
            setDisableReccuring(true)
@@ -218,7 +218,7 @@ const handleEdit= async () => {
 }
 else{
   if(e>start){
-    if(((new Date(start).getDate() < new Date(e).getDate()))
+    if((new Date(start).getDate() < new Date(e).getDate())
     ||(new Date(start).getMonth() < new Date(e).getMonth())
     ||(new Date(start).getFullYear() < new Date(e).getFullYear())){
            setDisableReccuring(true)

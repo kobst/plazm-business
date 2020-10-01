@@ -5,7 +5,7 @@ import './skeleton.css';
 const EventsSkeleton = () => (
 
   <div className="skelton">
-    <div class="postskelton">
+    <div className="postskelton">
     <div className="eventImage">
         <Skeleton height={53} />
       </div>
