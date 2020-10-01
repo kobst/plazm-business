@@ -5,9 +5,8 @@ stages:
 eslint:
  stage: lint
  script:
- - npm install -g eslint
- - eslint --init
- - eslint *.js,*.ts
+ - npm install
+ - eslint --ext .jsx,.js,.ts src/
  allow_failure: true
  only:
   - merge_requests
