@@ -901,7 +901,6 @@ const formats = {
   };
   const handleChange = (event, newValue, newPlainTextValue, mentions) => {
     const valueArr= mentionarray
-    console.log(mentions)
     if(mentions.length!==0){
     valueArr.push(mentions[0])
     setMentionArray(valueArr)
