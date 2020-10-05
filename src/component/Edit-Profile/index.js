@@ -274,7 +274,7 @@ select{
   margin-top: 10px;
   appearance: unset;
   background:transparent url(${DropdownIcon}) no-repeat top 7px right;
-  border-radius:2px;
+  border-radius:0px;
   &:focus{
     outline: none;
   }
