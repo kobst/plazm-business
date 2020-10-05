@@ -1579,6 +1579,9 @@ display: none;
   .btnhover{
     margin-bottom: 10px;
   }
+  .monthView .rbc-header{
+    margin-bottom: 10px;
+  }
 }
 
 @media (max-width: 1024px){
@@ -1615,5 +1618,8 @@ display: none;
   }
   .rbc-toolbar{
     justify-content: center !important;
+  }
+  .monthView .rbc-header{
+    margin-bottom: 10px;
   }
 }
