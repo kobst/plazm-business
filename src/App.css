@@ -1223,18 +1223,21 @@ display: none;
 
 @media not all and (min-resolution:.001dpcm) {
   .Image_wrap{
-  overflow: scroll;
+    overflow: scroll;
   }
   .MuiSelect-select.MuiSelect-select{
-  padding-bottom: 15px;
+    padding-bottom: 15px;
   }
   .rbc-timeslot-group{
-  min-height: 42px;
+    min-height: 47px;
   }
   .monthView .rbc-calendar .rbc-month-row{
-  height: 55px;
+    height: 55px;
   }
+  .rbc-time-view .rbc-allday-cell{
+    height: auto;
   }
+}
   
 
   
@@ -1567,11 +1570,20 @@ display: none;
   .CalenderSec .rbc-btn-group{
     margin-bottom: 10px;
   }
+  .dateWrap {
+    padding: 5px;
+  }
+  .dateWrap h3{
+    font-size: 18px;
+  }
+  .btnhover{
+    margin-bottom: 10px;
+  }
 }
 
 @media (max-width: 1024px){
   .rbc-header{
-    padding: 0 7.5px 0 5.1px !important;
+    padding: 0 7.5px 0 8.0px !important;
     text-overflow: unset !important;
     border-bottom: 1px solid #DDD !important;
   }
