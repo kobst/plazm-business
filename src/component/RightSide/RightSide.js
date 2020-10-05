@@ -20,6 +20,7 @@ import CrossIcon from '../../images/cross-icon.svg'
 import UserIcon from '../../images/user.svg'
 import CommentIcon from '../../images/comment.svg'
 import UploadIocn from '../../images/upload.svg'
+import Watermark from '../../images/watermark.png'
 import EventSkeleton from '../UI/Skeleton/EventsSkeleton'
 import PostSkeleton from '../UI/Skeleton/PostSkeleton'
 // import Search from '../UI/Search/Search'
@@ -1114,6 +1115,7 @@ const formats = {
                  <UploadImage id={v.id} onClick={()=>deleteImage(v)}><img src={v.value} alt="Upload" /></UploadImage>
                     )}
                     </UploadOuter>:null}
+                    { description||imageUrl.length>0?
                     <ButtonSmall
                       maxWidth="34px"
                       bgColor="#FF7171"
@@ -1121,7 +1123,8 @@ const formats = {
                       onClick={()=>CancelPost()}
                       >
                       <img src={CrossIcon} alt="Cross Icon" style={{ marginRight: '0px' }} />
-                    </ButtonSmall>
+                    </ButtonSmall>:null
+                     }
                     <ButtonSmall disabled={saveDisable} onClick={() => addPost()}>Publish</ButtonSmall>
                   </FlexRow>
                 </div>
@@ -1172,7 +1175,7 @@ const formats = {
                     {typeof allFeed !== 'undefined' ?
                       allFeed.map(v => (
                         <FeedListing>
-                          <FeedImage><img src={place.default_image_url?place.default_image_url:EventImg} alt="Event" /></FeedImage>
+                          <FeedImage><img src={place.default_image_url?place.default_image_url:Watermark} alt="Event" /></FeedImage>
                           <EventText>
                             <span>{(getDate(v.updatedAt))}</span>
                             <h3 onClick={() => postOpenFunc(v)}>{v.name ? v.name : place.company_name}</h3>
