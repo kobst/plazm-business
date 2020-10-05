@@ -6,7 +6,7 @@ import crossIocn from '../../images/cross-black.svg'
 
 import Button from '../UI/Button/Button'
 
-const DeleteModalBox = ({ isOpen,closeModal,postId,setDeleteOpen,setToggleMenu}) => {
+const DeleteModalBox = ({ isOpen,closeModal,postId,setDeleteOpen}) => {
 
 
   const handleDelete = async () => {
@@ -28,7 +28,6 @@ const DeleteModalBox = ({ isOpen,closeModal,postId,setDeleteOpen,setToggleMenu})
 
 
  const onCancel=()=>{
-   setToggleMenu(false)
      closeModal()
  }
 
