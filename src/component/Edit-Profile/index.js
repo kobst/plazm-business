@@ -64,6 +64,9 @@ position:relative;
   height:100%;
   border-radius: 20px;
   overflow: hidden;
+  @media (max-width:767px){
+    height: 350px;
+  }
   >div{
     border-radius: 20px;
     overflow: hidden; 
@@ -271,7 +274,7 @@ select{
   margin-top: 10px;
   appearance: unset;
   background:transparent url(${DropdownIcon}) no-repeat top 7px right;
-  
+  border-radius:2px;
   &:focus{
     outline: none;
   }
