@@ -5,6 +5,7 @@ import history from '../../utils/history'
 import Wrapper from '../../component/Login-Register/Wrapper'
 import RegisterForm from '../../component/Login-Register/Form-Components/Register-Form'
 import {getMessage} from '../../config'
+import ValueLoader from '../../utils/loader'
 import {callApi,addBusiness, updateBusiness} from '../../Api'
 
 const renderMessage= getMessage()
@@ -34,6 +35,7 @@ const Register = (props) => {
     const [emptyCode,setEmptyCodeError]= useState(false)
     const [phoneShort,setPhoneShort]= useState(false)
     const [phoneLong,setPhoneLong]= useState(false)
+    const [loginValue,setLoginValue]= useState(false)
     useEffect(() => {
         let updateUser = async authState => {
           try {
@@ -42,6 +44,7 @@ const Register = (props) => {
              window.location.reload() 
             
           } catch {
+              setLoginValue(true)
           }
         }
         updateUser()
@@ -245,6 +248,7 @@ const Register = (props) => {
     }
 
     return(
+        <>{loginValue=== true?
         <Wrapper type ={type} page='register' welcomeMessage={renderMessage.New_Reg}>
             <RegisterForm
                   type ={type}
@@ -270,7 +274,8 @@ const Register = (props) => {
                   phoneShort={phoneShort}
                   password={password}
                   />
-        </Wrapper>
+        </Wrapper>:<div style={{textAlign:'center' ,margin:' 40px auto 0'}}><ValueLoader height="100" width="100" /></div>
+        }</>
    
     )
 
