@@ -1584,7 +1584,7 @@ display: none;
   }
 }
 
-@media (max-width: 1024px){
+@media (max-width: 1120px){
   .rbc-header{
     padding: 0 7.5px 0 8.0px !important;
     text-overflow: unset !important;
