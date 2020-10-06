@@ -455,7 +455,7 @@ const RightSide = (props) => {
   const [posts, setPosts] = useState()
   const [mentions, setMention] = useState()
   const [allFeed, setAllFeed] = useState()
-  const [description, setDescription] = useState()
+  const [description, setDescription] = useState('')
   const [saveDisable, setSaveDisable] = useState(false)
   // const [showTag, setShowTag] = useState(false)
   const [curators, setCurators] = useState([])
