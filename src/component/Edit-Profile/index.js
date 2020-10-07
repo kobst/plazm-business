@@ -10,10 +10,10 @@ import PlusIcon from '../../images/plus-img.svg'
 import DropdownIcon from '../../images/dropdown-arrow.svg'
 import MapPin from '../../images/map-pin.svg'
 import history from '../../utils/history'
-import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
 import TimePicker from 'react-bootstrap-time-picker';
 // import GallerySec from '../UI/Gallery'
+// import ReactTagInput from "@pathofdev/react-tag-input";
 import GoogleMapReact from 'google-map-react';
 import Geocode from "react-geocode";
 import FindAddressValue from '../../utils/findAddress'
@@ -26,22 +26,22 @@ const accessKey = process.env.REACT_APP_ACCESS_KEY_ID
 const Secret = process.env.REACT_APP_SECRET_ACCESS_KEY
 
 const config = {
-  bucketName: bucket,
-  dirName: dir,
-  region: region,
-  accessKeyId: accessKey,
-  secretAccessKey:Secret,
+bucketName: bucket,
+dirName: dir,
+region: region,
+accessKeyId: accessKey,
+secretAccessKey:Secret,
 }
- Geocode.setApiKey(process.env.REACT_APP_GOOGLE_API_KEY);
- Geocode.setLanguage("en");
+Geocode.setApiKey(process.env.REACT_APP_GOOGLE_API_KEY);
+Geocode.setLanguage("en");
 
 const ProfileOuter = styled.div`
 display:flex;
 flex-direction: column;
 p{
-  color:#fff;
-  padding: 0 0 15px 15px;
-  font-size: 18px;
+color:#fff;
+padding: 0 0 15px 15px;
+font-size: 18px;
 }
 }
 `
@@ -49,7 +49,7 @@ const ProfileInner = styled.div`
 display:flex;
 width:100%;
 @media (max-width:767px){
-  flex-direction:column;
+flex-direction:column;
 }
 `
 
@@ -60,17 +60,17 @@ margin-bottom: 10px;
 margin-right:5px;
 position:relative;
 >div{
-  padding:10px;
-  height:100%;
-  border-radius: 20px;
-  overflow: hidden;
-  @media (max-width:767px){
-    height: 350px;
-  }
-  >div{
-    border-radius: 20px;
-    overflow: hidden; 
-  }
+padding:10px;
+height:100%;
+border-radius: 20px;
+overflow: hidden;
+@media (max-width:767px){
+height: 350px;
+}
+>div{
+border-radius: 20px;
+overflow: hidden; 
+}
 }
 img{max-width:100%;}
 @media (max-width:767px){
@@ -233,8 +233,6 @@ width: calc(100% - 195px);
 :focus{
   outline:none;
   border: 1px solid #DBE2EA;
-  background:#ffffff url(${TagInputCross}) no-repeat top 10px right 15px;
-  cursor:pointer;
 }
 ::placeholder{
   font-weight: 500;
@@ -253,9 +251,9 @@ padding: 0 15px;
 div{
   display:flex;
   flex-direction:column;
- margin-bottom:10px;
- width:20%;
- @media (max-width:991px){
+  margin-bottom:10px;
+  width:20%;
+@media (max-width:991px){
   width:45%;
  }
 }
@@ -303,12 +301,12 @@ const EditProfile = ({ value }) => {
   const [inputList, setInputList] = useState([
     { StartDay: "Monday", EndDay: "Monday", Start: "00:00", End: "00:00"}
   ]);
+  let tagInput
 
   useEffect(() => {
     if (typeof value !== 'undefined') {
       window.scrollTo(0, 0)
       if (value.company_name) {
-        console.log(value)
         setCompany(value.company_name)
       }
       if (value.web_site) {
@@ -364,7 +362,6 @@ const EditProfile = ({ value }) => {
       }
     }
 
-
   }, [value])
 
   const updateBusiness = async () => {
@@ -414,9 +411,27 @@ const EditProfile = ({ value }) => {
       transform: 'translate(-50%, -50%)'
     }}>
       <div className="mapTextOuter"><img src={MapPin} alt=""/> <div className="mapText">{text}</div></div>
-     
     </div>
-  );
+    );
+
+      const removeTag = (i) => {
+       const newTags = [ ...tags ];
+       newTags.splice(i, 1);
+       setTags(newTags)
+      }
+
+      const inputKeyDown = (e) => {
+       const val = e.target.value;
+       if (e.key === 'Enter' && val) {
+        if (tags.find(tag => tag.toLowerCase() === val.toLowerCase())) {
+           return;
+       }
+         setTags([...tags, val]);
+        tagInput.value = null;
+      } else if (e.key === 'Backspace' && !val) {
+            removeTag(tags.length - 1);
+         }
+      }
 
 
 
@@ -464,54 +479,54 @@ const updateTime = (time)=>{
  else if(timePointer%2===0){
      return (timePointer/2+':00')
 }
- else{
+  else{
   return ((timePointer-1)/2+':30')
- }
+  }
 }
-const handleStartChange = (time,index,name) => {    
-  const list = [...inputList];
-  list[index][name] = updateTime(time);
-  setInputList(list);
+const handleStartChange = (time,index,name) => { 
+const list = [...inputList];
+list[index][name] = updateTime(time);
+setInputList(list);
 }
 const handleEndChange = (time,index,name) => {
-   const list = [...inputList];
-   list[index][name] = updateTime(time);
-   setInputList(list);
+const list = [...inputList];
+list[index][name] = updateTime(time);
+setInputList(list);
 }
- const center= {
-  lat: 30.7092231,
-  lng: 76.68880390000004,
+const center= {
+lat: 30.7092231,
+lng: 76.68880390000004,
 }
 
 const zoom = 15
 const renderMarkers = (val) => {
-  if(DropPin===true){
-    setChangeCenter({lat: val.lat,
-      lng: val.lng,})
-  setLatitude(val.lat)
-  setLongitude(val.lng)
-  Geocode.fromLatLng(val.lat,val.lng).then(
-    response => {
-      const address = response.results[0].formatted_address;
-      setAddress(address)
-    },
-    error => {
-      console.error(error);
-    }
-  );
-  }
- };
+if(DropPin===true){
+setChangeCenter({lat: val.lat,
+lng: val.lng,})
+setLatitude(val.lat)
+setLongitude(val.lng)
+Geocode.fromLatLng(val.lat,val.lng).then(
+response => {
+const address = response.results[0].formatted_address;
+setAddress(address)
+},
+error => {
+console.error(error);
+}
+);
+}
+};
 const FindAddress = (userAddress)=>{
- Geocode.fromAddress(userAddress).then(
-  response => {
-    const { lat, lng } = response.results[0].geometry.location;
-    setChangeCenter({lat, lng})
-    setLatitude(lat)
-    setLongitude(lng)
-  },
-  error => {
-    console.error(error);
-  }
+Geocode.fromAddress(userAddress).then(
+response => {
+const { lat, lng } = response.results[0].geometry.location;
+setChangeCenter({lat, lng})
+setLatitude(lat)
+setLongitude(lng)
+},
+error => {
+console.error(error);
+}
 );
 }
 const upload =(e)=> {
@@ -527,11 +542,11 @@ const handleInputChange = (e, index) => {
 };
 
 const handleAddClick = () => {
-  console.log(inputList)
   setInputList([...inputList, { StartDay: "Monday", EndDay: "Monday", Start: "00:00", End: "00:00"}]);
 };
 let myInput
-  return (
+
+return (
     <ProfileOuter>
       <p>Edit Profile</p>
       <ProfileInner>
@@ -539,155 +554,162 @@ let myInput
           <Card>
             {typeof value!=='undefined' && value.latitude!=='undefined'?
             <GoogleMapReact
-            center={typeof changeCenter==='undefined'?center:changeCenter}
-           defaultZoom={zoom}
-          onClick={(e)=>renderMarkers(e)}
-      
-         >
-        <AnyReactComponent 
+             center={typeof changeCenter==='undefined'?center:changeCenter}
+             defaultZoom={zoom}
+            onClick={(e)=>renderMarkers(e)}
+             >
+       <AnyReactComponent 
           lat={latitude} 
           lng={longitude} 
           text={ company }
         />
-      </GoogleMapReact>:null}
+       </GoogleMapReact>:null}
           </Card>
-        </LeftProfile>
+       </LeftProfile>
         <RightProfile>
           <Card>
-            <FormGroup>
-              <FlexRow>
-              <input id="myInput" onChange={(e)=> upload(e)} type="file"  ref={(ref) => myInput = ref} style={{ display: 'none' }} />
-                <TopProfile onClick={(e) => myInput.click() }>
-                  {typeof value !== 'undefined'&& value.default_image_url?
-                    <img src={imageUrl} alt='img'/>: null
-                  }
-              </TopProfile>
-                <LabelRight>
-                  <Label name="Business Name"></Label>
-                  <Input className="disabledCompanyname" disabled type="text" id='company' value={company} />
-                </LabelRight>
-              </FlexRow>
+           <FormGroup>
+           <FlexRow>
+           <input id="myInput" onChange={(e)=> upload(e)} type="file" ref={(ref) => myInput = ref} style={{ display: 'none' }} />
+             <TopProfile onClick={(e) => myInput.click() }>
+              {typeof value !== 'undefined'&& value.default_image_url?
+                <img src={imageUrl} alt='img'/>: null
+           }
+        </TopProfile>
+          <LabelRight>
+            <Label name="Business Name"></Label>
+            <Input className="disabledCompanyname" disabled type="text" id='company' value={company} />
+           </LabelRight>
+            </FlexRow>
 
-            </FormGroup>
-            <FormGroup>
-              <Label name="Address"></Label>
-              {/* <Input type="text" id='add' value={userAddress} onChange={(e) => handleChange(e)} /> */}
-              <FindAddressValue id="add" setAddress={setAddress} handleChange={handleChange} addressValue={userAddress}  />
+      </FormGroup>
+    <FormGroup>
+       <Label name="Address"></Label>
+       {/* <Input type="text" id='add' value={userAddress} onChange={(e) => handleChange(e)} /> */}
+       <FindAddressValue id="add" setAddress={setAddress} handleChange={handleChange} addressValue={userAddress} />
 
-              <div className="mt-15">
-                <FlexRow>
-                  <ButtonSmall onClick={()=>setDropPin(true)} maxWidth="103px" bgColor="#0FB1D2"><img src={PinIcon} alt="Drop Pin" />Drop Pin</ButtonSmall>
-                  <ButtonSmall onClick={()=>FindAddress(userAddress)} maxWidth="137px" style={{ marginLeft: 'auto' }}>Find Address</ButtonSmall>
-                </FlexRow>
-              </div>
+       <div className="mt-15">
+        <FlexRow>
+         <ButtonSmall onClick={()=>setDropPin(true)} maxWidth="103px" bgColor="#0FB1D2"><img src={PinIcon} alt="Drop Pin" />Drop Pin</ButtonSmall>
+         <ButtonSmall onClick={()=>FindAddress(userAddress)} maxWidth="137px" style={{ marginLeft: 'auto' }}>Find Address</ButtonSmall>
+         </FlexRow>
+    </div>
 
-            </FormGroup>
-            <FormGroup>
-              <Label name="Phone"></Label>
-              <Input type="text" id='phone' value={phone} onChange={(e) => handleChange(e)} />
-            </FormGroup>
-            <FormGroup>
-              <Label name="Website"></Label>
-              <Input type="text" id='website' value={website} onChange={(e) => handleChange(e)} />
-            </FormGroup>
-            <FormGroup>
-              <Label name="Type"></Label>
-              <Input type="text" id='type' value={type} onChange={(e) => handleChange(e)} />
-            </FormGroup>
-            <FormGroup>
-              <Label name="Facebook Profile"></Label>
-              <Input type="text" id='facebook' value={facebook} onChange={(e) => handleChange(e)} />
-            </FormGroup>
-            <FormGroup>
-              <Label name="Twitter Profile"></Label>
-              <Input type="text" id='twitter' value={twitter} onChange={(e) => handleChange(e)} />
-            </FormGroup>
-            <FormGroup>
-              <Label name="LinkedIN Profile"></Label>
-              <Input type="text" id='linkedin' value={linkedin} onChange={(e) => handleChange(e)} />
-            </FormGroup>
-            <FormGroup>
-              <Label name="Instagram Profile"></Label>
-              <Input type="text" id='instagram' value={instagram} onChange={(e) => handleChange(e)} />
-            </FormGroup>
-          </Card>
-        </RightProfile>
-      </ProfileInner>
-      <HashTags>
-        <Card>
-          <HashTagsSearch>
-            <h3>Select Hashtags</h3>
-          </HashTagsSearch>
-          <HashSearch onClick={(e)=> e.target.reset}>
-            <ReactTagInput
-              tags={tags} placeholder="Label"
-              onChange={(newTags) => setTags(newTags)}
-            />
-          </HashSearch>
-        </Card>
-        <Card>
-          <HashTagsSearch>
-            <h3>Opening Hours</h3>
-          </HashTagsSearch>
-          {inputList.map((x,i) => {
-            return(
-          <SelectSection>
-            <div>
-              <Label name="Start Day"></Label>
-              <select name="StartDay" value={x.StartDay} onChange={e => handleInputChange(e,i)}>
-                <option value="Monday">Monday</option>
-                <option value="Tuesday">Tuesday</option>
-                <option value="Wednesday">Wednesday</option>
-                <option value="Thursday">Thursday</option>
-                <option value="Friday">Friday</option>
-                <option value="Saturday">Saturday</option>
-                <option value="Sunday">Sunday</option>
-              </select>
-            </div>
-            <div>
-              <Label name="End Day"></Label>
-              <select name="EndDay" value={x.EndDay} onChange={e => handleInputChange(e,i)}>
-                <option value="Monday">Monday</option>
-                <option value="Tuesday">Tuesday</option>
-                <option value="Wednesday">Wednesday</option>
-                <option value="Thursday">Thursday</option>
-                <option value="Friday">Friday</option>
-                <option value="Saturday">Saturday</option>
-                <option value="Sunday">Sunday</option>
-              </select>
-            </div>
-            <div>
-              <Label name="Start Time"></Label>
-              <TimePicker onChange={(e)=>handleStartChange(e,i,'Start')} value={x.Start} />
-            </div>
-            <div>
-              <Label name="End Time"></Label>
-              <TimePicker onChange={(e)=>handleEndChange(e,i,'End')} value={x.End} />
-            </div>
-          </SelectSection>)
-          })}
-          <Button onClick={handleAddClick}>Add New Time Slot <img src={PlusIcon} alt="plus icon" /></Button>
-        </Card>
-      </HashTags>
-      <row>
-        {/* <Card>
-          <HashTagsSearch>
-            <h3>Upload Highlight Images</h3>
-          </HashTagsSearch>
-          <GallerySec type="edit" />
-        </Card> */}
-      </row>
-      <row>
-        <Card>
-          <FlexRow>
-            <ButtonSmall onClick={() => (history.push(`/dashboard`), window.location.reload())} maxWidth="110px" bgColor="#FF7171" style={{ marginLeft: 'auto', marginRight: '10px' }}>Cancel</ButtonSmall>
-            <ButtonSmall onClick={() => updateBusiness()} maxWidth="110px" >Save</ButtonSmall>
-          </FlexRow>
-        </Card>
-      </row>
+    </FormGroup>
+      <FormGroup>
+       <Label name="Phone"></Label>
+       <Input type="text" id='phone' value={phone} onChange={(e) => handleChange(e)} />
+      </FormGroup>
+      <FormGroup>
+       <Label name="Website"></Label>
+       <Input type="text" id='website' value={website} onChange={(e) => handleChange(e)} />
+     </FormGroup>
+      <FormGroup>
+       <Label name="Type"></Label>
+       <Input type="text" id='type' value={type} onChange={(e) => handleChange(e)} />
+     </FormGroup>
+      <FormGroup>
+       <Label name="Facebook Profile"></Label>
+       <Input type="text" id='facebook' value={facebook} onChange={(e) => handleChange(e)} />
+      </FormGroup>
+       <FormGroup>
+        <Label name="Twitter Profile"></Label>
+        <Input type="text" id='twitter' value={twitter} onChange={(e) => handleChange(e)} />
+       </FormGroup>
+      <FormGroup>
+        <Label name="LinkedIN Profile"></Label>
+        <Input type="text" id='linkedin' value={linkedin} onChange={(e) => handleChange(e)} />
+      </FormGroup>
+      <FormGroup>
+          <Label name="Instagram Profile"></Label>
+          <Input type="text" id='instagram' value={instagram} onChange={(e) => handleChange(e)} />
+       </FormGroup>
+       </Card>
+      </RightProfile>
+    </ProfileInner>
+    <HashTags>
+       <Card>
+        <HashTagsSearch>
+           <h3>Select Hashtags</h3>
+        </HashTagsSearch>
+    <HashSearch onClick={(e)=> e.target.reset}>
+       <div className="input-tag">
+        <ul className="input-tag__tags">
+       { tags.map((tag, i) => (
+        <li key={tag}>
+         {tag}
+        <button type="button" onClick={(i) => removeTag(i)}>+</button>
+        </li>
+        ))}
+       <li className="input-tag__tags__input"><input type="text" onKeyDown={inputKeyDown} ref={(ref) => tagInput = ref } /></li>
+       <img onClick={()=>tagInput.value = null} src={TagInputCross} alt="plus icon" />
+      </ul>
+    </div>
+    </HashSearch>
+    </Card>
+    <Card>
+    <HashTagsSearch>
+    <h3>Opening Hours</h3>
+    </HashTagsSearch>
+    {inputList.map((x,i) => {
+    return(
+    <SelectSection>
+    <div>
+        <Label name="Start Day"></Label>
+         <select name="StartDay" value={x.StartDay} onChange={e => handleInputChange(e,i)}>
+          <option value="Monday">Monday</option>
+           <option value="Tuesday">Tuesday</option>
+           <option value="Wednesday">Wednesday</option>
+           <option value="Thursday">Thursday</option>
+           <option value="Friday">Friday</option>
+           <option value="Saturday">Saturday</option>
+            <option value="Sunday">Sunday</option>
+           </select>
+        </div>
+        <div>
+        <Label name="End Day"></Label>
+         <select name="EndDay" value={x.EndDay} onChange={e => handleInputChange(e,i)}>
+           <option value="Monday">Monday</option>
+           <option value="Tuesday">Tuesday</option>
+           <option value="Wednesday">Wednesday</option>
+           <option value="Thursday">Thursday</option>
+           <option value="Friday">Friday</option>
+           <option value="Saturday">Saturday</option>
+           <option value="Sunday">Sunday</option>
+          </select>
+         </div>
+        <div>
+    <Label name="Start Time"></Label>
+      <TimePicker onChange={(e)=>handleStartChange(e,i,'Start')} value={x.Start} />
+    </div>
+    <div>
+    <Label name="End Time"></Label>
+        <TimePicker onChange={(e)=>handleEndChange(e,i,'End')} value={x.End} />
+    </div>
+    </SelectSection>)
+    })}
+        <Button onClick={handleAddClick}>Add New Time Slot <img src={PlusIcon} alt="plus icon" /></Button>
+     </Card>
+    </HashTags>
+    <row>
+    {/* <Card>
+    <HashTagsSearch>
+    <h3>Upload Highlight Images</h3>
+    </HashTagsSearch>
+    <GallerySec type="edit" />
+    </Card> */}
+    </row>
+    <row>
+      <Card>
+       <FlexRow>
+          <ButtonSmall onClick={() => (history.push(`/dashboard`), window.location.reload())} maxWidth="110px" bgColor="#FF7171" style={{ marginLeft: 'auto', marginRight: '10px' }}>Cancel</ButtonSmall>
+          <ButtonSmall onClick={() => updateBusiness()} maxWidth="110px" >Save</ButtonSmall>
+    </FlexRow>
+    </Card>
+    </row>
     </ProfileOuter>
 
-  )
+)
 }
 
 export default EditProfile
