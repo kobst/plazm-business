@@ -1579,9 +1579,12 @@ display: none;
   .btnhover{
     margin-bottom: 10px;
   }
+  .monthView .rbc-header{
+    margin-bottom: 10px;
+  }
 }
 
-@media (max-width: 1024px){
+@media (max-width: 1120px){
   .rbc-header{
     padding: 0 7.5px 0 8.0px !important;
     text-overflow: unset !important;
@@ -1601,6 +1604,9 @@ display: none;
 }
 
 @media (max-width: 767px){
+  body, html{
+    overflow-x: hidden;
+  }
   .monthView{
     flex-direction: column;
   }
@@ -1672,4 +1678,31 @@ display: none;
   background: none;
   flex-grow: 1;
   padding: 0;
+}
+
+@media (min-width: 768px){
+  .Custom_modal{
+    max-height: 700px;
+    height: 90%;
+  }
+  .Custom_modal .ContentModal::-webkit-scrollbar {
+    width: 6px;
+  }
+  .Custom_modal .ContentModal::-webkit-scrollbar-track {
+    background:transparent;
+  }
+  .Custom_modal .ContentModal::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+  }
+  .Custom_modal .ContentModal::-webkit-scrollbar-thumb:hover {
+    background: #ccc;
+  }
+  .Custom_modal .modalButton{
+    padding-bottom: 15px;
+  }
+  .Custom_modal .ContentModal{
+    padding-right: 15px;
+    overflow-y: auto;
+  }
 }
