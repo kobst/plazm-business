@@ -346,7 +346,7 @@ else{
         isOpen={isOpen}
         // onAfterOpen={this.afterOpenModal}
         onRequestClose={()=> onCancel()}
-        className="Modal"
+        className="Modal Custom_modal"
         overlayClassName="Overlay"
         htmlOpenClassName="ReactModal__Html--open"
       >

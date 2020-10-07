@@ -1623,3 +1623,26 @@ display: none;
     margin-bottom: 10px;
   }
 }
+
+@media (min-width: 768px){
+  .Custom_modal{
+    max-height: 700px;
+    height: 90%;
+  }
+  .Custom_modal::-webkit-scrollbar {
+    width: 6px;
+  }
+  .Custom_modal::-webkit-scrollbar-track {
+    background:transparent;
+  }
+  .Custom_modal::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+  }
+  .Custom_modal::-webkit-scrollbar-thumb:hover {
+    background: #ccc;
+  }
+  .Custom_modal .modalButton{
+    padding-bottom: 15px;
+  }
+}
