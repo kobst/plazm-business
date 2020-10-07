@@ -1629,20 +1629,24 @@ display: none;
     max-height: 700px;
     height: 90%;
   }
-  .Custom_modal::-webkit-scrollbar {
+  .Custom_modal .ContentModal::-webkit-scrollbar {
     width: 6px;
   }
-  .Custom_modal::-webkit-scrollbar-track {
+  .Custom_modal .ContentModal::-webkit-scrollbar-track {
     background:transparent;
   }
-  .Custom_modal::-webkit-scrollbar-thumb {
+  .Custom_modal .ContentModal::-webkit-scrollbar-thumb {
     background: #ccc;
     border-radius: 10px;
   }
-  .Custom_modal::-webkit-scrollbar-thumb:hover {
+  .Custom_modal .ContentModal::-webkit-scrollbar-thumb:hover {
     background: #ccc;
   }
   .Custom_modal .modalButton{
     padding-bottom: 15px;
+  }
+  .Custom_modal .ContentModal{
+    padding-right: 15px;
+    overflow-y: auto;
   }
 }
