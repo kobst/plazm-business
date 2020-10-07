@@ -638,11 +638,11 @@ return (
        { tags.map((tag, i) => (
         <li key={tag}>
          {tag}
-        <button type="button" onClick={(i) => removeTag(i)}>+</button>
+        <button type="button" onClick={(i) => removeTag(i)}></button>
         </li>
         ))}
-       <li className="input-tag__tags__input"><input type="text" onKeyDown={inputKeyDown} ref={(ref) => tagInput = ref } /></li>
-       <img onClick={()=>tagInput.value = null} src={TagInputCross} alt="plus icon" />
+       <li className="input-tag__tags__input"><input placeholder="Label" type="text" onKeyDown={inputKeyDown} ref={(ref) => tagInput = ref } /><img onClick={()=>tagInput.value = null} src={TagInputCross} alt="plus icon" /></li>
+       
       </ul>
     </div>
     </HashSearch>

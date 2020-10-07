@@ -1619,11 +1619,11 @@ display: none;
   .rbc-toolbar{
     justify-content: center !important;
   }
+  .input-tag__tags li.input-tag__tags__input{
+    width: 100% !important;
+  }
 }
 .input-tag {
-  background: white;
-  border: 1px solid #d6d6d6;
-  border-radius: 2px;
   display: flex;
   flex-wrap: wrap;
   padding: 5px 5px 0;
@@ -1643,41 +1643,73 @@ display: none;
 }
 
 .input-tag__tags li {
-  align-items: center;
-  background: #85A3BF;
-  border-radius: 2px;
-  color: white;
-  display: flex;
-  font-weight: 300;
-  list-style: none;
-  margin-bottom: 5px;
-  margin-right: 5px;
-  padding: 5px 10px;
+  height: 37px;
+    background: #f3f1f5!important;
+    font-size: 14px;
+    display: inline-flex;
+    border-radius: 40px!important;
+    justify-content: center;
+    align-items: center;
+    padding: 0 15px;
+    color: #280a33;
+    margin: 10px 10px 10px 0;
+    line-height: 40px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(44,39,56,.08);
+    border-radius: 17px;
+    border: 1px solid #facdd0;
+    min-width: 110px;
+    margin-bottom: 10px!important;
+    text-align: left;
+    justify-content: flex-start;
+    font-weight: 500!important;
+    font-size: 14px!important;
+    line-height: 18px!important;
 }
 
 .input-tag__tags li button {
   align-items: center;
   appearance: none;
-  background: #333333;
   border: none;
   border-radius: 50%;
-  color: white;
   cursor: pointer;
   display: inline-flex;
-  font-size: 12px;
   height: 15px;
   justify-content: center;
   line-height: 0;
-  margin-left: 8px;
+  margin-left: auto;
   padding: 0;
-  transform: rotate(45deg);
   width: 15px;
+  background: url(./images/cross-brown.svg) no-repeat center !important;
 }
 
 .input-tag__tags li.input-tag__tags__input {
   background: none;
   flex-grow: 1;
   padding: 0;
+  background: rgb(255, 255, 255);
+  border: 1px solid rgb(219, 226, 234);
+  box-sizing: border-box;
+  box-shadow: rgba(44, 39, 56, 0.08) 0px 2px 4px;
+  border-radius: 17px;
+  height: 34px;
+  padding: 0px 15px 0px 15px;
+  font-family: "IBM Plex Sans", sans-serif;
+  width: calc(100% - 265px);
+  min-width: inherit;
+  ;
+}
+
+.input-tag__tags li.input-tag__tags__input input{
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  width: 100%;
+  padding: 0;
+  font-weight: 500!important;
+  font-size: 14px!important;
+  line-height: 18px!important;
+  color: #280a33
 }
 
 @media (min-width: 768px){
