@@ -298,6 +298,7 @@ const EditProfile = ({ value }) => {
   const [DropPin,setDropPin]= useState(false)
   const [imageUrl,setImageUrl]= useState()
   const [changeCenter,setChangeCenter]= useState()
+  const [preview,setPreview]= useState()
   const [inputList, setInputList] = useState([
     { StartDay: "Monday", EndDay: "Monday", Start: "00:00", End: "00:00"}
   ]);
@@ -530,6 +531,7 @@ console.error(error);
        );
       }
    const upload =(e)=> {
+     setPreview(URL.createObjectURL(e.target.files[0]))
    reactS3.uploadFile(e.target.files[0],config).then(data => setImageUrl(data.location))
    .catch(err => console.error(err))
 }
@@ -552,7 +554,7 @@ return (
       <ProfileInner>
         <LeftProfile>
           <Card>
-            {typeof value!=='undefined' && value.latitude!=='undefined'?
+            { typeof value!=='undefined' && value.latitude!=='undefined'?
             <GoogleMapReact
              center={typeof changeCenter==='undefined'?center:changeCenter}
              defaultZoom={zoom}
@@ -572,8 +574,8 @@ return (
            <FlexRow>
            <input id="myInput" onChange={(e)=> upload(e)} type="file" ref={(ref) => myInput = ref} style={{ display: 'none' }} />
              <TopProfile onClick={(e) => myInput.click() }>
-              {typeof value !== 'undefined'&& value.default_image_url?
-                <img src={imageUrl} alt='img'/>: null
+              {typeof preview!==undefined || (typeof value !== 'undefined'&& value.default_image_url)?
+                <img src={ preview? preview : imageUrl} alt='img'/>: null
            }
         </TopProfile>
           <LabelRight>
