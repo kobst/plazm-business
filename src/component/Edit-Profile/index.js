@@ -299,6 +299,7 @@ const EditProfile = ({ value }) => {
   const [imageUrl,setImageUrl]= useState()
   const [changeCenter,setChangeCenter]= useState()
   const [preview,setPreview]= useState()
+  const [formDisable,setFormDisable]= useState(true)
   const [inputList, setInputList] = useState([
     { StartDay: "Monday", EndDay: "Monday", Start: "00:00", End: "00:00"}
   ]);
@@ -306,6 +307,7 @@ const EditProfile = ({ value }) => {
 
   useEffect(() => {
     if (typeof value !== 'undefined') {
+      setFormDisable(false)
       window.scrollTo(0, 0)
       if (value.company_name) {
         setCompany(value.company_name)
@@ -366,6 +368,7 @@ const EditProfile = ({ value }) => {
   }, [value])
 
   const updateBusiness = async () => {
+    setFormDisable(true)
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/place`, {
       method: 'PUT',
       headers: {
@@ -588,7 +591,7 @@ return (
     <FormGroup>
        <Label name="Address"></Label>
        {/* <Input type="text" id='add' value={userAddress} onChange={(e) => handleChange(e)} /> */}
-       <FindAddressValue id="add" setAddress={setAddress} handleChange={handleChange} addressValue={userAddress} />
+       <FindAddressValue disabled={formDisable} id="add" setAddress={setAddress} handleChange={handleChange} addressValue={userAddress} />
 
        <div className="mt-15">
         <FlexRow>
@@ -600,31 +603,31 @@ return (
     </FormGroup>
       <FormGroup>
        <Label name="Phone"></Label>
-       <Input type="text" id='phone' value={phone} onChange={(e) => handleChange(e)} />
+       <Input disabled={formDisable} type="text" id='phone' value={phone} onChange={(e) => handleChange(e)} />
       </FormGroup>
       <FormGroup>
        <Label name="Website"></Label>
-       <Input type="text" id='website' value={website} onChange={(e) => handleChange(e)} />
+       <Input disabled={formDisable} type="text" id='website' value={website} onChange={(e) => handleChange(e)} />
      </FormGroup>
       <FormGroup>
        <Label name="Type"></Label>
-       <Input type="text" id='type' value={type} onChange={(e) => handleChange(e)} />
+       <Input disabled={formDisable} type="text" id='type' value={type} onChange={(e) => handleChange(e)} />
      </FormGroup>
       <FormGroup>
        <Label name="Facebook Profile"></Label>
-       <Input type="text" id='facebook' value={facebook} onChange={(e) => handleChange(e)} />
+       <Input disabled={formDisable} type="text" id='facebook' value={facebook} onChange={(e) => handleChange(e)} />
       </FormGroup>
        <FormGroup>
         <Label name="Twitter Profile"></Label>
-        <Input type="text" id='twitter' value={twitter} onChange={(e) => handleChange(e)} />
+        <Input disabled={formDisable} type="text" id='twitter' value={twitter} onChange={(e) => handleChange(e)} />
        </FormGroup>
       <FormGroup>
         <Label name="LinkedIN Profile"></Label>
-        <Input type="text" id='linkedin' value={linkedin} onChange={(e) => handleChange(e)} />
+        <Input disabled={formDisable} type="text" id='linkedin' value={linkedin} onChange={(e) => handleChange(e)} />
       </FormGroup>
       <FormGroup>
           <Label name="Instagram Profile"></Label>
-          <Input type="text" id='instagram' value={instagram} onChange={(e) => handleChange(e)} />
+          <Input disabled={formDisable} type="text" id='instagram' value={instagram} onChange={(e) => handleChange(e)} />
        </FormGroup>
        </Card>
       </RightProfile>
