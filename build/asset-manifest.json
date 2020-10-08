@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/static/css/main.537d553c.chunk.css",
+    "main.css": "/static/css/main.74bc5eb8.chunk.css",
     "main.js": "/static/js/main.1b085e6b.chunk.js",
     "main.js.map": "/static/js/main.1b085e6b.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.b89d9217.js",
@@ -9,10 +9,10 @@
     "static/js/2.3d386c68.chunk.js": "/static/js/2.3d386c68.chunk.js",
     "static/js/2.3d386c68.chunk.js.map": "/static/js/2.3d386c68.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.e56f8b97c5ee178ab7cf952ab6a55505.js": "/precache-manifest.e56f8b97c5ee178ab7cf952ab6a55505.js",
+    "precache-manifest.fb578e489cf66b4c50da1fcea9b11d8e.js": "/precache-manifest.fb578e489cf66b4c50da1fcea9b11d8e.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.f77b436b.chunk.css.map": "/static/css/2.f77b436b.chunk.css.map",
-    "static/css/main.537d553c.chunk.css.map": "/static/css/main.537d553c.chunk.css.map",
+    "static/css/main.74bc5eb8.chunk.css.map": "/static/css/main.74bc5eb8.chunk.css.map",
     "static/js/2.3d386c68.chunk.js.LICENSE.txt": "/static/js/2.3d386c68.chunk.js.LICENSE.txt",
     "static/media/Instagram.svg": "/static/media/Instagram.ff9b6ac3.svg",
     "static/media/Mask.svg": "/static/media/Mask.dffb6f67.svg",
@@ -42,7 +42,7 @@
     "static/js/runtime-main.b89d9217.js",
     "static/css/2.f77b436b.chunk.css",
     "static/js/2.3d386c68.chunk.js",
-    "static/css/main.537d553c.chunk.css",
+    "static/css/main.74bc5eb8.chunk.css",
     "static/js/main.1b085e6b.chunk.js"
   ]
 }
