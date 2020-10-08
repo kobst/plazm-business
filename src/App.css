@@ -1683,6 +1683,11 @@ display: none;
   background: url(./images/cross-brown.svg) no-repeat center !important;
 }
 
+.input-tag__tags li button:hover, .input-tag__tags li button:focus{
+  outline: 0;
+  border: none;
+}
+
 .input-tag__tags li.input-tag__tags__input {
   background: none;
   flex-grow: 1;
