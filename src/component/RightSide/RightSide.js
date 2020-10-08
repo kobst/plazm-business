@@ -642,9 +642,8 @@ const formats = {
         eventArr.push({
           id: v._id,
           title: v.name,
-          start: v.eventSchedule.start_time,
-          end: v.eventSchedule.end_time,
-          allDay: true
+          start: new Date(v.eventSchedule.start_time),
+          end: new Date(v.eventSchedule.end_time),
         })
         setEventCopy(eventArr)
         setEvent(eventArr)
