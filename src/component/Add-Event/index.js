@@ -61,7 +61,7 @@ margin: 10px auto 40px;
 Modal.setAppElement('#root')
 
 const renderMessage = getMessage()
-const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen, closeModal }) => {
+const AddModalBox = ({ isOpen,setEvent,events,value, data, editValue, setEdit, setIsOpen, closeModal }) => {
   const [title, setTitle] = useState()
   const [description, setDescription] = useState()
   const [id, setId] = useState()
@@ -122,9 +122,11 @@ const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen,
   const findContent=(id)=> {
 
    const val = events.find(v=>v._id===id)
+   if(val){
    setDescription(val.content)
    setRecurring(val.eventSchedule.recurring)
    setImage(val.item_photo)
+   }
   }
 
   const addEvent = async () => {
@@ -150,7 +152,7 @@ const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen,
     setIsOpen(false)
     setEdit(false)
     setSaveDisable(false)
-    window.location.reload()
+    setEvent()
     return body
   }
 
@@ -181,7 +183,7 @@ const handleEdit= async () => {
     setIsOpen(false)
     setEdit(false)
     setSaveDisable(false)
-    window.location.reload() 
+    setEvent()
     return body
 }
   }
@@ -199,7 +201,7 @@ const handleEdit= async () => {
     const body = await response.text();
     setIsOpen(false)
     setEdit(false)
-   window.location.reload()
+    setEvent()
     return body
 
   }

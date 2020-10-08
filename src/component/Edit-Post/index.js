@@ -51,7 +51,6 @@ const handleEdit= async () => {
   });
     const body = await response.text();
     setIsOpen(false)
-    window.location.reload() 
     return body
     }
   }

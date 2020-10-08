@@ -48,19 +48,19 @@ bottom: -25px;
 // bottom: -25px;
 // `  
 const renderMessage =getMessage()
-const LoginForm = ({type,userError,error,passwordError,loader,message,handleChange,handleSubmit}) => {
+const LoginForm = ({type,disable,userError,error,passwordError,loader,message,handleChange,handleSubmit}) => {
 return(
   <>
       <form onSubmit={ (e) => handleSubmit(e) }>
 							  <FormGroup>
                   <Label name="Enter your login ID" />
-                      <Input type="text" id='username' onChange={(e) => handleChange(e)} 
+                      <Input disabled={disable} type="text" id='username' onChange={(e) => handleChange(e)} 
                         error={userError}/>
                         {error && (message ==='User does not exist.'||message ==='Invalid Email') ?<ErrorMessage>{message}</ErrorMessage>: null}
 							  </FormGroup>
                 <FormGroup>
                     <Label name="Password" />
-                        <Input type="password" id='password' onChange={(e) => handleChange(e)}
+                        <Input disabled={disable} type="password" id='password' onChange={(e) => handleChange(e)}
                           error={passwordError} />
                           {error && message !=='User does not exist.' && message !=='Invalid Email' ?<ErrorMessage>{message}</ErrorMessage>: null}
 							  </FormGroup>	

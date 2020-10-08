@@ -51,7 +51,7 @@ margin-top: 6px;
 `
 
 
-const RegisterForm = ({ verified, err,confirmationCode,password,phoneLong,phoneShort, firstError,emptyCode, business, loader, setbusiness, setBusinessInfo, setName, message, type, locationError, codeError, firstNameError, phoneError, emailError, passwordError, handleChange, handleSubmit }) => {
+const RegisterForm = ({ verified,disable,err,confirmationCode,password,phoneLong,phoneShort, firstError,emptyCode, business, loader, setbusiness, setBusinessInfo, setName, message, type, locationError, codeError, firstNameError, phoneError, emailError, passwordError, handleChange, handleSubmit }) => {
     return (
         <>
             {verified ? (<form>
@@ -73,7 +73,7 @@ const RegisterForm = ({ verified, err,confirmationCode,password,phoneLong,phoneS
 
                     <FormGroup>
                         <Label name="Business Name" />
-                        <Input type="text" id="username" onChange={(e) => handleChange(e)}
+                        <Input disabled={disable} type="text" id="username" onChange={(e) => handleChange(e)}
                             error={firstNameError} placeholder="" />
                         {firstError ? <ErrorMessage>Username length should be greater than 3.</ErrorMessage> : null}
 
@@ -81,7 +81,7 @@ const RegisterForm = ({ verified, err,confirmationCode,password,phoneLong,phoneS
 
                     <FormGroup>
                         <Label name="Phone Number" />
-                        <Input id='phone_number' onChange={(e) => handleChange(e)}
+                        <Input disabled={disable} id='phone_number' onChange={(e) => handleChange(e)}
                             error={phoneError} placeholder="" />
                             {phoneShort ? <ErrorMessage>Phone Number length should be greater than 5.</ErrorMessage> : null}
                             {phoneLong ? <ErrorMessage>Phone Number length should be less than 50.</ErrorMessage> : null}
@@ -91,14 +91,14 @@ const RegisterForm = ({ verified, err,confirmationCode,password,phoneLong,phoneS
 
                     <FormGroup>
                         <Label name="Email Address" />
-                        <Input type="text" id='email' onChange={(e) => handleChange(e)}
+                        <Input disabled={disable} type="text" id='email' onChange={(e) => handleChange(e)}
                             error={emailError} placeholder="" />
                         {err && message && message.includes("exists") ? <ErrorMessage>{message}</ErrorMessage> : null}
                     </FormGroup>
 
                     <FormGroup>
                         <Label name="Password" />
-                        <Input type="password" id="password" onChange={(e) => handleChange(e)}
+                        <Input disabled={disable} type="password" id="password" onChange={(e) => handleChange(e)}
                             error={passwordError} placeholder="" />
                             <PasswordStrengthMeter password={password} />
                         {err && message && message.includes("Password") ? <ErrorMessage>{message}</ErrorMessage> : null}
@@ -112,7 +112,7 @@ const RegisterForm = ({ verified, err,confirmationCode,password,phoneLong,phoneS
                             <>
                                 <h2 onClick={() => setbusiness(true)}> Find Your Business</h2>
                                 <FormGroup>
-                                    <SearchLocationInput id="location" error={locationError} handleChange={handleChange} setBusinessInfo={setBusinessInfo} setName={setName} />
+                                    <SearchLocationInput disabled={disable} id="location" error={locationError} handleChange={handleChange} setBusinessInfo={setBusinessInfo} setName={setName} />
                                 </FormGroup>
                             </>
                             : null}
