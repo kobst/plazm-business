@@ -1222,11 +1222,8 @@ display: none;
 
 
 @media not all and (min-resolution:.001dpcm) {
-  .Image_wrap{
-    overflow: scroll;
-  }
-  .MuiSelect-select.MuiSelect-select{
-    padding-bottom: 15px;
+  .Custom_modal .MuiSelect-select.MuiSelect-select{
+    padding-bottom: 22px;
   }
   .rbc-timeslot-group{
     min-height: 47px;
@@ -1236,6 +1233,9 @@ display: none;
   }
   .rbc-time-view .rbc-allday-cell{
     height: auto;
+  }
+  .Custom_modal .MuiInput-underline:before, .Custom_modal .MuiInput-underline:after{
+    bottom: -22px;
   }
 }
   
