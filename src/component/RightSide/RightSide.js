@@ -455,7 +455,7 @@ const RightSide = (props) => {
   const [posts, setPosts] = useState()
   const [mentions, setMention] = useState()
   const [allFeed, setAllFeed] = useState()
-  const [description, setDescription] = useState()
+  const [description, setDescription] = useState('')
   const [saveDisable, setSaveDisable] = useState(false)
   // const [showTag, setShowTag] = useState(false)
   const [curators, setCurators] = useState([])
@@ -477,7 +477,7 @@ const RightSide = (props) => {
   const [imageUploadCopy,setImageUploadCopy]=useState([])
   const [anchorEl, setAnchorEl]= useState(null)
   const [mentionarray,setMentionArray]= useState([])
-  const [toolbarRef, setToolbarRef] = useState(null);
+  const [toolbarRef, setToolbarRef] = useState(null)
 
   useEffect(() => {
     let updateUser = async authState => {
@@ -709,6 +709,7 @@ const formats = {
 
   const getCustomToolbar = (toolbar) => {
   //  const toolbarDate = toolbar.date;
+  const now = new Date()
     const goToDayView = () => {
       setEvent(eventCopy)
     toolbar.onView("day")
@@ -721,16 +722,30 @@ const formats = {
     };
     const goToMonthView = () => {
       setEvent([])
-    toolbar.onView("month")
-    setViewState('month')
-    setToolbarRef(toolbar)
+      if(toolbar.date.getMonth()===now.getMonth()){
+        toolbar.date.setMonth(now.getMonth());
+        toolbar.date.setYear(now.getFullYear());
+        toolbar.date.setDate(now.getDate());
+        toolbar.onNavigate("current");
+      }
+      toolbar.onView("month")
+      setViewState('month')
+      setToolbarRef(toolbar)
     };
     const goToBack = () => {
       let view = viewState
       let mDate = toolbar.date
       let newDate
       if (view === "month") {
-        newDate = new Date(mDate.getFullYear(), mDate.getMonth() - 1, 1);
+        if(mDate.getMonth() - 1=== now.getMonth()){
+          toolbar.date.setMonth(now.getMonth());
+          toolbar.date.setYear(now.getFullYear());
+          toolbar.date.setDate(now.getDate());
+          toolbar.onNavigate("current");
+            }
+            else{
+            newDate = new Date(mDate.getFullYear(), mDate.getMonth() - 1, 1);
+            }
       } else if (view === "week") {
         newDate = new Date(
           mDate.getFullYear(),
@@ -753,7 +768,15 @@ const formats = {
       let mDate = toolbar.date;
       let newDate;
       if (view === "month") {
+        if(mDate.getMonth() + 1=== now.getMonth()){
+      toolbar.date.setMonth(now.getMonth());
+      toolbar.date.setYear(now.getFullYear());
+      toolbar.date.setDate(now.getDate());
+      toolbar.onNavigate("current");
+        }
+        else{
         newDate = new Date(mDate.getFullYear(), mDate.getMonth() + 1, 1);
+        }
       } else if (view === "week") {
         newDate = new Date(
           mDate.getFullYear(),
@@ -970,6 +993,11 @@ const formats = {
       display: `${myUser.name}`
     }))
 
+    // const fetchMoreData = () =>{
+    //        setTimeout(()=>{
+    //          setPostLength(allFeed.length)
+    //        },2000)
+    // }
   return (
     <RightSection>
       <Row>

@@ -421,6 +421,7 @@ else{
           <MenuItem value="Daily">Daily</MenuItem>
           <MenuItem value="Weekly">Weekly</MenuItem>
           <MenuItem value="Monday-Friday">Monday-Friday</MenuItem>
+          <MenuItem value="One-Time">One-Time</MenuItem>
         </Select>
       </FormControl>
           {/* <select id='recurring' value={recurring} onChange={e => handleChange(e)} disabled={disableReccuring}>
