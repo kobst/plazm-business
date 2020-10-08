@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Input from '../component/UI/Input/Input'
-      function SearchLocationInput({id,handleChange,error,setBusinessInfo,setName}) { 
+      function SearchLocationInput({id,handleChange,disabled,error,setBusinessInfo,setName}) { 
             const [query, setQuery] = useState("");
             const autoCompleteRef = useRef(null);
             let autoComplete;
@@ -58,6 +58,7 @@ import Input from '../component/UI/Input/Input'
                 onChange={event => (setQuery(event.target.value), handleChange(event))}
                 placeholder=""
                 value={query}
+                disabled={disabled}
             />
             
             );

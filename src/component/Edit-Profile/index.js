@@ -419,6 +419,7 @@ const EditProfile = ({ value }) => {
     );
 
       const removeTag = (i) => {
+        // console.log(i)
        const newTags = [ ...tags ];
        newTags.splice(i, 1);
        setTags(newTags)
@@ -643,10 +644,10 @@ return (
        { tags.map((tag, i) => (
         <li key={tag}>
          {tag}
-        <button type="button" onClick={(i) => removeTag(i)}></button>
+        <button type="button" onClick={()=>removeTag(i)}></button>
         </li>
         ))}
-       <li className="input-tag__tags__input"><input placeholder="Label" type="text" onKeyDown={inputKeyDown} ref={(ref) => tagInput = ref } /><img onClick={()=>tagInput.value = null} src={TagInputCross} alt="plus icon" /></li>
+       <li className="input-tag__tags__input"><input disabled={formDisable} placeholder="Label" type="text" onKeyDown={inputKeyDown} ref={(ref) => tagInput = ref } /><img onClick={()=>tagInput.value = null} src={TagInputCross} alt="plus icon" /></li>
        
       </ul>
     </div>
@@ -661,7 +662,7 @@ return (
     <SelectSection>
     <div>
         <Label name="Start Day"></Label>
-         <select name="StartDay" value={x.StartDay} onChange={e => handleInputChange(e,i)}>
+         <select disabled={formDisable} name="StartDay" value={x.StartDay} onChange={e => handleInputChange(e,i)}>
           <option value="Monday">Monday</option>
            <option value="Tuesday">Tuesday</option>
            <option value="Wednesday">Wednesday</option>
@@ -673,7 +674,7 @@ return (
         </div>
         <div>
         <Label name="End Day"></Label>
-         <select name="EndDay" value={x.EndDay} onChange={e => handleInputChange(e,i)}>
+         <select disabled={formDisable} name="EndDay" value={x.EndDay} onChange={e => handleInputChange(e,i)}>
            <option value="Monday">Monday</option>
            <option value="Tuesday">Tuesday</option>
            <option value="Wednesday">Wednesday</option>
@@ -685,11 +686,11 @@ return (
          </div>
         <div>
     <Label name="Start Time"></Label>
-      <TimePicker onChange={(e)=>handleStartChange(e,i,'Start')} value={x.Start} />
+      <TimePicker disabled={formDisable} onChange={(e)=>handleStartChange(e,i,'Start')} value={x.Start} />
     </div>
     <div>
     <Label name="End Time"></Label>
-        <TimePicker onChange={(e)=>handleEndChange(e,i,'End')} value={x.End} />
+        <TimePicker disabled={formDisable} onChange={(e)=>handleEndChange(e,i,'End')} value={x.End} />
     </div>
     </SelectSection>)
     })}
