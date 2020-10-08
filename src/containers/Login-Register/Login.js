@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import './style.css'
 import { Auth } from 'aws-amplify';
 import {getMessage} from '../../config'
-
+import ValueLoader from '../../utils/loader'
 import history from '../../utils/history'
 import Wrapper from '../../component/Login-Register/Wrapper'
 import LoginForm from '../../component/Login-Register/Form-Components/Login-Form'
@@ -18,6 +18,7 @@ const Login = (props) => {
     const [passwordError, setPasswordError] = useState(false)
     const [message,setmessage] = useState()
     const [loader,setLoader] = useState(false)
+    const [loginValue,setLoginValue]= useState(false)
 
     useEffect(() => {
         let updateUser = async authState => {
@@ -27,7 +28,7 @@ const Login = (props) => {
              window.location.reload() 
             
           } catch {
-             console.log(message)
+             setLoginValue(true)
           }
         }
         updateUser()
@@ -100,6 +101,8 @@ const Validation = () => {
 
 
     return(
+        <>
+        { loginValue === true?
         <Wrapper type ={type} page='login' heading={renderMessage.Welcome} welcomeMessage={renderMessage.Login_Mess} >
             <LoginForm
                   type ={type}
@@ -111,7 +114,9 @@ const Validation = () => {
                   handleChange={handleChange}
                   handleSubmit={handleSubmit}
                   />
-                  </Wrapper>
+                  </Wrapper>:<div style={{textAlign:'center' ,margin:' 40px auto 0'}}><ValueLoader height="100" width="100" /></div>
+                  }
+                  </>
    
     )
 }

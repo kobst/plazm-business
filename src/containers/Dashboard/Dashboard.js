@@ -6,6 +6,7 @@ import history from '../../utils/history'
 import Header from '../../component/Header'
 import Footer from '../../component/Footer'
 import { callPlace } from '../../Api'
+import ValueLoader from '../../utils/loader'
 const DashboardContainer = styled.div`
 display:flex;
 background: linear-gradient(157.1deg, #FF7171 -1.1%, #FF479D 100%);
@@ -43,15 +44,16 @@ const Dashboard = () => {
       }, []);
     
     return(
+    <>
+    {placeValue?
        <DashboardContainer>
          <Container>
           <Header value={placeValue} />
           <RightSide/>
           <Footer />
        </Container>
-       </DashboardContainer>
-
-    )
+       </DashboardContainer>:<div style={{textAlign:'center' ,margin:' 40px auto 0'}}><ValueLoader height="100" width="100" /></div>
+   }</>)
 }
 
 export default Dashboard

@@ -8,7 +8,7 @@ import Gallery from '../UI/Gallery'
 import { MentionsInput, Mention } from 'react-mentions'
 
 
-const EditModalBox = ({ isOpen,closeModal,users,value,setIsOpen,setToggleMenu}) => {
+const EditModalBox = ({ isOpen,closeModal,users,value,setIsOpen}) => {
    const [description, setDescription] = useState()
    const [image,setImage]= useState([])
    const [mentionArray,setMentionArray]= useState([])
@@ -66,7 +66,6 @@ const handleEdit= async () => {
     }
   const onCancel=()=>{
       setDescription('')
-      setToggleMenu(false)
       closeModal()
   }
 

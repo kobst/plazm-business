@@ -4,6 +4,7 @@ import { Auth } from 'aws-amplify';
 import history from '../../utils/history'
 import Wrapper from '../../component/Login-Register/Wrapper'
 import ForgotPasswordForm from '../../component/Login-Register/Form-Components/Forgot-Password-Form'
+import ValueLoader from '../../utils/loader'
 import {getMessage} from '../../config'
 
 const renderMessage= getMessage()
@@ -25,15 +26,17 @@ const ForgotPassword = (props) => {
     const [con,setCon] = useState(false)
     const [loader,setLoader] = useState(false)
     const [emError,setEmError]= useState(false)
+    const [loginValue,setLoginValue]= useState(false)
     
     useEffect(() => {
         let updateUser = async authState => {
           try {
-             await Auth.currentAuthenticatedUser()
-             history.push('/dashboard')
-             window.location.reload() 
+            await Auth.currentAuthenticatedUser()
+            history.push('/dashboard')
+            window.location.reload() 
             
           } catch {
+              setLoginValue(true)
           }
         }
         updateUser()
@@ -125,6 +128,8 @@ function validateEmail(user) {
 }
 
  return(
+     <>
+     {loginValue === true ?
      <Wrapper type ={type} page='forgot' heading={renderMessage.Reset} welcomeMessage={email?renderMessage.Res_Message:renderMessage.Email_Msg}>
          <ForgotPasswordForm 
          type = {type}
@@ -146,7 +151,8 @@ function validateEmail(user) {
          ResponseValue={ResponseValue}
          
          />
-         </Wrapper>
+         </Wrapper>:<div style={{textAlign:'center' ,margin:' 40px auto 0'}}><ValueLoader height="100" width="100" /></div> }
+         </>
 
  )
     
