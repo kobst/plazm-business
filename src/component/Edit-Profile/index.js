@@ -516,22 +516,22 @@ console.error(error);
 );
 }
 };
-const FindAddress = (userAddress)=>{
-Geocode.fromAddress(userAddress).then(
-response => {
-const { lat, lng } = response.results[0].geometry.location;
-setChangeCenter({lat, lng})
-setLatitude(lat)
-setLongitude(lng)
-},
-error => {
-console.error(error);
-}
-);
-}
-const upload =(e)=> {
-reactS3.uploadFile(e.target.files[0],config).then(data => setImageUrl(data.location))
-.catch(err => console.error(err))
+      const FindAddress = (userAddress)=>{
+       Geocode.fromAddress(userAddress).then(
+        response => {
+        const { lat, lng } = response.results[0].geometry.location;
+         setChangeCenter({lat, lng})
+         setLatitude(lat)
+         setLongitude(lng)
+       },
+         error => {
+         console.error(error);
+        }
+       );
+      }
+   const upload =(e)=> {
+   reactS3.uploadFile(e.target.files[0],config).then(data => setImageUrl(data.location))
+   .catch(err => console.error(err))
 }
 
 const handleInputChange = (e, index) => {

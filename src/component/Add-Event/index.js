@@ -411,7 +411,7 @@ else{
            </form>
           </DatePicker>
           <FormControl>
-        <InputLabel id="demo-simple-select-label">Reccuring</InputLabel>
+        <InputLabel id="demo-simple-select-label">Frequency</InputLabel>
         <Select
           id='recurring'
           value={recurring}
