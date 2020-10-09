@@ -150,13 +150,13 @@ const AddModalBox = ({ isOpen,setEvent,events,value, data, editValue, setEdit, s
     });
     const body = await response.text();
     setIsOpen(false)
-    setEdit(false)
     setSaveDisable(false)
     setEvent()
     return body
   }
 
 }
+
 const handleEdit= async () => {
   if(Validation()){
     setSaveDisable(true)
@@ -200,7 +200,6 @@ const handleEdit= async () => {
     });
     const body = await response.text();
     setIsOpen(false)
-    setEdit(false)
     setEvent()
     return body
 
