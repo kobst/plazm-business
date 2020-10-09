@@ -563,7 +563,7 @@ const formats = {
 
   const eventManage = (sol) => {
     let eventArr = []
-    setEvent([])
+    setEvent(eventArr)
     // eslint-disable-next-line array-callback-return
     sol.map(v => {
       if (v.eventSchedule.recurring === 'weekly' || v.eventSchedule.recurring === 'Weekly') {
