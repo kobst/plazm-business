@@ -1222,11 +1222,9 @@ display: none;
 
 
 @media not all and (min-resolution:.001dpcm) {
-  .Image_wrap{
-    overflow: scroll;
-  }
-  .MuiSelect-select.MuiSelect-select{
-    padding-bottom: 15px;
+  .Custom_modal .MuiSelect-select.MuiSelect-select{
+    padding-bottom: 0;
+    margin-top: 7px;
   }
   .rbc-timeslot-group{
     min-height: 47px;
@@ -1236,6 +1234,9 @@ display: none;
   }
   .rbc-time-view .rbc-allday-cell{
     height: auto;
+  }
+  .Custom_modal .MuiInput-underline:before, .Custom_modal .MuiInput-underline:after{
+    bottom: -22px;
   }
 }
   
@@ -1671,16 +1672,20 @@ display: none;
   align-items: center;
   appearance: none;
   border: none;
-  border-radius: 50%;
   cursor: pointer;
   display: inline-flex;
-  height: 15px;
+  height: 10px;
   justify-content: center;
   line-height: 0;
   margin-left: auto;
   padding: 0;
-  width: 15px;
+  width: 10px;
   background: url(./images/cross-brown.svg) no-repeat center !important;
+}
+
+.input-tag__tags li button:hover, .input-tag__tags li button:focus{
+  outline: 0;
+  border: none;
 }
 
 .input-tag__tags li.input-tag__tags__input {

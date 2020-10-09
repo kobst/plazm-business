@@ -21,7 +21,6 @@ const DeleteModalBox = ({ isOpen,closeModal,postId,setDeleteOpen}) => {
     });
     const body = await response.text();
     setDeleteOpen(false)
-   window.location.reload()
     return body
 
   }

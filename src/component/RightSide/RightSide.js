@@ -478,6 +478,7 @@ const RightSide = (props) => {
   const [anchorEl, setAnchorEl]= useState(null)
   const [mentionarray,setMentionArray]= useState([])
   const [toolbarRef, setToolbarRef] = useState(null)
+  const [postRef,setPostRef]= useState(false)
 
   useEffect(() => {
     let updateUser = async authState => {
@@ -503,6 +504,7 @@ const RightSide = (props) => {
           const allMentions = val.filter(v => (!v.eventSchedule || v.eventSchedule === null) && (v.name !== place[0].company_name) && v.name)
           const upEvent = sol.filter(v=>(new Date(v.eventSchedule.start_time)>=new Date()))
           setUpcomingEvents(upEvent)
+          setEvent()
           setMention('Public')
           setActivePublic(true)
           setPosts(val)
@@ -511,6 +513,9 @@ const RightSide = (props) => {
           setAllFeed(feed)
           setAllMentions(allMentions)
           eventManage(sol)
+          setPostRef(false)
+          setSaveDisable(false)
+          setDetails()
         }
         else {
           let eventArr = []
@@ -524,7 +529,7 @@ const RightSide = (props) => {
     updateUser()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isOpen,postRef,isModelOpen,deleteOpen]);
   useEffect(() => {
 
     const checkMentions = () => {
@@ -642,9 +647,8 @@ const formats = {
         eventArr.push({
           id: v._id,
           title: v.name,
-          start: v.eventSchedule.start_time,
-          end: v.eventSchedule.end_time,
-          allDay: true
+          start: new Date(v.eventSchedule.start_time),
+          end: new Date(v.eventSchedule.end_time),
         })
         setEventCopy(eventArr)
         setEvent(eventArr)
@@ -686,7 +690,6 @@ const formats = {
 
   const returnTodayDate = ()=> {
     let today = new Date();
-    console.log(today.toLocaleDateString("en-US", options))
     const dateArr = today.toLocaleDateString("en-US", options).split(',')
     return(
     <>
@@ -906,7 +909,8 @@ const formats = {
         })
       });
       const body = await response.text();
-      window.location.reload()
+        setPostRef(true)
+        setDescription('')
       return body
     }
 
@@ -1010,7 +1014,7 @@ const formats = {
                 <ButtonSmall onClick={() => setIsOpen(true)}>Add Event</ButtonSmall>
               </FlexRow>
 
-              <AddModalBox editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
+              <AddModalBox setEvent={setEvent} editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
               <CalenderSection>
         <div className={ calenderView === 'month'? "monthView": null}>
         {calenderView === 'month' ?
@@ -1153,7 +1157,7 @@ const formats = {
                       <img src={CrossIcon} alt="Cross Icon" style={{ marginRight: '0px' }} />
                     </ButtonSmall>:null
                      }
-                    <ButtonSmall disabled={saveDisable} onClick={() => addPost()}>Publish</ButtonSmall>
+                    <ButtonSmall onClick={() => addPost()}>{saveDisable!==true?'Publish':<ValueLoader/>}</ButtonSmall>
                   </FlexRow>
                 </div>
               </div>

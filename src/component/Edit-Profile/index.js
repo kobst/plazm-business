@@ -298,6 +298,8 @@ const EditProfile = ({ value }) => {
   const [DropPin,setDropPin]= useState(false)
   const [imageUrl,setImageUrl]= useState()
   const [changeCenter,setChangeCenter]= useState()
+  const [preview,setPreview]= useState()
+  const [formDisable,setFormDisable]= useState(true)
   const [inputList, setInputList] = useState([
     { StartDay: "Monday", EndDay: "Monday", Start: "00:00", End: "00:00"}
   ]);
@@ -305,6 +307,7 @@ const EditProfile = ({ value }) => {
 
   useEffect(() => {
     if (typeof value !== 'undefined') {
+      setFormDisable(false)
       window.scrollTo(0, 0)
       if (value.company_name) {
         setCompany(value.company_name)
@@ -365,6 +368,7 @@ const EditProfile = ({ value }) => {
   }, [value])
 
   const updateBusiness = async () => {
+    setFormDisable(true)
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/place`, {
       method: 'PUT',
       headers: {
@@ -415,6 +419,7 @@ const EditProfile = ({ value }) => {
     );
 
       const removeTag = (i) => {
+        // console.log(i)
        const newTags = [ ...tags ];
        newTags.splice(i, 1);
        setTags(newTags)
@@ -516,22 +521,23 @@ console.error(error);
 );
 }
 };
-const FindAddress = (userAddress)=>{
-Geocode.fromAddress(userAddress).then(
-response => {
-const { lat, lng } = response.results[0].geometry.location;
-setChangeCenter({lat, lng})
-setLatitude(lat)
-setLongitude(lng)
-},
-error => {
-console.error(error);
-}
-);
-}
-const upload =(e)=> {
-reactS3.uploadFile(e.target.files[0],config).then(data => setImageUrl(data.location))
-.catch(err => console.error(err))
+      const FindAddress = (userAddress)=>{
+       Geocode.fromAddress(userAddress).then(
+        response => {
+        const { lat, lng } = response.results[0].geometry.location;
+         setChangeCenter({lat, lng})
+         setLatitude(lat)
+         setLongitude(lng)
+       },
+         error => {
+         console.error(error);
+        }
+       );
+      }
+   const upload =(e)=> {
+     setPreview(URL.createObjectURL(e.target.files[0]))
+   reactS3.uploadFile(e.target.files[0],config).then(data => setImageUrl(data.location))
+   .catch(err => console.error(err))
 }
 
 const handleInputChange = (e, index) => {
@@ -552,7 +558,7 @@ return (
       <ProfileInner>
         <LeftProfile>
           <Card>
-            {typeof value!=='undefined' && value.latitude!=='undefined'?
+            { typeof value!=='undefined' && value.latitude!=='undefined'?
             <GoogleMapReact
              center={typeof changeCenter==='undefined'?center:changeCenter}
              defaultZoom={zoom}
@@ -572,8 +578,8 @@ return (
            <FlexRow>
            <input id="myInput" onChange={(e)=> upload(e)} type="file" ref={(ref) => myInput = ref} style={{ display: 'none' }} />
              <TopProfile onClick={(e) => myInput.click() }>
-              {typeof value !== 'undefined'&& value.default_image_url?
-                <img src={imageUrl} alt='img'/>: null
+              {typeof preview!==undefined || (typeof value !== 'undefined'&& value.default_image_url)?
+                <img src={ preview? preview : imageUrl} alt='img'/>: null
            }
         </TopProfile>
           <LabelRight>
@@ -586,7 +592,7 @@ return (
     <FormGroup>
        <Label name="Address"></Label>
        {/* <Input type="text" id='add' value={userAddress} onChange={(e) => handleChange(e)} /> */}
-       <FindAddressValue id="add" setAddress={setAddress} handleChange={handleChange} addressValue={userAddress} />
+       <FindAddressValue disabled={formDisable} id="add" setAddress={setAddress} handleChange={handleChange} addressValue={userAddress} />
 
        <div className="mt-15">
         <FlexRow>
@@ -598,31 +604,31 @@ return (
     </FormGroup>
       <FormGroup>
        <Label name="Phone"></Label>
-       <Input type="text" id='phone' value={phone} onChange={(e) => handleChange(e)} />
+       <Input disabled={formDisable} type="text" id='phone' value={phone} onChange={(e) => handleChange(e)} />
       </FormGroup>
       <FormGroup>
        <Label name="Website"></Label>
-       <Input type="text" id='website' value={website} onChange={(e) => handleChange(e)} />
+       <Input disabled={formDisable} type="text" id='website' value={website} onChange={(e) => handleChange(e)} />
      </FormGroup>
       <FormGroup>
        <Label name="Type"></Label>
-       <Input type="text" id='type' value={type} onChange={(e) => handleChange(e)} />
+       <Input disabled={formDisable} type="text" id='type' value={type} onChange={(e) => handleChange(e)} />
      </FormGroup>
       <FormGroup>
        <Label name="Facebook Profile"></Label>
-       <Input type="text" id='facebook' value={facebook} onChange={(e) => handleChange(e)} />
+       <Input disabled={formDisable} type="text" id='facebook' value={facebook} onChange={(e) => handleChange(e)} />
       </FormGroup>
        <FormGroup>
         <Label name="Twitter Profile"></Label>
-        <Input type="text" id='twitter' value={twitter} onChange={(e) => handleChange(e)} />
+        <Input disabled={formDisable} type="text" id='twitter' value={twitter} onChange={(e) => handleChange(e)} />
        </FormGroup>
       <FormGroup>
         <Label name="LinkedIN Profile"></Label>
-        <Input type="text" id='linkedin' value={linkedin} onChange={(e) => handleChange(e)} />
+        <Input disabled={formDisable} type="text" id='linkedin' value={linkedin} onChange={(e) => handleChange(e)} />
       </FormGroup>
       <FormGroup>
           <Label name="Instagram Profile"></Label>
-          <Input type="text" id='instagram' value={instagram} onChange={(e) => handleChange(e)} />
+          <Input disabled={formDisable} type="text" id='instagram' value={instagram} onChange={(e) => handleChange(e)} />
        </FormGroup>
        </Card>
       </RightProfile>
@@ -638,10 +644,10 @@ return (
        { tags.map((tag, i) => (
         <li key={tag}>
          {tag}
-        <button type="button" onClick={(i) => removeTag(i)}></button>
+        <button type="button" onClick={()=>removeTag(i)}></button>
         </li>
         ))}
-       <li className="input-tag__tags__input"><input placeholder="Label" type="text" onKeyDown={inputKeyDown} ref={(ref) => tagInput = ref } /><img onClick={()=>tagInput.value = null} src={TagInputCross} alt="plus icon" /></li>
+       <li className="input-tag__tags__input"><input disabled={formDisable} placeholder="Label" type="text" onKeyDown={inputKeyDown} ref={(ref) => tagInput = ref } /><img onClick={()=>tagInput.value = null} src={TagInputCross} alt="plus icon" /></li>
        
       </ul>
     </div>
@@ -656,7 +662,7 @@ return (
     <SelectSection>
     <div>
         <Label name="Start Day"></Label>
-         <select name="StartDay" value={x.StartDay} onChange={e => handleInputChange(e,i)}>
+         <select disabled={formDisable} name="StartDay" value={x.StartDay} onChange={e => handleInputChange(e,i)}>
           <option value="Monday">Monday</option>
            <option value="Tuesday">Tuesday</option>
            <option value="Wednesday">Wednesday</option>
@@ -668,7 +674,7 @@ return (
         </div>
         <div>
         <Label name="End Day"></Label>
-         <select name="EndDay" value={x.EndDay} onChange={e => handleInputChange(e,i)}>
+         <select disabled={formDisable} name="EndDay" value={x.EndDay} onChange={e => handleInputChange(e,i)}>
            <option value="Monday">Monday</option>
            <option value="Tuesday">Tuesday</option>
            <option value="Wednesday">Wednesday</option>
@@ -680,11 +686,11 @@ return (
          </div>
         <div>
     <Label name="Start Time"></Label>
-      <TimePicker onChange={(e)=>handleStartChange(e,i,'Start')} value={x.Start} />
+      <TimePicker disabled={formDisable} onChange={(e)=>handleStartChange(e,i,'Start')} value={x.Start} />
     </div>
     <div>
     <Label name="End Time"></Label>
-        <TimePicker onChange={(e)=>handleEndChange(e,i,'End')} value={x.End} />
+        <TimePicker disabled={formDisable} onChange={(e)=>handleEndChange(e,i,'End')} value={x.End} />
     </div>
     </SelectSection>)
     })}

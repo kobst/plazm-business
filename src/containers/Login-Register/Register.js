@@ -36,6 +36,7 @@ const Register = (props) => {
     const [phoneShort,setPhoneShort]= useState(false)
     const [phoneLong,setPhoneLong]= useState(false)
     const [loginValue,setLoginValue]= useState(false)
+    const [disable,setDisable]= useState(false)
     useEffect(() => {
         let updateUser = async authState => {
           try {
@@ -75,10 +76,10 @@ const Register = (props) => {
         .catch((err) => {
             if(err.message.includes('phone'))
             {  
-                return(setMessage(renderMessage.phone_Err) , setError(true)) 
+                return(setMessage(renderMessage.phone_Err) , setError(true),setDisable(false)) 
             }
             else{
-                return(setMessage(err.message) , setError(true))
+                return(setMessage(err.message) , setError(true),setDisable(false))
                 
             }
     })
@@ -178,12 +179,14 @@ const Register = (props) => {
           }
         if(!verified && Validation()){
             setLoader(true)
+            setDisable(true)
             if(await checkBusiness()){
            setMessage()
            setError(false)
            signUp(form)
             }
             else{
+                setDisable(false)
                 setError(true)
                 setMessage(renderMessage.Busi_Err)
 
@@ -273,6 +276,7 @@ const Register = (props) => {
                   phoneLong={phoneLong}
                   phoneShort={phoneShort}
                   password={password}
+                  disable={disable}
                   />
         </Wrapper>:<div style={{textAlign:'center' ,margin:' 40px auto 0'}}><ValueLoader height="100" width="100" /></div>
         }</>

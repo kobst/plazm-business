@@ -19,6 +19,7 @@ const Login = (props) => {
     const [message,setmessage] = useState()
     const [loader,setLoader] = useState(false)
     const [loginValue,setLoginValue]= useState(false)
+    const [disable,setDisable]= useState(false)
 
     useEffect(() => {
         let updateUser = async authState => {
@@ -46,7 +47,7 @@ const Login = (props) => {
         ))
         .catch((err) =>{ 
         if(err){
-            return(setmessage(err.message),setError(true))}})
+            return(setmessage(err.message),setError(true),setDisable(false))}})
     }
 
     function validateEmail(user) {
@@ -59,6 +60,7 @@ const Login = (props) => {
         e.preventDefault()
         setError(false)
         setmessage()
+        setDisable(true)
         if(Validation()){
          setLoader(true)
          signIn()
@@ -68,14 +70,17 @@ const Login = (props) => {
 const Validation = () => {
     if(!user){
       setuserError(true)
+      setDisable(false)
     }
     if(user){
     if(!validateEmail(user)){
+        setDisable(false)
         setError(true)
         setmessage(renderMessage.emErr)
     }
 }
     if(!password){
+        setDisable(false)
         setPasswordError(true)
     }
     else if(user && password && validateEmail(user)){
@@ -113,6 +118,7 @@ const Validation = () => {
                   message={message}
                   handleChange={handleChange}
                   handleSubmit={handleSubmit}
+                  disable={disable}
                   />
                   </Wrapper>:<div style={{textAlign:'center' ,margin:' 40px auto 0'}}><ValueLoader height="100" width="100" /></div>
                   }
