@@ -20,6 +20,7 @@ sonar-scanner:
    - master
 deploy:
  stage: deploy
+ when: manual
  script:
    - rsync -aurvz --delete -e 'ssh -p 22' --stats --include='build/***' --exclude='*' . $user@$host:$path;
  only:
