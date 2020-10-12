@@ -1,0 +1,69 @@
+{
+  "name": "metagon",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@aws-amplify/ui-react": "^0.2.8",
+    "@date-io/date-fns": "^1.3.13",
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/pickers": "^3.2.10",
+    "@pathofdev/react-tag-input": "^1.0.7",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "aws-amplify": "^3.0.16",
+    "date-fns": "^2.0.0-beta.5",
+    "google-map-react": "^2.1.3",
+    "google-maps-react": "^2.0.6",
+    "history": "^5.0.0",
+    "moment": "^2.28.0",
+    "multiselect-react-dropdown": "^1.5.7",
+    "react": "^16.13.1",
+    "react-alice-carousel": "^1.19.3",
+    "react-big-calendar": "^0.26.0",
+    "react-bootstrap": "^1.3.0",
+    "react-bootstrap-time-picker": "^2.0.1",
+    "react-custom-scrollbars": "^4.2.1",
+    "react-datetime": "^2.16.3",
+    "react-datetime-picker": "^3.0.2",
+    "react-dom": "^16.13.1",
+    "react-geocode": "^0.2.1",
+    "react-icons": "^3.10.0",
+    "react-loader-spinner": "^3.1.14",
+    "react-loading-skeleton": "^2.1.1",
+    "react-mentions": "^4.0.2",
+    "react-modal": "^3.11.2",
+    "react-router-dom": "^5.2.0",
+    "react-s3": "^1.3.1",
+    "react-scripts": "3.4.1",
+    "react-tag-input": "^6.4.3",
+    "react-textarea-mention": "^1.0.11",
+    "rrule": "^2.6.4",
+    "styled-components": "^5.1.1",
+    "zxcvbn": "^4.4.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/react-big-calendar": "^0.24.6"
+  }
+}

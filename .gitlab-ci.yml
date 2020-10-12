@@ -1,0 +1,26 @@
+stages:
+  - lint
+  - sonar-scanner
+  - deploy
+eslint:
+ stage: lint
+ script:
+ - npm install
+ - eslint --ext .jsx,.js,.ts src/
+ allow_failure: true
+ only:
+  - merge_requests
+sonar-scanner:
+ stage: sonar-scanner
+ script:
+   - source /etc/environment
+   - sonar-scanner -Dsonar.projectKey=metagon-curator-business -Dsonar.sources=. -Dsonar.host.url=$SONAR_HOST -Dsonar.login=$SONAR_KEY
+ only:
+   - development
+   - master
+deploy:
+ stage: deploy
+ script:
+   - rsync -aurvz --delete -e 'ssh -p 22' --stats --include='build/***' --exclude='*' . $user@$host:$path;
+ only:
+   - master

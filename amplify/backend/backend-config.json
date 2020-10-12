@@ -1,0 +1,10 @@
+{
+	"auth": {
+		"metagon99fcca73": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": [],
+			"customAuth": false
+		}
+	}
+}
