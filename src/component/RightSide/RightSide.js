@@ -432,21 +432,14 @@ margin:0 10px;
 moment.locale('en-GB')
 const localizer = momentLocalizer(moment)
 const bucket = process.env.REACT_APP_BUCKET_NAME
-// const dir = process.env.REACT_APP_DIRNAME
 const region = process.env.REACT_APP_REGION
-// const accessKey = process.env.REACT_APP_ACCESS_KEY_ID
-// const Secret = process.env.REACT_APP_SECRET_ACCESS_KEY
-// const config = {
-//   bucketName: bucket,
-//   dirName: dir,
-//   region: region,
-//   accessKeyId: accessKey,
-//   secretAccessKey:Secret,
-// }
 
-AWS.config.update({region: region});
 
+// AWS.config.update({region: region});
+console.log(AWS.config)
 let s3 = new AWS.S3({apiVersion: '2006-03-01'});
+
+
 let myInput
 const RightSide = (props) => {
   // const { loading } = props;
