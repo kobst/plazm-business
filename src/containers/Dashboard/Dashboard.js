@@ -25,7 +25,7 @@ margin:35px auto 0;
 }
 `
 
-
+process.env.AWS_SDK_LOAD_CONFIG = true;
 const Dashboard = () => {
   const [placeValue,setPlace]=useState()
     useEffect(() => {

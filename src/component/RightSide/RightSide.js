@@ -41,7 +41,6 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { MentionsInput, Mention } from 'react-mentions'
 import { Scrollbars } from 'react-custom-scrollbars';
-process.env.AWS_SDK_LOAD_CONFIG = true;
 import AWS from 'aws-sdk';
 
 const RightSection = styled.div`
@@ -434,7 +433,6 @@ moment.locale('en-GB')
 const localizer = momentLocalizer(moment)
 const bucket = process.env.REACT_APP_BUCKET_NAME
 const region = process.env.REACT_APP_REGION
-
 
 AWS.config.update({region: region});
 
