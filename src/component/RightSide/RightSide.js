@@ -41,6 +41,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { MentionsInput, Mention } from 'react-mentions'
 import { Scrollbars } from 'react-custom-scrollbars';
+process.env.AWS_SDK_LOAD_CONFIG = true;
 import AWS from 'aws-sdk';
 
 const RightSection = styled.div`
@@ -435,8 +436,8 @@ const bucket = process.env.REACT_APP_BUCKET_NAME
 const region = process.env.REACT_APP_REGION
 
 
-// AWS.config.update({region: region});
-console.log(AWS.config)
+AWS.config.update({region: region});
+
 let s3 = new AWS.S3({apiVersion: '2006-03-01'});
 
 
