@@ -8,6 +8,7 @@ import GalleryImg1 from '../../../images/gallery-img1.png'
 import GalleryWishlist from '../../../images/wishlist-gallery.svg'
 import GallerModalBox from '../../Add-Gallery/index'
 import reactS3 from 'react-s3'
+import AWS from 'aws-sdk';
 
 const GallerySection = styled.div`
 margin-top: 20px;
@@ -23,26 +24,32 @@ img{
 }
 `
 const bucket = process.env.REACT_APP_BUCKET_NAME
-const dir = process.env.REACT_APP_DIRNAME
 const region = process.env.REACT_APP_REGION
-const accessKey = process.env.REACT_APP_ACCESS_KEY_ID
-const Secret = process.env.REACT_APP_SECRET_ACCESS_KEY
-const config = {
-  bucketName: bucket,
-  dirName: dir,
-  region: region,
-  accessKeyId: accessKey,
-  secretAccessKey:Secret,
-}
+// const config = {
+//   bucketName: bucket,
+//   dirName: dir,
+//   region: region,
+//   accessKeyId: accessKey,
+//   secretAccessKey:Secret,
+// }
+
+AWS.config.update({region: region});
+
+let s3 = new AWS.S3({apiVersion: '2006-03-01'});
+
 const Gallery = (props) => {
   const [isOpen,setIsOpen]= useState(false)
   let myInput
   const upload =async(e)=> {
     const imageArr= props.image
     if(imageArr.length<5){
-   const data = await reactS3.uploadFile(e.target.files[0],config)
-    imageArr.push(data.location)
-    props.setImage([...imageArr])
+      let params = {Bucket: bucket, Key: e.target.files[0].name, Body: e.target.files[0]};
+      s3.upload(params, function(err, data) {
+         console.log(err, data);
+    })
+  //  const data = await reactS3.uploadFile(e.target.files[0],config)
+  //   imageArr.push(data.location)
+  //   props.setImage([...imageArr])
     }
     }
     const CancelPost= (v)=>{

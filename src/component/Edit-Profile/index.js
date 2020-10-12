@@ -12,6 +12,7 @@ import MapPin from '../../images/map-pin.svg'
 import history from '../../utils/history'
 import "@pathofdev/react-tag-input/build/index.css";
 import TimePicker from 'react-bootstrap-time-picker';
+import AWS from 'aws-sdk';
 // import GallerySec from '../UI/Gallery'
 // import ReactTagInput from "@pathofdev/react-tag-input";
 import GoogleMapReact from 'google-map-react';
@@ -20,18 +21,23 @@ import FindAddressValue from '../../utils/findAddress'
 import reactS3 from 'react-s3'
 import TagInputCross from '../../images/Mask.svg'
 const bucket = process.env.REACT_APP_BUCKET_NAME
-const dir = process.env.REACT_APP_DIRNAME
+// const dir = process.env.REACT_APP_DIRNAME
 const region = process.env.REACT_APP_REGION
-const accessKey = process.env.REACT_APP_ACCESS_KEY_ID
-const Secret = process.env.REACT_APP_SECRET_ACCESS_KEY
+// const accessKey = process.env.REACT_APP_ACCESS_KEY_ID
+// const Secret = process.env.REACT_APP_SECRET_ACCESS_KEY
 
-const config = {
-bucketName: bucket,
-dirName: dir,
-region: region,
-accessKeyId: accessKey,
-secretAccessKey:Secret,
-}
+// const config = {
+// bucketName: bucket,
+// dirName: dir,
+// region: region,
+// accessKeyId: accessKey,
+// secretAccessKey:Secret,
+// }
+
+AWS.config.update({region: region});
+
+let s3 = new AWS.S3({apiVersion: '2006-03-01'});
+
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_API_KEY);
 Geocode.setLanguage("en");
 
@@ -536,8 +542,12 @@ console.error(error);
       }
    const upload =(e)=> {
      setPreview(URL.createObjectURL(e.target.files[0]))
-   reactS3.uploadFile(e.target.files[0],config).then(data => setImageUrl(data.location))
-   .catch(err => console.error(err))
+     let params = {Bucket: bucket, Key: e.target.files[0].name, Body: e.target.files[0]};
+     s3.upload(params, function(err, data) {
+        console.log(err, data);
+   })
+  //  reactS3.uploadFile(e.target.files[0],config).then(data => setImageUrl(data.location))
+  //  .catch(err => console.error(err))
 }
 
 const handleInputChange = (e, index) => {

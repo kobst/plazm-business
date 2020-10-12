@@ -32,15 +32,16 @@ import PostSkeleton from '../UI/Skeleton/PostSkeleton'
 // import WishlistGrey from '../../images/wishlist-grey.svg'
 // import CommentGrey from '../../images/comment-grey.svg'
 // import Mention from 'react-textarea-mention';
+// import reactS3 from 'react-s3'
 import EditModalBox from '../Edit-Post'
 import DeleteModalBox from '../Delete-Post'
 import PostModalBox from '../Post-Modal'
-import reactS3 from 'react-s3'
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { MentionsInput, Mention } from 'react-mentions'
 import { Scrollbars } from 'react-custom-scrollbars';
+import AWS from 'aws-sdk';
 
 const RightSection = styled.div`
 
@@ -431,17 +432,21 @@ margin:0 10px;
 moment.locale('en-GB')
 const localizer = momentLocalizer(moment)
 const bucket = process.env.REACT_APP_BUCKET_NAME
-const dir = process.env.REACT_APP_DIRNAME
+// const dir = process.env.REACT_APP_DIRNAME
 const region = process.env.REACT_APP_REGION
-const accessKey = process.env.REACT_APP_ACCESS_KEY_ID
-const Secret = process.env.REACT_APP_SECRET_ACCESS_KEY
-const config = {
-  bucketName: bucket,
-  dirName: dir,
-  region: region,
-  accessKeyId: accessKey,
-  secretAccessKey:Secret,
-}
+// const accessKey = process.env.REACT_APP_ACCESS_KEY_ID
+// const Secret = process.env.REACT_APP_SECRET_ACCESS_KEY
+// const config = {
+//   bucketName: bucket,
+//   dirName: dir,
+//   region: region,
+//   accessKeyId: accessKey,
+//   secretAccessKey:Secret,
+// }
+
+AWS.config.update({region: region});
+
+let s3 = new AWS.S3({apiVersion: '2006-03-01'});
 let myInput
 const RightSide = (props) => {
   // const { loading } = props;
@@ -970,16 +975,21 @@ const formats = {
   // const options = [{name: 'John Watson', id: 1},{name: 'Marie Curie', id: 2}]
 
   const upload =async(e)=> {
-    const imageArr= imageCopy
-    const imgUpload= imageUploadCopy
+    // const imageArr= imageCopy
+    // const imgUpload= imageUploadCopy
     if(imageCopy.length<5){
-   const data = await reactS3.uploadFile(e.target.files[0],config)
-    imageArr.push({id:(imageCopy.length)+1,value:data.location})
-    imgUpload.push(data.location)
-    setImageUpload([...imgUpload])
-    setImageUploadCopy([...imgUpload])
-    setImageCopy([...imageArr])
-    setImageUrl([...imageArr])
+      console.log(e.target.files[0])
+      let params = {Bucket: bucket, Key: e.target.files[0].name, Body: e.target.files[0]};
+       s3.upload(params, function(err, data) {
+          console.log(err, data);
+     })
+  //  const data = await reactS3.uploadFile(e.target.files[0],config)
+  //   imageArr.push({id:(imageCopy.length)+1,value:data.location})
+  //   imgUpload.push(data.location)
+  //   setImageUpload([...imgUpload])
+  //   setImageUploadCopy([...imgUpload])
+  //   setImageCopy([...imageArr])
+  //   setImageUrl([...imageArr])
     }
     }
 
