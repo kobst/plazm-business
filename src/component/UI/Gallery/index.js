@@ -7,8 +7,6 @@ import GalleryImg from '../../../images/gallery-img.png'
 import GalleryImg1 from '../../../images/gallery-img1.png'
 import GalleryWishlist from '../../../images/wishlist-gallery.svg'
 import GallerModalBox from '../../Add-Gallery/index'
-import reactS3 from 'react-s3'
-import AWS from 'aws-sdk';
 
 const GallerySection = styled.div`
 margin-top: 20px;
@@ -23,19 +21,8 @@ img{
   padding: 0px;
 }
 `
-const bucket = process.env.REACT_APP_BUCKET_NAME
-const region = process.env.REACT_APP_REGION
-// const config = {
-//   bucketName: bucket,
-//   dirName: dir,
-//   region: region,
-//   accessKeyId: accessKey,
-//   secretAccessKey:Secret,
-// }
+const bucket = process.env.REACT_APP_BUCKET
 
-AWS.config.update({region: region});
-
-let s3 = new AWS.S3({apiVersion: '2006-03-01'});
 
 const Gallery = (props) => {
   const [isOpen,setIsOpen]= useState(false)
@@ -43,13 +30,36 @@ const Gallery = (props) => {
   const upload =async(e)=> {
     const imageArr= props.image
     if(imageArr.length<5){
-      let params = {Bucket: bucket, Key: e.target.files[0].name, Body: e.target.files[0]};
-      s3.upload(params, function(err, data) {
-         console.log(err, data);
-    })
-  //  const data = await reactS3.uploadFile(e.target.files[0],config)
-  //   imageArr.push(data.location)
-  //   props.setImage([...imageArr])
+      const file = e.target.files[0]
+      const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${file.name}`
+      const value = await fetch(`${process.env.REACT_APP_API_URL}/api/upload_photo`, {
+       method: 'POST',
+       headers: {
+         'Content-Type': 'application/json',
+       },
+       body: JSON.stringify({
+         Key:file.name,
+         ContentType:file.type
+       })
+     });
+     const body =await value.text();
+     const Val = JSON.parse(body)
+ 
+     await fetch(Val, { 
+     method: 'PUT',
+     headers: {
+       "Content-Type": file.type,
+     },
+     body: file 
+   }).then(
+     response => {
+       imageArr.push(baseUrl)
+       props.setImage([...imageArr])
+     }
+     
+   ).catch(
+     error => console.log(error) // Handle the error response object
+   )
     }
     }
     const CancelPost= (v)=>{

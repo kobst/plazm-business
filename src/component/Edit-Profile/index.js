@@ -12,31 +12,14 @@ import MapPin from '../../images/map-pin.svg'
 import history from '../../utils/history'
 import "@pathofdev/react-tag-input/build/index.css";
 import TimePicker from 'react-bootstrap-time-picker';
-import AWS from 'aws-sdk';
 // import GallerySec from '../UI/Gallery'
 // import ReactTagInput from "@pathofdev/react-tag-input";
 import GoogleMapReact from 'google-map-react';
 import Geocode from "react-geocode";
 import FindAddressValue from '../../utils/findAddress'
-import reactS3 from 'react-s3'
 import TagInputCross from '../../images/Mask.svg'
-const bucket = process.env.REACT_APP_BUCKET_NAME
-// const dir = process.env.REACT_APP_DIRNAME
-const region = process.env.REACT_APP_REGION
-// const accessKey = process.env.REACT_APP_ACCESS_KEY_ID
-// const Secret = process.env.REACT_APP_SECRET_ACCESS_KEY
 
-// const config = {
-// bucketName: bucket,
-// dirName: dir,
-// region: region,
-// accessKeyId: accessKey,
-// secretAccessKey:Secret,
-// }
-
-AWS.config.update({region: region});
-
-let s3 = new AWS.S3({apiVersion: '2006-03-01'});
+const bucket = process.env.REACT_APP_BUCKET
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_API_KEY);
 Geocode.setLanguage("en");
@@ -425,7 +408,6 @@ const EditProfile = ({ value }) => {
     );
 
       const removeTag = (i) => {
-        // console.log(i)
        const newTags = [ ...tags ];
        newTags.splice(i, 1);
        setTags(newTags)
@@ -540,14 +522,35 @@ console.error(error);
         }
        );
       }
-   const upload =(e)=> {
+   const upload = async (e)=> {
      setPreview(URL.createObjectURL(e.target.files[0]))
-     let params = {Bucket: bucket, Key: e.target.files[0].name, Body: e.target.files[0]};
-     s3.upload(params, function(err, data) {
-        console.log(err, data);
-   })
-  //  reactS3.uploadFile(e.target.files[0],config).then(data => setImageUrl(data.location))
-  //  .catch(err => console.error(err))
+     const file = e.target.files[0]
+     const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${file.name}`
+     const value = await fetch(`${process.env.REACT_APP_API_URL}/api/upload_photo`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        Key:file.name,
+        ContentType:file.type
+      })
+    });
+    const body =await value.text();
+    const Val = JSON.parse(body)
+
+    await fetch(Val, { 
+    method: 'PUT',
+    headers: {
+      "Content-Type": file.type,
+    },
+    body: file 
+  }).then(
+    response => setImageUrl(baseUrl)
+    
+  ).catch(
+    error => console.log(error) // Handle the error response object
+  )
 }
 
 const handleInputChange = (e, index) => {

@@ -2,8 +2,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import PlusIcon from '../../../images/plus.svg'
-import reactS3 from 'react-s3'
-import AWS from 'aws-sdk';
 
 const GallerySection = styled.div`
 margin-top: 20px;
@@ -18,33 +16,43 @@ img{
   padding: 0px;
 }
 `
-const bucket = process.env.REACT_APP_BUCKET_NAME
-// const dir = process.env.REACT_APP_DIRNAME
-const region = process.env.REACT_APP_REGION
-// const accessKey = process.env.REACT_APP_ACCESS_KEY_ID
-// const Secret = process.env.REACT_APP_SECRET_ACCESS_KEY
-// const config = {
-//   bucketName: bucket,
-//   dirName: dir,
-//   region: region,
-//   accessKeyId: accessKey,
-//   secretAccessKey:Secret,
-// }
-
-AWS.config.update({region: region});
-
-let s3 = new AWS.S3({apiVersion: '2006-03-01'});
-
+const bucket = process.env.REACT_APP_BUCKET
 const Gallery = (props) => {
   const [counter,setCounter]= useState(0)
   let myInput
   const upload =async(e)=> {
     const imageArr= props.image
     if(imageArr.length<1&& counter<1){
-      let params = {Bucket: bucket, Key: e.target.files[0].name, Body: e.target.files[0]};
-      s3.upload(params, function(err, data) {
-         console.log(err, data);
-    })
+      const file = e.target.files[0]
+      const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${file.name}`
+      const value = await fetch(`${process.env.REACT_APP_API_URL}/api/upload_photo`, {
+       method: 'POST',
+       headers: {
+         'Content-Type': 'application/json',
+       },
+       body: JSON.stringify({
+         Key:file.name,
+         ContentType:file.type
+       })
+     });
+     const body =await value.text();
+     const Val = JSON.parse(body)
+ 
+     await fetch(Val, { 
+     method: 'PUT',
+     headers: {
+       "Content-Type": file.type,
+     },
+     body: file 
+   }).then(
+     response => {
+       imageArr.push(baseUrl)
+       props.setImage([...imageArr])
+     }
+     
+   ).catch(
+     error => console.log(error) // Handle the error response object
+   )
   //     setCounter(1)
   //  const data = await reactS3.uploadFile(e.target.files[0],config)
   //   imageArr.push(data.location)

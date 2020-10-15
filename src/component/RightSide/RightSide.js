@@ -41,7 +41,6 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { MentionsInput, Mention } from 'react-mentions'
 import { Scrollbars } from 'react-custom-scrollbars';
-import AWS from 'aws-sdk';
 
 const RightSection = styled.div`
 
@@ -431,12 +430,8 @@ margin:0 10px;
 
 moment.locale('en-GB')
 const localizer = momentLocalizer(moment)
-const bucket = process.env.REACT_APP_BUCKET_NAME
-const region = process.env.REACT_APP_REGION
+const bucket = process.env.REACT_APP_BUCKET
 
-AWS.config.update({region: region});
-
-let s3 = new AWS.S3({apiVersion: '2006-03-01'});
 
 
 let myInput
@@ -889,6 +884,7 @@ const formats = {
     }
   }
   
+
   const addPost = async () => {
     if (Validation()) {
       setSaveDisable(true)
@@ -907,7 +903,7 @@ const formats = {
       });
       const body = await response.text();
         setPostRef(true)
-        setDescription('')
+        CancelPost()
       return body
     }
 
@@ -967,22 +963,58 @@ const formats = {
   // const options = [{name: 'John Watson', id: 1},{name: 'Marie Curie', id: 2}]
 
   const upload =async(e)=> {
-    // const imageArr= imageCopy
-    // const imgUpload= imageUploadCopy
+    const imageArr= imageCopy
+    const imgUpload= imageUploadCopy
+    const file = e.target.files[0]
+    const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${file.name}`
     if(imageCopy.length<5){
-      console.log(e.target.files[0])
-      let params = {Bucket: bucket, Key: e.target.files[0].name, Body: e.target.files[0]};
-       s3.upload(params, function(err, data) {
-          console.log(err, data);
-     })
-  //  const data = await reactS3.uploadFile(e.target.files[0],config)
-  //   imageArr.push({id:(imageCopy.length)+1,value:data.location})
-  //   imgUpload.push(data.location)
-  //   setImageUpload([...imgUpload])
-  //   setImageUploadCopy([...imgUpload])
-  //   setImageCopy([...imageArr])
-  //   setImageUrl([...imageArr])
+    const value = await fetch(`${process.env.REACT_APP_API_URL}/api/upload_photo`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        Key:file.name,
+        ContentType:file.type
+      })
+    });
+    const body =await value.text();
+    const Val = JSON.parse(body)
+
+    await fetch(Val, { 
+    method: 'PUT',
+    headers: {
+      "Content-Type": file.type,
+    },
+    body: file 
+  }).then(
+    response => {
+    imageArr.push({id:(imageCopy.length)+1,value:baseUrl})
+    imgUpload.push(baseUrl)
+    setImageUpload([...imgUpload])
+    setImageUploadCopy([...imgUpload])
+    setImageCopy([...imageArr])
+    setImageUrl([...imageArr])
+    
+  }
+  ).catch(
+    error => console.log(error) // Handle the error response object
+  )
     }
+
+    // if(imageCopy.length<5){
+    //   console.log(e.target.files[0])
+    //   let params = {Bucket: bucket, Key: e.target.files[0].name, Body: e.target.files[0]};
+    //    s3.upload(params, function(err, data) {
+    //       console.log(err, data);
+    //  })
+  //  const data = await reactS3.uploadFile(e.target.files[0],config)
+    // imageArr.push({id:(imageCopy.length)+1,value:data.location})
+    // imgUpload.push(data.location)
+    // setImageUpload([...imgUpload])
+    // setImageUploadCopy([...imgUpload])
+    // setImageCopy([...imageArr])
+    // setImageUrl([...imageArr])
     }
 
     const deleteImage = (v)=> {
