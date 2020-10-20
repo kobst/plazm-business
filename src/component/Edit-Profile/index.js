@@ -592,7 +592,7 @@ return (
            <input id="myInput" onChange={(e)=> upload(e)} type="file" ref={(ref) => myInput = ref} style={{ display: 'none' }} />
              <TopProfile onClick={(e) => myInput.click() }>
               {typeof preview!==undefined || (typeof value !== 'undefined'&& value.default_image_url)?
-                <img src={ preview? preview : imageUrl} alt='img'/>: null
+                <img src={ preview? preview : imageUrl} alt=''/>: null
            }
         </TopProfile>
           <LabelRight>

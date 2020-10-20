@@ -41,6 +41,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { MentionsInput, Mention } from 'react-mentions'
 import { Scrollbars } from 'react-custom-scrollbars';
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const RightSection = styled.div`
 
@@ -471,7 +472,8 @@ const RightSide = (props) => {
   const [mentionarray,setMentionArray]= useState([])
   const [toolbarRef, setToolbarRef] = useState(null)
   const [postRef,setPostRef]= useState(false)
-
+  const [arrPositon,setArrPosition]= useState(10)
+  const [eventPosition,setEventPosition]= useState(10)
   useEffect(() => {
     let updateUser = async authState => {
       try {
@@ -967,6 +969,18 @@ const formats = {
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   // const options = [{name: 'John Watson', id: 1},{name: 'Marie Curie', id: 2}]
 
+  const fetchMoreData = () => {
+    setTimeout(() => {
+      setArrPosition(arrPositon+10)
+    }, 4000);
+  };
+
+  const fetchMoreEvents = () => {
+    setTimeout(() => {
+      setEventPosition(eventPosition+10)
+    }, 4000);
+  };
+
   const upload =async(e)=> {
     const imageArr= imageCopy
     const imgUpload= imageUploadCopy
@@ -1125,7 +1139,13 @@ const formats = {
                 
                 <EventList>
                 <Scrollbars autoHeight autoHeightMax={566}>
-                  {eventList ? eventList.map(v =>
+                <InfiniteScroll
+          dataLength={eventPosition}
+          next={fetchMoreEvents}
+          hasMore={true}
+          loader={eventList && eventPosition<= eventList.length ? <div style={{textAlign:'center' ,margin:' 40px auto 0'}}> <ValueLoader height="40" width="40" /></div>:null}
+            >
+                  {eventList ? eventList.slice(0,eventPosition).map(v =>
                     <>
                       {v.name ?
                         <EventListing>
@@ -1142,6 +1162,7 @@ const formats = {
                       }
                     </>) : <><EventSkeleton /><EventSkeleton /><EventSkeleton /><EventSkeleton /></>
                   }
+                  </InfiniteScroll>
                   </Scrollbars>
                 </EventList>
               </AllEvent>
@@ -1233,8 +1254,14 @@ const formats = {
          <PostModalBox isOpen={postOpen} closeModal={() => setPostOpen(false)} value={content} place={place} />
          <EditModalBox setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={userMentionData} value={content} />
           <DeleteModalBox  setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
+          <InfiniteScroll
+          dataLength={arrPositon}
+          next={fetchMoreData}
+          hasMore={true}
+          loader={allFeed && arrPositon<= allFeed.length ? <div style={{textAlign:'center' ,margin:' 40px auto 0'}}> <ValueLoader height="40" width="40" /></div>:null}
+            >
                     {typeof allFeed !== 'undefined' ?
-                      allFeed.map(v => (
+                      allFeed.slice(0,arrPositon).map(v => (
                         <FeedListing>
                           <FeedImage><img src={place.default_image_url?place.default_image_url:Watermark} alt="Event" /></FeedImage>
                           <EventText>
@@ -1282,6 +1309,7 @@ const formats = {
                           </EventText>
                         </FeedListing>)) : null
                     }
+                    </InfiniteScroll>
                    
 
 
