@@ -200,6 +200,8 @@ const handleEdit= async () => {
     });
     const body = await response.text();
     setIsOpen(false)
+    setEdit(false)
+    setSaveDisable(false)
     setEvent()
     return body
 

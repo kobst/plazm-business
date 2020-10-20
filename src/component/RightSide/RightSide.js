@@ -556,6 +556,7 @@ const formats = {
   const eventManage = (sol) => {
     let eventArr = []
     setEvent(eventArr)
+    if(viewState!=='month'){
     // eslint-disable-next-line array-callback-return
     sol.map(v => {
       if (v.eventSchedule.recurring === 'weekly' || v.eventSchedule.recurring === 'Weekly') {
@@ -647,6 +648,10 @@ const formats = {
 
       }
     })
+  }
+  else{
+    setEvent(eventArr)
+  }
   }
 
   const ConvertNumberToTwoDigitString = (n) => {
@@ -1051,7 +1056,7 @@ const formats = {
               <AddModalBox setEvent={setEvent} editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
               <CalenderSection>
         <div className={ calenderView === 'month'? "monthView": null}>
-        {calenderView === 'month' ?
+        {calenderView === 'month' && typeof event !== 'undefined' ?
     <EventMenu>
       <div className="dateWrap">{returnTodayDate()}</div>
       <h4>Upcoming Events in September</h4>
@@ -1101,23 +1106,13 @@ const formats = {
                     );
                   }
                 },
-
-                // week:{ 
-                //   header:(props)=>{
-                //     console.log(props)
-                //     return (
-                //       <span>{props.label}</span>
-                //     );
-                //   }
-
-                // }
               }}
               defaultView={viewState}
               step={60}
               onView={(e) => (setCalenderView(e),setViewState(e))}
               views={['day', 'week', 'month',]}
               style={{ height: 463, width:'100%'}}
-            /> : <div className="loader"> <ValueLoader height="70" width="70" /></div>
+            /> : <div className="loader" style={{textAlign:'center' ,margin:' 40px auto 0'}}> <ValueLoader height="70" width="70" /></div>
 
           }
         </div>
