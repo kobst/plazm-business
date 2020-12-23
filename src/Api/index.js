@@ -9,8 +9,19 @@ export const callPlace = async(userSub) => {
   const val = JSON.parse(body)
   return val
   }
-  export const fetchItems = async(id) => {
-    const response= await fetch(`${process.env.REACT_APP_API_URL}/api/items/${id}`, {
+  export const fetchPosts = async(id) => {
+    const response= await fetch(`${process.env.REACT_APP_API_URL}/api/posts/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  const body = await response.text();
+  const val = JSON.parse(body)
+  return val
+  }
+  export const fetchEvents = async(id) => {
+    const response= await fetch(`${process.env.REACT_APP_API_URL}/api/events/${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

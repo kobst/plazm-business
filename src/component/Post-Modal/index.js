@@ -28,8 +28,8 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
 
  useEffect(() => {
      if(value){
-      setDescription(value.content)
-      setImage(value.item_photo)
+      setDescription(value.data)
+      setImage(value.media)
      }
     
  // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -46,7 +46,7 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
   else if(image.length===1){
     return(
       <div className="imageSlider">
-   <img src={image[0]} alt="img" />
+   <img src={image[0].image} alt="img" />
   </div>
     )
   }

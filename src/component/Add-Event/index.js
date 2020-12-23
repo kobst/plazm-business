@@ -125,27 +125,28 @@ const AddModalBox = ({ isOpen,setEvent,events,value, data, editValue, setEdit, s
    if(val){
    setDescription(val.content)
    setRecurring(val.eventSchedule.recurring)
-   setImage(val.item_photo)
+   setImage(val.media)
    }
   }
 
   const addEvent = async () => {
     if(Validation()){
       setSaveDisable(true)
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/items`, {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/events`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name: title,
-        place_id: data._id,
-        content:description,
-        scheduledEvent: "yes",
+        title: title,
+        business: data._id,
+        description:description,
+        eventSchedule: {
+         start_time: start,
+          end_time: end,
+        },
         recurring: recurring,
-        start_time: start,
-        end_time: end,
-        item_photo:image
+        media:image
       })
     });
     const body = await response.text();
@@ -160,21 +161,22 @@ const AddModalBox = ({ isOpen,setEvent,events,value, data, editValue, setEdit, s
 const handleEdit= async () => {
   if(Validation()){
     setSaveDisable(true)
-  const response= await fetch(`${process.env.REACT_APP_API_URL}/api/items`, {
+  const response= await fetch(`${process.env.REACT_APP_API_URL}/api/events`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         _id:id,
-        name:title,
-        place_id:data._id,
-        scheduledEvent:"yes",
-        content:description,
-        recurring:recurring,
-        start_time:start,
-        end_time:end,
-        item_photo:image,
+        title: title,
+        business: data._id,
+        description:description,
+        eventSchedule: {
+         start_time: start,
+          end_time: end,
+        },
+        recurring: recurring,
+        media:image
 
 
     })
@@ -189,7 +191,7 @@ const handleEdit= async () => {
   }
 
   const handleDelete = async () => {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/item-delete`, {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/event-delete`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

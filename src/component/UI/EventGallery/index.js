@@ -46,7 +46,7 @@ const Gallery = (props) => {
      body: file 
    }).then(
      response => {
-       imageArr.push(baseUrl)
+       imageArr.push({image:baseUrl})
        props.setImage([...imageArr])
      }
      
@@ -61,7 +61,7 @@ const Gallery = (props) => {
     }
     const CancelPost= (v)=>{
       setCounter(0)
-      const deleteImage = props.image.filter((item) => item !== v)
+      const deleteImage = props.image.filter((item) => item.image !== v.image)
       props.setImage([...deleteImage])
     }
     return(
@@ -69,7 +69,7 @@ const Gallery = (props) => {
       <GallerySection className="Imgcontent">
         {props.image.length!==0 ?(props.image.map(v => 
                     <div onClick={()=>CancelPost(v)} className="EventsImage">
-                    <img className="" src={v} alt="" />
+                    <img className="" src={v.image} alt="" />
                   </div>)): <div className="galleryImage">
         <input id="myInput" onChange={(e)=> upload(e)} type="file"  ref={(ref) => myInput = ref} style={{ display: 'none' }} />
           <p onClick={(e) => myInput.click()}><img src={PlusIcon} alt="" /> Photo</p>

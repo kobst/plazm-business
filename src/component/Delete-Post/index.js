@@ -10,7 +10,7 @@ const DeleteModalBox = ({ isOpen,closeModal,postId,setDeleteOpen}) => {
 
 
   const handleDelete = async () => {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/item-delete`, {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/post-delete`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
