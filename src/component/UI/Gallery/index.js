@@ -53,7 +53,7 @@ const Gallery = (props) => {
      body: file 
    }).then(
      response => {
-       imageArr.push(baseUrl)
+       imageArr.push({image:baseUrl})
        props.setImage([...imageArr])
      }
      
@@ -63,7 +63,7 @@ const Gallery = (props) => {
     }
     }
     const CancelPost= (v)=>{
-      const deleteImage = props.image.filter((item) => item !== v)
+      const deleteImage = props.image.filter((item) => item.image !== v.image)
       props.setImage([...deleteImage])
     }
     return(
@@ -77,7 +77,7 @@ const Gallery = (props) => {
         </div>
         {typeof props.image!=='undefined' ?(props.image.map(v => 
                     <div onClick={()=>CancelPost(v)} className="galleryImage">
-                    <img src={v} alt="" />
+                    <img src={v.image} alt="" />
                   </div>)): null
                   }
       </GallerySection>

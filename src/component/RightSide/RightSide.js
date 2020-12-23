@@ -9,7 +9,7 @@ import { Auth } from 'aws-amplify';
 import AddModalBox from '../Add-Event/index'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
-import { callPlace, fetchItems, fetchUsers } from '../../Api'
+import { callPlace, fetchPosts,fetchEvents, fetchUsers } from '../../Api'
 import ValueLoader from '../../utils/loader'
 import { RRule } from 'rrule'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -492,21 +492,19 @@ const RightSide = (props) => {
         setPlace(place[0])
         if (place && place.length !== 0) {
 
-          const val = await fetchItems(place[0]._id)
-          const sol = val.filter(v => v.eventSchedule !== null && v.eventSchedule && v.eventSchedule.start_time!== null)
-          const feed = val.filter(v => (!v.eventSchedule || v.eventSchedule === null)).reverse()
-          const allMentions = val.filter(v => (!v.eventSchedule || v.eventSchedule === null) && (v.name !== place[0].company_name) && v.name)
-          const upEvent = sol.filter(v=>(new Date(v.eventSchedule.start_time)>=new Date()))
+          const val = await fetchPosts(place[0]._id)
+          const events = await fetchEvents(place[0]._id)
+          const upEvent = events.filter(v=>(new Date(v.eventSchedule.start_time)>=new Date()))
           setUpcomingEvents(upEvent)
           setEvent()
           setMention('Public')
           setActivePublic(true)
           setPosts(val)
-          setEventList(sol.reverse())
-          setFeed(feed)
-          setAllFeed(feed)
-          setAllMentions(allMentions)
-          eventManage(sol)
+          setEventList(events.reverse())
+          setFeed(val)
+          setAllFeed(val)
+          setAllMentions(val)
+          eventManage(events)
           setPostRef(false)
           setSaveDisable(false)
           setDetails()
@@ -561,7 +559,7 @@ const formats = {
     if(viewState!=='month'){
     // eslint-disable-next-line array-callback-return
     sol.map(v => {
-      if (v.eventSchedule.recurring === 'weekly' || v.eventSchedule.recurring === 'Weekly') {
+      if (v.recurring === 'weekly' || v.recurring === 'Weekly') {
         const weeklyStartRule = new RRule({
           freq: RRule.WEEKLY,
           dtstart: new Date(v.eventSchedule.start_time),
@@ -578,7 +576,7 @@ const formats = {
           const num2 = weeklyEndRule.all().filter(onlyUnique)[index];
           eventArr.push({
             id: v._id,
-            title: v.name,
+            title: v.title,
             start: num1,
             end: num2,
           })
@@ -586,7 +584,7 @@ const formats = {
         setEvent(eventArr)
         setEventCopy(eventArr)
       }
-      else if (v.eventSchedule.recurring === 'daily' || v.eventSchedule.recurring === 'Daily') {
+      else if (v.recurring === 'daily' || v.recurring === 'Daily') {
         const dailyStartRule = new RRule({
           freq: RRule.DAILY,
           dtstart: new Date(v.eventSchedule.start_time),
@@ -603,7 +601,7 @@ const formats = {
           const num2 = dailyEndRule.all().filter(onlyUnique)[index];
           eventArr.push({
             id: v._id,
-            title: v.name,
+            title: v.title,
             start: num1,
             end: num2,
           })
@@ -611,7 +609,7 @@ const formats = {
         setEventCopy(eventArr)
         setEvent(eventArr)
       }
-      else if (v.eventSchedule.recurring === 'mondayFriday' || v.eventSchedule.recurring === 'Monday-Friday') {
+      else if (v.recurring === 'mondayFriday' || v.recurring === 'Monday-Friday') {
         const weekDayStartRule = new RRule({
           freq: RRule.WEEKLY,
           dtstart: new Date(v.eventSchedule.start_time),
@@ -630,7 +628,7 @@ const formats = {
           const num2 = weekDayEndRule.all().filter(onlyUnique)[index];
           eventArr.push({
             id: v._id,
-            title: v.name,
+            title: v.title,
             start: num1,
             end: num2,
           })
@@ -641,7 +639,7 @@ const formats = {
       else {
         eventArr.push({
           id: v._id,
-          title: v.name,
+          title: v.title,
           start: new Date(v.eventSchedule.start_time),
           end: new Date(v.eventSchedule.end_time),
         })
@@ -895,17 +893,16 @@ const formats = {
   const addPost = async () => {
     if (Validation()) {
       setSaveDisable(true)
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/items`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/posts`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          place_id: place._id,
-          content: description,
-          scheduledEvent: "no",
-          item_photo:imageUpload,
-          mentions:mentionarray,
+          business: place._id,
+          data: description,
+          media:imageUpload,
+          taggedUsers:mentionarray,
         })
       });
       const body = await response.text();
@@ -930,7 +927,7 @@ const formats = {
   const handleChange = (event, newValue, newPlainTextValue, mentions) => {
     const valueArr= mentionarray
     if(mentions.length!==0){
-    valueArr.push(mentions[0])
+    valueArr.push(mentions[0].id)
     setMentionArray(valueArr)
     }
     setDescription(newPlainTextValue)
@@ -949,11 +946,12 @@ const formats = {
   }
 
   const findDesc = (value,mentions)=>{
+    console.log(mentions)
   let divContent=value
-   // eslint-disable-next-line array-callback-return
+  //  eslint-disable-next-line array-callback-return
    mentions.map(v=>{
-   let re = new RegExp(v.display, 'g');
-   divContent = divContent.replace(re, '<h2>' + v.display + '</h2>');
+   let re = new RegExp(v.name, 'g');
+   divContent = divContent.replace(re, '<h2>' + v.name + '</h2>');
    })
    if(mentions.length!==0){
    return (<>
@@ -1009,7 +1007,7 @@ const formats = {
   }).then(
     response => {
     imageArr.push({id:(imageCopy.length)+1,value:baseUrl})
-    imgUpload.push(baseUrl)
+    imgUpload.push({image:baseUrl})
     setImageUpload([...imgUpload])
     setImageUploadCopy([...imgUpload])
     setImageCopy([...imageArr])
@@ -1076,9 +1074,9 @@ const formats = {
       <h4>Upcoming Events in September</h4>
       {upComingEvents ? upComingEvents.map(v =>
         <>
-          {v.name ?
+          {v.title ?
             <MonthEventList>
-              <p>{v.name}</p>
+              <p>{v.title}</p>
               <span>{getDate(v.eventSchedule.start_time)}</span>
             </MonthEventList> : null
           }
@@ -1147,16 +1145,16 @@ const formats = {
             >
                   {eventList ? eventList.slice(0,eventPosition).map(v =>
                     <>
-                      {v.name ?
+                      {v.title ?
                         <EventListing>
                           <EventText>
-                            <h3>{v.name}</h3>
+                            <h3>{v.title}</h3>
                             {/* <p>{v.eventSchedule.recurring}</p> */}
                             <span>{getDate(v.eventSchedule.start_time)}</span>
-                            <p>{v.content}</p>
+                            <p>{v.description}</p>
                           </EventText>
-                          {v.item_photo.length>0?
-                          <EventImage><img src={v.item_photo[0]} alt=""/></EventImage>
+                          {v.media && v.media.length>0?
+                          <EventImage><img src={v.media[0].image} alt=""/></EventImage>
                             :null }
                         </EventListing> : null
                       }
@@ -1267,7 +1265,7 @@ const formats = {
                           <EventText>
                             <span>{(getDate(v.updatedAt))}</span>
                             <h3 onClick={() => postOpenFunc(v)}>{v.name ? v.name : place.company_name}</h3>
-                            <p>{findDesc(v.content,v.mentions)}</p>
+                            <p>{findDesc(v.data,v.taggedUsers)}</p>
                             <Icon>
                             <EditRomve>
               

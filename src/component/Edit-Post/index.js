@@ -15,10 +15,12 @@ const EditModalBox = ({ isOpen,closeModal,users,value,setIsOpen}) => {
 
   useEffect(() => {
       if(value){
-       setDescription(value.content)
-       setImage(value.item_photo)
-       if(value.mentions){
-         setMentionArray(value.mentions)
+       setDescription(value.data)
+       setImage(value.media)
+       if(value.taggedUsers){
+         const arrayValue = mentionArray
+        value.taggedUsers.map(v=> arrayValue.push(v._id))
+         setMentionArray(arrayValue)
        }
       }
      
@@ -35,18 +37,24 @@ const EditModalBox = ({ isOpen,closeModal,users,value,setIsOpen}) => {
 
 const handleEdit= async () => {
   if(Validation()){
-  const response= await fetch(`${process.env.REACT_APP_API_URL}/api/items`, {
+    console.log(JSON.stringify({
+      _id:value._id,
+      business:value.place_id,
+      data:description,
+      media:image,
+      taggedUsers:mentionArray,
+  }))
+  const response= await fetch(`${process.env.REACT_APP_API_URL}/api/posts`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         _id:value._id,
-        name:value.name,
-        place_id:value.place_id,
-        content:description,
-        item_photo:image,
-        mentions:mentionArray,
+        business:value.place_id,
+        data:description,
+        media:image,
+        taggedUsers:mentionArray,
     })
   });
     const body = await response.text();
@@ -58,7 +66,7 @@ const handleEdit= async () => {
   const handleChange = (event, newValue, newPlainTextValue, mentions) => {
     const valueArr= mentionArray
     if(mentions.length!==0){
-    valueArr.push(mentions[0])
+    valueArr.push(mentions[0].id)
     setMentionArray(valueArr)
     }
     setDescription(newPlainTextValue)
