@@ -946,7 +946,6 @@ const formats = {
   }
 
   const findDesc = (value,mentions)=>{
-    console.log(mentions)
   let divContent=value
   //  eslint-disable-next-line array-callback-return
    mentions.map(v=>{
