@@ -37,13 +37,6 @@ const EditModalBox = ({ isOpen,closeModal,users,value,setIsOpen}) => {
 
 const handleEdit= async () => {
   if(Validation()){
-    console.log(JSON.stringify({
-      _id:value._id,
-      business:value.place_id,
-      data:description,
-      media:image,
-      taggedUsers:mentionArray,
-  }))
   const response= await fetch(`${process.env.REACT_APP_API_URL}/api/posts`, {
       method: 'PUT',
       headers: {
