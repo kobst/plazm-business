@@ -1,6 +1,7 @@
 import React, {useState,useEffect}from 'react'
 import Modal from 'react-modal'
 import CloseIcon from '../../images/cross-modal.svg'
+import Watermark from '../../images/watermark.png'
 // import Image from '../../images/user.png'
 // import WishlistIcon from '../../images/wishlist-icon.svg'
 // import CommentIcon from '../../images/comment.svg'
@@ -76,7 +77,7 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
             </button>
             <div className="postDetails">
               <div className="messageSec">
-                <div className="image"><img src={place.default_image_url?place.default_image_url:null} alt="" /></div>
+                <div className="image"><img src={place.default_image_url?place.default_image_url:Watermark} alt="" /></div>
                 <div className="text">
                    <h2>{value&&value.name ? value.name : place.company_name }</h2>
                    <span>{value ?(getDate(value.updatedAt)):null}</span>
