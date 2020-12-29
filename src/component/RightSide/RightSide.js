@@ -1204,7 +1204,7 @@ const formats = {
                       <img src={CrossIcon} alt="Cross Icon" style={{ marginRight: '0px' }} />
                     </ButtonSmall>:null
                      }
-                    <ButtonSmall onClick={() => addPost()}>{saveDisable!==true?'Publish':<ValueLoader/>}</ButtonSmall>
+                    <ButtonSmall disabled={saveDisable} onClick={() => addPost()}>{saveDisable!==true?'Publish':<ValueLoader/>}</ButtonSmall>
                   </FlexRow>
                 </div>
               </div>
