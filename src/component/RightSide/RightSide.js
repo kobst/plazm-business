@@ -696,6 +696,12 @@ const formats = {
     </>
     )
     }
+
+    const returnMonth = ()=> {
+      let today = new Date();
+      return today.toLocaleString('default', { month: 'long' })
+
+    }
   const goToDateFromMonthView = (date) => {
     if (!toolbarRef) return false
     toolbarRef.date.setMonth(date.getMonth());
@@ -1070,7 +1076,7 @@ const formats = {
         {calenderView === 'month' && typeof event !== 'undefined' ?
     <EventMenu>
       <div className="dateWrap">{returnTodayDate()}</div>
-      <h4>Upcoming Events in September</h4>
+      <h4>Upcoming Events in {returnMonth()}</h4>
       {upComingEvents ? upComingEvents.map(v =>
         <>
           {v.title ?
