@@ -44,7 +44,7 @@ const handleEdit= async () => {
       },
       body: JSON.stringify({
         _id:value._id,
-        business:value.place_id,
+        business:value.business,
         data:description,
         media:image,
         taggedUsers:mentionArray,

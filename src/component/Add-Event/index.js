@@ -123,8 +123,8 @@ const AddModalBox = ({ isOpen,setEvent,events,value, data, editValue, setEdit, s
 
    const val = events.find(v=>v._id===id)
    if(val){
-   setDescription(val.content)
-   setRecurring(val.eventSchedule.recurring)
+    setDescription(val.description)
+   setRecurring(val.recurring)
    setImage(val.media)
    }
   }
