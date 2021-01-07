@@ -100,6 +100,18 @@ export const updateBusiness = async (value,userSub) => {
             userSub: userSub,
             latitude: value.latitude,
             longitude: value.longitude,
+            city:value.city,
+            postalCode:value.postalCode,
+            stateProvince:value.stateProvince,
+            twitter: value.handles.twitter,
+            instagram: value.handles.instagram,
+            facebook: value.handles.facebook,
+            linkedin:value.handles.linkedin,
+            filterTags: value.filter_tags,
+            file:value.default_image_url,
+            price:value.price,
+            genType:value.genType,
+            openingHours:value.hours,
                 
             
       })
