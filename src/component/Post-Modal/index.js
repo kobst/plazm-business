@@ -3,18 +3,21 @@ import Modal from 'react-modal'
 import CloseIcon from '../../images/cross-modal.svg'
 import Watermark from '../../images/watermark.png'
 // import Image from '../../images/user.png'
-// import WishlistIcon from '../../images/wishlist-icon.svg'
+import WishlistIcon from '../../images/wishlist-icon.svg'
 // import CommentIcon from '../../images/comment.svg'
-// import CommnentImg from '../../images/comment-img.png'
-// import ReplyIcon from '../../images/reply.svg'
+import CommnentImg from '../../images/comment-img.png'
+import ReplyIcon from '../../images/reply.svg'
 // import Wishlistgrey from '../../images/wishlist-grey.svg'
 // import Commentgrey from '../../images/comment-grey.svg'
 // import rightarrowblack from '../../images/right-arrow-black.svg'
 import SlideShow from '../UI/SlideShow'
+import {fetchComments} from '../../Api'
 
 const PostModalBox = ({ isOpen, closeModal, value, place}) => {
   const [description, setDescription] = useState()
   const [image,setImage]= useState([])
+  const [comments,setComments]= useState([])
+  const [message,setMessage]= useState()
 
   const ConvertNumberToTwoDigitString = (n) => {
     return n > 9 ? "" + n : "0" + n;
@@ -27,14 +30,35 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
 
   }
 
+
  useEffect(() => {
+  const  getAllData = async(id)=>{
+    const allComments = await fetchComments(id)
+    setComments(allComments)
+   }
      if(value){
       setDescription(value.data)
       setImage(value.media)
+      getAllData(value._id)
      }
     
  // eslint-disable-next-line react-hooks/exhaustive-deps
  }, [value,closeModal])
+ let ws = new WebSocket("ws://localhost:3001/dev?userId=5e10fc74432aedc2a29b7226")
+
+ ws.onopen = () => {
+
+ };
+ ws.onmessage = (evt) => {
+   // on receiving a message, add it to the list of messages
+   const message = JSON.parse(evt.data);
+    setMessage(message)
+ };
+ ws.onclose = () => {
+   console.log("disconnected");
+ };
+
+ 
  
  const returnSlider=()=>{
   if(image.length>1)
@@ -93,62 +117,29 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
               </div>
             </div>
             <div className="commentSec">
-                {/* <div className="commentLeft">
-                    <div class="commentimg">
-                      <img src={CommnentImg} alt="" />
-                    </div>
-                    <div className="commentText">
-                      <div className="left">
-                        <div class="topHeading">
-                          <h3>Kevin Nash</h3>
-                          <span>23m</span>
-                          </div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In quis aliquam adipiscing aliquam est arcu quis facilisi. Sed id feugiat felis porttitor pharetra.</p>
-                        </div>
-                        <div className="commenticon">
-                          <img src={WishlistIcon} alt=""  />
-                          <img src={ReplyIcon} alt=""  />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="commentLeft ml-55">
-                    <div class="commentimg">
-                      <img src={CommnentImg} alt="" />
-                    </div>
-                    <div className="commentText">
-                      <div className="left">
-                        <div class="topHeading">
-                          <h3>Kevin Nash</h3>
-                          <span>23m</span>
-                          </div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In quis aliquam adipiscing aliquam est arcu quis facilisi. Sed id feugiat felis porttitor pharetra.</p>
-                        </div>
-                        <div className="commenticon">
-                          <img src={WishlistIcon} alt=""  />
-                          <img src={ReplyIcon} alt=""  />
-                        </div>
-                    </div>
-                </div>
+            {comments && comments.length!==0?
+              comments.map(v => (
+                <>
                 <div className="commentLeft">
-                    <div class="commentimg">
-                      <img src={CommnentImg} alt="" />
+                <div class="commentimg">
+                  <img src={CommnentImg} alt="" />
+                </div>
+                <div className="commentText">
+                  <div className="left">
+                    <div class="topHeading">
+                      <h3>{v.userId.name}</h3>
+                      <span>{v.created_on}</span>
+                      </div>
+                    <p>{v.body}</p>
                     </div>
-                    <div className="commentText">
-                      <div className="left">
-                        <div class="topHeading">
-                          <h3>Kevin Nash</h3>
-                          <span>23m</span>
-                          </div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In quis aliquam adipiscing aliquam est arcu quis facilisi. Sed id feugiat felis porttitor pharetra.</p>
-                        </div>
-                        <div className="commenticon">
-                          <img src={WishlistIcon} alt=""  />
-                          <img src={ReplyIcon} alt=""  />
-                        </div>
+                    <div className="commenticon">
+                      <img src={WishlistIcon} alt=""  />
+                      <img src={ReplyIcon} alt=""  />
                     </div>
-                </div> */}
-
+                </div>
+            </div>
+               </>)):null}
+        
             </div>
           </div>
         </div>
