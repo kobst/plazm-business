@@ -7,6 +7,11 @@ import Header from '../../component/Header'
 import Footer from '../../component/Footer'
 import { callPlace } from '../../Api'
 import ValueLoader from '../../utils/loader'
+import ws from '../../utils/socket'
+
+ws.onopen = () => {
+  console.log('connected')
+ };
 const DashboardContainer = styled.div`
 display:flex;
 background: linear-gradient(157.1deg, #FF7171 -1.1%, #FF479D 100%);
@@ -49,7 +54,7 @@ const Dashboard = () => {
        <DashboardContainer>
          <Container>
           <Header value={placeValue} />
-          <RightSide/>
+          <RightSide ws={ws}/>
           <Footer />
        </Container>
        </DashboardContainer>:<div style={{textAlign:'center' ,margin:' 40px auto 0'}}><ValueLoader height="100" width="100" /></div>

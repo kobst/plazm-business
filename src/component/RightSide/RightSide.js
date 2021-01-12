@@ -474,6 +474,7 @@ const RightSide = (props) => {
   const [postRef,setPostRef]= useState(false)
   const [arrPositon,setArrPosition]= useState(10)
   const [eventPosition,setEventPosition]= useState(10)
+
   useEffect(() => {
     let updateUser = async authState => {
       try {
@@ -485,8 +486,8 @@ const RightSide = (props) => {
           users.map(v => {
             return userVal.push({_id:v._id, name: v.name })
           })
-          const val = userVal.sort(dynamicSort("name"))
-          setCurators(val)
+          // const val = userVal.sort(dynamicSort("name"))
+          setCurators(userVal)
 
         }
         setPlace(place[0])
@@ -657,23 +658,23 @@ const formats = {
   const ConvertNumberToTwoDigitString = (n) => {
     return n > 9 ? "" + n : "0" + n;
   }
-  const dynamicSort = (property) => {
-    var sortOrder = 1;
+  // const dynamicSort = (property) => {
+  //   var sortOrder = 1;
 
-    if (property[0] === "-") {
-      sortOrder = -1;
-      property = property.substr(1);
-    }
+  //   if (property[0] === "-") {
+  //     sortOrder = -1;
+  //     property = property.substr(1);
+  //   }
 
-    return function (a, b) {
-      // eslint-disable-next-line eqeqeq
-      if (sortOrder == -1) {
-        return b[property].localeCompare(a[property]);
-      } else {
-        return a[property].localeCompare(b[property]);
-      }
-    }
-  }
+  //   return function (a, b) {
+  //     // eslint-disable-next-line eqeqeq
+  //     if (sortOrder == -1) {
+  //       return b[property].localeCompare(a[property]);
+  //     } else {
+  //       return a[property].localeCompare(b[property]);
+  //     }
+  //   }
+  // }
   const handleEdit = () => {
     handleClose()
     setIsModelOpen(true)
@@ -1254,7 +1255,7 @@ const formats = {
                         </Icon>
                       </EventText>
                     </FeedListing> */}
-         <PostModalBox isOpen={postOpen} closeModal={() => setPostOpen(false)} value={content} place={place} />
+         <PostModalBox message={props.ws} isOpen={postOpen} closeModal={() => setPostOpen(false)} value={content} place={place} />
          <EditModalBox setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={userMentionData} value={content} />
           <DeleteModalBox  setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
           <InfiniteScroll

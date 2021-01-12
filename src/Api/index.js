@@ -20,6 +20,18 @@ export const callPlace = async(userSub) => {
   const val = JSON.parse(body)
   return val
   }
+
+  export const fetchComments = async(id) => {
+    const response= await fetch(`${process.env.REACT_APP_API_URL}/api/comments/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  const body = await response.text();
+  const val = JSON.parse(body)
+  return val
+  }
   export const fetchEvents = async(id) => {
     const response= await fetch(`${process.env.REACT_APP_API_URL}/api/events/${id}`, {
     method: 'GET',
