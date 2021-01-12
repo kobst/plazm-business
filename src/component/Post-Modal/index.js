@@ -13,12 +13,12 @@ import ReplyIcon from '../../images/reply.svg'
 import SlideShow from '../UI/SlideShow'
 import {fetchComments} from '../../Api'
 
-const PostModalBox = ({ isOpen, closeModal, value, place}) => {
+const PostModalBox = ({ isOpen, closeModal, value, place, message}) => {
   const [description, setDescription] = useState()
   const [image,setImage]= useState([])
   const [comments,setComments]= useState([])
-  const [message,setMessage]= useState()
-
+  const [newComment,setNewComment]= useState()
+  const [allReplies,setAllReplies]= useState([])
   const ConvertNumberToTwoDigitString = (n) => {
     return n > 9 ? "" + n : "0" + n;
   }
@@ -29,12 +29,25 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
     return time
 
   }
+  message.onmessage = (evt) => {
+    const message = JSON.parse(evt.data);
+    setNewComment(message)
+    console.log(message)
+  };
+  message.onclose = () => {
+    console.log("disconnected");
+  };
 
 
  useEffect(() => {
   const  getAllData = async(id)=>{
     const allComments = await fetchComments(id)
+    setAllReplies([])
+    if(allComments.length!==0){
+    const reply = allComments[0].replies
+    setAllReplies(reply)
     setComments(allComments)
+  }
    }
      if(value){
       setDescription(value.data)
@@ -43,22 +56,9 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
      }
     
  // eslint-disable-next-line react-hooks/exhaustive-deps
- }, [value,closeModal])
- let ws = new WebSocket("ws://localhost:3001/dev?userId=5e10fc74432aedc2a29b7226")
+ }, [value,closeModal,newComment])
 
- ws.onopen = () => {
 
- };
- ws.onmessage = (evt) => {
-   // on receiving a message, add it to the list of messages
-   const message = JSON.parse(evt.data);
-    setMessage(message)
- };
- ws.onclose = () => {
-   console.log("disconnected");
- };
-
- 
  
  const returnSlider=()=>{
   if(image.length>1)
@@ -79,8 +79,6 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
     return null
   }
  }
-
-
 
   return (
     <div>
@@ -118,7 +116,7 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
             </div>
             <div className="commentSec">
             {comments && comments.length!==0?
-              comments.map(v => (
+              allReplies.map(v => (
                 <>
                 <div className="commentLeft">
                 <div class="commentimg">
@@ -127,8 +125,8 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
                 <div className="commentText">
                   <div className="left">
                     <div class="topHeading">
-                      <h3>{v.userId.name}</h3>
-                      <span>{v.created_on}</span>
+                      <h3>{comments[0].userId.name}</h3>
+                      <span>{comments[0].createdAt}</span>
                       </div>
                     <p>{v.body}</p>
                     </div>

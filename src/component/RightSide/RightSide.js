@@ -474,6 +474,7 @@ const RightSide = (props) => {
   const [postRef,setPostRef]= useState(false)
   const [arrPositon,setArrPosition]= useState(10)
   const [eventPosition,setEventPosition]= useState(10)
+
   useEffect(() => {
     let updateUser = async authState => {
       try {
@@ -1254,7 +1255,7 @@ const formats = {
                         </Icon>
                       </EventText>
                     </FeedListing> */}
-         <PostModalBox isOpen={postOpen} closeModal={() => setPostOpen(false)} value={content} place={place} />
+         <PostModalBox message={props.ws} isOpen={postOpen} closeModal={() => setPostOpen(false)} value={content} place={place} />
          <EditModalBox setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={userMentionData} value={content} />
           <DeleteModalBox  setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
           <InfiniteScroll
