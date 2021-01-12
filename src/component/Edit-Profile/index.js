@@ -17,21 +17,10 @@ import TimePicker from 'react-bootstrap-time-picker';
 import GoogleMapReact from 'google-map-react';
 import Geocode from "react-geocode";
 import FindAddressValue from '../../utils/findAddress'
-import reactS3 from 'react-s3'
 import TagInputCross from '../../images/Mask.svg'
-const bucket = process.env.REACT_APP_BUCKET_NAME
-const dir = process.env.REACT_APP_DIRNAME
-const region = process.env.REACT_APP_REGION
-const accessKey = process.env.REACT_APP_ACCESS_KEY_ID
-const Secret = process.env.REACT_APP_SECRET_ACCESS_KEY
 
-const config = {
-bucketName: bucket,
-dirName: dir,
-region: region,
-accessKeyId: accessKey,
-secretAccessKey:Secret,
-}
+const bucket = process.env.REACT_APP_BUCKET
+
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_API_KEY);
 Geocode.setLanguage("en");
 
@@ -533,10 +522,35 @@ console.error(error);
         }
        );
       }
-   const upload =(e)=> {
+   const upload = async (e)=> {
      setPreview(URL.createObjectURL(e.target.files[0]))
-   reactS3.uploadFile(e.target.files[0],config).then(data => setImageUrl(data.location))
-   .catch(err => console.error(err))
+     const file = e.target.files[0]
+     const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${file.name}`
+     const value = await fetch(`${process.env.REACT_APP_API_URL}/api/upload_photo`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        Key:file.name,
+        ContentType:file.type
+      })
+    });
+    const body =await value.text();
+    const Val = JSON.parse(body)
+
+    await fetch(Val, { 
+    method: 'PUT',
+    headers: {
+      "Content-Type": file.type,
+    },
+    body: file 
+  }).then(
+    response => setImageUrl(baseUrl)
+    
+  ).catch(
+    error => console.log(error) // Handle the error response object
+  )
 }
 
 const handleInputChange = (e, index) => {
@@ -578,7 +592,7 @@ return (
            <input id="myInput" onChange={(e)=> upload(e)} type="file" ref={(ref) => myInput = ref} style={{ display: 'none' }} />
              <TopProfile onClick={(e) => myInput.click() }>
               {typeof preview!==undefined || (typeof value !== 'undefined'&& value.default_image_url)?
-                <img src={ preview? preview : imageUrl} alt='img'/>: null
+                <img src={ preview? preview : imageUrl} alt=''/>: null
            }
         </TopProfile>
           <LabelRight>
@@ -643,10 +657,10 @@ return (
        { tags.map((tag, i) => (
         <li key={tag}>
          {tag}
-        <button type="button" onClick={(i) => removeTag(i)}></button>
+        <button type="button" onClick={()=>removeTag(i)}></button>
         </li>
         ))}
-       <li className="input-tag__tags__input"><input placeholder="Label" type="text" onKeyDown={inputKeyDown} ref={(ref) => tagInput = ref } /><img onClick={()=>tagInput.value = null} src={TagInputCross} alt="plus icon" /></li>
+       <li className="input-tag__tags__input"><input disabled={formDisable} placeholder="Label" type="text" onKeyDown={inputKeyDown} ref={(ref) => tagInput = ref } /><img onClick={()=>tagInput.value = null} src={TagInputCross} alt="plus icon" /></li>
        
       </ul>
     </div>
@@ -661,7 +675,7 @@ return (
     <SelectSection>
     <div>
         <Label name="Start Day"></Label>
-         <select name="StartDay" value={x.StartDay} onChange={e => handleInputChange(e,i)}>
+         <select disabled={formDisable} name="StartDay" value={x.StartDay} onChange={e => handleInputChange(e,i)}>
           <option value="Monday">Monday</option>
            <option value="Tuesday">Tuesday</option>
            <option value="Wednesday">Wednesday</option>
@@ -673,7 +687,7 @@ return (
         </div>
         <div>
         <Label name="End Day"></Label>
-         <select name="EndDay" value={x.EndDay} onChange={e => handleInputChange(e,i)}>
+         <select disabled={formDisable} name="EndDay" value={x.EndDay} onChange={e => handleInputChange(e,i)}>
            <option value="Monday">Monday</option>
            <option value="Tuesday">Tuesday</option>
            <option value="Wednesday">Wednesday</option>
@@ -685,11 +699,11 @@ return (
          </div>
         <div>
     <Label name="Start Time"></Label>
-      <TimePicker onChange={(e)=>handleStartChange(e,i,'Start')} value={x.Start} />
+      <TimePicker disabled={formDisable} onChange={(e)=>handleStartChange(e,i,'Start')} value={x.Start} />
     </div>
     <div>
     <Label name="End Time"></Label>
-        <TimePicker onChange={(e)=>handleEndChange(e,i,'End')} value={x.End} />
+        <TimePicker disabled={formDisable} onChange={(e)=>handleEndChange(e,i,'End')} value={x.End} />
     </div>
     </SelectSection>)
     })}

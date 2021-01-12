@@ -1,20 +1,24 @@
 import React, {useState,useEffect}from 'react'
 import Modal from 'react-modal'
 import CloseIcon from '../../images/cross-modal.svg'
+import Watermark from '../../images/watermark.png'
 // import Image from '../../images/user.png'
-// import WishlistIcon from '../../images/wishlist-icon.svg'
+import WishlistIcon from '../../images/wishlist-icon.svg'
 // import CommentIcon from '../../images/comment.svg'
-// import CommnentImg from '../../images/comment-img.png'
-// import ReplyIcon from '../../images/reply.svg'
+import CommnentImg from '../../images/comment-img.png'
+import ReplyIcon from '../../images/reply.svg'
 // import Wishlistgrey from '../../images/wishlist-grey.svg'
 // import Commentgrey from '../../images/comment-grey.svg'
 // import rightarrowblack from '../../images/right-arrow-black.svg'
 import SlideShow from '../UI/SlideShow'
+import {fetchComments} from '../../Api'
 
-const PostModalBox = ({ isOpen, closeModal, value, place}) => {
+const PostModalBox = ({ isOpen, closeModal, value, place, message}) => {
   const [description, setDescription] = useState()
   const [image,setImage]= useState([])
-
+  const [comments,setComments]= useState([])
+  const [newComment,setNewComment]= useState()
+  const [allReplies,setAllReplies]= useState([])
   const ConvertNumberToTwoDigitString = (n) => {
     return n > 9 ? "" + n : "0" + n;
   }
@@ -25,15 +29,36 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
     return time
 
   }
+  message.onmessage = (evt) => {
+    const message = JSON.parse(evt.data);
+    setNewComment(message)
+    console.log(message)
+  };
+  message.onclose = () => {
+    console.log("disconnected");
+  };
+
 
  useEffect(() => {
+  const  getAllData = async(id)=>{
+    const allComments = await fetchComments(id)
+    setAllReplies([])
+    if(allComments.length!==0){
+    const reply = allComments[0].replies
+    setAllReplies(reply)
+    setComments(allComments)
+  }
+   }
      if(value){
-      setDescription(value.content)
-      setImage(value.item_photo)
+      setDescription(value.data)
+      setImage(value.media)
+      getAllData(value._id)
      }
     
  // eslint-disable-next-line react-hooks/exhaustive-deps
- }, [value,closeModal])
+ }, [value,closeModal,newComment])
+
+
  
  const returnSlider=()=>{
   if(image.length>1)
@@ -46,7 +71,7 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
   else if(image.length===1){
     return(
       <div className="imageSlider">
-   <img src={image[0]} alt="img" />
+   <img src={image[0].image} alt="img" />
   </div>
     )
   }
@@ -54,8 +79,6 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
     return null
   }
  }
-
-
 
   return (
     <div>
@@ -76,7 +99,7 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
             </button>
             <div className="postDetails">
               <div className="messageSec">
-                <div className="image"><img src={place.default_image_url?place.default_image_url:null} alt="" /></div>
+                <div className="image"><img src={place.default_image_url?place.default_image_url:Watermark} alt="" /></div>
                 <div className="text">
                    <h2>{value&&value.name ? value.name : place.company_name }</h2>
                    <span>{value ?(getDate(value.updatedAt)):null}</span>
@@ -92,62 +115,29 @@ const PostModalBox = ({ isOpen, closeModal, value, place}) => {
               </div>
             </div>
             <div className="commentSec">
-                {/* <div className="commentLeft">
-                    <div class="commentimg">
-                      <img src={CommnentImg} alt="" />
-                    </div>
-                    <div className="commentText">
-                      <div className="left">
-                        <div class="topHeading">
-                          <h3>Kevin Nash</h3>
-                          <span>23m</span>
-                          </div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In quis aliquam adipiscing aliquam est arcu quis facilisi. Sed id feugiat felis porttitor pharetra.</p>
-                        </div>
-                        <div className="commenticon">
-                          <img src={WishlistIcon} alt=""  />
-                          <img src={ReplyIcon} alt=""  />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="commentLeft ml-55">
-                    <div class="commentimg">
-                      <img src={CommnentImg} alt="" />
-                    </div>
-                    <div className="commentText">
-                      <div className="left">
-                        <div class="topHeading">
-                          <h3>Kevin Nash</h3>
-                          <span>23m</span>
-                          </div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In quis aliquam adipiscing aliquam est arcu quis facilisi. Sed id feugiat felis porttitor pharetra.</p>
-                        </div>
-                        <div className="commenticon">
-                          <img src={WishlistIcon} alt=""  />
-                          <img src={ReplyIcon} alt=""  />
-                        </div>
-                    </div>
-                </div>
+            {comments && comments.length!==0?
+              allReplies.map(v => (
+                <>
                 <div className="commentLeft">
-                    <div class="commentimg">
-                      <img src={CommnentImg} alt="" />
+                <div class="commentimg">
+                  <img src={CommnentImg} alt="" />
+                </div>
+                <div className="commentText">
+                  <div className="left">
+                    <div class="topHeading">
+                      <h3>{comments[0].userId.name}</h3>
+                      <span>{comments[0].createdAt}</span>
+                      </div>
+                    <p>{v.body}</p>
                     </div>
-                    <div className="commentText">
-                      <div className="left">
-                        <div class="topHeading">
-                          <h3>Kevin Nash</h3>
-                          <span>23m</span>
-                          </div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In quis aliquam adipiscing aliquam est arcu quis facilisi. Sed id feugiat felis porttitor pharetra.</p>
-                        </div>
-                        <div className="commenticon">
-                          <img src={WishlistIcon} alt=""  />
-                          <img src={ReplyIcon} alt=""  />
-                        </div>
+                    <div className="commenticon">
+                      <img src={WishlistIcon} alt=""  />
+                      <img src={ReplyIcon} alt=""  />
                     </div>
-                </div> */}
-
+                </div>
+            </div>
+               </>)):null}
+        
             </div>
           </div>
         </div>

@@ -1672,16 +1672,20 @@ display: none;
   align-items: center;
   appearance: none;
   border: none;
-  border-radius: 50%;
   cursor: pointer;
   display: inline-flex;
-  height: 15px;
+  height: 10px;
   justify-content: center;
   line-height: 0;
   margin-left: auto;
   padding: 0;
-  width: 15px;
+  width: 10px;
   background: url(./images/cross-brown.svg) no-repeat center !important;
+}
+
+.input-tag__tags li button:hover, .input-tag__tags li button:focus{
+  outline: 0;
+  border: none;
 }
 
 .input-tag__tags li.input-tag__tags__input {

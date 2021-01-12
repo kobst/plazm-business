@@ -9,8 +9,31 @@ export const callPlace = async(userSub) => {
   const val = JSON.parse(body)
   return val
   }
-  export const fetchItems = async(id) => {
-    const response= await fetch(`${process.env.REACT_APP_API_URL}/api/items/${id}`, {
+  export const fetchPosts = async(id) => {
+    const response= await fetch(`${process.env.REACT_APP_API_URL}/api/posts/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  const body = await response.text();
+  const val = JSON.parse(body)
+  return val
+  }
+
+  export const fetchComments = async(id) => {
+    const response= await fetch(`${process.env.REACT_APP_API_URL}/api/comments/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  const body = await response.text();
+  const val = JSON.parse(body)
+  return val
+  }
+  export const fetchEvents = async(id) => {
+    const response= await fetch(`${process.env.REACT_APP_API_URL}/api/events/${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -89,6 +112,18 @@ export const updateBusiness = async (value,userSub) => {
             userSub: userSub,
             latitude: value.latitude,
             longitude: value.longitude,
+            city:value.city,
+            postalCode:value.postalCode,
+            stateProvince:value.stateProvince,
+            twitter: value.handles.twitter,
+            instagram: value.handles.instagram,
+            facebook: value.handles.facebook,
+            linkedin:value.handles.linkedin,
+            filterTags: value.filter_tags,
+            file:value.default_image_url,
+            price:value.price,
+            genType:value.genType,
+            openingHours:value.hours,
                 
             
       })

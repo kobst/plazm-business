@@ -12,26 +12,11 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-// import { makeStyles } from '@material-ui/core/styles';
-// import TextField from '@material-ui/core/TextField';
 import Gallery from '../UI/EventGallery'
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
 
 
-// const useStyles = makeStyles((theme) => ({
-//   container: {
-//     display: 'flex',
-//     flexWrap: 'wrap',
-//     focused: {
-//       border: '1px solid #4A90E2'
-// },
-//   },
-//   textField: {
-//     width: 224,
-//   },
-// }));
-// import Gallery from '../UI/Gallery'
 
 const DatePicker = styled.div`
 padding:0px;
@@ -61,7 +46,7 @@ margin: 10px auto 40px;
 Modal.setAppElement('#root')
 
 const renderMessage = getMessage()
-const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen, closeModal }) => {
+const AddModalBox = ({ isOpen,setEvent,events,value, data, editValue, setEdit, setIsOpen, closeModal }) => {
   const [title, setTitle] = useState()
   const [description, setDescription] = useState()
   const [id, setId] = useState()
@@ -122,57 +107,61 @@ const AddModalBox = ({ isOpen,events,value, data, editValue, setEdit, setIsOpen,
   const findContent=(id)=> {
 
    const val = events.find(v=>v._id===id)
-   setDescription(val.content)
-   setRecurring(val.eventSchedule.recurring)
-   setImage(val.item_photo)
+   if(val){
+    setDescription(val.description)
+   setRecurring(val.recurring)
+   setImage(val.media)
+   }
   }
 
   const addEvent = async () => {
     if(Validation()){
       setSaveDisable(true)
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/items`, {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/events`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name: title,
-        place_id: data._id,
-        content:description,
-        scheduledEvent: "yes",
+        title: title,
+        business: data._id,
+        description:description,
+        eventSchedule: {
+         start_time: start,
+          end_time: end,
+        },
         recurring: recurring,
-        start_time: start,
-        end_time: end,
-        item_photo:image
+        media:image
       })
     });
     const body = await response.text();
     setIsOpen(false)
-    setEdit(false)
     setSaveDisable(false)
-    window.location.reload()
+    setEvent()
     return body
   }
 
 }
+
 const handleEdit= async () => {
   if(Validation()){
     setSaveDisable(true)
-  const response= await fetch(`${process.env.REACT_APP_API_URL}/api/items`, {
+  const response= await fetch(`${process.env.REACT_APP_API_URL}/api/events`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         _id:id,
-        name:title,
-        place_id:data._id,
-        scheduledEvent:"yes",
-        content:description,
-        recurring:recurring,
-        start_time:start,
-        end_time:end,
-        item_photo:image,
+        title: title,
+        business: data._id,
+        description:description,
+        eventSchedule: {
+         start_time: start,
+          end_time: end,
+        },
+        recurring: recurring,
+        media:image
 
 
     })
@@ -181,13 +170,13 @@ const handleEdit= async () => {
     setIsOpen(false)
     setEdit(false)
     setSaveDisable(false)
-    window.location.reload() 
+    setEvent()
     return body
 }
   }
 
   const handleDelete = async () => {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/item-delete`, {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/event-delete`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -199,7 +188,8 @@ const handleEdit= async () => {
     const body = await response.text();
     setIsOpen(false)
     setEdit(false)
-   window.location.reload()
+    setSaveDisable(false)
+    setEvent()
     return body
 
   }

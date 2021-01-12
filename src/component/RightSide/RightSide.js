@@ -9,7 +9,7 @@ import { Auth } from 'aws-amplify';
 import AddModalBox from '../Add-Event/index'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
-import { callPlace, fetchItems, fetchUsers } from '../../Api'
+import { callPlace, fetchPosts,fetchEvents, fetchUsers } from '../../Api'
 import ValueLoader from '../../utils/loader'
 import { RRule } from 'rrule'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -32,15 +32,16 @@ import PostSkeleton from '../UI/Skeleton/PostSkeleton'
 // import WishlistGrey from '../../images/wishlist-grey.svg'
 // import CommentGrey from '../../images/comment-grey.svg'
 // import Mention from 'react-textarea-mention';
+// import reactS3 from 'react-s3'
 import EditModalBox from '../Edit-Post'
 import DeleteModalBox from '../Delete-Post'
 import PostModalBox from '../Post-Modal'
-import reactS3 from 'react-s3'
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { MentionsInput, Mention } from 'react-mentions'
 import { Scrollbars } from 'react-custom-scrollbars';
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const RightSection = styled.div`
 
@@ -430,18 +431,10 @@ margin:0 10px;
 
 moment.locale('en-GB')
 const localizer = momentLocalizer(moment)
-const bucket = process.env.REACT_APP_BUCKET_NAME
-const dir = process.env.REACT_APP_DIRNAME
-const region = process.env.REACT_APP_REGION
-const accessKey = process.env.REACT_APP_ACCESS_KEY_ID
-const Secret = process.env.REACT_APP_SECRET_ACCESS_KEY
-const config = {
-  bucketName: bucket,
-  dirName: dir,
-  region: region,
-  accessKeyId: accessKey,
-  secretAccessKey:Secret,
-}
+const bucket = process.env.REACT_APP_BUCKET
+
+
+
 let myInput
 const RightSide = (props) => {
   // const { loading } = props;
@@ -478,6 +471,9 @@ const RightSide = (props) => {
   const [anchorEl, setAnchorEl]= useState(null)
   const [mentionarray,setMentionArray]= useState([])
   const [toolbarRef, setToolbarRef] = useState(null)
+  const [postRef,setPostRef]= useState(false)
+  const [arrPositon,setArrPosition]= useState(10)
+  const [eventPosition,setEventPosition]= useState(10)
 
   useEffect(() => {
     let updateUser = async authState => {
@@ -490,27 +486,29 @@ const RightSide = (props) => {
           users.map(v => {
             return userVal.push({_id:v._id, name: v.name })
           })
-          const val = userVal.sort(dynamicSort("name"))
-          setCurators(val)
+          // const val = userVal.sort(dynamicSort("name"))
+          setCurators(userVal)
 
         }
         setPlace(place[0])
         if (place && place.length !== 0) {
 
-          const val = await fetchItems(place[0]._id)
-          const sol = val.filter(v => v.eventSchedule !== null && v.eventSchedule && v.eventSchedule.start_time!== null)
-          const feed = val.filter(v => (!v.eventSchedule || v.eventSchedule === null)).reverse()
-          const allMentions = val.filter(v => (!v.eventSchedule || v.eventSchedule === null) && (v.name !== place[0].company_name) && v.name)
-          const upEvent = sol.filter(v=>(new Date(v.eventSchedule.start_time)>=new Date()))
+          const val = await fetchPosts(place[0]._id)
+          const events = await fetchEvents(place[0]._id)
+          const upEvent = events.filter(v=>(new Date(v.eventSchedule.start_time)>=new Date()))
           setUpcomingEvents(upEvent)
+          setEvent()
           setMention('Public')
           setActivePublic(true)
           setPosts(val)
-          setEventList(sol.reverse())
-          setFeed(feed)
-          setAllFeed(feed)
-          setAllMentions(allMentions)
-          eventManage(sol)
+          setEventList(events.reverse())
+          setFeed(val)
+          setAllFeed(val)
+          setAllMentions(val)
+          eventManage(events)
+          setPostRef(false)
+          setSaveDisable(false)
+          setDetails()
         }
         else {
           let eventArr = []
@@ -524,7 +522,7 @@ const RightSide = (props) => {
     updateUser()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isOpen,postRef,isModelOpen,deleteOpen]);
   useEffect(() => {
 
     const checkMentions = () => {
@@ -559,9 +557,10 @@ const formats = {
   const eventManage = (sol) => {
     let eventArr = []
     setEvent(eventArr)
+    if(viewState!=='month'){
     // eslint-disable-next-line array-callback-return
     sol.map(v => {
-      if (v.eventSchedule.recurring === 'weekly' || v.eventSchedule.recurring === 'Weekly') {
+      if (v.recurring === 'weekly' || v.recurring === 'Weekly') {
         const weeklyStartRule = new RRule({
           freq: RRule.WEEKLY,
           dtstart: new Date(v.eventSchedule.start_time),
@@ -578,7 +577,7 @@ const formats = {
           const num2 = weeklyEndRule.all().filter(onlyUnique)[index];
           eventArr.push({
             id: v._id,
-            title: v.name,
+            title: v.title,
             start: num1,
             end: num2,
           })
@@ -586,7 +585,7 @@ const formats = {
         setEvent(eventArr)
         setEventCopy(eventArr)
       }
-      else if (v.eventSchedule.recurring === 'daily' || v.eventSchedule.recurring === 'Daily') {
+      else if (v.recurring === 'daily' || v.recurring === 'Daily') {
         const dailyStartRule = new RRule({
           freq: RRule.DAILY,
           dtstart: new Date(v.eventSchedule.start_time),
@@ -603,7 +602,7 @@ const formats = {
           const num2 = dailyEndRule.all().filter(onlyUnique)[index];
           eventArr.push({
             id: v._id,
-            title: v.name,
+            title: v.title,
             start: num1,
             end: num2,
           })
@@ -611,7 +610,7 @@ const formats = {
         setEventCopy(eventArr)
         setEvent(eventArr)
       }
-      else if (v.eventSchedule.recurring === 'mondayFriday' || v.eventSchedule.recurring === 'Monday-Friday') {
+      else if (v.recurring === 'mondayFriday' || v.recurring === 'Monday-Friday') {
         const weekDayStartRule = new RRule({
           freq: RRule.WEEKLY,
           dtstart: new Date(v.eventSchedule.start_time),
@@ -630,7 +629,7 @@ const formats = {
           const num2 = weekDayEndRule.all().filter(onlyUnique)[index];
           eventArr.push({
             id: v._id,
-            title: v.name,
+            title: v.title,
             start: num1,
             end: num2,
           })
@@ -641,7 +640,7 @@ const formats = {
       else {
         eventArr.push({
           id: v._id,
-          title: v.name,
+          title: v.title,
           start: new Date(v.eventSchedule.start_time),
           end: new Date(v.eventSchedule.end_time),
         })
@@ -651,27 +650,31 @@ const formats = {
       }
     })
   }
+  else{
+    setEvent(eventArr)
+  }
+  }
 
   const ConvertNumberToTwoDigitString = (n) => {
     return n > 9 ? "" + n : "0" + n;
   }
-  const dynamicSort = (property) => {
-    var sortOrder = 1;
+  // const dynamicSort = (property) => {
+  //   var sortOrder = 1;
 
-    if (property[0] === "-") {
-      sortOrder = -1;
-      property = property.substr(1);
-    }
+  //   if (property[0] === "-") {
+  //     sortOrder = -1;
+  //     property = property.substr(1);
+  //   }
 
-    return function (a, b) {
-      // eslint-disable-next-line eqeqeq
-      if (sortOrder == -1) {
-        return b[property].localeCompare(a[property]);
-      } else {
-        return a[property].localeCompare(b[property]);
-      }
-    }
-  }
+  //   return function (a, b) {
+  //     // eslint-disable-next-line eqeqeq
+  //     if (sortOrder == -1) {
+  //       return b[property].localeCompare(a[property]);
+  //     } else {
+  //       return a[property].localeCompare(b[property]);
+  //     }
+  //   }
+  // }
   const handleEdit = () => {
     handleClose()
     setIsModelOpen(true)
@@ -685,7 +688,6 @@ const formats = {
 
   const returnTodayDate = ()=> {
     let today = new Date();
-    console.log(today.toLocaleDateString("en-US", options))
     const dateArr = today.toLocaleDateString("en-US", options).split(',')
     return(
     <>
@@ -694,6 +696,12 @@ const formats = {
     <h2>{dateArr[2]}</h2>
     </>
     )
+    }
+
+    const returnMonth = ()=> {
+      let today = new Date();
+      return today.toLocaleString('default', { month: 'long' })
+
     }
   const goToDateFromMonthView = (date) => {
     if (!toolbarRef) return false
@@ -888,24 +896,25 @@ const formats = {
     }
   }
   
+
   const addPost = async () => {
     if (Validation()) {
       setSaveDisable(true)
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/items`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/posts`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          place_id: place._id,
-          content: description,
-          scheduledEvent: "no",
-          item_photo:imageUpload,
-          mentions:mentionarray,
+          business: place._id,
+          data: description,
+          media:imageUpload,
+          taggedUsers:mentionarray,
         })
       });
       const body = await response.text();
-      window.location.reload()
+        setPostRef(true)
+        CancelPost()
       return body
     }
 
@@ -925,7 +934,7 @@ const formats = {
   const handleChange = (event, newValue, newPlainTextValue, mentions) => {
     const valueArr= mentionarray
     if(mentions.length!==0){
-    valueArr.push(mentions[0])
+    valueArr.push(mentions[0].id)
     setMentionArray(valueArr)
     }
     setDescription(newPlainTextValue)
@@ -945,10 +954,10 @@ const formats = {
 
   const findDesc = (value,mentions)=>{
   let divContent=value
-   // eslint-disable-next-line array-callback-return
+  //  eslint-disable-next-line array-callback-return
    mentions.map(v=>{
-   let re = new RegExp(v.display, 'g');
-   divContent = divContent.replace(re, '<h2>' + v.display + '</h2>');
+   let re = new RegExp(v.name, 'g');
+   divContent = divContent.replace(re, '<h2>' + v.name + '</h2>');
    })
    if(mentions.length!==0){
    return (<>
@@ -964,18 +973,71 @@ const formats = {
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   // const options = [{name: 'John Watson', id: 1},{name: 'Marie Curie', id: 2}]
 
+  const fetchMoreData = () => {
+    setTimeout(() => {
+      setArrPosition(arrPositon+10)
+    }, 4000);
+  };
+
+  const fetchMoreEvents = () => {
+    setTimeout(() => {
+      setEventPosition(eventPosition+10)
+    }, 4000);
+  };
+
   const upload =async(e)=> {
     const imageArr= imageCopy
     const imgUpload= imageUploadCopy
+    const file = e.target.files[0]
+    const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${file.name}`
     if(imageCopy.length<5){
-   const data = await reactS3.uploadFile(e.target.files[0],config)
-    imageArr.push({id:(imageCopy.length)+1,value:data.location})
-    imgUpload.push(data.location)
+    const value = await fetch(`${process.env.REACT_APP_API_URL}/api/upload_photo`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        Key:file.name,
+        ContentType:file.type
+      })
+    });
+    const body =await value.text();
+    const Val = JSON.parse(body)
+
+    await fetch(Val, { 
+    method: 'PUT',
+    headers: {
+      "Content-Type": file.type,
+    },
+    body: file 
+  }).then(
+    response => {
+    imageArr.push({id:(imageCopy.length)+1,value:baseUrl})
+    imgUpload.push({image:baseUrl})
     setImageUpload([...imgUpload])
     setImageUploadCopy([...imgUpload])
     setImageCopy([...imageArr])
     setImageUrl([...imageArr])
+    
+  }
+  ).catch(
+    error => console.log(error) // Handle the error response object
+  )
     }
+
+    // if(imageCopy.length<5){
+    //   console.log(e.target.files[0])
+    //   let params = {Bucket: bucket, Key: e.target.files[0].name, Body: e.target.files[0]};
+    //    s3.upload(params, function(err, data) {
+    //       console.log(err, data);
+    //  })
+  //  const data = await reactS3.uploadFile(e.target.files[0],config)
+    // imageArr.push({id:(imageCopy.length)+1,value:data.location})
+    // imgUpload.push(data.location)
+    // setImageUpload([...imgUpload])
+    // setImageUploadCopy([...imgUpload])
+    // setImageCopy([...imageArr])
+    // setImageUrl([...imageArr])
     }
 
     const deleteImage = (v)=> {
@@ -1009,18 +1071,18 @@ const formats = {
                 <ButtonSmall onClick={() => setIsOpen(true)}>Add Event</ButtonSmall>
               </FlexRow>
 
-              <AddModalBox editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
+              <AddModalBox setEvent={setEvent} editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
               <CalenderSection>
         <div className={ calenderView === 'month'? "monthView": null}>
-        {calenderView === 'month' ?
+        {calenderView === 'month' && typeof event !== 'undefined' ?
     <EventMenu>
       <div className="dateWrap">{returnTodayDate()}</div>
-      <h4>Upcoming Events in September</h4>
+      <h4>Upcoming Events in {returnMonth()}</h4>
       {upComingEvents ? upComingEvents.map(v =>
         <>
-          {v.name ?
+          {v.title ?
             <MonthEventList>
-              <p>{v.name}</p>
+              <p>{v.title}</p>
               <span>{getDate(v.eventSchedule.start_time)}</span>
             </MonthEventList> : null
           }
@@ -1062,23 +1124,13 @@ const formats = {
                     );
                   }
                 },
-
-                // week:{ 
-                //   header:(props)=>{
-                //     console.log(props)
-                //     return (
-                //       <span>{props.label}</span>
-                //     );
-                //   }
-
-                // }
               }}
               defaultView={viewState}
               step={60}
               onView={(e) => (setCalenderView(e),setViewState(e))}
               views={['day', 'week', 'month',]}
               style={{ height: 463, width:'100%'}}
-            /> : <div className="loader"> <ValueLoader height="70" width="70" /></div>
+            /> : <div className="loader" style={{textAlign:'center' ,margin:' 40px auto 0'}}> <ValueLoader height="70" width="70" /></div>
 
           }
         </div>
@@ -1091,23 +1143,30 @@ const formats = {
                 
                 <EventList>
                 <Scrollbars autoHeight autoHeightMax={566}>
-                  {eventList ? eventList.map(v =>
+                <InfiniteScroll
+          dataLength={eventPosition}
+          next={fetchMoreEvents}
+          hasMore={true}
+          loader={eventList && eventPosition<= eventList.length ? <div style={{textAlign:'center' ,margin:' 40px auto 0'}}> <ValueLoader height="40" width="40" /></div>:null}
+            >
+                  {eventList ? eventList.slice(0,eventPosition).map(v =>
                     <>
-                      {v.name ?
+                      {v.title ?
                         <EventListing>
                           <EventText>
-                            <h3>{v.name}</h3>
+                            <h3>{v.title}</h3>
                             {/* <p>{v.eventSchedule.recurring}</p> */}
                             <span>{getDate(v.eventSchedule.start_time)}</span>
-                            <p>{v.content}</p>
+                            <p>{v.description}</p>
                           </EventText>
-                          {v.item_photo.length>0?
-                          <EventImage><img src={v.item_photo[0]} alt=""/></EventImage>
+                          {v.media && v.media.length>0?
+                          <EventImage><img src={v.media[0].image} alt=""/></EventImage>
                             :null }
                         </EventListing> : null
                       }
                     </>) : <><EventSkeleton /><EventSkeleton /><EventSkeleton /><EventSkeleton /></>
                   }
+                  </InfiniteScroll>
                   </Scrollbars>
                 </EventList>
               </AllEvent>
@@ -1152,7 +1211,7 @@ const formats = {
                       <img src={CrossIcon} alt="Cross Icon" style={{ marginRight: '0px' }} />
                     </ButtonSmall>:null
                      }
-                    <ButtonSmall disabled={saveDisable} onClick={() => addPost()}>Publish</ButtonSmall>
+                    <ButtonSmall disabled={saveDisable} onClick={() => addPost()}>{saveDisable!==true?'Publish':<ValueLoader/>}</ButtonSmall>
                   </FlexRow>
                 </div>
               </div>
@@ -1196,17 +1255,23 @@ const formats = {
                         </Icon>
                       </EventText>
                     </FeedListing> */}
-         <PostModalBox isOpen={postOpen} closeModal={() => setPostOpen(false)} value={content} place={place} />
+         <PostModalBox message={props.ws} isOpen={postOpen} closeModal={() => setPostOpen(false)} value={content} place={place} />
          <EditModalBox setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={userMentionData} value={content} />
           <DeleteModalBox  setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
+          <InfiniteScroll
+          dataLength={arrPositon}
+          next={fetchMoreData}
+          hasMore={true}
+          loader={allFeed && arrPositon<= allFeed.length ? <div style={{textAlign:'center' ,margin:' 40px auto 0'}}> <ValueLoader height="40" width="40" /></div>:null}
+            >
                     {typeof allFeed !== 'undefined' ?
-                      allFeed.map(v => (
+                      allFeed.slice(0,arrPositon).map(v => (
                         <FeedListing>
                           <FeedImage><img src={place.default_image_url?place.default_image_url:Watermark} alt="Event" /></FeedImage>
                           <EventText>
                             <span>{(getDate(v.updatedAt))}</span>
                             <h3 onClick={() => postOpenFunc(v)}>{v.name ? v.name : place.company_name}</h3>
-                            <p>{findDesc(v.content,v.mentions)}</p>
+                            <p>{findDesc(v.data,v.taggedUsers)}</p>
                             <Icon>
                             <EditRomve>
               
@@ -1248,6 +1313,7 @@ const formats = {
                           </EventText>
                         </FeedListing>)) : null
                     }
+                    </InfiniteScroll>
                    
 
 

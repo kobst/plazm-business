@@ -25,7 +25,7 @@ const SlideShow = ({image,currentIndex})=> {
     return (
        <AliceCarousel infinite={false} slideToIndex={currentIndex} responsive={responsive} >
            {image ? image.map(v=> 
-          <img src={v} className="" alt=""/>
+          <img src={v.image} className="" alt=""/>
         ):null}
       </AliceCarousel>
     );
