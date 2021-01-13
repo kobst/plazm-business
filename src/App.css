@@ -811,6 +811,8 @@ background: #F8F8F8;
 border-radius: 19px;
 padding:15px;
 margin-right:10px;
+max-width: calc(100% - 50px);
+width: 100%;
 }
 .ml-55{
   margin-left:55px;
