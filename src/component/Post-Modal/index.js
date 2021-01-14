@@ -14,11 +14,10 @@ import SlideShow from '../UI/SlideShow'
 import {fetchComments} from '../../Api'
 import { Scrollbars } from 'react-custom-scrollbars';
 
-const PostModalBox = ({ isOpen, closeModal, value, place, message}) => {
+const PostModalBox = ({ isOpen, closeModal, value, place,newComment}) => {
   const [description, setDescription] = useState()
   const [image,setImage]= useState([])
   const [comments,setComments]= useState([])
-  const [newComment,setNewComment]= useState()
   const [allReplies,setAllReplies]= useState([])
   const ConvertNumberToTwoDigitString = (n) => {
     return n > 9 ? "" + n : "0" + n;
@@ -30,14 +29,6 @@ const PostModalBox = ({ isOpen, closeModal, value, place, message}) => {
     return time
 
   }
-  message.onmessage = (evt) => {
-    const message = JSON.parse(evt.data);
-    setNewComment(message)
-    console.log(message)
-  };
-  message.onclose = () => {
-    console.log("disconnected");
-  };
 
 
  useEffect(() => {

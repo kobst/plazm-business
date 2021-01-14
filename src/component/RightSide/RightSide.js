@@ -474,7 +474,20 @@ const RightSide = (props) => {
   const [postRef,setPostRef]= useState(false)
   const [arrPositon,setArrPosition]= useState(10)
   const [eventPosition,setEventPosition]= useState(10)
-
+  const [webPost,setWebPost]= useState()
+  const [webComment,setNewComment]= useState()
+  props.ws.onmessage = (evt) => {
+    const message = JSON.parse(evt.data);
+    if(message.businessId && message.businessId===place._id){
+    setWebPost(message)
+    }
+    else if(message.postId){
+      setNewComment(message)
+      }
+  };
+  props.ws.onclose = () => {
+    console.log("disconnected");
+  };
   useEffect(() => {
     let updateUser = async authState => {
       try {
@@ -523,6 +536,7 @@ const RightSide = (props) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen,postRef,isModelOpen,deleteOpen]);
+  
   useEffect(() => {
 
     const checkMentions = () => {
@@ -546,6 +560,18 @@ const RightSide = (props) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mentions])
+
+  useEffect(() => {
+    const updateWebpost = async()=> {
+      if(typeof webPost !== 'undefined'){
+      const val = await fetchPosts(place._id)
+       setAllFeed(val)
+      }
+    }
+    updateWebpost()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [webPost])
   function onlyUnique(value, index, self) { 
     return self.indexOf(value) === index;
 }
@@ -913,6 +939,13 @@ const formats = {
         })
       });
       const body = await response.text();
+      props.ws.send(
+        JSON.stringify({
+          action: "post",
+          post: description,
+          businessId: place._id
+        })
+      )
         setPostRef(true)
         CancelPost()
       return body
@@ -1255,9 +1288,9 @@ const formats = {
                         </Icon>
                       </EventText>
                     </FeedListing> */}
-         <PostModalBox message={props.ws} isOpen={postOpen} closeModal={() => setPostOpen(false)} value={content} place={place} />
-         <EditModalBox setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={userMentionData} value={content} />
-          <DeleteModalBox  setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
+         <PostModalBox newComment={webComment} isOpen={postOpen} closeModal={() => setPostOpen(false)} value={content} place={place} />
+         <EditModalBox message={props.ws} userId={place._id} setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={userMentionData} value={content} />
+          <DeleteModalBox message={props.ws} userId={place._id}  setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
           <InfiniteScroll
           dataLength={arrPositon}
           next={fetchMoreData}
