@@ -124,9 +124,7 @@ export const updateBusiness = async (value,userSub) => {
             price:value.price,
             genType:value.genType,
             openingHours:value.hours,
-                
-            
-      })
+          })
     });
       const body = await response.text();
       return body
