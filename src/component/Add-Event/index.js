@@ -12,26 +12,11 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-// import { makeStyles } from '@material-ui/core/styles';
-// import TextField from '@material-ui/core/TextField';
 import Gallery from '../UI/EventGallery'
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
 
 
-// const useStyles = makeStyles((theme) => ({
-//   container: {
-//     display: 'flex',
-//     flexWrap: 'wrap',
-//     focused: {
-//       border: '1px solid #4A90E2'
-// },
-//   },
-//   textField: {
-//     width: 224,
-//   },
-// }));
-// import Gallery from '../UI/Gallery'
 
 const DatePicker = styled.div`
 padding:0px;
