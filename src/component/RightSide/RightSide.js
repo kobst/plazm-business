@@ -1018,11 +1018,16 @@ const formats = {
     }, 4000);
   };
 
+  const editName=(name)=>{
+    return `${place.company_name}-${name}`
+  }
+
   const upload =async(e)=> {
     const imageArr= imageCopy
     const imgUpload= imageUploadCopy
     const file = e.target.files[0]
-    const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${file.name}`
+    const newName= editName(file.name)
+    const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${newName}`
     if(imageCopy.length<5){
     const value = await fetch(`${process.env.REACT_APP_API_URL}/api/upload_photo`, {
       method: 'POST',
@@ -1030,7 +1035,7 @@ const formats = {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        Key:file.name,
+        Key:newName,
         ContentType:file.type
       })
     });
@@ -1289,7 +1294,7 @@ const formats = {
                       </EventText>
                     </FeedListing> */}
          <PostModalBox newComment={webComment} isOpen={postOpen} closeModal={() => setPostOpen(false)} value={content} place={place} />
-         <EditModalBox message={props.ws} userId={place._id} setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={userMentionData} value={content} />
+         <EditModalBox message={props.ws} user={place} setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={userMentionData} value={content} />
           <DeleteModalBox message={props.ws} userId={place._id}  setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
           <InfiniteScroll
           dataLength={arrPositon}

@@ -27,18 +27,22 @@ const bucket = process.env.REACT_APP_BUCKET
 const Gallery = (props) => {
   const [isOpen,setIsOpen]= useState(false)
   let myInput
+  const editName=(name)=>{
+    return `${props.name}-${name}`
+  }
   const upload =async(e)=> {
     const imageArr= props.image
     if(imageArr.length<5){
       const file = e.target.files[0]
-      const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${file.name}`
+      const newName= editName(file.name) 
+      const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${newName}`
       const value = await fetch(`${process.env.REACT_APP_API_URL}/api/upload_photo`, {
        method: 'POST',
        headers: {
          'Content-Type': 'application/json',
        },
        body: JSON.stringify({
-         Key:file.name,
+         Key:newName,
          ContentType:file.type
        })
      });
