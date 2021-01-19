@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react'
+import React, { useState, useEffect} from 'react'
 import styled from 'styled-components'
 import PlusIcon from '../../../images/plus.svg'
 import CloseIcon from '../../../images/close.svg'
@@ -26,19 +26,32 @@ const bucket = process.env.REACT_APP_BUCKET
 
 const Gallery = (props) => {
   const [isOpen,setIsOpen]= useState(false)
+  const [imageValue,setImageValue]= useState([])
+
+  useEffect(() => {
+    if(props.image){
+      console.log(props.image)
+      setImageValue(props.image)
+    }
+  },[])
   let myInput
+  const editName=(name)=>{
+    return `${props.name}-${name}`
+  }
   const upload =async(e)=> {
     const imageArr= props.image
+    setImageValue(imageArr)
     if(imageArr.length<5){
       const file = e.target.files[0]
-      const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${file.name}`
+      const newName= editName(file.name) 
+      const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${newName}`
       const value = await fetch(`${process.env.REACT_APP_API_URL}/api/upload_photo`, {
        method: 'POST',
        headers: {
          'Content-Type': 'application/json',
        },
        body: JSON.stringify({
-         Key:file.name,
+         Key:newName,
          ContentType:file.type
        })
      });
@@ -54,6 +67,7 @@ const Gallery = (props) => {
    }).then(
      response => {
        imageArr.push({image:baseUrl})
+       setImageValue([...imageArr])
        props.setImage([...imageArr])
      }
      
@@ -64,6 +78,7 @@ const Gallery = (props) => {
     }
     const CancelPost= (v)=>{
       const deleteImage = props.image.filter((item) => item.image !== v.image)
+      setImageValue([...deleteImage])
       props.setImage([...deleteImage])
     }
     return(
@@ -75,7 +90,7 @@ const Gallery = (props) => {
           <p onClick={(e) => myInput.click()}><img src={PlusIcon} alt="" /> Photo</p>
           {/* <GallerModalBox  isOpen={isOpen} closeModal={() => setIsOpen(false)}/> */}
         </div>
-        {typeof props.image!=='undefined' ?(props.image.map(v => 
+        {typeof props.image!=='undefined' ?(imageValue.map(v => 
                     <div onClick={()=>CancelPost(v)} className="galleryImage">
                     <img src={v.image} alt="" />
                   </div>)): null

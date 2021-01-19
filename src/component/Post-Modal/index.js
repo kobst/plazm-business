@@ -12,12 +12,12 @@ import ReplyIcon from '../../images/reply.svg'
 // import rightarrowblack from '../../images/right-arrow-black.svg'
 import SlideShow from '../UI/SlideShow'
 import {fetchComments} from '../../Api'
+import { Scrollbars } from 'react-custom-scrollbars';
 
-const PostModalBox = ({ isOpen, closeModal, value, place, message}) => {
+const PostModalBox = ({ isOpen, closeModal, value, place,newComment}) => {
   const [description, setDescription] = useState()
   const [image,setImage]= useState([])
   const [comments,setComments]= useState([])
-  const [newComment,setNewComment]= useState()
   const [allReplies,setAllReplies]= useState([])
   const ConvertNumberToTwoDigitString = (n) => {
     return n > 9 ? "" + n : "0" + n;
@@ -29,14 +29,6 @@ const PostModalBox = ({ isOpen, closeModal, value, place, message}) => {
     return time
 
   }
-  message.onmessage = (evt) => {
-    const message = JSON.parse(evt.data);
-    setNewComment(message)
-    console.log(message)
-  };
-  message.onclose = () => {
-    console.log("disconnected");
-  };
 
 
  useEffect(() => {
@@ -82,6 +74,7 @@ const PostModalBox = ({ isOpen, closeModal, value, place, message}) => {
 
   return (
     <div>
+      
       <Modal
         isOpen={isOpen}
         // onAfterOpen={this.afterOpenModal}
@@ -93,6 +86,7 @@ const PostModalBox = ({ isOpen, closeModal, value, place, message}) => {
 
         <div style={ image.length>0?{maxWidth:'1000px'}:{maxWidth:'600px'}} className="ContentModal">
           {returnSlider()}
+          <Scrollbars autoHeight autoHeightMax={736} style={{ }}>
           <div className="postOuter">
             <button onClick={closeModal}>
               <img src={CloseIcon} alt="Close" />
@@ -125,8 +119,8 @@ const PostModalBox = ({ isOpen, closeModal, value, place, message}) => {
                 <div className="commentText">
                   <div className="left">
                     <div class="topHeading">
-                      <h3>{comments[0].userId.name}</h3>
-                      <span>{comments[0].createdAt}</span>
+                      <h3>{v.userId.name}</h3>
+                      <span>{getDate(comments[0].createdAt)}</span>
                       </div>
                     <p>{v.body}</p>
                     </div>
@@ -140,8 +134,11 @@ const PostModalBox = ({ isOpen, closeModal, value, place, message}) => {
         
             </div>
           </div>
+          </Scrollbars>
         </div>
+        
       </Modal>
+      
     </div >
   )
 }

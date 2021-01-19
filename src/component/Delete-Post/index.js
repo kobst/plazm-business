@@ -6,7 +6,7 @@ import crossIocn from '../../images/cross-black.svg'
 
 import Button from '../UI/Button/Button'
 
-const DeleteModalBox = ({ isOpen,closeModal,postId,setDeleteOpen}) => {
+const DeleteModalBox = ({ isOpen,closeModal,postId,setDeleteOpen,message,userId}) => {
 
 
   const handleDelete = async () => {
@@ -20,6 +20,12 @@ const DeleteModalBox = ({ isOpen,closeModal,postId,setDeleteOpen}) => {
       })
     });
     const body = await response.text();
+    message.send(
+      JSON.stringify({
+        action: "post",
+        businessId: userId
+      })
+    )
     setDeleteOpen(false)
     return body
 

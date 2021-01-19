@@ -12,11 +12,26 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
+// import { makeStyles } from '@material-ui/core/styles';
+// import TextField from '@material-ui/core/TextField';
 import Gallery from '../UI/EventGallery'
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
 
 
+// const useStyles = makeStyles((theme) => ({
+//   container: {
+//     display: 'flex',
+//     flexWrap: 'wrap',
+//     focused: {
+//       border: '1px solid #4A90E2'
+// },
+//   },
+//   textField: {
+//     width: 224,
+//   },
+// }));
+// import Gallery from '../UI/Gallery'
 
 const DatePicker = styled.div`
 padding:0px;
@@ -91,7 +106,7 @@ const AddModalBox = ({ isOpen,setEvent,events,value, data, editValue, setEdit, s
         }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value,closeModal])
+  }, [value])
 
   useEffect(() => {
    if(editValue===false){
@@ -421,7 +436,7 @@ else{
           </select> */}
           <br />
           <div className="Image_wrap">
-          <Gallery type="edit" image={image} setImage={setImage}/>
+          <Gallery name={data.company_name} type="edit" image={image} setImage={setImage}/>
           </div>
           <P>You may upload images under the size of 2 MB each. Any dimension related message goes here</P>
           {!editValue ?

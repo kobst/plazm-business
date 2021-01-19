@@ -8,7 +8,7 @@ import Gallery from '../UI/Gallery'
 import { MentionsInput, Mention } from 'react-mentions'
 
 
-const EditModalBox = ({ isOpen,closeModal,users,value,setIsOpen}) => {
+const EditModalBox = ({ isOpen,closeModal,users,value,setIsOpen,message,user}) => {
    const [description, setDescription] = useState()
    const [image,setImage]= useState([])
    const [mentionArray,setMentionArray]= useState([])
@@ -49,8 +49,15 @@ const handleEdit= async () => {
         media:image,
         taggedUsers:mentionArray,
     })
+    
   });
     const body = await response.text();
+    message.send(
+      JSON.stringify({
+        action: "post",
+        businessId: user._id
+      })
+    )
     setIsOpen(false)
     return body
     }
@@ -100,7 +107,7 @@ const handleEdit= async () => {
          data={users}
       /> */}
       <div className="Image_wrap">
-      <Gallery type="edit" image={image} setImage={setImage}/>
+      <Gallery name={user.company_name} type="edit" image={image} setImage={setImage}/>
       </div>
         <div className="modalButton">
               <Button onClick={()=>handleEdit()} type="submit" className="btn btn-primary">Save</Button>
