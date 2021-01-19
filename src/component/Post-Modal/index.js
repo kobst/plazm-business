@@ -29,9 +29,8 @@ const PostModalBox = ({ isOpen, closeModal, value, place,newComment}) => {
     return time
 
   }
-
-
- useEffect(() => {
+  
+   useEffect(() => {
   const  getAllData = async(id)=>{
     const allComments = await fetchComments(id)
     setAllReplies([])
@@ -86,7 +85,6 @@ const PostModalBox = ({ isOpen, closeModal, value, place,newComment}) => {
 
         <div style={ image.length>0?{maxWidth:'1000px'}:{maxWidth:'600px'}} className="ContentModal">
           {returnSlider()}
-          <Scrollbars autoHeight autoHeightMax={736} style={{ }}>
           <div className="postOuter">
             <button onClick={closeModal}>
               <img src={CloseIcon} alt="Close" />
@@ -108,6 +106,7 @@ const PostModalBox = ({ isOpen, closeModal, value, place,newComment}) => {
                 </div>
               </div>
             </div>
+            <Scrollbars className="" autoHeight autoHeightMax={736} style={{overflow:'hidden'}}>
             <div className="commentSec">
             {comments && comments.length!==0?
               allReplies.map(v => (
@@ -133,13 +132,13 @@ const PostModalBox = ({ isOpen, closeModal, value, place,newComment}) => {
                </>)):null}
         
             </div>
+            </Scrollbars>
           </div>
-          </Scrollbars>
         </div>
         
       </Modal>
-      
-    </div >
+      </div>
+  
   )
 }
 
