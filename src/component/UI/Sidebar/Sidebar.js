@@ -92,6 +92,7 @@ margin-bottom:0px;
 margin-top:5px;
 display:flex;
 width:100%;
+word-break: break-word;
 span:last-child{
 margin-left: auto;
 width: auto;

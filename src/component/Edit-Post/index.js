@@ -8,7 +8,7 @@ import Gallery from '../UI/Gallery'
 import { MentionsInput, Mention } from 'react-mentions'
 
 
-const EditModalBox = ({ isOpen,closeModal,users,value,setIsOpen,message,user}) => {
+const EditModalBox = React.memo(({ isOpen,closeModal,users,value,setIsOpen,message,user}) => {
    const [description, setDescription] = useState()
    const [image,setImage]= useState([])
    const [mentionArray,setMentionArray]= useState([])
@@ -18,7 +18,7 @@ const EditModalBox = ({ isOpen,closeModal,users,value,setIsOpen,message,user}) =
        setDescription(value.data)
        setImage(value.media)
        if(value.taggedUsers){
-         const arrayValue = mentionArray
+         const arrayValue = []
         value.taggedUsers.map(v=> arrayValue.push(v._id))
          setMentionArray(arrayValue)
        }
@@ -117,6 +117,6 @@ const handleEdit= async () => {
       </Modal>
     </div >
   )
-}
+})
 
 export default EditModalBox
