@@ -1,109 +1,163 @@
-import React from "react";
-import styled from "styled-components"
+import React, { useState } from "react";
+import styled from "styled-components";
 import { IoMdClose } from "react-icons/io";
-import Input from '../UI/Input/Input'
-import SaveButton from '../UI/SaveButton'
-import BackButton from '../UI/BackButton'
+import SaveButton from "../UI/SaveButton";
+import BackButton from "../UI/BackButton";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import FormBody from "./formBody";
+import error from "../../../constants";
+import { Auth } from "aws-amplify";
+import ValueLoader from "../../../utils/loader";
 
 const ChangePasswordContent = styled.div`
-    width:100%;
-    position: relative;
-    display:flex;
-    flex-direction: column;
-    flex-wrap:wrap;
-`
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+`;
 
 const MainHeading = styled.h1`
-    font-weight: bold;
-    font-size: 20px;
-    line-height: 24px;
-    color: #FFFFFF;
-    margin:48px 0 0;
-    padding: 0 0 13px 23px;
-    border-bottom: 0.5px dashed #FFFFFF;
-    @media (max-width:767px){
-        font-size: 16px;
-        padding: 0 0 13px 20px;
-    }
-`
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 24px;
+  color: #ffffff;
+  margin: 48px 0 0;
+  padding: 0 0 13px 23px;
+  border-bottom: 0.5px dashed #ffffff;
+  @media (max-width: 767px) {
+    font-size: 16px;
+    padding: 0 0 13px 20px;
+  }
+`;
 const CloseDiv = styled.div`
-    width:24px;
-    position: relative;
-    display:flex;
-    justify-content:flex-end;
-    position: absolute;
-    right: 17px;
-    cursor: pointer;
-    top: 17px;
-    svg{
-        font-size:24px;
-        color:#fff;
-    }
-`
+  width: 24px;
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  position: absolute;
+  right: 17px;
+  cursor: pointer;
+  top: 17px;
+  svg {
+    font-size: 24px;
+    color: #fff;
+  }
+`;
 
 const FormContainer = styled.div`
-    padding: 40px;
-    display:flex;
-    flex-direction:column;
-    @media (max-width:767px){
-        padding: 20px;
-    }
-`
-const InputContainer = styled.div`
-    border: 1px solid  ${props => props.usererror ? "#FF7171" : "#ffffff" };
-    height: 60px;
-    font-size: 16px;
-    line-height:21px;
-    width: 100%;
-    padding:6px 8px;
-    margin:0 0 15px;
-    background: #FFFFFF;
-    box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
-    border-radius: 0px;
-    display:flex;
-    flex-direction:column;
-`
-
-const LabelText = styled.label`
-    font-weight: bold;
-    font-size: 10px;
-    text-transform: uppercase;
-    color: #7F75BF;
-    line-height: normal;
-`
-
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  @media (max-width: 767px) {
+    padding: 20px;
+  }
+`;
 const BottomBtns = styled.div`
-    display:flex;
-    justify-content:space-between;
-    margin: 10px 0 0;
-`
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0 0;
+`;
 
+const ErrorDiv = styled.div`
+  color: #ff0000;
+`;
 
-const ChangePassword = () => (
+// validation schema
+const validate = {
+  oldPassword: Yup.string()
+    .matches(/^.{6,}$/, error.PASSWORD_MISMATCH)
+    .required(error.REQUIRED),
+  newPassword: Yup.string()
+    .matches(/^.{6,}$/, error.PASSWORD_MISMATCH)
+    .required(error.REQUIRED),
+  confirmPassword: Yup.string()
+    .matches(/^.{6,}$/, error.PASSWORD_MISMATCH)
+    .oneOf([Yup.ref("newPassword"), null], error.BOTH_PASSWORD_UNMATCH)
+    .required(error.REQUIRED),
+};
+
+/*
+@desc: change password component
+@params: setChangePassword (to display change password component or edit profile component)
+*/
+const ChangePassword = ({ setChangePassword }) => {
+  const [error, setError] = useState("");
+  const [loader, setLoader] = useState(false);
+  return (
     <>
-        <ChangePasswordContent>
-            <CloseDiv><IoMdClose /></CloseDiv>
-            <MainHeading>Change Password</MainHeading>
-            <FormContainer>
-                <InputContainer>
-                    <LabelText>Old Password</LabelText>
-                    <Input />
-                </InputContainer>
-                <InputContainer>
-                    <LabelText>New Password</LabelText>
-                    <Input />
-                </InputContainer>
-                <InputContainer>
-                    <LabelText>Re-Type New Password</LabelText>
-                    <Input />
-                </InputContainer>
+      <ChangePasswordContent>
+        <CloseDiv>
+          <IoMdClose />
+        </CloseDiv>
+        <MainHeading>Change Password</MainHeading>
+        <FormContainer>
+          <Formik
+            initialValues={{
+              oldPassword: "",
+              newPassword: "",
+              confirmPassword: "",
+            }}
+            /*validation schema */
+            validationSchema={Yup.object(validate)}
+            validateOnChange={false}
+            validateOnBlur={false}
+            onSubmit={(values) => {
+              /*change password */
+              Auth.currentAuthenticatedUser()
+                .then((user) => {
+                  return Auth.changePassword(
+                    user,
+                    values.oldPassword,
+                    values.newPassword
+                  );
+                })
+                .then((data) => {
+                  setLoader(true);
+                  setError("");
+                  setTimeout(() => {
+                    setLoader(false);
+                    setError("");
+                  }, 2000);
+                })
+                .catch((err) => {
+                  setLoader(true);
+                  setError("");
+                  setTimeout(() => {
+                    setLoader(false);
+                    setError("There was an error.  Please try again!");
+                  }, 10000);
+                });
+            }}
+          >
+            {(formik) => (
+              <form
+                onSubmit={formik.handleSubmit}
+                method="POST"
+                className="login-form"
+              >
+                {/* form body */}
+                <FormBody />
+                {/* display error message */}
+                {error !== "" ? <ErrorDiv>{error}</ErrorDiv> : <></>}
+
+                {/* change password btn */}
                 <BottomBtns>
-                    <BackButton>Back</BackButton>
-                    <SaveButton>Save</SaveButton>
-                </BottomBtns>                
-            </FormContainer>
-        </ChangePasswordContent>
+                  <BackButton onClick={() => setChangePassword(false)}>
+                    Back
+                  </BackButton>
+                  <SaveButton type="submit" disabled={loader}>
+                    {loader ? <ValueLoader /> : "Save"}
+                  </SaveButton>
+                </BottomBtns>
+              </form>
+            )}
+          </Formik>
+        </FormContainer>
+      </ChangePasswordContent>
     </>
-  )
-  
-export default ChangePassword
+  );
+};
+
+export default ChangePassword;

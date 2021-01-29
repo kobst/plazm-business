@@ -19,7 +19,7 @@ const RightBarContent = styled.div`
 const RightBar = () => (
     <>
         <RightBarContent>
-            <img src={RightBG} />
+            <img src={RightBG} alt="rightImg"/>
         </RightBarContent>
     </>
   )

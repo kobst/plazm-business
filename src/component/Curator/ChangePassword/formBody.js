@@ -1,0 +1,55 @@
+import React from "react";
+import styled from "styled-components";
+import FormikInput from "../UI/FormikInput";
+
+const InputContainer = styled.div`
+  border: 1px solid ${(props) => (props.usererror ? "#FF7171" : "#ffffff")};
+  height: 60px;
+  font-size: 16px;
+  line-height: 21px;
+  width: 100%;
+  padding: 6px 8px;
+  margin: 0 0 20px;
+  background: #ffffff;
+  box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
+  border-radius: 0px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const LabelText = styled.label`
+  font-weight: bold;
+  font-size: 10px;
+  text-transform: uppercase;
+  color: #7f75bf;
+  line-height: normal;
+`;
+// form body to change Password
+function FormBody() {
+  return (
+    <>
+      <InputContainer>
+        <LabelText>Old Password</LabelText>
+        <FormikInput
+          type="password"
+          name="oldPassword"
+        />
+      </InputContainer>
+      <InputContainer>
+        <LabelText>New Password</LabelText>
+        <FormikInput
+          type="password"
+          name="newPassword"
+        />
+      </InputContainer>
+      <InputContainer>
+        <LabelText>Re-Type New Password</LabelText>
+        <FormikInput
+          type="password"
+          name="confirmPassword"
+        />
+      </InputContainer>
+    </>
+  );
+}
+export default FormBody;

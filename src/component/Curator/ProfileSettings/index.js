@@ -155,7 +155,8 @@ const UploadImageText = styled.div`
     }
 `
 
-const ProfileSettings = () => (
+const ProfileSettings = ({setChangePassword}) => {
+    return (
     <>
         <ChangePasswordContent>
             <CloseDiv><IoMdClose /></CloseDiv>
@@ -187,12 +188,13 @@ const ProfileSettings = () => (
                     <Checkbox /> <span>Lock My Profile</span>
                 </CheckboxContainer>
                 <BottomBtns>
-                    <BackButton>Change Password</BackButton>
+                    <BackButton onClick={()=>setChangePassword(true)}>Change Password</BackButton>
                     <SaveButton>Save</SaveButton>
                 </BottomBtns>                
             </FormContainer>
         </ChangePasswordContent>
     </>
-  )
+    )
+    }
   
 export default ProfileSettings

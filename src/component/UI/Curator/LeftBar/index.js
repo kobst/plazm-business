@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components"
 import './styles.css';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
@@ -52,7 +52,9 @@ const SearchIcon = styled.div`
     
 `
 
-const LeftBar = () => (
+const LeftBar = () => {
+  const [changePassword, setChangePassword] = useState(false)
+  return (
     <>
       <LeftBarContent>
       <Tabs>
@@ -129,13 +131,14 @@ const LeftBar = () => (
         </TabPanel>
         <TabPanel>
           <div className="panel-content">
-            {/* <ChangePassword /> */}
-            <ProfileSettings />
+            {changePassword === true ?<ChangePassword setChangePassword={setChangePassword} />:
+            <ProfileSettings setChangePassword={setChangePassword}/>}
           </div>
         </TabPanel>
       </Tabs>
       </LeftBarContent>
     </>
   )
+}
   
 export default LeftBar
