@@ -32,7 +32,7 @@ const ErrorDiv = styled.div`
 /*
 @desc: formik form input box
 */
-const FormikInput = ({ label, ...props }) => {
+const Input = ({ label, ...props }) => {
   const [field, meta] = useField(props);
   return (
     <>
@@ -44,4 +44,4 @@ const FormikInput = ({ label, ...props }) => {
   );
 };
 
-export default FormikInput;
+export default Input;

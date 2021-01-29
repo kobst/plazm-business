@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import FormikInput from "../UI/FormikInput";
+import Input from "../UI/FormikInput";
 
 const InputContainer = styled.div`
   border: 1px solid ${(props) => (props.usererror ? "#FF7171" : "#ffffff")};
@@ -30,24 +30,15 @@ function FormBody() {
     <>
       <InputContainer>
         <LabelText>Old Password</LabelText>
-        <FormikInput
-          type="password"
-          name="oldPassword"
-        />
+        <Input type="password" name="oldPassword" />
       </InputContainer>
       <InputContainer>
         <LabelText>New Password</LabelText>
-        <FormikInput
-          type="password"
-          name="newPassword"
-        />
+        <Input type="password" name="newPassword" />
       </InputContainer>
       <InputContainer>
         <LabelText>Re-Type New Password</LabelText>
-        <FormikInput
-          type="password"
-          name="confirmPassword"
-        />
+        <Input type="password" name="confirmPassword" />
       </InputContainer>
     </>
   );

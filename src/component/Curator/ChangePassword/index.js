@@ -67,24 +67,47 @@ const ErrorDiv = styled.div`
 // validation schema
 const validate = {
   oldPassword: Yup.string()
-    .matches(/^.{6,}$/, error.PASSWORD_MISMATCH)
+    .matches(/^.{6,}$/, error.PASSWORD_LENGTH_MISMATCH)
     .required(error.REQUIRED),
   newPassword: Yup.string()
-    .matches(/^.{6,}$/, error.PASSWORD_MISMATCH)
+    .matches(/^.{6,}$/, error.PASSWORD_LENGTH_MISMATCH)
     .required(error.REQUIRED),
   confirmPassword: Yup.string()
-    .matches(/^.{6,}$/, error.PASSWORD_MISMATCH)
-    .oneOf([Yup.ref("newPassword"), null], error.BOTH_PASSWORD_UNMATCH)
+    .matches(/^.{6,}$/, error.PASSWORD_LENGTH_MISMATCH)
+    .oneOf([Yup.ref("newPassword"), null], error.PASSWORD_MISMATCH)
     .required(error.REQUIRED),
 };
 
 /*
 @desc: change password component
-@params: setChangePassword (to display change password component or edit profile component)
+@params: setDisplayChangePassword (to display change password component or edit profile component)
 */
-const ChangePassword = ({ setChangePassword }) => {
-  const [error, setError] = useState("");
+const ChangePassword = ({ setDisplayChangePassword }) => {
+  const [formError, setFormError] = useState("");
   const [loader, setLoader] = useState(false);
+  
+  /*
+  @desc: update password function
+  @params: form values
+  */
+  const updatePassword = (values) => {
+    Auth.currentAuthenticatedUser()
+    .then((user) => {
+      return Auth.changePassword(
+        user,
+        values.oldPassword,
+        values.newPassword
+      );
+    })
+    .then((data) => {
+      setLoader(false);
+      setFormError(error.PASSWORD_UPDATED_SUCCESSFULLY);
+    })
+    .catch((err) => {
+      setLoader(false);
+      setFormError(err.message);
+    });
+  }
   return (
     <>
       <ChangePasswordContent>
@@ -104,47 +127,25 @@ const ChangePassword = ({ setChangePassword }) => {
             validateOnChange={false}
             validateOnBlur={false}
             onSubmit={(values) => {
-              /*change password */
-              Auth.currentAuthenticatedUser()
-                .then((user) => {
-                  return Auth.changePassword(
-                    user,
-                    values.oldPassword,
-                    values.newPassword
-                  );
-                })
-                .then((data) => {
-                  setLoader(true);
-                  setError("");
-                  setTimeout(() => {
-                    setLoader(false);
-                    setError("");
-                  }, 2000);
-                })
-                .catch((err) => {
-                  setLoader(true);
-                  setError("");
-                  setTimeout(() => {
-                    setLoader(false);
-                    setError("There was an error.  Please try again!");
-                  }, 10000);
-                });
+              /*set loader value */
+              setLoader(true);
+              /*update password function call*/
+              updatePassword(values);
             }}
           >
             {(formik) => (
               <form
                 onSubmit={formik.handleSubmit}
                 method="POST"
-                className="login-form"
               >
                 {/* form body */}
                 <FormBody />
                 {/* display error message */}
-                {error !== "" ? <ErrorDiv>{error}</ErrorDiv> : <></>}
+                {error !== "" ? <ErrorDiv>{formError}</ErrorDiv> : <></>}
 
                 {/* change password btn */}
                 <BottomBtns>
-                  <BackButton onClick={() => setChangePassword(false)}>
+                  <BackButton onClick={() => setDisplayChangePassword(false)}>
                     Back
                   </BackButton>
                   <SaveButton type="submit" disabled={loader}>

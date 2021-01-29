@@ -154,8 +154,11 @@ const UploadImageText = styled.div`
         line-height: normal;
     }
 `
-
-const ProfileSettings = ({setChangePassword}) => {
+/*
+@desc: profile settings
+@params: setDisplayChangePassword (to display change password or profile settings)
+*/
+const ProfileSettings = ({setDisplayChangePassword}) => {
     return (
     <>
         <ChangePasswordContent>
@@ -167,6 +170,7 @@ const ProfileSettings = ({setChangePassword}) => {
                 </UploadImage>
                 <UploadImageText>Any message regarding profile picture uploading dimensions and file sizes goes here</UploadImageText>
             </UploadImageContainer>
+            
             <FormContainer>
                 <InputContainer>
                     <LabelText>First Name</LabelText>
@@ -188,7 +192,7 @@ const ProfileSettings = ({setChangePassword}) => {
                     <Checkbox /> <span>Lock My Profile</span>
                 </CheckboxContainer>
                 <BottomBtns>
-                    <BackButton onClick={()=>setChangePassword(true)}>Change Password</BackButton>
+                    <BackButton onClick={()=>setDisplayChangePassword(true)}>Change Password</BackButton>
                     <SaveButton>Save</SaveButton>
                 </BottomBtns>                
             </FormContainer>

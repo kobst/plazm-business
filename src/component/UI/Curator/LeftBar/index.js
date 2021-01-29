@@ -53,7 +53,7 @@ const SearchIcon = styled.div`
 `
 
 const LeftBar = () => {
-  const [changePassword, setChangePassword] = useState(false)
+  const [displayChangePassword, setDisplayChangePassword] = useState(false)
   return (
     <>
       <LeftBarContent>
@@ -131,8 +131,8 @@ const LeftBar = () => {
         </TabPanel>
         <TabPanel>
           <div className="panel-content">
-            {changePassword === true ?<ChangePassword setChangePassword={setChangePassword} />:
-            <ProfileSettings setChangePassword={setChangePassword}/>}
+            {displayChangePassword === true ?<ChangePassword setDisplayChangePassword={setDisplayChangePassword} />:
+            <ProfileSettings setDisplayChangePassword={setDisplayChangePassword}/>}
           </div>
         </TabPanel>
       </Tabs>
