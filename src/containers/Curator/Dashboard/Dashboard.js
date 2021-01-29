@@ -1,7 +1,11 @@
 import React from "react";
+import Dashboard from "../../../component/Curator/Dashboard/Dashboard"
+import './style.css';
 
-const Dashboard = (props) => {
-  return <div>This is consumer dashboard</div>;
+const DashboardContainer = (props) => {
+  return (
+    <Dashboard />
+  )
 };
 
-export default Dashboard;
+export default DashboardContainer;

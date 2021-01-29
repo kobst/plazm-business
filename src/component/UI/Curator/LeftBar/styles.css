@@ -1,0 +1,137 @@
+  .react-tabs {
+    display: flex;
+    width: 100%;
+    border: 0;
+    color: white;
+    background: #1c1d1f;
+    position: relative;
+  }
+  
+  .react-tabs__tab-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    color: white;
+    background: #F3F3F3;
+    box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
+  }
+  
+  .react-tabs__tab {
+    height: 98px;
+    list-style: none;
+    padding: 10px;
+    cursor: pointer;
+    color: #bbb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .react-tabs__tab:nth-child(1){
+    height: 64px;
+  }
+
+  .react-tabs__tab:nth-child(1), .react-tabs__tab:nth-child(2), .react-tabs__tab:nth-child(3){
+    border-bottom: 0.5px dashed #C4C4C4;
+  }
+  
+  .react-tabs__tab--selected, .react-tabs__tab--selected:hover, .react-tabs__tab--selected:focus {
+      outline: 0;
+  }
+  
+  .react-tabs__tab-panel {
+    display: none;
+    width: 544px;
+    position: absolute;
+    left: 100px;
+    background: #221E45;
+    height: 100%;
+    z-index: 1;
+    animation: fadein .5s;
+    -moz-animation: fadein .5s; /* Firefox */
+    -webkit-animation: fadein .5s; /* Safari and Chrome */
+    -o-animation: fadein .5s; /* Opera */
+    
+  }
+@keyframes fadein {
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@-moz-keyframes fadein { /* Firefox */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@-webkit-keyframes fadein { /* Safari and Chrome */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@-o-keyframes fadein { /* Opera */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+  
+  .react-tabs__tab-panel--selected {
+    display: block;
+  }
+  
+  .react-tabs__tab {
+  }
+  
+  .react-tabs__tab--selected {
+  }
+
+  #react-tabs-1{
+      display: none;
+  }
+
+  .react-tabs__tab.react-tabs__tab--selected{
+    background: #211D43;
+  }
+
+  #react-tabs-0{
+    background: transparent;
+  }
+
+  @media (max-width:767px){
+    .react-tabs__tab-panel{
+      left: 50px;
+      width: 300px;
+      height: auto;
+    }
+    .react-tabs__tab img{
+      max-width: 26px;
+    }
+    .react-tabs__tab, .react-tabs__tab:nth-child(1){
+      height: 50px;
+    }
+    .panel-content{
+      height: 400px;
+      overflow: auto;
+      overflow-x: hidden;
+    }
+  }
+  @media (max-width:359px){
+    .react-tabs__tab-panel{
+      left: 50px;
+      width: 260px;
+    }
+  }
+ 

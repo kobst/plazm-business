@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+body, html{
+    font-family: 'Montserrat', sans-serif; 
+    height: 100%; 
+    color:#fff;
+
+}
+input, button, select, option{
+    font-family: 'Montserrat', sans-serif; 
+}
+img{
+    max-width: 100%;
+}
+
+@media (max-width: 991px) and (orientation: landscape){
+    body, html{
+       height: auto;
+    }
+}
