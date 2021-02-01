@@ -158,11 +158,11 @@ const UploadImageText = styled.div`
 @desc: profile settings
 @params: setDisplayChangePassword (to display change password or profile settings)
 */
-const ProfileSettings = ({setDisplayChangePassword}) => {
+const ProfileSettings = ({setDisplayChangePassword, setDisplayTab}) => {
     return (
     <>
         <ChangePasswordContent>
-            <CloseDiv><IoMdClose /></CloseDiv>
+            <CloseDiv><IoMdClose onClick={()=>setDisplayTab(false)}/></CloseDiv>
             <MainHeading>Profile Settings <FaSort /></MainHeading>
             <UploadImageContainer>
                 <UploadImage>

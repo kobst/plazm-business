@@ -85,7 +85,7 @@ const validate = {
 @desc: change password component
 @params: setDisplayChangePassword (to display change password component or edit profile component)
 */
-const ChangePassword = ({ setDisplayChangePassword }) => {
+const ChangePassword = ({ setDisplayChangePassword, setDisplayTab }) => {
   const [formError, setFormError] = useState("");
   const [loader, setLoader] = useState(false);
 
@@ -116,7 +116,7 @@ const ChangePassword = ({ setDisplayChangePassword }) => {
     <>
       <ChangePasswordContent>
         <CloseDiv>
-          <IoMdClose />
+          <IoMdClose onClick={()=>setDisplayTab(false)} />
         </CloseDiv>
         <MainHeading>Change Password</MainHeading>
         <FormContainer>

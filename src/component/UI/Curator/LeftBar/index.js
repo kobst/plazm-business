@@ -53,88 +53,89 @@ const SearchIcon = styled.div`
 `
 
 const LeftBar = () => {
-  const [displayChangePassword, setDisplayChangePassword] = useState(false)
+  const [displayChangePassword, setDisplayChangePassword] = useState(false);
+  const [displayTab, setDisplayTab] = useState(true)
   return (
     <>
       <LeftBarContent>
       <Tabs>
         <TabList>
-          <Tab>
+          <Tab onClick={()=>setDisplayTab(true)}>
             <img src={PlazmLogo} alt="" />
           </Tab>
-          <Tab>
+          <Tab onClick={()=>setDisplayTab(true)}>
             <img src={LocalNav} alt="" />
           </Tab>
-          <Tab>
+          <Tab onClick={()=>setDisplayTab(true)}>
             <UserImage>
                 <img src={ProfileImg} alt="" />
             </UserImage>
           </Tab>
-          <Tab>
+          <Tab onClick={()=>setDisplayTab(true)}>
             <SearchIcon>
                 <BiSearchAlt2 />
             </SearchIcon>
           </Tab>
-          <Tab>
+          <Tab onClick={()=>setDisplayTab(true)}>
             <img src={Mention} alt="" />
           </Tab>
-          <Tab>
+          <Tab onClick={()=>setDisplayTab(true)}>
             <img src={Notifications} alt="" />
           </Tab>
-          <Tab>
+          <Tab onClick={()=>setDisplayTab(true)}>
             <img src={Favorites} alt="" />
           </Tab>
-          <Tab>
+          <Tab onClick={()=>setDisplayTab(true)}>
             <img src={GridIcon} alt="" />
           </Tab>
-          <Tab>
+          <Tab onClick={()=>setDisplayTab(true)}>
             <img src={ProfileSettingImg} alt="" />
           </Tab>
         </TabList>
 
-        <TabPanel>
-        </TabPanel>
-        <TabPanel>
+        {displayTab ===  true?<TabPanel>
+        </TabPanel>:<></>}
+        {displayTab ===  true?<TabPanel>
           <div className="panel-content">
             <h2>Any content 2</h2>
           </div>
-        </TabPanel>
-        <TabPanel>
+        </TabPanel>:<></>}
+        {displayTab ===  true?<TabPanel>
           <div className="panel-content">
             <h2>Any content 3</h2>
           </div>
-        </TabPanel>
-        <TabPanel>
+        </TabPanel>:<></>}
+        {displayTab ===  true?<TabPanel>
           <div className="panel-content">
             <h2>Any content 4</h2>
           </div>
-        </TabPanel>
-        <TabPanel>
+        </TabPanel>:<></>}
+        {displayTab ===  true?<TabPanel>
           <div className="panel-content">
             <h2>Any content 5</h2>
           </div>
-        </TabPanel>
-        <TabPanel>
+        </TabPanel>:<></>}
+        {displayTab ===  true?<TabPanel>
           <div className="panel-content">
             <h2>Any content 6</h2>
           </div>
-        </TabPanel>
-        <TabPanel>
+        </TabPanel>:<></>}
+        {displayTab ===  true?<TabPanel>
           <div className="panel-content">
             <h2>Any content 7</h2>
           </div>
-        </TabPanel>
-        <TabPanel>
+        </TabPanel>:<></>}
+        {displayTab ===  true?<TabPanel>
           <div className="panel-content">
             <h2>Any content 8</h2>
           </div>
-        </TabPanel>
-        <TabPanel>
+        </TabPanel>:<></>}
+        {displayTab ===  true?<TabPanel>
           <div className="panel-content">
-            {displayChangePassword === true ?<ChangePassword setDisplayChangePassword={setDisplayChangePassword} />:
-            <ProfileSettings setDisplayChangePassword={setDisplayChangePassword}/>}
+            {displayChangePassword === true ?<ChangePassword setDisplayChangePassword={setDisplayChangePassword} setDisplayTab={setDisplayTab}/>:
+            <ProfileSettings setDisplayChangePassword={setDisplayChangePassword} setDisplayTab={setDisplayTab}/>}
           </div>
-        </TabPanel>
+        </TabPanel>:<></>}
       </Tabs>
       </LeftBarContent>
     </>
