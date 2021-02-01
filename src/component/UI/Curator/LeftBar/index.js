@@ -52,9 +52,8 @@ const SearchIcon = styled.div`
     
 `
 
-const LeftBar = () => {
+const LeftBar = ({displayTab,setDisplayTab}) => {
   const [displayChangePassword, setDisplayChangePassword] = useState(false);
-  const [displayTab, setDisplayTab] = useState(true)
   return (
     <>
       <LeftBarContent>

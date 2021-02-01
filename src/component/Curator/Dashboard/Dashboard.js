@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import styled from "styled-components"
 import LeftBar from "../../UI/Curator/LeftBar"
 import RightBar from "../Dashboard/RightBar"
@@ -10,13 +10,16 @@ const DashboardContent = styled.div`
     height: 100%;
 `
 
-const Dashboard = () => (
+const Dashboard = () => {
+    const [displayTab, setDisplayTab] = useState(false)
+    return (
     <>
     <DashboardContent>
-        <LeftBar />
-        <RightBar />
+        <LeftBar displayTab={displayTab} setDisplayTab={setDisplayTab}/>
+        <RightBar displayTab={displayTab}/>
     </DashboardContent>
     </>
-  )
+    )
+}
   
   export default Dashboard
