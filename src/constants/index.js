@@ -1,7 +1,6 @@
-const error = {
-  PASSWORD_LENGTH_MISMATCH: "Your password must be at least 5 characters long.",
+export default {
+  PASSWORD_LENGTH_MISMATCH: "Password must be at least 8 characters long.",
   REQUIRED: "This field is required.",
-  PASSWORD_MISMATCH: "Password and confirm password does not match.",
-  PASSWORD_UPDATED_SUCCESSFULLY:"Password updated successfully!!"
+  PASSWORD_MISMATCH: "Password and confirm password do not match.",
+  PASSWORD_UPDATED_SUCCESSFULLY: "Password updated successfully.",
 };
-export default error;

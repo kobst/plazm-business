@@ -85,29 +85,30 @@ const validate = {
 const ChangePassword = ({ setDisplayChangePassword }) => {
   const [formError, setFormError] = useState("");
   const [loader, setLoader] = useState(false);
-  
+
   /*
   @desc: update password function
   @params: form values
   */
   const updatePassword = (values) => {
+    setLoader(true);
     Auth.currentAuthenticatedUser()
-    .then((user) => {
-      return Auth.changePassword(
-        user,
-        values.oldPassword,
-        values.newPassword
-      );
-    })
-    .then((data) => {
-      setLoader(false);
-      setFormError(error.PASSWORD_UPDATED_SUCCESSFULLY);
-    })
-    .catch((err) => {
-      setLoader(false);
-      setFormError(err.message);
-    });
-  }
+      .then((user) => {
+        return Auth.changePassword(
+          user,
+          values.oldPassword,
+          values.newPassword
+        );
+      })
+      .then((data) => {
+        setLoader(false);
+        setFormError(error.PASSWORD_UPDATED_SUCCESSFULLY);
+      })
+      .catch((err) => {
+        setLoader(false);
+        setFormError(err.message);
+      });
+  };
   return (
     <>
       <ChangePasswordContent>
@@ -127,17 +128,12 @@ const ChangePassword = ({ setDisplayChangePassword }) => {
             validateOnChange={false}
             validateOnBlur={false}
             onSubmit={(values) => {
-              /*set loader value */
-              setLoader(true);
               /*update password function call*/
               updatePassword(values);
             }}
           >
             {(formik) => (
-              <form
-                onSubmit={formik.handleSubmit}
-                method="POST"
-              >
+              <form onSubmit={formik.handleSubmit} method="POST">
                 {/* form body */}
                 <FormBody />
                 {/* display error message */}
