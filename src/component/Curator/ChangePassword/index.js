@@ -62,6 +62,9 @@ const BottomBtns = styled.div`
 
 const ErrorDiv = styled.div`
   color: #ff0000;
+  font-weight: 600;
+  font-size: 12px;
+  margin: 0;
 `;
 
 // validation schema

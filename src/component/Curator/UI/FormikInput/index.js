@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const InputText = styled.input`
   border: 0;
-  height: 40px;
+  height: 36px;
   font-size: 16px;
   line-height: normal;
   width: 100%;
@@ -27,7 +27,9 @@ const InputText = styled.input`
 `;
 const ErrorDiv = styled.div`
   color: #ff0000;
-  float: right;
+  font-weight: 600;
+  font-size: 11px;
+  margin: 0;
 `;
 /*
 @desc: formik form input box

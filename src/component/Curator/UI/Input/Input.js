@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 const InputText = styled.input`
     border: 0;
-    height: 40px;
+    height: 36px;
     font-size: 16px;
     line-height: normal;
     width: 100%;

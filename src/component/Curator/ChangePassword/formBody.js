@@ -4,7 +4,7 @@ import Input from "../UI/FormikInput";
 
 const InputContainer = styled.div`
   border: 1px solid ${(props) => (props.usererror ? "#FF7171" : "#ffffff")};
-  height: 60px;
+  min-height: 60px;
   font-size: 16px;
   line-height: 21px;
   width: 100%;
