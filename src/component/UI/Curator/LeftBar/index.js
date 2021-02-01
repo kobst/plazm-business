@@ -87,7 +87,7 @@ const LeftBar = ({displayTab,setDisplayTab}) => {
           <Tab onClick={()=>setDisplayTab(true)}>
             <img src={GridIcon} alt="" />
           </Tab>
-          <Tab onClick={()=>setDisplayTab(true)}>
+          <Tab onClick={()=>setDisplayTab(true)} style={displayTab === false?{background:"#f3f3f3"}:{background:""}}>
             <img src={ProfileSettingImg} alt="" />
           </Tab>
         </TabList>
