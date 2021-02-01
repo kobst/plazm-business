@@ -7,6 +7,8 @@ const RightBarContent = styled.div`
     position: relative;
     display:flex;
     max-width: calc(100% - 100px);
+    transition: 0.5s;
+    left: 0;
     img{
         width:100%;
         height:100%;
@@ -14,12 +16,21 @@ const RightBarContent = styled.div`
     @media (max-width:767px){
         max-width: calc(100% - 50px);
     }
+    &.imgSlide_onTabOpen{
+    left: 440px;
+    max-width: calc(100% - 540px);
+    transition: 0.5s;
+        @media (max-width:767px){
+            left: 0px;
+            max-width: 100%;
+        }
+    }
 `
 
 const RightBar = ({displayTab}) => (
     <>
-        <RightBarContent>
-            <img src={RightBG} alt="rightImg" className={displayTab===true?"imgSlide_onTabOpen":""}/>
+        <RightBarContent className={displayTab===true?"imgSlide_onTabOpen":""}>
+            <img src={RightBG} alt="rightImg" />
         </RightBarContent>
     </>
   )

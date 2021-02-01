@@ -3,8 +3,8 @@
 body, html{
     font-family: 'Montserrat', sans-serif; 
     height: 100%; 
-    color:#fff;
-
+    overflow-x: hidden;
+    background: #221E45;
 }
 input, button, select, option{
     font-family: 'Montserrat', sans-serif; 
@@ -17,4 +17,8 @@ img{
     body, html{
        height: auto;
     }
+}
+
+.imgSlide_onTabOpen{
+    
 }
