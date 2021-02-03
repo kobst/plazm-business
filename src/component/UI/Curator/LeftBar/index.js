@@ -52,7 +52,7 @@ const SearchIcon = styled.div`
     
 `
 
-const LeftBar = ({displayTab,setDisplayTab}) => {
+const LeftBar = ({displayTab,setDisplayTab,profile,setFlag}) => {
   const [displayChangePassword, setDisplayChangePassword] = useState(false);
   return (
     <>
@@ -132,7 +132,7 @@ const LeftBar = ({displayTab,setDisplayTab}) => {
         {displayTab ===  true?<TabPanel>
           <div className="panel-content">
             {displayChangePassword === true ?<ChangePassword setDisplayChangePassword={setDisplayChangePassword} setDisplayTab={setDisplayTab}/>:
-            <ProfileSettings setDisplayChangePassword={setDisplayChangePassword} setDisplayTab={setDisplayTab}/>}
+            <ProfileSettings setDisplayChangePassword={setDisplayChangePassword} setDisplayTab={setDisplayTab} profile={profile} setFlag={setFlag}/>}
           </div>
         </TabPanel>:<></>}
       </Tabs>

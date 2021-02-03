@@ -6,7 +6,7 @@ import Wrapper from '../../component/Login-Register/Wrapper'
 import RegisterForm from '../../component/Login-Register/Form-Components/Register-Form'
 import {getMessage} from '../../config'
 import ValueLoader from '../../utils/loader'
-import {callApi,addBusiness, updateBusiness} from '../../Api'
+import {callApi,addBusiness, updateBusiness, addUserProfile} from '../../Api'
 
 const renderMessage= getMessage()
 
@@ -65,7 +65,22 @@ const Register = (props) => {
         })
         .then(async(res) => {
             if(res.userSub){
-         if(await checkUser(res.userSub)){
+                if(type.includes('curator')){
+                    const obj = {
+                        name: username,
+                        email: email,
+                        phoneNumber: phone_number,
+                        userSub: res.userSub
+                    }
+                    const profile = await addUserProfile(obj)
+                    if(profile.data.addUser.success === true){
+                        form.reset()
+                        setVerified(true)
+                        setError(false)
+                        setLoader(false)
+                    }
+                }
+         if(type.includes('business')&&await checkUser(res.userSub)){
              form.reset()
             setVerified(true)
             setError(false)
@@ -124,7 +139,7 @@ const Register = (props) => {
             setFirstError(true)
             }
         }
-        if(!loc){
+        if(!loc && type.includes('business')){
             setLocError(true)
         }
         if(loc){
@@ -161,7 +176,11 @@ const Register = (props) => {
             setMessage(renderMessage.pass_length)
     }
 }
-        if(username && loc && username.length>3 && phone_number && validateEmail(email) && password && name && password.length>7 && phone_number.length>=5 &&
+        if(type.includes('business')&&username && loc && username.length>3 && phone_number && validateEmail(email) && password && name && password.length>7 && phone_number.length>=5 &&
+        phone_number.length<=50 ){
+            return true
+        }
+        if(type.includes('curator')&&username  && username.length>3 && phone_number && validateEmail(email) && password && password.length>7 && phone_number.length>=5 &&
         phone_number.length<=50 ){
             return true
         }
