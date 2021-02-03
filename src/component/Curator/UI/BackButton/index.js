@@ -25,6 +25,7 @@ padding: 0 25px;
 }
 @media (max-width:359px){
   font-size: 10px;
+  min-width: 80px;
 }
 `
 

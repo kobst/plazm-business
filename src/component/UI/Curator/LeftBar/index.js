@@ -13,6 +13,7 @@ import ProfileSettingImg from '../../../../images/Profile_Setting.png';
 import { BiSearchAlt2 } from "react-icons/bi";
 import ChangePassword from '../../../Curator/ChangePassword'
 import ProfileSettings from '../../../Curator/ProfileSettings'
+import ProfileView from '../../../Curator/ProfileView'
 
 const LeftBarContent = styled.div`
     width:100px;
@@ -100,9 +101,7 @@ const LeftBar = ({displayTab,setDisplayTab}) => {
           </div>
         </TabPanel>:<></>}
         {displayTab ===  true?<TabPanel>
-          <div className="panel-content">
-            <h2>Any content 3</h2>
-          </div>
+          <ProfileView />
         </TabPanel>:<></>}
         {displayTab ===  true?<TabPanel>
           <div className="panel-content">
@@ -133,6 +132,7 @@ const LeftBar = ({displayTab,setDisplayTab}) => {
           <div className="panel-content">
             {displayChangePassword === true ?<ChangePassword setDisplayChangePassword={setDisplayChangePassword} setDisplayTab={setDisplayTab}/>:
             <ProfileSettings setDisplayChangePassword={setDisplayChangePassword} setDisplayTab={setDisplayTab}/>}
+            
           </div>
         </TabPanel>:<></>}
       </Tabs>
