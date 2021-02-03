@@ -2,6 +2,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import './checkbox-style.css'
+import { Field } from "formik";
 
 const DivText = styled.label`
     border: 0;
@@ -19,7 +20,7 @@ const DivText = styled.label`
 const Checkbox = () => (
     <>
         <DivText className="container">
-            <input type="checkbox" />
+        <Field type="checkbox" name="lockMyProfile" />
             <span className="checkmark"></span>
         </DivText>
     </>

@@ -42,9 +42,13 @@ const Login = (props) => {
             password: password
         })
         // eslint-disable-next-line no-sequences
-        .then(() =>( history.push('/dashboard'),
+        .then(() =>{ 
+        if(type.includes('business'))
+        history.push('/dashboard');
+        else
+        history.push('/curator/dashboard');
         window.location.reload() 
-        ))
+       })
         .catch((err) =>{ 
         if(err){
             return(setmessage(err.message),setError(true),setDisable(false))}})
