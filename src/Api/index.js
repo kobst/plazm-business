@@ -1,4 +1,5 @@
 import { AddUser, getUser, updateUserProfile } from "../graphQl";
+import {graphQlEndPoint} from './graphQl';
 
 export const callPlace = async (userSub) => {
   const response = await fetch(
@@ -156,53 +157,20 @@ export const addUserProfile = async (values) => {
     userSub: values.userSub,
   };
   const graphQl = AddUser(obj);
-  const response = await fetch(
-    `http://localhost:8080/dev`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*"
-      },
-      body: JSON.stringify( graphQl ),
-    }
-  );
-  const body = await response.json();
-  return body;
+  const response = graphQlEndPoint(graphQl);
+  return response;
 };
 
 /* get User Profile of the signIn curator */
 export const getUserProfile = async (userSub) => {
   const graphQl = getUser(userSub);
-  const response = await fetch(
-    `http://localhost:8080/dev`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*"
-      },
-      body: JSON.stringify( graphQl ),
-    }
-  );
-  const body = await response.json();
-  return body;
+  const response = graphQlEndPoint(graphQl);
+  return response;
 };
 
 /* update User Profile */
 export const updateProfileApi = async (obj) => {
   const graphQl = updateUserProfile(obj);
-  const response = await fetch(
-    `http://localhost:8080/dev`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*"
-      },
-      body: JSON.stringify( graphQl ),
-    }
-  );
-  const body = await response.json();
-  return body;
+  const response = graphQlEndPoint(graphQl);
+  return response;
 };

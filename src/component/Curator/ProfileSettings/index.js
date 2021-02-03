@@ -151,7 +151,6 @@ const ProfileSettings = ({
   const [profileImage, setProfileImage] = useState(null);
   const [imageError, setImageError] = useState("");
   const [imageFile, setImageFile] = useState(null);
-
   /*
   @desc: to check input file format and throw error if invalid image is input
   @params: input file
@@ -181,7 +180,7 @@ const ProfileSettings = ({
     /* to replace all spaces to underscore */
     const replacedName = removeSpecialCharacter.split(" ").join("_");
     /* return folder name */
-    return replacedName + "_" + id;
+    return replacedName+"_"+id;
   };
 
   /*
@@ -237,7 +236,7 @@ const ProfileSettings = ({
     };
     /* update profile api */
     const res = await updateProfileApi(obj);
-    if (res.data.updateProfile.success === true) {
+    if (res&&res.data.updateProfile.success === true) {
       setFlag(true);
       setLoader(false);
     }
@@ -255,7 +254,7 @@ const ProfileSettings = ({
         <UploadImageContainer>
           <UploadImage>
             {profile.photo!=="" || profileImage !== null ? (
-              <ProfileImage src={profile.photo||profileImage} />
+              <ProfileImage src={profile.photo || profileImage} />
             ) : (
               <>
                 <input
@@ -305,7 +304,7 @@ const ProfileSettings = ({
               <form onSubmit={formik.handleSubmit} method="POST">
                 <FormBody loader={loader} />
                 <BottomBtns>
-                  <BackButton onClick={() => setDisplayChangePassword(true)}>
+                  <BackButton  disabled={loader} onClick={() => setDisplayChangePassword(true)}>
                     Change Password
                   </BackButton>
                   <SaveButton type="submit" disabled={loader}>

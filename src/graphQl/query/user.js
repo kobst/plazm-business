@@ -13,7 +13,7 @@ const getUser = (userSub) => {
                   email
                   userSub
                   phoneNumber
-                  photo
+                  photo 
                   lockProfile
                   _id
               }

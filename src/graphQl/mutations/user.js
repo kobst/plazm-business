@@ -44,7 +44,7 @@ const updateUserProfile = (values) => {
                   phoneNumber
                   userSub
                   lockProfile
-                  photo
+                  photo 
               }
             }
           }`,

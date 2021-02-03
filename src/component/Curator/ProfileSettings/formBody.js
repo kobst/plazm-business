@@ -56,7 +56,7 @@ function FormBody({loader}) {
         <Input type="email" name="email" disabled={loader} />
       </InputContainer>
       <CheckboxContainer>
-        <Checkbox /> <span>Lock My Profile</span>
+        <Checkbox loader={loader}/> <span>Lock My Profile</span>
       </CheckboxContainer>
     </>
   );

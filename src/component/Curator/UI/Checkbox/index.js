@@ -17,10 +17,10 @@ const DivText = styled.label`
     }
 `
 
-const Checkbox = () => (
+const Checkbox = ({loader}) => (
     <>
         <DivText className="container">
-        <Field type="checkbox" name="lockMyProfile" />
+        <Field type="checkbox" name="lockMyProfile" disabled={loader}/>
             <span className="checkmark"></span>
         </DivText>
     </>
