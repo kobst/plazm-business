@@ -42,12 +42,17 @@ const Login = (props) => {
     })
       // eslint-disable-next-line no-sequences
       .then((data) => {
-        if (data.attributes["custom:type"] === "business")
+        console.log("data: ", data);
+        if (data.attributes["custom:type"] === "business") {
+          console.log("business", data.attributes["custom:type"]);
           history.push("/dashboard");
-        else if (data.attributes["custom:type"] === "curator")
+        } else if (data.attributes["custom:type"] === "curator") {
+          console.log("curator", data.attributes["custom:type"]);
           history.push("/curator/dashboard");
-        else history.push("/business/login");
-        window.location.reload();
+        } else {
+          console.log("else condition");
+          history.push("/business/login");
+        }
       })
       .catch((err) => {
         if (err) {
