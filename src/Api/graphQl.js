@@ -6,7 +6,6 @@ export const graphQlEndPoint = async (graphQl) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*"
         },
         body: JSON.stringify( graphQl ),
       }
