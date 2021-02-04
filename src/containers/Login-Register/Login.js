@@ -53,6 +53,7 @@ const Login = (props) => {
           console.log("else condition");
           history.push("/business/login");
         }
+        window.location.reload();
       })
       .catch((err) => {
         if (err) {
