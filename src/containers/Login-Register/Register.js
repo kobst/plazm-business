@@ -11,6 +11,7 @@ import {callApi,addBusiness, updateBusiness, addUserProfile} from '../../Api'
 const renderMessage= getMessage()
 
 const Register = (props) => {
+    const {userType} = props;
     const type = props.match.url
     const [username,setUser]= useState()
     const [password,setPassword]= useState()
@@ -58,9 +59,10 @@ const Register = (props) => {
             username: email,
             password: password,
             attributes: {
-                email: email,
-                phone_number: phone_number, 
-                name: username,
+                'email': email,
+                'phone_number': phone_number, 
+                'name': username,
+                'custom:type': userType
             }
         })
         .then(async(res) => {

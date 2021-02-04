@@ -151,6 +151,7 @@ const ProfileSettings = ({
   const [profileImage, setProfileImage] = useState(null);
   const [imageError, setImageError] = useState("");
   const [imageFile, setImageFile] = useState(null);
+  const [error, setError] = useState("");
   /*
   @desc: to check input file format and throw error if invalid image is input
   @params: input file
@@ -237,8 +238,12 @@ const ProfileSettings = ({
     /* update profile api */
     const res = await updateProfileApi(obj);
     if (res&&res.data.updateProfile.success === true) {
+      setError("");
       setFlag(true);
       setLoader(false);
+    }else if(res&&res.data.updateProfile.success === false){
+      setLoader(false);
+      setError("Could not update profile")
     }
 
   };
@@ -253,7 +258,7 @@ const ProfileSettings = ({
         </MainHeading>
         <UploadImageContainer>
           <UploadImage>
-            {profile.photo!=="" || profileImage !== null ? (
+            {profile.photo!=="" && profile.photo!==null || profileImage !== null ? (
               <ProfileImage src={profile.photo || profileImage} />
             ) : (
               <>
@@ -303,6 +308,7 @@ const ProfileSettings = ({
             {(formik) => (
               <form onSubmit={formik.handleSubmit} method="POST">
                 <FormBody loader={loader} />
+                {error!==""?<ErrorDiv>{error}</ErrorDiv>:<></>}
                 <BottomBtns>
                   <BackButton  disabled={loader} onClick={() => setDisplayChangePassword(true)}>
                     Change Password
