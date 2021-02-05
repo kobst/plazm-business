@@ -157,20 +157,20 @@ export const addUserProfile = async (values) => {
     userSub: values.userSub,
   };
   const graphQl = AddUser(obj);
-  const response = graphQlEndPoint(graphQl);
+  const response =  graphQlEndPoint(graphQl);
   return response;
 };
 
 /* get User Profile of the signIn curator */
 export const getUserProfile = async (userSub) => {
   const graphQl = getUser(userSub);
-  const response = graphQlEndPoint(graphQl);
+  const response =  graphQlEndPoint(graphQl);
   return response;
 };
 
 /* update User Profile */
 export const updateProfileApi = async (obj) => {
   const graphQl = updateUserProfile(obj);
-  const response = graphQlEndPoint(graphQl);
+  const response =  graphQlEndPoint(graphQl);
   return response;
 };
