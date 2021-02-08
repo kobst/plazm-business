@@ -144,7 +144,7 @@ const ChangePassword = ({ setDisplayChangePassword, setDisplayTab }) => {
 
                 {/* change password btn */}
                 <BottomBtns>
-                  <BackButton onClick={() => setDisplayChangePassword(false)}>
+                  <BackButton onClick={() => setDisplayChangePassword(false)} disabled={loader}>
                     Back
                   </BackButton>
                   <SaveButton type="submit" disabled={loader}>
