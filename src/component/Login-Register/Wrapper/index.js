@@ -264,7 +264,7 @@ const Wrapper = (props) => {
                             {props.page === 'register' ?
                                 <SignIn><span>Already On Plazm?</span>{props.type.includes('business') ?
                                     <Link to='/business/login' className="link-btn"><strong>Sign In</strong></Link> :
-                                    <Link to='/curator/login' className="link-btn"><strong>Sign In</strong></Link>
+                                    <Link to='/consumer/login' className="link-btn"><strong>Sign In</strong></Link>
                                 }</SignIn>
                                 : null}
                             {props.page === 'forgot' ?
@@ -293,7 +293,7 @@ const Wrapper = (props) => {
                     {props.page === 'login' ?
                         (props.type.includes('business') ?
                             <Link to='/business/register' >Don't have an account yet?<strong>Sign Up</strong></Link> :
-                            <Link to='/curator/register' >Don't have an account yet?<strong>Sign Up</strong></Link>
+                            <Link to='/consumer/register' >Don't have an account yet?<strong>Sign Up</strong></Link>
                         )
                         : null
                     }
@@ -318,7 +318,7 @@ const Wrapper = (props) => {
                                     {props.page === 'register' ?
                                         <SignIn><span>Already On Plazm?</span>{props.type.includes('business') ?
                                             <Link to='/business/login' className="link-btn"><strong>Sign In</strong></Link> :
-                                            <Link to='/curator/login' className="link-btn"><strong>Sign In</strong></Link>
+                                            <Link to='/consumer/login' className="link-btn"><strong>Sign In</strong></Link>
                                         }</SignIn>
                                         : null}
                                     {props.page === 'forgot' ?

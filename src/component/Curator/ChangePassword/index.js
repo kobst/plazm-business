@@ -87,6 +87,7 @@ const validate = {
 */
 const ChangePassword = ({ setDisplayChangePassword, setDisplayTab }) => {
   const [formError, setFormError] = useState("");
+  const [response, setResponse] = useState("");
   const [loader, setLoader] = useState(false);
 
   /*
@@ -105,11 +106,16 @@ const ChangePassword = ({ setDisplayChangePassword, setDisplayTab }) => {
       })
       .then((data) => {
         setLoader(false);
-        setFormError(error.PASSWORD_UPDATED_SUCCESSFULLY);
+        setFormError("");
+        setResponse(error.PASSWORD_UPDATED_SUCCESSFULLY);
       })
       .catch((err) => {
         setLoader(false);
-        setFormError(err.message);
+        setResponse("");
+        if(err.message === "Incorrect username or password.")
+        setFormError(error.INCORRECT_OLD_PASSWORD);
+        else
+        setFormError(err.message)
       });
   };
   return (
@@ -138,9 +144,9 @@ const ChangePassword = ({ setDisplayChangePassword, setDisplayTab }) => {
             {(formik) => (
               <form onSubmit={formik.handleSubmit} method="POST">
                 {/* form body */}
-                <FormBody />
+                <FormBody formError={formError} setResponse={setResponse}/>
                 {/* display error message */}
-                {error !== "" ? <ErrorDiv>{formError}</ErrorDiv> : <></>}
+                {response !== "" ? <ErrorDiv>{response}</ErrorDiv> : formError !== error.INCORRECT_OLD_PASSWORD? <ErrorDiv>{formError}</ErrorDiv>:null}
 
                 {/* change password btn */}
                 <BottomBtns>

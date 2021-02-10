@@ -26,7 +26,7 @@ const DashboardContainer = (props) => {
         }
       } catch {
         /* if not authenticated then redirect to login curator page */
-        history.push("/curator/login");
+        history.push("/consumer/login");
         window.location.reload();
       }
     };

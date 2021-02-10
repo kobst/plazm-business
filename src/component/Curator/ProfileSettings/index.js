@@ -5,6 +5,7 @@ import SaveButton from "../UI/SaveButton";
 import BackButton from "../UI/BackButton";
 import { FaSort } from "react-icons/fa";
 import { HiPlus } from "react-icons/hi";
+import { IoMdCloseCircle } from "react-icons/io";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import FormBody from "./formBody";
@@ -103,6 +104,7 @@ const UploadImage = styled.div`
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  position: relative;
   svg {
     color: #c5c5c5;
     font-size: 32px;
@@ -114,6 +116,20 @@ const UploadImage = styled.div`
     width: 60px;
     height: 60px;
     margin: 0 0 15px 0;
+  }
+  .hide {
+    display: none;
+  }
+  &:hover {
+    opacity: 0.7;
+    .hide {
+      display: block;
+      position: absolute;
+      svg {
+        color: #ff0000;
+        cursor: pointer;
+      }
+    }
   }
 `;
 const UploadImageText = styled.div`
@@ -148,10 +164,13 @@ const ProfileSettings = ({
   setFlag,
 }) => {
   const [loader, setLoader] = useState(false);
-  const [profileImage, setProfileImage] = useState(null);
+  const [profileImage, setProfileImage] = useState(
+    profile.photo ? profile.photo : null
+  );
   const [imageError, setImageError] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [error, setError] = useState("");
+  const [response, setResponse] = useState("");
   /*
   @desc: to check input file format and throw error if invalid image is input
   @params: input file
@@ -181,7 +200,7 @@ const ProfileSettings = ({
     /* to replace all spaces to underscore */
     const replacedName = removeSpecialCharacter.split(" ").join("_");
     /* return folder name */
-    return replacedName+"_"+id;
+    return replacedName + "_" + id;
   };
 
   /*
@@ -194,38 +213,38 @@ const ProfileSettings = ({
     const folder_name = folderName(values.name, profile._id);
     /* to upload file to s3 bucket on save of profile button */
     let imageUrl = null;
-    if(imageFile!==null){
-    const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${imageFile.name}`;
-    const value = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/upload_photo`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          Key: imageFile.name,
-          ContentType: imageFile.type,
-          folder_name: folder_name,
-        }),
-      }
-    );
-    const body = await value.text();
-    const Val = JSON.parse(body);
-
-    await fetch(Val, {
-      method: "PUT",
-      headers: {
-        "Content-Type": imageFile.type,
-      },
-      body: imageFile,
-    })
-      .then((response) => {
-        imageUrl = baseUrl;
-      })
-      .catch(
-        (error) => console.log(error) // Handle the error response object
+    if (imageFile !== null) {
+      const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${imageFile.name}`;
+      const value = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/upload_photo`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            Key: imageFile.name,
+            ContentType: imageFile.type,
+            folder_name: folder_name,
+          }),
+        }
       );
+      const body = await value.text();
+      const Val = JSON.parse(body);
+
+      await fetch(Val, {
+        method: "PUT",
+        headers: {
+          "Content-Type": imageFile.type,
+        },
+        body: imageFile,
+      })
+        .then((response) => {
+          imageUrl = baseUrl;
+        })
+        .catch(
+          (error) => console.log(error) // Handle the error response object
+        );
     }
     const obj = {
       name: values.name,
@@ -233,19 +252,20 @@ const ProfileSettings = ({
       phoneNumber: values.phoneNumber,
       userSub: profile.userSub,
       lockProfile: values.lockMyProfile === true ? 1 : 0,
-      photo: imageFile!==null?imageUrl!==null?imageUrl:profile.photo:profile.photo,
+      photo: imageFile !== null ? (imageUrl !== null ? imageUrl : "") : "",
     };
     /* update profile api */
     const res = await updateProfileApi(obj);
-    if (res&&res.data.updateProfile.success === true) {
+    if (res && res.data.updateProfile.success === true) {
+      setResponse("Profile updated successfully.");
       setError("");
       setFlag(true);
       setLoader(false);
-    }else if(res&&res.data.updateProfile.success === false){
+    } else if (res && res.data.updateProfile.success === false) {
       setLoader(false);
-      setError("Could not update profile")
+      setResponse("");
+      setError("Could not update profile");
     }
-
   };
   return (
     <>
@@ -258,8 +278,8 @@ const ProfileSettings = ({
         </MainHeading>
         <UploadImageContainer>
           <UploadImage>
-            {profile.photo!=="" && profile.photo!==null || profileImage !== null ? (
-              <ProfileImage src={profile.photo || profileImage} />
+            {profileImage !== null ? (
+              <ProfileImage src={profileImage} />
             ) : (
               <>
                 <input
@@ -275,6 +295,12 @@ const ProfileSettings = ({
                 </p>
               </>
             )}
+            {/* for displaying cross icon when an image is uploaded */}
+            {profileImage !== null ? (
+              <div className="hide" onClick={() => setProfileImage(null)}>
+                <IoMdCloseCircle />
+              </div>
+            ) : null}
           </UploadImage>
           <UploadImageText>
             Any message regarding profile picture uploading dimensions and file
@@ -308,9 +334,18 @@ const ProfileSettings = ({
             {(formik) => (
               <form onSubmit={formik.handleSubmit} method="POST">
                 <FormBody loader={loader} />
-                {error!==""?<ErrorDiv>{error}</ErrorDiv>:<></>}
+                {error !== "" ? (
+                  <ErrorDiv>{error}</ErrorDiv>
+                ) : response !== "" ? (
+                  <ErrorDiv>{response}</ErrorDiv>
+                ) : (
+                  <></>
+                )}
                 <BottomBtns>
-                  <BackButton  disabled={loader} onClick={() => setDisplayChangePassword(true)}>
+                  <BackButton
+                    disabled={loader}
+                    onClick={() => setDisplayChangePassword(true)}
+                  >
                     Change Password
                   </BackButton>
                   <SaveButton type="submit" disabled={loader}>

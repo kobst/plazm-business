@@ -42,17 +42,11 @@ const Login = (props) => {
     })
       // eslint-disable-next-line no-sequences
       .then((data) => {
-        console.log("data: ", data);
-        if (data.attributes["custom:type"] === "business") {
-          console.log("business", data.attributes["custom:type"]);
+        if (data.attributes["custom:type"] === "business")
           history.push("/dashboard");
-        } else if (data.attributes["custom:type"] === "curator") {
-          console.log("curator", data.attributes["custom:type"]);
-          history.push("/curator/dashboard");
-        } else {
-          console.log("else condition");
-          history.push("/business/login");
-        }
+        else if (data.attributes["custom:type"] === "curator")
+          history.push("/consumer/dashboard");
+        else history.push("/business/login");
         window.location.reload();
       })
       .catch((err) => {
@@ -119,7 +113,11 @@ const Login = (props) => {
           type={type}
           page="login"
           heading={renderMessage.Welcome}
-          welcomeMessage={renderMessage.Login_Mess}
+          welcomeMessage={
+            type.includes("business")
+              ? renderMessage.Login_Mess
+              : renderMessage.Login_Mess_Consumer
+          }
         >
           <LoginForm
             type={type}

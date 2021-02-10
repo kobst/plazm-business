@@ -15,13 +15,13 @@ const Routes = () => (
   <Router>
     <Switch>
       <Route path="/business/login" component={Login} />
-      <Route path="/curator/login" component={Login} />
+      <Route path="/consumer/login" component={Login} />
       <Route
         path="/business/register"
         render={(props) => <Register userType="business" {...props} />}
       />
       <Route
-        path="/curator/register"
+        path="/consumer/register"
         render={(props) => <Register userType="curator" {...props} />}
       />
       <Route
@@ -29,9 +29,9 @@ const Routes = () => (
         component={ForgotPassword}
       />
       <Route path="/business/forgot-password" component={ForgotPassword} />
-      <Route path="/curator/forgot-password" component={ForgotPassword} />
+      <Route path="/consumer/forgot-password" component={ForgotPassword} />
       <Route path="/dashboard" component={Dashboard} />
-      <Route path="/curator/dashboard" component={ConsumerDashboard} />
+      <Route path="/consumer/dashboard" component={ConsumerDashboard} />
       <Route path="/edit-profile" component={EditProfile} />
       <Redirect exact from="/*" to="/business/login" />
     </Switch>
