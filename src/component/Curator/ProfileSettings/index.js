@@ -5,6 +5,7 @@ import SaveButton from "../UI/SaveButton";
 import BackButton from "../UI/BackButton";
 import { FaSort } from "react-icons/fa";
 import { HiPlus } from "react-icons/hi";
+import { IoMdCloseCircle } from "react-icons/io";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import FormBody from "./formBody";
@@ -103,6 +104,7 @@ const UploadImage = styled.div`
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  position: relative;
   svg {
     color: #c5c5c5;
     font-size: 32px;
@@ -114,6 +116,20 @@ const UploadImage = styled.div`
     width: 60px;
     height: 60px;
     margin: 0 0 15px 0;
+  }
+  .hide{
+    display: none;
+  }
+  &:hover{
+    opacity: 0.7;
+    .hide {
+      display: block;
+      position: absolute;
+      svg{
+        color: #ff0000;
+        cursor: pointer;
+      }
+    }
   }
 `;
 const UploadImageText = styled.div`
@@ -278,6 +294,7 @@ const ProfileSettings = ({
                 </p>
               </>
             )}
+            <div className="hide" onClick={()=>setProfileImage(null)}><IoMdCloseCircle /></div>
           </UploadImage>
           {/* {profileImage!==null?<button onClick={()=>setProfileImage(null)}>Remove Image</button>:null} */}
           <UploadImageText>
