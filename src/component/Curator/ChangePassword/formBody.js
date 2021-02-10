@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import styled from "styled-components";
 import Input from "../UI/FormikInput";
 
@@ -25,20 +25,20 @@ const LabelText = styled.label`
   line-height: normal;
 `;
 // form body to change Password
-function FormBody() {
+function FormBody({formError,setResponse}) {
   return (
     <>
       <InputContainer>
         <LabelText>Old Password</LabelText>
-        <Input type="password" name="oldPassword" />
+        <Input type="password" name="oldPassword" formError={formError} onFocus={()=>setResponse("")}/>
       </InputContainer>
       <InputContainer>
         <LabelText>New Password</LabelText>
-        <Input type="password" name="newPassword" />
+        <Input type="password" name="newPassword" onFocus={()=>setResponse("")}/>
       </InputContainer>
       <InputContainer>
         <LabelText>Re-Type New Password</LabelText>
-        <Input type="password" name="confirmPassword" />
+        <Input type="password" name="confirmPassword" onFocus={()=>setResponse("")} />
       </InputContainer>
     </>
   );

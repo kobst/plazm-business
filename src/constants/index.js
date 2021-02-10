@@ -8,4 +8,6 @@ export default {
   EMAIL_ERROR: "Not a valid email address.",
   MINIMUM_PHONE_NUMBER_LENGTH: "minimum length 5 is required.",
   MAXIMUM_PHONE_NUMBER_LENGTH: "maximum length 50 is allowed.",
+  INCORRECT_OLD_PASSWORD: "Incorrect old password entered",
+  PHONE_NUMBER_FORMAT: "Phone number format should contain country code, Example:- +917599xxxxxx or +1257xxxx"
 };

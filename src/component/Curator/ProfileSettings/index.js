@@ -148,10 +148,11 @@ const ProfileSettings = ({
   setFlag,
 }) => {
   const [loader, setLoader] = useState(false);
-  const [profileImage, setProfileImage] = useState(null);
+  const [profileImage, setProfileImage] = useState(profile.photo? profile.photo : null);
   const [imageError, setImageError] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [error, setError] = useState("");
+  const [response, setResponse] = useState("");
   /*
   @desc: to check input file format and throw error if invalid image is input
   @params: input file
@@ -233,16 +234,18 @@ const ProfileSettings = ({
       phoneNumber: values.phoneNumber,
       userSub: profile.userSub,
       lockProfile: values.lockMyProfile === true ? 1 : 0,
-      photo: imageFile!==null?imageUrl!==null?imageUrl:profile.photo:profile.photo,
+      photo: imageFile!==null?imageUrl!==null?imageUrl:"":""
     };
     /* update profile api */
     const res = await updateProfileApi(obj);
     if (res&&res.data.updateProfile.success === true) {
+      setResponse("Profile updated successfully.");
       setError("");
       setFlag(true);
       setLoader(false);
     }else if(res&&res.data.updateProfile.success === false){
       setLoader(false);
+      setResponse("");
       setError("Could not update profile")
     }
 
@@ -258,8 +261,8 @@ const ProfileSettings = ({
         </MainHeading>
         <UploadImageContainer>
           <UploadImage>
-            {profile.photo!=="" && profile.photo!==null || profileImage !== null ? (
-              <ProfileImage src={profile.photo || profileImage} />
+            {profileImage !== null ? (
+              <ProfileImage src={profileImage} />
             ) : (
               <>
                 <input
@@ -276,6 +279,7 @@ const ProfileSettings = ({
               </>
             )}
           </UploadImage>
+          {/* {profileImage!==null?<button onClick={()=>setProfileImage(null)}>Remove Image</button>:null} */}
           <UploadImageText>
             Any message regarding profile picture uploading dimensions and file
             sizes goes here
@@ -308,7 +312,7 @@ const ProfileSettings = ({
             {(formik) => (
               <form onSubmit={formik.handleSubmit} method="POST">
                 <FormBody loader={loader} />
-                {error!==""?<ErrorDiv>{error}</ErrorDiv>:<></>}
+                {error!==""?<ErrorDiv>{error}</ErrorDiv>:response!==""?<ErrorDiv>{response}</ErrorDiv>:<></>}
                 <BottomBtns>
                   <BackButton  disabled={loader} onClick={() => setDisplayChangePassword(true)}>
                     Change Password
