@@ -117,15 +117,15 @@ const UploadImage = styled.div`
     height: 60px;
     margin: 0 0 15px 0;
   }
-  .hide{
+  .hide {
     display: none;
   }
-  &:hover{
+  &:hover {
     opacity: 0.7;
     .hide {
       display: block;
       position: absolute;
-      svg{
+      svg {
         color: #ff0000;
         cursor: pointer;
       }
@@ -164,7 +164,9 @@ const ProfileSettings = ({
   setFlag,
 }) => {
   const [loader, setLoader] = useState(false);
-  const [profileImage, setProfileImage] = useState(profile.photo? profile.photo : null);
+  const [profileImage, setProfileImage] = useState(
+    profile.photo ? profile.photo : null
+  );
   const [imageError, setImageError] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [error, setError] = useState("");
@@ -198,7 +200,7 @@ const ProfileSettings = ({
     /* to replace all spaces to underscore */
     const replacedName = removeSpecialCharacter.split(" ").join("_");
     /* return folder name */
-    return replacedName+"_"+id;
+    return replacedName + "_" + id;
   };
 
   /*
@@ -211,38 +213,38 @@ const ProfileSettings = ({
     const folder_name = folderName(values.name, profile._id);
     /* to upload file to s3 bucket on save of profile button */
     let imageUrl = null;
-    if(imageFile!==null){
-    const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${imageFile.name}`;
-    const value = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/upload_photo`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          Key: imageFile.name,
-          ContentType: imageFile.type,
-          folder_name: folder_name,
-        }),
-      }
-    );
-    const body = await value.text();
-    const Val = JSON.parse(body);
-
-    await fetch(Val, {
-      method: "PUT",
-      headers: {
-        "Content-Type": imageFile.type,
-      },
-      body: imageFile,
-    })
-      .then((response) => {
-        imageUrl = baseUrl;
-      })
-      .catch(
-        (error) => console.log(error) // Handle the error response object
+    if (imageFile !== null) {
+      const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${imageFile.name}`;
+      const value = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/upload_photo`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            Key: imageFile.name,
+            ContentType: imageFile.type,
+            folder_name: folder_name,
+          }),
+        }
       );
+      const body = await value.text();
+      const Val = JSON.parse(body);
+
+      await fetch(Val, {
+        method: "PUT",
+        headers: {
+          "Content-Type": imageFile.type,
+        },
+        body: imageFile,
+      })
+        .then((response) => {
+          imageUrl = baseUrl;
+        })
+        .catch(
+          (error) => console.log(error) // Handle the error response object
+        );
     }
     const obj = {
       name: values.name,
@@ -250,21 +252,20 @@ const ProfileSettings = ({
       phoneNumber: values.phoneNumber,
       userSub: profile.userSub,
       lockProfile: values.lockMyProfile === true ? 1 : 0,
-      photo: imageFile!==null?imageUrl!==null?imageUrl:"":""
+      photo: imageFile !== null ? (imageUrl !== null ? imageUrl : "") : "",
     };
     /* update profile api */
     const res = await updateProfileApi(obj);
-    if (res&&res.data.updateProfile.success === true) {
+    if (res && res.data.updateProfile.success === true) {
       setResponse("Profile updated successfully.");
       setError("");
       setFlag(true);
       setLoader(false);
-    }else if(res&&res.data.updateProfile.success === false){
+    } else if (res && res.data.updateProfile.success === false) {
       setLoader(false);
       setResponse("");
-      setError("Could not update profile")
+      setError("Could not update profile");
     }
-
   };
   return (
     <>
@@ -294,9 +295,13 @@ const ProfileSettings = ({
                 </p>
               </>
             )}
-            <div className="hide" onClick={()=>setProfileImage(null)}><IoMdCloseCircle /></div>
+            {/* for displaying cross icon when an image is uploaded */}
+            {profileImage !== null ? (
+              <div className="hide" onClick={() => setProfileImage(null)}>
+                <IoMdCloseCircle />
+              </div>
+            ) : null}
           </UploadImage>
-          {/* {profileImage!==null?<button onClick={()=>setProfileImage(null)}>Remove Image</button>:null} */}
           <UploadImageText>
             Any message regarding profile picture uploading dimensions and file
             sizes goes here
@@ -329,9 +334,18 @@ const ProfileSettings = ({
             {(formik) => (
               <form onSubmit={formik.handleSubmit} method="POST">
                 <FormBody loader={loader} />
-                {error!==""?<ErrorDiv>{error}</ErrorDiv>:response!==""?<ErrorDiv>{response}</ErrorDiv>:<></>}
+                {error !== "" ? (
+                  <ErrorDiv>{error}</ErrorDiv>
+                ) : response !== "" ? (
+                  <ErrorDiv>{response}</ErrorDiv>
+                ) : (
+                  <></>
+                )}
                 <BottomBtns>
-                  <BackButton  disabled={loader} onClick={() => setDisplayChangePassword(true)}>
+                  <BackButton
+                    disabled={loader}
+                    onClick={() => setDisplayChangePassword(true)}
+                  >
                     Change Password
                   </BackButton>
                   <SaveButton type="submit" disabled={loader}>

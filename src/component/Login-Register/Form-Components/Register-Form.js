@@ -65,7 +65,7 @@ const RegisterForm = ({ verified,disable,err,confirmationCode,password,phoneLong
                             <Input value={confirmationCode} id='confirmationCode' type='text' onChange={(e) => handleChange(e)} error={emptyCode} />
                             {codeError ? <ErrorMessage>Confirmation code does not match</ErrorMessage> : null}
                         </FormGroup> */}
-                        {type.includes('business')?<Link to='/business/login' className="link-btn"><strong>Sign In</strong></Link>:<Link to='/curator/login' className="link-btn"><strong>Sign In</strong></Link>}
+                        {type.includes('business')?<Link to='/business/login' className="link-btn"><strong>Sign In</strong></Link>:<Link to='/consumer/login' className="link-btn"><strong>Sign In</strong></Link>}
 
                     </>
             </form>) :

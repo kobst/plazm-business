@@ -273,7 +273,7 @@ const Register = (props) => {
 
     return(
         <>{loginValue=== true?
-        <Wrapper type ={type} page='register' welcomeMessage={renderMessage.New_Reg}>
+        <Wrapper type ={type} page='register' welcomeMessage={type.includes('business')?renderMessage.New_Reg:renderMessage.New_Reg_Consumer}>
             <RegisterForm
                   type ={type}
                   err={err}
