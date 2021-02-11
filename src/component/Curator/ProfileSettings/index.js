@@ -333,7 +333,7 @@ const ProfileSettings = ({
           >
             {(formik) => (
               <form onSubmit={formik.handleSubmit} method="POST">
-                <FormBody loader={loader} />
+                <FormBody loader={loader} setResponse={setResponse}/>
                 {error !== "" ? (
                   <ErrorDiv>{error}</ErrorDiv>
                 ) : response !== "" ? (

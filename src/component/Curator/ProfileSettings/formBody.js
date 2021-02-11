@@ -40,16 +40,16 @@ const CheckboxContainer = styled.div`
 /*
 *@desc: form body for update profile
 */
-function FormBody({loader}) {
+function FormBody({loader,setResponse}) {
   return (
     <>
       <InputContainer>
         <LabelText>Name</LabelText>
-        <Input type="text" name="name" disabled={loader}/>
+        <Input type="text" name="name" disabled={loader} onFocus={()=>setResponse("")}/>
       </InputContainer>
       <InputContainer>
         <LabelText>Phone Number</LabelText>
-        <Input type="text" name="phoneNumber" disabled={loader}/>
+        <Input type="text" name="phoneNumber" disabled={loader} onFocus={()=>setResponse("")}/>
       </InputContainer>
       <InputContainer>
         <LabelText>Email Address</LabelText>

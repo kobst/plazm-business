@@ -51,7 +51,7 @@ margin-top: 6px;
 `
 
 
-const RegisterForm = ({ verified,disable,err,confirmationCode,password,phoneLong,phoneShort, firstError,emptyCode, business, loader, setbusiness, setBusinessInfo, setName, message, type, locationError, codeError, firstNameError, phoneError, emailError, passwordError, handleChange, handleSubmit }) => {
+const RegisterForm = ({ verified,disable,err,confirmationCode,password,phoneLong,phoneShort, firstError,emptyCode, business, loader, setbusiness, setBusinessInfo, setName, message, type, locationError, codeError, firstNameError, phoneError, emailError, passwordError, handleChange, handleSubmit, phoneOnlyNumbers }) => {
     return (
         <>
             {verified ? (<form>
@@ -83,6 +83,7 @@ const RegisterForm = ({ verified,disable,err,confirmationCode,password,phoneLong
                         <Label name="Phone Number" />
                         <Input disabled={disable} id='phone_number' onChange={(e) => handleChange(e)}
                             error={phoneError} placeholder="" />
+                            {phoneOnlyNumbers ? <ErrorMessage>Phone Number should only contain numbers.</ErrorMessage> : null}
                             {phoneShort ? <ErrorMessage>Phone Number length should be greater than 5.</ErrorMessage> : null}
                             {phoneLong ? <ErrorMessage>Phone Number length should be less than 50.</ErrorMessage> : null}
                         {err && message && message.includes("number") ? <ErrorMessage>{message}</ErrorMessage> : null}
