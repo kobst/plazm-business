@@ -38,6 +38,8 @@ const Register = (props) => {
     const [phoneLong,setPhoneLong]= useState(false)
     const [loginValue,setLoginValue]= useState(false)
     const [disable,setDisable]= useState(false)
+    const [phoneOnlyNumbers,setPhoneOnlyNumbers] = useState(false);
+
     useEffect(() => {
         let updateUser = async authState => {
           try {
@@ -165,6 +167,9 @@ const Register = (props) => {
             else if(phone_number.length>=50){
                 setPhoneLong(true)
             }
+            else if(!phone_number.match(/^[^a-zA-Z]*$/)) {
+                setPhoneOnlyNumbers(true)
+            }
         }
         if(!validateEmail(email)){
             setEmailError(true)
@@ -178,11 +183,11 @@ const Register = (props) => {
             setMessage(renderMessage.pass_length)
     }
 }
-        if(type.includes('business')&&username && loc && username.length>3 && phone_number && validateEmail(email) && password && name && password.length>7 && phone_number.length>=5 &&
+        if(type.includes('business')&&username && loc && username.length>3 && phone_number && phone_number.match(/^[^a-zA-Z]*$/) && validateEmail(email) && password && name && password.length>7 && phone_number.length>=5 &&
         phone_number.length<=50 ){
             return true
         }
-        if(type.includes('consumer')&&username  && username.length>3 && phone_number && validateEmail(email) && password && password.length>7 && phone_number.length>=5 &&
+        if(type.includes('consumer')&&username  && username.length>3 && phone_number && phone_number.match(/^[^a-zA-Z]*$/) && validateEmail(email) && password && password.length>7 && phone_number.length>=5 &&
         phone_number.length<=50 ){
             return true
         }
@@ -252,6 +257,7 @@ const Register = (props) => {
         setEmptyCodeError(false)
         setPhoneLong(false)
         setPhoneShort(false)
+        setPhoneOnlyNumbers(false)
         if (e.target.id === 'username') {
             setUser(e.target.value)
         }
@@ -298,6 +304,7 @@ const Register = (props) => {
                   phoneShort={phoneShort}
                   password={password}
                   disable={disable}
+                  phoneOnlyNumbers={phoneOnlyNumbers}
                   />
         </Wrapper>:<div style={{textAlign:'center' ,margin:' 40px auto 0'}}><ValueLoader height="100" width="100" /></div>
         }</>
