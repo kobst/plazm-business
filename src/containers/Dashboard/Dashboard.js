@@ -37,8 +37,8 @@ const Dashboard = () => {
     let updateUser = async (authState) => {
       try {
         const value = await Auth.currentAuthenticatedUser();
-        if (value.attributes["custom:type"] === "curator") {
-          history.push("/consumer/dashboard");
+        if (value.attributes["custom:type"] === "curator" || value.attributes["custom:type"] === "customer") {
+          history.push("/customer");
           window.location.reload();
         } else {
           const place = await callPlace(value.attributes.sub);

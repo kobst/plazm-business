@@ -192,7 +192,7 @@ const ProfileSettings = ({
 
   /*
   @desc: to get specific folder name to be created in aws
-  @params: curator name, curator _id
+  @params: customer name, customer _id
   */
   const folderName = (name, id) => {
     /* to remove all special characters except space */

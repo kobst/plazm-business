@@ -44,7 +44,7 @@ const Register = (props) => {
         let updateUser = async authState => {
           try {
              await Auth.currentAuthenticatedUser()
-             history.push('/dashboard')
+             history.push('/')
              window.location.reload() 
             
           } catch {
@@ -69,7 +69,7 @@ const Register = (props) => {
         })
         .then(async(res) => {
             if(res.userSub){
-                if(type.includes('consumer')){
+                if(type.includes('customer')){
                     const obj = {
                         name: username,
                         email: email,
@@ -112,7 +112,7 @@ const Register = (props) => {
                 password: password
             })
             // eslint-disable-next-line no-sequences
-            .then(() =>( history.push('/dashboard'),
+            .then(() =>( history.push('/'),
             window.location.reload() 
             ))
             .catch((err) => console.log(err))
@@ -187,7 +187,7 @@ const Register = (props) => {
         phone_number.length<=50 ){
             return true
         }
-        if(type.includes('consumer')&&username  && username.length>3 && phone_number && phone_number.match(/^[^a-zA-Z]*$/) && validateEmail(email) && password && password.length>7 && phone_number.length>=5 &&
+        if(type.includes('customer')&&username  && username.length>3 && phone_number && phone_number.match(/^[^a-zA-Z]*$/) && validateEmail(email) && password && password.length>7 && phone_number.length>=5 &&
         phone_number.length<=50 ){
             return true
         }
@@ -279,7 +279,7 @@ const Register = (props) => {
 
     return(
         <>{loginValue=== true?
-        <Wrapper type ={type} page='register' welcomeMessage={type.includes('business')?renderMessage.New_Reg:renderMessage.New_Reg_Consumer}>
+        <Wrapper type ={type} page='register' welcomeMessage={type.includes('business')?renderMessage.New_Reg:renderMessage.New_Reg_Customer}>
             <RegisterForm
                   type ={type}
                   err={err}

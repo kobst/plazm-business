@@ -32,7 +32,7 @@ const ForgotPassword = (props) => {
         let updateUser = async authState => {
           try {
             await Auth.currentAuthenticatedUser()
-            history.push('/dashboard')
+            history.push('/')
             window.location.reload() 
             
           } catch {
@@ -71,7 +71,7 @@ const ForgotPassword = (props) => {
         window.location.reload() )
         }
         else{
-            return( history.push(`/consumer/login`),
+            return( history.push(`/customer/login`),
             window.location.reload())  
         }
     }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Dashboard from "../../../component/Curator/Dashboard/Dashboard";
+import Dashboard from "../../../component/Customer/Dashboard/Dashboard";
 import "./style.css";
 import { Auth } from "aws-amplify";
 import { getUserProfile } from "../../../Api";
@@ -15,18 +15,18 @@ const DashboardContainer = (props) => {
     let getProfile = async () => {
       try {
         const value = await Auth.currentAuthenticatedUser();
-        if (value.attributes["custom:type"] === "curator") {
+        if (value.attributes["custom:type"] === "curator" || value.attributes["custom:type"] === "customer") {
           const res = await getUserProfile(value.attributes.sub);
           if (res.data.getUser.success === true) {
             setProfile(res.data.getUser.user);
           }
         } else {
-          history.push("/dashboard");
+          history.push("/");
           window.location.reload();
         }
       } catch {
-        /* if not authenticated then redirect to login curator page */
-        history.push("/consumer/login");
+        /* if not authenticated then redirect to login customer page */
+        history.push("/customer/login");
         window.location.reload();
       }
     };
