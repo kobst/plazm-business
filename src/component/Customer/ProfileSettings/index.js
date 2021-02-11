@@ -146,6 +146,9 @@ const UploadImageText = styled.div`
 `;
 const ErrorDiv = styled.div`
   color: #ff0000;
+  font-weight: 600;
+  font-size: 12px;
+  margin: 0;
 `;
 const ProfileImage = styled.img`
   border-radius: 50%;
