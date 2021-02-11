@@ -25,7 +25,7 @@ const Login = (props) => {
     let updateUser = async (authState) => {
       try {
         await Auth.currentAuthenticatedUser();
-        history.push("/dashboard");
+        history.push("/");
         window.location.reload();
       } catch {
         setLoginValue(true);
@@ -43,9 +43,9 @@ const Login = (props) => {
       // eslint-disable-next-line no-sequences
       .then((data) => {
         if (data.attributes["custom:type"] === "business")
-          history.push("/dashboard");
-        else if (data.attributes["custom:type"] === "curator")
-          history.push("/consumer/dashboard");
+          history.push("/");
+        else if (data.attributes["custom:type"] === "curator" || data.attributes["custom:type"] === "customer")
+          history.push("/customer");
         else history.push("/business/login");
         window.location.reload();
       })
@@ -113,7 +113,7 @@ const Login = (props) => {
           type={type}
           page="login"
           heading={renderMessage.Welcome}
-          welcomeMessage={type.includes('business')?renderMessage.Login_Mess:renderMessage.Login_Mess_Consumer}
+          welcomeMessage={type.includes('business')?renderMessage.Login_Mess:renderMessage.Login_Mess_Customer}
         >
           <LoginForm
             type={type}
