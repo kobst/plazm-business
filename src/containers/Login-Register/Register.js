@@ -69,7 +69,7 @@ const Register = (props) => {
         })
         .then(async(res) => {
             if(res.userSub){
-                if(type.includes('customer')){
+                if(type.includes('consumer')){
                     const obj = {
                         name: username,
                         email: email,
@@ -187,7 +187,7 @@ const Register = (props) => {
         phone_number.length<=50 ){
             return true
         }
-        if(type.includes('customer')&&username  && username.length>3 && phone_number && phone_number.match(/^[^a-zA-Z]*$/) && validateEmail(email) && password && password.length>7 && phone_number.length>=5 &&
+        if(type.includes('consumer')&&username  && username.length>3 && phone_number && phone_number.match(/^[^a-zA-Z]*$/) && validateEmail(email) && password && password.length>7 && phone_number.length>=5 &&
         phone_number.length<=50 ){
             return true
         }
@@ -279,7 +279,7 @@ const Register = (props) => {
 
     return(
         <>{loginValue=== true?
-        <Wrapper type ={type} page='register' welcomeMessage={type.includes('business')?renderMessage.New_Reg:renderMessage.New_Reg_Customer}>
+        <Wrapper type ={type} page='register' welcomeMessage={type.includes('business')?renderMessage.New_Reg:renderMessage.New_Reg_Consumer}>
             <RegisterForm
                   type ={type}
                   err={err}

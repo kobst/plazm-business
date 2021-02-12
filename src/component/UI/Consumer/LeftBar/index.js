@@ -11,8 +11,8 @@ import Favorites from '../../../../images/favorites.png';
 import GridIcon from '../../../../images/Grid_icon.png';
 import ProfileSettingImg from '../../../../images/Profile_Setting.png';
 import { BiSearchAlt2 } from "react-icons/bi";
-import ChangePassword from '../../../Customer/ChangePassword'
-import ProfileSettings from '../../../Customer/ProfileSettings'
+import ChangePassword from '../../../Consumer/ChangePassword'
+import ProfileSettings from '../../../Consumer/ProfileSettings'
 
 const LeftBarContent = styled.div`
     width:100px;

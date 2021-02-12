@@ -451,7 +451,7 @@ const RightSide = (props) => {
   const [description, setDescription] = useState('')
   const [saveDisable, setSaveDisable] = useState(false)
   // const [showTag, setShowTag] = useState(false)
-  const [customers, setCustomers] = useState([])
+  const [consumers, setConsumers] = useState([])
   const [activePublic, setActivePublic] = useState(false)
   const [mess, setActiveMess] = useState(false)
   const [allMentions, setAllMentions] = useState()
@@ -500,7 +500,7 @@ const RightSide = (props) => {
             return userVal.push({_id:v._id, name: v.name })
           })
           // const val = userVal.sort(dynamicSort("name"))
-          setCustomers(userVal)
+          setConsumers(userVal)
 
         }
         setPlace(place[0])
@@ -1087,7 +1087,7 @@ const formats = {
       setImageUrl([...deleteImage])
     }
    
-    const userMentionData = customers.map(myUser => ({
+    const userMentionData = consumers.map(myUser => ({
       id: myUser._id,
       display: `${myUser.name}`
     }))
@@ -1219,7 +1219,7 @@ const formats = {
                 // textAreaProps={{value:description}}
                  onChange={handleChange}
                   field="name"
-                  data={customers}
+                  data={consumers}
                 /> */}
                 <MentionsInput markup='@(__id__)[__display__]' value={description} onChange={handleChange} className="mentions">
                 <Mention
@@ -1335,7 +1335,7 @@ const formats = {
                                 <img onClick={() => setToggle(v._id)} src={MoreIcon} alt="More" />
                                 {toggle && id === v._id ?
                                   <Tooltip>
-                                    <EditModalBox setToggleMenu={setToggleMenu} setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={customers} value={content} />
+                                    <EditModalBox setToggleMenu={setToggleMenu} setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={consumers} value={content} />
                                     <DeleteModalBox setToggleMenu={setToggleMenu} setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
                                     <ul>
                                       <li onClick={() => handleEdit(v)}>Edit</li>
@@ -1530,7 +1530,7 @@ const formats = {
               <FlexRow>
                 <LineButton setShowTag={setShowTag} name="Add Tags" />
                 {showTag ?
-                  <Multiselect options={customers} displayValue="name" /> : null
+                  <Multiselect options={consumers} displayValue="name" /> : null
                 }
                 <Anchor onClick={() => setDescription('')}>Cancel</Anchor>
                 <Button className="btn btn-primary" disabled={saveDisable} onClick={() => addPost()} buttontext="Publish" >{'Publish'}</Button>

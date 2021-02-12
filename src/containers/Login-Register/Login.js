@@ -45,9 +45,10 @@ const Login = (props) => {
         if (data.attributes["custom:type"] === "business") history.push("/");
         else if (
           data.attributes["custom:type"] === "curator" ||
-          data.attributes["custom:type"] === "customer"
+          data.attributes["custom:type"] === "customer" ||
+          data.attributes["custom:type"] === "consumer"
         )
-          history.push("/customer");
+          history.push("/consumer");
         else history.push("/business/login");
         window.location.reload();
       })
@@ -118,7 +119,7 @@ const Login = (props) => {
           welcomeMessage={
             type.includes("business")
               ? renderMessage.Login_Mess
-              : renderMessage.Login_Mess_Customer
+              : renderMessage.Login_Mess_Consumer
           }
         >
           <LoginForm

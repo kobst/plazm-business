@@ -1,6 +1,6 @@
 import React,{useState} from "react";
 import styled from "styled-components"
-import LeftBar from "../../UI/Customer/LeftBar"
+import LeftBar from "../../UI/Consumer/LeftBar"
 import RightBar from "../Dashboard/RightBar"
 
 const DashboardContent = styled.div`
