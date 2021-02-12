@@ -86,7 +86,7 @@ const ForgotPasswordForm = ({type,ResponseValue,email,password,con,loader,emErro
                 <Links>
                 { type.includes('business') ?
                 <Link to ='/business/login' className="link-btn">{renderMessage.Log_Link}</Link> :
-                <Link to ='/customer/login' className="link-btn">{renderMessage.Log_Link}</Link>
+                <Link to ='/consumer/login' className="link-btn">{renderMessage.Log_Link}</Link>
                 }
                 </Links>
                  </>   }

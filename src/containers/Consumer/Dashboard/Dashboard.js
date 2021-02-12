@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Dashboard from "../../../component/Customer/Dashboard/Dashboard";
+import Dashboard from "../../../component/Consumer/Dashboard/Dashboard";
 import "./style.css";
 import { Auth } from "aws-amplify";
 import { getUserProfile } from "../../../Api";
@@ -15,7 +15,7 @@ const DashboardContainer = (props) => {
     let getProfile = async () => {
       try {
         const value = await Auth.currentAuthenticatedUser();
-        if (value.attributes["custom:type"] === "curator" || value.attributes["custom:type"] === "customer") {
+        if (value.attributes["custom:type"] === "curator" || value.attributes["custom:type"] === "customer" ||  value.attributes["custom:type"] === "consumer") {
           const res = await getUserProfile(value.attributes.sub);
           if (res.data.getUser.success === true) {
             setProfile(res.data.getUser.user);
@@ -25,8 +25,8 @@ const DashboardContainer = (props) => {
           window.location.reload();
         }
       } catch {
-        /* if not authenticated then redirect to login customer page */
-        history.push("/customer/login");
+        /* if not authenticated then redirect to login consumer page */
+        history.push("/consumer/login");
         window.location.reload();
       }
     };

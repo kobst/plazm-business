@@ -71,7 +71,7 @@ const ForgotPassword = (props) => {
         window.location.reload() )
         }
         else{
-            return( history.push(`/customer/login`),
+            return( history.push(`/consumer/login`),
             window.location.reload())  
         }
     }

@@ -148,7 +148,7 @@ export const updateBusiness = async (value, userSub) => {
   return body;
 };
 
-/* add User Profile when a new customer signUp */
+/* add User Profile when a new consumer signUp */
 export const addUserProfile = async (values) => {
   const obj = {
     name: values.name,
@@ -161,7 +161,7 @@ export const addUserProfile = async (values) => {
   return response;
 };
 
-/* get User Profile of the signIn customer */
+/* get User Profile of the signIn consumer */
 export const getUserProfile = async (userSub) => {
   const graphQl = getUser(userSub);
   const response =  graphQlEndPoint(graphQl);

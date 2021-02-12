@@ -2,7 +2,7 @@ import * as Yup from "yup";
 import error from "../../../constants";
 
 /*
- * @desc: validation schema for update customer profile
+ * @desc: validation schema for update consumer profile
  */
 export const validate = {
   name: Yup.string()
