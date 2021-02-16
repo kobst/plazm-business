@@ -25,13 +25,13 @@ const Routes = () => (
         render={(props) => <Register userType="consumer" {...props} />}
       />
       <Route
-        path="/business/forgot-password/:code/:id"
+        path="/user/forgot-password/:code/:id"
         component={ForgotPassword}
       />
-      <Route path="/business/forgot-password" component={ForgotPassword} />
-      <Route path="/consumer/forgot-password" component={ForgotPassword} />
-      <Route path="/" exact component={Dashboard} />
-      <Route path="/consumer" exact component={ConsumerDashboard} />
+      <Route path="/user/forgot-password" component={ForgotPassword} />
+      {/* <Route path="/user/forgot-password" component={ForgotPassword} /> */}
+      <Route path="/business" exact component={Dashboard} />
+      <Route path="/" exact component={ConsumerDashboard} />
       <Route path="/edit-profile" component={EditProfile} />
       <Redirect exact from="/*" to="/business/login" />
     </Switch>

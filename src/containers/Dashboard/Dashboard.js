@@ -38,7 +38,7 @@ const Dashboard = () => {
       try {
         const value = await Auth.currentAuthenticatedUser();
         if (value.attributes["custom:type"] === "curator" || value.attributes["custom:type"] === "customer" || value.attributes["custom:type"] === "consumer") {
-          history.push("/consumer");
+          history.push("/");
           window.location.reload();
         } else {
           const place = await callPlace(value.attributes.sub);

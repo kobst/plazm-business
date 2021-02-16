@@ -68,8 +68,8 @@ return(
     
                 <ForgotPassword>
                         { type.includes('business') ?
-                         <Link to ='/business/forgot-password' >{renderMessage.Forgot}</Link> :
-                         <Link to ='/consumer/forgot-password' >{renderMessage.Forgot}</Link>
+                         <Link to ='/user/forgot-password' >{renderMessage.Forgot}</Link> :
+                         <Link to ='/user/forgot-password' >{renderMessage.Forgot}</Link>
                           }
 							   </ForgotPassword> 
 							

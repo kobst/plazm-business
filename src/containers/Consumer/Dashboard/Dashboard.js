@@ -21,7 +21,7 @@ const DashboardContainer = (props) => {
             setProfile(res.data.getUser.user);
           }
         } else {
-          history.push("/");
+          history.push("/business");
           window.location.reload();
         }
       } catch {

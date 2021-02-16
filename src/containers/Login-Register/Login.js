@@ -25,7 +25,7 @@ const Login = (props) => {
     let updateUser = async (authState) => {
       try {
         await Auth.currentAuthenticatedUser();
-        history.push("/");
+        history.push("/business");
         window.location.reload();
       } catch {
         setLoginValue(true);
@@ -42,13 +42,13 @@ const Login = (props) => {
     })
       // eslint-disable-next-line no-sequences
       .then((data) => {
-        if (data.attributes["custom:type"] === "business") history.push("/");
+        if (data.attributes["custom:type"] === "business") history.push("/business");
         else if (
           data.attributes["custom:type"] === "curator" ||
           data.attributes["custom:type"] === "customer" ||
           data.attributes["custom:type"] === "consumer"
         )
-          history.push("/consumer");
+          history.push("/");
         else history.push("/business/login");
         window.location.reload();
       })
