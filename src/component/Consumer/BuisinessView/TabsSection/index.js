@@ -1,0 +1,45 @@
+import React,{useState} from "react";
+import styled from "styled-components"
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+import './styles.css';
+import PostsSection from './PostsSection'
+
+const TabsSectionContent = styled.div`
+    width:100%;
+    position: relative;
+    display:flex;
+    height: 100%;
+`
+
+const TabsSection = ({}) => {
+    return (
+    <>
+    <TabsSectionContent className="InnerTabs">
+        <Tabs>
+            <TabList>
+                <Tab>Posts</Tab>
+                <Tab>Media</Tab>
+                <Tab>Events</Tab>
+                <Tab>Messages</Tab>
+            </TabList>
+
+            <TabPanel>
+                <PostsSection />
+            </TabPanel>
+            <TabPanel>
+                <h2>Any content 2</h2>
+            </TabPanel>
+            <TabPanel>
+                <h2>Any content 3</h2>
+            </TabPanel>
+            <TabPanel>
+                <h2>Any content 4</h2>
+            </TabPanel>
+        </Tabs>
+    </TabsSectionContent>
+    </>
+    )
+}
+  
+  export default TabsSection

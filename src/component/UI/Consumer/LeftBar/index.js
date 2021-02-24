@@ -13,6 +13,7 @@ import ProfileSettingImg from '../../../../images/Profile_Setting.png';
 import { BiSearchAlt2 } from "react-icons/bi";
 import ChangePassword from '../../../Consumer/ChangePassword'
 import ProfileSettings from '../../../Consumer/ProfileSettings'
+import BuisinessView from '../../../Consumer/BuisinessView'
 
 const LeftBarContent = styled.div`
     width:100px;
@@ -56,7 +57,7 @@ const LeftBar = ({displayTab,setDisplayTab,profile,setFlag}) => {
   const [displayChangePassword, setDisplayChangePassword] = useState(false);
   return (
     <>
-      <LeftBarContent>
+      <LeftBarContent className="MainTabs">
       <Tabs>
         <TabList>
           <Tab onClick={()=>setDisplayTab(true)}>
@@ -121,7 +122,7 @@ const LeftBar = ({displayTab,setDisplayTab,profile,setFlag}) => {
         </TabPanel>:<></>}
         {displayTab ===  true?<TabPanel>
           <div className="panel-content">
-            <h2>Any content 7</h2>
+            <BuisinessView setDisplayTab={setDisplayTab} />
           </div>
         </TabPanel>:<></>}
         {displayTab ===  true?<TabPanel>
