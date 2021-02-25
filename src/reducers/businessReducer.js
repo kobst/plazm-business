@@ -30,8 +30,6 @@ export const slice = createSlice({
       loadingAddPosts: false,
       business: [],
       posts: [],
-      totalComments: 0,
-      totalLikes: 0
     },
     reducers: {
 
@@ -48,33 +46,12 @@ export const slice = createSlice({
           if(action.payload) {
               state.business = action.payload.place;
               state.posts = action.payload.posts;
-              state.totalComments = action.payload.totalComments;
-              state.totalLikes = action.payload.totalLikes;
           }
         }
       },
       [checkBusiness.rejected]: (state, action) => {
         if (state.loading) {
           state.loading = false;
-          state.error = action.payload;
-        }
-      },
-      [addPostToBusiness.pending]: (state) => {
-        if (!state.loadingAddPosts) {
-          state.loadingAddPosts = true;
-        }
-      },
-      [addPostToBusiness.fulfilled]: (state, action) => {
-        if (state.loadingAddPosts) {
-          state.loadingAddPosts = false;
-          if(action.payload) {
-            state.posts = action.payload.post
-          }
-        }
-      },
-      [addPostToBusiness.rejected]: (state, action) => {
-        if (state.loadingAddPosts) {
-          state.loadingAddPosts = false;
           state.error = action.payload;
         }
       },

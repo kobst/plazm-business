@@ -7,7 +7,7 @@ import AddImageImg from "../../../../../../images/addImage.svg";
 import CrossIcon from "../../../../../../images/cross-icon.svg";
 import { MentionsInput, Mention } from "react-mentions";
 import { useDispatch, useSelector } from "react-redux";
-import { addPostToBusiness } from '../../../../../../reducers/businessReducer';
+import { addPostToBusiness, checkBusiness } from '../../../../../../reducers/businessReducer';
 import ValueLoader from '../../../../../../utils/loader';
 import './style.css'
 import { unwrapResult } from "@reduxjs/toolkit";
@@ -300,6 +300,7 @@ const AddPostSection = ({profile, businessId}) => {
     const response = await unwrapResult(addPost);
     if(response.success === true)
     {
+      await dispatch(checkBusiness(businessId))
       setLoader(false);
       setDescription("");
     }
