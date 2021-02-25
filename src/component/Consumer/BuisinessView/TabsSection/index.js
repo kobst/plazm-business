@@ -12,7 +12,7 @@ const TabsSectionContent = styled.div`
     height: 100%;
 `
 
-const TabsSection = ({}) => {
+const TabsSection = ({profile, businessId}) => {
     return (
     <>
     <TabsSectionContent className="InnerTabs">
@@ -25,7 +25,7 @@ const TabsSection = ({}) => {
             </TabList>
 
             <TabPanel>
-                <PostsSection />
+                <PostsSection profile={profile} businessId={businessId}/>
             </TabPanel>
             <TabPanel>
                 <h2>Any content 2</h2>

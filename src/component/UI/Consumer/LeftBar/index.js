@@ -14,6 +14,7 @@ import { BiSearchAlt2 } from "react-icons/bi";
 import ChangePassword from '../../../Consumer/ChangePassword'
 import ProfileSettings from '../../../Consumer/ProfileSettings'
 import BuisinessView from '../../../Consumer/BuisinessView'
+import BusinessList from '../../../Consumer/BusinessList'
 
 const LeftBarContent = styled.div`
     width:100px;
@@ -53,7 +54,7 @@ const SearchIcon = styled.div`
     
 `
 
-const LeftBar = ({displayTab,setDisplayTab,profile,setFlag}) => {
+const LeftBar = ({displayTab,setDisplayTab,profile,setFlag, isBusinessOpen, businessExists, businessId}) => {
   const [displayChangePassword, setDisplayChangePassword] = useState(false);
   return (
     <>
@@ -82,7 +83,7 @@ const LeftBar = ({displayTab,setDisplayTab,profile,setFlag}) => {
           <Tab onClick={()=>setDisplayTab(true)}>
             <img src={Notifications} alt="" />
           </Tab>
-          <Tab onClick={()=>setDisplayTab(true)}>
+          <Tab onClick={()=>setDisplayTab(true)} style={displayTab === false?{background:"#f3f3f3"}:{background:""}}>
             <img src={Favorites} alt="" />
           </Tab>
           <Tab onClick={()=>setDisplayTab(true)}>
@@ -120,9 +121,9 @@ const LeftBar = ({displayTab,setDisplayTab,profile,setFlag}) => {
             <h2>Any content 6</h2>
           </div>
         </TabPanel>:<></>}
-        {displayTab ===  true?<TabPanel>
+        {displayTab ===  true || isBusinessOpen === true?<TabPanel>
           <div className="panel-content">
-            <BuisinessView setDisplayTab={setDisplayTab} />
+            {isBusinessOpen === true?<BuisinessView setDisplayTab={setDisplayTab} profile={profile} businessExists={businessExists} businessId={businessId}/>:<BusinessList/>}
           </div>
         </TabPanel>:<></>}
         {displayTab ===  true?<TabPanel>

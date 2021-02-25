@@ -8,6 +8,7 @@ import FacebookImg from '../../../../images/Facebook-new.svg'
 import TwitterImg from '../../../../images/Twitter-new.svg'
 import LinkedInImg from '../../../../images/Linkedin-new.svg'
 import InstagramImg from '../../../../images/Instagram-new.svg'
+import { useHistory } from 'react-router-dom';
 
 const BuisinessHeaderContent = styled.div`
     width:100%;
@@ -158,11 +159,12 @@ const SocialIcon = styled.div`
 `
 
 const BuisinessHeader = ({setDisplayTab}) => {
+    const history = useHistory();
     return (
     <>
     <BuisinessHeaderContent>
         <ArrowBack>
-            <MdKeyboardArrowLeft />
+            <MdKeyboardArrowLeft onClick={()=>history.push("/")}/>
         </ArrowBack>
         <CloseDiv>
             <IoMdClose onClick={() => setDisplayTab(false)} />

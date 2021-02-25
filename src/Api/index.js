@@ -1,4 +1,4 @@
-import { AddUser, getUser, updateUserProfile } from "../graphQl";
+import { AddUser, getAllUsers, getPlace, getUser, updateUserProfile } from "../graphQl";
 import {graphQlEndPoint} from './graphQl';
 
 export const callPlace = async (userSub) => {

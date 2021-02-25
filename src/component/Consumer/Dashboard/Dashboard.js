@@ -10,12 +10,12 @@ const DashboardContent = styled.div`
     height: 100%;
 `
 
-const Dashboard = ({profile,setFlag}) => {
+const Dashboard = ({profile,setFlag,isBusinessOpen,businessExists,businessId}) => {
     const [displayTab, setDisplayTab] = useState(false)
     return (
     <>
     <DashboardContent>
-        <LeftBar displayTab={displayTab} setDisplayTab={setDisplayTab} profile={profile} setFlag={setFlag}/>
+        <LeftBar displayTab={displayTab} setDisplayTab={setDisplayTab} profile={profile} setFlag={setFlag} isBusinessOpen={isBusinessOpen} businessExists={businessExists} businessId={businessId}/>
         <RightBar displayTab={displayTab}/>
     </DashboardContent>
     </>
