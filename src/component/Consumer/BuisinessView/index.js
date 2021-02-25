@@ -3,7 +3,8 @@ import styled from "styled-components";
 import BuisinessHeader from "./BuisinessHeader";
 import TabsSection from "./TabsSection";
 import BuisinessHeaderNotClaimed from "./BuisinessHeaderNotClaimed";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
+import BuisinessProfileDetails from "./BuisinessProfileDetails";
 import ValueLoader from '../../../utils/loader';
 
 const BuisinessViewContent = styled.div`
@@ -28,19 +29,51 @@ const LoaderWrap = styled.div`
   }
 `;
 
-const BuisinessView = ({ setDisplayTab, profile, businessExists, businessId }) => {
+const BuisinessView = ({
+  setDisplayTab,
+  profile,
+  businessExists,
+  businessId,
+}) => {
   const loading = useSelector(state => state.business.loading);
+  const businessProfile = useSelector((state) => state.business.business);
+  const [displayBusinessProfile, setDisplayBusinessProfile] = useState(false);
   return (
     <>
-    {loading ? <LoaderWrap><ValueLoader/></LoaderWrap>:
-      <BuisinessViewContent>
-        {businessExists ? (
-          <BuisinessHeader setDisplayTab={setDisplayTab} />
-        ) : (
-          <BuisinessHeaderNotClaimed setDisplayTab={setDisplayTab} />
-        )}
-        <TabsSection profile={profile} businessId={businessId} />
-      </BuisinessViewContent> }
+      {loading || businessProfile.length === 0 ? (
+        <LoaderWrap>
+          <ValueLoader />
+        </LoaderWrap>
+      ) : (
+        <BuisinessViewContent>
+          {businessProfile[0].userSub !== null ? (
+            displayBusinessProfile ? (
+              <BuisinessProfileDetails
+                setDisplayBusinessProfile={setDisplayBusinessProfile}
+                setDisplayTab={setDisplayTab}
+              />
+            ) : (
+              <BuisinessHeader
+                setDisplayTab={setDisplayTab}
+                setDisplayBusinessProfile={setDisplayBusinessProfile}
+              />
+            )
+          ) : displayBusinessProfile ? (
+            <BuisinessProfileDetails
+              setDisplayBusinessProfile={setDisplayBusinessProfile}
+              setDisplayTab={setDisplayTab}
+            />
+          ) : (
+            <BuisinessHeaderNotClaimed
+              setDisplayTab={setDisplayTab}
+              setDisplayBusinessProfile={setDisplayBusinessProfile}
+            />
+          )}
+          {!displayBusinessProfile ? (
+            <TabsSection profile={profile} businessId={businessId} />
+          ) : null}
+        </BuisinessViewContent>
+      )}
     </>
   );
 };

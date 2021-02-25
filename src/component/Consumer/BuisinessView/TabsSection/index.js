@@ -4,6 +4,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import './styles.css';
 import PostsSection from './PostsSection'
+import EventsSection from './EventsSection'
 
 const TabsSectionContent = styled.div`
     width:100%;
@@ -31,7 +32,7 @@ const TabsSection = ({profile, businessId}) => {
                 <h2>Any content 2</h2>
             </TabPanel>
             <TabPanel>
-                <h2>Any content 3</h2>
+                <EventsSection />
             </TabPanel>
             <TabPanel>
                 <h2>Any content 4</h2>
