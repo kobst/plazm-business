@@ -3,6 +3,7 @@ import styled from "styled-components"
 import BuisinessHeader from './BuisinessHeader'
 import TabsSection from './TabsSection'
 import BuisinessHeaderNotClaimed from './BuisinessHeaderNotClaimed'
+import BuisinessProfileDetails from './BuisinessProfileDetails'
 
 const BuisinessViewContent = styled.div`
     width:100%;
@@ -17,8 +18,9 @@ const BuisinessView = ({setDisplayTab}) => {
     <>
     <BuisinessViewContent>
         {/* <BuisinessHeader setDisplayTab={setDisplayTab} /> */}
-        <BuisinessHeaderNotClaimed setDisplayTab={setDisplayTab} />
-        <TabsSection />
+        {/* <BuisinessHeaderNotClaimed setDisplayTab={setDisplayTab} />
+        <TabsSection /> */}
+        <BuisinessProfileDetails />
     </BuisinessViewContent>
     </>
     )
