@@ -15,7 +15,6 @@ const ChatContent = styled.div`
     }
 `
 
-
 const PostChat = ({}) => {
     return (
     <>
@@ -38,4 +37,4 @@ const PostChat = ({}) => {
     )
 }
   
-  export default PostChat
+export default PostChat

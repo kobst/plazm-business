@@ -3,7 +3,9 @@ import styled from "styled-components"
 import ProfileImg from '../../../../../../../images/profile-img.png'
 import ReplyInput from './ReplyInput'
 import LikesBar from '../LikesBar'
-
+import DateBar from '../DateBar'
+import TimeBar from '../TimeBar'
+import ImageComment from '../ImageComment'
 
 const UserMessageContent = styled.div`
     width:100%;
@@ -143,6 +145,15 @@ const RightDiv = styled.div`
   }
 `
 
+const SubHeading = styled.div`
+  font-style: normal;
+  font-size: 13px;
+  line-height: normal;
+  margin: 0 0 5px 0;
+  font-weight: 700;
+  color: #00C2FF;
+`
+
 const UserMessage = ({}) => {
     return (
     <>
@@ -153,12 +164,16 @@ const UserMessage = ({}) => {
             </ProfileThumb>
             <ProfileNameWrap>
                 <ProfileName>Top 10 Restaurant in NYC<span>by</span>NYPlazm_Eater </ProfileName>
+                <SubHeading>The Grand Italian Pizza Fest</SubHeading>
                 <ChatInput>
                     La Morada serves some of the best pasta in the city, but the real attraction is the pizza which is world class...
                 </ChatInput>
+                <DateBar />
+                <TimeBar />
                 <LikesBar />
-            </ProfileNameWrap>
+            </ProfileNameWrap>            
         </ProfileNameHeader>
+        <ImageComment />
     </UserMessageContent>
     <UserMessageContent className="UserReplyContent">
         <ProfileNameHeader>
