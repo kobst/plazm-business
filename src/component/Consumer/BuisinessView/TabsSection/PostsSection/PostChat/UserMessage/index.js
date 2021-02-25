@@ -19,6 +19,18 @@ const UserMessageContent = styled.div`
         padding: 0 0 0 40px;
     }
 `
+const UserMsgWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 0 12px;
+  :nth-child(even) {
+    background-color: #282352;
+  }
+  :nth-child(odd) {
+    background-color: #221e45;
+  }
+`
+
 const ProfileNameHeader = styled.div`
   display: flex;
   padding: 0;
@@ -146,35 +158,37 @@ const RightDiv = styled.div`
 const UserMessage = ({}) => {
     return (
     <>
-    <UserMessageContent>
-        <ProfileNameHeader>
-            <ProfileThumb>
-                <img src={ProfileImg} alt="" />
-            </ProfileThumb>
-            <ProfileNameWrap>
-                <ProfileName>Top 10 Restaurant in NYC<span>by</span>NYPlazm_Eater </ProfileName>
-                <ChatInput>
-                    La Morada serves some of the best pasta in the city, but the real attraction is the pizza which is world class...
-                </ChatInput>
-                <LikesBar />
-            </ProfileNameWrap>
-        </ProfileNameHeader>
-    </UserMessageContent>
-    <UserMessageContent className="UserReplyContent">
-        <ProfileNameHeader>
-            <ProfileThumb>
-                <img src={ProfileImg} alt="" />
-            </ProfileThumb>
-            <ProfileNameWrap>
-                <ProfileName>Top 10 Restaurant in NYC<span>by</span>NYPlazm_Eater </ProfileName>
-                <ChatInput>
-                    La Morada serves some of the best pasta in the city, but the real attraction is the pizza which is world class...
-                </ChatInput>
-                <LikesBar />
-            </ProfileNameWrap>
-        </ProfileNameHeader>
-        <ReplyInput />
-    </UserMessageContent>
+    <UserMsgWrap>
+      <UserMessageContent>
+          <ProfileNameHeader>
+              <ProfileThumb>
+                  <img src={ProfileImg} alt="" />
+              </ProfileThumb>
+              <ProfileNameWrap>
+                  <ProfileName>Top 10 Restaurant in NYC<span>by</span>NYPlazm_Eater </ProfileName>
+                  <ChatInput>
+                      La Morada serves some of the best pasta in the city, but the real attraction is the pizza which is world class...
+                  </ChatInput>
+                  <LikesBar />
+              </ProfileNameWrap>
+          </ProfileNameHeader>
+      </UserMessageContent>
+      <UserMessageContent className="UserReplyContent">
+          <ProfileNameHeader>
+              <ProfileThumb>
+                  <img src={ProfileImg} alt="" />
+              </ProfileThumb>
+              <ProfileNameWrap>
+                  <ProfileName>Top 10 Restaurant in NYC<span>by</span>NYPlazm_Eater </ProfileName>
+                  <ChatInput>
+                      La Morada serves some of the best pasta in the city, but the real attraction is the pizza which is world class...
+                  </ChatInput>
+                  <LikesBar />
+              </ProfileNameWrap>
+          </ProfileNameHeader>
+          <ReplyInput />
+      </UserMessageContent>
+    </UserMsgWrap>
     </>
     )
 }

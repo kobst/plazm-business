@@ -16,7 +16,9 @@ const bucket = process.env.REACT_APP_BUCKET;
 
 const UploadOuter = styled.div`
   display: flex;
-  margin: 0 10px;
+  margin: 0;
+  justify-content: flex-start;
+  align-items: flex-start;
 `;
 
 const UploadImage = styled.div`
@@ -24,7 +26,7 @@ const UploadImage = styled.div`
   height: 33px;
   border-radius: 5px;
   overflow: hidden;
-  margin-right: 3px;
+  margin-right: 10px;
   display: flex;
   position: relative;
   cursor: pointer;
@@ -52,17 +54,63 @@ const AddPostSectionContent = styled.div`
   display: flex;
   padding: 12px;
   background: #292454;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   @media (max-width: 767px) {
     flex-direction: column;
   }
+  textarea{
+    box-shadow: none;
+    border: 0;
+    padding: 10px;
+    color: #000;
+    font-weight: 600;
+  }
+  .postInput__suggestions{
+    background-color: #FE02B9 !important;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 2px;
+    padding: 15px;
+    height: auto;
+    max-height: 150px;
+    overflow: auto;
+    overflow-x: hidden;
+    ul{
+      margin: 0 0 5px;
+      padding: 0;
+      li{
+      color: #fff;
+      font-size:10px;
+      font-weight: 500;
+      margin: 0 0 5px;
+      padding: 0;
+    }
+    }    
+  }
 `;
+
+const TopSection = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin: 0 0 10px;
+  @media (max-width: 767px) {
+    flex-direction: column;
+  }
+`;
+
+const BottomBar = styled.div`
+  display: flex;
+  width: 100%;
+  margin: 0 0 10px;
+`;
+
 const TextAreaWrap = styled.div`
   width: 100%;
   max-width: calc(100% - 147px);
   @media (max-width: 767px) {
     max-width: 100%;
+    margin: 0 0 5px;
   }
 `;
 const RightWrap = styled.div`
@@ -104,6 +152,7 @@ const AddImageDiv = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 1;
+  cursor: pointer;
   svg {
     font-size: 34px;
     color: #fff;
@@ -258,6 +307,7 @@ const AddPostSection = ({profile, businessId}) => {
   return (
     <>
       <AddPostSectionContent>
+        <TopSection>
         <TextAreaWrap>
           <MentionsInput
             markup="@(__id__)[__display__]"
@@ -294,6 +344,8 @@ const AddPostSection = ({profile, businessId}) => {
             <SaveButton onClick={() => savePost()} disabled={loader}> {loader ? <ValueLoader /> : "Post"}</SaveButton>
           </RightBottomWrap>
         </RightWrap>
+        </TopSection>
+        <BottomBar>
         {imageUrl ? (
           <UploadOuter>
             {imageUrl.map((v) => (
@@ -303,6 +355,7 @@ const AddPostSection = ({profile, businessId}) => {
             ))}
           </UploadOuter>
         ) : null}
+        </BottomBar>
       </AddPostSectionContent>
     </>
   );

@@ -8,7 +8,7 @@ const ChatContent = styled.div`
     width:100%;
     position: relative;
     display:flex;
-    padding: 12px 0 12px 12px;
+    padding: 12px 0;
     flex-direction: column;
     overflow: hidden;
     @media (max-width:767px){
@@ -22,7 +22,7 @@ const PostChat = ({}) => {
      <Scrollbars  
         autoHeight
         autoHeightMin={0}
-        autoHeightMax={500}
+        autoHeightMax={450}
         thumbMinSize={30}
         >
         <ChatContent>
