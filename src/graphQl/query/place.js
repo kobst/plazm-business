@@ -8,8 +8,6 @@ const getPlace = (userSub) => {
             searchPlacesByUserId(input: {id:$id}) {
               message
               success
-              totalLikes
-              totalComments
               place {
                 _id
                 location {
@@ -55,6 +53,8 @@ const getPlace = (userSub) => {
             }
             posts {
                 postId
+                totalLikes
+                totalComments
                 postDetails {
                     _id
                     data

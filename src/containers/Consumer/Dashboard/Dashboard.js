@@ -51,7 +51,7 @@ const DashboardContainer = (props) => {
       if (isOpen === true) {
       setBusinessId(props.match.params.id?props.match.params.id:"")
       const response =  await dispatch(checkBusiness(props.match.params.id));
-      const data =  unwrapResult(response);
+      const data =  await unwrapResult(response);
       if(data.success === true && data.place.length > 0){
         setBusinessExists(true)
       }

@@ -1,18 +1,16 @@
-import React,{useState} from "react"
-import styled from "styled-components"
-import { MdFavoriteBorder , MdChatBubbleOutline } from "react-icons/md";
-
-
+import React, { useState } from "react";
+import styled from "styled-components";
+import { MdFavoriteBorder, MdChatBubbleOutline } from "react-icons/md";
 
 const BottomBarLikes = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  @media (max-width:767px){
+  @media (max-width: 767px) {
     flex-direction: column;
     align-items: flex-start;
   }
-`
+`;
 const LikesBtnWrap = styled.div`
   display: flex;
   flex-direction: row;
@@ -20,14 +18,14 @@ const LikesBtnWrap = styled.div`
   margin: 0px;
   align-items: center;
   flex-wrap: wrap;
-`
+`;
 
 const UsersButton = styled.button`
   font-weight: 600;
   font-size: 13px;
   line-height: normal;
   text-align: center;
-  color: #FF2E9A;
+  color: #ff2e9a;
   background: transparent;
   width: auto;
   border: 0;
@@ -42,23 +40,23 @@ const UsersButton = styled.button`
     border: 0;
     background: transparent;
   }
-`
+`;
 
 const CircleDot = styled.div`
   width: 3px;
   height: 3px;
   border-radius: 50%;
   margin: 0 5px;
-  background: #FF2E9A;
-`
+  background: #ff2e9a;
+`;
 const ChatDate = styled.div`
   color: #fff;
   font-weight: 600;
   font-size: 13px;
   span {
-      margin: 0 10px;
+    margin: 0 10px;
   }
-`
+`;
 
 const RightDiv = styled.div`
   color: #fff;
@@ -66,38 +64,39 @@ const RightDiv = styled.div`
   font-size: 13px;
   align-items: center;
   display: flex;
-  margin:0 0 0 20px;
-  @media (max-width:767px){
+  margin: 0 0 0 20px;
+  @media (max-width: 767px) {
     margin: 8px 15px 0 0px;
   }
   svg {
-      margin: 0 7px 0 0;
+    margin: 0 7px 0 0;
   }
-`
+`;
 
-const LikesBar = ({}) => {
-    return (
+const LikesBar = ({ totalLikes, totalComments }) => {
+  return (
     <>
-    <BottomBarLikes>
-                    <LikesBtnWrap>
-                        
-                            <UsersButton>Reply</UsersButton>
-                            <CircleDot />
-                            <UsersButton>Like</UsersButton>
-                        
-                        <ChatDate><span>-</span>22 Oct 2020</ChatDate>                        
-                    </LikesBtnWrap>
-                    <LikesBtnWrap>
-                        <RightDiv> 
-                            <MdFavoriteBorder /> 2
-                        </RightDiv>
-                        <RightDiv>
-                            <MdChatBubbleOutline /> 3
-                        </RightDiv>                    
-                    </LikesBtnWrap>
-                </BottomBarLikes>
+      <BottomBarLikes>
+        <LikesBtnWrap>
+          <UsersButton>Reply</UsersButton>
+          <CircleDot />
+          <UsersButton>Like</UsersButton>
+
+          <ChatDate>
+            <span>-</span>22 Oct 2020
+          </ChatDate>
+        </LikesBtnWrap>
+        <LikesBtnWrap>
+          <RightDiv>
+            <MdFavoriteBorder /> {totalLikes}
+          </RightDiv>
+          <RightDiv>
+            <MdChatBubbleOutline /> {totalComments}
+          </RightDiv>
+        </LikesBtnWrap>
+      </BottomBarLikes>
     </>
-    )
-}
-  
-  export default LikesBar
+  );
+};
+
+export default LikesBar;

@@ -68,7 +68,7 @@ export const slice = createSlice({
         if (state.loadingAddPosts) {
           state.loadingAddPosts = false;
           if(action.payload) {
-            state.posts = action.payload.post.reverse()
+            state.posts = action.payload.post
           }
         }
       },
