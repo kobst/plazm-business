@@ -17,10 +17,10 @@ const BuisinessView = ({setDisplayTab}) => {
     return (
     <>
     <BuisinessViewContent>
-        {/* <BuisinessHeader setDisplayTab={setDisplayTab} /> */}
-        {/* <BuisinessHeaderNotClaimed setDisplayTab={setDisplayTab} />
-        <TabsSection /> */}
-        <BuisinessProfileDetails />
+        <BuisinessHeader setDisplayTab={setDisplayTab} />
+        {/* <BuisinessHeaderNotClaimed setDisplayTab={setDisplayTab} */}
+        <TabsSection />
+        {/* <BuisinessProfileDetails /> */}
     </BuisinessViewContent>
     </>
     )
