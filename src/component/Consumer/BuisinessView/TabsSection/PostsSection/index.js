@@ -16,7 +16,7 @@ const PostsSection = ({profile, businessId}) => {
     <>
     <PostsSectionContent>
         <AddPostSection profile={profile} businessId={businessId}/>
-        <PostFilter />
+        <PostFilter />        
         <PostChat />
     </PostsSectionContent>
     </>

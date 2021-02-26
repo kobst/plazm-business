@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React from "react";
 import styled from "styled-components"
 import UserMessage from './UserMessage'
 import { Scrollbars } from 'react-custom-scrollbars';
