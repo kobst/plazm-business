@@ -14,6 +14,9 @@ const BuisinessHeaderContent = styled.div`
   position: relative;
   display: flex;
   height: 150px;
+  &.NotSlider{
+    height: 20px;
+  }
   @media (max-width: 767px) {
     flex-direction: column;
   }
@@ -62,6 +65,9 @@ const BottomBar = styled.div`
     padding: 10px;
     position: relative;
     min-height: 100px;
+  }
+  &.ProfileHeaderNam{
+    justify-content: flex-end;
   }
 `;
 const BusinessIcon = styled.div`
@@ -144,11 +150,11 @@ const BuisinessHeaderNotClaimed = ({
   const businessProfile = useSelector((state) => state.business.business)[0];
   return (
     <>
-      <BuisinessHeaderContent>
+      <BuisinessHeaderContent className={isProfile&&businessProfile.userSub===null?"NotSlider":''}>
         <CloseDiv>
           <IoMdClose onClick={() => setDisplayTab(false)} />
         </CloseDiv>
-        <BottomBar>
+        <BottomBar className={isProfile?"ProfileHeaderNam":''}>
           {!isProfile ? (
             <BusinessIcon>
               <img
@@ -196,17 +202,12 @@ const BuisinessHeaderNotClaimed = ({
               </SocialIconsWrap>
             </BusinessNameWrap>
           ) : null}
-          <ArrowDown>
-            {isProfile ? (
-              <MdKeyboardArrowUp
-                onClick={() => setDisplayBusinessProfile(false)}
-              />
-            ) : (
+          {!isProfile ?<ArrowDown>
               <MdKeyboardArrowDown
                 onClick={() => setDisplayBusinessProfile(true)}
               />
-            )}
-          </ArrowDown>
+              </ArrowDown>
+            : null}
         </BottomBar>
       </BuisinessHeaderContent>
     </>

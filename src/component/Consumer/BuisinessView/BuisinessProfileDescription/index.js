@@ -127,6 +127,19 @@ const SocialInput = styled.div`
     justify-content: space-between;
     align-items: center;
     min-height: 29px;
+    cursor: pointer;
+    a {
+      color: #FF2E9A;
+      font-weight: 600;
+      font-size: 12px;
+      text-decoration: none;
+      :hover {
+        color: #FF2E9A;
+        font-weight: 600;
+        font-size: 12px;
+        text-decoration: none;
+      }
+    }
     @media (max-width:767px){
         max-width: 100%;
     }

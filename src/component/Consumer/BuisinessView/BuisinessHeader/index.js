@@ -91,6 +91,9 @@ const BottomBar = styled.div`
     padding: 10px;
     position: relative;
   }
+  &.ProfileHeaderNam{
+    justify-content: flex-end;
+  }
 `;
 const BusinessIcon = styled.div`
   width: 50px;
@@ -181,7 +184,7 @@ const BuisinessHeader = ({
           <IoMdClose onClick={() => setDisplayTab(false)} />
         </CloseDiv>
         <SectionSlider />
-        <BottomBar>
+        <BottomBar className={isProfile?"ProfileHeaderNam":''}>
           {!isProfile ? (
             <BusinessIcon>
               <img

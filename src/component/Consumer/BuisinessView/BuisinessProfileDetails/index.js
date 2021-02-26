@@ -41,8 +41,8 @@ const BuisinessProfileDetails = ({
           />
         )}
         <BottomContent>
-          <BuisinessProfileSection />
-          <BuisinessProfileDescription />
+          <BuisinessProfileSection setDisplayBusinessProfile={setDisplayBusinessProfile} />
+          <BuisinessProfileDescription  />
         </BottomContent>
       </BuisinessViewContent>
     </>

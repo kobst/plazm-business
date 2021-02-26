@@ -12,7 +12,7 @@ const UserMessageContent = styled.div`
     width:100%;
     position: relative;
     display:flex;
-    padding: 0;
+    padding: 0 12px;
     flex-direction: column;
     @media (max-width:767px){
         justify-content: flex-start;
@@ -48,6 +48,7 @@ const ProfileNameWrap = styled.div`
   max-width: calc(100% - 40px);
   border-bottom: 0.25px solid #878787;
   padding: 0 25px 15px 0px;
+  width: 100%;
   @media (max-width:1024px){
     padding: 0 45px 15px 0px;
   }
