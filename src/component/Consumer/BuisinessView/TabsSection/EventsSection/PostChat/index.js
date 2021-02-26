@@ -1,7 +1,8 @@
-import React,{useState} from "react";
+import React from "react";
 import styled from "styled-components"
 import UserMessage from './UserMessage'
 import { Scrollbars } from 'react-custom-scrollbars';
+import { useSelector } from 'react-redux';
 
 
 const ChatContent = styled.div`
@@ -16,6 +17,7 @@ const ChatContent = styled.div`
 `
 
 const PostChat = ({}) => {
+    const events = useSelector(state => state.event.events);
     return (
     <>
      <Scrollbars  
@@ -25,12 +27,7 @@ const PostChat = ({}) => {
         thumbMinSize={30}
         >
         <ChatContent>
-            <UserMessage />
-            <UserMessage />
-            <UserMessage />
-            <UserMessage />
-            <UserMessage />
-            <UserMessage />
+            {events&&events.length>0&&events.map(i=><UserMessage eventData={i} />)}
         </ChatContent>
     </Scrollbars>
     </>

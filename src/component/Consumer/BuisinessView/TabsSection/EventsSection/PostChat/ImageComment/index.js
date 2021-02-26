@@ -1,4 +1,4 @@
-import React,{useState} from "react"
+import React from "react"
 import styled from "styled-components"
 import CommentStaticImg from '../../../../../../../images/CommentStaticImg.png'
 
@@ -15,11 +15,11 @@ const BottomBarLikes = styled.div`
   }
 `
 
-const ImageComment = ({}) => {
+const ImageComment = ({image}) => {
     return (
     <>
     <BottomBarLikes>
-      <img src={CommentStaticImg} alt="" />
+      <img src={image!==""?image:CommentStaticImg} alt="" />
     </BottomBarLikes>
     </>
     )

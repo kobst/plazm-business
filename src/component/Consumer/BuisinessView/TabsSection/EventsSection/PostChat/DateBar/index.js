@@ -1,4 +1,4 @@
-import React,{useState} from "react"
+import React from "react"
 import styled from "styled-components"
 
 
@@ -26,12 +26,12 @@ const LabelInput = styled.div`
   color: #FF2E9A;
 `
 
-const DateBar = ({}) => {
+const DateBar = ({startDay, endDay}) => {
     return (
     <>
     <BottomBarLikes>
       <LabelWrap>Date -</LabelWrap>
-      <LabelInput>Monday to Tuesday</LabelInput>
+      <LabelInput>{startDay} to {endDay}</LabelInput>
     </BottomBarLikes>
     </>
     )

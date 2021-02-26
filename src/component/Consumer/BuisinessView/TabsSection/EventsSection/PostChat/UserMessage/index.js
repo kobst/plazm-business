@@ -1,4 +1,4 @@
-import React,{useState} from "react"
+import React from "react"
 import styled from "styled-components"
 import ProfileImg from '../../../../../../../images/profile-img.png'
 import ReplyInput from './ReplyInput'
@@ -6,6 +6,7 @@ import LikesBar from '../LikesBar'
 import DateBar from '../DateBar'
 import TimeBar from '../TimeBar'
 import ImageComment from '../ImageComment'
+import { useSelector } from 'react-redux';
 
 const UserMessageContent = styled.div`
     width:100%;
@@ -154,26 +155,28 @@ const SubHeading = styled.div`
   color: #00C2FF;
 `
 
-const UserMessage = ({}) => {
+const UserMessage = ({eventData}) => {
+  const businessInfo = useSelector(state => state.business.business)[0]
+  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     return (
     <>
     <UserMessageContent>
         <ProfileNameHeader>
             <ProfileThumb>
-                <img src={ProfileImg} alt="" />
+                <img src={eventData.user!==null&&eventData.user.photo?eventData.user.photo:eventData.user==null?businessInfo.default_image_url?businessInfo.default_image_url:ProfileImg:ProfileImg}  alt="" />
             </ProfileThumb>
             <ProfileNameWrap>
-                <ProfileName>Top 10 Restaurant in NYC<span>by</span>NYPlazm_Eater </ProfileName>
-                <SubHeading>The Grand Italian Pizza Fest</SubHeading>
+                <ProfileName>{businessInfo.company_name}</ProfileName>
+                <SubHeading>{eventData.title}</SubHeading>
                 <ChatInput>
-                    La Morada serves some of the best pasta in the city, but the real attraction is the pizza which is world class...
+                    {eventData.description}
                 </ChatInput>
-                <DateBar />
-                <TimeBar />
-                <LikesBar />
+                <DateBar startDay={days[new Date(eventData.eventSchedule.start_time).getDay()-1]} endDay={days[new Date(eventData.eventSchedule.end_time).getDay()-1]} />
+                <TimeBar startTime={new Date(eventData.eventSchedule.start_time)} endTime={new Date(eventData.eventSchedule.end_time)}/>
+                <LikesBar date={new Date(eventData.createdAt)}/>
             </ProfileNameWrap>            
         </ProfileNameHeader>
-        <ImageComment />
+        <ImageComment image={eventData.media.length>0?eventData.media[0].image:""}/>
     </UserMessageContent>
     <UserMessageContent className="UserReplyContent">
         <ProfileNameHeader>
@@ -185,7 +188,7 @@ const UserMessage = ({}) => {
                 <ChatInput>
                     La Morada serves some of the best pasta in the city, but the real attraction is the pizza which is world class...
                 </ChatInput>
-                <LikesBar />
+                <LikesBar date={new Date(eventData.createdAt)}/>
             </ProfileNameWrap>
         </ProfileNameHeader>
         <ReplyInput />

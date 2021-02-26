@@ -7,4 +7,6 @@ import {getAllLists} from './query/list';
 
 import {createPost} from './mutations/post';
 
-export {AddUser,updateUserProfile,getUser,getAllUsers,getPlace,searchAllPlaces,getAllLists,createPost};
+import {fetchEvent,fetchEventForAWeek} from './query/event';
+
+export {AddUser,updateUserProfile,getUser,getAllUsers,getPlace,searchAllPlaces,getAllLists,createPost,fetchEvent,fetchEventForAWeek};

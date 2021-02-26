@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React from "react";
 import styled from "styled-components"
 import CalenderSection from './CalenderSection'
 import PostChat from './PostChat'
@@ -10,11 +10,11 @@ const PostsSectionContent = styled.div`
     flex-direction: column;
 `
 
-const PostsSection = ({}) => {
+const PostsSection = ({businessId}) => {
     return (
     <>
     <PostsSectionContent>
-        <CalenderSection />
+        <CalenderSection businessId={businessId}/>
         <PostChat />
     </PostsSectionContent>
     </>

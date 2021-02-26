@@ -10,12 +10,13 @@ import {findAllUsers} from '../../../reducers/consumerReducer';
 import { findAllLists } from "../../../reducers/listReducer";
 import { fetchAllPlaces } from "../../../reducers/placeReducer";
 import { checkBusiness } from "../../../reducers/businessReducer";
+import { fetchEventsForTheDay } from "../../../reducers/eventReducer";
 import { unwrapResult } from '@reduxjs/toolkit';
 
 const DashboardContainer = (props) => {
   const [profile, setProfile] = useState();
   const [flag, setFlag] = useState(false);
-  const [businessExists, setBusinessExists] = useState(false);
+  const [businessExists, setBusinessExists] = useState();
   const [businessId, setBusinessId] = useState("");
   const dispatch = useDispatch();
  
@@ -47,11 +48,23 @@ const DashboardContainer = (props) => {
     setFlag(false);
   }, [flag]);
   useEffect(() => {
+    /** find business function */
     let findBusiness = async (isOpen) => {
       if (isOpen === true) {
       setBusinessId(props.match.params.id?props.match.params.id:"")
+      /** to check if business exists or not */
       const response =  await dispatch(checkBusiness(props.match.params.id));
       const data =  await unwrapResult(response);
+      const days = ['sun', 'mon', 'tue', 'wed', 'thurs', 'fri', 'sat'];
+      const date = new Date();
+      const dayName = days[date.getDay()];
+      const obj = {
+        date: date,
+        day: dayName,
+        businessId: props.match.params.id 
+      }
+      /** to fetch business events for current day */
+      await dispatch(fetchEventsForTheDay(obj))
       if(data.success === true && data.place.length > 0){
         setBusinessExists(true)
       }

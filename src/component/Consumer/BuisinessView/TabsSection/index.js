@@ -32,7 +32,7 @@ const TabsSection = ({profile, businessId}) => {
                 <h2>Any content 2</h2>
             </TabPanel>
             <TabPanel>
-                <EventsSection />
+                <EventsSection businessId={businessId}/>
             </TabPanel>
             <TabPanel>
                 <h2>Any content 4</h2>

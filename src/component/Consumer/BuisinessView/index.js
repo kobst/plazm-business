@@ -40,7 +40,8 @@ const BuisinessView = ({
   const [displayBusinessProfile, setDisplayBusinessProfile] = useState(false);
   return (
     <>
-      {loading || businessProfile.length === 0 ? (
+     {!loading&& !businessExists && businessProfile && businessProfile.length === 0? <h3>Business Does Not Exist</h3>:
+      loading? (
         <LoaderWrap>
           <ValueLoader />
         </LoaderWrap>

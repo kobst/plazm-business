@@ -68,7 +68,9 @@ const getPlace = (userSub) => {
                         updatedAt
                     }
                     taggedLists
-                    ownerId
+                    ownerId {
+                      _id
+                    }
                     likes
                     media {
                         image
