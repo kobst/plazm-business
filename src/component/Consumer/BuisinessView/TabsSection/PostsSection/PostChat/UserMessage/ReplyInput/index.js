@@ -43,12 +43,12 @@ const ChatContent = styled.div`
       margin: 0 0 5px;
       padding: 0;
       li{
-      color: #fff;
-      font-size:10px;
-      font-weight: 500;
-      margin: 0 0 5px;
-      padding: 0;
-    }
+        color: #fff;
+        font-size:10px;
+        font-weight: 500;
+        margin: 0 0 5px;
+        padding: 0;
+      }
     } 
   }
 `;
@@ -99,6 +99,22 @@ const InputWrap = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  textarea{
+    border: 0;
+    box-shadow: none;
+    padding: 10px 0;
+    height: auto;
+    overflow: auto;
+    height: 100%;
+  }
+  input {
+    border:0;
+    background: transparent;
+    outline: 0;
+    width: auto;
+    color: #fff;
+    padding: 0;
+    width: 110px;
   }
 `;
 const EmojiWrap = styled.div`

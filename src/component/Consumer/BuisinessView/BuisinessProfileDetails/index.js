@@ -14,6 +14,10 @@ const BuisinessViewContent = styled.div`
 `;
 const BottomContent = styled.div`
   padding: 35px;
+  animation: fadein .5s;
+    -moz-animation: fadein .5s; /* Firefox */
+    -webkit-animation: fadein .5s; /* Safari and Chrome */
+    -o-animation: fadein .5s; /* Opera */
   @media (max-width: 767px) {
     padding: 15px;
   }

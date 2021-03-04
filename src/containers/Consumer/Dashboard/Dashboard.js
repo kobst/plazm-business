@@ -82,7 +82,7 @@ const DashboardContainer = (props) => {
   return profile ? (
     <Dashboard profile={profile} setFlag={setFlag} isBusinessOpen={props.isBusinessOpen} businessExists={businessExists} businessId={businessId}/>
   ) : (
-    <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
+    <div style={{ textAlign: "center", margin: " 40px auto 0", display: "flex", justifyContent: "center", alignItems: "center", height:"100%" }}>
       <ValueLoader height="100" width="100" />
     </div>
   );

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import ProfileImg from "../../../../../../../images/profile-img.png";
 import ReplyInput from "./ReplyInput";
 import LikesBar from "../LikesBar";
+import { Scrollbars } from 'react-custom-scrollbars';
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -18,6 +19,10 @@ const UserMessageContent = styled.div`
     padding: 0 0 0 40px;
   }
 `;
+
+
+const ReplyWrap = styled.div`
+`
 
 const ProfileNameHeader = styled.div`
   display: flex;
@@ -112,7 +117,13 @@ const Comments = ({
             commentId={i._id}
             commentLikes={i.likes}
           />
-          <div>
+          <Scrollbars  
+        autoHeight
+        autoHeightMin={0}
+        autoHeightMax={300}
+        thumbMinSize={30}
+        >
+        <ReplyWrap>
             {displayReply && i.replies.length > 0
               ? i.replies.map((j, key) => (
                   <>
@@ -140,6 +151,8 @@ const Comments = ({
                   </>
                 ))
               : null}
+              </ReplyWrap>
+              </Scrollbars>
             {displayReply ? (
               <>
                 <ReplyInput
@@ -154,7 +167,6 @@ const Comments = ({
                 />
               </>
             ) : null}
-          </div>
         </ProfileNameWrap>
       </ProfileNameHeader>
     </UserMessageContent>

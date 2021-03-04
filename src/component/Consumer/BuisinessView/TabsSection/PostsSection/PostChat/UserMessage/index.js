@@ -5,6 +5,8 @@ import ReplyInput from "./ReplyInput";
 import LikesBar from "../LikesBar";
 import { useSelector, useDispatch } from "react-redux";
 import ValueLoader from "../../../../../../../utils/loader";
+import { Scrollbars } from 'react-custom-scrollbars';
+
 import {
   addCommentToPost,
   addReplyToComment,
@@ -98,6 +100,9 @@ const ChatInput = styled.div`
     font-weight: 600;
   }
 `;
+
+const ReplyWrap = styled.div`
+`
 
 const LoaderWrap = styled.div`
   width: 100%;
@@ -297,6 +302,13 @@ const UserMessage = ({ postData }) => {
             </ProfileNameWrap>
           </ProfileNameHeader>
         </UserMessageContent>
+        <Scrollbars  
+        autoHeight
+        autoHeightMin={0}
+        autoHeightMax={300}
+        thumbMinSize={30}
+        >
+        <ReplyWrap>
         {displayComments && !loadingComments && postData.comments.length > 0 ? (
           postData.comments.map((i) => {
             return (
@@ -316,6 +328,8 @@ const UserMessage = ({ postData }) => {
             <ValueLoader />
           </LoaderWrap>
         ) : null}
+        </ReplyWrap>
+        </Scrollbars>
         <ReplyInput
           type="comment"
           postId={postData.postId}

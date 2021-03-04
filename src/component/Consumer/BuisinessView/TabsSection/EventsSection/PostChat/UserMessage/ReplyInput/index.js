@@ -77,6 +77,14 @@ const InputWrap = styled.div`
         outline: 0;
       }
   }
+  textarea{
+    border: 0;
+    box-shadow: none;
+    padding: 10px 0;
+    height: auto;
+    overflow: auto;
+    height: 100%;
+  }
 `
 const EmojiWrap = styled.div`
   width: 15px;
