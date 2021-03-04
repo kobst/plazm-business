@@ -16,7 +16,7 @@ const ChatContent = styled.div`
     }
 `
 
-const PostChat = ({}) => {
+const PostChat = () => {
     const events = useSelector(state => state.event.events);
     return (
     <>
@@ -27,7 +27,7 @@ const PostChat = ({}) => {
         thumbMinSize={30}
         >
         <ChatContent>
-            {events&&events.length>0&&events.map(i=><UserMessage eventData={i} />)}
+            {events&&events.length>0?events.map(i=><UserMessage eventData={i} />):<center><p>No events to display</p></center>}
         </ChatContent>
     </Scrollbars>
     </>

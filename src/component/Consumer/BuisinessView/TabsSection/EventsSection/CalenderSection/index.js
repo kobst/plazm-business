@@ -150,7 +150,7 @@ const CalenderSection = ({ businessId }) => {
         );
     };
     fetchData();
-  }, [eventDate]);
+  }, [eventDate, businessId, currentDate, dispatch, previousBtnClicked]);
 
   const fetchEventsForAParticularDay = async (day) => {
     const obj = {

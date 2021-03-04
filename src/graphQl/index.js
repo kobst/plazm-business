@@ -5,8 +5,11 @@ import {getPlace,searchAllPlaces} from './query/place';
 
 import {getAllLists} from './query/list';
 
-import {createPost} from './mutations/post';
+import {createPost,addLikeToPost} from './mutations/post';
 
 import {fetchEvent,fetchEventForAWeek} from './query/event';
 
-export {AddUser,updateUserProfile,getUser,getAllUsers,getPlace,searchAllPlaces,getAllLists,createPost,fetchEvent,fetchEventForAWeek};
+import {AddComment,CreateReply,AddLikeToComment} from './mutations/comments';
+import {findPostComments} from './query/comments';
+
+export {addLikeToPost,AddUser,updateUserProfile,getUser,getAllUsers,getPlace,searchAllPlaces,getAllLists,createPost,fetchEvent,fetchEventForAWeek,AddComment,CreateReply,findPostComments,AddLikeToComment};

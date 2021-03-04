@@ -24,8 +24,22 @@ const createPost = (values) => {
                   createdAt
                   updatedAt
               }
-              taggedLists
-              ownerId
+              taggedLists {
+                _id
+                name
+                description
+                items
+                type
+                photo
+                account_id
+                createdAt
+              }
+              ownerId {
+                  _id
+                  name
+                  email
+                  photo
+              }
               likes
               media {
                   image
@@ -48,4 +62,34 @@ const createPost = (values) => {
   return graphQl;
 };
 
-export { createPost };
+/*
+@desc: add like to a post
+@params: postId, userId
+*/
+const addLikeToPost = (values) => {
+  const graphQl = {
+    query: `
+          mutation AddLikeToPost($id: ID!, $userId:ID!){
+            addLikeToPost(input: {id:$id, userId:$userId}) {
+              message
+              success
+              like {
+                name
+                email
+                userSub
+                phoneNumber
+                photo 
+                lockProfile
+                _id
+              }
+            }
+          }`,
+    variables: {
+      id: values.postId,
+      userId: values.userId,
+    },
+  };
+  return graphQl;
+};
+
+export { createPost, addLikeToPost };

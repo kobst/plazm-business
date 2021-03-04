@@ -1,9 +1,10 @@
-import React  from "react";
+import React from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Scrollbars } from "react-custom-scrollbars";
-import ValueLoader from '../../../utils/loader';
+import ValueLoader from "../../../utils/loader";
+import { IoMdClose } from "react-icons/io";
 
 const LoaderWrap = styled.div`
   width: 100%;
@@ -63,10 +64,25 @@ const BusinessListWrap = styled.div`
   flex-direction: column;
 `;
 
+const CloseDiv = styled.div`
+  width: 24px;
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  position: absolute;
+  right: 17px;
+  cursor: pointer;
+  top: 17px;
+  svg {
+    font-size: 24px;
+    color: #fff;
+  }
+`;
+
 /*
-* @desc: to display all business lists
-*/
-const BusinessList = ({}) => {
+ * @desc: to display all business lists
+ */
+const BusinessList = ({setDisplayTab}) => {
   const business = useSelector((state) => state.place.place);
   const loading = useSelector((state) => state.place.loading);
   const history = useHistory();
@@ -78,6 +94,9 @@ const BusinessList = ({}) => {
         </LoaderWrap>
       ) : (
         <BuisinessViewContent>
+          <CloseDiv>
+            <IoMdClose onClick={() => setDisplayTab(false)} />
+          </CloseDiv>
           <h3>Business Lists</h3>
           <Scrollbars
             autoHeight
@@ -86,8 +105,8 @@ const BusinessList = ({}) => {
             thumbMinSize={30}
           >
             <BusinessListWrap>
-              {business.map((i) => (
-                <p onClick={() => history.push(`/b/${i._id}`)}>
+              {business.map((i,key) => (
+                <p key={key} onClick={() => history.push(`/b/${i._id}`)}>
                   {i.company_name}
                 </p>
               ))}

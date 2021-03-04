@@ -17,8 +17,24 @@ const ChatContent = styled.div`
   }
 `;
 
-const PostChat = ({}) => {
+const LoaderWrap = styled.div`
+  width: 100%;
+  position: relative;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 100px 0 0 0;
+  @media (max-width: 767px) {
+    margin: 30px 0 0 0;
+  }
+`;
+
+const PostChat = () => {
   const posts = useSelector((state) => state.business.posts);
+
+  const loadingFilterData = useSelector(state => state.business.loadingFilterData);
   const [eventPosition, setEventPosition] = useState(20);
   const fetchMorePosts = () => {
     setTimeout(() => {
@@ -27,14 +43,15 @@ const PostChat = ({}) => {
   };
   return (
     <>
-      <div id="scrollableDiv">
+      <div id="scrollableDiv" style={{ height: 450 }}>
         <Scrollbars
         autoHeight
         autoHeightMin={0}
         autoHeightMax={450}
         thumbMinSize={30}
       >
-        <InfiniteScroll
+
+        {/* <InfiniteScroll
           dataLength={posts.length}
           next={fetchMorePosts}
           hasMore={true}
@@ -51,15 +68,15 @@ const PostChat = ({}) => {
             )
           }
           scrollableTarget="scrollableDiv"
-        >
+        > */}
           <ChatContent>
-            {posts
+            {!loadingFilterData&&posts.length>0
               ? posts
-                  .slice(0, eventPosition)
+                  // .slice(0, eventPosition)
                   .map((i) => <UserMessage postData={i} />)
-              : null}
+              : loadingFilterData?<LoaderWrap><ValueLoader/></LoaderWrap> : <center><p>No posts to display</p></center>}
           </ChatContent>
-        </InfiniteScroll>
+        {/* </InfiniteScroll> */}
         </Scrollbars>
       </div>
     </>

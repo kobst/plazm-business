@@ -1,62 +1,479 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import { graphQlEndPoint } from "../Api/graphQl";
-import { createPost, getPlace } from "../graphQl";
-
+import {
+  createPost,
+  getPlace,
+  findPostComments,
+  addLikeToPost,
+  AddLikeToComment
+} from "../graphQl";
 
 /*
- * @desc:  to check if business exists or not 
+ * @desc:  to check if business exists or not
  * @params: businessId
  */
-export const checkBusiness = createAsyncThunk("data/checkBusiness", async (businessId) => {
-    const graphQl = getPlace(businessId);
+export const checkBusiness = createAsyncThunk(
+  "data/checkBusiness",
+  async (obj) => {
+    const graphQl = getPlace(obj);
     const response = await graphQlEndPoint(graphQl);
     return response.data.searchPlacesByUserId;
-  });
+  }
+);
 
 /*
  * @desc:  to add a post to a business
  * @params: obj
  */
-export const addPostToBusiness = createAsyncThunk("data/addPostToBusiness", async (obj) => {
-  const graphQl = createPost(obj);
+export const addPostToBusiness = createAsyncThunk(
+  "data/addPostToBusiness",
+  async (obj) => {
+    const graphQl = createPost(obj);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.createPost;
+  }
+);
+
+/*
+ * @desc:  to sort posts by likes
+ */
+export const sortPostsByLikes = createAsyncThunk(
+  "data/sortPostsByLikes",
+  async () => {
+    return true;
+  }
+);
+
+/*
+ * @desc:  to sort posts by most recent
+ */
+export const sortPostsByDate = createAsyncThunk(
+  "data/sortPostsByDate",
+  async () => {
+    return true;
+  }
+);
+
+/*
+ * @desc:  to sort posts by most recent
+ */
+export const filterData = createAsyncThunk("data/filterData", async (obj) => {
+  const graphQl = getPlace(obj);
   const response = await graphQlEndPoint(graphQl);
-  return response.data.createPost;
+  return response.data.searchPlacesByUserId;
 });
 
-export const slice = createSlice({
-    name: "business",
-    initialState: {
-      loading: false,
-      loadingAddPosts: false,
-      business: [],
-      posts: [],
-    },
-    reducers: {
+/*
+ * @desc:  to comment to post
+ * @params: obj
+ */
+export const addCommentToPost = createAsyncThunk(
+  "data/addCommentToPost",
+  async (obj) => {
+    return obj;
+    // const graphQl = AddComment(obj);
+    // const response = await graphQlEndPoint(graphQl);
+    // console.log(response)
+    // return response.data.createComment;
+  }
+);
 
+/*
+ * @desc:  to check if business exists or not
+ * @params: businessId
+ */
+export const fetchPostComments = createAsyncThunk(
+  "data/fetchPostComments",
+  async (businessId) => {
+    const graphQl = findPostComments(businessId);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.getComment;
+  }
+);
+
+/*
+ * @desc:  to add reply to comment
+ * @params: obj
+ */
+export const addReplyToComment = createAsyncThunk(
+  "data/addReplyToComment",
+  async (obj) => {
+    return obj
+    // const graphQl = CreateReply(obj);
+    // const response = await graphQlEndPoint(graphQl);
+    // return {
+    //   data: response.data.createReply,
+    //   postId: obj.postId,
+    //   commentId: obj._id,
+    // };
+  }
+);
+
+export const addPostViaSocket = createAsyncThunk(
+  "data/addPostViaSocket",
+  async (obj) => {
+    return obj;
+  }
+);
+
+export const AddLikeToPost = createAsyncThunk(
+  "data/AddLikeToPost",  
+  async (obj) => {
+    const graphQl = addLikeToPost(obj);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.addLikeToPost;
+  }
+);
+
+export const addLikeToComment = createAsyncThunk(
+  "data/addLikeToComment",  
+  async (obj) => {
+    const graphQl = AddLikeToComment(obj);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.addLikeToComment;
+  }
+);
+
+export const addLikeViaSocket = createAsyncThunk(
+  "data/addLikeViaSocket",
+  async (obj) => {
+    return obj;
+  }
+);
+
+export const addLikeToCommentViaSocket = createAsyncThunk(
+  "data/addLikeToCommentViaSocket",
+  async (obj) => {
+    return obj;
+  }
+);
+export const slice = createSlice({
+  name: "business",
+  initialState: {
+    loading: false,
+    loadingAddPosts: false,
+    posts: [],
+    loadingAddComment: false,
+    loadingPostComments: false,
+    filters: { Business: true, PostsByMe: false, MySubscriptions: false, Others:false },
+    loadingFilterData: false,
+    loadingAddReply: false,
+    loadingAddLike: false,
+    loadingAddLikeToComment: false
+  },
+  reducers: {
+    setFilters: (state, action) => {
+      if (
+        action.payload["Business"] === false &&
+        action.payload["PostsByMe"] === false &&
+        action.payload["MySubscriptions"] === false
+      )
+        state.filters = {
+          Business: true,
+          PostsByMe: false,
+          MySubscriptions: false,
+        };
+      else state.filters = action.payload;
     },
-    extraReducers: {
-      [checkBusiness.pending]: (state) => {
-        if (!state.loading) {
-          state.loading = true;
+  },
+  extraReducers: {
+    [checkBusiness.pending]: (state) => {
+      if (!state.loading) {
+        state.loading = true;
+      }
+    },
+    [checkBusiness.fulfilled]: (state, action) => {
+      if (state.loading) {
+        state.loading = false;
+        if (action.payload) {
+          state.business = action.payload.place;
+          state.posts = action.payload.posts;
         }
-      },
-      [checkBusiness.fulfilled]: (state, action) => {
-        if (state.loading) {
-          state.loading = false;
-          if(action.payload) {
-              state.business = action.payload.place;
-              state.posts = action.payload.posts;
+      }
+    },
+    [checkBusiness.rejected]: (state, action) => {
+      if (state.loading) {
+        state.loading = false;
+        state.error = action.payload;
+      }
+    },
+    [addPostViaSocket.pending]: (state) => {
+      if (!state.loadingAddPosts) {
+        state.loadingAddPosts = true;
+      }
+    },
+    [addPostViaSocket.fulfilled]: (state, action) => {
+      if (state.loadingAddPosts) {
+        state.loadingAddPosts = false;
+        if (action.payload) {
+          state.posts = [action.payload].concat(state.posts);
+        }
+      }
+    },
+    [addPostViaSocket.rejected]: (state, action) => {
+      if (state.loadingAddPosts) {
+        state.loadingAddPosts = false;
+        state.error = action.payload;
+      }
+    },
+    [addLikeViaSocket.pending]: (state) => {
+      if (!state.loadingAddLike) {
+        state.loadingAddLike = true;
+      }
+    },
+    [addLikeViaSocket.fulfilled]: (state, action) => {
+      if (state.loadingAddLike) {
+        state.loadingAddLike = false;
+        if (action.payload) {
+          let findPost = current(state.posts).filter(
+            (i) => i.postId !== action.payload.postId
+          );
+          let findPost1 = current(state.posts).filter(
+            (i) => i.postId === action.payload.postId
+          );
+          if(findPost1&&findPost1.length>0) {
+            let likes = findPost1[0].postDetails.likes.concat(action.payload.like);
+            let dummy1 = [];
+            dummy1.push({
+              postId: action.payload.postId,
+              postDetails: {...findPost1[0].postDetails, likes:likes},
+              comments: findPost1[0].comments,
+              totalComments: findPost1[0].totalComments,
+              totalLikes: findPost1[0].totalLikes+1,
+            });
+            dummy1 = dummy1.concat(findPost);
+            state.posts = dummy1.sort((a, b) => {
+              return (
+                new Date(b.postDetails.createdAt) -
+                new Date(a.postDetails.createdAt)
+              );
+            });
           }
         }
-      },
-      [checkBusiness.rejected]: (state, action) => {
-        if (state.loading) {
-          state.loading = false;
-          state.error = action.payload;
-        }
-      },
+      }
     },
-  });
-  
-  export default slice.reducer;
-  
+    [addLikeViaSocket.rejected]: (state, action) => {
+      if (state.loadingAddLike) {
+        state.loadingAddLike = false;
+        state.error = action.payload;
+      }
+    },
+    [addLikeToCommentViaSocket.fulfilled]: (state, action) => {
+        if (action.payload) {
+          let findPost = current(state.posts).filter(
+            (i) => i.postId !== action.payload.postId
+          );
+          let findPost1 = current(state.posts).filter(
+            (i) => i.postId === action.payload.postId
+          );
+          if(findPost1&&findPost1.length>0) {
+            if(findPost1[0].comments.length>0) {
+            let findComment = findPost1[0].comments.filter(i=>i._id === action.payload.commentId)
+            let findComment1 = findPost1[0].comments.filter(i=>i._id !== action.payload.commentId)
+
+            let likes = findComment[0].likes.concat(action.payload.like);
+            let commentsSort = findComment1.concat({...findComment[0], likes:likes }).sort((a, b) => {
+              return (
+                new Date(a.createdAt) -
+                new Date(b.createdAt)
+              )
+            })
+            let dummy1 = [];
+            dummy1.push({
+              postId: action.payload.postId,
+              postDetails: findPost1[0].postDetails,
+              comments: commentsSort,
+              totalComments: findPost1[0].totalComments,
+              totalLikes: findPost1[0].totalLikes+1,
+            });
+            dummy1 = dummy1.concat(findPost);
+            state.posts = dummy1.sort((a, b) => {
+              return (
+                new Date(b.postDetails.createdAt) -
+                new Date(a.postDetails.createdAt)
+              );
+            });
+          }
+        }
+      }
+    },
+    [addCommentToPost.pending]: (state) => {
+      if (!state.loadingAddComment) {
+        state.loadingAddComment = true;
+      }
+    },
+    [addCommentToPost.fulfilled]: (state, action) => {
+      if (state.loadingAddComment) {
+        state.loadingAddComment = false;
+        if (action.payload) {
+          let posts = current(state.posts).filter(
+            (i) => i.postId !== action.payload.commentInfo.itemId
+          );
+          let posts1 = current(state.posts).filter(
+            (i) => i.postId === action.payload.commentInfo.itemId
+          )[0];
+          let comments = posts1.comments.concat({
+            ...action.payload.commentInfo,
+            userId: action.payload.userDetails,
+          });
+          let dummy1 = [];
+          dummy1.push({
+            postId: action.payload.commentInfo.itemId,
+            postDetails: posts1.postDetails,
+            comments: comments,
+            totalComments: posts1.totalComments + 1,
+            totalLikes: posts1.totalLikes,
+          });
+          dummy1 = dummy1.concat(posts);
+          state.posts = dummy1.sort((a, b) => {
+            return (
+              new Date(b.postDetails.createdAt) -
+              new Date(a.postDetails.createdAt)
+            );
+          });
+        }
+      }
+    },
+    [addCommentToPost.rejected]: (state, action) => {
+      if (state.loadingAddComment) {
+        state.loadingAddComment = false;
+        state.error = action.payload;
+      }
+    },
+    [addReplyToComment.pending]: (state) => {
+      if (!state.loadingAddReply) {
+        state.loadingAddReply = true;
+      }
+    },
+    [addReplyToComment.fulfilled]: (state, action) => {
+      if (state.loadingAddReply) {
+        state.loadingAddReply = false;
+        if (action.payload) {
+          let posts = current(state.posts).filter(
+            (i) => i.postId !== action.payload.postId
+          );
+          let posts1 = current(state.posts).filter(
+            (i) => i.postId === action.payload.postId
+          )[0];
+          if(posts1.comments.length>0) {
+          let findComment = posts1.comments.filter(i=>i._id === action.payload.commentId)[0];
+          let findComment1 = posts1.comments.filter(i=>i._id !== action.payload.commentId);
+          let replies = findComment.replies.concat({
+            userId: {_id: action.payload.userId, name: action.payload.userName, photo: action.payload.photo},
+            body: action.payload.comment,
+            created_on: action.payload.created_on
+          });
+          let commentsSort = findComment1.concat({...findComment, replies:replies }).sort((a, b) => {
+            return (
+              new Date(a.createdAt) -
+              new Date(b.createdAt)
+            )
+          })
+          let dummy1 = [];
+          dummy1.push({
+            postId: action.payload.postId,
+            postDetails: posts1.postDetails,
+            comments: commentsSort,
+            totalComments: posts1.totalComments + 1,
+            totalLikes: posts1.totalLikes,
+          });
+          dummy1 = dummy1.concat(posts);
+          state.posts = dummy1.sort((a, b) => {
+            return (
+              new Date(b.postDetails.createdAt) -
+              new Date(a.postDetails.createdAt)
+            );
+          });
+        }
+        }
+      }
+    },
+    [addReplyToComment.rejected]: (state, action) => {
+      if (state.loadingAddReply) {
+        state.loadingAddReply = false;
+        state.error = action.payload;
+      }
+    },
+    [addPostToBusiness.rejected]: (state, action) => {
+      if (state.loadingAddPosts) {
+        state.loadingAddPosts = false;
+        state.error = action.payload;
+      }
+    },
+    [fetchPostComments.pending]: (state) => {
+      if (!state.loadingPostComments) {
+        state.loadingPostComments = true;
+      }
+    },
+    [fetchPostComments.fulfilled]: (state, action) => {
+      if (state.loadingPostComments) {
+        state.loadingPostComments = false;
+        if (action.payload) {
+          if (action.payload.post.length > 0) {
+            let posts = current(state.posts).filter(
+              (i) => i.postId !== action.payload.post[0].itemId
+            );
+            let posts1 = current(state.posts).filter(
+              (i) => i.postId === action.payload.post[0].itemId
+            )[0];
+            let dummy1 = [];
+            dummy1.push({
+              postId: action.payload.post[0].itemId,
+              postDetails: posts1.postDetails,
+              comments: action.payload.post,
+              totalComments: action.payload.post.length,
+              totalLikes: posts1.totalLikes,
+            });
+            dummy1 = dummy1.concat(posts);
+            state.posts = dummy1.sort((a, b) => {
+              return (
+                new Date(b.postDetails.createdAt) -
+                new Date(a.postDetails.createdAt)
+              );
+            });
+          }
+        }
+      }
+    },
+    [fetchPostComments.rejected]: (state, action) => {
+      if (state.loadingPostComments) {
+        state.loadingPostComments = false;
+        state.error = action.payload;
+      }
+    },
+    [sortPostsByLikes.fulfilled]: (state, action) => {
+      state.posts = state.posts.sort((a, b) => {
+        return b.totalLikes - a.totalLikes;
+      });
+    },
+    [sortPostsByDate.fulfilled]: (state, action) => {
+      state.posts = state.posts.sort((a, b) => {
+        return (
+          new Date(b.postDetails.createdAt) - new Date(a.postDetails.createdAt)
+        );
+      });
+    },
+    [filterData.pending]: (state) => {
+      if (!state.loadingFilterData) {
+        state.loadingFilterData = true;
+      }
+    },
+    [filterData.fulfilled]: (state, action) => {
+      if (state.loadingFilterData) {
+        state.loadingFilterData = false;
+        if (action.payload) {
+          state.posts = action.payload.posts;
+        }
+      }
+    },
+    [filterData.rejected]: (state, action) => {
+      if (state.loadingFilterData) {
+        state.loadingFilterData = false;
+        state.error = action.payload;
+      }
+    },
+  },
+});
+
+export const { setFilters } = slice.actions;
+export default slice.reducer;

@@ -87,7 +87,7 @@ const EmojiWrap = styled.div`
   }
 `
 
-const ReplyInput = ({}) => {
+const ReplyInput = () => {
     return (
     <>
         <ChatContent>

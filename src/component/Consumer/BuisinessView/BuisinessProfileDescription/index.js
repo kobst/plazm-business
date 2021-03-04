@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React from "react";
 import styled from "styled-components"
 import { IoMdClose } from "react-icons/io";
 import { FaTwitter, FaFacebookF, FaInstagramSquare, FaLinkedinIn, FaBehance, FaDeviantart } from "react-icons/fa";
@@ -53,29 +53,8 @@ const PhoneNumberDiv = styled.div`
         flex-direction: column;
     }
 `
-const CircleDot = styled.div`
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  margin: 0 10px;
-  background: #fff;
-  @media (max-width:767px){
-    margin: 1px 0;
-    visibility: hidden;
-  }
-`
 const WeekDays = styled.div`
     color: #fff;
-    font-weight: 500;
-    font-size: 13px;
-    line-height: normal;
-    margin: 0 0 10px;
-    span{
-        font-weight: 700;
-    }
-`
-const WeekEndDays = styled.div`
-    color: #FF434B;
     font-weight: 500;
     font-size: 13px;
     line-height: normal;
@@ -176,9 +155,6 @@ const BuisinessProfileDescription = ({setDisplayTab}) => {
     <>
     <BuisinessViewContent>
         <BuisinessShortDesp>
-          Additional information about the business, Lorem ipsum dolor sit amet,
-          consectetur adipiscing elit. Fermentum sit porttitor ipsum volutpat
-          massa amet.
         </BuisinessShortDesp>
         <CommonWrap>
           <HeadingDesp>Address</HeadingDesp>
@@ -209,7 +185,7 @@ const BuisinessProfileDescription = ({setDisplayTab}) => {
           <HeadingDesp>Hashtags</HeadingDesp>
           <HastagsWrap>
             {businessProfile.filter_tags.length > 0
-              ? businessProfile.filter_tags.map((i) => <Hastags>#{i}</Hastags>)
+              ? businessProfile.filter_tags.map((i,key) => <Hastags key={key}>#{i}</Hastags>)
               : null}
           </HastagsWrap>
         </CommonWrap>
@@ -218,7 +194,7 @@ const BuisinessProfileDescription = ({setDisplayTab}) => {
           <SocialDivWrap>
             {businessProfile.handles.twitter ? (
               <SocialInput>
-                <a href={businessProfile.handles.twitter}>
+                <a href={businessProfile.handles.twitter} target="_blank" rel="noopener noreferrer">
                   <FirstDiv>
                     <FaTwitter /> Twitter
                   </FirstDiv>
@@ -231,7 +207,7 @@ const BuisinessProfileDescription = ({setDisplayTab}) => {
 
             {businessProfile.handles.facebook ? (
               <SocialInput>
-                <a href={businessProfile.handles.facebook}>
+                <a href={businessProfile.handles.facebook} target="_blank" rel="noopener noreferrer">
                   {" "}
                   <FirstDiv>
                     <FaFacebookF /> Facebook
@@ -245,7 +221,7 @@ const BuisinessProfileDescription = ({setDisplayTab}) => {
 
             {businessProfile.handles.instagram ? (
               <SocialInput>
-                <a href={businessProfile.handles.instagram}>
+                <a href={businessProfile.handles.instagram} target="_blank" rel="noopener noreferrer">
                   {" "}
                   <FirstDiv>
                     <FaInstagramSquare /> Instagram
@@ -259,7 +235,7 @@ const BuisinessProfileDescription = ({setDisplayTab}) => {
 
             {businessProfile.handles.linkedin ? (
               <SocialInput>
-                <a href={businessProfile.handles.linkedin}>
+                <a href={businessProfile.handles.linkedin} target="_blank" rel="noopener noreferrer">
                   <FirstDiv>
                     <FaLinkedinIn /> LinkedIn
                   </FirstDiv>

@@ -123,7 +123,7 @@ const LeftBar = ({displayTab,setDisplayTab,profile,setFlag, isBusinessOpen, busi
         </TabPanel>:<></>}
         {displayTab ===  true || isBusinessOpen === true?<TabPanel>
           <div className="panel-content">
-            {isBusinessOpen === true?<BuisinessView setDisplayTab={setDisplayTab} profile={profile} businessExists={businessExists} businessId={businessId}/>:<BusinessList/>}
+            {isBusinessOpen === true?<BuisinessView setDisplayTab={setDisplayTab} profile={profile} businessExists={businessExists} businessId={businessId}/>:<BusinessList setDisplayTab={setDisplayTab}/>}
           </div>
         </TabPanel>:<></>}
         {displayTab ===  true?<TabPanel>

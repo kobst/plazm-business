@@ -4,6 +4,7 @@ import eventReducer from './reducers/eventReducer';
 import consumerReducer from './reducers/consumerReducer';
 import listReducer from './reducers/listReducer';
 import placeReducer from './reducers/placeReducer';
+import userReducer from './reducers/userReducer';
 
 export default configureStore({
   reducer: {
@@ -11,7 +12,8 @@ export default configureStore({
     event: eventReducer,
     consumer: consumerReducer,
     list: listReducer,
-    place: placeReducer
+    place: placeReducer,
+    user: userReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

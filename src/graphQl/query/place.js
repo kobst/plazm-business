@@ -1,11 +1,11 @@
 /*
 @desc: getPlace query
 */
-const getPlace = (userSub) => {
+const getPlace = (obj) => {
   const graphQl = {
     query: `
-          query SearchPlacesByUserId($id: ID!){
-            searchPlacesByUserId(input: {id:$id}) {
+          query SearchPlacesByUserId($id: ID!, $value: Int, $filters: filterInput, $ownerId:ID){
+            searchPlacesByUserId(input: {id:$id, value:$value, filters:$filters, ownerId:$ownerId}) {
               message
               success
               place {
@@ -67,11 +67,31 @@ const getPlace = (userSub) => {
                         createdAt
                         updatedAt
                     }
-                    taggedLists
+                    taggedLists {
+                      _id
+                      name
+                      description
+                      items
+                      type
+                      photo
+                      account_id
+                      createdAt
+                    }
                     ownerId {
                       _id
+                      name
+                      email
+                      photo
                     }
-                    likes
+                    likes {
+                      name
+                      email
+                      userSub
+                      phoneNumber
+                      photo 
+                      lockProfile
+                      _id
+                    }
                     media {
                         image
                         thumbnail
@@ -86,24 +106,14 @@ const getPlace = (userSub) => {
                 comments {
                     userId {
                       _id
-                      list_ids
                       name
-                      blurb
-                      photo
-                      createdAt
-                      updatedAt
                       }
                     body
                     replies {
                         userId {
-                            _id
-                            list_ids
-                            name
-                            blurb
-                            photo
-                            createdAt
-                            updatedAt
-                            }
+                          _id
+                          name
+                          }
                     body
                     created_on
                 }
@@ -114,7 +124,10 @@ const getPlace = (userSub) => {
             }
           }`,
     variables: {
-      id: userSub,
+      id: obj.businessId,
+      value: obj.value,
+      filters: obj.filters,
+      ownerId: obj.ownerId || null
     },
   };
   return graphQl;

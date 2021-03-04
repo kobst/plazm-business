@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react'
 import styled from "styled-components"
-import Checkbox from '../../../../UI/Checkbox'
+import Checkbox from '../../../../UI/Checkbox/checkbox'
 import DropdwonArrowTop from '../../../../../../images/top_arrow.png'
-import { Formik } from "formik"
 import { FaSort } from "react-icons/fa"
+import { useDispatch,useSelector } from 'react-redux';
+import { sortPostsByLikes,sortPostsByDate,filterData, checkBusiness, setFilters } from '../../../../../../reducers/businessReducer';
 
 const PostFilterContent = styled.div`
     width:100%;
@@ -94,10 +95,19 @@ const DropdownContent = styled.div`
   }
 `
 
-const PostFilter = ({}) => {
+const PostFilter = () => {
     const [uploadMenu, setUploadMenu] = useState(false)
     const menuRef = useRef(null)
-    
+    const dispatch = useDispatch();
+    const business = useSelector(state => state.business.business);
+    const user = useSelector(state => state.user.user)
+    const filters = useSelector(state => state.business.filters)
+    const [flag, setFlag] = useState(false)
+    /** useEffect to check if no checkbox is selected then by default check Business checkbox */
+    useEffect(()=>{
+      dispatch(filterData({businessId:business&&business[0]?business[0]._id:"", filters:filters, value:0, ownerId: user._id}))
+    },[flag])
+
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside)
         return () => {
@@ -114,34 +124,40 @@ const PostFilter = ({}) => {
       const toggleUploadMenu = () => {
         setUploadMenu(!uploadMenu)
       }
-
-      const handleRemovePhoto = (e) => {
-        e.stopPropagation()
+      
+      /*
+      * @desc: handle change function to be called on checkbox change
+      */
+      const handleChange = (e,text) => {
+        dispatch(setFilters({
+          ...filters,
+          [text]: e.target.checked
+        }))
+        setFlag(!flag)
       }
-
     return (
     <>
     <PostFilterContent>
         <CheckboxWrap>
-            <Formik initialValues={{}}>{(formik) => <Checkbox />}</Formik>Business
+        <Checkbox  checked={filters['Business']} onChange={(e)=>handleChange(e,"Business")} name="filter"/>Business
         </CheckboxWrap>
         <CheckboxWrap>
-            <Formik initialValues={{}}>{(formik) => <Checkbox />}</Formik>Posts By Me
+            <Checkbox  onChange={(e)=>handleChange(e,"PostsByMe")} name="filter" checked={filters['PostsByMe']}/>Posts By Me
         </CheckboxWrap>
         <CheckboxWrap>
-            <Formik initialValues={{}}>{(formik) => <Checkbox />}</Formik>My Subscriptions
+            <Checkbox  onChange={(e)=>handleChange(e,"MySubscriptions")} name="filter" checked={filters['MySubscriptions']}/>My Subscriptions
         </CheckboxWrap>
         <CheckboxWrap>
-            <Formik initialValues={{}}>{(formik) => <Checkbox />}</Formik>Others
+            <Checkbox  onChange={(e)=>handleChange(e,"Others")} name="filter"/>Others
         </CheckboxWrap>
         <CheckboxWrap ref={menuRef}>
             <FaSort onClick={toggleUploadMenu} />
             {uploadMenu && (
               <DropdownContent>
                 <ul>
-                    <li>Most Liked</li>
+                    <li onClick={()=>dispatch(sortPostsByLikes())}>Most Liked</li>
                   
-                    <li>Most recent</li>
+                    <li onClick={()=>dispatch(sortPostsByDate())}>Most recent</li>
                   
                 </ul>
               </DropdownContent>

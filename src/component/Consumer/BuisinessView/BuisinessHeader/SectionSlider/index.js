@@ -16,7 +16,7 @@ const SectionSliderWrapper = styled.div`
   }
 `
 
-const SectionSlider = () => {
+const SectionSlider = ({images}) => {
   const responsive = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
@@ -65,39 +65,9 @@ const SectionSlider = () => {
           autoPlay={false}
           autoPlaySpeed={2000}
         >
-          <div>
-            <SliderItems />
-          </div>
-          <div>
-            <SliderItems />
-          </div>
-          <div>
-            <SliderItems />
-          </div>
-          <div>
-            <SliderItems />
-          </div>
-          <div>
-            <SliderItems />
-          </div>
-          <div>
-            <SliderItems />
-          </div>
-          <div>
-            <SliderItems />
-          </div>
-          <div>
-            <SliderItems />
-          </div>
-          <div>
-            <SliderItems />
-          </div>
-          <div>
-            <SliderItems />
-          </div>
-          <div>
-            <SliderItems />
-          </div>
+          {images.map((i,key)=><div key={key}>
+            <SliderItems image={i}/>
+          </div>)}
         </Carousel>
       </SectionSliderWrapper>
     </>

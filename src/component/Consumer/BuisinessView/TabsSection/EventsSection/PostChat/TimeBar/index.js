@@ -51,7 +51,7 @@ const TimeBar = ({startTime, endTime}) => {
       setSTime(stTime);
       const etTime = formatTime(endTime)
       setETime(etTime)
-  },[])
+  },[endTime, startTime])
     return (
     <>
     <BottomBarLikes>

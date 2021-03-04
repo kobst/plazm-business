@@ -1,13 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 import { IoMdClose } from "react-icons/io";
-import {  MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
+import {  MdKeyboardArrowDown } from "react-icons/md";
 import ProfileImg from "../../../../images/profile-img.png";
 import FacebookImg from "../../../../images/Facebook-new.svg";
 import TwitterImg from "../../../../images/Twitter-new.svg";
 import LinkedInImg from "../../../../images/Linkedin-new.svg";
 import InstagramImg from "../../../../images/Instagram-new.svg";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 const BuisinessHeaderContent = styled.div`
   width: 100%;
@@ -147,20 +148,29 @@ const BuisinessHeaderNotClaimed = ({
   setDisplayBusinessProfile,
   isProfile,
 }) => {
-  const businessProfile = useSelector((state) => state.business.business)[0];
+  const businessProfile = useSelector((state) => state.business.business);
+  const history = useHistory();
+
+  /*
+   * @desc: close tab function to be called on cross icon click 
+   */
+  const closeTab = () => {
+    setDisplayTab(false);
+    history.push("/")
+  }
   return (
     <>
-      <BuisinessHeaderContent className={isProfile&&businessProfile.userSub===null?"NotSlider":''}>
+      <BuisinessHeaderContent className={isProfile&&businessProfile&&businessProfile[0].userSub===null?"NotSlider":''}>
         <CloseDiv>
-          <IoMdClose onClick={() => setDisplayTab(false)} />
+          <IoMdClose onClick={() => closeTab()} />
         </CloseDiv>
         <BottomBar className={isProfile?"ProfileHeaderNam":''}>
           {!isProfile ? (
             <BusinessIcon>
               <img
                 src={
-                  businessProfile.default_image_url
-                    ? businessProfile.default_image_url
+                  businessProfile&&businessProfile[0].default_image_url
+                    ? businessProfile[0].default_image_url
                     : ProfileImg
                 }
                 alt=""
@@ -169,31 +179,31 @@ const BuisinessHeaderNotClaimed = ({
           ) : null}
           {!isProfile ? (
             <BusinessNameWrap>
-              <BusinessName>{businessProfile.company_name}</BusinessName>
+              <BusinessName>{businessProfile&&businessProfile[0].company_name}</BusinessName>
               <SocialIconsWrap>
-                {businessProfile.handles.instagram ? (
-                  <a href={businessProfile.handles.instagram}>
+                {businessProfile&&businessProfile[0].handles.instagram ? (
+                  <a href={businessProfile&&businessProfile[0].handles.instagram}>
                     <SocialIcon>
                       <img src={InstagramImg} alt="" />
                     </SocialIcon>
                   </a>
                 ) : null}
-                {businessProfile.handles.twitter ? (
-                  <a href={businessProfile.handles.instagram}>
+                {businessProfile&&businessProfile[0].handles.twitter ? (
+                  <a href={businessProfile&&businessProfile[0].handles.twitter}>
                     <SocialIcon>
                       <img src={TwitterImg} alt="" />
                     </SocialIcon>
                   </a>
                 ) : null}
-                {businessProfile.handles.linkedin ? (
-                  <a href={businessProfile.handles.linkedin}>
+                {businessProfile&&businessProfile[0].handles.linkedin ? (
+                  <a href={businessProfile&&businessProfile[0].handles.linkedin}>
                     <SocialIcon>
                       <img src={LinkedInImg} alt="" />
                     </SocialIcon>
                   </a>
                 ) : null}
-                {businessProfile.handles.facebook ? (
-                  <a href={businessProfile.handles.facebook}>
+                {businessProfile&&businessProfile[0].handles.facebook ? (
+                  <a href={businessProfile[0].handles.facebook}>
                     <SocialIcon>
                       <img src={FacebookImg} alt="" />
                     </SocialIcon>

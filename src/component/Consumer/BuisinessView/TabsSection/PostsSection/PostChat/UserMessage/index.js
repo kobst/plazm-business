@@ -3,6 +3,16 @@ import styled from "styled-components";
 import ProfileImg from "../../../../../../../images/profile-img.png";
 import ReplyInput from "./ReplyInput";
 import LikesBar from "../LikesBar";
+import { useSelector, useDispatch } from "react-redux";
+import ValueLoader from "../../../../../../../utils/loader";
+import {
+  addCommentToPost,
+  addReplyToComment,
+  addPostViaSocket,
+  addLikeViaSocket,
+  addLikeToCommentViaSocket
+} from "../../../../../../../reducers/businessReducer";
+import Comment from "./comments";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -82,126 +92,238 @@ const ChatInput = styled.div`
   line-height: normal;
   margin: 0 0 5px;
   color: #fff;
-`;
-
-const BottomBarLikes = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  @media (max-width: 767px) {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-`;
-const LikesBtnWrap = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  margin: 0px;
-  align-items: center;
-  flex-wrap: wrap;
-`;
-
-const UsersButton = styled.button`
-  font-weight: 600;
-  font-size: 13px;
-  line-height: normal;
-  text-align: center;
-  color: #ff2e9a;
-  background: transparent;
-  width: auto;
-  border: 0;
-  padding: 0px 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  margin-right: 0;
-  :hover,
-  :focus {
-    outline: 0;
-    border: 0;
-    background: transparent;
-  }
-`;
-
-const CircleDot = styled.div`
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  margin: 0 5px;
-  background: #ff2e9a;
-`;
-const ChatDate = styled.div`
-  color: #fff;
-  font-weight: 600;
-  font-size: 13px;
   span {
-    margin: 0 10px;
+    font-size: 13px;
+    color: #ff2e9a;
+    font-weight: 600;
   }
 `;
 
-const RightDiv = styled.div`
-  color: #fff;
-  font-weight: 600;
-  font-size: 13px;
-  align-items: center;
+const LoaderWrap = styled.div`
+  width: 100%;
+  position: relative;
   display: flex;
-  margin: 0 0 0 20px;
-  @media (max-width: 767px) {
-    margin: 8px 15px 0 0px;
-  }
-  svg {
-    margin: 0 7px 0 0;
-  }
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 100px 0 0 0;
 `;
+const UserMessage = ({ postData }) => {
+  const dispatch = useDispatch();
+  const [displayComments, setDisplayComments] = useState(false);
+  const loadingComments = useSelector(
+    (state) => state.business.loadingPostComments
+  );
+  const business = useSelector((state) => state.business.business)[0];
+  const [description, setDescription] = useState("");
+  const [replyDescription, setReplyDescription] = useState("");
+  const [replyUser, setReplyUser] = useState("");
+  const filters = useSelector((state) => state.business.filters);
+  const ws = useSelector((state) => state.user.ws);
 
-const UserMessage = ({postData}) => {
+  ws.onmessage = (evt) => {
+    const message = JSON.parse(evt.data);
+    console.log(message);
+    /** to add reply via socket */
+    if (message.comment && message.commentId) {
+      setReplyDescription("");
+      if (message.businessId === business._id) {
+        dispatch(addReplyToComment(message));
+      }
+    } else if (message.commentInfo) {
+    /** to add comment via socket */
+      setDescription("");
+      if (message.businessId === business._id) {
+        dispatch(addCommentToPost(message));
+      }
+    } else if (message.post) {
+    /** to add post via socket */
+      if (message.businessId === business._id && filters.postsByMe === true) {
+        dispatch(addPostViaSocket(message));
+      }
+    } else if (message.like&&message.commentId) {
+    /** to add comment like via socket */
+      if (message.businessId === business._id) {
+        dispatch(addLikeToCommentViaSocket(message));
+      }
+    } else if (message.like) {
+    /** to add post like via socket */
+      if (message.businessId === business._id) {
+        dispatch(addLikeViaSocket(message));
+      }
+    }
+  };
+
+  /** to add comment function */
+  const addComment = async (obj) => {
+    ws.send(
+      JSON.stringify({
+        action: "comment",
+        postId: obj.itemId,
+        type: "Post",
+        comment: obj.body,
+        userId: obj.userId,
+        businessId: business._id,
+      })
+    );
+  };
+  /** to add reply function */
+  const addReply = async (obj) => {
+    ws.send(
+      JSON.stringify({
+        action: "message",
+        commentId: obj._id, //commentId
+        userId: obj.userId, //userId
+        comment: replyUser + " " + obj.body,
+        postId: obj.postId,
+        businessId: business._id,
+      })
+    );
+  };
+
+  /** to highlight the user mentions mentioned in post description */
+  const findDesc = (value, mentions, mentionsList) => {
+    let divContent = value;
+    if (mentions.length > 0 && mentionsList.length > 0) {
+      mentions.map((v) => {
+        let re = new RegExp("@" + v.name, "g");
+        divContent = divContent.replace(
+          re,
+          "<span className='mentionData'>" + "@" + v.name + "</span>"
+        );
+        return divContent;
+      });
+      mentionsList.map((v) => {
+        let re = new RegExp("@" + v.name, "g");
+        divContent = divContent.replace(
+          re,
+          "<span className='mentionData'>" + "@" + v.name + "</span>"
+        );
+        return divContent;
+      });
+      if (mentions.length !== 0) {
+        return (
+          <>
+            <div dangerouslySetInnerHTML={{ __html: divContent }}></div>
+          </>
+        );
+      } else {
+        return value;
+      }
+    } else if (mentions.length > 0) {
+      mentions.map((v) => {
+        let re = new RegExp("@" + v.name, "g");
+        divContent = divContent.replace(
+          re,
+          "<span className='mentionData'>" + "@" + v.name + "</span>"
+        );
+        return divContent;
+      });
+      if (mentions.length !== 0) {
+        return (
+          <>
+            <div dangerouslySetInnerHTML={{ __html: divContent }}></div>
+          </>
+        );
+      } else {
+        return value;
+      }
+    } else if (mentionsList.length > 0) {
+      mentionsList.map((v) => {
+        let re = new RegExp("@" + v.name, "g");
+        divContent = divContent.replace(
+          re,
+          "<span className='mentionData'>" + "@" + v.name + "</span>"
+        );
+        return divContent;
+      });
+      if (mentionsList.length !== 0) {
+        return (
+          <>
+            <div dangerouslySetInnerHTML={{ __html: divContent }}></div>
+          </>
+        );
+      } else {
+        return value;
+      }
+    } else {
+      return value;
+    }
+  };
   return (
     <>
       <UserMsgWrap>
         <UserMessageContent>
           <ProfileNameHeader>
             <ProfileThumb>
-              <img src={ProfileImg} alt="" />
+              <img
+                src={
+                  postData.postDetails.ownerId === null
+                    ? business.default_image_url
+                    : postData.postDetails.ownerId.photo !== ""
+                    ? postData.postDetails.ownerId.photo
+                    : ProfileImg
+                }
+                alt=""
+              />
             </ProfileThumb>
             <ProfileNameWrap>
               <ProfileName>
-                Top 10 Restaurant in NYC<span>by</span>NYPlazm_Eater{" "}
+                Top 10 Restaurant in NYC<span>by</span>
+                {postData.postDetails.ownerId === null
+                  ? business.company_name
+                  : postData.postDetails.ownerId.name}{" "}
               </ProfileName>
-              <ChatInput>{postData.postDetails.data}</ChatInput>
+              <ChatInput>
+                <p>
+                  {findDesc(
+                    postData.postDetails.data,
+                    postData.postDetails.taggedUsers,
+                    postData.postDetails.taggedLists
+                  )}
+                </p>
+              </ChatInput>
               <LikesBar
+                type="comment"
                 totalLikes={postData.totalLikes}
                 totalComments={postData.totalComments}
+                date={new Date(postData.postDetails.createdAt)}
+                setDisplayComments={setDisplayComments}
+                displayComments={displayComments}
+                postId={postData.postId}
+                postLikes={postData.postDetails.likes}
               />
             </ProfileNameWrap>
           </ProfileNameHeader>
         </UserMessageContent>
-        {postData.comments.length > 0 ? (
-          <UserMessageContent className="UserReplyContent">
-            <ProfileNameHeader>
-              <ProfileThumb>
-                <img
-                  src={
-                    postData.comments[0].userId.photo
-                      ? postData.comments[0].userId.photo
-                      : ProfileImg
-                  }
-                  alt=""
-                />
-              </ProfileThumb>
-              <ProfileNameWrap>
-                <ProfileName>
-                  Top 10 Restaurant in NYC<span>by</span>NYPlazm_Eater{" "}
-                </ProfileName>
-                <ChatInput>
-                  {postData.comments[0].body ? postData.comments[0].body : ""}
-                </ChatInput>
-                <LikesBar />
-              </ProfileNameWrap>
-            </ProfileNameHeader>
-            <ReplyInput />
-          </UserMessageContent>
+        {displayComments && !loadingComments && postData.comments.length > 0 ? (
+          postData.comments.map((i) => {
+            return (
+              <Comment
+                i={i}
+                setReplyDescription={setReplyDescription}
+                replyDescription={replyDescription}
+                addReply={addReply}
+                postData={postData}
+                displayComments={displayComments}
+                setReplyUser={setReplyUser}
+              />
+            );
+          })
+        ) : displayComments && loadingComments ? (
+          <LoaderWrap>
+            <ValueLoader />
+          </LoaderWrap>
         ) : null}
+        <ReplyInput
+          type="comment"
+          postId={postData.postId}
+          displayComments={displayComments}
+          description={description}
+          setDescription={setDescription}
+          addComment={addComment}
+        />
       </UserMsgWrap>
     </>
   );

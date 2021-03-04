@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import CoverPhoto from '../../../../../../images/sliderimg.png'
 
 const ItemsWrapper = styled.div`
   position: relative;
@@ -19,10 +18,10 @@ const ItemsWrapper = styled.div`
   }
 `
 
-const SliderItems = () => (
+const SliderItems = ({image}) => (
   <>
     <ItemsWrapper>
-        <img src={CoverPhoto} alt="Cover" />
+        <img src={image} alt="Cover" />
     </ItemsWrapper>
   </>
 )

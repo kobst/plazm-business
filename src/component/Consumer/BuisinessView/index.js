@@ -47,7 +47,7 @@ const BuisinessView = ({
         </LoaderWrap>
       ) : (
         <BuisinessViewContent>
-          {businessProfile[0].userSub !== null ? (
+          {businessProfile&&businessProfile.length>0&&businessProfile[0].userSub !== null ? (
             displayBusinessProfile ? (
               <BuisinessProfileDetails
                 setDisplayBusinessProfile={setDisplayBusinessProfile}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { IoMdClose } from "react-icons/io";
 import {
@@ -174,6 +174,14 @@ const BuisinessHeader = ({
 }) => {
   const history = useHistory();
   const businessProfile = useSelector((state) => state.business.business)[0];
+  
+  /*
+   * @desc: close tab function to be called on cross icon click 
+   */
+  const closeTab = () => {
+    setDisplayTab(false);
+    history.push("/")
+  }
   return (
     <>
       <BuisinessHeaderContent>
@@ -181,9 +189,9 @@ const BuisinessHeader = ({
           <MdKeyboardArrowLeft onClick={() => history.push("/")} />
         </ArrowBack>
         <CloseDiv>
-          <IoMdClose onClick={() => setDisplayTab(false)} />
+          <IoMdClose onClick={() => closeTab()} />
         </CloseDiv>
-        <SectionSlider />
+        <SectionSlider images={businessProfile.additional_media} />
         <BottomBar className={isProfile?"ProfileHeaderNam":''}>
           {!isProfile ? (
             <BusinessIcon>

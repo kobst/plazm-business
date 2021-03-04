@@ -1,6 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { MdFavoriteBorder, MdChatBubbleOutline } from "react-icons/md";
+import {
+  MdFavoriteBorder,
+  MdChatBubbleOutline,
+  MdFavorite,
+} from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchPostComments,
+  AddLikeToPost,
+  addLikeToComment,
+} from "../../../../../../../reducers/businessReducer";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const BottomBarLikes = styled.div`
   display: flex;
@@ -73,27 +84,147 @@ const RightDiv = styled.div`
   }
 `;
 
-const LikesBar = ({ totalLikes, totalComments }) => {
+const LikesBar = ({
+  totalLikes,
+  totalComments,
+  date,
+  setDisplayComments,
+  displayComments,
+  postId,
+  type,
+  name,
+  setReplyUser,
+  postLikes,
+  commentId,
+  commentLikes,
+}) => {
+  const [eventDate, setEventDate] = useState();
+  const [userLikedPost, setUserLikedPost] = useState(false);
+  const [userLikedComment, setUserLikedComment] = useState(false);
+  const [userCommentId, setUserCommentId] = useState()
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
+  const ws = useSelector((state) => state.user.ws);
+  const business = useSelector((state) => state.business.business);
+
+  /** to convert date into display format */
+  useEffect(() => {
+    let monthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+
+    let day = date.getDate();
+
+    let monthIndex = date.getMonth();
+    let monthName = monthNames[monthIndex];
+
+    let year = date.getFullYear();
+
+    setEventDate(`${day} ${monthName} ${year}`);
+
+    if (type === "comment") {
+      if (postLikes.length > 0) {
+        const findUser = postLikes.find((i) => i._id === user._id);
+        if (findUser) {
+          setUserLikedPost(true);
+        }
+      }
+    } else if (type === "reply") {
+      if (commentLikes.length > 0) {
+        const findUser = commentLikes.find((i) => i._id === user._id);
+        if (findUser) {
+          setUserCommentId(findUser._id)
+          setUserLikedComment(true);
+        }
+      }
+    }
+  }, [date]);
+
+  const displayCommentsWithPosts = () => {
+    setDisplayComments(!displayComments);
+    if (type === "reply") setReplyUser("@" + name);
+    if (type === "comment") dispatch(fetchPostComments(postId));
+  };
+
+  const addLike = async () => {
+    if (type === "comment") {
+      const obj = {
+        postId: postId,
+        userId: user._id,
+      };
+      const data = await dispatch(AddLikeToPost(obj));
+      const response = await unwrapResult(data);
+      if (response.success === true) {
+        ws.send(
+          JSON.stringify({
+            action: "like",
+            postId: postId,
+            like: response.like,
+            businessId: business[0]._id,
+          })
+        );
+      }
+    } else if (type === "reply") {
+      const obj = {
+        id: commentId,
+        userId: user._id,
+      };
+      const data = await dispatch(addLikeToComment(obj));
+      const response = await unwrapResult(data);
+      if (response.success === true) {
+        ws.send(
+          JSON.stringify({
+            action: "like",
+            postId: response.postId,
+            like: response.like,
+            commentId: response.commentId,
+            businessId: business[0]._id,
+          })
+        );
+      }
+      console.log(response);
+    }
+  };
   return (
     <>
       <BottomBarLikes>
         <LikesBtnWrap>
-          <UsersButton>Reply</UsersButton>
-          <CircleDot />
-          <UsersButton>Like</UsersButton>
+          {type !== "commentReply" ? <UsersButton>Reply</UsersButton> : null}
+          {type !== "commentReply" ? <CircleDot /> : null}
+          {type !== "commentReply" ? <UsersButton>Like</UsersButton> : null}
 
           <ChatDate>
-            <span>-</span>22 Oct 2020
+            <span>-</span>
+            {eventDate}
           </ChatDate>
         </LikesBtnWrap>
-        <LikesBtnWrap>
-          <RightDiv>
-            <MdFavoriteBorder /> {totalLikes}
-          </RightDiv>
-          <RightDiv>
-            <MdChatBubbleOutline /> {totalComments}
-          </RightDiv>
-        </LikesBtnWrap>
+        {type !== "commentReply" ? (
+          <LikesBtnWrap>
+            <RightDiv>
+              {userLikedPost || userLikedComment ? (
+                <MdFavorite style={{ color: "red" }} />
+              ) : (
+                <MdFavoriteBorder onClick={() => addLike()} />
+              )}{" "}
+              {totalLikes}
+            </RightDiv>
+            <RightDiv>
+              <MdChatBubbleOutline onClick={() => displayCommentsWithPosts()} />{" "}
+              {totalComments}
+            </RightDiv>
+          </LikesBtnWrap>
+        ) : null}
       </BottomBarLikes>
     </>
   );
