@@ -11,7 +11,7 @@ const ChatContent = styled.div`
     display:flex;
     padding: 12px 0 12px 0px;
     flex-direction: column;
-    overflow: hidden;
+    /* overflow: hidden; */
     @media (max-width:767px){
     }
 `
