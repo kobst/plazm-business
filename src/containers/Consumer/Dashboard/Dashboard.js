@@ -20,7 +20,6 @@ const DashboardContainer = (props) => {
   const [businessExists, setBusinessExists] = useState();
   const [businessId, setBusinessId] = useState("");
   const dispatch = useDispatch();
- console.log(props.isBusinessOpen)
 
   useEffect(() => {
     /* to get loggedIn user profile */
@@ -30,7 +29,7 @@ const DashboardContainer = (props) => {
         if (value.attributes["custom:type"] === "curator" || value.attributes["custom:type"] === "customer" ||  value.attributes["custom:type"] === "consumer") {
           const data = await dispatch(fetchUserDetails(value.attributes.sub));
           const res = await unwrapResult(data)
-          const ws = new WebSocket(`wss://k7ln6b8ynl.execute-api.us-east-1.amazonaws.com/dev/?userId=${res.data.getUser.user._id}`)
+          const ws = new WebSocket(`${process.env.REACT_APP_WEBSOCKET}/?userId=${res.data.getUser.user._id}`)
           if (res.data.getUser.success === true) {
             dispatch(setWs(ws))
             setProfile(res.data.getUser.user);
@@ -50,7 +49,7 @@ const DashboardContainer = (props) => {
     };
     getProfile();
     setFlag(false);
-  }, [flag]);
+  }, [flag,dispatch]);
   useEffect(() => {
     /** find business function */
     let findBusiness = async (isOpen) => {
@@ -78,7 +77,7 @@ const DashboardContainer = (props) => {
     }
     };
     findBusiness(props.isBusinessOpen);
-  }, [props.isBusinessOpen]);
+  }, [props.isBusinessOpen,props.match.params.id,dispatch]);
   return profile ? (
     <Dashboard profile={profile} setFlag={setFlag} isBusinessOpen={props.isBusinessOpen} businessExists={businessExists} businessId={businessId}/>
   ) : (

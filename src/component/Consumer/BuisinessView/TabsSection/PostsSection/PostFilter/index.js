@@ -4,7 +4,7 @@ import Checkbox from '../../../../UI/Checkbox/checkbox'
 import DropdwonArrowTop from '../../../../../../images/top_arrow.png'
 import { FaSort } from "react-icons/fa"
 import { useDispatch,useSelector } from 'react-redux';
-import { sortPostsByLikes,sortPostsByDate,filterData, checkBusiness, setFilters } from '../../../../../../reducers/businessReducer';
+import { sortPostsByLikes,sortPostsByDate,filterData, setFilters } from '../../../../../../reducers/businessReducer';
 
 const PostFilterContent = styled.div`
     width:100%;
@@ -103,10 +103,11 @@ const PostFilter = () => {
     const user = useSelector(state => state.user.user)
     const filters = useSelector(state => state.business.filters)
     const [flag, setFlag] = useState(false)
+    const loadingFilterData = useSelector(state => state.business.loadingFilterData)
     /** useEffect to check if no checkbox is selected then by default check Business checkbox */
     useEffect(()=>{
       dispatch(filterData({businessId:business&&business[0]?business[0]._id:"", filters:filters, value:0, ownerId: user._id}))
-    },[flag])
+    },[flag,dispatch,business,filters,user._id])
 
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside)
@@ -139,16 +140,16 @@ const PostFilter = () => {
     <>
     <PostFilterContent>
         <CheckboxWrap>
-        <Checkbox  checked={filters['Business']} onChange={(e)=>handleChange(e,"Business")} name="filter"/>Business
+        <Checkbox  checked={filters['Business']} onChange={(e)=>handleChange(e,"Business")} name="filter" disabled={loadingFilterData}/>Business
         </CheckboxWrap>
         <CheckboxWrap>
-            <Checkbox  onChange={(e)=>handleChange(e,"PostsByMe")} name="filter" checked={filters['PostsByMe']}/>Posts By Me
+            <Checkbox  onChange={(e)=>handleChange(e,"PostsByMe")} name="filter" checked={filters['PostsByMe']} disabled={loadingFilterData}/>Posts By Me
         </CheckboxWrap>
         <CheckboxWrap>
-            <Checkbox  onChange={(e)=>handleChange(e,"MySubscriptions")} name="filter" checked={filters['MySubscriptions']}/>My Subscriptions
+            <Checkbox  onChange={(e)=>handleChange(e,"MySubscriptions")} name="filter" checked={filters['MySubscriptions']} disabled={loadingFilterData}/>My Subscriptions
         </CheckboxWrap>
         <CheckboxWrap>
-            <Checkbox  onChange={(e)=>handleChange(e,"Others")} name="filter"/>Others
+            <Checkbox  onChange={(e)=>handleChange(e,"Others")} name="filter" disabled={loadingFilterData}/>Others
         </CheckboxWrap>
         <CheckboxWrap ref={menuRef}>
             <FaSort onClick={toggleUploadMenu} />

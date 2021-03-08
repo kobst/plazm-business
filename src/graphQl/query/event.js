@@ -10,6 +10,11 @@ const fetchEvent = (values) => {
             success
             event {
                 _id
+                totalComments
+                likes {
+                  _id
+                  name
+                }
                 eventSchedule {
                     start_time
                     end_time
@@ -59,6 +64,11 @@ const fetchEventForAWeek = (values) => {
           success
           event {
               _id
+              totalComments
+              likes {
+                _id
+                name
+              }
               eventSchedule {
                   start_time
                   end_time

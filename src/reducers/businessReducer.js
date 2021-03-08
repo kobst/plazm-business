@@ -5,7 +5,7 @@ import {
   getPlace,
   findPostComments,
   addLikeToPost,
-  AddLikeToComment
+  AddLikeToComment,
 } from "../graphQl";
 
 /*
@@ -63,6 +63,13 @@ export const filterData = createAsyncThunk("data/filterData", async (obj) => {
   return response.data.searchPlacesByUserId;
 });
 
+
+export const addFilteredPosts = createAsyncThunk("data/addFilteredPosts", async (obj) => {
+  const graphQl = getPlace(obj);
+  const response = await graphQlEndPoint(graphQl);
+  return response.data.searchPlacesByUserId;
+});
+
 /*
  * @desc:  to comment to post
  * @params: obj
@@ -71,10 +78,6 @@ export const addCommentToPost = createAsyncThunk(
   "data/addCommentToPost",
   async (obj) => {
     return obj;
-    // const graphQl = AddComment(obj);
-    // const response = await graphQlEndPoint(graphQl);
-    // console.log(response)
-    // return response.data.createComment;
   }
 );
 
@@ -98,7 +101,7 @@ export const fetchPostComments = createAsyncThunk(
 export const addReplyToComment = createAsyncThunk(
   "data/addReplyToComment",
   async (obj) => {
-    return obj
+    return obj;
     // const graphQl = CreateReply(obj);
     // const response = await graphQlEndPoint(graphQl);
     // return {
@@ -117,7 +120,7 @@ export const addPostViaSocket = createAsyncThunk(
 );
 
 export const AddLikeToPost = createAsyncThunk(
-  "data/AddLikeToPost",  
+  "data/AddLikeToPost",
   async (obj) => {
     const graphQl = addLikeToPost(obj);
     const response = await graphQlEndPoint(graphQl);
@@ -126,7 +129,7 @@ export const AddLikeToPost = createAsyncThunk(
 );
 
 export const addLikeToComment = createAsyncThunk(
-  "data/addLikeToComment",  
+  "data/addLikeToComment",
   async (obj) => {
     const graphQl = AddLikeToComment(obj);
     const response = await graphQlEndPoint(graphQl);
@@ -155,23 +158,32 @@ export const slice = createSlice({
     posts: [],
     loadingAddComment: false,
     loadingPostComments: false,
-    filters: { Business: true, PostsByMe: false, MySubscriptions: false, Others:false },
+    filters: {
+      Business: true,
+      PostsByMe: false,
+      MySubscriptions: false,
+      Others: false,
+    },
     loadingFilterData: false,
     loadingAddReply: false,
     loadingAddLike: false,
-    loadingAddLikeToComment: false
+    loadingAddLikeToComment: false,
+    loadingAddFilteredPosts: false,
+    totalPosts: 0
   },
   reducers: {
     setFilters: (state, action) => {
       if (
         action.payload["Business"] === false &&
         action.payload["PostsByMe"] === false &&
-        action.payload["MySubscriptions"] === false
+        action.payload["MySubscriptions"] === false &&
+        action.payload["Others"] === false
       )
         state.filters = {
           Business: true,
           PostsByMe: false,
           MySubscriptions: false,
+          Others: false,
         };
       else state.filters = action.payload;
     },
@@ -188,6 +200,7 @@ export const slice = createSlice({
         if (action.payload) {
           state.business = action.payload.place;
           state.posts = action.payload.posts;
+          state.totalPosts = action.payload.totalPosts
         }
       }
     },
@@ -197,94 +210,72 @@ export const slice = createSlice({
         state.error = action.payload;
       }
     },
-    [addPostViaSocket.pending]: (state) => {
-      if (!state.loadingAddPosts) {
-        state.loadingAddPosts = true;
-      }
-    },
     [addPostViaSocket.fulfilled]: (state, action) => {
-      if (state.loadingAddPosts) {
-        state.loadingAddPosts = false;
         if (action.payload) {
-          state.posts = [action.payload].concat(state.posts);
+          state.posts = [action.payload.post].concat(state.posts);
         }
-      }
-    },
-    [addPostViaSocket.rejected]: (state, action) => {
-      if (state.loadingAddPosts) {
-        state.loadingAddPosts = false;
-        state.error = action.payload;
-      }
-    },
-    [addLikeViaSocket.pending]: (state) => {
-      if (!state.loadingAddLike) {
-        state.loadingAddLike = true;
-      }
     },
     [addLikeViaSocket.fulfilled]: (state, action) => {
-      if (state.loadingAddLike) {
-        state.loadingAddLike = false;
-        if (action.payload) {
-          let findPost = current(state.posts).filter(
-            (i) => i.postId !== action.payload.postId
+      if (action.payload) {
+        let findPost = current(state.posts).filter(
+          (i) => i.postId !== action.payload.postId
+        );
+        let findPost1 = current(state.posts).filter(
+          (i) => i.postId === action.payload.postId
+        );
+        if (findPost1 && findPost1.length > 0) {
+          let likes = findPost1[0].postDetails.likes.concat(
+            action.payload.like
           );
-          let findPost1 = current(state.posts).filter(
-            (i) => i.postId === action.payload.postId
-          );
-          if(findPost1&&findPost1.length>0) {
-            let likes = findPost1[0].postDetails.likes.concat(action.payload.like);
-            let dummy1 = [];
-            dummy1.push({
-              postId: action.payload.postId,
-              postDetails: {...findPost1[0].postDetails, likes:likes},
-              comments: findPost1[0].comments,
-              totalComments: findPost1[0].totalComments,
-              totalLikes: findPost1[0].totalLikes+1,
-            });
-            dummy1 = dummy1.concat(findPost);
-            state.posts = dummy1.sort((a, b) => {
-              return (
-                new Date(b.postDetails.createdAt) -
-                new Date(a.postDetails.createdAt)
-              );
-            });
-          }
+          let dummy1 = [];
+          dummy1.push({
+            postId: action.payload.postId,
+            postDetails: { ...findPost1[0].postDetails, likes: likes },
+            comments: findPost1[0].comments,
+            totalComments: findPost1[0].totalComments,
+            totalLikes: findPost1[0].totalLikes + 1,
+          });
+          dummy1 = dummy1.concat(findPost);
+          state.posts = dummy1.sort((a, b) => {
+            return (
+              new Date(b.postDetails.createdAt) -
+              new Date(a.postDetails.createdAt)
+            );
+          });
         }
-      }
-    },
-    [addLikeViaSocket.rejected]: (state, action) => {
-      if (state.loadingAddLike) {
-        state.loadingAddLike = false;
-        state.error = action.payload;
       }
     },
     [addLikeToCommentViaSocket.fulfilled]: (state, action) => {
-        if (action.payload) {
-          let findPost = current(state.posts).filter(
-            (i) => i.postId !== action.payload.postId
-          );
-          let findPost1 = current(state.posts).filter(
-            (i) => i.postId === action.payload.postId
-          );
-          if(findPost1&&findPost1.length>0) {
-            if(findPost1[0].comments.length>0) {
-            let findComment = findPost1[0].comments.filter(i=>i._id === action.payload.commentId)
-            let findComment1 = findPost1[0].comments.filter(i=>i._id !== action.payload.commentId)
+      if (action.payload) {
+        let findPost = current(state.posts).filter(
+          (i) => i.postId !== action.payload.postId
+        );
+        let findPost1 = current(state.posts).filter(
+          (i) => i.postId === action.payload.postId
+        );
+        if (findPost1 && findPost1.length > 0) {
+          if (findPost1[0].comments.length > 0) {
+            let findComment = findPost1[0].comments.filter(
+              (i) => i._id === action.payload.commentId
+            );
+            let findComment1 = findPost1[0].comments.filter(
+              (i) => i._id !== action.payload.commentId
+            );
 
+            if(findComment && findComment.length>0) {
             let likes = findComment[0].likes.concat(action.payload.like);
-            let commentsSort = findComment1.concat({...findComment[0], likes:likes }).sort((a, b) => {
-              return (
-                new Date(a.createdAt) -
-                new Date(b.createdAt)
-              )
-            })
+            let commentsSort = findComment1
+              .concat({ ...findComment[0], likes: likes })
+              .sort((a, b) => {
+                return new Date(a.createdAt) - new Date(b.createdAt);
+              });
             let dummy1 = [];
             dummy1.push({
               postId: action.payload.postId,
               postDetails: findPost1[0].postDetails,
               comments: commentsSort,
               totalComments: findPost1[0].totalComments,
-              totalLikes: findPost1[0].totalLikes+1,
+              totalLikes: findPost1[0].totalLikes + 1,
             });
             dummy1 = dummy1.concat(findPost);
             state.posts = dummy1.sort((a, b) => {
@@ -294,35 +285,31 @@ export const slice = createSlice({
               );
             });
           }
+          }
         }
       }
     },
-    [addCommentToPost.pending]: (state) => {
-      if (!state.loadingAddComment) {
-        state.loadingAddComment = true;
-      }
-    },
     [addCommentToPost.fulfilled]: (state, action) => {
-      if (state.loadingAddComment) {
-        state.loadingAddComment = false;
-        if (action.payload) {
-          let posts = current(state.posts).filter(
-            (i) => i.postId !== action.payload.commentInfo.itemId
-          );
-          let posts1 = current(state.posts).filter(
-            (i) => i.postId === action.payload.commentInfo.itemId
-          )[0];
-          let comments = posts1.comments.concat({
+      if (action.payload) {
+        let posts = current(state.posts).filter(
+          (i) => i.postId !== action.payload.commentInfo.itemId
+        );
+        let posts1 = current(state.posts).filter(
+          (i) => i.postId === action.payload.commentInfo.itemId
+        );
+        if (posts1 && posts1.length > 0) {
+          let comments = posts1[0].comments.concat({
             ...action.payload.commentInfo,
             userId: action.payload.userDetails,
+            likes: [],
           });
           let dummy1 = [];
           dummy1.push({
             postId: action.payload.commentInfo.itemId,
-            postDetails: posts1.postDetails,
+            postDetails: posts1[0].postDetails,
             comments: comments,
-            totalComments: posts1.totalComments + 1,
-            totalLikes: posts1.totalLikes,
+            totalComments: posts1[0].totalComments + 1,
+            totalLikes: posts1[0].totalLikes,
           });
           dummy1 = dummy1.concat(posts);
           state.posts = dummy1.sort((a, b) => {
@@ -334,41 +321,34 @@ export const slice = createSlice({
         }
       }
     },
-    [addCommentToPost.rejected]: (state, action) => {
-      if (state.loadingAddComment) {
-        state.loadingAddComment = false;
-        state.error = action.payload;
-      }
-    },
-    [addReplyToComment.pending]: (state) => {
-      if (!state.loadingAddReply) {
-        state.loadingAddReply = true;
-      }
-    },
     [addReplyToComment.fulfilled]: (state, action) => {
-      if (state.loadingAddReply) {
-        state.loadingAddReply = false;
-        if (action.payload) {
-          let posts = current(state.posts).filter(
-            (i) => i.postId !== action.payload.postId
-          );
-          let posts1 = current(state.posts).filter(
-            (i) => i.postId === action.payload.postId
+      if (action.payload) {
+        let posts = current(state.posts).filter(
+          (i) => i.postId !== action.payload.postId
+        );
+        let posts1 = current(state.posts).filter(
+          (i) => i.postId === action.payload.postId
+        )[0];
+        if (posts1.comments.length > 0) {
+          let findComment = posts1.comments.filter(
+            (i) => i._id === action.payload.commentId
           )[0];
-          if(posts1.comments.length>0) {
-          let findComment = posts1.comments.filter(i=>i._id === action.payload.commentId)[0];
-          let findComment1 = posts1.comments.filter(i=>i._id !== action.payload.commentId);
+          let findComment1 = posts1.comments.filter(
+            (i) => i._id !== action.payload.commentId
+          );
           let replies = findComment.replies.concat({
-            userId: {_id: action.payload.userId, name: action.payload.userName, photo: action.payload.photo},
-            body: action.payload.comment,
-            created_on: action.payload.created_on
+            ...action.payload.reply,
+            userId: {
+              _id: action.payload.userId,
+              name: action.payload.userName,
+              photo: action.payload.photo,
+            },            
           });
-          let commentsSort = findComment1.concat({...findComment, replies:replies }).sort((a, b) => {
-            return (
-              new Date(a.createdAt) -
-              new Date(b.createdAt)
-            )
-          })
+          let commentsSort = findComment1
+            .concat({ ...findComment, replies: replies })
+            .sort((a, b) => {
+              return new Date(a.createdAt) - new Date(b.createdAt);
+            });
           let dummy1 = [];
           dummy1.push({
             postId: action.payload.postId,
@@ -385,13 +365,6 @@ export const slice = createSlice({
             );
           });
         }
-        }
-      }
-    },
-    [addReplyToComment.rejected]: (state, action) => {
-      if (state.loadingAddReply) {
-        state.loadingAddReply = false;
-        state.error = action.payload;
       }
     },
     [addPostToBusiness.rejected]: (state, action) => {
@@ -463,12 +436,33 @@ export const slice = createSlice({
         state.loadingFilterData = false;
         if (action.payload) {
           state.posts = action.payload.posts;
+          state.totalPosts = action.payload.totalPosts
         }
       }
     },
     [filterData.rejected]: (state, action) => {
       if (state.loadingFilterData) {
         state.loadingFilterData = false;
+        state.error = action.payload;
+      }
+    },
+    [addFilteredPosts.pending]: (state) => {
+      if (!state.loadingAddFilteredPosts) {
+        state.loadingAddFilteredPosts = true;
+      }
+    },
+    [addFilteredPosts.fulfilled]: (state, action) => {
+      if (state.loadingAddFilteredPosts) {
+        state.loadingAddFilteredPosts = false;
+        if (action.payload) {
+          state.posts = state.posts.concat(action.payload.posts);
+          state.totalPosts = action.payload.totalPosts
+        }
+      }
+    },
+    [addFilteredPosts.rejected]: (state, action) => {
+      if (state.loadingAddFilteredPosts) {
+        state.loadingAddFilteredPosts = false;
         state.error = action.payload;
       }
     },

@@ -1,45 +1,54 @@
-import React from "react"
-import styled from "styled-components"
-import ProfileImg from '../../../../../../../images/profile-img.png'
-import ReplyInput from './ReplyInput'
-import LikesBar from '../LikesBar'
-import DateBar from '../DateBar'
-import TimeBar from '../TimeBar'
-import ImageComment from '../ImageComment'
-import { useSelector } from 'react-redux';
+import React, { useState } from "react";
+import styled from "styled-components";
+import ProfileImg from "../../../../../../../images/profile-img.png";
+import ReplyInput from "./ReplyInput";
+import LikesBar from "../LikesBar";
+import DateBar from "../DateBar";
+import TimeBar from "../TimeBar";
+import ImageComment from "../ImageComment";
+import { useSelector, useDispatch } from "react-redux";
+import ValueLoader from "../../../../../../../utils/loader";
+import { Scrollbars } from "react-custom-scrollbars";
+import {
+  addCommentViaSocket,
+  addLikeViaSocket,
+  addReplyViaSocket,
+  addLikeToCommentViaSocket,
+} from "../../../../../../../reducers/eventReducer";
+import Comment from "./comments";
 
 const UserMessageContent = styled.div`
-    width:100%;
-    position: relative;
-    display:flex;
-    padding: 0 12px;
-    flex-direction: column;
-    @media (max-width:767px){
-        justify-content: flex-start;
-        align-items: flex-start;
-    }
-    &.UserReplyContent{
-        padding: 0 0 0 40px;
-    }
-`
+  width: 100%;
+  position: relative;
+  display: flex;
+  padding: 0 12px;
+  flex-direction: column;
+  @media (max-width: 767px) {
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+  &.UserReplyContent {
+    padding: 0 0 0 40px;
+  }
+`;
 const ProfileNameHeader = styled.div`
   display: flex;
   padding: 0;
   margin: 15px 0;
-`
+`;
 
 const ProfileThumb = styled.div`
   width: 30px;
   height: 30px;
   margin: 0 10px 0 0;
-  border: 1px solid #FFFFFF;
+  border: 1px solid #ffffff;
   border-radius: 50%;
   overflow: hidden;
   img {
     width: 30px;
     height: 30px;
   }
-`
+`;
 const ProfileNameWrap = styled.div`
   display: flex;
   flex-direction: column;
@@ -49,10 +58,10 @@ const ProfileNameWrap = styled.div`
   border-bottom: 0.25px solid #878787;
   padding: 0 25px 15px 0px;
   width: 100%;
-  @media (max-width:1024px){
+  @media (max-width: 1024px) {
     padding: 0 45px 15px 0px;
   }
-`
+`;
 
 const ProfileName = styled.div`
   font-style: normal;
@@ -60,13 +69,13 @@ const ProfileName = styled.div`
   line-height: normal;
   margin: 0 0 5px 0;
   font-weight: 700;
-  color: #FF2E9A;
-  span{
-    font-weight: 700;  
+  color: #ff2e9a;
+  span {
+    font-weight: 700;
     color: #fff;
     margin: 0 3px;
   }
-`
+`;
 
 const ChatInput = styled.div`
   font-style: normal;
@@ -74,78 +83,7 @@ const ChatInput = styled.div`
   line-height: normal;
   margin: 0 0 5px;
   color: #fff;
-`
-
-const BottomBarLikes = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  @media (max-width:767px){
-    flex-direction: column;
-    align-items: flex-start;
-  }
-`
-const LikesBtnWrap = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  margin: 0px;
-  align-items: center;
-  flex-wrap: wrap;
-`
-
-const UsersButton = styled.button`
-  font-weight: 600;
-  font-size: 13px;
-  line-height: normal;
-  text-align: center;
-  color: #FF2E9A;
-  background: transparent;
-  width: auto;
-  border: 0;
-  padding: 0px 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  margin-right: 0;
-  :hover,
-  :focus {
-    outline: 0;
-    border: 0;
-    background: transparent;
-  }
-`
-
-const CircleDot = styled.div`
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  margin: 0 5px;
-  background: #FF2E9A;
-`
-const ChatDate = styled.div`
-  color: #fff;
-  font-weight: 600;
-  font-size: 13px;
-  span {
-      margin: 0 10px;
-  }
-`
-
-const RightDiv = styled.div`
-  color: #fff;
-  font-weight: 600;
-  font-size: 13px;
-  align-items: center;
-  display: flex;
-  margin:0 0 0 20px;
-  @media (max-width:767px){
-    margin: 8px 15px 0 0px;
-  }
-  svg {
-      margin: 0 7px 0 0;
-  }
-`
+`;
 
 const SubHeading = styled.div`
   font-style: normal;
@@ -153,49 +91,168 @@ const SubHeading = styled.div`
   line-height: normal;
   margin: 0 0 5px 0;
   font-weight: 700;
-  color: #00C2FF;
-`
+  color: #00c2ff;
+`;
 
-const UserMessage = ({eventData}) => {
-  const businessInfo = useSelector(state => state.business.business)[0]
-  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    return (
+const ReplyWrap = styled.div``;
+
+const LoaderWrap = styled.div`
+  width: 100%;
+  position: relative;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 100px 0 0 0;
+`;
+
+const UserMessage = ({ eventData }) => {
+  const businessInfo = useSelector((state) => state.business.business)[0];
+  const [displayEventComments, setDisplayEventComments] = useState(false);
+  const business = useSelector((state) => state.business.business);
+  const [description, setDescription] = useState("");
+  const loadingComments = useSelector(
+    (state) => state.event.loadingEventComments
+  );
+  const ws = useSelector((state) => state.user.ws);
+  const dispatch = useDispatch();
+
+  ws.onmessage = (evt) => {
+    const message = JSON.parse(evt.data);
+    if (message.commentInfo && message.commentInfo.type === "Events") {
+      /** to add event comment via socket */
+      setDescription("");
+      if (message.businessId === business[0]._id) {
+        dispatch(addCommentViaSocket(message));
+      }
+    } else if (
+      message.comment &&
+      message.commentId &&
+      message.type === "Event"
+    ) {
+      /** to add event comment via socket */
+      if (message.businessId === business[0]._id) {
+        dispatch(addReplyViaSocket(message));
+      }
+    } else if (message.like && message.commentId && message.type === "Event") {
+      /** to add comment like via socket */
+      if (message.businessId === business[0]._id) {
+        dispatch(addLikeToCommentViaSocket(message));
+      }
+    } else if (message.like && message.type === "Event") {
+      /** to add post like via socket */
+      if (message.businessId === business[0]._id) {
+        dispatch(addLikeViaSocket(message));
+      }
+    }
+  };
+
+  /** to add comment on event function */
+  const addComment = async (obj) => {
+    ws.send(
+      JSON.stringify({
+        action: "comment",
+        postId: obj.itemId,
+        type: "Events",
+        comment: obj.body,
+        userId: obj.userId,
+        businessId: business[0]._id,
+        taggedUsers: obj.taggedUsers,
+      })
+    );
+  };
+
+  const days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  return (
     <>
-    <UserMessageContent>
+      <UserMessageContent>
         <ProfileNameHeader>
-            <ProfileThumb>
-                <img src={eventData.user!==null&&eventData.user.photo?eventData.user.photo:eventData.user==null?businessInfo.default_image_url?businessInfo.default_image_url:ProfileImg:ProfileImg}  alt="" />
-            </ProfileThumb>
-            <ProfileNameWrap>
-                <ProfileName>{businessInfo.company_name}</ProfileName>
-                <SubHeading>{eventData.title}</SubHeading>
-                <ChatInput>
-                    {eventData.description}
-                </ChatInput>
-                <DateBar startDay={days[new Date(eventData.eventSchedule.start_time).getDay()-1]} endDay={days[new Date(eventData.eventSchedule.end_time).getDay()-1]} />
-                <TimeBar startTime={new Date(eventData.eventSchedule.start_time)} endTime={new Date(eventData.eventSchedule.end_time)}/>
-                <LikesBar date={new Date(eventData.createdAt)}/>
-            </ProfileNameWrap>            
+          <ProfileThumb>
+            <img
+              src={
+                eventData.user !== null && eventData.user.photo
+                  ? eventData.user.photo
+                  : eventData.user == null
+                  ? businessInfo.default_image_url
+                    ? businessInfo.default_image_url
+                    : ProfileImg
+                  : ProfileImg
+              }
+              alt=""
+            />
+          </ProfileThumb>
+          <ProfileNameWrap>
+            <ProfileName>{businessInfo.company_name}</ProfileName>
+            <SubHeading>{eventData.title}</SubHeading>
+            <ChatInput>{eventData.description}</ChatInput>
+            <DateBar
+              startDay={
+                days[new Date(eventData.eventSchedule.start_time).getDay() - 1]
+              }
+              endDay={
+                days[new Date(eventData.eventSchedule.end_time).getDay() - 1]
+              }
+            />
+            <TimeBar
+              startTime={new Date(eventData.eventSchedule.start_time)}
+              endTime={new Date(eventData.eventSchedule.end_time)}
+            />
+            <LikesBar
+              type="comment"
+              eventId={eventData._id}
+              date={new Date(eventData.createdAt)}
+              setDisplayEventComments={setDisplayEventComments}
+              displayEventComments={displayEventComments}
+              totalLikes={eventData.likes.length}
+              totalComments={eventData.totalComments}
+              postLikes={eventData.likes}
+            />
+          </ProfileNameWrap>
         </ProfileNameHeader>
-        <ImageComment image={eventData.media.length>0?eventData.media[0].image:""}/>
-    </UserMessageContent>
-    <UserMessageContent className="UserReplyContent">
-        <ProfileNameHeader>
-            <ProfileThumb>
-                <img src={ProfileImg} alt="" />
-            </ProfileThumb>
-            <ProfileNameWrap>
-                <ProfileName>Top 10 Restaurant in NYC<span>by</span>NYPlazm_Eater </ProfileName>
-                <ChatInput>
-                    La Morada serves some of the best pasta in the city, but the real attraction is the pizza which is world class...
-                </ChatInput>
-                <LikesBar date={new Date(eventData.createdAt)}/>
-            </ProfileNameWrap>
-        </ProfileNameHeader>
-        <ReplyInput />
-    </UserMessageContent>
+        <ImageComment
+          image={eventData.media.length > 0 ? eventData.media[0].image : ""}
+        />
+      </UserMessageContent>
+      <Scrollbars
+        autoHeight
+        autoHeightMin={0}
+        autoHeightMax={300}
+        thumbMinSize={30}
+      >
+        <ReplyWrap>
+          {displayEventComments &&
+          !loadingComments &&
+          eventData.comments.length > 0 ? (
+            eventData.comments.map((i) => {
+              return <Comment i={i} eventData={eventData} />;
+            })
+          ) : displayEventComments && loadingComments ? (
+            <LoaderWrap>
+              <ValueLoader />
+            </LoaderWrap>
+          ) : null}
+        </ReplyWrap>
+      </Scrollbars>
+      {displayEventComments ? (
+        <ReplyInput
+          type="comment"
+          eventId={eventData._id}
+          description={description}
+          setDescription={setDescription}
+          addComment={addComment}
+        />
+      ) : null}
     </>
-    )
-}
-  
-  export default UserMessage
+  );
+};
+
+export default UserMessage;

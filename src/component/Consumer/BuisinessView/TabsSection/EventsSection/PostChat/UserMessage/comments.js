@@ -82,29 +82,32 @@ const ChatInput = styled.div`
   }
 `;
 
-const Comments = ({ i, postData, displayComments }) => {
+const Comments = ({
+  i,
+  eventData,
+  displayComments,
+}) => {
   const [displayReply, setDisplayReply] = useState(false);
-  const [displayReplyInput, setDisplayReplyInput] = useState(false);
   const [replyDescription, setReplyDescription] = useState("");
+  const business = useSelector(state => state.business.business)[0]
   const ws = useSelector(state => state.user.ws);
-  const business = useSelector(state => state.business.business)
+    /** to add reply function */
+    const addReply = async (obj) => {
+      ws.send(
+        JSON.stringify({
+          action: "message",
+          commentId: obj._id, //commentId
+          userId: obj.userId, //userId
+          comment: obj.replyUser+" "+obj.body,
+          postId: obj.postId,
+          businessId: business._id,
+          taggedUsers: obj.taggedUsers,
+          type: "Event"
+        })
+      );
+      setReplyDescription("")
+    };
 
-  /** to add reply function */
-  const addReply = async (obj) => {
-    setReplyDescription("");
-    ws.send(
-      JSON.stringify({
-        action: "message",
-        commentId: obj._id, //commentId
-        userId: obj.userId, //userId
-        comment: "@"+i.userId.name + " " + obj.body,
-        postId: obj.postId,
-        businessId: business[0]._id,
-        taggedUsers: obj.taggedUsers,
-        type: "Post",
-      })
-    );
-  };
   /** to highlight the user mentions mentioned in post description */
   const findDesc = (value, mentions) => {
     let divContent = value;
@@ -145,16 +148,13 @@ const Comments = ({ i, postData, displayComments }) => {
           </ChatInput>
           <LikesBar
             type="reply"
+            commentId={i._id}
             date={new Date(i.createdAt)}
-            setDisplayComments={setDisplayReply}
-            displayComments={displayReply}
-            name={i.userId.name}
             totalLikes={i.likes.length}
             totalComments={i.replies.length}
-            commentId={i._id}
+            setDisplayReply={setDisplayReply}
+            displayReply={displayReply}
             commentLikes={i.likes}
-            setDisplayReplyInput={setDisplayReplyInput}
-            displayReplyInput={displayReplyInput}
           />
           <Scrollbars
             autoHeight
@@ -202,7 +202,7 @@ const Comments = ({ i, postData, displayComments }) => {
             <>
               <ReplyInput
                 type="reply"
-                postId={postData.postId}
+                eventId={eventData._id}
                 displayComments={displayComments}
                 replyDescription={replyDescription}
                 setReplyDescription={setReplyDescription}

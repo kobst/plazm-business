@@ -127,6 +127,9 @@ const ArrowDown = styled.div`
     font-size: 34px;
     color: #fff;
   }
+  svg: hover {
+    cursor:pointer;
+  }
 `;
 
 const BusinessNameWrap = styled.div`

@@ -6,7 +6,6 @@ import LikesBar from "../LikesBar";
 import { useSelector, useDispatch } from "react-redux";
 import ValueLoader from "../../../../../../../utils/loader";
 import { Scrollbars } from 'react-custom-scrollbars';
-
 import {
   addCommentToPost,
   addReplyToComment,
@@ -122,37 +121,49 @@ const UserMessage = ({ postData }) => {
   );
   const business = useSelector((state) => state.business.business)[0];
   const [description, setDescription] = useState("");
-  const [replyDescription, setReplyDescription] = useState("");
-  const [replyUser, setReplyUser] = useState("");
   const filters = useSelector((state) => state.business.filters);
+  const [displayCommentInput, setDisplayCommentInput] = useState(false)
+  const user = useSelector(state => state.user.user)
   const ws = useSelector((state) => state.user.ws);
 
   ws.onmessage = (evt) => {
     const message = JSON.parse(evt.data);
-    console.log(message);
     /** to add reply via socket */
-    if (message.comment && message.commentId) {
-      setReplyDescription("");
+    if (message.comment && message.commentId && message.type==="Post") {
+      // setReplyDescription("");
       if (message.businessId === business._id) {
         dispatch(addReplyToComment(message));
       }
-    } else if (message.commentInfo) {
+    } else if (message.commentInfo &&  message.commentInfo.type === "Post") {
     /** to add comment via socket */
       setDescription("");
       if (message.businessId === business._id) {
         dispatch(addCommentToPost(message));
       }
-    } else if (message.post) {
+    }
+     else if (message.post) {
     /** to add post via socket */
-      if (message.businessId === business._id && filters.postsByMe === true) {
-        dispatch(addPostViaSocket(message));
+      if (message.businessId === business._id) {
+        if(message.userId === user._id)
+        {
+          if(filters.PostsByMe === true) {
+            dispatch(addPostViaSocket(message));
+          }
+        }
+        else {
+          if(filters.Others === true) {
+            dispatch(addPostViaSocket(message));
+          } else if(filters.Business === true) {
+            dispatch(addPostViaSocket(message));
+          }
+        }        
       }
-    } else if (message.like&&message.commentId) {
+    } else if (message.like && message.commentId) {
     /** to add comment like via socket */
       if (message.businessId === business._id) {
         dispatch(addLikeToCommentViaSocket(message));
       }
-    } else if (message.like) {
+    } else if (message.like && message.type==="Post") {
     /** to add post like via socket */
       if (message.businessId === business._id) {
         dispatch(addLikeViaSocket(message));
@@ -170,22 +181,11 @@ const UserMessage = ({ postData }) => {
         comment: obj.body,
         userId: obj.userId,
         businessId: business._id,
+        taggedUsers: obj.taggedUsers
       })
     );
   };
-  /** to add reply function */
-  const addReply = async (obj) => {
-    ws.send(
-      JSON.stringify({
-        action: "message",
-        commentId: obj._id, //commentId
-        userId: obj.userId, //userId
-        comment: replyUser + " " + obj.body,
-        postId: obj.postId,
-        businessId: business._id,
-      })
-    );
-  };
+
 
   /** to highlight the user mentions mentioned in post description */
   const findDesc = (value, mentions, mentionsList) => {
@@ -195,7 +195,7 @@ const UserMessage = ({ postData }) => {
         let re = new RegExp("@" + v.name, "g");
         divContent = divContent.replace(
           re,
-          "<span className='mentionData'>" + "@" + v.name + "</span>"
+          `<span className='mentionData' onClick={window.open("/u/${v._id}")}> ${"@" + v.name}  </span>`
         );
         return divContent;
       });
@@ -203,7 +203,7 @@ const UserMessage = ({ postData }) => {
         let re = new RegExp("@" + v.name, "g");
         divContent = divContent.replace(
           re,
-          "<span className='mentionData'>" + "@" + v.name + "</span>"
+          `<span className='mentionData' onClick={window.open("/u/${v._id}")}> ${"@" + v.name}  </span>`
         );
         return divContent;
       });
@@ -221,7 +221,7 @@ const UserMessage = ({ postData }) => {
         let re = new RegExp("@" + v.name, "g");
         divContent = divContent.replace(
           re,
-          "<span className='mentionData'>" + "@" + v.name + "</span>"
+          `<span className='mentionData' onClick={window.open("/u/${v._id}")}> ${"@" + v.name}  </span>`
         );
         return divContent;
       });
@@ -239,7 +239,7 @@ const UserMessage = ({ postData }) => {
         let re = new RegExp("@" + v.name, "g");
         divContent = divContent.replace(
           re,
-          "<span className='mentionData'>" + "@" + v.name + "</span>"
+          `<span className='mentionData' onClick={window.open("/u/${v._id}")}> ${"@" + v.name}  </span>`
         );
         return divContent;
       });
@@ -298,6 +298,8 @@ const UserMessage = ({ postData }) => {
                 displayComments={displayComments}
                 postId={postData.postId}
                 postLikes={postData.postDetails.likes}
+                displayCommentInput={displayCommentInput}
+                setDisplayCommentInput={setDisplayCommentInput}
               />
             </ProfileNameWrap>
           </ProfileNameHeader>
@@ -314,12 +316,8 @@ const UserMessage = ({ postData }) => {
             return (
               <Comment
                 i={i}
-                setReplyDescription={setReplyDescription}
-                replyDescription={replyDescription}
-                addReply={addReply}
                 postData={postData}
                 displayComments={displayComments}
-                setReplyUser={setReplyUser}
               />
             );
           })
@@ -330,14 +328,14 @@ const UserMessage = ({ postData }) => {
         ) : null}
         </ReplyWrap>
         </Scrollbars>
-        <ReplyInput
+        {displayComments?<ReplyInput
           type="comment"
           postId={postData.postId}
           displayComments={displayComments}
           description={description}
           setDescription={setDescription}
           addComment={addComment}
-        />
+        />:null}
       </UserMsgWrap>
     </>
   );

@@ -12,4 +12,6 @@ import {fetchEvent,fetchEventForAWeek} from './query/event';
 import {AddComment,CreateReply,AddLikeToComment} from './mutations/comments';
 import {findPostComments} from './query/comments';
 
-export {addLikeToPost,AddUser,updateUserProfile,getUser,getAllUsers,getPlace,searchAllPlaces,getAllLists,createPost,fetchEvent,fetchEventForAWeek,AddComment,CreateReply,findPostComments,AddLikeToComment};
+import {addLikeToEvents} from './mutations/event';
+
+export {addLikeToEvents,addLikeToPost,AddUser,updateUserProfile,getUser,getAllUsers,getPlace,searchAllPlaces,getAllLists,createPost,fetchEvent,fetchEventForAWeek,AddComment,CreateReply,findPostComments,AddLikeToComment};

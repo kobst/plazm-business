@@ -130,6 +130,10 @@ const LoaderWrap = styled.div`
     margin: 30px 0 0 0;
   }
 `;
+const Button = styled.button`
+  background-color: transparent;
+  border: 0;
+`;
 
 const CalenderSection = ({ businessId }) => {
   const dispatch = useDispatch();
@@ -150,7 +154,7 @@ const CalenderSection = ({ businessId }) => {
         );
     };
     fetchData();
-  }, [eventDate, businessId, currentDate, dispatch, previousBtnClicked]);
+  }, [eventDate]);
 
   const fetchEventsForAParticularDay = async (day) => {
     const obj = {
@@ -182,17 +186,17 @@ const CalenderSection = ({ businessId }) => {
       ) : (
         <CalenderSectionWrap>
           <TopArrows>
+            <Button disabled={eventDate < currentDate} onClick={() => previousWeek()}> 
             <LeftArrow
               className={
                 eventDate < currentDate
                   ? "disabled"
                   : ""
-              }
-              onClick={() => previousWeek()}
-              disabled
+              }              
+              disabled={eventDate < currentDate}
             >
               <RiArrowDropLeftLine />
-            </LeftArrow>
+            </LeftArrow></Button>
             <RightArrow>
               <RiArrowDropRightLine onClick={() => nextWeek()} />
             </RightArrow>

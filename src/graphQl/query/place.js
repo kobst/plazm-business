@@ -8,6 +8,7 @@ const getPlace = (obj) => {
             searchPlacesByUserId(input: {id:$id, value:$value, filters:$filters, ownerId:$ownerId}) {
               message
               success
+              totalPosts
               place {
                 _id
                 location {

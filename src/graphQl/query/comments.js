@@ -20,6 +20,11 @@ const findPostComments = (id) => {
                         photo
                         lockProfile
                         }
+                      taggedUsers {
+                          _id
+                          name
+                          email
+                        }
                       body
                       likes {
                         _id
@@ -39,6 +44,11 @@ const findPostComments = (id) => {
                             userSub
                             photo
                             lockProfile
+                            }
+                            taggedUsers {
+                              _id
+                              name
+                              email
                             }
                       body
                       created_on

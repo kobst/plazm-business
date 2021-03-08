@@ -159,6 +159,7 @@ const ReplyInput = ({ postId, type, name, description, setDescription, addCommen
         userId: user._id,
         body: description,
         created_on: new Date(),
+        taggedUsers: mentionArrayUser
       };
       addComment(obj);
     }
@@ -168,6 +169,7 @@ const ReplyInput = ({ postId, type, name, description, setDescription, addCommen
         _id: commentId,
         userId: user._id,
         body: replyDescription,
+        taggedUsers: mentionArrayUser
       };
       addReply(obj)
     }
@@ -187,7 +189,7 @@ const ReplyInput = ({ postId, type, name, description, setDescription, addCommen
                 markup="@(__id__)[__display__]"
                 value={type==="reply"?replyDescription :description}
                 onChange={handleChange}
-                placeholder="Add Comment"
+                placeholder={type==="reply"?"Add Reply":"Add Comment"}
                 className="replyInput"
                 onKeyPress={(event) => {
                   if (event.key === "Enter") {

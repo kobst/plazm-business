@@ -82,6 +82,9 @@ const RightDiv = styled.div`
   svg {
     margin: 0 7px 0 0;
   }
+  svg: hover {
+    cursor: pointer
+  }
 `;
 
 const LikesBar = ({
@@ -93,15 +96,17 @@ const LikesBar = ({
   postId,
   type,
   name,
-  setReplyUser,
   postLikes,
   commentId,
   commentLikes,
+  displayReplyInput,
+  setDisplayReplyInput,
+  displayCommentInput,
+  setDisplayCommentInput
 }) => {
   const [eventDate, setEventDate] = useState();
   const [userLikedPost, setUserLikedPost] = useState(false);
   const [userLikedComment, setUserLikedComment] = useState(false);
-  const [userCommentId, setUserCommentId] = useState()
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const ws = useSelector((state) => state.user.ws);
@@ -144,16 +149,14 @@ const LikesBar = ({
       if (commentLikes.length > 0) {
         const findUser = commentLikes.find((i) => i._id === user._id);
         if (findUser) {
-          setUserCommentId(findUser._id)
           setUserLikedComment(true);
         }
       }
     }
-  }, [date]);
+  }, [date,commentLikes,postLikes,type,user._id]);
 
   const displayCommentsWithPosts = () => {
     setDisplayComments(!displayComments);
-    if (type === "reply") setReplyUser("@" + name);
     if (type === "comment") dispatch(fetchPostComments(postId));
   };
 
@@ -172,6 +175,7 @@ const LikesBar = ({
             postId: postId,
             like: response.like,
             businessId: business[0]._id,
+            type: "Post"
           })
         );
       }
@@ -190,17 +194,26 @@ const LikesBar = ({
             like: response.like,
             commentId: response.commentId,
             businessId: business[0]._id,
+            type: "Post"
           })
         );
       }
-      console.log(response);
     }
+  };
+
+  const setReplyDisplay = () => {
+    if(type === "reply")
+    setDisplayReplyInput(!displayReplyInput);
+    else if(type === "comment") 
+    setDisplayCommentInput(!displayCommentInput)
   };
   return (
     <>
       <BottomBarLikes>
         <LikesBtnWrap>
-          {type !== "commentReply" ? <UsersButton>Reply</UsersButton> : null}
+          {type !== "commentReply" ? (
+            <UsersButton onClick={() => setReplyDisplay()}>{type==="comment"?"Comment":"Reply"}</UsersButton>
+          ) : null}
           {type !== "commentReply" ? <CircleDot /> : null}
           {type !== "commentReply" ? <UsersButton>Like</UsersButton> : null}
 
