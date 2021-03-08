@@ -475,14 +475,14 @@ const RightSide = (props) => {
   const [eventPosition, setEventPosition] = useState(10);
   const [webPost, setWebPost] = useState();
   const [webComment, setNewComment] = useState();
-  // props.ws.onmessage = (evt) => {
-  //   const message = JSON.parse(evt.data);
-  //   if (message.businessId && message.businessId === place._id) {
-  //     setWebPost(message);
-  //   } else if (message.postId) {
-  //     setNewComment(message);
-  //   }
-  // };
+  props.ws.onmessage = (evt) => {
+    const message = JSON.parse(evt.data);
+    if (message.businessId && message.businessId === place._id) {
+      setWebPost(message);
+    } else if (message.postId) {
+      setNewComment(message);
+    }
+  };
   props.ws.onclose = () => {
     console.log("disconnected");
   };
