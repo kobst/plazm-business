@@ -102,11 +102,13 @@ const LikesBar = ({
   displayReplyInput,
   setDisplayReplyInput,
   displayCommentInput,
-  setDisplayCommentInput
+  setDisplayCommentInput,
 }) => {
   const [eventDate, setEventDate] = useState();
   const [userLikedPost, setUserLikedPost] = useState(false);
   const [userLikedComment, setUserLikedComment] = useState(false);
+  const [likeCount, setLikeCount] = useState(0)
+  const [likeCountForComment, setLikeCountForComment] = useState(0)
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const ws = useSelector((state) => state.user.ws);
@@ -114,6 +116,10 @@ const LikesBar = ({
 
   /** to convert date into display format */
   useEffect(() => {
+    setUserLikedComment(false);
+    setUserLikedPost(false);
+    setLikeCount(0)
+    setLikeCountForComment(0)
     let monthNames = [
       "Jan",
       "Feb",
@@ -138,18 +144,24 @@ const LikesBar = ({
 
     setEventDate(`${day} ${monthName} ${year}`);
 
-    if (type === "comment") {
+    if (type === "comment" && totalLikes>0) {
       if (postLikes.length > 0) {
         const findUser = postLikes.find((i) => i._id === user._id);
         if (findUser) {
           setUserLikedPost(true);
+          setUserLikedComment(false);
+        } else {
+          setUserLikedPost(false);
         }
       }
-    } else if (type === "reply") {
+    } else if (type === "reply" && totalLikes>0) {
       if (commentLikes.length > 0) {
         const findUser = commentLikes.find((i) => i._id === user._id);
         if (findUser) {
           setUserLikedComment(true);
+          setUserLikedPost(false);
+        } else {
+          setUserLikedComment(false);
         }
       }
     }
@@ -157,11 +169,16 @@ const LikesBar = ({
 
   const displayCommentsWithPosts = () => {
     setDisplayComments(!displayComments);
-    if (type === "comment") dispatch(fetchPostComments(postId));
+    if (type === "comment") {
+      if(displayCommentInput === false)
+      dispatch(fetchPostComments(postId));
+    }
   };
 
   const addLike = async () => {
     if (type === "comment") {
+      setUserLikedPost(true);
+      setLikeCount(totalLikes+1)
       const obj = {
         postId: postId,
         userId: user._id,
@@ -178,8 +195,13 @@ const LikesBar = ({
             type: "Post"
           })
         );
+      } else {
+        setUserLikedPost(false);
+        setLikeCount(totalLikes-1)
       }
     } else if (type === "reply") {
+      setUserLikedComment(true)
+      setLikeCountForComment(totalLikes+1)
       const obj = {
         id: commentId,
         userId: user._id,
@@ -197,6 +219,9 @@ const LikesBar = ({
             type: "Post"
           })
         );
+      } else {
+        setUserLikedComment(false)
+        setLikeCountForComment(totalLikes-1)
       }
     }
   };
@@ -204,8 +229,11 @@ const LikesBar = ({
   const setReplyDisplay = () => {
     if(type === "reply")
     setDisplayReplyInput(!displayReplyInput);
-    else if(type === "comment") 
-    setDisplayCommentInput(!displayCommentInput)
+    else if(type === "comment")  {
+    setDisplayCommentInput(!displayCommentInput);
+    if(displayComments === false)
+    dispatch(fetchPostComments(postId));
+    }
   };
   return (
     <>
@@ -215,7 +243,7 @@ const LikesBar = ({
             <UsersButton onClick={() => setReplyDisplay()}>{type==="comment"?"Comment":"Reply"}</UsersButton>
           ) : null}
           {type !== "commentReply" ? <CircleDot /> : null}
-          {type !== "commentReply" ? <UsersButton>Like</UsersButton> : null}
+          {type !== "commentReply" ? <UsersButton onClick={() => addLike()} disabled={userLikedPost || userLikedComment}>Like</UsersButton> : null}
 
           <ChatDate>
             <span>-</span>
@@ -228,9 +256,9 @@ const LikesBar = ({
               {userLikedPost || userLikedComment ? (
                 <MdFavorite style={{ color: "red" }} />
               ) : (
-                <MdFavoriteBorder onClick={() => addLike()} />
+                <MdFavoriteBorder/>
               )}{" "}
-              {totalLikes}
+              {likeCount === 0? likeCountForComment ===0 ?  totalLikes : likeCountForComment : likeCount}
             </RightDiv>
             <RightDiv>
               <MdChatBubbleOutline onClick={() => displayCommentsWithPosts()} />{" "}

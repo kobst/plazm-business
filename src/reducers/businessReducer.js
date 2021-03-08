@@ -164,6 +164,8 @@ export const slice = createSlice({
       MySubscriptions: false,
       Others: false,
     },
+    filterByMostLiked: false,
+    filterByMostRecent: false,
     loadingFilterData: false,
     loadingAddReply: false,
     loadingAddLike: false,
@@ -187,6 +189,14 @@ export const slice = createSlice({
         };
       else state.filters = action.payload;
     },
+    setSideFiltersByMostLiked: (state, action) => {
+       state.filterByMostLiked = true;
+       state.filterByMostRecent = false
+    },
+    setSideFiltersByMostRecent: (state, action) => {
+      state.filterByMostLiked = false;
+      state.filterByMostRecent = true
+   }
   },
   extraReducers: {
     [checkBusiness.pending]: (state) => {
@@ -469,5 +479,5 @@ export const slice = createSlice({
   },
 });
 
-export const { setFilters } = slice.actions;
+export const { setFilters, setSideFiltersByMostRecent, setSideFiltersByMostLiked } = slice.actions;
 export default slice.reducer;

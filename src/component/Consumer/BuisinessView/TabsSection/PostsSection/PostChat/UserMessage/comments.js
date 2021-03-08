@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import ProfileImg from "../../../../../../../images/profile-img.png";
 import ReplyInput from "./ReplyInput";
 import LikesBar from "../LikesBar";
 import { Scrollbars } from "react-custom-scrollbars";
-import { useSelector } from 'react-redux'
+import { useSelector } from "react-redux";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -86,9 +86,13 @@ const Comments = ({ i, postData, displayComments }) => {
   const [displayReply, setDisplayReply] = useState(false);
   const [displayReplyInput, setDisplayReplyInput] = useState(false);
   const [replyDescription, setReplyDescription] = useState("");
-  const ws = useSelector(state => state.user.ws);
-  const business = useSelector(state => state.business.business)
-
+  const ws = useSelector((state) => state.user.ws);
+  const business = useSelector((state) => state.business.business);
+  const divRef = useRef(null);
+  useEffect(() => {
+    if(displayReply === true)
+    divRef.current.scrollIntoView({ behavior: 'smooth' });
+  },[displayReply]);
   /** to add reply function */
   const addReply = async (obj) => {
     setReplyDescription("");
@@ -97,7 +101,7 @@ const Comments = ({ i, postData, displayComments }) => {
         action: "message",
         commentId: obj._id, //commentId
         userId: obj.userId, //userId
-        comment: "@"+i.userId.name + " " + obj.body,
+        comment: "@" + i.userId.name + " " + obj.body,
         postId: obj.postId,
         businessId: business[0]._id,
         taggedUsers: obj.taggedUsers,
@@ -162,9 +166,10 @@ const Comments = ({ i, postData, displayComments }) => {
             autoHeightMax={300}
             thumbMinSize={30}
           >
-            <ReplyWrap>
-              {displayReply && i.replies.length > 0
-                ? i.replies.map((j, key) => (
+            <ReplyWrap ref={divRef}>
+              {displayReply && i.replies.length > 0 ? (
+                <div>
+                  {i.replies.map((j, key) => (
                     <>
                       <UserMessageContent
                         className="UserReplyContent"
@@ -194,8 +199,9 @@ const Comments = ({ i, postData, displayComments }) => {
                         </ProfileNameHeader>
                       </UserMessageContent>
                     </>
-                  ))
-                : null}
+                  ))}
+                </div>
+              ) : null}
             </ReplyWrap>
           </Scrollbars>
           {displayReply ? (

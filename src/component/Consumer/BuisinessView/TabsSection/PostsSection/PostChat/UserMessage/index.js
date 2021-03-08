@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import ProfileImg from "../../../../../../../images/profile-img.png";
 import ReplyInput from "./ReplyInput";
@@ -125,9 +125,9 @@ const UserMessage = ({ postData }) => {
   const [displayCommentInput, setDisplayCommentInput] = useState(false)
   const user = useSelector(state => state.user.user)
   const ws = useSelector((state) => state.user.ws);
-
   ws.onmessage = (evt) => {
     const message = JSON.parse(evt.data);
+
     /** to add reply via socket */
     if (message.comment && message.commentId && message.type==="Post") {
       // setReplyDescription("");
@@ -153,7 +153,7 @@ const UserMessage = ({ postData }) => {
         else {
           if(filters.Others === true) {
             dispatch(addPostViaSocket(message));
-          } else if(filters.Business === true) {
+          } else if(message.post.postDetails.type === "Business" && filters.Business === true) {
             dispatch(addPostViaSocket(message));
           }
         }        
@@ -266,7 +266,7 @@ const UserMessage = ({ postData }) => {
                 src={
                   postData.postDetails.ownerId === null
                     ? business.default_image_url
-                    : postData.postDetails.ownerId.photo !== ""
+                    : postData.postDetails.ownerId.photo !== "" && postData.postDetails.ownerId.photo !== null
                     ? postData.postDetails.ownerId.photo
                     : ProfileImg
                 }
@@ -311,7 +311,7 @@ const UserMessage = ({ postData }) => {
         thumbMinSize={30}
         >
         <ReplyWrap>
-        {displayComments && !loadingComments && postData.comments.length > 0 ? (
+        {(displayComments || displayCommentInput) && !loadingComments && postData.comments.length > 0 ? (
           postData.comments.map((i) => {
             return (
               <Comment
@@ -321,14 +321,14 @@ const UserMessage = ({ postData }) => {
               />
             );
           })
-        ) : displayComments && loadingComments ? (
+        ) : (displayComments || displayCommentInput) && loadingComments ? (
           <LoaderWrap>
             <ValueLoader />
           </LoaderWrap>
         ) : null}
         </ReplyWrap>
         </Scrollbars>
-        {displayComments?<ReplyInput
+        {(displayComments || displayCommentInput) ?<ReplyInput
           type="comment"
           postId={postData.postId}
           displayComments={displayComments}

@@ -4,7 +4,7 @@ import Checkbox from '../../../../UI/Checkbox/checkbox'
 import DropdwonArrowTop from '../../../../../../images/top_arrow.png'
 import { FaSort } from "react-icons/fa"
 import { useDispatch,useSelector } from 'react-redux';
-import { sortPostsByLikes,sortPostsByDate,filterData, setFilters } from '../../../../../../reducers/businessReducer';
+import { sortPostsByLikes,sortPostsByDate,filterData, setFilters, setSideFiltersByMostLiked, setSideFiltersByMostRecent } from '../../../../../../reducers/businessReducer';
 
 const PostFilterContent = styled.div`
     width:100%;
@@ -102,12 +102,18 @@ const PostFilter = () => {
     const business = useSelector(state => state.business.business);
     const user = useSelector(state => state.user.user)
     const filters = useSelector(state => state.business.filters)
+    const filterByLiked = useSelector(state => state.business.filterByMostLiked)
     const [flag, setFlag] = useState(false)
     const loadingFilterData = useSelector(state => state.business.loadingFilterData)
+    const [sideFilterFlag, setSideFilterFlag] = useState(false);
     /** useEffect to check if no checkbox is selected then by default check Business checkbox */
     useEffect(()=>{
       dispatch(filterData({businessId:business&&business[0]?business[0]._id:"", filters:filters, value:0, ownerId: user._id}))
     },[flag,dispatch,business,filters,user._id])
+
+    useEffect(()=>{
+      dispatch(filterData({businessId:business&&business[0]?business[0]._id:"", filters:filters, value:0, ownerId: user._id, sideFilters: {likes: filterByLiked}}))
+    },[sideFilterFlag])
 
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside)
@@ -136,6 +142,16 @@ const PostFilter = () => {
         }))
         setFlag(!flag)
       }
+
+      const setMostLiked = () => {
+        setSideFilterFlag(!sideFilterFlag);
+        dispatch(setSideFiltersByMostLiked())
+      }
+
+      const setMostRecent = () => {
+        setSideFilterFlag(!sideFilterFlag);
+        dispatch(setSideFiltersByMostRecent())
+      }
     return (
     <>
     <PostFilterContent>
@@ -156,9 +172,9 @@ const PostFilter = () => {
             {uploadMenu && (
               <DropdownContent>
                 <ul>
-                    <li onClick={()=>dispatch(sortPostsByLikes())}>Most Liked</li>
+                    <li onClick={()=>setMostLiked()}>Most Liked</li>
                   
-                    <li onClick={()=>dispatch(sortPostsByDate())}>Most recent</li>
+                    <li onClick={()=>setMostRecent()}>Most recent</li>
                   
                 </ul>
               </DropdownContent>

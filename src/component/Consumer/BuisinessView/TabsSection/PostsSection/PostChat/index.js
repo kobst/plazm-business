@@ -56,6 +56,7 @@ const PostChat = () => {
     setOffSet(0);
     setHasMore(true);
   }, [filters]);
+  
   const fetchMorePosts = () => {
     if (offset + 20 < totalPosts) {
       setOffSet(offset + 20);
@@ -80,7 +81,7 @@ const PostChat = () => {
       > */}
 
         <InfiniteScroll
-          dataLength={posts.length || 0}
+          dataLength={posts? posts.length: 0}
           next={fetchMorePosts}
           hasMore={hasMore}
           loader={

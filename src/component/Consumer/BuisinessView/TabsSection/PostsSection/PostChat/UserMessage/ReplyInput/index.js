@@ -1,9 +1,10 @@
-import React, {  useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { FaRegSmile } from "react-icons/fa";
 import ProfileImg from "../../../../../../../../images/profile-img.png";
 import { useSelector } from "react-redux";
 import { MentionsInput, Mention } from "react-mentions";
+import Picker from "emoji-picker-react";
 
 const ChatContent = styled.div`
   width: 100%;
@@ -93,13 +94,13 @@ const InputWrap = styled.div`
   color: #fff;
   background: rgba(255, 255, 255, 0.05);
   height: 37px;
-  border-bottom: 0.5px solid #AFAFAF;
+  border-bottom: 0.5px solid #afafaf;
   padding: 0 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  textarea{
+  textarea {
     border: 0;
     box-shadow: none;
     padding: 10px 0;
@@ -108,7 +109,7 @@ const InputWrap = styled.div`
     height: 100%;
   }
   input {
-    border:0;
+    border: 0;
     background: transparent;
     outline: 0;
     width: auto;
@@ -125,16 +126,33 @@ const EmojiWrap = styled.div`
     font-size: 15px;
   }
 `;
-const ReplyInput = ({ postId, type, name, description, setDescription, addComment, replyDescription, setReplyDescription, commentId, addReply }) => {
+const ReplyInput = ({
+  postId,
+  type,
+  name,
+  description,
+  setDescription,
+  addComment,
+  replyDescription,
+  setReplyDescription,
+  commentId,
+  addReply,
+}) => {
   const user = useSelector((state) => state.user.user);
   const allUsers = useSelector((state) => state.consumer.users);
   const [mentionArrayUser, setMentionArrayUser] = useState([]);
+  const [displayEmoji, setDisplayEmoji] = useState(false);
+
   const inputEl = useRef(null);
   let userMentionData = allUsers.map((myUser) => ({
     id: myUser._id,
     display: `@${myUser.name}`,
   }));
 
+  const onEmojiClick = (event, emojiObject) => {
+    if (type === "comment") setDescription(description+emojiObject.emoji);
+    else if (type === "reply") setReplyDescription(replyDescription+emojiObject.emoji);
+  };
   const handleChange = (event, newValue, newPlainTextValue, mentions) => {
     if (mentions.length !== 0) {
       /** to find if the mention is of users or lists */
@@ -146,32 +164,37 @@ const ReplyInput = ({ postId, type, name, description, setDescription, addCommen
         setMentionArrayUser(valueArr);
       }
     }
-    if(type==="comment")
-    setDescription(newPlainTextValue);
-    else if(type==="reply")
-    setReplyDescription(newPlainTextValue)
+    if (type === "comment") setDescription(newPlainTextValue);
+    else if (type === "reply") setReplyDescription(newPlainTextValue);
   };
 
   const addCommentToPost = async () => {
-    if (type==="comment"&&description !== "" && !(description.trim()) === false) {
+    if (
+      type === "comment" &&
+      description !== "" &&
+      !description.trim() === false
+    ) {
       const obj = {
         itemId: postId,
         userId: user._id,
         body: description,
         created_on: new Date(),
-        taggedUsers: mentionArrayUser
+        taggedUsers: mentionArrayUser,
       };
       addComment(obj);
-    }
-    else if (type==="reply"&&replyDescription !== "" && !(replyDescription.trim()) === false) {
+    } else if (
+      type === "reply" &&
+      replyDescription !== "" &&
+      !replyDescription.trim() === false
+    ) {
       const obj = {
         postId: postId,
         _id: commentId,
         userId: user._id,
         body: replyDescription,
-        taggedUsers: mentionArrayUser
+        taggedUsers: mentionArrayUser,
       };
-      addReply(obj)
+      addReply(obj);
     }
   };
 
@@ -184,15 +207,16 @@ const ReplyInput = ({ postId, type, name, description, setDescription, addCommen
           </ProfileThumb>
           <ProfileNameWrap>
             <InputWrap>
-            {type==="reply"?<input value={"@"+name} readOnly/>:null}
+              {type === "reply" ? <input value={"@" + name} readOnly /> : null}
               <MentionsInput
                 markup="@(__id__)[__display__]"
-                value={type==="reply"?replyDescription :description}
+                value={type === "reply" ? replyDescription : description}
                 onChange={handleChange}
-                placeholder={type==="reply"?"Add Reply":"Add Comment"}
+                placeholder={type === "reply" ? "Add Reply" : "Add Comment"}
                 className="replyInput"
                 onKeyPress={(event) => {
                   if (event.key === "Enter") {
+                    event.preventDefault();
                     addCommentToPost();
                   }
                 }}
@@ -201,7 +225,8 @@ const ReplyInput = ({ postId, type, name, description, setDescription, addCommen
                 <Mention type="user" trigger="@" data={userMentionData} />
               </MentionsInput>
               <EmojiWrap>
-                <FaRegSmile />
+                <FaRegSmile onClick={() => setDisplayEmoji(!displayEmoji)} />
+                {displayEmoji ? <Picker onEmojiClick={onEmojiClick} /> : null}
               </EmojiWrap>
             </InputWrap>
           </ProfileNameWrap>

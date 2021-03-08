@@ -956,7 +956,7 @@ const RightSide = (props) => {
           action: "post",
           post: {
             postId: val.post._id,
-            postDetails: {...val.post,ownerId: null, createdAt: new Date()},
+            postDetails: {...val.post,ownerId: null, createdAt: new Date(), type:"Business"},
             totalComments: 0,
             totalLikes: 0,
             comments: [],

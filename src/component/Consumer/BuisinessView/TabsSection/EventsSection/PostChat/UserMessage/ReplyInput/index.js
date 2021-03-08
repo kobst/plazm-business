@@ -209,6 +209,7 @@ const ReplyInput = ({
                 className="replyInput"
                 onKeyPress={(event) => {
                   if (event.key === "Enter") {
+                    event.preventDefault()
                     addCommentToPost();
                   }
                 }}
@@ -216,6 +217,7 @@ const ReplyInput = ({
                 <Mention type="user" trigger="@" data={userMentionData} />
               </MentionsInput>:<input value={replyDescription} onChange={e=>setReplyDescription(e.target.value)} onKeyPress={(event) => {
                   if (event.key === "Enter") {
+                    event.preventDefault()
                     addCommentToPost();
                   }
                 }} />}

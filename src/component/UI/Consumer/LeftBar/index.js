@@ -55,88 +55,90 @@ const SearchIcon = styled.div`
 `
 
 const LeftBar = ({displayTab,setDisplayTab,profile,setFlag, isBusinessOpen, businessExists, businessId}) => {
+  console.log(isBusinessOpen)
   const [displayChangePassword, setDisplayChangePassword] = useState(false);
+  const [tabIndex, setTabIndex] = useState(isBusinessOpen? 6:0);
   return (
     <>
       <LeftBarContent className="MainTabs">
-      <Tabs>
+      <Tabs selectedIndex={tabIndex} onSelect={index => setTabIndex(index)}>
         <TabList>
-          <Tab onClick={()=>setDisplayTab(true)}>
+          <Tab >
             <img src={PlazmLogo} alt="" />
           </Tab>
-          <Tab onClick={()=>setDisplayTab(true)}>
+          <Tab >
             <img src={LocalNav} alt="" />
           </Tab>
-          <Tab onClick={()=>setDisplayTab(true)}>
+          <Tab >
             <UserImage>
                 <img src={ProfileImg} alt="" />
             </UserImage>
           </Tab>
-          <Tab onClick={()=>setDisplayTab(true)}>
+          <Tab >
             <SearchIcon>
                 <BiSearchAlt2 />
             </SearchIcon>
           </Tab>
-          <Tab onClick={()=>setDisplayTab(true)}>
+          <Tab >
             <img src={Mention} alt="" />
           </Tab>
-          <Tab onClick={()=>setDisplayTab(true)}>
+          <Tab >
             <img src={Notifications} alt="" />
           </Tab>
-          <Tab onClick={()=>setDisplayTab(true)} style={displayTab === false?{background:"#f3f3f3"}:{background:""}}>
+          <Tab>
             <img src={Favorites} alt="" />
           </Tab>
-          <Tab onClick={()=>setDisplayTab(true)}>
+          <Tab>
             <img src={GridIcon} alt="" />
           </Tab>
-          <Tab onClick={()=>setDisplayTab(true)} style={displayTab === false?{background:"#f3f3f3"}:{background:""}}>
+          <Tab>
             <img src={ProfileSettingImg} alt="" />
           </Tab>
         </TabList>
 
-        {displayTab ===  true?<TabPanel>
-        </TabPanel>:<></>}
-        {displayTab ===  true?<TabPanel>
+        <TabPanel>
+        </TabPanel>
+        <TabPanel>
           <div className="panel-content">
             <h2>Any content 2</h2>
           </div>
-        </TabPanel>:<></>}
-        {displayTab ===  true?<TabPanel>
+        </TabPanel>
+        <TabPanel>
           <div className="panel-content">
             <h2>Any content 3</h2>
           </div>
-        </TabPanel>:<></>}
-        {displayTab ===  true?<TabPanel>
+        </TabPanel>
+        <TabPanel>
           <div className="panel-content">
             <h2>Any content 4</h2>
           </div>
-        </TabPanel>:<></>}
-        {displayTab ===  true?<TabPanel>
+        </TabPanel>
+        <TabPanel>
           <div className="panel-content">
             <h2>Any content 5</h2>
           </div>
-        </TabPanel>:<></>}
-        {displayTab ===  true?<TabPanel>
+        </TabPanel>
+        <TabPanel>
           <div className="panel-content">
             <h2>Any content 6</h2>
           </div>
-        </TabPanel>:<></>}
-        {displayTab ===  true || isBusinessOpen === true?<TabPanel>
+        </TabPanel>
+        <TabPanel>
           <div className="panel-content">
-            {isBusinessOpen === true?<BuisinessView setDisplayTab={setDisplayTab} profile={profile} businessExists={businessExists} businessId={businessId}/>:<BusinessList setDisplayTab={setDisplayTab}/>}
+            {isBusinessOpen === true?<BuisinessView setDisplayTab={()=>setTabIndex(0)} profile={profile} businessExists={businessExists} businessId={businessId}/>:<BusinessList setDisplayTab={()=>setTabIndex(0)}/>}
           </div>
-        </TabPanel>:<></>}
-        {displayTab ===  true?<TabPanel>
+        </TabPanel>
+        <TabPanel>
           <div className="panel-content">
             <h2>Any content 8</h2>
           </div>
-        </TabPanel>:<></>}
-        {displayTab ===  true?<TabPanel>
+        </TabPanel>
+        <TabPanel>
           <div className="panel-content">
-            {displayChangePassword === true ?<ChangePassword setDisplayChangePassword={setDisplayChangePassword} setDisplayTab={setDisplayTab}/>:
-            <ProfileSettings setDisplayChangePassword={setDisplayChangePassword} setDisplayTab={setDisplayTab} profile={profile} setFlag={setFlag}/>}
+            {displayChangePassword === true ?<ChangePassword setDisplayChangePassword={setDisplayChangePassword} setDisplayTab={()=>setTabIndex(0)}/>:
+            <ProfileSettings setDisplayChangePassword={setDisplayChangePassword} setDisplayTab={()=>setTabIndex(0)} profile={profile} setFlag={setFlag}/>}
           </div>
-        </TabPanel>:<></>}
+        </TabPanel>
       </Tabs>
       </LeftBarContent>
     </>

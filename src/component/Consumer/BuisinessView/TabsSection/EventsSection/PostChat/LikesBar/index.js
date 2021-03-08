@@ -209,7 +209,7 @@ const LikesBar = ({
             </UsersButton>
           ) : null}
           {type !== "commentReply" ? <CircleDot /> : null}
-          {type !== "commentReply" ? <UsersButton>Like</UsersButton> : null}
+          {type !== "commentReply" ? <UsersButton onClick={() => addLike()} disabled={userLikedEvent || userLikedComment}>Like</UsersButton> : null}
           <ChatDate>
             <span>-</span>
             {eventDate}
@@ -221,7 +221,7 @@ const LikesBar = ({
               {userLikedEvent || userLikedComment ? (
                 <MdFavorite style={{ color: "red" }} />
               ) : (
-                <MdFavoriteBorder onClick={() => addLike()} />
+                <MdFavoriteBorder />
               )}{" "}
               {totalLikes}
             </RightDiv>
