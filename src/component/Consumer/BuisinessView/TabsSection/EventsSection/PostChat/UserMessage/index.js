@@ -111,7 +111,8 @@ const UserMessage = ({ eventData }) => {
   const businessInfo = useSelector((state) => state.business.business)[0];
   const [displayEventComments, setDisplayEventComments] = useState(false);
   const business = useSelector((state) => state.business.business);
-  const [description, setDescription] = useState("");
+  const [displayEventCommentInput, setDisplayEventCommentInput] = useState(false)
+  const [description, setDescription] = useState(""); 
   const loadingComments = useSelector(
     (state) => state.event.loadingEventComments
   );
@@ -215,6 +216,8 @@ const UserMessage = ({ eventData }) => {
               totalLikes={eventData.likes.length}
               totalComments={eventData.totalComments}
               postLikes={eventData.likes}
+              displayEventCommentInput={displayEventCommentInput}
+              setDisplayEventCommentInput={setDisplayEventCommentInput}
             />
           </ProfileNameWrap>
         </ProfileNameHeader>
@@ -229,20 +232,20 @@ const UserMessage = ({ eventData }) => {
         thumbMinSize={30}
       >
         <ReplyWrap>
-          {displayEventComments &&
+          {(displayEventComments||displayEventCommentInput) &&
           !loadingComments &&
           eventData.comments.length > 0 ? (
             eventData.comments.map((i) => {
               return <Comment i={i} eventData={eventData} />;
             })
-          ) : displayEventComments && loadingComments ? (
+          ) : (displayEventComments||displayEventCommentInput)  && loadingComments ? (
             <LoaderWrap>
               <ValueLoader />
             </LoaderWrap>
           ) : null}
         </ReplyWrap>
       </Scrollbars>
-      {displayEventComments ? (
+      {(displayEventComments||displayEventCommentInput)  ? (
         <ReplyInput
           type="comment"
           eventId={eventData._id}

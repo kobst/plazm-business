@@ -165,7 +165,7 @@ const LikesBar = ({
         }
       }
     }
-  }, [date,commentLikes,postLikes,type,user._id]);
+  }, [date,commentLikes,postLikes,type,user._id, totalLikes]);
 
   const displayCommentsWithPosts = () => {
     setDisplayComments(!displayComments);

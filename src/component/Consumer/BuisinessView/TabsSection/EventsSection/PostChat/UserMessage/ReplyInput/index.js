@@ -4,6 +4,7 @@ import { FaRegSmile } from "react-icons/fa";
 import ProfileImg from "../../../../../../../../images/profile-img.png";
 import { useSelector } from "react-redux";
 import { MentionsInput, Mention } from "react-mentions";
+import Picker from "emoji-picker-react";
 
 const ChatContent = styled.div`
   width: 100%;
@@ -140,6 +141,7 @@ const ReplyInput = ({
   const user = useSelector((state) => state.user.user);
   const allUsers = useSelector((state) => state.consumer.users);
   const [mentionArrayUser, setMentionArrayUser] = useState([]);
+  const [displayEmoji, setDisplayEmoji] = useState(false);
   let userMentionData = allUsers.map((myUser) => ({
     id: myUser._id,
     display: `@${myUser.name}`,
@@ -159,7 +161,12 @@ const ReplyInput = ({
     if (type === "comment") setDescription(newPlainTextValue);
     else if (type === "reply") setReplyDescription(newPlainTextValue);
   };
-
+  
+  /** to add emoji in input */
+  const onEmojiClick = (event, emojiObject) => {
+    if (type === "comment") setDescription(description+emojiObject.emoji);
+    else if (type === "reply") setReplyDescription(replyDescription+emojiObject.emoji);
+  };
   const addCommentToPost = async () => {
     if (
       type === "comment" &&
@@ -222,7 +229,8 @@ const ReplyInput = ({
                   }
                 }} />}
               <EmojiWrap>
-                <FaRegSmile />
+              <FaRegSmile onClick={() => setDisplayEmoji(!displayEmoji)} />
+                {displayEmoji ? <Picker onEmojiClick={onEmojiClick} /> : null}
               </EmojiWrap>
             </InputWrap>
           </ProfileNameWrap>

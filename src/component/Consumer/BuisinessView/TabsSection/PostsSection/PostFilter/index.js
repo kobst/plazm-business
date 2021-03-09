@@ -4,7 +4,7 @@ import Checkbox from '../../../../UI/Checkbox/checkbox'
 import DropdwonArrowTop from '../../../../../../images/top_arrow.png'
 import { FaSort } from "react-icons/fa"
 import { useDispatch,useSelector } from 'react-redux';
-import { sortPostsByLikes,sortPostsByDate,filterData, setFilters, setSideFiltersByMostLiked, setSideFiltersByMostRecent } from '../../../../../../reducers/businessReducer';
+import { filterData, setFilters, setSideFiltersByMostLiked, setSideFiltersByMostRecent } from '../../../../../../reducers/businessReducer';
 
 const PostFilterContent = styled.div`
     width:100%;
@@ -113,7 +113,7 @@ const PostFilter = () => {
 
     useEffect(()=>{
       dispatch(filterData({businessId:business&&business[0]?business[0]._id:"", filters:filters, value:0, ownerId: user._id, sideFilters: {likes: filterByLiked}}))
-    },[sideFilterFlag])
+    },[sideFilterFlag, business, dispatch, filterByLiked, filters, user._id])
 
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside)

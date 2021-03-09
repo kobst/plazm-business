@@ -97,6 +97,10 @@ const LikesBar = ({
   postLikes,
   commentId,
   commentLikes,
+  displayEventCommentInput, 
+  setDisplayEventCommentInput,
+  displayReplyInput,
+  setDisplayReplyInput
 }) => {
   const [eventDate, setEventDate] = useState();
   const dispatch = useDispatch();
@@ -105,9 +109,15 @@ const LikesBar = ({
   const ws = useSelector((state) => state.user.ws);
   const [userLikedEvent, setUserLikedEvent] = useState(false);
   const [userLikedComment, setUserLikedComment] = useState(false);
+  const [likeCount, setLikeCount] = useState(0)
+  const [likeCountForComment, setLikeCountForComment] = useState(0)
 
   /** to convert date into display format */
   useEffect(() => {
+    setLikeCount(0)
+    setLikeCountForComment(0)
+    setUserLikedComment(false);
+    setUserLikedEvent(false);
     let monthNames = [
       "Jan",
       "Feb",
@@ -153,7 +163,7 @@ const LikesBar = ({
   const displayCommentsWithEvents = () => {
     if (type === "comment") {
       setDisplayEventComments(!displayEventComments);
-      if (type === "comment") dispatch(fetchEventComments(eventId));
+      dispatch(fetchEventComments(eventId));
     } else if (type === "reply") {
       setDisplayReply(!displayReply);
     }
@@ -161,6 +171,8 @@ const LikesBar = ({
 
   const addLike = async () => {
     if (type === "comment") {
+      setLikeCount(totalLikes+1)
+      setUserLikedEvent(true);
       const obj = {
         eventId: eventId,
         userId: user._id,
@@ -177,8 +189,13 @@ const LikesBar = ({
             type: "Event",
           })
         );
+      } else {
+        setUserLikedEvent(false);
+        setLikeCount(totalLikes-1)
       }
     } else if (type === "reply") {
+      setUserLikedComment(true)
+      setLikeCountForComment(totalLikes+1)
       const obj = {
         id: commentId,
         userId: user._id,
@@ -196,15 +213,27 @@ const LikesBar = ({
             type: "Event",
           })
         );
+      } else {
+        setUserLikedComment(false)
+        setLikeCountForComment(totalLikes-1)
       }
     }
   };
+  const displayComments = () => {
+    if (type === "comment") {
+      setDisplayEventCommentInput(!displayEventCommentInput)
+      if(displayEventComments === false)
+      dispatch(fetchEventComments(eventId));
+    } else if (type === "reply") {
+      setDisplayReplyInput(!displayReplyInput);
+    }
+  }
   return (
     <>
       <BottomBarLikes>
         <LikesBtnWrap>
           {type !== "commentReply" ? (
-            <UsersButton>
+            <UsersButton onClick={()=> displayComments()}>
               {type === "comment" ? "Comment" : "Reply"}
             </UsersButton>
           ) : null}
@@ -223,7 +252,7 @@ const LikesBar = ({
               ) : (
                 <MdFavoriteBorder />
               )}{" "}
-              {totalLikes}
+              {likeCount === 0? likeCountForComment ===0 ?  totalLikes : likeCountForComment : likeCount}
             </RightDiv>
             <RightDiv>
               <MdChatBubbleOutline

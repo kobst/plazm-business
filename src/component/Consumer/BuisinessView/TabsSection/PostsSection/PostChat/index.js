@@ -44,6 +44,8 @@ const PostChat = () => {
   const business = useSelector((state) => state.business.business);
   const user = useSelector((state) => state.user.user);
   const filters = useSelector((state) => state.business.filters);
+  const sideFilterForLikes = useSelector(state => state.business.filterByMostLiked)
+  const sideFilterForRecent = useSelector(state => state.business.filterByMostRecent)
   const loadingFilterData = useSelector(
     (state) => state.business.loadingFilterData
   );
@@ -55,7 +57,7 @@ const PostChat = () => {
   useEffect(() => {
     setOffSet(0);
     setHasMore(true);
-  }, [filters]);
+  }, [filters, sideFilterForRecent, sideFilterForLikes]);
   
   const fetchMorePosts = () => {
     if (offset + 20 < totalPosts) {
@@ -97,7 +99,7 @@ const PostChat = () => {
           }
           scrollableTarget="scrollableDiv"
           endMessage={
-            posts.length > 20 ? (
+            posts.length > 20 && !loadingFilterData ? (
               <center>
                 <NoMorePost className="noMorePost">
                   No more posts to show

@@ -4,7 +4,7 @@ import ProfileImg from "../../../../../../../images/profile-img.png";
 import ReplyInput from "./ReplyInput";
 import LikesBar from "../LikesBar";
 import { Scrollbars } from "react-custom-scrollbars";
-import { useSelector } from 'react-redux'
+import { useSelector } from "react-redux";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -82,31 +82,28 @@ const ChatInput = styled.div`
   }
 `;
 
-const Comments = ({
-  i,
-  eventData,
-  displayComments,
-}) => {
+const Comments = ({ i, eventData, displayComments }) => {
   const [displayReply, setDisplayReply] = useState(false);
+  const [displayReplyInput, setDisplayReplyInput] = useState(false);
   const [replyDescription, setReplyDescription] = useState("");
-  const business = useSelector(state => state.business.business)[0]
-  const ws = useSelector(state => state.user.ws);
-    /** to add reply function */
-    const addReply = async (obj) => {
-      ws.send(
-        JSON.stringify({
-          action: "message",
-          commentId: obj._id, //commentId
-          userId: obj.userId, //userId
-          comment: obj.replyUser+" "+obj.body,
-          postId: obj.postId,
-          businessId: business._id,
-          taggedUsers: obj.taggedUsers,
-          type: "Event"
-        })
-      );
-      setReplyDescription("")
-    };
+  const business = useSelector((state) => state.business.business)[0];
+  const ws = useSelector((state) => state.user.ws);
+  /** to add reply function */
+  const addReply = async (obj) => {
+    ws.send(
+      JSON.stringify({
+        action: "message",
+        commentId: obj._id, //commentId
+        userId: obj.userId, //userId
+        comment: obj.replyUser + " " + obj.body,
+        postId: obj.postId,
+        businessId: business._id,
+        taggedUsers: obj.taggedUsers,
+        type: "Event",
+      })
+    );
+    setReplyDescription("");
+  };
 
   /** to highlight the user mentions mentioned in post description */
   const findDesc = (value, mentions) => {
@@ -155,6 +152,8 @@ const Comments = ({
             setDisplayReply={setDisplayReply}
             displayReply={displayReply}
             commentLikes={i.likes}
+            setDisplayReplyInput={setDisplayReplyInput}
+            displayReplyInput={displayReplyInput}
           />
           <Scrollbars
             autoHeight
@@ -163,7 +162,7 @@ const Comments = ({
             thumbMinSize={30}
           >
             <ReplyWrap>
-              {displayReply && i.replies.length > 0
+              {(displayReply || displayReplyInput) && i.replies.length > 0
                 ? i.replies.map((j, key) => (
                     <>
                       <UserMessageContent
@@ -198,7 +197,7 @@ const Comments = ({
                 : null}
             </ReplyWrap>
           </Scrollbars>
-          {displayReply ? (
+          {displayReply || displayReplyInput ? (
             <>
               <ReplyInput
                 type="reply"
