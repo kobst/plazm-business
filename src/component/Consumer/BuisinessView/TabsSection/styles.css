@@ -149,3 +149,32 @@
     }
   }
  
+  aside.emoji-picker-react {
+    position: absolute !important;
+    right: 0 !important;
+    z-index: 1;
+    max-width: 250px !important;
+    box-shadow: none !important;
+    height: 250px !important;
+  }
+
+  #scrollableDiv::-webkit-scrollbar {
+    width: 5px;
+  }
+   
+  #scrollableDiv::-webkit-scrollbar-track {
+    background: rgba(241, 241, 241, 0.233);
+    border-radius: 10px;
+  }
+   
+  #scrollableDiv::-webkit-scrollbar-thumb {
+    background: #000; 
+    cursor: pointer;
+    border-radius: 10px;
+  }
+
+  @media (max-width:767px){ 
+    aside.emoji-picker-react {
+      right: -30px !important;
+    }
+  }
