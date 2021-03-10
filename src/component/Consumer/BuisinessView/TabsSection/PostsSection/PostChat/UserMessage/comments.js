@@ -90,9 +90,11 @@ const Comments = ({ i, postData, displayComments }) => {
   const business = useSelector((state) => state.business.business);
   const divRef = useRef(null);
   useEffect(() => {
-    if(displayReply === true)
-    divRef.current.scrollIntoView({ behavior: 'smooth' });
-  },[displayReply]);
+    if (displayReply === true || displayReplyInput===true)
+      divRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, [displayReply,displayReplyInput]);
+
+
   /** to add reply function */
   const addReply = async (obj) => {
     setReplyDescription("");
@@ -167,7 +169,7 @@ const Comments = ({ i, postData, displayComments }) => {
             thumbMinSize={30}
           >
             <ReplyWrap ref={divRef}>
-              {displayReply && i.replies.length > 0 ? (
+              {(displayReply || displayReplyInput) && i.replies.length > 0 ? (
                 <div>
                   {i.replies.map((j, key) => (
                     <>
@@ -202,22 +204,22 @@ const Comments = ({ i, postData, displayComments }) => {
                   ))}
                 </div>
               ) : null}
+              {displayReply || displayReplyInput ? (
+                <>
+                  <ReplyInput
+                    type="reply"
+                    postId={postData.postId}
+                    displayComments={displayComments}
+                    replyDescription={replyDescription}
+                    setReplyDescription={setReplyDescription}
+                    commentId={i._id}
+                    addReply={addReply}
+                    name={i.userId.name}
+                  />
+                </>
+              ) : null}
             </ReplyWrap>
           </Scrollbars>
-          {displayReply ? (
-            <>
-              <ReplyInput
-                type="reply"
-                postId={postData.postId}
-                displayComments={displayComments}
-                replyDescription={replyDescription}
-                setReplyDescription={setReplyDescription}
-                commentId={i._id}
-                addReply={addReply}
-                name={i.userId.name}
-              />
-            </>
-          ) : null}
         </ProfileNameWrap>
       </ProfileNameHeader>
     </UserMessageContent>
