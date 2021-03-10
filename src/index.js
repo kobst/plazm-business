@@ -5,12 +5,14 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import Amplify from "aws-amplify";
 import awsExports from "./aws-exports";
+import store from './store';
+import { Provider } from 'react-redux';
 Amplify.configure(awsExports);
 
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <App />
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById('root')
 );
 

@@ -2,8 +2,8 @@
 @desc: getUser query
 */
 const getUser = (userSub) => {
-    const graphQl = {
-      query: `
+  const graphQl = {
+    query: `
           query GetUser($userSub: String){
             getUser(input: {userSub:$userSub}) {
               message
@@ -19,12 +19,34 @@ const getUser = (userSub) => {
               }
             }
           }`,
-      variables: {
-        userSub: userSub,
-      },
-    };
-    return graphQl;
+    variables: {
+      userSub: userSub,
+    },
   };
-  export { getUser };
-
-  
+  return graphQl;
+};
+/*
+@desc: getAllUser query
+*/
+const getAllUsers = () => {
+  const graphQl = {
+    query: `
+        query GetAllUser{
+          getAllUser {
+            message
+            success
+            user {
+                name
+                email
+                userSub
+                phoneNumber
+                photo 
+                lockProfile
+                _id
+            }
+          }
+        }`,
+  };
+  return graphQl;
+};
+export { getUser,getAllUsers };

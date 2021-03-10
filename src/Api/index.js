@@ -60,7 +60,7 @@ export const fetchEvents = async (id) => {
 };
 export const fetchUsers = async (id) => {
   const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/api/accounts`,
+    `${process.env.REACT_APP_API_URL}/api/user`,
     {
       method: "GET",
       headers: {

@@ -1,4 +1,4 @@
-  .react-tabs {
+  .MainTabs .react-tabs {
     display: flex;
     width: 100%;
     border: 0;
@@ -7,7 +7,7 @@
     position: relative;
   }
   
-  .react-tabs__tab-list {
+  .MainTabs .react-tabs__tab-list {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -18,7 +18,7 @@
     box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
   }
   
-  .react-tabs__tab {
+  .MainTabs .react-tabs__tab {
     height: 98px;
     list-style: none;
     padding: 10px;
@@ -29,19 +29,19 @@
     align-items: center;
   }
 
-  .react-tabs__tab:nth-child(1){
+  .MainTabs .react-tabs__tab:nth-child(1){
     height: 64px;
   }
 
-  .react-tabs__tab:nth-child(1), .react-tabs__tab:nth-child(2), .react-tabs__tab:nth-child(3){
+  .MainTabs .react-tabs__tab:nth-child(1), .MainTabs .react-tabs__tab:nth-child(2), .MainTabs .react-tabs__tab:nth-child(3){
     border-bottom: 0.5px dashed #C4C4C4;
   }
   
-  .react-tabs__tab--selected, .react-tabs__tab--selected:hover, .react-tabs__tab--selected:focus {
+  .MainTabs .react-tabs__tab--selected, .MainTabs .react-tabs__tab--selected:hover, .MainTabs .react-tabs__tab--selected:focus {
       outline: 0;
   }
   
-  .react-tabs__tab-panel {
+  .MainTabs .react-tabs__tab-panel {
     display: none;
     width: 544px;
     position: absolute;
@@ -88,48 +88,50 @@
     }
 }
   
-  .react-tabs__tab-panel--selected {
+.MainTabs .react-tabs__tab-panel--selected {
     display: block;
   }
   
-  .react-tabs__tab {
+  .MainTabs .react-tabs__tab {
   }
   
-  .react-tabs__tab--selected {
+  .MainTabs .react-tabs__tab--selected {
   }
 
-  #react-tabs-1{
+  .MainTabs #react-tabs-1{
       display: none;
   }
 
-  .react-tabs__tab.react-tabs__tab--selected{
+  .MainTabs .react-tabs__tab.react-tabs__tab--selected{
     background: #211D43;
+    border: 0;
+    border-radius: 0;
   }
 
-  #react-tabs-0{
+  .MainTabs #react-tabs-0{
     background: transparent;
   }
 
   @media (max-width:767px){
-    .react-tabs__tab-panel{
+    .MainTabs .react-tabs__tab-panel{
       left: 50px;
       width: 300px;
       height: 100%;
     }
-    .react-tabs__tab img{
+    .MainTabs .react-tabs__tab img{
       max-width: 26px;
     }
-    .react-tabs__tab, .react-tabs__tab:nth-child(1){
+    .MainTabs .react-tabs__tab, .react-tabs__tab:nth-child(1){
       height: 50px;
     }
-    .panel-content{
+    .MainTabs .panel-content{
       height: 90vh;
       overflow: auto;
       overflow-x: hidden;
     }
   }
   @media (max-width:359px){
-    .react-tabs__tab-panel{
+    .MainTabs .react-tabs__tab-panel{
       left: 50px;
       width: 260px;
     }
