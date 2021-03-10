@@ -35,26 +35,6 @@ export const addPostToBusiness = createAsyncThunk(
 );
 
 /*
- * @desc:  to sort posts by likes
- */
-export const sortPostsByLikes = createAsyncThunk(
-  "data/sortPostsByLikes",
-  async () => {
-    return true;
-  }
-);
-
-/*
- * @desc:  to sort posts by most recent
- */
-export const sortPostsByDate = createAsyncThunk(
-  "data/sortPostsByDate",
-  async () => {
-    return true;
-  }
-);
-
-/*
  * @desc:  to sort posts by most recent
  */
 export const filterData = createAsyncThunk("data/filterData", async (obj) => {
@@ -63,7 +43,10 @@ export const filterData = createAsyncThunk("data/filterData", async (obj) => {
   return response.data.searchPlacesByUserId;
 });
 
-
+/*
+ * @desc:  to concat filtered posts to posts array
+ * @params: obj
+ */
 export const addFilteredPosts = createAsyncThunk("data/addFilteredPosts", async (obj) => {
   const graphQl = getPlace(obj);
   const response = await graphQlEndPoint(graphQl);
@@ -82,8 +65,8 @@ export const addCommentToPost = createAsyncThunk(
 );
 
 /*
- * @desc:  to check if business exists or not
- * @params: businessId
+ * @desc:  to fetch post comments
+ * @params: postId
  */
 export const fetchPostComments = createAsyncThunk(
   "data/fetchPostComments",
@@ -102,16 +85,13 @@ export const addReplyToComment = createAsyncThunk(
   "data/addReplyToComment",
   async (obj) => {
     return obj;
-    // const graphQl = CreateReply(obj);
-    // const response = await graphQlEndPoint(graphQl);
-    // return {
-    //   data: response.data.createReply,
-    //   postId: obj.postId,
-    //   commentId: obj._id,
-    // };
   }
 );
 
+/*
+ * @desc:  to add a post via sockets
+ * @params: obj
+ */
 export const addPostViaSocket = createAsyncThunk(
   "data/addPostViaSocket",
   async (obj) => {
@@ -119,6 +99,10 @@ export const addPostViaSocket = createAsyncThunk(
   }
 );
 
+/*
+ * @desc:  to add like to a post
+ * @params: obj
+ */
 export const AddLikeToPost = createAsyncThunk(
   "data/AddLikeToPost",
   async (obj) => {
@@ -128,6 +112,10 @@ export const AddLikeToPost = createAsyncThunk(
   }
 );
 
+/*
+ * @desc:  to add like to a comment
+ * @params: obj
+ */
 export const addLikeToComment = createAsyncThunk(
   "data/addLikeToComment",
   async (obj) => {
@@ -137,6 +125,10 @@ export const addLikeToComment = createAsyncThunk(
   }
 );
 
+/*
+ * @desc:  to add like to post via sockets
+ * @params: obj
+ */
 export const addLikeViaSocket = createAsyncThunk(
   "data/addLikeViaSocket",
   async (obj) => {
@@ -144,12 +136,17 @@ export const addLikeViaSocket = createAsyncThunk(
   }
 );
 
+/*
+ * @desc:  to add like to comment via sockets
+ * @params: obj
+ */
 export const addLikeToCommentViaSocket = createAsyncThunk(
   "data/addLikeToCommentViaSocket",
   async (obj) => {
     return obj;
   }
 );
+
 export const slice = createSlice({
   name: "business",
   initialState: {
@@ -423,18 +420,6 @@ export const slice = createSlice({
         state.loadingPostComments = false;
         state.error = action.payload;
       }
-    },
-    [sortPostsByLikes.fulfilled]: (state, action) => {
-      state.posts = state.posts.sort((a, b) => {
-        return b.totalLikes - a.totalLikes;
-      });
-    },
-    [sortPostsByDate.fulfilled]: (state, action) => {
-      state.posts = state.posts.sort((a, b) => {
-        return (
-          new Date(b.postDetails.createdAt) - new Date(a.postDetails.createdAt)
-        );
-      });
     },
     [filterData.pending]: (state) => {
       if (!state.loadingFilterData) {

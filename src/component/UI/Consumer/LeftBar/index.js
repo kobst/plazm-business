@@ -55,7 +55,6 @@ const SearchIcon = styled.div`
 `
 
 const LeftBar = ({displayTab,setDisplayTab,profile,setFlag, isBusinessOpen, businessExists, businessId}) => {
-  console.log(isBusinessOpen)
   const [displayChangePassword, setDisplayChangePassword] = useState(false);
   const [tabIndex, setTabIndex] = useState(isBusinessOpen? 6:0);
   return (

@@ -121,6 +121,8 @@ const InputWrap = styled.div`
 const EmojiWrap = styled.div`
   width: 15px;
   height: 15px;
+  position: relative;
+  cursor: pointer;
   svg {
     color: #fff;
     font-size: 15px;
