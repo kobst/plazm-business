@@ -117,7 +117,7 @@
 
   .InnerTabs .react-tabs__tab.react-tabs__tab--selected{
     background: #FF2E9A;
-    border: 0;
+    border: 0 !important;
     border-radius: 0;
   }
 

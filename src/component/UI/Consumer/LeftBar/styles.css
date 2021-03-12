@@ -37,6 +37,7 @@
 
   .MainTabs .react-tabs__tab:nth-child(1){
     height: 64px;
+    border-bottom: 0.5px dashed #C4C4C4 !important;
   }
 
   .MainTabs .react-tabs__tab:nth-child(1), .MainTabs .react-tabs__tab:nth-child(2), .MainTabs .react-tabs__tab:nth-child(3){

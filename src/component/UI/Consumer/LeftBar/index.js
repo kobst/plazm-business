@@ -65,7 +65,7 @@ const LeftBar = ({profile,setFlag, isBusinessOpen, businessExists, businessId}) 
           <Tab className={0===tabIndex-1?"react-tabs__tab LIBefore": tabIndex+1 === 0? "react-tabs__tab LIAFter":tabIndex===0?"react-tabs__tab react-tabs__tab--selected":"react-tabs__tab"}>
             <img src={PlazmLogo} alt="" />
           </Tab>
-          <Tab className={1===tabIndex-1?"react-tabs__tab LIBefore": tabIndex+1 === 1? "react-tabs__tab LIAFter":tabIndex===1?"react-tabs__tab react-tabs__tab--selected":"react-tabs__tab"}>
+          <Tab className={1===tabIndex-1?"react-tabs__tab LIBefore": tabIndex===1?"react-tabs__tab react-tabs__tab--selected":"react-tabs__tab"}>
             <img src={LocalNav} alt="" />
           </Tab>
           <Tab className={2===tabIndex-1?"react-tabs__tab LIBefore": tabIndex+1 === 2? "react-tabs__tab LIAFter":tabIndex===2?"react-tabs__tab react-tabs__tab--selected":"react-tabs__tab"}>
