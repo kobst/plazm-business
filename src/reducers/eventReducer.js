@@ -230,7 +230,7 @@ export const slice = createSlice({
             likes: [],
           });
           let eventsArr = [];
-          eventsArr.push({ ...findEvent[0], comments: eventComments });
+          eventsArr.push({ ...findEvent[0], comments: eventComments, totalComments: findEvent[0].totalComments+1 });
           eventsArr.concat(findOtherEvents);
           state.events = eventsArr.sort((a, b) => {
             return new Date(b.createdAt) - new Date(a.createdAt);
