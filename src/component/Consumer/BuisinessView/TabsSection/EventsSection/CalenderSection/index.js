@@ -108,16 +108,26 @@ const DaysDiv = styled.div`
   font-weight: 600;
   text-transform: uppercase;
   margin: 0 0 10px;
+  position: relative;
   @media (max-width: 767px) {
   }
   &.current {
     background: #ff2e9a;
-    box-shadow: 10px 0px 43px -12px #1c1838;
+    box-shadow: 0px 0px 4px #FF2E9A;
     backdrop-filter: blur(250px);
+    :after{
+      content: "";
+      width: 35px;
+      height: 2px;
+      background: #FF2E9A;
+      position: absolute;
+      bottom: -6px;
+    }
   }
   &.disabled {
     opacity: 0.4;
   }
+  
 `;
 const BtnWrap = styled.div`
   display: flex;
@@ -172,6 +182,17 @@ const TodayBtn = styled.button`
   border:0;
   padding: 4px 9px;
   cursor: pointer;
+`;
+
+const DaysIndicator = styled.div`
+  width: 7px;
+  height: 7px;
+  background: #FF2E9A;
+  box-shadow: 0px 0px 4px #FF2E9A;
+  border-radius: 50%;
+  position: absolute;
+  right:0;
+  top: 0;
 `;
 
 const CalenderSection = ({ businessId }) => {
@@ -262,6 +283,7 @@ const CalenderSection = ({ businessId }) => {
               className={previousBtnClicked||nextBtnClicked?"":currentDay==="tue"?"current":""}
               onClick={() => fetchEventsForAParticularDay("tue")}
             >
+              <DaysIndicator />
               tue
             </DaysDiv>
             <DaysDiv
