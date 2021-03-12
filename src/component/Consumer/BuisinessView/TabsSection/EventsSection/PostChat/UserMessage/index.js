@@ -30,6 +30,9 @@ const UserMessageContent = styled.div`
   &.UserReplyContent {
     padding: 0 0 0 40px;
   }
+  .InnerScroll {
+    overflow-x: hidden;
+  }
 `;
 const ProfileNameHeader = styled.div`
   display: flex;
@@ -230,6 +233,7 @@ const UserMessage = ({ eventData }) => {
         autoHeightMin={0}
         autoHeightMax={300}
         thumbMinSize={30}
+        className="InnerScroll"
       >
         <ReplyWrap>
           {(displayEventComments||displayEventCommentInput) &&

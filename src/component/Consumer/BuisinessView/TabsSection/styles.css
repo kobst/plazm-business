@@ -12,12 +12,12 @@
     display: flex;
     flex-direction: row;
     width: 100%;
-    margin: 0;
+    margin: 0 !important;
     padding: 0;
     color: white;
     background: #221e45;
     justify-content: space-between;
-    border-bottom: 0.5px solid #ff2e9a;
+    border-bottom: 2px solid #ff2e9a;
   }
   
   .InnerTabs .react-tabs__tab {
@@ -32,6 +32,7 @@
     font-style: normal;
     font-weight: 700;
     font-size: 14px;
+    background-color: inherit;
   }
 
   .InnerTabs .react-tabs__tab:nth-child(1){
@@ -40,10 +41,14 @@
 
   .InnerTabs .react-tabs__tab:nth-child(1), .InnerTabs .react-tabs__tab:nth-child(2), .InnerTabs .react-tabs__tab:nth-child(3){
     border-bottom: 0;
+    pointer-events: inherit;
   }
   
   .InnerTabs .react-tabs__tab--selected, .InnerTabs .react-tabs__tab--selected:hover, .InnerTabs .react-tabs__tab--selected:focus {
       outline: 0;
+  }
+  .InnerTabs .react-tabs__tab:last-child{
+    pointer-events: inherit;
   }
   
   .InnerTabs .react-tabs__tab-panel {
@@ -156,6 +161,24 @@
     max-width: 250px !important;
     box-shadow: none !important;
     height: 250px !important;
+    color: #000 !important;
+  }
+
+  .emoji-picker-react input.emoji-search {
+    color: #000;
+  }
+
+  .emoji-picker-react .active-category-indicator-wrapper .active-category-indicator {
+    display: none;
+  }
+
+  .emoji-picker-react .emoji-group:before{
+    font-size: 11px !important;
+  }
+
+  
+  #scrollableDiv {
+    overflow-x: hidden;
   }
 
   #scrollableDiv::-webkit-scrollbar {
@@ -173,8 +196,22 @@
     border-radius: 10px;
   }
 
+  .InnerScroll {
+    overflow-x: hidden !important;
+  }
+
   @media (max-width:767px){ 
+    #scrollableDiv {
+      height: auto !important;
+    }
     aside.emoji-picker-react {
       right: -30px !important;
     }
   }
+
+  @media (max-width: 991px) and (orientation: landscape) {
+    #scrollableDiv {
+      height: auto !important;
+    }
+  }
+  

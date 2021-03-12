@@ -20,7 +20,7 @@ const LeftBarContent = styled.div`
     width:100px;
     position: relative;
     display:flex;
-    background: #F3F3F3;
+    /* background: #F3F3F3; */
     box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
     @media (max-width:767px){
       width:50px;
@@ -54,7 +54,7 @@ const SearchIcon = styled.div`
     
 `
 
-const LeftBar = ({displayTab,setDisplayTab,profile,setFlag, isBusinessOpen, businessExists, businessId}) => {
+const LeftBar = ({profile,setFlag, isBusinessOpen, businessExists, businessId}) => {
   const [displayChangePassword, setDisplayChangePassword] = useState(false);
   const [tabIndex, setTabIndex] = useState(isBusinessOpen? 6:0);
   return (
@@ -62,36 +62,42 @@ const LeftBar = ({displayTab,setDisplayTab,profile,setFlag, isBusinessOpen, busi
       <LeftBarContent className="MainTabs">
       <Tabs selectedIndex={tabIndex} onSelect={index => setTabIndex(index)}>
         <TabList>
-          <Tab >
+          <Tab className={0===tabIndex-1?"react-tabs__tab LIBefore": tabIndex+1 === 0? "react-tabs__tab LIAFter":tabIndex===0?"react-tabs__tab react-tabs__tab--selected":"react-tabs__tab"}>
             <img src={PlazmLogo} alt="" />
           </Tab>
-          <Tab >
+          <Tab className={1===tabIndex-1?"react-tabs__tab LIBefore": tabIndex+1 === 1? "react-tabs__tab LIAFter":tabIndex===1?"react-tabs__tab react-tabs__tab--selected":"react-tabs__tab"}>
             <img src={LocalNav} alt="" />
           </Tab>
-          <Tab >
+          <Tab className={2===tabIndex-1?"react-tabs__tab LIBefore": tabIndex+1 === 2? "react-tabs__tab LIAFter":tabIndex===2?"react-tabs__tab react-tabs__tab--selected":"react-tabs__tab"}>
             <UserImage>
                 <img src={ProfileImg} alt="" />
             </UserImage>
           </Tab>
-          <Tab >
+          <Tab className={3===tabIndex-1?"react-tabs__tab LIBefore": tabIndex+1 === 3? "react-tabs__tab LIAFter":tabIndex===3?"react-tabs__tab react-tabs__tab--selected":"react-tabs__tab"}>
             <SearchIcon>
                 <BiSearchAlt2 />
             </SearchIcon>
           </Tab>
-          <Tab >
+          <Tab className={4===tabIndex-1?"react-tabs__tab LIBefore": tabIndex+1 === 4? "react-tabs__tab LIAFter":tabIndex===4?"react-tabs__tab react-tabs__tab--selected":"react-tabs__tab"}>
             <img src={Mention} alt="" />
           </Tab>
-          <Tab >
+          <Tab className={5===tabIndex-1?"react-tabs__tab LIBefore": tabIndex+1 === 5? "react-tabs__tab LIAFter":tabIndex===5?"react-tabs__tab react-tabs__tab--selected":"react-tabs__tab"}>
             <img src={Notifications} alt="" />
           </Tab>
-          <Tab>
+          <Tab className={6===tabIndex-1?"react-tabs__tab LIBefore": tabIndex+1 === 6? "react-tabs__tab LIAFter":tabIndex===6?"react-tabs__tab react-tabs__tab--selected":"react-tabs__tab"}>
             <img src={Favorites} alt="" />
           </Tab>
-          <Tab>
+          <Tab className={7===tabIndex-1?"react-tabs__tab LIBefore": tabIndex+1 === 7 ?"react-tabs__tab LIAFter":tabIndex===7?"react-tabs__tab react-tabs__tab--selected":"react-tabs__tab"}>
             <img src={GridIcon} alt="" />
           </Tab>
-          <Tab>
+          <Tab className={8===tabIndex-1?"react-tabs__tab LIBefore": tabIndex+1 === 8? "react-tabs__tab LIAFter":tabIndex===8?"react-tabs__tab react-tabs__tab--selected":"react-tabs__tab"}>
             <img src={ProfileSettingImg} alt="" />
+          </Tab>
+          <Tab className={9===tabIndex-1?"react-tabs__tab LIBefore": tabIndex+1 === 9? "react-tabs__tab LIAFter":tabIndex===9?"react-tabs__tab react-tabs__tab--selected":"react-tabs__tab"}>
+            &nbsp;
+          </Tab>
+          <Tab className={10===tabIndex-1?"react-tabs__tab LIBefore": tabIndex+1 === 10? "react-tabs__tab LIAFter":tabIndex===10?"react-tabs__tab react-tabs__tab--selected":"react-tabs__tab"}>
+          &nbsp;
           </Tab>
         </TabList>
 

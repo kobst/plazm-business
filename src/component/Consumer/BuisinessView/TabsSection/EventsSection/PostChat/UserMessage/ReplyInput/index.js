@@ -55,7 +55,7 @@ const ChatContent = styled.div`
 `;
 const ProfileNameHeader = styled.div`
   display: flex;
-  padding: 0;
+  padding: 0px;
   margin: 0;
   width: 100%;
 `;

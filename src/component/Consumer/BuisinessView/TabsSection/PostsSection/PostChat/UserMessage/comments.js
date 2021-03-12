@@ -19,9 +19,15 @@ const UserMessageContent = styled.div`
   &.UserReplyContent {
     padding: 0 0 0 40px;
   }
+  .InnerScroll {
+    overflow-x: hidden;
+  }
 `;
 
-const ReplyWrap = styled.div``;
+const ReplyWrap = styled.div`
+  overflow-x: hidden;
+`;
+
 
 const ProfileNameHeader = styled.div`
   display: flex;
@@ -79,6 +85,7 @@ const ChatInput = styled.div`
     font-size: 13px;
     color: #ff2e9a;
     font-weight: 600;
+    cursor: pointer;
   }
 `;
 
@@ -165,8 +172,10 @@ const Comments = ({ i, postData, displayComments }) => {
             autoHeightMin={0}
             autoHeightMax={300}
             thumbMinSize={30}
+            style={{ overflowX: "hidden" }}
+            className="InnerScroll"
           >
-            <ReplyWrap ref={divRef}>
+            <ReplyWrap ref={divRef} style={{ overflowX: "hidden" }}>
               {displayReply && i.replies.length > 0 ? (
                 <div>
                   {i.replies.map((j, key) => (

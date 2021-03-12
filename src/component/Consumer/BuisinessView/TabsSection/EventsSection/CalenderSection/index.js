@@ -28,6 +28,12 @@ const TopArrows = styled.div`
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
+  button {
+    :hover, :focus {
+      outline:0;
+      border: 0;
+    }
+  }
   @media (max-width: 767px) {
   }
 `;
@@ -48,6 +54,10 @@ const LeftArrow = styled.div`
     opacity: 0.4;
     cursor: not-allowed;
   }
+  :hover, :focus {
+    outline:0;
+    border: 0;
+  }
 `;
 const RightArrow = styled.div`
   width: 26px;
@@ -64,6 +74,10 @@ const RightArrow = styled.div`
   }
   &.disabled {
     opacity: 0.4;
+  }
+  :hover, :focus {
+    outline:0;
+    border: 0;
   }
 `;
 const DaysWrap = styled.div`
@@ -106,8 +120,8 @@ const DaysDiv = styled.div`
 `;
 const BtnWrap = styled.div`
   display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
+  align-items: flex-start;
+  justify-content: flex-start;
   button {
     padding: 0;
     line-height: 14px;

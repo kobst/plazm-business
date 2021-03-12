@@ -28,6 +28,9 @@ const UserMessageContent = styled.div`
   &.UserReplyContent {
     padding: 0 0 0 40px;
   }
+  .InnerScroll {
+    overflow-x: hidden;
+  }
 `;
 const UserMsgWrap = styled.div`
   display: flex;
@@ -97,6 +100,7 @@ const ChatInput = styled.div`
     font-size: 13px;
     color: #ff2e9a;
     font-weight: 600;
+    cursor: pointer;
   }
 `;
 
@@ -309,6 +313,7 @@ const UserMessage = ({ postData }) => {
         autoHeightMin={0}
         autoHeightMax={300}
         thumbMinSize={30}
+        className="InnerScroll"
         >
         <ReplyWrap>
         {(displayComments || displayCommentInput) && !loadingComments && postData.comments.length > 0 ? (
