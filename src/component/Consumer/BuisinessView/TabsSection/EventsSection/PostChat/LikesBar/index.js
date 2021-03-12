@@ -8,6 +8,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import {
   AddLikeToEvent,
+  addLikeViaSocket,
   fetchEventComments,
 } from "../../../../../../../reducers/eventReducer";
 import { unwrapResult } from "@reduxjs/toolkit";
@@ -97,10 +98,6 @@ const LikesBar = ({
   postLikes,
   commentId,
   commentLikes,
-  displayEventCommentInput, 
-  setDisplayEventCommentInput,
-  displayReplyInput,
-  setDisplayReplyInput
 }) => {
   const [eventDate, setEventDate] = useState();
   const dispatch = useDispatch();
@@ -109,13 +106,12 @@ const LikesBar = ({
   const ws = useSelector((state) => state.user.ws);
   const [userLikedEvent, setUserLikedEvent] = useState(false);
   const [userLikedComment, setUserLikedComment] = useState(false);
-  const [likeCount, setLikeCount] = useState(0)
-  const [likeCountForComment, setLikeCountForComment] = useState(0)
-
+  const [likeCount, setLikeCount] = useState(0);
+  const [likeCountForComment, setLikeCountForComment] = useState(0);
   /** to convert date into display format */
   useEffect(() => {
-    setLikeCount(0)
-    setLikeCountForComment(0)
+    setLikeCount(0);
+    setLikeCountForComment(0);
     setUserLikedComment(false);
     setUserLikedEvent(false);
     let monthNames = [
@@ -149,8 +145,7 @@ const LikesBar = ({
           setUserLikedEvent(true);
         }
       }
-    }
-    else if (type === "reply") {
+    } else if (type === "reply") {
       if (commentLikes.length > 0) {
         const findUser = commentLikes.find((i) => i._id === user._id);
         if (findUser) {
@@ -160,23 +155,25 @@ const LikesBar = ({
     }
   }, [date, commentLikes, postLikes, type, user._id]);
 
-  const displayCommentsWithEvents = () => {
+  /** to display comments on a particular event */
+  const displayCommentsWithEvents =  () => {
     if (type === "comment") {
       setDisplayEventComments(!displayEventComments);
+      if(displayEventComments === false)
       dispatch(fetchEventComments(eventId));
     } else if (type === "reply") {
       setDisplayReply(!displayReply);
     }
   };
 
+  /** to add like to post or comment */
   const addLike = async () => {
     if (type === "comment") {
-      setLikeCount(totalLikes+1)
-      setUserLikedEvent(true);
       const obj = {
         eventId: eventId,
         userId: user._id,
       };
+      dispatch(addLikeViaSocket({postId: eventId, like:{...obj,_id: user._id}}))
       const data = await dispatch(AddLikeToEvent(obj));
       const response = await unwrapResult(data);
       if (response.success === true) {
@@ -189,9 +186,6 @@ const LikesBar = ({
             type: "Event",
           })
         );
-      } else {
-        setUserLikedEvent(false);
-        setLikeCount(totalLikes-1)
       }
     } else if (type === "reply") {
       setUserLikedComment(true)
@@ -213,32 +207,36 @@ const LikesBar = ({
             type: "Event",
           })
         );
-      } else {
-        setUserLikedComment(false)
-        setLikeCountForComment(totalLikes-1)
       }
     }
   };
+
+  /** to display comments of a particular event */
   const displayComments = () => {
     if (type === "comment") {
-      setDisplayEventCommentInput(!displayEventCommentInput)
+      setDisplayEventComments(!displayEventComments)
       if(displayEventComments === false)
       dispatch(fetchEventComments(eventId));
-    } else if (type === "reply") {
-      setDisplayReplyInput(!displayReplyInput);
     }
-  }
+  };
   return (
     <>
       <BottomBarLikes>
         <LikesBtnWrap>
           {type !== "commentReply" ? (
-            <UsersButton onClick={()=> displayComments()}>
+            <UsersButton onClick={() => displayComments()}>
               {type === "comment" ? "Comment" : "Reply"}
             </UsersButton>
           ) : null}
           {type !== "commentReply" ? <CircleDot /> : null}
-          {type !== "commentReply" ? <UsersButton onClick={() => addLike()} disabled={userLikedEvent || userLikedComment}>Like</UsersButton> : null}
+          {type !== "commentReply" ? (
+            <UsersButton
+              onClick={() => addLike()}
+              disabled={userLikedEvent || userLikedComment}
+            >
+              Like
+            </UsersButton>
+          ) : null}
           <ChatDate>
             <span>-</span>
             {eventDate}
@@ -247,12 +245,16 @@ const LikesBar = ({
         {type !== "commentReply" ? (
           <LikesBtnWrap>
             <RightDiv>
-              {userLikedEvent || userLikedComment ? (
+              {(userLikedEvent || userLikedComment) ? (
                 <MdFavorite style={{ color: "red" }} />
               ) : (
                 <MdFavoriteBorder />
               )}{" "}
-              {likeCount === 0? likeCountForComment ===0 ?  totalLikes : likeCountForComment : likeCount}
+              {likeCount === 0
+                ? likeCountForComment === 0
+                  ? totalLikes
+                  : likeCountForComment
+                : likeCount}
             </RightDiv>
             <RightDiv>
               <MdChatBubbleOutline

@@ -5,6 +5,7 @@ import ReplyInput from "./ReplyInput";
 import LikesBar from "../LikesBar";
 import { Scrollbars } from "react-custom-scrollbars";
 import { useSelector } from "react-redux";
+import ScrollToBottom from "./ScrollToBottom";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -79,6 +80,7 @@ const ChatInput = styled.div`
     font-size: 13px;
     color: #ff2e9a;
     font-weight: 600;
+    cursor: pointer;
   }
 `;
 
@@ -136,7 +138,7 @@ const Comments = ({ i, eventData, displayComments }) => {
         </ProfileThumb>
         <ProfileNameWrap>
           <ProfileName>
-            Top 10 Restaurant in NYC<span>by</span>
+            <span>by</span>
             {i.userId.name}{" "}
           </ProfileName>
           <ChatInput>
@@ -154,6 +156,7 @@ const Comments = ({ i, eventData, displayComments }) => {
             commentLikes={i.likes}
             setDisplayReplyInput={setDisplayReplyInput}
             displayReplyInput={displayReplyInput}
+            eventId={eventData._id}
           />
           <Scrollbars
             autoHeight
@@ -178,7 +181,7 @@ const Comments = ({ i, eventData, displayComments }) => {
                           </ProfileThumb>
                           <ProfileNameWrap>
                             <ProfileName>
-                              Top 10 Restaurant in NYC<span>by</span>
+                              <span>by</span>
                               {j.userId.name}{" "}
                             </ProfileName>
                             <ChatInput>
@@ -195,22 +198,23 @@ const Comments = ({ i, eventData, displayComments }) => {
                     </>
                   ))
                 : null}
+              {displayReply || displayReplyInput ? (
+                <>
+                  <ReplyInput
+                    type="reply"
+                    eventId={eventData._id}
+                    displayComments={displayComments}
+                    replyDescription={replyDescription}
+                    setReplyDescription={setReplyDescription}
+                    commentId={i._id}
+                    addReply={addReply}
+                    name={i.userId.name}
+                  />
+                </>
+              ) : null}
+              <ScrollToBottom/>
             </ReplyWrap>
           </Scrollbars>
-          {displayReply || displayReplyInput ? (
-            <>
-              <ReplyInput
-                type="reply"
-                eventId={eventData._id}
-                displayComments={displayComments}
-                replyDescription={replyDescription}
-                setReplyDescription={setReplyDescription}
-                commentId={i._id}
-                addReply={addReply}
-                name={i.userId.name}
-              />
-            </>
-          ) : null}
         </ProfileNameWrap>
       </ProfileNameHeader>
     </UserMessageContent>

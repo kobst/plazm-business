@@ -149,6 +149,7 @@ const ReplyInput = ({
     display: `@${myUser.name}`,
   }));
 
+  /** handle change method for mentions input */
   const handleChange = (event, newValue, newPlainTextValue, mentions) => {
     if (mentions.length !== 0) {
       /** to find if the mention is of users or lists */
@@ -163,12 +164,15 @@ const ReplyInput = ({
     if (type === "comment") setDescription(newPlainTextValue);
     else if (type === "reply") setReplyDescription(newPlainTextValue);
   };
-  
+
   /** to add emoji in input */
   const onEmojiClick = (event, emojiObject) => {
-    if (type === "comment") setDescription(description+emojiObject.emoji);
-    else if (type === "reply") setReplyDescription(replyDescription+emojiObject.emoji);
+    if (type === "comment") setDescription(description + emojiObject.emoji);
+    else if (type === "reply")
+      setReplyDescription(replyDescription + emojiObject.emoji);
   };
+
+  /** to add comment on post or comment */
   const addCommentToPost = async () => {
     if (
       type === "comment" &&
@@ -194,12 +198,20 @@ const ReplyInput = ({
         userId: user._id,
         body: replyDescription,
         taggedUsers: mentionArrayUser,
-        replyUser:"@" + name
+        replyUser: "@" + name,
       };
       addReply(obj);
     }
   };
-
+  /** on adding comment keyPress function */
+  const commentAddKeyPress = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      addCommentToPost(type === "reply" ? replyDescription : description);
+      if (type === "reply") setReplyDescription("");
+      else setDescription("");
+    }
+  };
   return (
     <>
       <ChatContent>
@@ -210,28 +222,31 @@ const ReplyInput = ({
           <ProfileNameWrap>
             <InputWrap>
               {type === "reply" ? <input value={"@" + name} readOnly /> : null}
-              {type==="comment"?<MentionsInput
-                markup="@(__id__)[__display__]"
-                value={type === "reply" ? replyDescription : description}
-                onChange={handleChange}
-                placeholder={type === "reply" ? "Add Reply" : "Add Comment"}
-                className="replyInput"
-                onKeyPress={(event) => {
-                  if (event.key === "Enter") {
-                    event.preventDefault()
-                    addCommentToPost();
-                  }
-                }}
-              >
-                <Mention type="user" trigger="@" data={userMentionData} />
-              </MentionsInput>:<input value={replyDescription} onChange={e=>setReplyDescription(e.target.value)} onKeyPress={(event) => {
-                  if (event.key === "Enter") {
-                    event.preventDefault()
-                    addCommentToPost();
-                  }
-                }} />}
+              {type === "comment" ? (
+                <MentionsInput
+                  markup="@(__id__)[__display__]"
+                  value={type === "reply" ? replyDescription : description}
+                  onChange={handleChange}
+                  placeholder={type === "reply" ? "Add Reply" : "Add Comment"}
+                  className="replyInput"
+                  onKeyPress={(event) => commentAddKeyPress(event)}
+                >
+                  <Mention
+                    type="user"
+                    trigger="@"
+                    data={userMentionData}
+                    appendSpaceOnAdd={true}
+                  />
+                </MentionsInput>
+              ) : (
+                <input
+                  value={replyDescription}
+                  onChange={(e) => setReplyDescription(e.target.value)}
+                  onKeyPress={(event) => commentAddKeyPress(event)}
+                />
+              )}
               <EmojiWrap>
-              <FaRegSmile onClick={() => setDisplayEmoji(!displayEmoji)} />
+                <FaRegSmile onClick={() => setDisplayEmoji(!displayEmoji)} />
                 {displayEmoji ? <Picker onEmojiClick={onEmojiClick} /> : null}
               </EmojiWrap>
             </InputWrap>

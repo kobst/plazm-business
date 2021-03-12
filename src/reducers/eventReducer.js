@@ -132,6 +132,9 @@ export const slice = createSlice({
       currentDate.setDate(currentDate.getDate() - 7);
       state.date = currentDate;
     },
+    setCurrentDate: (state) => {
+      state.date = new Date();
+    },
   },
   extraReducers: {
     [fetchEventsForTheDay.pending]: (state) => {
@@ -144,10 +147,13 @@ export const slice = createSlice({
       if (state.loading) {
         state.loading = false;
         if (action.payload) {
-          state.events = action.payload.map((obj) => ({
+          let arr = action.payload.map((obj) => ({
             ...obj,
             comments: [],
           }));
+          state.events = arr.sort((a, b) => {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+          });
         }
       }
     },
@@ -167,10 +173,13 @@ export const slice = createSlice({
       if (state.loadingForAWeek) {
         state.loadingForAWeek = false;
         if (action.payload) {
-          state.events = action.payload.map((obj) => ({
+          let arr = action.payload.map((obj) => ({
             ...obj,
             comments: [],
           }));
+          state.events = arr.sort((a, b) => {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+          });
         }
       }
     },
@@ -197,7 +206,7 @@ export const slice = createSlice({
           );
           let eventsArr = [];
           eventsArr.push({ ...findEvent, comments: action.payload.data.post });
-          eventsArr.concat(findOtherEvents);
+          eventsArr = eventsArr.concat(findOtherEvents);
           state.events = eventsArr.sort((a, b) => {
             return new Date(b.createdAt) - new Date(a.createdAt);
           });
@@ -230,8 +239,12 @@ export const slice = createSlice({
             likes: [],
           });
           let eventsArr = [];
-          eventsArr.push({ ...findEvent[0], comments: eventComments, totalComments: findEvent[0].totalComments+1 });
-          eventsArr.concat(findOtherEvents);
+          eventsArr.push({
+            ...findEvent[0],
+            comments: eventComments,
+            totalComments: findEvent[0].totalComments + 1,
+          });
+          eventsArr = eventsArr.concat(findOtherEvents);
           state.events = eventsArr.sort((a, b) => {
             return new Date(b.createdAt) - new Date(a.createdAt);
           });
@@ -301,6 +314,7 @@ export const slice = createSlice({
       }
     },
     [addLikeToCommentViaSocket.fulfilled]: (state, action) => {
+      console.log(action.payload);
       if (action.payload) {
         let findPost = current(state.events).filter(
           (i) => i._id !== action.payload.postId
@@ -341,5 +355,5 @@ export const slice = createSlice({
   },
 });
 
-export const { nextWeekDate, previousWeekDate } = slice.actions;
+export const { nextWeekDate, previousWeekDate, setCurrentDate } = slice.actions;
 export default slice.reducer;

@@ -243,6 +243,14 @@ export const slice = createSlice({
             totalLikes: findPost1[0].totalLikes + 1,
           });
           dummy1 = dummy1.concat(findPost);
+          if(state.filterByMostLiked === true) {
+            state.posts = dummy1.sort((a, b) => {
+              return (
+                new Date(b.totalLikes) -
+                new Date(a.totalLikes)
+              );
+            });
+          } else
           state.posts = dummy1.sort((a, b) => {
             return (
               new Date(b.postDetails.createdAt) -

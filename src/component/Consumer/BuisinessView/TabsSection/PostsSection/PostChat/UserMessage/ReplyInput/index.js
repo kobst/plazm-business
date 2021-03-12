@@ -1,6 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { FaRegSmile } from "react-icons/fa";
+import {  FaRegSmile } from "react-icons/fa";
 import ProfileImg from "../../../../../../../../images/profile-img.png";
 import { useSelector } from "react-redux";
 import { MentionsInput, Mention } from "react-mentions";
@@ -145,16 +145,19 @@ const ReplyInput = ({
   const [mentionArrayUser, setMentionArrayUser] = useState([]);
   const [displayEmoji, setDisplayEmoji] = useState(false);
 
-  const inputEl = useRef(null);
   let userMentionData = allUsers.map((myUser) => ({
     id: myUser._id,
     display: `@${myUser.name}`,
   }));
 
+  /** on select of emoji */
   const onEmojiClick = (event, emojiObject) => {
-    if (type === "comment") setDescription(description+emojiObject.emoji);
-    else if (type === "reply") setReplyDescription(replyDescription+emojiObject.emoji);
+    if (type === "comment") setDescription(description + emojiObject.emoji);
+    else if (type === "reply")
+      setReplyDescription(replyDescription + emojiObject.emoji);
   };
+
+  /** handle change input for mentions input */
   const handleChange = (event, newValue, newPlainTextValue, mentions) => {
     if (mentions.length !== 0) {
       /** to find if the mention is of users or lists */
@@ -170,36 +173,38 @@ const ReplyInput = ({
     else if (type === "reply") setReplyDescription(newPlainTextValue);
   };
 
-  const addCommentToPost = async () => {
-    if (
-      type === "comment" &&
-      description !== "" &&
-      !description.trim() === false
-    ) {
+  /** to add comment on post */
+  const addCommentToPost = async (desc) => {
+    if (type === "comment" && desc !== "" && !desc.trim() === false) {
       const obj = {
         itemId: postId,
         userId: user._id,
-        body: description,
+        body: desc,
         created_on: new Date(),
         taggedUsers: mentionArrayUser,
       };
       addComment(obj);
-    } else if (
-      type === "reply" &&
-      replyDescription !== "" &&
-      !replyDescription.trim() === false
-    ) {
+    } else if (type === "reply" && desc !== "" && !desc.trim() === false) {
       const obj = {
         postId: postId,
         _id: commentId,
         userId: user._id,
-        body: replyDescription,
+        body: desc,
         taggedUsers: mentionArrayUser,
       };
       addReply(obj);
     }
   };
 
+  /** on adding comment keyPress function */
+  const commentAddKeyPress = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      addCommentToPost(type === "reply" ? replyDescription : description);
+      if (type === "reply") setReplyDescription("");
+      else setDescription("");
+    }
+  };
   return (
     <>
       <ChatContent>
@@ -216,15 +221,14 @@ const ReplyInput = ({
                 onChange={handleChange}
                 placeholder={type === "reply" ? "Add Reply" : "Add Comment"}
                 className="replyInput"
-                onKeyPress={(event) => {
-                  if (event.key === "Enter") {
-                    event.preventDefault();
-                    addCommentToPost();
-                  }
-                }}
-                ref={inputEl}
+                onKeyPress={(event) => commentAddKeyPress(event)}
               >
-                <Mention type="user" trigger="@" data={userMentionData} />
+                <Mention
+                  type="user"
+                  trigger="@"
+                  data={userMentionData}
+                  appendSpaceOnAdd={true}
+                />
               </MentionsInput>
               <EmojiWrap>
                 <FaRegSmile onClick={() => setDisplayEmoji(!displayEmoji)} />

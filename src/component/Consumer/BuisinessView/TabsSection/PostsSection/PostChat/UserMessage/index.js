@@ -14,6 +14,8 @@ import {
   addLikeToCommentViaSocket,
 } from "../../../../../../../reducers/businessReducer";
 import Comment from "./comments";
+import ScrollToBottom from "./ScrollToBottom";
+import { setWs } from "../../../../../../../reducers/userReducer";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -97,6 +99,7 @@ const ChatInput = styled.div`
     font-size: 13px;
     color: #ff2e9a;
     font-weight: 600;
+    cursor: pointer;
   }
 `;
 
@@ -124,9 +127,9 @@ const UserMessage = ({ postData }) => {
   const [displayCommentInput, setDisplayCommentInput] = useState(false);
   const user = useSelector((state) => state.user.user);
   const ws = useSelector((state) => state.user.ws);
+
   ws.onmessage = (evt) => {
     const message = JSON.parse(evt.data);
-
     /** to add reply via socket */
     if (message.comment && message.commentId && message.type === "Post") {
       if (message.businessId === business._id) {
@@ -163,9 +166,18 @@ const UserMessage = ({ postData }) => {
       }
     } else if (message.like && message.type === "Post") {
       /** to add post like via socket */
-      if (message.businessId === business._id) {
+      if (message.businessId === business._id && message.like._id !== user._id) {
         dispatch(addLikeViaSocket(message));
       }
+    }
+  };
+
+  ws.onclose = () => {
+    if (user) {
+      const ws = new WebSocket(
+        `${process.env.REACT_APP_WEBSOCKET}/?userId=${user._id}`
+      );
+      dispatch(setWs(ws));
     }
   };
 
@@ -281,7 +293,7 @@ const UserMessage = ({ postData }) => {
             </ProfileThumb>
             <ProfileNameWrap>
               <ProfileName>
-                Top 10 Restaurant in NYC<span>by</span>
+                <span>by</span>
                 {postData.postDetails.ownerId === null
                   ? business.company_name
                   : postData.postDetails.ownerId.name}{" "}
@@ -334,18 +346,21 @@ const UserMessage = ({ postData }) => {
                 <ValueLoader />
               </LoaderWrap>
             ) : null}
+            {displayComments || displayCommentInput ? (
+              <>
+                <ReplyInput
+                  type="comment"
+                  postId={postData.postId}
+                  displayComments={displayComments}
+                  description={description}
+                  setDescription={setDescription}
+                  addComment={addComment}
+                />
+                <ScrollToBottom />
+              </>
+            ) : null}
           </ReplyWrap>
         </Scrollbars>
-        {displayComments || displayCommentInput ? (
-          <ReplyInput
-            type="comment"
-            postId={postData.postId}
-            displayComments={displayComments}
-            description={description}
-            setDescription={setDescription}
-            addComment={addComment}
-          />
-        ) : null}
       </UserMsgWrap>
     </>
   );

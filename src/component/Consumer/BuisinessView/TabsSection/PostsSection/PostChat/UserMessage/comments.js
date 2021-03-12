@@ -90,10 +90,9 @@ const Comments = ({ i, postData, displayComments }) => {
   const business = useSelector((state) => state.business.business);
   const divRef = useRef(null);
   useEffect(() => {
-    if (displayReply === true || displayReplyInput===true)
+    if (displayReply === true || displayReplyInput === true)
       divRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
-  }, [displayReply,displayReplyInput]);
-
+  }, [displayReply, displayReplyInput]);
 
   /** to add reply function */
   const addReply = async (obj) => {
@@ -142,7 +141,7 @@ const Comments = ({ i, postData, displayComments }) => {
         </ProfileThumb>
         <ProfileNameWrap>
           <ProfileName>
-            Top 10 Restaurant in NYC<span>by</span>
+            <span>by</span>
             {i.userId.name}{" "}
           </ProfileName>
           <ChatInput>
@@ -186,7 +185,7 @@ const Comments = ({ i, postData, displayComments }) => {
                           </ProfileThumb>
                           <ProfileNameWrap>
                             <ProfileName>
-                              Top 10 Restaurant in NYC<span>by</span>
+                              <span>by</span>
                               {j.userId.name}{" "}
                             </ProfileName>
                             <ChatInput>

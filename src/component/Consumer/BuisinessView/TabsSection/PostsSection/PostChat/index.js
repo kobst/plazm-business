@@ -68,6 +68,7 @@ const PostChat = () => {
           filters: filters,
           value: offset + 20,
           ownerId: user._id,
+          sideFilters: {likes: sideFilterForLikes}
         })
       );
     } else setHasMore(false);

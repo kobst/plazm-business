@@ -196,40 +196,43 @@ const AddPostSection = ({ profile, businessId }) => {
   /*
    * @desc: to change file_name
    */
-  const fileName = (name) => {
-    return `${Date.now()}-${name}`;
+  const fileName = (name,date) => {
+    return `${date}_${name}`;
   };
 
   /*
    * @desc: post images upload function
    */
   const upload = async (e) => {
-    const selectedFile = e.target.files[0];
-    const folder_name = folderName();
-    const file_name = fileName(selectedFile.name);
-    const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${file_name}`;
-    const idxDot = selectedFile.name.lastIndexOf(".") + 1;
-    const extFile = selectedFile.name
-      .substr(idxDot, selectedFile.name.length)
-      .toLowerCase();
-    if (extFile === "jpeg" || extFile === "png" || extFile === "jpg") {
-      setImageError("");
-      setImageUrl([
-        ...imageUrl,
-        {
-          id: imageUrl.length + 1,
-          value: URL.createObjectURL(e.target.files[0]),
-          image: baseUrl,
-        },
-      ]);
-      setImageUpload([
-        ...imageUpload,
-        { id: imageUrl.length + 1, value: e.target.files[0], image: baseUrl },
-      ]);
-      setImageCopy([...imageCopy, { image: baseUrl }]);
-      setImageUploadCopy([...imageUploadCopy, { image: baseUrl }]);
-    } else {
-      setImageError("Only jpg/jpeg and png,files are allowed!");
+    if (imageUrl.length < 5) {
+      const selectedFile = e.target.files[0];
+      const currentDate = Date.now()
+      const folder_name = folderName();
+      const file_name = fileName(selectedFile.name,currentDate);
+      const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${file_name}`;
+      const idxDot = selectedFile.name.lastIndexOf(".") + 1;
+      const extFile = selectedFile.name
+        .substr(idxDot, selectedFile.name.length)
+        .toLowerCase();
+      if (extFile === "jpeg" || extFile === "png" || extFile === "jpg") {
+        setImageError("");
+        setImageUrl([
+          ...imageUrl,
+          {
+            id: imageUrl.length + 1,
+            value: URL.createObjectURL(e.target.files[0]),
+            image: baseUrl,
+          },
+        ]);
+        setImageUpload([
+          ...imageUpload,
+          { id: imageUrl.length + 1, value: e.target.files[0], image: baseUrl, date: currentDate },
+        ]);
+        setImageCopy([...imageCopy, { image: baseUrl }]);
+        setImageUploadCopy([...imageUploadCopy, { image: baseUrl }]);
+      } else {
+        setImageError("Only jpg/jpeg and png,files are allowed!");
+      }
     }
   };
 
@@ -301,49 +304,50 @@ const AddPostSection = ({ profile, businessId }) => {
         })
       );
 
+      /**if there are no images added */
       if (imageUpload.length === 0) {
         setLoader(false);
         setDescription("");
-      }
-      imageUpload.map(async (i) => {
-        const file = i.value;
-        const folder_name = folderName();
-        const file_name = fileName(file.name);
-        const value = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/upload_photo`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              Key: file_name,
-              ContentType: file.type,
-              folder_name: folder_name,
-            }),
-          }
-        );
-        const body = await value.text();
-        const Val = JSON.parse(body);
-
-        await fetch(Val, {
-          method: "PUT",
-          headers: {
-            "Content-Type": file.type,
-          },
-          body: file,
-        })
-          .then((response) => {
-            setLoader(false);
-            setDescription("");
-            setImageUrl([]);
-            setImageCopy([]);
-            setImageUpload([]);
-          })
-          .catch(
-            (error) => console.log(error) // Handle the error response object
+      } else {
+        imageUpload.map(async (i) => {
+          const file = i.value;
+          const folder_name = folderName();
+          const file_name = fileName(file.name,i.date);
+          const value = await fetch(
+            `${process.env.REACT_APP_API_URL}/api/upload_photo`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                Key: file_name,
+                ContentType: file.type,
+                folder_name: folder_name,
+              }),
+            }
           );
-      });
+          const body = await value.text();
+          const Val = JSON.parse(body);
+
+          await fetch(Val, {
+            method: "PUT",
+            headers: {
+              "Content-Type": file.type,
+            },
+            body: file,
+          })
+            .then((response) => {})
+            .catch(
+              (error) => console.log(error) // Handle the error response object
+            );
+        });
+        setLoader(false);
+        setDescription("");
+        setImageUrl([]);
+        setImageCopy([]);
+        setImageUpload([]);
+      }
     }
   };
   return (
@@ -365,6 +369,7 @@ const AddPostSection = ({ profile, businessId }) => {
                 data={userMentionData}
                 className="mentions__mention"
                 style={defaultMentionStyle}
+                appendSpaceOnAdd={true}
               />
             </MentionsInput>
           </TextAreaWrap>

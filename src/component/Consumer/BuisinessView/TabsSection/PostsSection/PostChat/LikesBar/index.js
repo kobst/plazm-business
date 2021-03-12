@@ -10,6 +10,7 @@ import {
   fetchPostComments,
   AddLikeToPost,
   addLikeToComment,
+  addLikeViaSocket,
 } from "../../../../../../../reducers/businessReducer";
 import { unwrapResult } from "@reduxjs/toolkit";
 
@@ -83,7 +84,7 @@ const RightDiv = styled.div`
     margin: 0 7px 0 0;
   }
   svg: hover {
-    cursor: pointer
+    cursor: pointer;
   }
 `;
 
@@ -95,20 +96,15 @@ const LikesBar = ({
   displayComments,
   postId,
   type,
-  name,
   postLikes,
   commentId,
   commentLikes,
-  displayReplyInput,
-  setDisplayReplyInput,
-  displayCommentInput,
-  setDisplayCommentInput,
 }) => {
   const [eventDate, setEventDate] = useState();
   const [userLikedPost, setUserLikedPost] = useState(false);
   const [userLikedComment, setUserLikedComment] = useState(false);
-  const [likeCount, setLikeCount] = useState(0)
-  const [likeCountForComment, setLikeCountForComment] = useState(0)
+  const [likeCount, setLikeCount] = useState(0);
+  const [likeCountForComment, setLikeCountForComment] = useState(0);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const ws = useSelector((state) => state.user.ws);
@@ -118,8 +114,8 @@ const LikesBar = ({
   useEffect(() => {
     setUserLikedComment(false);
     setUserLikedPost(false);
-    setLikeCount(0)
-    setLikeCountForComment(0)
+    setLikeCount(0);
+    setLikeCountForComment(0);
     let monthNames = [
       "Jan",
       "Feb",
@@ -143,8 +139,7 @@ const LikesBar = ({
     let year = date.getFullYear();
 
     setEventDate(`${day} ${monthName} ${year}`);
-
-    if (type === "comment" && totalLikes>0) {
+    if (type === "comment" && totalLikes > 0) {
       if (postLikes.length > 0) {
         const findUser = postLikes.find((i) => i._id === user._id);
         if (findUser) {
@@ -154,7 +149,7 @@ const LikesBar = ({
           setUserLikedPost(false);
         }
       }
-    } else if (type === "reply" && totalLikes>0) {
+    } else if (type === "reply" && totalLikes > 0) {
       if (commentLikes.length > 0) {
         const findUser = commentLikes.find((i) => i._id === user._id);
         if (findUser) {
@@ -165,24 +160,26 @@ const LikesBar = ({
         }
       }
     }
-  }, [date,commentLikes,postLikes,type,user._id, totalLikes]);
+  }, [date, commentLikes, postLikes, type, user._id, totalLikes]);
 
+  /** to display comments or replies of the post */
   const displayCommentsWithPosts = () => {
     setDisplayComments(!displayComments);
     if (type === "comment") {
-      if(displayCommentInput === false)
-      dispatch(fetchPostComments(postId));
+      if (displayComments === false) dispatch(fetchPostComments(postId));
     }
   };
 
+  /** to add like to post or comments */
   const addLike = async () => {
     if (type === "comment") {
-      setUserLikedPost(true);
-      setLikeCount(totalLikes+1)
       const obj = {
         postId: postId,
         userId: user._id,
       };
+      dispatch(
+        addLikeViaSocket({ postId: postId, like: { ...obj, _id: user._id } })
+      );
       const data = await dispatch(AddLikeToPost(obj));
       const response = await unwrapResult(data);
       if (response.success === true) {
@@ -192,16 +189,16 @@ const LikesBar = ({
             postId: postId,
             like: response.like,
             businessId: business[0]._id,
-            type: "Post"
+            type: "Post",
           })
         );
       } else {
         setUserLikedPost(false);
-        setLikeCount(totalLikes-1)
+        setLikeCount(totalLikes - 1);
       }
     } else if (type === "reply") {
-      setUserLikedComment(true)
-      setLikeCountForComment(totalLikes+1)
+      setUserLikedComment(true);
+      setLikeCountForComment(totalLikes + 1);
       const obj = {
         id: commentId,
         userId: user._id,
@@ -216,23 +213,19 @@ const LikesBar = ({
             like: response.like,
             commentId: response.commentId,
             businessId: business[0]._id,
-            type: "Post"
+            type: "Post",
           })
         );
-      } else {
-        setUserLikedComment(false)
-        setLikeCountForComment(totalLikes-1)
       }
     }
   };
 
+  /** to display comments of the post on click of comment icon */
   const setReplyDisplay = () => {
-    if(type === "reply")
-    setDisplayReplyInput(!displayReplyInput);
-    else if(type === "comment")  {
-    setDisplayCommentInput(!displayCommentInput);
-    if(displayComments === false)
-    dispatch(fetchPostComments(postId));
+    if (type === "reply") setDisplayComments(!displayComments);
+    else if (type === "comment") {
+      setDisplayComments(!displayComments);
+      if (displayComments === false) dispatch(fetchPostComments(postId));
     }
   };
   return (
@@ -240,10 +233,19 @@ const LikesBar = ({
       <BottomBarLikes>
         <LikesBtnWrap>
           {type !== "commentReply" ? (
-            <UsersButton onClick={() => setReplyDisplay()}>{type==="comment"?"Comment":"Reply"}</UsersButton>
+            <UsersButton onClick={() => setReplyDisplay()}>
+              {type === "comment" ? "Comment" : "Reply"}
+            </UsersButton>
           ) : null}
           {type !== "commentReply" ? <CircleDot /> : null}
-          {type !== "commentReply" ? <UsersButton onClick={() => addLike()} disabled={userLikedPost || userLikedComment}>Like</UsersButton> : null}
+          {type !== "commentReply" ? (
+            <UsersButton
+              onClick={() => addLike()}
+              disabled={userLikedPost || userLikedComment}
+            >
+              Like
+            </UsersButton>
+          ) : null}
 
           <ChatDate>
             <span>-</span>
@@ -256,9 +258,13 @@ const LikesBar = ({
               {userLikedPost || userLikedComment ? (
                 <MdFavorite style={{ color: "red" }} />
               ) : (
-                <MdFavoriteBorder/>
+                <MdFavoriteBorder />
               )}{" "}
-              {likeCount === 0? likeCountForComment ===0 ?  totalLikes : likeCountForComment : likeCount}
+              {likeCount === 0
+                ? likeCountForComment === 0
+                  ? totalLikes
+                  : likeCountForComment
+                : likeCount}
             </RightDiv>
             <RightDiv>
               <MdChatBubbleOutline onClick={() => displayCommentsWithPosts()} />{" "}
