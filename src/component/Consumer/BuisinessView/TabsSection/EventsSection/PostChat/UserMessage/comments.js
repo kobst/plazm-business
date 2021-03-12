@@ -20,13 +20,16 @@ const UserMessageContent = styled.div`
   &.UserReplyContent {
     padding: 0 0 0 40px;
   }
+  .InnerScroll {
+    overflow-x: hidden;
+  }
 `;
 
 const ReplyWrap = styled.div``;
 
 const ProfileNameHeader = styled.div`
   display: flex;
-  padding: 0;
+  padding: 0 12px;
   margin: 15px 0;
 `;
 
@@ -163,6 +166,7 @@ const Comments = ({ i, eventData, displayComments }) => {
             autoHeightMin={0}
             autoHeightMax={300}
             thumbMinSize={30}
+            className="InnerScroll"
           >
             <ReplyWrap>
               {(displayReply || displayReplyInput) && i.replies.length > 0

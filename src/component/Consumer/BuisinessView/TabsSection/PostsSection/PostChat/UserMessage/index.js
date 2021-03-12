@@ -30,6 +30,9 @@ const UserMessageContent = styled.div`
   &.UserReplyContent {
     padding: 0 0 0 40px;
   }
+  .InnerScroll {
+    overflow-x: hidden;
+  }
 `;
 const UserMsgWrap = styled.div`
   display: flex;
@@ -322,11 +325,12 @@ const UserMessage = ({ postData }) => {
             </ProfileNameWrap>
           </ProfileNameHeader>
         </UserMessageContent>
-        <Scrollbars
-          autoHeight
-          autoHeightMin={0}
-          autoHeightMax={300}
-          thumbMinSize={30}
+        <Scrollbars  
+        autoHeight
+        autoHeightMin={0}
+        autoHeightMax={300}
+        thumbMinSize={30}
+        className="InnerScroll"
         >
           <ReplyWrap>
             {(displayComments || displayCommentInput) &&

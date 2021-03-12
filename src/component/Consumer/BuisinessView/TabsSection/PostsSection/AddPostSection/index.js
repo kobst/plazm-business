@@ -196,7 +196,7 @@ const AddPostSection = ({ profile, businessId }) => {
   /*
    * @desc: to change file_name
    */
-  const fileName = (name,date) => {
+  const fileName = (name, date) => {
     return `${date}_${name}`;
   };
 
@@ -206,9 +206,9 @@ const AddPostSection = ({ profile, businessId }) => {
   const upload = async (e) => {
     if (imageUrl.length < 5) {
       const selectedFile = e.target.files[0];
-      const currentDate = Date.now()
+      const currentDate = Date.now();
       const folder_name = folderName();
-      const file_name = fileName(selectedFile.name,currentDate);
+      const file_name = fileName(selectedFile.name, currentDate);
       const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${file_name}`;
       const idxDot = selectedFile.name.lastIndexOf(".") + 1;
       const extFile = selectedFile.name
@@ -226,7 +226,12 @@ const AddPostSection = ({ profile, businessId }) => {
         ]);
         setImageUpload([
           ...imageUpload,
-          { id: imageUrl.length + 1, value: e.target.files[0], image: baseUrl, date: currentDate },
+          {
+            id: imageUrl.length + 1,
+            value: e.target.files[0],
+            image: baseUrl,
+            date: currentDate,
+          },
         ]);
         setImageCopy([...imageCopy, { image: baseUrl }]);
         setImageUploadCopy([...imageUploadCopy, { image: baseUrl }]);
@@ -278,75 +283,77 @@ const AddPostSection = ({ profile, businessId }) => {
    * @desc: add post to specific business
    */
   const savePost = async () => {
-    setLoader(true);
-    const obj = {
-      business: businessId,
-      data: description,
-      media: imageCopy,
-      taggedUsers: mentionArrayUser,
-      taggedLists: mentionArrayList,
-      ownerId: profile._id,
-    };
-    const addPost = await dispatch(addPostToBusiness(obj));
-    const response = await unwrapResult(addPost);
-    if (response.success === true) {
-      ws.send(
-        JSON.stringify({
-          action: "post",
-          businessId: businessId,
-          post: {
-            postId: response.post._id,
-            postDetails: response.post,
-            totalComments: 0,
-            totalLikes: 0,
-            comments: [],
-          },
-        })
-      );
-
-      /**if there are no images added */
-      if (imageUpload.length === 0) {
-        setLoader(false);
-        setDescription("");
-      } else {
-        imageUpload.map(async (i) => {
-          const file = i.value;
-          const folder_name = folderName();
-          const file_name = fileName(file.name,i.date);
-          const value = await fetch(
-            `${process.env.REACT_APP_API_URL}/api/upload_photo`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                Key: file_name,
-                ContentType: file.type,
-                folder_name: folder_name,
-              }),
-            }
-          );
-          const body = await value.text();
-          const Val = JSON.parse(body);
-
-          await fetch(Val, {
-            method: "PUT",
-            headers: {
-              "Content-Type": file.type,
+    if (imageError === "") {
+      setLoader(true);
+      const obj = {
+        business: businessId,
+        data: description,
+        media: imageCopy,
+        taggedUsers: mentionArrayUser,
+        taggedLists: mentionArrayList,
+        ownerId: profile._id,
+      };
+      const addPost = await dispatch(addPostToBusiness(obj));
+      const response = await unwrapResult(addPost);
+      if (response.success === true) {
+        ws.send(
+          JSON.stringify({
+            action: "post",
+            businessId: businessId,
+            post: {
+              postId: response.post._id,
+              postDetails: response.post,
+              totalComments: 0,
+              totalLikes: 0,
+              comments: [],
             },
-            body: file,
           })
-            .then((response) => {})
-            .catch(
-              (error) => console.log(error) // Handle the error response object
+        );
+
+        /**if there are no images added */
+        if (imageUpload.length === 0) {
+          setLoader(false);
+          setDescription("");
+        } else {
+          imageUpload.map(async (i) => {
+            const file = i.value;
+            const folder_name = folderName();
+            const file_name = fileName(file.name, i.date);
+            const value = await fetch(
+              `${process.env.REACT_APP_API_URL}/api/upload_photo`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  Key: file_name,
+                  ContentType: file.type,
+                  folder_name: folder_name,
+                }),
+              }
             );
-        });
-        setLoader(false);
-        setDescription("");
-        setImageUrl([]);
-        setImageCopy([]);
-        setImageUpload([]);
+            const body = await value.text();
+            const Val = JSON.parse(body);
+
+            await fetch(Val, {
+              method: "PUT",
+              headers: {
+                "Content-Type": file.type,
+              },
+              body: file,
+            })
+              .then((response) => {})
+              .catch(
+                (error) => console.log(error) // Handle the error response object
+              );
+          });
+          setLoader(false);
+          setDescription("");
+          setImageUrl([]);
+          setImageCopy([]);
+          setImageUpload([]);
+        }
       }
     }
   };

@@ -31,6 +31,9 @@ const UserMessageContent = styled.div`
   &.UserReplyContent {
     padding: 0 0 0 40px;
   }
+  .InnerScroll {
+    overflow-x: hidden;
+  }
 `;
 const ProfileNameHeader = styled.div`
   display: flex;
@@ -120,12 +123,11 @@ const UserMessage = ({ eventData }) => {
     (state) => state.event.loadingEventComments
   );
   const ws = useSelector((state) => state.user.ws);
-  const user = useSelector(state => state.user.user)
+  const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
-
   ws.onmessage = (evt) => {
     const message = JSON.parse(evt.data);
-    console.log(message)
+    console.log(message);
     if (message.commentInfo && message.commentInfo.type === "Events") {
       /** to add event comment via socket */
       setDescription("");
@@ -148,7 +150,10 @@ const UserMessage = ({ eventData }) => {
       }
     } else if (message.like && message.type === "Event") {
       /** to add post like via socket */
-      if (message.businessId === business[0]._id && message.like._id !== user._id ) {
+      if (
+        message.businessId === business[0]._id &&
+        message.like._id !== user._id
+      ) {
         dispatch(addLikeViaSocket(message));
       }
     }
@@ -204,7 +209,9 @@ const UserMessage = ({ eventData }) => {
               startDay={
                 days[new Date(eventData.eventSchedule.start_time).getDay()]
               }
-              endDay={days[new Date(eventData.eventSchedule.end_time).getDay()]}
+              endDay={
+                days[new Date(eventData.eventSchedule.end_time).getDay()]
+              }
             />
             <TimeBar
               startTime={new Date(eventData.eventSchedule.start_time)}
@@ -233,21 +240,21 @@ const UserMessage = ({ eventData }) => {
         autoHeightMin={0}
         autoHeightMax={300}
         thumbMinSize={30}
+        className="InnerScroll"
       >
         <ReplyWrap>
-          {(displayEventComments) &&
+          {displayEventComments &&
           !loadingComments &&
           eventData.comments.length > 0 ? (
             eventData.comments.map((i) => {
               return <Comment i={i} eventData={eventData} />;
             })
-          ) : (displayEventComments) &&
-            loadingComments ? (
+          ) : displayEventComments && loadingComments ? (
             <LoaderWrap>
               <ValueLoader />
             </LoaderWrap>
           ) : null}
-          {(displayEventComments) && !loadingComments? (
+          {displayEventComments && !loadingComments ? (
             <>
               <ReplyInput
                 type="comment"

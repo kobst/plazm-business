@@ -75,7 +75,7 @@ const PostChat = () => {
   };
   return (
     <>
-      <div id="scrollableDiv" style={{ height: 450, overflow: "auto" }}>
+      <div id="scrollableDiv" style={{ height: 'calc(100vh - 490px)', overflow: "auto" }}>
         {/* <Scrollbars
         autoHeight
         autoHeightMin={0}
