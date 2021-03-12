@@ -26,8 +26,9 @@ const TopArrows = styled.div`
   position: relative;
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 10px 0;
   button {
     :hover, :focus {
       outline:0;
@@ -149,6 +150,30 @@ const Button = styled.button`
   border: 0;
 `;
 
+const CurrentDate = styled.div`
+  color: #fff;
+  font-size: 10px;
+  font-weight: 500;
+`;
+
+const ArrowsWrap = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const TodayBtn = styled.button`
+  background: #FF006B;
+  border-radius: 40px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  border:0;
+  padding: 4px 9px;
+  cursor: pointer;
+`;
+
 const CalenderSection = ({ businessId }) => {
   const dispatch = useDispatch();
   const eventDate = useSelector((state) => state.event.date);
@@ -200,21 +225,26 @@ const CalenderSection = ({ businessId }) => {
       ) : (
         <CalenderSectionWrap>
           <TopArrows>
-            <Button disabled={eventDate < currentDate} onClick={() => previousWeek()}> 
-            <LeftArrow
-              className={
-                eventDate < currentDate
-                  ? "disabled"
-                  : ""
-              }              
-              disabled={eventDate < currentDate}
-            >
-              <RiArrowDropLeftLine />
-            </LeftArrow></Button>
-            <RightArrow>
-              <RiArrowDropRightLine onClick={() => nextWeek()} />
-            </RightArrow>
+            <ArrowsWrap>
+              <Button disabled={eventDate < currentDate} onClick={() => previousWeek()}> 
+              <LeftArrow
+                className={
+                  eventDate < currentDate
+                    ? "disabled"
+                    : ""
+                }              
+                disabled={eventDate < currentDate}
+              >
+                <RiArrowDropLeftLine />
+              </LeftArrow></Button>
+              <CurrentDate>22 Feb - 28 Feb 2021</CurrentDate>
+              <RightArrow>
+                <RiArrowDropRightLine onClick={() => nextWeek()} />
+              </RightArrow>
+            </ArrowsWrap>
+            <TodayBtn>Today</TodayBtn>
           </TopArrows>
+
           <DaysWrap>
             <DaysDiv
               className={previousBtnClicked||nextBtnClicked?"":currentDay==="sun"?"current":""}
