@@ -11,6 +11,7 @@ import ValueLoader from "../../../../../../utils/loader";
 import "./style.css";
 import { unwrapResult } from "@reduxjs/toolkit";
 import defaultMentionStyle from "./style";
+import ModalComponent from '../../../../UI/Modal'
 
 const bucket = process.env.REACT_APP_BUCKET;
 
@@ -107,7 +108,7 @@ const BottomBar = styled.div`
 
 const TextAreaWrap = styled.div`
   width: 100%;
-  max-width: calc(100% - 147px);
+  /* max-width: calc(100% - 147px); */
   @media (max-width: 767px) {
     max-width: 100%;
     margin: 0 0 5px;
@@ -170,6 +171,7 @@ const AddPostSection = ({ profile, businessId }) => {
   const [mentionArrayList, setMentionArrayList] = useState([]);
   const [mentionArrayUser, setMentionArrayUser] = useState([]);
   const [loader, setLoader] = useState(false);
+  const [addPostModal, setAddPostModal] = useState(false);
   const [imageError, setImageError] = useState("");
   const users = useSelector((state) => state.consumer.users);
   const lists = useSelector((state) => state.list.lists);
@@ -359,9 +361,18 @@ const AddPostSection = ({ profile, businessId }) => {
   };
   return (
     <>
+      {addPostModal && (
+        <ModalComponent
+          closeOnOutsideClick={true}
+          isOpen={addPostModal}
+          closeModal={() => setAddPostModal(false)}
+        >
+          <p>fsdfsdf</p>
+        </ModalComponent>
+      )}
       <AddPostSectionContent>
         <TopSection>
-          <TextAreaWrap>
+          <TextAreaWrap onClick={() => setAddPostModal(true)}>
             <MentionsInput
               markup="@(__id__)[__display__]"
               value={description}
@@ -380,7 +391,7 @@ const AddPostSection = ({ profile, businessId }) => {
               />
             </MentionsInput>
           </TextAreaWrap>
-          <RightWrap>
+          {/* <RightWrap>
             <Select disabled={loader}>
               <option>Posting Options</option>
               <option>Posting Options Options</option>
@@ -411,7 +422,7 @@ const AddPostSection = ({ profile, businessId }) => {
                 {loader ? <ValueLoader /> : "Post"}
               </SaveButton>
             </RightBottomWrap>
-          </RightWrap>
+          </RightWrap> */}
         </TopSection>
         <BottomBar>
           {imageUrl ? (
