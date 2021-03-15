@@ -234,7 +234,7 @@ const LikesBar = ({
         <LikesBtnWrap>
           {type !== "commentReply" ? (
             <UsersButton onClick={()=> displayComments()}>
-              {type === "comment" ? "Comment" : "Reply"}
+              {type === "comment" ? "Reply" : "Reply"}
             </UsersButton>
           ) : null}
           {type !== "commentReply" ? <CircleDot /> : null}

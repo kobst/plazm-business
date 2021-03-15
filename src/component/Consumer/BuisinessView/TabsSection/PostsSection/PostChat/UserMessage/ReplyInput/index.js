@@ -10,7 +10,7 @@ const ChatContent = styled.div`
   width: 100%;
   position: relative;
   display: flex;
-  padding: 12px 0 12px 0px;
+  padding: 12px 0 12px 12px;
   flex-direction: column;
   /* overflow: hidden; */
   /* overflow-x: hidden; */
@@ -65,7 +65,7 @@ const ProfileThumb = styled.div`
   width: 30px;
   height: 30px;
   margin: 0 10px 0 0;
-  border: 1px solid #ffffff;
+  border: 3px solid #ffffff;
   border-radius: 50%;
   overflow: hidden;
   img {

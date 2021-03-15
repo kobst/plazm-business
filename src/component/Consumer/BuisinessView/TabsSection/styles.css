@@ -40,7 +40,7 @@
   }
 
   .InnerTabs .react-tabs__tab:nth-child(1), .InnerTabs .react-tabs__tab:nth-child(2), .InnerTabs .react-tabs__tab:nth-child(3){
-    border-bottom: 0;
+    border-bottom: 0 !important;
     pointer-events: inherit;
   }
   
@@ -197,6 +197,9 @@
   }
 
   .InnerScroll {
+    overflow-x: hidden !important;
+  }
+  .InnerScroll>div:first-child {
     overflow-x: hidden !important;
   }
 

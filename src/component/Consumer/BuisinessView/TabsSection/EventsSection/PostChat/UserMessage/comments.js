@@ -36,7 +36,7 @@ const ProfileThumb = styled.div`
   width: 30px;
   height: 30px;
   margin: 0 10px 0 0;
-  border: 1px solid #ffffff;
+  border: 3px solid #ffffff;
   border-radius: 50%;
   overflow: hidden;
   img {
@@ -62,7 +62,7 @@ const ProfileName = styled.div`
   font-style: normal;
   font-size: 13px;
   line-height: normal;
-  margin: 0 0 5px 0;
+  margin: 7px 0 5px 0;
   font-weight: 700;
   color: #ff2e9a;
   span {
