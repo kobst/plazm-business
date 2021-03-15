@@ -5,11 +5,8 @@ import { Auth } from "aws-amplify";
 import history from "../../../utils/history";
 import ValueLoader from "../../../utils/loader";
 import { useDispatch } from "react-redux";
-import {findAllUsers} from '../../../reducers/consumerReducer';
-import { findAllLists } from "../../../reducers/listReducer";
 import { fetchAllPlaces } from "../../../reducers/placeReducer";
 import { checkBusiness } from "../../../reducers/businessReducer";
-import { fetchEventsForTheDay } from "../../../reducers/eventReducer";
 import { unwrapResult } from '@reduxjs/toolkit';
 import { fetchUserDetails,setWs } from "../../../reducers/userReducer";
 
@@ -34,8 +31,6 @@ const DashboardContainer = (props) => {
             dispatch(setWs(ws))
             setProfile(res.data.getUser.user);
           }
-          dispatch(findAllUsers())
-          dispatch(findAllLists())
           dispatch(fetchAllPlaces())
         } else {
           history.push("/business");
@@ -58,16 +53,6 @@ const DashboardContainer = (props) => {
       /** to check if business exists or not */
       const response =  await dispatch(checkBusiness({businessId:props.match.params.id,filters:{Business: true, PostsByMe: false, MySubscriptions:false}, value:0}));
       const data =  await unwrapResult(response);
-      const days = ['sun', 'mon', 'tue', 'wed', 'thurs', 'fri', 'sat'];
-      const date = new Date();
-      const dayName = days[date.getDay()];
-      const obj = {
-        date: date,
-        day: dayName,
-        businessId: props.match.params.id 
-      }
-      /** to fetch business events for current day */
-      await dispatch(fetchEventsForTheDay(obj))
       if(data.success === true && data.place.length > 0){
         setBusinessExists(true)
       }

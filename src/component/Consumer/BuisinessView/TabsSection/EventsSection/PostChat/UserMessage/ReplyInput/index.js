@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { FaRegSmile } from "react-icons/fa";
 import ProfileImg from "../../../../../../../../images/profile-img.png";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { MentionsInput, Mention } from "react-mentions";
 import Picker from "emoji-picker-react";
+import { findAllUsers } from "../../../../../../../../reducers/consumerReducer";
 
 const ChatContent = styled.div`
   width: 100%;
@@ -128,6 +129,22 @@ const EmojiWrap = styled.div`
     font-size: 15px;
   }
 `;
+
+const MentionsImage = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  .mentionsImageImg {
+    width: 20px;
+    height: 20px;
+    position: relative;
+    cursor: pointer;
+    border: 1px solid #fff;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 5px;
+  }
+`;
 const ReplyInput = ({
   eventId,
   type,
@@ -144,13 +161,17 @@ const ReplyInput = ({
   const allUsers = useSelector((state) => state.consumer.users);
   const [mentionArrayUser, setMentionArrayUser] = useState([]);
   const [displayEmoji, setDisplayEmoji] = useState(false);
+  const dispatch = useDispatch();
   let userMentionData = allUsers.map((myUser) => ({
     id: myUser._id,
     display: `@${myUser.name}`,
   }));
 
   /** handle change method for mentions input */
-  const handleChange = (event, newValue, newPlainTextValue, mentions) => {
+  const handleChange = async (event, newValue, newPlainTextValue, mentions) => {
+    /** to fetch list of all users */
+    if (allUsers.length === 0) await dispatch(findAllUsers());
+
     if (mentions.length !== 0) {
       /** to find if the mention is of users or lists */
       const findUser = allUsers.find((i) => i._id === mentions[0].id);
@@ -212,6 +233,26 @@ const ReplyInput = ({
       else setDescription("");
     }
   };
+
+  /** custom render suggestion with images */
+  const customRenderSuggestion = (entry) => {
+    return (
+      <MentionsImage>
+        <img
+          src={
+            entry.image !== null
+              ? entry.image !== "" && entry.image !== "sample"
+                ? entry.image
+                : ProfileImg
+              : ProfileImg
+          }
+          alt=""
+          className="mentionsImageImg"
+        />
+        {entry.display}
+      </MentionsImage>
+    );
+  };
   return (
     <>
       <ChatContent>
@@ -236,6 +277,7 @@ const ReplyInput = ({
                     trigger="@"
                     data={userMentionData}
                     appendSpaceOnAdd={true}
+                    renderSuggestion={customRenderSuggestion}
                   />
                 </MentionsInput>
               ) : (

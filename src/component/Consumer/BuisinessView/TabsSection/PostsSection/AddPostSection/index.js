@@ -10,7 +10,8 @@ import { addPostToBusiness } from "../../../../../../reducers/businessReducer";
 import ValueLoader from "../../../../../../utils/loader";
 import "./style.css";
 import { unwrapResult } from "@reduxjs/toolkit";
-import defaultMentionStyle from "./style";
+import { findAllUsers } from "../../../../../../reducers/consumerReducer";
+import { findAllLists } from "../../../../../../reducers/listReducer";
 
 const bucket = process.env.REACT_APP_BUCKET;
 
@@ -259,7 +260,11 @@ const AddPostSection = ({ profile, businessId }) => {
   /*
    * @desc: handle change function called on post input change
    */
-  const handleChange = (event, newValue, newPlainTextValue, mentions) => {
+  const handleChange = async (event, newValue, newPlainTextValue, mentions) => {
+    /** to fetch all users and list data */
+    if (users.length === 0) await dispatch(findAllUsers());
+    if (lists.length === 0) await dispatch(findAllLists());
+
     if (mentions.length !== 0) {
       /** to find if the mention is of users or lists */
       const findUser = users.find((i) => i._id === mentions[0].id);
@@ -375,7 +380,6 @@ const AddPostSection = ({ profile, businessId }) => {
                 trigger="@"
                 data={userMentionData}
                 className="mentions__mention"
-                style={defaultMentionStyle}
                 appendSpaceOnAdd={true}
               />
             </MentionsInput>

@@ -33,7 +33,7 @@ const Gallery = (props) => {
       console.log(props.image)
       setImageValue(props.image)
     }
-  },[])
+  },[props.image])
   let myInput
   const editName=(name)=>{
     return `${props.name}-${name}`
