@@ -118,28 +118,28 @@ const BuisinessProfileSection = ({ setDisplayTab, setDisplayBusinessProfile }) =
           <BusinessName>{businessProfile.company_name}</BusinessName>
           <SocialIconsWrap>
             {businessProfile.handles.instagram ? (
-              <a href={businessProfile.handles.instagram}>
+              <a href={businessProfile.handles.instagram} target="_blank" rel="noopener noreferrer">
                 <SocialIcon>
                   <img src={InstagramImg} alt="" />
                 </SocialIcon>
               </a>
             ) : null}
             {businessProfile.handles.twitter ? (
-              <a href={businessProfile.handles.instagram}>
+              <a href={businessProfile.handles.twitter} target="_blank" rel="noopener noreferrer">
                 <SocialIcon>
                   <img src={TwitterImg} alt="" />
                 </SocialIcon>
               </a>
             ) : null}
             {businessProfile.handles.linkedin ? (
-              <a href={businessProfile.handles.linkedin}>
+              <a href={businessProfile.handles.linkedin} target="_blank" rel="noopener noreferrer">
                 <SocialIcon>
                   <img src={LinkedInImg} alt="" />
                 </SocialIcon>
               </a>
             ) : null}
             {businessProfile.handles.facebook ? (
-              <a href={businessProfile.handles.facebook}>
+              <a href={businessProfile.handles.facebook} target="_blank" rel="noopener noreferrer">
                 <SocialIcon>
                   <img src={FacebookImg} alt="" />
                 </SocialIcon>
