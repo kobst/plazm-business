@@ -3,6 +3,7 @@ import {
   addLikeToEvents,
   fetchEvent,
   fetchEventForAWeek,
+  findCommentReplies,
   findPostComments,
 } from "../graphQl";
 import { graphQlEndPoint } from "../Api/graphQl";
@@ -112,6 +113,19 @@ export const addLikeToCommentViaSocket = createAsyncThunk(
   }
 );
 
+/*
+ * @desc:  to fetch post replies
+ * @params: postId
+ */
+export const fetchCommentReplies = createAsyncThunk(
+  "data/fetchEventCommentReplies",
+  async (businessId) => {
+    const graphQl = findCommentReplies(businessId);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.getReplies;
+  }
+);
+
 export const slice = createSlice({
   name: "event",
   initialState: {
@@ -120,6 +134,7 @@ export const slice = createSlice({
     loadingEventComments: false,
     date: new Date(),
     events: [],
+    loadingReplies: false,
   },
   reducers: {
     nextWeekDate: (state) => {
@@ -205,7 +220,12 @@ export const slice = createSlice({
             (i) => i._id !== action.payload.eventId
           );
           let eventsArr = [];
-          eventsArr.push({ ...findEvent, comments: action.payload.data.post });
+          let arr = action.payload.data.post.map((obj) => ({
+            ...obj.comment,
+            totalReplies: obj.totalReplies,
+            replies: [],
+          }));
+          eventsArr.push({ ...findEvent, comments: arr });
           eventsArr = eventsArr.concat(findOtherEvents);
           state.events = eventsArr.sort((a, b) => {
             return new Date(b.createdAt) - new Date(a.createdAt);
@@ -216,6 +236,56 @@ export const slice = createSlice({
     [fetchEventComments.rejected]: (state, action) => {
       if (state.loadingEventComments) {
         state.loadingEventComments = false;
+        state.error = action.payload;
+      }
+    },
+    [fetchCommentReplies.pending]: (state) => {
+      if (!state.loadingReplies) {
+        state.loadingReplies = true;
+      }
+    },
+    [fetchCommentReplies.fulfilled]: (state, action) => {
+      if (state.loadingReplies) {
+        state.loadingReplies = false;
+        if (action.payload) {
+            let posts = current(state.events).filter(
+              (i) => i._id !== action.payload.postId
+            );
+            let posts1 = current(state.events).filter(
+              (i) => i._id === action.payload.postId
+            )[0];
+            let dummy1 = [];
+            if(posts1.comments.length>0) {
+            let findComment = posts1.comments.filter(i=>i._id === action.payload.commentId);
+            let findComment1 = posts1.comments.filter(i=>i._id !== action.payload.commentId);
+            let newArr = []
+            newArr = newArr.concat({...findComment[0],replies: action.payload.replies})            
+            newArr = newArr.concat(findComment1)
+            newArr = newArr.sort((a, b) => {
+              return (
+                new Date(a.createdAt) -
+                new Date(b.createdAt)
+              );
+            });
+            dummy1.push({
+              ...posts1,
+              comments: newArr,
+              totalComments: posts1.totalComments,
+            });
+            dummy1 = dummy1.concat(posts);
+            state.events = dummy1.sort((a, b) => {
+              return (
+                new Date(b.createdAt) -
+                new Date(a.createdAt)
+              );
+            });
+          }
+        }
+      }
+    },
+    [fetchCommentReplies.rejected]: (state, action) => {
+      if (state.loadingReplies) {
+        state.loadingReplies = false;
         state.error = action.payload;
       }
     },

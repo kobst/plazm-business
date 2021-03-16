@@ -126,8 +126,9 @@ const UserMessage = ({ postData }) => {
   );
   const business = useSelector((state) => state.business.business)[0];
   const [description, setDescription] = useState("");
-  const filters = useSelector((state) => state.business.filters);
   const [displayCommentInput, setDisplayCommentInput] = useState(false);
+  const [flag, setFlag] = useState(false)
+  const filters = useSelector((state) => state.business.filters);
   const user = useSelector((state) => state.user.user);
   const ws = useSelector((state) => state.user.ws);
 
@@ -321,6 +322,8 @@ const UserMessage = ({ postData }) => {
                 postLikes={postData.postDetails.likes}
                 displayCommentInput={displayCommentInput}
                 setDisplayCommentInput={setDisplayCommentInput}
+                setFlag={setFlag}
+                flag={flag}
               />
             </ProfileNameWrap>
           </ProfileNameHeader>
@@ -342,6 +345,8 @@ const UserMessage = ({ postData }) => {
                     i={i}
                     postData={postData}
                     displayComments={displayComments}
+                    setFlag={setFlag}
+                    flag={flag}
                   />
                 );
               })
@@ -360,7 +365,7 @@ const UserMessage = ({ postData }) => {
                   setDescription={setDescription}
                   addComment={addComment}
                 />
-                <ScrollToBottom />
+                {flag===false?<ScrollToBottom />:null}
               </>
             ) : null}
           </ReplyWrap>

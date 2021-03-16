@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import ProfileImg from "../../../../../../../images/profile-img.png";
 import ReplyInput from "./ReplyInput";
 import LikesBar from "../LikesBar";
 import { Scrollbars } from "react-custom-scrollbars";
 import { useSelector } from "react-redux";
+import ValueLoader from "../../../../../../../utils/loader";
+import ScrollToBottom1 from "./ScrollToBottom1";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -27,7 +29,6 @@ const UserMessageContent = styled.div`
 const ReplyWrap = styled.div`
   overflow-x: hidden;
 `;
-
 
 const ProfileNameHeader = styled.div`
   display: flex;
@@ -89,17 +90,24 @@ const ChatInput = styled.div`
   }
 `;
 
-const Comments = ({ i, postData, displayComments }) => {
+const LoaderWrap = styled.div`
+  width: 100%;
+  position: relative;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 100px 0 0 0;
+`;
+
+const Comments = ({ i, postData, displayComments, setFlag, flag }) => {
   const [displayReply, setDisplayReply] = useState(false);
   const [displayReplyInput, setDisplayReplyInput] = useState(false);
   const [replyDescription, setReplyDescription] = useState("");
   const ws = useSelector((state) => state.user.ws);
   const business = useSelector((state) => state.business.business);
-  const divRef = useRef(null);
-  useEffect(() => {
-    if (displayReply === true || displayReplyInput === true)
-      divRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
-  }, [displayReply, displayReplyInput]);
+  const loadingReplies = useSelector((state) => state.business.loadingReplies);
 
   /** to add reply function */
   const addReply = async (obj) => {
@@ -162,11 +170,13 @@ const Comments = ({ i, postData, displayComments }) => {
             displayComments={displayReply}
             name={i.userId.name}
             totalLikes={i.likes.length}
-            totalComments={i.replies.length}
+            totalComments={i.totalReplies}
             commentId={i._id}
             commentLikes={i.likes}
             setDisplayReplyInput={setDisplayReplyInput}
             displayReplyInput={displayReplyInput}
+            flag={flag}
+            setFlag={setFlag}
           />
           <Scrollbars
             autoHeight
@@ -176,8 +186,8 @@ const Comments = ({ i, postData, displayComments }) => {
             style={{ overflowX: "hidden" }}
             className="InnerScroll"
           >
-            <ReplyWrap ref={divRef} style={{ overflowX: "hidden" }}>
-              {displayReply && i.replies.length > 0 ? (
+            <ReplyWrap style={{ overflowX: "hidden" }}>
+              {displayReply && i.replies.length > 0 && !loadingReplies ? (
                 <div>
                   {i.replies.map((j, key) => (
                     <>
@@ -211,8 +221,12 @@ const Comments = ({ i, postData, displayComments }) => {
                     </>
                   ))}
                 </div>
+              ) : displayReply && loadingReplies ? (
+                <LoaderWrap>
+                  <ValueLoader />
+                </LoaderWrap>
               ) : null}
-              {displayReply || displayReplyInput ? (
+              {displayReply && !loadingReplies ? (
                 <>
                   <ReplyInput
                     type="reply"
@@ -224,6 +238,7 @@ const Comments = ({ i, postData, displayComments }) => {
                     addReply={addReply}
                     name={i.userId.name}
                   />
+                  <ScrollToBottom1/>
                 </>
               ) : null}
             </ReplyWrap>

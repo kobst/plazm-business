@@ -11,6 +11,7 @@ import {
   AddLikeToPost,
   addLikeToComment,
   addLikeViaSocket,
+  fetchCommentReplies,
 } from "../../../../../../../reducers/businessReducer";
 import { unwrapResult } from "@reduxjs/toolkit";
 
@@ -99,6 +100,7 @@ const LikesBar = ({
   postLikes,
   commentId,
   commentLikes,
+  setFlag
 }) => {
   const [eventDate, setEventDate] = useState();
   const [userLikedPost, setUserLikedPost] = useState(false);
@@ -166,7 +168,11 @@ const LikesBar = ({
   const displayCommentsWithPosts = () => {
     setDisplayComments(!displayComments);
     if (type === "comment") {
+      setFlag(false)
       if (displayComments === false) dispatch(fetchPostComments(postId));
+    } else if (type === "reply") {
+      setFlag(true)
+      if (displayComments === false) dispatch(fetchCommentReplies(commentId));
     }
   };
 
@@ -222,8 +228,12 @@ const LikesBar = ({
 
   /** to display comments of the post on click of comment icon */
   const setReplyDisplay = () => {
-    if (type === "reply") setDisplayComments(!displayComments);
-    else if (type === "comment") {
+    if (type === "reply") {
+      setDisplayComments(!displayComments);
+      setFlag(true)
+      if (displayComments === false) dispatch(fetchCommentReplies(commentId));
+    } else if (type === "comment") {
+      setFlag(false)
       setDisplayComments(!displayComments);
       if (displayComments === false) dispatch(fetchPostComments(postId));
     }

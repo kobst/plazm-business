@@ -6,6 +6,7 @@ import {
   findPostComments,
   addLikeToPost,
   AddLikeToComment,
+  findCommentReplies,
 } from "../graphQl";
 
 /*
@@ -77,6 +78,19 @@ export const fetchPostComments = createAsyncThunk(
     const graphQl = findPostComments(businessId);
     const response = await graphQlEndPoint(graphQl);
     return response.data.getComment;
+  }
+);
+
+/*
+ * @desc:  to fetch post replies
+ * @params: postId
+ */
+export const fetchCommentReplies = createAsyncThunk(
+  "data/fetchCommentReplies",
+  async (businessId) => {
+    const graphQl = findCommentReplies(businessId);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.getReplies;
   }
 );
 
@@ -171,6 +185,7 @@ export const slice = createSlice({
     loadingAddLike: false,
     loadingAddLikeToComment: false,
     loadingAddFilteredPosts: false,
+    loadingReplies: false,
     totalPosts: 0,
   },
   reducers: {
@@ -403,16 +418,21 @@ export const slice = createSlice({
         if (action.payload) {
           if (action.payload.post.length > 0) {
             let posts = current(state.posts).filter(
-              (i) => i.postId !== action.payload.post[0].itemId
+              (i) => i.postId !== action.payload.post[0].comment.itemId
             );
             let posts1 = current(state.posts).filter(
-              (i) => i.postId === action.payload.post[0].itemId
+              (i) => i.postId === action.payload.post[0].comment.itemId
             )[0];
             let dummy1 = [];
+            let arr = action.payload.post.map((obj) => ({
+              ...obj.comment,
+              totalReplies: obj.totalReplies,
+              replies: [],
+            }));
             dummy1.push({
-              postId: action.payload.post[0].itemId,
+              postId: action.payload.post[0].comment.itemId,
               postDetails: posts1.postDetails,
-              comments: action.payload.post,
+              comments: arr,
               totalComments: action.payload.post.length,
               totalLikes: posts1.totalLikes,
             });
@@ -430,6 +450,58 @@ export const slice = createSlice({
     [fetchPostComments.rejected]: (state, action) => {
       if (state.loadingPostComments) {
         state.loadingPostComments = false;
+        state.error = action.payload;
+      }
+    },
+    [fetchCommentReplies.pending]: (state) => {
+      if (!state.loadingReplies) {
+        state.loadingReplies = true;
+      }
+    },
+    [fetchCommentReplies.fulfilled]: (state, action) => {
+      if (state.loadingReplies) {
+        state.loadingReplies = false;
+        if (action.payload) {
+            let posts = current(state.posts).filter(
+              (i) => i.postId !== action.payload.postId
+            );
+            let posts1 = current(state.posts).filter(
+              (i) => i.postId === action.payload.postId
+            )[0];
+            let dummy1 = [];
+            if(posts1.comments.length>0) {
+            let findComment = posts1.comments.filter(i=>i._id === action.payload.commentId);
+            let findComment1 = posts1.comments.filter(i=>i._id !== action.payload.commentId);
+            let newArr = []
+            newArr = newArr.concat({...findComment[0],replies: action.payload.replies})            
+            newArr = newArr.concat(findComment1)
+            newArr = newArr.sort((a, b) => {
+              return (
+                new Date(a.createdAt) -
+                new Date(b.createdAt)
+              );
+            });
+            dummy1.push({
+              postId: action.payload.postId,
+              postDetails: posts1.postDetails,
+              comments: newArr,
+              totalComments: posts1.totalComments,
+              totalLikes: posts1.totalLikes,
+            });
+            dummy1 = dummy1.concat(posts);
+            state.posts = dummy1.sort((a, b) => {
+              return (
+                new Date(b.postDetails.createdAt) -
+                new Date(a.postDetails.createdAt)
+              );
+            });
+          }
+        }
+      }
+    },
+    [fetchCommentReplies.rejected]: (state, action) => {
+      if (state.loadingReplies) {
+        state.loadingReplies = false;
         state.error = action.payload;
       }
     },

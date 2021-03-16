@@ -11,12 +11,6 @@ const getPlace = (obj) => {
               totalPosts
               place {
                 _id
-                location {
-                  type
-                  coordinates
-                }
-                latitude
-                longitude
                 hours_format {
                     StartDay
                     EndDay
@@ -25,32 +19,16 @@ const getPlace = (obj) => {
                 }
                 additional_media
                 filter_tags
-                posts
-                events
                 company_name
-                city
                 address
-                postal_code
-                state_province
                 telephone
-                hours
-                genType
-                web_site
-                place_id
-                group_classification
                 handles {
                     twitter
                     facebook
                     instagram
                     linkedin
                 }
-                rating
                 default_image_url
-                type
-                status
-                profilePhotoAvailable
-                map_link
-                userSub
             }
             posts {
                 postId
@@ -86,11 +64,6 @@ const getPlace = (obj) => {
                     }
                     likes {
                       name
-                      email
-                      userSub
-                      phoneNumber
-                      photo 
-                      lockProfile
                       _id
                     }
                     media {

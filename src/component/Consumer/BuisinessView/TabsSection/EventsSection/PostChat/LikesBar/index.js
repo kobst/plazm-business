@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   AddLikeToEvent,
   addLikeViaSocket,
+  fetchCommentReplies,
   fetchEventComments,
 } from "../../../../../../../reducers/eventReducer";
 import { unwrapResult } from "@reduxjs/toolkit";
@@ -98,6 +99,8 @@ const LikesBar = ({
   postLikes,
   commentId,
   commentLikes,
+  flag,
+  setFlag,
 }) => {
   const [eventDate, setEventDate] = useState();
   const dispatch = useDispatch();
@@ -156,13 +159,15 @@ const LikesBar = ({
   }, [date, commentLikes, postLikes, type, user._id]);
 
   /** to display comments on a particular event */
-  const displayCommentsWithEvents =  () => {
+  const displayCommentsWithEvents = () => {
     if (type === "comment") {
       setDisplayEventComments(!displayEventComments);
-      if(displayEventComments === false)
-      dispatch(fetchEventComments(eventId));
+      setFlag(false);
+      if (displayEventComments === false) dispatch(fetchEventComments(eventId));
     } else if (type === "reply") {
       setDisplayReply(!displayReply);
+      setFlag(true);
+      if (displayReply === false) dispatch(fetchCommentReplies(commentId));
     }
   };
 
@@ -173,7 +178,9 @@ const LikesBar = ({
         eventId: eventId,
         userId: user._id,
       };
-      dispatch(addLikeViaSocket({postId: eventId, like:{...obj,_id: user._id}}))
+      dispatch(
+        addLikeViaSocket({ postId: eventId, like: { ...obj, _id: user._id } })
+      );
       const data = await dispatch(AddLikeToEvent(obj));
       const response = await unwrapResult(data);
       if (response.success === true) {
@@ -188,8 +195,8 @@ const LikesBar = ({
         );
       }
     } else if (type === "reply") {
-      setUserLikedComment(true)
-      setLikeCountForComment(totalLikes+1)
+      setUserLikedComment(true);
+      setLikeCountForComment(totalLikes + 1);
       const obj = {
         id: commentId,
         userId: user._id,
@@ -214,9 +221,12 @@ const LikesBar = ({
   /** to display comments of a particular event */
   const displayComments = () => {
     if (type === "comment") {
-      setDisplayEventComments(!displayEventComments)
-      if(displayEventComments === false)
-      dispatch(fetchEventComments(eventId));
+      setDisplayEventComments(!displayEventComments);
+      setFlag(false);
+      if (displayEventComments === false) dispatch(fetchEventComments(eventId));
+    } else if (type === "reply") {
+      setFlag(true);
+      if (displayReply === false) dispatch(fetchCommentReplies(commentId));
     }
   };
   return (
@@ -224,7 +234,7 @@ const LikesBar = ({
       <BottomBarLikes>
         <LikesBtnWrap>
           {type !== "commentReply" ? (
-            <UsersButton onClick={()=> displayComments()}>
+            <UsersButton onClick={() => displayComments()}>
               {type === "comment" ? "Reply" : "Reply"}
             </UsersButton>
           ) : null}
@@ -245,7 +255,7 @@ const LikesBar = ({
         {type !== "commentReply" ? (
           <LikesBtnWrap>
             <RightDiv>
-              {(userLikedEvent || userLikedComment) ? (
+              {userLikedEvent || userLikedComment ? (
                 <MdFavorite style={{ color: "red" }} />
               ) : (
                 <MdFavoriteBorder />

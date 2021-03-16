@@ -2,13 +2,15 @@
 @desc: findPostComments query
 */
 const findPostComments = (id) => {
-    const graphQl = {
-      query: `
+  const graphQl = {
+    query: `
             query GetComment($id: ID!){
                 getComment(input: {id:$id}) {
                 message
                 success
                 post {
+                  totalReplies
+                  comment {
                     _id
                     itemId 
                     userId {
@@ -36,32 +38,54 @@ const findPostComments = (id) => {
                         lockProfile
                       }
                       replies {
-                          userId {
-                            _id
-                            name
-                            email
-                            phoneNumber
-                            userSub
-                            photo
-                            lockProfile
-                            }
-                            taggedUsers {
-                              _id
-                              name
-                              email
-                            }
                       body
                       created_on
-                  }
+                      }
                   createdAt
                   updatedAt
               }
+            }
               }
             }`,
-            variables: {
-                id:id,
-              },
-    };
-    return graphQl;
+    variables: {
+      id: id,
+    },
   };
-  export { findPostComments };
+  return graphQl;
+};
+
+/*
+@desc: findCommentReplies query
+*/
+const findCommentReplies = (id) => {
+  const graphQl = {
+    query: `
+          query GetReplies($id: ID!){
+            getReplies(input: {id:$id}) {
+              message
+              success
+              postId
+              commentId
+              replies {
+                        userId {
+                          _id
+                          name
+                          photo
+                          }
+                          taggedUsers {
+                            _id
+                            name
+                            email
+                          }
+                    body
+                    created_on
+                }
+            }
+          }`,
+    variables: {
+      id: id,
+    },
+  };
+  return graphQl;
+};
+export { findPostComments ,findCommentReplies};

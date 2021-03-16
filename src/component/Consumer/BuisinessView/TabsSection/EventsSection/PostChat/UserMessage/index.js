@@ -114,6 +114,7 @@ const LoaderWrap = styled.div`
 const UserMessage = ({ eventData }) => {
   const businessInfo = useSelector((state) => state.business.business)[0];
   const [displayEventComments, setDisplayEventComments] = useState(false);
+  const [flag, setFlag] = useState(false);
   const business = useSelector((state) => state.business.business);
   const [displayEventCommentInput, setDisplayEventCommentInput] = useState(
     false
@@ -209,9 +210,7 @@ const UserMessage = ({ eventData }) => {
               startDay={
                 days[new Date(eventData.eventSchedule.start_time).getDay()]
               }
-              endDay={
-                days[new Date(eventData.eventSchedule.end_time).getDay()]
-              }
+              endDay={days[new Date(eventData.eventSchedule.end_time).getDay()]}
             />
             <TimeBar
               startTime={new Date(eventData.eventSchedule.start_time)}
@@ -228,6 +227,8 @@ const UserMessage = ({ eventData }) => {
               postLikes={eventData.likes}
               displayEventCommentInput={displayEventCommentInput}
               setDisplayEventCommentInput={setDisplayEventCommentInput}
+              flag={flag}
+              setFlag={setFlag}
             />
           </ProfileNameWrap>
         </ProfileNameHeader>
@@ -247,14 +248,21 @@ const UserMessage = ({ eventData }) => {
           !loadingComments &&
           eventData.comments.length > 0 ? (
             eventData.comments.map((i) => {
-              return <Comment i={i} eventData={eventData} />;
+              return (
+                <Comment
+                  i={i}
+                  eventData={eventData}
+                  flag={flag}
+                  setFlag={setFlag}
+                />
+              );
             })
           ) : displayEventComments && loadingComments ? (
             <LoaderWrap>
               <ValueLoader />
             </LoaderWrap>
           ) : null}
-          {displayEventComments && !loadingComments ? (
+          {displayEventComments ? (
             <>
               <ReplyInput
                 type="comment"
@@ -263,7 +271,7 @@ const UserMessage = ({ eventData }) => {
                 setDescription={setDescription}
                 addComment={addComment}
               />
-              <ScrollToBottom />
+              {flag === false ? <ScrollToBottom /> : null}
             </>
           ) : null}
         </ReplyWrap>
