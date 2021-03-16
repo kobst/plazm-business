@@ -334,6 +334,7 @@ export const slice = createSlice({
         if (posts1 && posts1.length > 0) {
           let comments = posts1[0].comments.concat({
             ...action.payload.commentInfo,
+            totalReplies: 0,
             userId: action.payload.userDetails,
             likes: [],
           });
@@ -379,7 +380,7 @@ export const slice = createSlice({
             },
           });
           let commentsSort = findComment1
-            .concat({ ...findComment, replies: replies })
+            .concat({ ...findComment, replies: replies, totalReplies: findComment.totalReplies+1 })
             .sort((a, b) => {
               return new Date(a.createdAt) - new Date(b.createdAt);
             });

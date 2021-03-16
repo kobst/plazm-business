@@ -306,6 +306,7 @@ export const slice = createSlice({
             ...action.payload.commentInfo,
             ownerId: action.payload.userInfo,
             userId: action.payload.userDetails,
+            totalReplies: 0,
             likes: [],
           });
           let eventsArr = [];
@@ -345,7 +346,7 @@ export const slice = createSlice({
             },
           });
           let commentsSort = findComment1
-            .concat({ ...findComment, replies: replies })
+            .concat({ ...findComment, replies: replies, totalReplies: findComment.totalReplies+1 })
             .sort((a, b) => {
               return new Date(a.createdAt) - new Date(b.createdAt);
             });
