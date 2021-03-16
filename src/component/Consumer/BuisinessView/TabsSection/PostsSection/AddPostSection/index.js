@@ -423,12 +423,13 @@ const AddPostSection = ({ profile, businessId }) => {
               {imageError !== "" ? (
                 <p>{imageError}</p>
               ) : (
-                imageUrl.map((v) => (
+                imageUrl.map((v,key) => (
                   <UploadImage
                     disabled={loader}
                     id={v.id}
                     onClick={() => deleteImage(v)}
                     key={v.id}
+                    key={key}
                   >
                     <img src={v.value} alt="Upload" />
                   </UploadImage>

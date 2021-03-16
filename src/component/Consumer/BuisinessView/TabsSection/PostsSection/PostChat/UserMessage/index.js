@@ -339,10 +339,11 @@ const UserMessage = ({ postData }) => {
             {(displayComments || displayCommentInput) &&
             !loadingComments &&
             postData.comments.length > 0 ? (
-              postData.comments.map((i) => {
+              postData.comments.map((i,key) => {
                 return (
                   <Comment
                     i={i}
+                    key={key}
                     postData={postData}
                     displayComments={displayComments}
                     setFlag={setFlag}

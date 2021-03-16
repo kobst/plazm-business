@@ -247,9 +247,10 @@ const UserMessage = ({ eventData }) => {
           {displayEventComments &&
           !loadingComments &&
           eventData.comments.length > 0 ? (
-            eventData.comments.map((i) => {
+            eventData.comments.map((i, key) => {
               return (
                 <Comment
+                  key={key}
                   i={i}
                   eventData={eventData}
                   flag={flag}
