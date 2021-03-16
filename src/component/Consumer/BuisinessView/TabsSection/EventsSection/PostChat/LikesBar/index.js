@@ -226,6 +226,7 @@ const LikesBar = ({
       if (displayEventComments === false) dispatch(fetchEventComments(eventId));
     } else if (type === "reply") {
       setFlag(true);
+      setDisplayReply(!displayReply);
       if (displayReply === false) dispatch(fetchCommentReplies(commentId));
     }
   };
