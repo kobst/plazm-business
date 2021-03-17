@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Select from "../../../../UI/Select";
-import SaveButton from "../../../../UI/SaveButton";
-import AddImageImg from "../../../../../../images/addImage.svg";
 import CrossIcon from "../../../../../../images/cross-icon.svg";
 import { MentionsInput, Mention } from "react-mentions";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +9,7 @@ import "./style.css";
 import { unwrapResult } from "@reduxjs/toolkit";
 import defaultMentionStyle from "./style";
 import ModalComponent from '../../../../UI/Modal'
+import AddPostModal from '../../../../AddPostModal'
 
 const bucket = process.env.REACT_APP_BUCKET;
 
@@ -356,7 +354,7 @@ const AddPostSection = ({ profile, businessId }) => {
           isOpen={addPostModal}
           closeModal={() => setAddPostModal(false)}
         >
-          <p>fsdfsdf</p>
+          <AddPostModal />
         </ModalComponent>
       )}
       <AddPostSectionContent>
