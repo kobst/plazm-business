@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { MdClose } from "react-icons/md";
 import Textarea from '../../UI/Textarea'
+import BottomButtons from '../BottomButtons'
 import AddImageImg from "../../../../images/addImage.svg";
 
 const PostContent = styled.div`
@@ -27,6 +28,10 @@ const Heading = styled.h1`
   font-weight: bold;
   font-size: 16px;
   line-height: 20px;
+  @media (max-width: 767px) {
+    font-size: 14px;
+    line-height: normal;
+  }
 `;
 
 const CloseModal = styled.div`
@@ -89,6 +94,7 @@ const ModalPostContent = ({}) => {
                 />
               </AddImageDiv>
           </AddYourPostBar>
+          <BottomButtons />
       </PostContent>
     </>
   );
