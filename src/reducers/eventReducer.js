@@ -160,11 +160,13 @@ export const slice = createSlice({
       const currentDate = new Date(state.date);
       currentDate.setDate(currentDate.getDate() + 7);
       state.date = currentDate;
+      state.initialWeekEvents = []
     },
     previousWeekDate: (state) => {
       const currentDate = new Date(state.date);
       currentDate.setDate(currentDate.getDate() - 7);
       state.date = currentDate;
+      state.initialWeekEvents = []
     },
     setCurrentDate: (state) => {
       state.date = new Date();
@@ -213,6 +215,9 @@ export const slice = createSlice({
             comments: [],
           }));
           state.events = arr.sort((a, b) => {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+          });
+          state.initialWeekEvents = arr.sort((a, b) => {
             return new Date(b.createdAt) - new Date(a.createdAt);
           });
         }
