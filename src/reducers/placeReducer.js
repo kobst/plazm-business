@@ -32,7 +32,7 @@ export const slice = createSlice({
         if (state.loading) {
           state.loading = false;
           if(action.payload) {
-              state.place = action.payload;
+              state.place = action.payload.sort((a, b) => a.company_name < b.company_name ? -1 : (a.company_name > b.company_name ? 1 : 0))
           }
         }
       },

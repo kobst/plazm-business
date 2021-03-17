@@ -8,7 +8,7 @@ const ChatContent = styled.div`
   width: 100%;
   position: relative;
   display: flex;
-  padding: 12px 0 12px 0px;
+  padding: 12px 0 12px 12px;
   flex-direction: column;
   /* overflow: hidden; */
   @media (max-width: 767px) {
@@ -36,7 +36,7 @@ const PostChat = () => {
       >
         <ChatContent>
           {events && events.length > 0 ? (
-            events.map((i) => <UserMessage eventData={i} />)
+            events.map((i,key) => <UserMessage eventData={i} key={key} />)
           ) : !loading && !loadingForAWeek ? (
             <center>
               <NoMorePost>No events to display</NoMorePost>

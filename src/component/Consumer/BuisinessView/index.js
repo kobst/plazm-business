@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import BuisinessHeader from "./BuisinessHeader";
 import TabsSection from "./TabsSection";
 import BuisinessHeaderNotClaimed from "./BuisinessHeaderNotClaimed";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import BuisinessProfileDetails from "./BuisinessProfileDetails";
-import ValueLoader from '../../../utils/loader';
+import ValueLoader from "../../../utils/loader";
+import { setSideFilters } from "../../../reducers/businessReducer";
 
 const BuisinessViewContent = styled.div`
   width: 100%;
@@ -35,19 +36,29 @@ const BuisinessView = ({
   businessExists,
   businessId,
 }) => {
-  const loading = useSelector(state => state.business.loading);
+  const loading = useSelector((state) => state.business.loading);
   const businessProfile = useSelector((state) => state.business.business);
   const [displayBusinessProfile, setDisplayBusinessProfile] = useState(false);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setSideFilters());
+  });
   return (
     <>
-     {!loading&& !businessExists && businessProfile && businessProfile.length === 0? <h3>Business Does Not Exist</h3>:
-      loading? (
+      {!loading &&
+      !businessExists &&
+      businessProfile &&
+      businessProfile.length === 0 ? (
+        <h3>Business Does Not Exist</h3>
+      ) : loading ? (
         <LoaderWrap>
           <ValueLoader />
         </LoaderWrap>
       ) : (
         <BuisinessViewContent>
-          {businessProfile&&businessProfile.length>0&&businessProfile[0].userSub !== null ? (
+          {businessProfile &&
+          businessProfile.length > 0 &&
+          businessProfile[0].userSub !== null ? (
             displayBusinessProfile ? (
               <BuisinessProfileDetails
                 setDisplayBusinessProfile={setDisplayBusinessProfile}

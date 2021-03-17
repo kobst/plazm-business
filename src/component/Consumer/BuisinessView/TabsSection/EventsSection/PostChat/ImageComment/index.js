@@ -12,6 +12,8 @@ const BottomBarLikes = styled.div`
   margin: 0;
   img{
     max-height: 224px;
+    /* width: 100%;
+    height: 100%; */
   }
 `
 

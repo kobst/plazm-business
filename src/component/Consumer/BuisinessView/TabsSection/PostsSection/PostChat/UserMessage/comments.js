@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import ProfileImg from "../../../../../../../images/profile-img.png";
 import ReplyInput from "./ReplyInput";
 import LikesBar from "../LikesBar";
 import { Scrollbars } from "react-custom-scrollbars";
 import { useSelector } from "react-redux";
+import ValueLoader from "../../../../../../../utils/loader";
+import ScrollToBottom1 from "./ScrollToBottom1";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -17,11 +19,16 @@ const UserMessageContent = styled.div`
     align-items: flex-start;
   }
   &.UserReplyContent {
-    padding: 0 0 0 40px;
+    padding: 10px 0 0 40px;
+  }
+  .InnerScroll {
+    overflow-x: hidden;
   }
 `;
 
-const ReplyWrap = styled.div``;
+const ReplyWrap = styled.div`
+  overflow-x: hidden;
+`;
 
 const ProfileNameHeader = styled.div`
   display: flex;
@@ -33,7 +40,7 @@ const ProfileThumb = styled.div`
   width: 30px;
   height: 30px;
   margin: 0 10px 0 0;
-  border: 1px solid #ffffff;
+  border: 3px solid #ffffff;
   border-radius: 50%;
   overflow: hidden;
   img {
@@ -59,7 +66,7 @@ const ProfileName = styled.div`
   font-style: normal;
   font-size: 13px;
   line-height: normal;
-  margin: 0 0 5px 0;
+  margin: 7px 0 5px 0;
   font-weight: 700;
   color: #ff2e9a;
   span {
@@ -79,21 +86,28 @@ const ChatInput = styled.div`
     font-size: 13px;
     color: #ff2e9a;
     font-weight: 600;
+    cursor: pointer;
   }
 `;
 
-const Comments = ({ i, postData, displayComments }) => {
+const LoaderWrap = styled.div`
+  width: 100%;
+  position: relative;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 30px 0 30px;
+`;
+
+const Comments = ({ i, postData, displayComments, setFlag, flag }) => {
   const [displayReply, setDisplayReply] = useState(false);
   const [displayReplyInput, setDisplayReplyInput] = useState(false);
   const [replyDescription, setReplyDescription] = useState("");
   const ws = useSelector((state) => state.user.ws);
   const business = useSelector((state) => state.business.business);
-  const divRef = useRef(null);
-  useEffect(() => {
-    if (displayReply === true || displayReplyInput===true)
-      divRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
-  }, [displayReply,displayReplyInput]);
-
+  const loadingReplies = useSelector((state) => state.business.loadingReplies);
 
   /** to add reply function */
   const addReply = async (obj) => {
@@ -142,7 +156,7 @@ const Comments = ({ i, postData, displayComments }) => {
         </ProfileThumb>
         <ProfileNameWrap>
           <ProfileName>
-            Top 10 Restaurant in NYC<span>by</span>
+            <span>by</span>
             {i.userId.name}{" "}
           </ProfileName>
           <ChatInput>
@@ -156,20 +170,24 @@ const Comments = ({ i, postData, displayComments }) => {
             displayComments={displayReply}
             name={i.userId.name}
             totalLikes={i.likes.length}
-            totalComments={i.replies.length}
+            totalComments={i.totalReplies}
             commentId={i._id}
             commentLikes={i.likes}
             setDisplayReplyInput={setDisplayReplyInput}
             displayReplyInput={displayReplyInput}
+            flag={flag}
+            setFlag={setFlag}
           />
           <Scrollbars
             autoHeight
             autoHeightMin={0}
             autoHeightMax={300}
             thumbMinSize={30}
+            style={{ overflowX: "hidden" }}
+            className="InnerScroll"
           >
-            <ReplyWrap ref={divRef}>
-              {(displayReply || displayReplyInput) && i.replies.length > 0 ? (
+            <ReplyWrap style={{ overflowX: "hidden" }}>
+              {displayReply && i.replies.length > 0 && !loadingReplies ? (
                 <div>
                   {i.replies.map((j, key) => (
                     <>
@@ -186,7 +204,7 @@ const Comments = ({ i, postData, displayComments }) => {
                           </ProfileThumb>
                           <ProfileNameWrap>
                             <ProfileName>
-                              Top 10 Restaurant in NYC<span>by</span>
+                              <span>by</span>
                               {j.userId.name}{" "}
                             </ProfileName>
                             <ChatInput>
@@ -202,24 +220,29 @@ const Comments = ({ i, postData, displayComments }) => {
                       </UserMessageContent>
                     </>
                   ))}
+                  <ScrollToBottom1 />
                 </div>
-              ) : null}
-              {displayReply || displayReplyInput ? (
-                <>
-                  <ReplyInput
-                    type="reply"
-                    postId={postData.postId}
-                    displayComments={displayComments}
-                    replyDescription={replyDescription}
-                    setReplyDescription={setReplyDescription}
-                    commentId={i._id}
-                    addReply={addReply}
-                    name={i.userId.name}
-                  />
-                </>
+              ) : displayReply && loadingReplies ? (
+                <LoaderWrap>
+                  <ValueLoader />
+                </LoaderWrap>
               ) : null}
             </ReplyWrap>
           </Scrollbars>
+          {displayReply && !loadingReplies ? (
+            <>
+              <ReplyInput
+                type="reply"
+                postId={postData.postId}
+                displayComments={displayComments}
+                replyDescription={replyDescription}
+                setReplyDescription={setReplyDescription}
+                commentId={i._id}
+                addReply={addReply}
+                name={i.userId.name}
+              />
+            </>
+          ) : null}
         </ProfileNameWrap>
       </ProfileNameHeader>
     </UserMessageContent>

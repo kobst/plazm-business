@@ -3,7 +3,7 @@
     width: 100%;
     border: 0;
     color: white;
-    background: #1c1d1f;
+    /* background: #1c1d1f; */
     position: relative;
   }
   
@@ -14,10 +14,15 @@
     margin: 0;
     padding: 0;
     color: white;
-    background: #F3F3F3;
+    /* background: #F3F3F3; */
     box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
+    margin-top: -1px;
   }
   
+  .MainTabs .react-tabs__tab:last-child, .MainTabs .react-tabs__tab:nth-last-child(2){
+    pointer-events: none;
+  }
+
   .MainTabs .react-tabs__tab {
     height: 98px;
     list-style: none;
@@ -27,10 +32,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #f3f3f3;
   }
 
   .MainTabs .react-tabs__tab:nth-child(1){
     height: 64px;
+    /* border-bottom: 0.5px dashed #C4C4C4 !important; */
   }
 
   .MainTabs .react-tabs__tab:nth-child(1), .MainTabs .react-tabs__tab:nth-child(2), .MainTabs .react-tabs__tab:nth-child(3){
@@ -108,8 +115,31 @@
     border-radius: 0;
   }
 
+  .MainTabs .react-tabs__tab.LIBefore{
+    border-radius: 0 0 20px;
+  }
+  .MainTabs .react-tabs__tab.LIAFter{
+    border-radius: 0 20px 0px 0;
+  }
+
   .MainTabs #react-tabs-0{
-    background: transparent;
+    /* background: transparent; */
+    pointer-events: none;
+    background: #f3f3f3;
+  }
+
+  .MainTabs .react-tabs__tab.react-tabs__tab--selected:focus {
+      box-shadow: none;
+  }
+
+  .MainTabs .react-tabs__tab:focus:after {
+    display: none;
+  }
+
+  .MainTabs .react-tabs__tab:focus {
+      box-shadow: none;
+      border-color: transparent;
+      outline: none;
   }
 
   @media (max-width:767px){

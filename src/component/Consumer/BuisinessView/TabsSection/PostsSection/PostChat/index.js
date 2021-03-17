@@ -68,13 +68,14 @@ const PostChat = () => {
           filters: filters,
           value: offset + 20,
           ownerId: user._id,
+          sideFilters: {likes: sideFilterForLikes}
         })
       );
     } else setHasMore(false);
   };
   return (
     <>
-      <div id="scrollableDiv" style={{ height: 450, overflow: "auto" }}>
+      <div id="scrollableDiv" style={{ height: 'calc(100vh - 490px)', overflow: "auto" }}>
         {/* <Scrollbars
         autoHeight
         autoHeightMin={0}
@@ -110,7 +111,7 @@ const PostChat = () => {
         >
           <ChatContent>
             {!loadingFilterData && posts.length > 0 ? (
-              posts.map((i) => <UserMessage postData={i} />)
+              posts.map((i,key) => <UserMessage postData={i} key={key} />)
             ) : loadingFilterData ? (
               <LoaderWrap>
                 <ValueLoader />

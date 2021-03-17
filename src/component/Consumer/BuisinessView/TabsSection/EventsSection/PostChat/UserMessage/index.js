@@ -16,6 +16,7 @@ import {
   addLikeToCommentViaSocket,
 } from "../../../../../../../reducers/eventReducer";
 import Comment from "./comments";
+import ScrollToBottom from "./ScrollToBottom";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -28,7 +29,10 @@ const UserMessageContent = styled.div`
     align-items: flex-start;
   }
   &.UserReplyContent {
-    padding: 0 0 0 40px;
+    padding: 10px 0 0 40px;
+  }
+  .InnerScroll {
+    overflow-x: hidden;
   }
 `;
 const ProfileNameHeader = styled.div`
@@ -41,7 +45,7 @@ const ProfileThumb = styled.div`
   width: 30px;
   height: 30px;
   margin: 0 10px 0 0;
-  border: 1px solid #ffffff;
+  border: 3px solid #ffffff;
   border-radius: 50%;
   overflow: hidden;
   img {
@@ -67,7 +71,7 @@ const ProfileName = styled.div`
   font-style: normal;
   font-size: 13px;
   line-height: normal;
-  margin: 0 0 5px 0;
+  margin: 7px 0 5px 0;
   font-weight: 700;
   color: #ff2e9a;
   span {
@@ -104,23 +108,27 @@ const LoaderWrap = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 100px 0 0 0;
+  margin: 30px 0 10px;
 `;
 
 const UserMessage = ({ eventData }) => {
   const businessInfo = useSelector((state) => state.business.business)[0];
   const [displayEventComments, setDisplayEventComments] = useState(false);
+  const [flag, setFlag] = useState(false);
   const business = useSelector((state) => state.business.business);
-  const [displayEventCommentInput, setDisplayEventCommentInput] = useState(false)
-  const [description, setDescription] = useState(""); 
+  const [displayEventCommentInput, setDisplayEventCommentInput] = useState(
+    false
+  );
+  const [description, setDescription] = useState("");
   const loadingComments = useSelector(
     (state) => state.event.loadingEventComments
   );
   const ws = useSelector((state) => state.user.ws);
+  const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
-
   ws.onmessage = (evt) => {
     const message = JSON.parse(evt.data);
+    console.log(message);
     if (message.commentInfo && message.commentInfo.type === "Events") {
       /** to add event comment via socket */
       setDescription("");
@@ -143,7 +151,10 @@ const UserMessage = ({ eventData }) => {
       }
     } else if (message.like && message.type === "Event") {
       /** to add post like via socket */
-      if (message.businessId === business[0]._id) {
+      if (
+        message.businessId === business[0]._id &&
+        message.like._id !== user._id
+      ) {
         dispatch(addLikeViaSocket(message));
       }
     }
@@ -197,11 +208,9 @@ const UserMessage = ({ eventData }) => {
             <ChatInput>{eventData.description}</ChatInput>
             <DateBar
               startDay={
-                days[new Date(eventData.eventSchedule.start_time).getDay() - 1]
+                days[new Date(eventData.eventSchedule.start_time).getDay()]
               }
-              endDay={
-                days[new Date(eventData.eventSchedule.end_time).getDay() - 1]
-              }
+              endDay={days[new Date(eventData.eventSchedule.end_time).getDay()]}
             />
             <TimeBar
               startTime={new Date(eventData.eventSchedule.start_time)}
@@ -218,6 +227,8 @@ const UserMessage = ({ eventData }) => {
               postLikes={eventData.likes}
               displayEventCommentInput={displayEventCommentInput}
               setDisplayEventCommentInput={setDisplayEventCommentInput}
+              flag={flag}
+              setFlag={setFlag}
             />
           </ProfileNameWrap>
         </ProfileNameHeader>
@@ -230,30 +241,42 @@ const UserMessage = ({ eventData }) => {
         autoHeightMin={0}
         autoHeightMax={300}
         thumbMinSize={30}
+        className="InnerScroll"
       >
         <ReplyWrap>
-          {(displayEventComments||displayEventCommentInput) &&
+          {displayEventComments &&
           !loadingComments &&
           eventData.comments.length > 0 ? (
-            eventData.comments.map((i) => {
-              return <Comment i={i} eventData={eventData} />;
+            eventData.comments.map((i, key) => {
+              return (
+                <Comment
+                  key={key}
+                  i={i}
+                  eventData={eventData}
+                  flag={flag}
+                  setFlag={setFlag}
+                />
+              );
             })
-          ) : (displayEventComments||displayEventCommentInput)  && loadingComments ? (
+          ) : displayEventComments && loadingComments ? (
             <LoaderWrap>
               <ValueLoader />
             </LoaderWrap>
           ) : null}
+          {displayEventComments ? (
+            <>
+              <ReplyInput
+                type="comment"
+                eventId={eventData._id}
+                description={description}
+                setDescription={setDescription}
+                addComment={addComment}
+              />
+              {flag === false ? <ScrollToBottom /> : null}
+            </>
+          ) : null}
         </ReplyWrap>
       </Scrollbars>
-      {(displayEventComments||displayEventCommentInput)  ? (
-        <ReplyInput
-          type="comment"
-          eventId={eventData._id}
-          description={description}
-          setDescription={setDescription}
-          addComment={addComment}
-        />
-      ) : null}
     </>
   );
 };

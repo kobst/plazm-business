@@ -101,7 +101,7 @@ const BusinessList = ({setDisplayTab}) => {
           <Scrollbars
             autoHeight
             autoHeightMin={0}
-            autoHeightMax={800}
+            autoHeightMax={860}
             thumbMinSize={30}
           >
             <BusinessListWrap>

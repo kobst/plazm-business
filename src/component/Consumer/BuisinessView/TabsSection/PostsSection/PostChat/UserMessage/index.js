@@ -14,6 +14,8 @@ import {
   addLikeToCommentViaSocket,
 } from "../../../../../../../reducers/businessReducer";
 import Comment from "./comments";
+import ScrollToBottom from "./ScrollToBottom";
+import { setWs } from "../../../../../../../reducers/userReducer";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -26,7 +28,10 @@ const UserMessageContent = styled.div`
     align-items: flex-start;
   }
   &.UserReplyContent {
-    padding: 0 0 0 40px;
+    padding: 10px 0 0 40px;
+  }
+  .InnerScroll {
+    overflow-x: hidden;
   }
 `;
 const UserMsgWrap = styled.div`
@@ -51,7 +56,7 @@ const ProfileThumb = styled.div`
   width: 30px;
   height: 30px;
   margin: 0 10px 0 0;
-  border: 1px solid #ffffff;
+  border: 3px solid #ffffff;
   border-radius: 50%;
   overflow: hidden;
   img {
@@ -77,7 +82,7 @@ const ProfileName = styled.div`
   font-style: normal;
   font-size: 13px;
   line-height: normal;
-  margin: 0 0 5px 0;
+  margin: 7px 0 5px 0;
   font-weight: 700;
   color: #ff2e9a;
   span {
@@ -97,6 +102,7 @@ const ChatInput = styled.div`
     font-size: 13px;
     color: #ff2e9a;
     font-weight: 600;
+    cursor: pointer;
   }
 `;
 
@@ -110,7 +116,7 @@ const LoaderWrap = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 100px 0 0 0;
+  margin: 30px 0 10px;
 `;
 const UserMessage = ({ postData }) => {
   const dispatch = useDispatch();
@@ -120,13 +126,14 @@ const UserMessage = ({ postData }) => {
   );
   const business = useSelector((state) => state.business.business)[0];
   const [description, setDescription] = useState("");
-  const filters = useSelector((state) => state.business.filters);
   const [displayCommentInput, setDisplayCommentInput] = useState(false);
+  const [flag, setFlag] = useState(false);
+  const filters = useSelector((state) => state.business.filters);
   const user = useSelector((state) => state.user.user);
   const ws = useSelector((state) => state.user.ws);
+
   ws.onmessage = (evt) => {
     const message = JSON.parse(evt.data);
-
     /** to add reply via socket */
     if (message.comment && message.commentId && message.type === "Post") {
       if (message.businessId === business._id) {
@@ -163,9 +170,21 @@ const UserMessage = ({ postData }) => {
       }
     } else if (message.like && message.type === "Post") {
       /** to add post like via socket */
-      if (message.businessId === business._id) {
+      if (
+        message.businessId === business._id &&
+        message.like._id !== user._id
+      ) {
         dispatch(addLikeViaSocket(message));
       }
+    }
+  };
+
+  ws.onclose = () => {
+    if (user) {
+      const ws = new WebSocket(
+        `${process.env.REACT_APP_WEBSOCKET}/?userId=${user._id}`
+      );
+      dispatch(setWs(ws));
     }
   };
 
@@ -281,7 +300,7 @@ const UserMessage = ({ postData }) => {
             </ProfileThumb>
             <ProfileNameWrap>
               <ProfileName>
-                Top 10 Restaurant in NYC<span>by</span>
+                <span>by</span>
                 {postData.postDetails.ownerId === null
                   ? business.company_name
                   : postData.postDetails.ownerId.name}{" "}
@@ -306,6 +325,8 @@ const UserMessage = ({ postData }) => {
                 postLikes={postData.postDetails.likes}
                 displayCommentInput={displayCommentInput}
                 setDisplayCommentInput={setDisplayCommentInput}
+                setFlag={setFlag}
+                flag={flag}
               />
             </ProfileNameWrap>
           </ProfileNameHeader>
@@ -315,20 +336,27 @@ const UserMessage = ({ postData }) => {
           autoHeightMin={0}
           autoHeightMax={300}
           thumbMinSize={30}
+          className="InnerScroll"
         >
           <ReplyWrap>
             {(displayComments || displayCommentInput) &&
             !loadingComments &&
             postData.comments.length > 0 ? (
-              postData.comments.map((i) => {
-                return (
-                  <Comment
-                    i={i}
-                    postData={postData}
-                    displayComments={displayComments}
-                  />
-                );
-              })
+              <>
+                {postData.comments.map((i, key) => {
+                  return (
+                    <Comment
+                      i={i}
+                      key={key}
+                      postData={postData}
+                      displayComments={displayComments}
+                      setFlag={setFlag}
+                      flag={flag}
+                    />
+                  );
+                })}
+                {flag === false ? <ScrollToBottom /> : null}
+              </>
             ) : (displayComments || displayCommentInput) && loadingComments ? (
               <LoaderWrap>
                 <ValueLoader />
@@ -337,14 +365,16 @@ const UserMessage = ({ postData }) => {
           </ReplyWrap>
         </Scrollbars>
         {displayComments || displayCommentInput ? (
-          <ReplyInput
-            type="comment"
-            postId={postData.postId}
-            displayComments={displayComments}
-            description={description}
-            setDescription={setDescription}
-            addComment={addComment}
-          />
+          <>
+            <ReplyInput
+              type="comment"
+              postId={postData.postId}
+              displayComments={displayComments}
+              description={description}
+              setDescription={setDescription}
+              addComment={addComment}
+            />
+          </>
         ) : null}
       </UserMsgWrap>
     </>
