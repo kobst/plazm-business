@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { graphQlEndPoint } from "../Api/graphQl";
-import { CreateList, getAllLists } from "../graphQl";
+import { CreateList, getAllLists, getUserLists } from "../graphQl";
 
 
 /*
@@ -21,6 +21,17 @@ export const createList = createAsyncThunk("data/createList", async (obj) => {
   const graphQl = CreateList(obj);
   const response = await graphQlEndPoint(graphQl);
   return response.data.createList.list;
+});
+
+/*
+ * @desc:  to fetch all the user Lists
+ * @params: ownerId
+ */
+export const GetUserLists = createAsyncThunk("data/getUserLists", async (id) => {
+  const graphQl = getUserLists(id);
+  const response = await graphQlEndPoint(graphQl);
+  console.log(response)
+  return response.data.getUserLists.list;
 });
 export const slice = createSlice({
     name: "list",
