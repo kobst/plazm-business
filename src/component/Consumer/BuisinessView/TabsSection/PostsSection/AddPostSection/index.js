@@ -364,7 +364,6 @@ const AddPostSection = ({ profile, businessId }) => {
   };
   return (
     <>
-<<<<<<< HEAD
       {addPostModal && (
         <ModalComponent
           closeOnOutsideClick={true}
@@ -374,8 +373,6 @@ const AddPostSection = ({ profile, businessId }) => {
           <AddPostModal />
         </ModalComponent>
       )}
-=======
->>>>>>> c74cf87786b5fb8378ff23fd8323ccfe4575f8c0
       <AddPostSectionContent>
         <TopSection>
           <TextAreaWrap>
