@@ -18,6 +18,8 @@ import { findPostComments, findCommentReplies } from "./query/comments";
 
 import { addLikeToEvents } from "./mutations/event";
 
+import { CreateList } from "./mutations/list";
+
 export {
   findCommentReplies,
   getSelectedUser,
@@ -37,4 +39,5 @@ export {
   CreateReply,
   findPostComments,
   AddLikeToComment,
+  CreateList
 };

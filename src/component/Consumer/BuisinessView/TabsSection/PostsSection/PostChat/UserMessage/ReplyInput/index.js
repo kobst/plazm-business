@@ -5,7 +5,10 @@ import ProfileImg from "../../../../../../../../images/profile-img.png";
 import { useDispatch, useSelector } from "react-redux";
 import { MentionsInput, Mention } from "react-mentions";
 import Picker from "emoji-picker-react";
-import { findAllUsers } from "../../../../../../../../reducers/consumerReducer";
+import {
+  findSelectedUsers,
+} from "../../../../../../../../reducers/consumerReducer";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const ChatContent = styled.div`
   width: 100%;
@@ -164,12 +167,6 @@ const ReplyInput = ({
   const [displayEmoji, setDisplayEmoji] = useState(false);
   const dispatch = useDispatch();
 
-  let userMentionData = allUsers.map((myUser) => ({
-    id: myUser._id,
-    display: `@${myUser.name}`,
-    image: myUser.photo ? myUser.photo : "",
-  }));
-
   /** on select of emoji */
   const onEmojiClick = (event, emojiObject) => {
     if (type === "comment") setDescription(description + emojiObject.emoji);
@@ -180,7 +177,6 @@ const ReplyInput = ({
   /** handle change input for mentions input */
   const handleChange = async (event, newValue, newPlainTextValue, mentions) => {
     /** to fetch list of all users */
-    if (allUsers.length === 0) await dispatch(findAllUsers());
 
     if (mentions.length !== 0) {
       /** to find if the mention is of users or lists */
@@ -247,6 +243,21 @@ const ReplyInput = ({
       </MentionsImage>
     );
   };
+
+  /** to search users for mentions */
+  const fetchUsers = async (query, callback) => {
+    if (!query) return;
+    const data = await dispatch(findSelectedUsers(query));
+    const res = await unwrapResult(data);
+    if (res) {
+      let x = res.map((myUser) => ({
+        id: myUser._id,
+        display: `@${myUser.name}`,
+        image: myUser.photo ? myUser.photo : "",
+      }));
+      return callback(x);
+    }
+  };
   return (
     <>
       <ChatContent>
@@ -268,7 +279,7 @@ const ReplyInput = ({
                 <Mention
                   type="user"
                   trigger="@"
-                  data={userMentionData}
+                  data={fetchUsers}
                   appendSpaceOnAdd={true}
                   renderSuggestion={customRenderSuggestion}
                 />

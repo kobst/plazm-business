@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { graphQlEndPoint } from "../Api/graphQl";
-import { getAllLists } from "../graphQl";
+import { CreateList, getAllLists } from "../graphQl";
 
 
 /*
@@ -13,6 +13,15 @@ export const findAllLists = createAsyncThunk("data/findAllLists", async () => {
     return response.data.getLists.list;
   });
 
+/*
+ * @desc:  to create a list
+ * @params: businessId
+ */
+export const createList = createAsyncThunk("data/createList", async (obj) => {
+  const graphQl = CreateList(obj);
+  const response = await graphQlEndPoint(graphQl);
+  return response.data.createList.list;
+});
 export const slice = createSlice({
     name: "list",
     initialState: {

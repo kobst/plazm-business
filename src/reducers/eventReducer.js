@@ -126,6 +126,23 @@ export const fetchCommentReplies = createAsyncThunk(
   }
 );
 
+
+/*
+ * @desc:  to fetch events of a complete week for a particular business
+ * @params: businessId,date
+ */
+export const fetchInitialWeekEvents = createAsyncThunk(
+  "data/fetchInitialWeekEvents",
+  async ({ businessId, date }) => {
+    const obj = {
+      date: date,
+      id: businessId,
+    };
+    const graphQl = fetchEventForAWeek(obj);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.getEventsForTheWeek.event;
+  }
+);
 export const slice = createSlice({
   name: "event",
   initialState: {
@@ -135,6 +152,8 @@ export const slice = createSlice({
     date: new Date(),
     events: [],
     loadingReplies: false,
+    initialWeekEvents: [],
+    loadingForInitialWeek: false
   },
   reducers: {
     nextWeekDate: (state) => {
@@ -182,6 +201,7 @@ export const slice = createSlice({
       if (!state.loadingForAWeek) {
         state.loadingForAWeek = true;
         state.events = [];
+        state.initialWeekEvents = []
       }
     },
     [fetchEventsForTheWeek.fulfilled]: (state, action) => {
@@ -201,6 +221,33 @@ export const slice = createSlice({
     [fetchEventsForTheWeek.rejected]: (state, action) => {
       if (state.loadingForAWeek) {
         state.loadingForAWeek = false;
+        state.error = action.payload;
+      }
+    },
+
+    [fetchInitialWeekEvents.pending]: (state) => {
+      if (!state.loadingForInitialWeek) {
+        state.loadingForInitialWeek = true;
+        // state.events = [];
+      }
+    },
+    [fetchInitialWeekEvents.fulfilled]: (state, action) => {
+      if (state.loadingForInitialWeek) {
+        state.loadingForInitialWeek = false;
+        if (action.payload) {
+          let arr = action.payload.map((obj) => ({
+            ...obj,
+            comments: [],
+          }));
+          state.initialWeekEvents = arr.sort((a, b) => {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+          });
+        }
+      }
+    },
+    [fetchInitialWeekEvents.rejected]: (state, action) => {
+      if (state.loadingForInitialWeek) {
+        state.loadingForInitialWeek = false;
         state.error = action.payload;
       }
     },
@@ -385,7 +432,6 @@ export const slice = createSlice({
       }
     },
     [addLikeToCommentViaSocket.fulfilled]: (state, action) => {
-      console.log(action.payload);
       if (action.payload) {
         let findPost = current(state.events).filter(
           (i) => i._id !== action.payload.postId

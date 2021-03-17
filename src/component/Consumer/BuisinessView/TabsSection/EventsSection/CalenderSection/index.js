@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import moment from "moment";
 import { RiArrowDropLeftLine, RiArrowDropRightLine } from "react-icons/ri";
 import SaveButton from "../../../../UI/SaveButton";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,6 +9,8 @@ import {
   nextWeekDate,
   previousWeekDate,
   fetchEventsForTheWeek,
+  fetchInitialWeekEvents,
+  setCurrentDate,
 } from "../../../../../../reducers/eventReducer";
 import ValueLoader from "../../../../../../utils/loader";
 
@@ -29,8 +32,9 @@ const TopArrows = styled.div`
   align-items: flex-start;
   justify-content: flex-start;
   button {
-    :hover, :focus {
-      outline:0;
+    :hover,
+    :focus {
+      outline: 0;
       border: 0;
     }
   }
@@ -54,8 +58,9 @@ const LeftArrow = styled.div`
     opacity: 0.4;
     cursor: not-allowed;
   }
-  :hover, :focus {
-    outline:0;
+  :hover,
+  :focus {
+    outline: 0;
     border: 0;
   }
 `;
@@ -75,8 +80,9 @@ const RightArrow = styled.div`
   &.disabled {
     opacity: 0.4;
   }
-  :hover, :focus {
-    outline:0;
+  :hover,
+  :focus {
+    outline: 0;
     border: 0;
   }
 `;
@@ -154,12 +160,21 @@ const CalenderSection = ({ businessId }) => {
   const eventDate = useSelector((state) => state.event.date);
   const loader = useSelector((state) => state.event.loading);
   const loadingForWeek = useSelector((state) => state.event.loadingForAWeek);
+  const events = useSelector((state) => state.event.events);
+  const initialWeekEvents = useSelector(
+    (state) => state.event.initialWeekEvents
+  );
   const currentDate = new Date();
   const days = ["sun", "mon", "tue", "wed", "thurs", "fri", "sat"];
   const [currentDay, setCurrentDay] = useState(days[currentDate.getDay()]);
   const currentDayNo = currentDate.getDay();
   const [previousBtnClicked, setPreviousBtnClicked] = useState(false);
   const [nextBtnClicked, setNextBtnClicked] = useState(false);
+  const [dateToDisplay, setDateToDisplay] = useState({
+    firstDay: "",
+    lastDay: "",
+  });
+  const [todayClicked, setTodayClicked] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -170,10 +185,57 @@ const CalenderSection = ({ businessId }) => {
         await dispatch(
           fetchEventsForTheWeek({ businessId: businessId, date: eventDate })
         );
+      /** to fetch week data for initial week */ else {
+        await dispatch(
+          fetchInitialWeekEvents({ businessId: businessId, date: eventDate })
+        );
+      }
     };
     fetchData();
   }, [eventDate]);
 
+  /** to set week starting and end date */
+  useEffect(() => {
+    const curr = new Date(eventDate);
+    const first = curr.getDate() - curr.getDay() + 1;
+    const last = first + 6;
+    const firstDay = new Date(curr.setDate(first)).toUTCString();
+    const lastDay = new Date(curr.setDate(last)).toUTCString();
+    setDateToDisplay({
+      firstDay: moment(firstDay).format("DD MMM YYYY"),
+      lastDay: moment(lastDay).format("DD MMM YYYY"),
+    });
+  }, [eventDate]);
+
+  /** to check if events are present or not on that particular day */
+  const checkEventPresent = (param) => {
+    /**for initial week */
+    if (initialWeekEvents.length > 0) {
+      const find = initialWeekEvents.find(
+        (i) =>
+          moment(new Date(i.eventSchedule.start_time)).format("DD MMM YYYY") ===
+          moment(
+            moment(dateToDisplay.firstDay).add(param, "day"),
+            "DD-MM-YYYY"
+          ).format("DD MMM YYYY")
+      );
+      if (find) return true;
+      else return false;
+    } else {
+      const find = events.find(
+        (i) =>
+          moment(new Date(i.eventSchedule.start_time)).format("DD MMM YYYY") ===
+          moment(
+            moment(dateToDisplay.firstDay).add(param, "day"),
+            "DD-MM-YYYY"
+          ).format("DD MMM YYYY")
+      );
+      if (find) return true;
+      else return false;
+    }
+  };
+
+  /** to fetch event for a particular day */
   const fetchEventsForAParticularDay = async (day, dayNo) => {
     if (dayNo >= currentDayNo || nextBtnClicked) {
       const obj = {
@@ -186,16 +248,33 @@ const CalenderSection = ({ businessId }) => {
     }
   };
 
+  /** to toggle event date to previous week */
   const previousWeek = async () => {
+    setTodayClicked(false);
     dispatch(previousWeekDate());
     setPreviousBtnClicked(true);
     setNextBtnClicked(false);
   };
 
+  /** to toggle event date to next week */
   const nextWeek = async () => {
     dispatch(nextWeekDate());
+    setTodayClicked(false);
     setPreviousBtnClicked(false);
     setNextBtnClicked(true);
+  };
+
+  const todayFunction = () => {
+    setCurrentDay(days[currentDate.getDay()]);
+    setTodayClicked(true);
+    dispatch(setCurrentDate());
+    dispatch(
+      fetchEventsForTheDay({
+        date: new Date(),
+        day: days[new Date().getDay()],
+        businessId: businessId,
+      })
+    );
   };
   return (
     <>
@@ -217,20 +296,35 @@ const CalenderSection = ({ businessId }) => {
                 <RiArrowDropLeftLine />
               </LeftArrow>
             </Button>
+            {dateToDisplay.firstDay + " - " + dateToDisplay.lastDay}
             <RightArrow>
               <RiArrowDropRightLine onClick={() => nextWeek()} />
             </RightArrow>
+            <button onClick={() => todayFunction()}>Today</button>
           </TopArrows>
           <DaysWrap>
             <DaysDiv
               className={
-                previousBtnClicked
-                  ? 0 < currentDayNo?"disabled":""
-                  : nextBtnClicked ? ""
-                  : currentDay === "sun"
-                  ? "current"
-                  : 0 < currentDayNo
-                  ? "disabled"
+                currentDay === "sun"
+                  ? todayClicked || !nextBtnClicked
+                    ? "current"
+                    : previousBtnClicked
+                    ? 0 < currentDayNo
+                      ? "disabled"
+                      : checkEventPresent(6) === true
+                      ? "present"
+                      : ""
+                    : nextBtnClicked
+                    ? checkEventPresent(6) === true
+                      ? "present"
+                      : ""
+                    : currentDay === "sun"
+                    ? "current"
+                    : 0 < currentDayNo
+                    ? "disabled"
+                    : checkEventPresent(6) === true
+                    ? "present"
+                    : ""
                   : ""
               }
               onClick={() => fetchEventsForAParticularDay("sun", 0)}
@@ -239,13 +333,26 @@ const CalenderSection = ({ businessId }) => {
             </DaysDiv>
             <DaysDiv
               className={
-                previousBtnClicked
-                  ?  1< currentDayNo?"disabled":""
-                  : nextBtnClicked ? ""
-                  : currentDay === "mon"
-                  ? "current"
-                  : 1 < currentDayNo
-                  ? "disabled"
+                currentDay === "mon"
+                  ? todayClicked || !nextBtnClicked
+                    ? "current"
+                    : previousBtnClicked
+                    ? 1 < currentDayNo
+                      ? "disabled"
+                      : checkEventPresent(0) === true
+                      ? "present"
+                      : ""
+                    : nextBtnClicked
+                    ? checkEventPresent(0) === true
+                      ? "present"
+                      : ""
+                    : currentDay === "mon"
+                    ? "current"
+                    : 1 < currentDayNo
+                    ? "disabled"
+                    : checkEventPresent(0) === true
+                    ? "present"
+                    : ""
                   : ""
               }
               onClick={() => fetchEventsForAParticularDay("mon", 1)}
@@ -254,13 +361,26 @@ const CalenderSection = ({ businessId }) => {
             </DaysDiv>
             <DaysDiv
               className={
-                previousBtnClicked
-                  ? 2< currentDayNo?"disabled":""
-                  : nextBtnClicked ? ""
-                  : currentDay === "tue"
-                  ? "current"
-                  : 2 < currentDayNo
-                  ? "disabled"
+                currentDay === "tue"
+                  ? todayClicked || !nextBtnClicked
+                    ? "current"
+                    : previousBtnClicked
+                    ? 2 < currentDayNo
+                      ? "disabled"
+                      : checkEventPresent(1) === true
+                      ? "present"
+                      : ""
+                    : nextBtnClicked
+                    ? checkEventPresent(1) === true
+                      ? "present"
+                      : ""
+                    : currentDay === "tue"
+                    ? "current"
+                    : 2 < currentDayNo
+                    ? "disabled"
+                    : checkEventPresent(1) === true
+                    ? "present"
+                    : ""
                   : ""
               }
               onClick={() => fetchEventsForAParticularDay("tue", 2)}
@@ -269,13 +389,26 @@ const CalenderSection = ({ businessId }) => {
             </DaysDiv>
             <DaysDiv
               className={
-                previousBtnClicked
-                  ? 3< currentDayNo?"disabled":""
-                  : nextBtnClicked ? ""
-                  : currentDay === "wed"
-                  ? "current"
-                  : 3 < currentDayNo
-                  ? "disabled"
+                currentDay === "wed"
+                  ? todayClicked || !nextBtnClicked
+                    ? "current"
+                    : previousBtnClicked
+                    ? 3 < currentDayNo
+                      ? "disabled"
+                      : checkEventPresent(2) === true
+                      ? "present"
+                      : ""
+                    : nextBtnClicked
+                    ? checkEventPresent(2) === true
+                      ? "present"
+                      : ""
+                    : currentDay === "wed"
+                    ? "current"
+                    : 3 < currentDayNo
+                    ? "disabled"
+                    : checkEventPresent(2) === true
+                    ? "present"
+                    : ""
                   : ""
               }
               onClick={() => fetchEventsForAParticularDay("wed", 3)}
@@ -284,13 +417,26 @@ const CalenderSection = ({ businessId }) => {
             </DaysDiv>
             <DaysDiv
               className={
-                previousBtnClicked
-                  ? 4< currentDayNo?"disabled":""
-                  : nextBtnClicked ? ""
-                  : currentDay === "thurs"
-                  ? "current"
-                  : 4 < currentDayNo
-                  ? "disabled"
+                currentDay === "thurs"
+                  ? todayClicked || !nextBtnClicked
+                    ? "current"
+                    : previousBtnClicked
+                    ? 4 < currentDayNo
+                      ? "disabled"
+                      : checkEventPresent(3) === true
+                      ? "present"
+                      : ""
+                    : nextBtnClicked
+                    ? checkEventPresent(3) === true
+                      ? "present"
+                      : ""
+                    : currentDay === "thurs"
+                    ? "current"
+                    : 4 < currentDayNo
+                    ? "disabled"
+                    : checkEventPresent(3) === true
+                    ? "present"
+                    : ""
                   : ""
               }
               onClick={() => fetchEventsForAParticularDay("thurs", 4)}
@@ -299,13 +445,26 @@ const CalenderSection = ({ businessId }) => {
             </DaysDiv>
             <DaysDiv
               className={
-                previousBtnClicked
-                  ? 5< currentDayNo?"disabled":""
-                  : nextBtnClicked ? ""
-                  : currentDay === "fri"
-                  ? "current"
-                  : 5 < currentDayNo
-                  ? "disabled"
+                currentDay === "fri"
+                  ? todayClicked || !nextBtnClicked
+                    ? "current"
+                    : previousBtnClicked
+                    ? 5 < currentDayNo
+                      ? "disabled"
+                      : checkEventPresent(4) === true
+                      ? "present"
+                      : ""
+                    : nextBtnClicked
+                    ? checkEventPresent(4) === true
+                      ? "present"
+                      : ""
+                    : currentDay === "fri"
+                    ? "current"
+                    : 5 < currentDayNo
+                    ? "disabled"
+                    : checkEventPresent(4) === true
+                    ? "present"
+                    : ""
                   : ""
               }
               onClick={() => fetchEventsForAParticularDay("fri", 5)}
@@ -314,13 +473,26 @@ const CalenderSection = ({ businessId }) => {
             </DaysDiv>
             <DaysDiv
               className={
-                previousBtnClicked
-                  ? 6< currentDayNo? "disabled":""
-                  : nextBtnClicked ? ""
-                  : currentDay === "sat"
-                  ? "current"
-                  : 6 < currentDayNo
-                  ? "disabled"
+                currentDay === "sat"
+                  ? todayClicked || !nextBtnClicked
+                    ? "current"
+                    : previousBtnClicked
+                    ? 6 < currentDayNo
+                      ? "disabled"
+                      : checkEventPresent(5) === true
+                      ? "present"
+                      : ""
+                    : nextBtnClicked
+                    ? checkEventPresent(5) === true
+                      ? "present"
+                      : ""
+                    : currentDay === "sat"
+                    ? "current"
+                    : 6 < currentDayNo
+                    ? "disabled"
+                    : checkEventPresent(5) === true
+                    ? "present"
+                    : ""
                   : ""
               }
               onClick={() => fetchEventsForAParticularDay("sat", 6)}
