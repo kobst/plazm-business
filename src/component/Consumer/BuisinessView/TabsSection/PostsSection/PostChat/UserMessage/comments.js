@@ -220,29 +220,29 @@ const Comments = ({ i, postData, displayComments, setFlag, flag }) => {
                       </UserMessageContent>
                     </>
                   ))}
+                  <ScrollToBottom1 />
                 </div>
               ) : displayReply && loadingReplies ? (
                 <LoaderWrap>
                   <ValueLoader />
                 </LoaderWrap>
               ) : null}
-              {displayReply && !loadingReplies ? (
-                <>
-                  <ReplyInput
-                    type="reply"
-                    postId={postData.postId}
-                    displayComments={displayComments}
-                    replyDescription={replyDescription}
-                    setReplyDescription={setReplyDescription}
-                    commentId={i._id}
-                    addReply={addReply}
-                    name={i.userId.name}
-                  />
-                  <ScrollToBottom1/>
-                </>
-              ) : null}
             </ReplyWrap>
           </Scrollbars>
+          {displayReply && !loadingReplies && i.replies.length > 0 ? (
+            <>
+              <ReplyInput
+                type="reply"
+                postId={postData.postId}
+                displayComments={displayComments}
+                replyDescription={replyDescription}
+                setReplyDescription={setReplyDescription}
+                commentId={i._id}
+                addReply={addReply}
+                name={i.userId.name}
+              />
+            </>
+          ) : null}
         </ProfileNameWrap>
       </ProfileNameHeader>
     </UserMessageContent>

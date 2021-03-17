@@ -12,7 +12,6 @@ import Dashboard from "../containers/Dashboard/Dashboard";
 import EditProfile from "../containers/Profile/";
 import ConsumerDashboard from "../containers/Consumer/Dashboard/Dashboard";
 import UserProfileContainer from "../containers/Consumer/UserProfile";
-import AddList from "../component/Consumer/BuisinessView/TabsSection/PostsSection/AddListSection";
 
 const Routes = () => (
   <Router>
@@ -38,7 +37,6 @@ const Routes = () => (
       <Route path="/edit-profile" component={EditProfile} />
       <Route path="/b/:id" exact render={(props) => <ConsumerDashboard isBusinessOpen={true} {...props} />} />
       <Route path="/u/:id" exact render={(props) => <UserProfileContainer/>} />
-      <Route path="/list" exact render={(props) => <AddList/>} />
       <Redirect exact from="/*" to="/business/login" />
     </Switch>
   </Router>

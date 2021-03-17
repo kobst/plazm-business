@@ -29,8 +29,9 @@ const TopArrows = styled.div`
   position: relative;
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 10px 0;
   button {
     :hover,
     :focus {
@@ -113,12 +114,21 @@ const DaysDiv = styled.div`
   font-weight: 600;
   text-transform: uppercase;
   margin: 0 0 10px;
+  position: relative;
   @media (max-width: 767px) {
   }
   &.current {
     background: #ff2e9a;
-    box-shadow: 10px 0px 43px -12px #1c1838;
+    box-shadow: 0px 0px 4px #ff2e9a;
     backdrop-filter: blur(250px);
+    :after {
+      content: "";
+      width: 35px;
+      height: 2px;
+      background: #ff2e9a;
+      position: absolute;
+      bottom: -6px;
+    }
   }
   &.disabled {
     opacity: 0.4;
@@ -155,6 +165,41 @@ const Button = styled.button`
   border: 0;
 `;
 
+const CurrentDate = styled.div`
+  color: #fff;
+  font-size: 10px;
+  font-weight: 500;
+`;
+
+const ArrowsWrap = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const TodayBtn = styled.button`
+  background: #ff006b;
+  border-radius: 40px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  border: 0;
+  padding: 4px 9px;
+  cursor: pointer;
+`;
+
+const DaysIndicator = styled.div`
+  width: 7px;
+  height: 7px;
+  background: #ff2e9a;
+  box-shadow: 0px 0px 4px #ff2e9a;
+  border-radius: 50%;
+  position: absolute;
+  right: 0;
+  top: 0;
+`;
+
 const CalenderSection = ({ businessId }) => {
   const dispatch = useDispatch();
   const eventDate = useSelector((state) => state.event.date);
@@ -175,6 +220,7 @@ const CalenderSection = ({ businessId }) => {
     lastDay: "",
   });
   const [todayClicked, setTodayClicked] = useState(false);
+  const today = days[currentDate.getDay()];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -285,218 +331,264 @@ const CalenderSection = ({ businessId }) => {
       ) : (
         <CalenderSectionWrap>
           <TopArrows>
-            <Button
-              disabled={eventDate < currentDate}
-              onClick={() => previousWeek()}
-            >
-              <LeftArrow
-                className={eventDate < currentDate ? "disabled" : ""}
+            <ArrowsWrap>
+              <Button
                 disabled={eventDate < currentDate}
+                onClick={() => previousWeek()}
               >
-                <RiArrowDropLeftLine />
-              </LeftArrow>
-            </Button>
-            {dateToDisplay.firstDay + " - " + dateToDisplay.lastDay}
-            <RightArrow>
-              <RiArrowDropRightLine onClick={() => nextWeek()} />
-            </RightArrow>
-            <button onClick={() => todayFunction()}>Today</button>
+                <LeftArrow
+                  className={eventDate < currentDate ? "disabled" : ""}
+                  disabled={eventDate < currentDate}
+                >
+                  <RiArrowDropLeftLine />
+                </LeftArrow>
+              </Button>
+              <CurrentDate>
+                {dateToDisplay.firstDay + " - " + dateToDisplay.lastDay}
+              </CurrentDate>
+              <RightArrow>
+                <RiArrowDropRightLine onClick={() => nextWeek()} />
+              </RightArrow>
+            </ArrowsWrap>
+            <TodayBtn onClick={() => todayFunction()}>Today</TodayBtn>
           </TopArrows>
           <DaysWrap>
             <DaysDiv
               className={
-                currentDay === "sun"
-                  ? todayClicked || !nextBtnClicked
-                    ? "current"
-                    : previousBtnClicked
-                    ? 0 < currentDayNo
-                      ? "disabled"
-                      : checkEventPresent(6) === true
-                      ? "present"
-                      : ""
-                    : nextBtnClicked
-                    ? checkEventPresent(6) === true
-                      ? "present"
-                      : ""
-                    : currentDay === "sun"
-                    ? "current"
-                    : 0 < currentDayNo
+                (today === "sun" && todayClicked) ||
+                (today === "sun" && !nextBtnClicked)
+                  ? "current"
+                  : previousBtnClicked
+                  ? 0 < currentDayNo
                     ? "disabled"
                     : checkEventPresent(6) === true
                     ? "present"
                     : ""
+                  : nextBtnClicked
+                  ? checkEventPresent(6) === true
+                    ? "present"
+                    : ""
+                  : today === "sun"
+                  ? "current"
+                  : 0 < currentDayNo
+                  ? "disabled"
+                  : checkEventPresent(6) === true
+                  ? "present"
                   : ""
               }
               onClick={() => fetchEventsForAParticularDay("sun", 0)}
             >
+              {(previousBtnClicked &&
+                0 >= currentDayNo &&
+                checkEventPresent(6) === true) ||
+              (nextBtnClicked && checkEventPresent(6) === true) ||
+              (0 >= currentDayNo && checkEventPresent(6) === true) ? (
+                <DaysIndicator />
+              ) : null}
               sun
             </DaysDiv>
             <DaysDiv
               className={
-                currentDay === "mon"
-                  ? todayClicked || !nextBtnClicked
-                    ? "current"
-                    : previousBtnClicked
-                    ? 1 < currentDayNo
-                      ? "disabled"
-                      : checkEventPresent(0) === true
-                      ? "present"
-                      : ""
-                    : nextBtnClicked
-                    ? checkEventPresent(0) === true
-                      ? "present"
-                      : ""
-                    : currentDay === "mon"
-                    ? "current"
-                    : 1 < currentDayNo
+                (today === "mon" && todayClicked) ||
+                (today === "mon" && !nextBtnClicked)
+                  ? "current"
+                  : previousBtnClicked
+                  ? 1 < currentDayNo
                     ? "disabled"
                     : checkEventPresent(0) === true
                     ? "present"
                     : ""
+                  : nextBtnClicked
+                  ? checkEventPresent(0) === true
+                    ? "present"
+                    : ""
+                  : today === "mon"
+                  ? "current"
+                  : 1 < currentDayNo
+                  ? "disabled"
+                  : checkEventPresent(0) === true
+                  ? "present"
                   : ""
               }
               onClick={() => fetchEventsForAParticularDay("mon", 1)}
             >
+              {(previousBtnClicked &&
+                1 >= currentDayNo &&
+                checkEventPresent(0) === true) ||
+              (nextBtnClicked && checkEventPresent(0) === true) ||
+              (1 >= currentDayNo && checkEventPresent(0) === true) ? (
+                <DaysIndicator />
+              ) : null}
               mon
             </DaysDiv>
             <DaysDiv
               className={
-                currentDay === "tue"
-                  ? todayClicked || !nextBtnClicked
-                    ? "current"
-                    : previousBtnClicked
-                    ? 2 < currentDayNo
-                      ? "disabled"
-                      : checkEventPresent(1) === true
-                      ? "present"
-                      : ""
-                    : nextBtnClicked
-                    ? checkEventPresent(1) === true
-                      ? "present"
-                      : ""
-                    : currentDay === "tue"
-                    ? "current"
-                    : 2 < currentDayNo
+                (today === "tue" && todayClicked) ||
+                (today === "tue" && !nextBtnClicked)
+                  ? "current"
+                  : previousBtnClicked
+                  ? 2 < currentDayNo
                     ? "disabled"
                     : checkEventPresent(1) === true
                     ? "present"
                     : ""
+                  : nextBtnClicked
+                  ? checkEventPresent(1) === true
+                    ? "present"
+                    : ""
+                  : today === "tue"
+                  ? "current"
+                  : 2 < currentDayNo
+                  ? "disabled"
+                  : checkEventPresent(1) === true
+                  ? "present"
                   : ""
               }
               onClick={() => fetchEventsForAParticularDay("tue", 2)}
             >
+              {(previousBtnClicked &&
+                2 >= currentDayNo &&
+                checkEventPresent(1) === true) ||
+              (nextBtnClicked && checkEventPresent(6) === true) ||
+              (2 >= currentDayNo && checkEventPresent(1) === true) ? (
+                <DaysIndicator />
+              ) : null}
               tue
             </DaysDiv>
             <DaysDiv
               className={
-                currentDay === "wed"
-                  ? todayClicked || !nextBtnClicked
-                    ? "current"
-                    : previousBtnClicked
-                    ? 3 < currentDayNo
-                      ? "disabled"
-                      : checkEventPresent(2) === true
-                      ? "present"
-                      : ""
-                    : nextBtnClicked
-                    ? checkEventPresent(2) === true
-                      ? "present"
-                      : ""
-                    : currentDay === "wed"
-                    ? "current"
-                    : 3 < currentDayNo
+                (today === "wed" && todayClicked) ||
+                (today === "wed" && !nextBtnClicked)
+                  ? "current"
+                  : previousBtnClicked
+                  ? 3 < currentDayNo
                     ? "disabled"
                     : checkEventPresent(2) === true
                     ? "present"
                     : ""
+                  : nextBtnClicked
+                  ? checkEventPresent(2) === true
+                    ? "present"
+                    : ""
+                  : today === "wed"
+                  ? "current"
+                  : 3 < currentDayNo
+                  ? "disabled"
+                  : checkEventPresent(2) === true
+                  ? "present"
                   : ""
               }
               onClick={() => fetchEventsForAParticularDay("wed", 3)}
             >
+              {(previousBtnClicked &&
+                3 >= currentDayNo &&
+                checkEventPresent(2) === true) ||
+              (nextBtnClicked && checkEventPresent(2) === true) ||
+              (3 >= currentDayNo && checkEventPresent(2) === true) ? (
+                <DaysIndicator />
+              ) : null}
               wed
             </DaysDiv>
             <DaysDiv
               className={
-                currentDay === "thurs"
-                  ? todayClicked || !nextBtnClicked
-                    ? "current"
-                    : previousBtnClicked
-                    ? 4 < currentDayNo
-                      ? "disabled"
-                      : checkEventPresent(3) === true
-                      ? "present"
-                      : ""
-                    : nextBtnClicked
-                    ? checkEventPresent(3) === true
-                      ? "present"
-                      : ""
-                    : currentDay === "thurs"
-                    ? "current"
-                    : 4 < currentDayNo
+                (today === "thurs" && todayClicked) ||
+                (today === "thurs" && !nextBtnClicked)
+                  ? "current"
+                  : previousBtnClicked
+                  ? 4 < currentDayNo
                     ? "disabled"
                     : checkEventPresent(3) === true
                     ? "present"
                     : ""
+                  : nextBtnClicked
+                  ? checkEventPresent(3) === true
+                    ? "present"
+                    : ""
+                  : today === "thurs"
+                  ? "current"
+                  : 4 < currentDayNo
+                  ? "disabled"
+                  : checkEventPresent(3) === true
+                  ? "present"
                   : ""
               }
               onClick={() => fetchEventsForAParticularDay("thurs", 4)}
             >
+              {(previousBtnClicked &&
+                4 >= currentDayNo &&
+                checkEventPresent(3) === true) ||
+              (nextBtnClicked && checkEventPresent(3) === true) ||
+              (4 >= currentDayNo && checkEventPresent(3) === true) ? (
+                <DaysIndicator />
+              ) : null}
               thur
             </DaysDiv>
             <DaysDiv
               className={
-                currentDay === "fri"
-                  ? todayClicked || !nextBtnClicked
-                    ? "current"
-                    : previousBtnClicked
-                    ? 5 < currentDayNo
-                      ? "disabled"
-                      : checkEventPresent(4) === true
-                      ? "present"
-                      : ""
-                    : nextBtnClicked
-                    ? checkEventPresent(4) === true
-                      ? "present"
-                      : ""
-                    : currentDay === "fri"
-                    ? "current"
-                    : 5 < currentDayNo
+                (today === "fri" && todayClicked) ||
+                (today === "fri" && !nextBtnClicked)
+                  ? "current"
+                  : previousBtnClicked
+                  ? 5 < currentDayNo
                     ? "disabled"
                     : checkEventPresent(4) === true
                     ? "present"
                     : ""
+                  : nextBtnClicked
+                  ? checkEventPresent(4) === true
+                    ? "present"
+                    : ""
+                  : today === "fri"
+                  ? "current"
+                  : 5 < currentDayNo
+                  ? "disabled"
+                  : checkEventPresent(4) === true
+                  ? "present"
                   : ""
               }
               onClick={() => fetchEventsForAParticularDay("fri", 5)}
             >
+              {(previousBtnClicked &&
+                5 >= currentDayNo &&
+                checkEventPresent(4) === true) ||
+              (nextBtnClicked && checkEventPresent(4) === true) ||
+              (5 >= currentDayNo && checkEventPresent(4) === true) ? (
+                <DaysIndicator />
+              ) : null}
               fri
             </DaysDiv>
             <DaysDiv
               className={
-                currentDay === "sat"
-                  ? todayClicked || !nextBtnClicked
-                    ? "current"
-                    : previousBtnClicked
-                    ? 6 < currentDayNo
-                      ? "disabled"
-                      : checkEventPresent(5) === true
-                      ? "present"
-                      : ""
-                    : nextBtnClicked
-                    ? checkEventPresent(5) === true
-                      ? "present"
-                      : ""
-                    : currentDay === "sat"
-                    ? "current"
-                    : 6 < currentDayNo
+                (today === "sat" && todayClicked) ||
+                (today === "sat" && !nextBtnClicked)
+                  ? "current"
+                  : previousBtnClicked
+                  ? 6 < currentDayNo
                     ? "disabled"
                     : checkEventPresent(5) === true
                     ? "present"
                     : ""
+                  : nextBtnClicked
+                  ? checkEventPresent(5) === true
+                    ? "present"
+                    : ""
+                  : today === "sat"
+                  ? "current"
+                  : 6 < currentDayNo
+                  ? "disabled"
+                  : checkEventPresent(5) === true
+                  ? "present"
                   : ""
               }
               onClick={() => fetchEventsForAParticularDay("sat", 6)}
             >
+              {(previousBtnClicked &&
+                6 >= currentDayNo &&
+                checkEventPresent(5) === true) ||
+              (nextBtnClicked && checkEventPresent(5) === true) ||
+              (6 >= currentDayNo && checkEventPresent(5) === true) ? (
+                <DaysIndicator />
+              ) : null}
               sat
             </DaysDiv>
           </DaysWrap>

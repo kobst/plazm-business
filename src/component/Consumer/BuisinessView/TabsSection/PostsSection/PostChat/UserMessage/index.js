@@ -127,7 +127,7 @@ const UserMessage = ({ postData }) => {
   const business = useSelector((state) => state.business.business)[0];
   const [description, setDescription] = useState("");
   const [displayCommentInput, setDisplayCommentInput] = useState(false);
-  const [flag, setFlag] = useState(false)
+  const [flag, setFlag] = useState(false);
   const filters = useSelector((state) => state.business.filters);
   const user = useSelector((state) => state.user.user);
   const ws = useSelector((state) => state.user.ws);
@@ -170,7 +170,10 @@ const UserMessage = ({ postData }) => {
       }
     } else if (message.like && message.type === "Post") {
       /** to add post like via socket */
-      if (message.businessId === business._id && message.like._id !== user._id) {
+      if (
+        message.businessId === business._id &&
+        message.like._id !== user._id
+      ) {
         dispatch(addLikeViaSocket(message));
       }
     }
@@ -328,18 +331,19 @@ const UserMessage = ({ postData }) => {
             </ProfileNameWrap>
           </ProfileNameHeader>
         </UserMessageContent>
-        <Scrollbars  
-        autoHeight
-        autoHeightMin={0}
-        autoHeightMax={300}
-        thumbMinSize={30}
-        className="InnerScroll"
+        <Scrollbars
+          autoHeight
+          autoHeightMin={0}
+          autoHeightMax={300}
+          thumbMinSize={30}
+          className="InnerScroll"
         >
           <ReplyWrap>
             {(displayComments || displayCommentInput) &&
             !loadingComments &&
             postData.comments.length > 0 ? (
-              postData.comments.map((i,key) => {
+              <>
+              {postData.comments.map((i, key) => {
                 return (
                   <Comment
                     i={i}
@@ -350,27 +354,29 @@ const UserMessage = ({ postData }) => {
                     flag={flag}
                   />
                 );
-              })
+              })}
+               {flag === false ? <ScrollToBottom /> : null} 
+               </>
             ) : (displayComments || displayCommentInput) && loadingComments ? (
               <LoaderWrap>
                 <ValueLoader />
               </LoaderWrap>
             ) : null}
-            {displayComments || displayCommentInput ? (
-              <>
-                <ReplyInput
-                  type="comment"
-                  postId={postData.postId}
-                  displayComments={displayComments}
-                  description={description}
-                  setDescription={setDescription}
-                  addComment={addComment}
-                />
-                {flag===false?<ScrollToBottom />:null}
-              </>
-            ) : null}
           </ReplyWrap>
         </Scrollbars>
+        {(displayComments || displayCommentInput) && !loadingComments &&
+            postData.comments.length > 0? (
+          <>
+            <ReplyInput
+              type="comment"
+              postId={postData.postId}
+              displayComments={displayComments}
+              description={description}
+              setDescription={setDescription}
+              addComment={addComment}
+            />
+          </>
+        ) : null}
       </UserMsgWrap>
     </>
   );
