@@ -14,6 +14,9 @@ const ChatContent = styled.div`
   display: flex;
   padding: 12px 0 12px 12px;
   flex-direction: column;
+  &.InnerReply {
+    margin: 30px 0 0;
+  }
   /* overflow: hidden; */
   @media (max-width: 767px) {
   }
@@ -265,7 +268,7 @@ const ReplyInput = ({
   };
   return (
     <>
-      <ChatContent>
+      <ChatContent className={type==="reply" ? "InnerReply" : ""}>
         <ProfileNameHeader>
           <ProfileThumb>
             <img src={user.photo ? user.photo : ProfileImg} alt="" />
