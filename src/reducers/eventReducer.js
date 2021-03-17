@@ -3,6 +3,7 @@ import {
   addLikeToEvents,
   fetchEvent,
   fetchEventForAWeek,
+  findCommentReplies,
   findPostComments,
 } from "../graphQl";
 import { graphQlEndPoint } from "../Api/graphQl";
@@ -112,6 +113,36 @@ export const addLikeToCommentViaSocket = createAsyncThunk(
   }
 );
 
+/*
+ * @desc:  to fetch post replies
+ * @params: postId
+ */
+export const fetchCommentReplies = createAsyncThunk(
+  "data/fetchEventCommentReplies",
+  async (businessId) => {
+    const graphQl = findCommentReplies(businessId);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.getReplies;
+  }
+);
+
+
+/*
+ * @desc:  to fetch events of a complete week for a particular business
+ * @params: businessId,date
+ */
+export const fetchInitialWeekEvents = createAsyncThunk(
+  "data/fetchInitialWeekEvents",
+  async ({ businessId, date }) => {
+    const obj = {
+      date: date,
+      id: businessId,
+    };
+    const graphQl = fetchEventForAWeek(obj);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.getEventsForTheWeek.event;
+  }
+);
 export const slice = createSlice({
   name: "event",
   initialState: {
@@ -120,17 +151,25 @@ export const slice = createSlice({
     loadingEventComments: false,
     date: new Date(),
     events: [],
+    loadingReplies: false,
+    initialWeekEvents: [],
+    loadingForInitialWeek: false
   },
   reducers: {
     nextWeekDate: (state) => {
       const currentDate = new Date(state.date);
       currentDate.setDate(currentDate.getDate() + 7);
       state.date = currentDate;
+      state.initialWeekEvents = []
     },
     previousWeekDate: (state) => {
       const currentDate = new Date(state.date);
       currentDate.setDate(currentDate.getDate() - 7);
       state.date = currentDate;
+      state.initialWeekEvents = []
+    },
+    setCurrentDate: (state) => {
+      state.date = new Date();
     },
   },
   extraReducers: {
@@ -144,10 +183,13 @@ export const slice = createSlice({
       if (state.loading) {
         state.loading = false;
         if (action.payload) {
-          state.events = action.payload.map((obj) => ({
+          let arr = action.payload.map((obj) => ({
             ...obj,
             comments: [],
           }));
+          state.events = arr.sort((a, b) => {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+          });
         }
       }
     },
@@ -161,22 +203,56 @@ export const slice = createSlice({
       if (!state.loadingForAWeek) {
         state.loadingForAWeek = true;
         state.events = [];
+        state.initialWeekEvents = []
       }
     },
     [fetchEventsForTheWeek.fulfilled]: (state, action) => {
       if (state.loadingForAWeek) {
         state.loadingForAWeek = false;
         if (action.payload) {
-          state.events = action.payload.map((obj) => ({
+          let arr = action.payload.map((obj) => ({
             ...obj,
             comments: [],
           }));
+          state.events = arr.sort((a, b) => {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+          });
+          state.initialWeekEvents = arr.sort((a, b) => {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+          });
         }
       }
     },
     [fetchEventsForTheWeek.rejected]: (state, action) => {
       if (state.loadingForAWeek) {
         state.loadingForAWeek = false;
+        state.error = action.payload;
+      }
+    },
+
+    [fetchInitialWeekEvents.pending]: (state) => {
+      if (!state.loadingForInitialWeek) {
+        state.loadingForInitialWeek = true;
+        // state.events = [];
+      }
+    },
+    [fetchInitialWeekEvents.fulfilled]: (state, action) => {
+      if (state.loadingForInitialWeek) {
+        state.loadingForInitialWeek = false;
+        if (action.payload) {
+          let arr = action.payload.map((obj) => ({
+            ...obj,
+            comments: [],
+          }));
+          state.initialWeekEvents = arr.sort((a, b) => {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+          });
+        }
+      }
+    },
+    [fetchInitialWeekEvents.rejected]: (state, action) => {
+      if (state.loadingForInitialWeek) {
+        state.loadingForInitialWeek = false;
         state.error = action.payload;
       }
     },
@@ -196,8 +272,13 @@ export const slice = createSlice({
             (i) => i._id !== action.payload.eventId
           );
           let eventsArr = [];
-          eventsArr.push({ ...findEvent, comments: action.payload.data.post });
-          eventsArr.concat(findOtherEvents);
+          let arr = action.payload.data.post.map((obj) => ({
+            ...obj.comment,
+            totalReplies: obj.totalReplies,
+            replies: [],
+          }));
+          eventsArr.push({ ...findEvent, comments: arr });
+          eventsArr = eventsArr.concat(findOtherEvents);
           state.events = eventsArr.sort((a, b) => {
             return new Date(b.createdAt) - new Date(a.createdAt);
           });
@@ -207,6 +288,56 @@ export const slice = createSlice({
     [fetchEventComments.rejected]: (state, action) => {
       if (state.loadingEventComments) {
         state.loadingEventComments = false;
+        state.error = action.payload;
+      }
+    },
+    [fetchCommentReplies.pending]: (state) => {
+      if (!state.loadingReplies) {
+        state.loadingReplies = true;
+      }
+    },
+    [fetchCommentReplies.fulfilled]: (state, action) => {
+      if (state.loadingReplies) {
+        state.loadingReplies = false;
+        if (action.payload) {
+            let posts = current(state.events).filter(
+              (i) => i._id !== action.payload.postId
+            );
+            let posts1 = current(state.events).filter(
+              (i) => i._id === action.payload.postId
+            )[0];
+            let dummy1 = [];
+            if(posts1.comments.length>0) {
+            let findComment = posts1.comments.filter(i=>i._id === action.payload.commentId);
+            let findComment1 = posts1.comments.filter(i=>i._id !== action.payload.commentId);
+            let newArr = []
+            newArr = newArr.concat({...findComment[0],replies: action.payload.replies})            
+            newArr = newArr.concat(findComment1)
+            newArr = newArr.sort((a, b) => {
+              return (
+                new Date(a.createdAt) -
+                new Date(b.createdAt)
+              );
+            });
+            dummy1.push({
+              ...posts1,
+              comments: newArr,
+              totalComments: posts1.totalComments,
+            });
+            dummy1 = dummy1.concat(posts);
+            state.events = dummy1.sort((a, b) => {
+              return (
+                new Date(b.createdAt) -
+                new Date(a.createdAt)
+              );
+            });
+          }
+        }
+      }
+    },
+    [fetchCommentReplies.rejected]: (state, action) => {
+      if (state.loadingReplies) {
+        state.loadingReplies = false;
         state.error = action.payload;
       }
     },
@@ -227,11 +358,16 @@ export const slice = createSlice({
             ...action.payload.commentInfo,
             ownerId: action.payload.userInfo,
             userId: action.payload.userDetails,
+            totalReplies: 0,
             likes: [],
           });
           let eventsArr = [];
-          eventsArr.push({ ...findEvent[0], comments: eventComments });
-          eventsArr.concat(findOtherEvents);
+          eventsArr.push({
+            ...findEvent[0],
+            comments: eventComments,
+            totalComments: findEvent[0].totalComments + 1,
+          });
+          eventsArr = eventsArr.concat(findOtherEvents);
           state.events = eventsArr.sort((a, b) => {
             return new Date(b.createdAt) - new Date(a.createdAt);
           });
@@ -262,7 +398,7 @@ export const slice = createSlice({
             },
           });
           let commentsSort = findComment1
-            .concat({ ...findComment, replies: replies })
+            .concat({ ...findComment, replies: replies, totalReplies: findComment.totalReplies+1 })
             .sort((a, b) => {
               return new Date(a.createdAt) - new Date(b.createdAt);
             });
@@ -341,5 +477,5 @@ export const slice = createSlice({
   },
 });
 
-export const { nextWeekDate, previousWeekDate } = slice.actions;
+export const { nextWeekDate, previousWeekDate, setCurrentDate } = slice.actions;
 export default slice.reducer;

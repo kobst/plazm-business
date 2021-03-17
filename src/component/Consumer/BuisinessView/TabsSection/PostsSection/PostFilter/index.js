@@ -217,6 +217,7 @@ const PostFilter = () => {
         <CheckboxWrap>
           <Checkbox
             onChange={(e) => handleChange(e, "Others")}
+            checked={filters["Others"]}
             name="filter"
             disabled={loadingFilterData}
           />

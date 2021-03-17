@@ -60,4 +60,33 @@ const updateUserProfile = (values) => {
   return graphQl;
 };
 
-export { AddUser, updateUserProfile };
+/*
+@desc: update user profile graphQL mutation
+@params: name, email, phoneNumber, userSub
+*/
+const getSelectedUser = (search) => {
+  const graphQl = {
+    query: `
+          mutation GetSelectedUser($search:String){
+            getSelectedUser(input: { search: $search}) {
+              message
+              success
+              user {
+                  _id
+                  name
+                  email
+                  phoneNumber
+                  userSub
+                  lockProfile
+                  photo 
+              }
+            }
+          }`,
+    variables: {
+      search: search
+    },
+  };
+  return graphQl;
+};
+
+export { AddUser, updateUserProfile, getSelectedUser };

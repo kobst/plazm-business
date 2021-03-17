@@ -2,8 +2,8 @@
 @desc: getAllLists query
 */
 const getAllLists = () => {
-    const graphQl = {
-      query: `
+  const graphQl = {
+    query: `
             query GetLists{
                 getLists {
                 message
@@ -20,10 +20,33 @@ const getAllLists = () => {
                     updatedAt
                   }
                 }
-            }`
-    };
-    return graphQl;
+            }`,
   };
+  return graphQl;
+};
 
-  export { getAllLists };
-  
+/*
+@desc: getUserLists query
+*/
+const getUserLists = (id) => {
+  const graphQl = {
+    query: `
+          query getUserLists($id: ID!){
+            getUserLists(input: {id:$id}) {
+              message
+              success
+              list {
+                  _id
+                  name
+                  description
+                }
+              }
+          }`,
+    variables: {
+      id: id,
+    },
+  };
+  return graphQl;
+};
+
+export { getAllLists,getUserLists };

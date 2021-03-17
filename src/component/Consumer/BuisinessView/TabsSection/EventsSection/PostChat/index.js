@@ -36,7 +36,7 @@ const PostChat = () => {
       >
         <ChatContent>
           {events && events.length > 0 ? (
-            events.map((i) => <UserMessage eventData={i} />)
+            events.map((i,key) => <UserMessage eventData={i} key={key} />)
           ) : !loading && !loadingForAWeek ? (
             <center>
               <NoMorePost>No events to display</NoMorePost>

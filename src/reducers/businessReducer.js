@@ -6,6 +6,7 @@ import {
   findPostComments,
   addLikeToPost,
   AddLikeToComment,
+  findCommentReplies,
 } from "../graphQl";
 
 /*
@@ -47,11 +48,14 @@ export const filterData = createAsyncThunk("data/filterData", async (obj) => {
  * @desc:  to concat filtered posts to posts array
  * @params: obj
  */
-export const addFilteredPosts = createAsyncThunk("data/addFilteredPosts", async (obj) => {
-  const graphQl = getPlace(obj);
-  const response = await graphQlEndPoint(graphQl);
-  return response.data.searchPlacesByUserId;
-});
+export const addFilteredPosts = createAsyncThunk(
+  "data/addFilteredPosts",
+  async (obj) => {
+    const graphQl = getPlace(obj);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.searchPlacesByUserId;
+  }
+);
 
 /*
  * @desc:  to comment to post
@@ -74,6 +78,19 @@ export const fetchPostComments = createAsyncThunk(
     const graphQl = findPostComments(businessId);
     const response = await graphQlEndPoint(graphQl);
     return response.data.getComment;
+  }
+);
+
+/*
+ * @desc:  to fetch post replies
+ * @params: postId
+ */
+export const fetchCommentReplies = createAsyncThunk(
+  "data/fetchCommentReplies",
+  async (businessId) => {
+    const graphQl = findCommentReplies(businessId);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.getReplies;
   }
 );
 
@@ -168,7 +185,8 @@ export const slice = createSlice({
     loadingAddLike: false,
     loadingAddLikeToComment: false,
     loadingAddFilteredPosts: false,
-    totalPosts: 0
+    loadingReplies: false,
+    totalPosts: 0,
   },
   reducers: {
     setFilters: (state, action) => {
@@ -187,13 +205,17 @@ export const slice = createSlice({
       else state.filters = action.payload;
     },
     setSideFiltersByMostLiked: (state, action) => {
-       state.filterByMostLiked = true;
-       state.filterByMostRecent = false
+      state.filterByMostLiked = true;
+      state.filterByMostRecent = false;
     },
     setSideFiltersByMostRecent: (state, action) => {
       state.filterByMostLiked = false;
-      state.filterByMostRecent = true
-   }
+      state.filterByMostRecent = true;
+    },
+    setSideFilters: (state, action) => {
+      state.filterByMostLiked = false;
+      state.filterByMostRecent = false;
+    },
   },
   extraReducers: {
     [checkBusiness.pending]: (state) => {
@@ -207,7 +229,7 @@ export const slice = createSlice({
         if (action.payload) {
           state.business = action.payload.place;
           state.posts = action.payload.posts;
-          state.totalPosts = action.payload.totalPosts
+          state.totalPosts = action.payload.totalPosts;
         }
       }
     },
@@ -218,9 +240,9 @@ export const slice = createSlice({
       }
     },
     [addPostViaSocket.fulfilled]: (state, action) => {
-        if (action.payload) {
-          state.posts = [action.payload.post].concat(state.posts);
-        }
+      if (action.payload) {
+        state.posts = [action.payload.post].concat(state.posts);
+      }
     },
     [addLikeViaSocket.fulfilled]: (state, action) => {
       if (action.payload) {
@@ -249,6 +271,11 @@ export const slice = createSlice({
               new Date(a.postDetails.createdAt)
             );
           });
+          if (state.filterByMostLiked === true) {
+            state.posts = state.posts.sort((a, b) => {
+              return new Date(b.totalLikes) - new Date(a.totalLikes);
+            });
+          }
         }
       }
     },
@@ -269,29 +296,29 @@ export const slice = createSlice({
               (i) => i._id !== action.payload.commentId
             );
 
-            if(findComment && findComment.length>0) {
-            let likes = findComment[0].likes.concat(action.payload.like);
-            let commentsSort = findComment1
-              .concat({ ...findComment[0], likes: likes })
-              .sort((a, b) => {
-                return new Date(a.createdAt) - new Date(b.createdAt);
+            if (findComment && findComment.length > 0) {
+              let likes = findComment[0].likes.concat(action.payload.like);
+              let commentsSort = findComment1
+                .concat({ ...findComment[0], likes: likes })
+                .sort((a, b) => {
+                  return new Date(a.createdAt) - new Date(b.createdAt);
+                });
+              let dummy1 = [];
+              dummy1.push({
+                postId: action.payload.postId,
+                postDetails: findPost1[0].postDetails,
+                comments: commentsSort,
+                totalComments: findPost1[0].totalComments,
+                totalLikes: findPost1[0].totalLikes + 1,
               });
-            let dummy1 = [];
-            dummy1.push({
-              postId: action.payload.postId,
-              postDetails: findPost1[0].postDetails,
-              comments: commentsSort,
-              totalComments: findPost1[0].totalComments,
-              totalLikes: findPost1[0].totalLikes + 1,
-            });
-            dummy1 = dummy1.concat(findPost);
-            state.posts = dummy1.sort((a, b) => {
-              return (
-                new Date(b.postDetails.createdAt) -
-                new Date(a.postDetails.createdAt)
-              );
-            });
-          }
+              dummy1 = dummy1.concat(findPost);
+              state.posts = dummy1.sort((a, b) => {
+                return (
+                  new Date(b.postDetails.createdAt) -
+                  new Date(a.postDetails.createdAt)
+                );
+              });
+            }
           }
         }
       }
@@ -307,6 +334,7 @@ export const slice = createSlice({
         if (posts1 && posts1.length > 0) {
           let comments = posts1[0].comments.concat({
             ...action.payload.commentInfo,
+            totalReplies: 0,
             userId: action.payload.userDetails,
             likes: [],
           });
@@ -349,10 +377,10 @@ export const slice = createSlice({
               _id: action.payload.userId,
               name: action.payload.userName,
               photo: action.payload.photo,
-            },            
+            },
           });
           let commentsSort = findComment1
-            .concat({ ...findComment, replies: replies })
+            .concat({ ...findComment, replies: replies, totalReplies: findComment.totalReplies+1 })
             .sort((a, b) => {
               return new Date(a.createdAt) - new Date(b.createdAt);
             });
@@ -391,16 +419,21 @@ export const slice = createSlice({
         if (action.payload) {
           if (action.payload.post.length > 0) {
             let posts = current(state.posts).filter(
-              (i) => i.postId !== action.payload.post[0].itemId
+              (i) => i.postId !== action.payload.post[0].comment.itemId
             );
             let posts1 = current(state.posts).filter(
-              (i) => i.postId === action.payload.post[0].itemId
+              (i) => i.postId === action.payload.post[0].comment.itemId
             )[0];
             let dummy1 = [];
+            let arr = action.payload.post.map((obj) => ({
+              ...obj.comment,
+              totalReplies: obj.totalReplies,
+              replies: [],
+            }));
             dummy1.push({
-              postId: action.payload.post[0].itemId,
+              postId: action.payload.post[0].comment.itemId,
               postDetails: posts1.postDetails,
-              comments: action.payload.post,
+              comments: arr,
               totalComments: action.payload.post.length,
               totalLikes: posts1.totalLikes,
             });
@@ -421,6 +454,58 @@ export const slice = createSlice({
         state.error = action.payload;
       }
     },
+    [fetchCommentReplies.pending]: (state) => {
+      if (!state.loadingReplies) {
+        state.loadingReplies = true;
+      }
+    },
+    [fetchCommentReplies.fulfilled]: (state, action) => {
+      if (state.loadingReplies) {
+        state.loadingReplies = false;
+        if (action.payload) {
+            let posts = current(state.posts).filter(
+              (i) => i.postId !== action.payload.postId
+            );
+            let posts1 = current(state.posts).filter(
+              (i) => i.postId === action.payload.postId
+            )[0];
+            let dummy1 = [];
+            if(posts1.comments.length>0) {
+            let findComment = posts1.comments.filter(i=>i._id === action.payload.commentId);
+            let findComment1 = posts1.comments.filter(i=>i._id !== action.payload.commentId);
+            let newArr = []
+            newArr = newArr.concat({...findComment[0],replies: action.payload.replies})            
+            newArr = newArr.concat(findComment1)
+            newArr = newArr.sort((a, b) => {
+              return (
+                new Date(a.createdAt) -
+                new Date(b.createdAt)
+              );
+            });
+            dummy1.push({
+              postId: action.payload.postId,
+              postDetails: posts1.postDetails,
+              comments: newArr,
+              totalComments: posts1.totalComments,
+              totalLikes: posts1.totalLikes,
+            });
+            dummy1 = dummy1.concat(posts);
+            state.posts = dummy1.sort((a, b) => {
+              return (
+                new Date(b.postDetails.createdAt) -
+                new Date(a.postDetails.createdAt)
+              );
+            });
+          }
+        }
+      }
+    },
+    [fetchCommentReplies.rejected]: (state, action) => {
+      if (state.loadingReplies) {
+        state.loadingReplies = false;
+        state.error = action.payload;
+      }
+    },
     [filterData.pending]: (state) => {
       if (!state.loadingFilterData) {
         state.loadingFilterData = true;
@@ -431,7 +516,7 @@ export const slice = createSlice({
         state.loadingFilterData = false;
         if (action.payload) {
           state.posts = action.payload.posts;
-          state.totalPosts = action.payload.totalPosts
+          state.totalPosts = action.payload.totalPosts;
         }
       }
     },
@@ -451,7 +536,7 @@ export const slice = createSlice({
         state.loadingAddFilteredPosts = false;
         if (action.payload) {
           state.posts = state.posts.concat(action.payload.posts);
-          state.totalPosts = action.payload.totalPosts
+          state.totalPosts = action.payload.totalPosts;
         }
       }
     },
@@ -464,5 +549,10 @@ export const slice = createSlice({
   },
 });
 
-export const { setFilters, setSideFiltersByMostRecent, setSideFiltersByMostLiked } = slice.actions;
+export const {
+  setFilters,
+  setSideFiltersByMostRecent,
+  setSideFiltersByMostLiked,
+  setSideFilters,
+} = slice.actions;
 export default slice.reducer;

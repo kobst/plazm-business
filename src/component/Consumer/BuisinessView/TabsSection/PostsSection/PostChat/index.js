@@ -68,6 +68,7 @@ const PostChat = () => {
           filters: filters,
           value: offset + 20,
           ownerId: user._id,
+          sideFilters: {likes: sideFilterForLikes}
         })
       );
     } else setHasMore(false);
@@ -110,7 +111,7 @@ const PostChat = () => {
         >
           <ChatContent>
             {!loadingFilterData && posts.length > 0 ? (
-              posts.map((i) => <UserMessage postData={i} />)
+              posts.map((i,key) => <UserMessage postData={i} key={key} />)
             ) : loadingFilterData ? (
               <LoaderWrap>
                 <ValueLoader />
