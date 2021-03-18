@@ -14,6 +14,9 @@ const ChatContent = styled.div`
   display: flex;
   padding: 12px 0 12px 12px;
   flex-direction: column;
+  &.InnerReply {
+    margin: 30px 0 0;
+  }
   /* overflow: hidden; */
   @media (max-width: 767px) {
   }
@@ -159,16 +162,17 @@ const ReplyInput = ({
   addReply,
 }) => {
   const user = useSelector((state) => state.user.user);
-  const allUsers = useSelector((state) => state.consumer.users);
   const [mentionArrayUser, setMentionArrayUser] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([])
   const [displayEmoji, setDisplayEmoji] = useState(false);
   const dispatch = useDispatch();
 
   /** handle change method for mentions input */
   const handleChange = async (event, newValue, newPlainTextValue, mentions) => {
+
     if (mentions.length !== 0) {
       /** to find if the mention is of users or lists */
-      const findUser = allUsers.find((i) => i._id === mentions[0].id);
+      const findUser = selectedUsers.find((i) => i._id === mentions[0].id);
       if (findUser) {
         /** if mention is of user add it into user's mention array */
         const valueArr = mentionArrayUser;
@@ -259,12 +263,13 @@ const ReplyInput = ({
         display: `@${myUser.name}`,
         image: myUser.photo ? myUser.photo : "",
       }));
+      setSelectedUsers(res)
       return callback(x);
     }
   };
   return (
     <>
-      <ChatContent>
+      <ChatContent className={type==="reply" ? "InnerReply" : ""}>
         <ProfileNameHeader>
           <ProfileThumb>
             <img src={user.photo ? user.photo : ProfileImg} alt="" />

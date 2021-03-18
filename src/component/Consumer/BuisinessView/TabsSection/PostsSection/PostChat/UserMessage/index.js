@@ -28,7 +28,7 @@ const UserMessageContent = styled.div`
     align-items: flex-start;
   }
   &.UserReplyContent {
-    padding: 0 0 0 40px;
+    padding: 10px 0 0 40px;
   }
   .InnerScroll {
     overflow-x: hidden;
@@ -364,8 +364,7 @@ const UserMessage = ({ postData }) => {
             ) : null}
           </ReplyWrap>
         </Scrollbars>
-        {(displayComments || displayCommentInput) && !loadingComments &&
-            postData.comments.length > 0? (
+        {displayComments || displayCommentInput ? (
           <>
             <ReplyInput
               type="comment"

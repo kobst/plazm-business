@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { IoMdClose } from "react-icons/io";
 import {
@@ -13,8 +13,12 @@ import TwitterImg from "../../../../images/Twitter-new.svg";
 import LinkedInImg from "../../../../images/Linkedin-new.svg";
 import InstagramImg from "../../../../images/Instagram-new.svg";
 import { useHistory } from "react-router-dom";
-import { useSelector } from 'react-redux';
-import Favorites from '../../../../images/favorites.png';
+import { useDispatch, useSelector } from "react-redux";
+import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
+import {
+  AddBusinessFavorite,
+  RemoveBusinessFavorite,
+} from "../../../../reducers/userReducer";
 
 const BuisinessHeaderContent = styled.div`
   width: 100%;
@@ -88,11 +92,14 @@ const BottomBar = styled.div`
   justify-content: space-between;
   padding: 15px;
   align-items: flex-end;
+  .favoriteBusiness {
+    color: red;
+  }
   @media (max-width: 767px) {
     padding: 10px;
     position: relative;
   }
-  &.ProfileHeaderNam{
+  &.ProfileHeaderNam {
     justify-content: flex-end;
   }
 `;
@@ -129,7 +136,7 @@ const ArrowDown = styled.div`
     color: #fff;
   }
   svg: hover {
-    cursor:pointer;
+    cursor: pointer;
   }
 `;
 
@@ -139,7 +146,7 @@ const BusinessNameWrap = styled.div`
   margin: 0 0 0 10px;
   max-width: calc(100% - 60px);
   width: 100%;
-  .FavoritesIcon{
+  .FavoritesIcon {
     max-width: 18px;
     margin: 0 0 0 10px;
   }
@@ -165,7 +172,7 @@ const BusinessName = styled.h1`
   display: flex;
   align-items: center;
   width: 100%;
-  span{
+  span {
     max-width: 90%;
     display: -webkit-box;
     -webkit-line-clamp: 1;
@@ -174,7 +181,6 @@ const BusinessName = styled.h1`
   }
   @media (max-width: 767px) {
     font-size: 14px;
-
   }
 `;
 const SocialIconsWrap = styled.div`
@@ -191,23 +197,49 @@ const SocialIcon = styled.div`
   cursor: pointer;
 `;
 
-
-
 const BuisinessHeader = ({
   setDisplayTab,
   setDisplayBusinessProfile,
   isProfile,
 }) => {
   const history = useHistory();
+  const [favoriteBusiness, setFavoriteBusiness] = useState(false);
   const businessProfile = useSelector((state) => state.business.business)[0];
-  
+  const user = useSelector((state) => state.user.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const find = user.favorites.find((i) => i === businessProfile._id);
+    if (find) {
+      setFavoriteBusiness(true);
+    } else setFavoriteBusiness(false);
+  }, [user, businessProfile._id]);
+
   /*
-   * @desc: close tab function to be called on cross icon click 
+   * @desc: close tab function to be called on cross icon click
    */
   const closeTab = () => {
     setDisplayTab(false);
-    history.push("/")
-  }
+    history.push("/");
+  };
+
+  /** to add a business to user favorites */
+  const addFavorite = async () => {
+    const obj = {
+      businessId: businessProfile._id,
+      userId: user._id,
+    };
+    await dispatch(AddBusinessFavorite(obj));
+  };
+
+  /** to remove a business to user favorites */
+  const removeFavorite = async () => {
+    const obj = {
+      businessId: businessProfile._id,
+      userId: user._id,
+    };
+    await dispatch(RemoveBusinessFavorite(obj));
+  };
   return (
     <>
       <BuisinessHeaderContent>
@@ -218,55 +250,82 @@ const BuisinessHeader = ({
           <IoMdClose onClick={() => closeTab()} />
         </CloseDiv>
         <SectionSlider images={businessProfile.additional_media} />
-        <BottomBar className={isProfile?"ProfileHeaderNam":''}>
+        <BottomBar className={isProfile ? "ProfileHeaderNam" : ""}>
           <LeftHeader>
-          {!isProfile ? (
-            <BusinessIcon>
-              <img
-                src={
-                  businessProfile.default_image_url
-                    ? businessProfile.default_image_url
-                    : ProfileImg
-                }
-                alt=""
-              />
-            </BusinessIcon>
-          ) : null}
-          {!isProfile ? (
-            <BusinessNameWrap>
-              <BusinessName><span>{businessProfile.company_name}</span> <img className="FavoritesIcon" src={Favorites} alt="" /></BusinessName>
-              <SocialIconsWrap>
-                {businessProfile.handles.instagram ? (
-                  <a href={businessProfile.handles.instagram} target="_blank" rel="noopener noreferrer">
-                    <SocialIcon>
-                      <img src={InstagramImg} alt="" />
-                    </SocialIcon>
-                  </a>
-                ) : null}
-                {businessProfile.handles.twitter ? (
-                  <a href={businessProfile.handles.twitter} target="_blank" rel="noopener noreferrer">
-                    <SocialIcon>
-                      <img src={TwitterImg} alt="" />
-                    </SocialIcon>
-                  </a>
-                ) : null}
-                {businessProfile.handles.linkedin ? (
-                  <a href={businessProfile.handles.linkedin} target="_blank" rel="noopener noreferrer">
-                    <SocialIcon>
-                      <img src={LinkedInImg} alt="" />
-                    </SocialIcon>
-                  </a>
-                ) : null}
-                {businessProfile.handles.facebook ? (
-                  <a href={businessProfile.handles.facebook} target="_blank" rel="noopener noreferrer">
-                    <SocialIcon>
-                      <img src={FacebookImg} alt="" />
-                    </SocialIcon>
-                  </a>
-                ) : null}
-              </SocialIconsWrap>
-            </BusinessNameWrap>
-          ) : null}
+            {!isProfile ? (
+              <BusinessIcon>
+                <img
+                  src={
+                    businessProfile.default_image_url
+                      ? businessProfile.default_image_url
+                      : ProfileImg
+                  }
+                  alt=""
+                />
+              </BusinessIcon>
+            ) : null}
+            {!isProfile ? (
+              <BusinessNameWrap>
+                <BusinessName>
+                  <span>{businessProfile.company_name}</span>{" "}
+                  {/* business favorite toggle */}
+                  {favoriteBusiness ? (
+                    <MdFavorite
+                      onClick={() => removeFavorite()}
+                      className="favoriteBusiness"
+                    />
+                  ) : (
+                    <MdFavoriteBorder onClick={() => addFavorite()} />
+                  )}
+                </BusinessName>
+                <SocialIconsWrap>
+                  {businessProfile.handles.instagram ? (
+                    <a
+                      href={businessProfile.handles.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <SocialIcon>
+                        <img src={InstagramImg} alt="" />
+                      </SocialIcon>
+                    </a>
+                  ) : null}
+                  {businessProfile.handles.twitter ? (
+                    <a
+                      href={businessProfile.handles.twitter}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <SocialIcon>
+                        <img src={TwitterImg} alt="" />
+                      </SocialIcon>
+                    </a>
+                  ) : null}
+                  {businessProfile.handles.linkedin ? (
+                    <a
+                      href={businessProfile.handles.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <SocialIcon>
+                        <img src={LinkedInImg} alt="" />
+                      </SocialIcon>
+                    </a>
+                  ) : null}
+                  {businessProfile.handles.facebook ? (
+                    <a
+                      href={businessProfile.handles.facebook}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <SocialIcon>
+                        <img src={FacebookImg} alt="" />
+                      </SocialIcon>
+                    </a>
+                  ) : null}
+                </SocialIconsWrap>
+              </BusinessNameWrap>
+            ) : null}
           </LeftHeader>
           <ArrowDown>
             {isProfile ? (

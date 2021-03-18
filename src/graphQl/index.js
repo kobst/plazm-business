@@ -1,4 +1,10 @@
-import { AddUser, updateUserProfile, getSelectedUser } from "./mutations/user";
+import {
+  AddUser,
+  updateUserProfile,
+  getSelectedUser,
+  addFavoriteBusiness,
+  removeFavoriteBusiness,
+} from "./mutations/user";
 import { getUser, getAllUsers } from "./query/user";
 
 import { getPlace, searchAllPlaces } from "./query/place";
@@ -21,6 +27,8 @@ import { addLikeToEvents } from "./mutations/event";
 import { CreateList } from "./mutations/list";
 
 export {
+  addFavoriteBusiness,
+  removeFavoriteBusiness,
   findCommentReplies,
   getSelectedUser,
   addLikeToEvents,
