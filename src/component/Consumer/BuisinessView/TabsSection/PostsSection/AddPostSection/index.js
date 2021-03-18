@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Select from "../../../../UI/Select";
-import SaveButton from "../../../../UI/SaveButton";
-import AddImageImg from "../../../../../../images/addImage.svg";
 import CrossIcon from "../../../../../../images/cross-icon.svg";
 import { MentionsInput, Mention } from "react-mentions";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,8 +7,9 @@ import { addPostToBusiness } from "../../../../../../reducers/businessReducer";
 import ValueLoader from "../../../../../../utils/loader";
 import "./style.css";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { findAllUsers } from "../../../../../../reducers/consumerReducer";
-import { findAllLists } from "../../../../../../reducers/listReducer";
+import defaultMentionStyle from "./style";
+import ModalComponent from '../../../../UI/Modal'
+import AddPostModal from '../../../../AddPostModal'
 
 const bucket = process.env.REACT_APP_BUCKET;
 
@@ -108,7 +106,7 @@ const BottomBar = styled.div`
 
 const TextAreaWrap = styled.div`
   width: 100%;
-  max-width: calc(100% - 147px);
+  /* max-width: calc(100% - 147px); */
   @media (max-width: 767px) {
     max-width: 100%;
     margin: 0 0 5px;
@@ -171,6 +169,7 @@ const AddPostSection = ({ profile, businessId }) => {
   const [mentionArrayList, setMentionArrayList] = useState([]);
   const [mentionArrayUser, setMentionArrayUser] = useState([]);
   const [loader, setLoader] = useState(false);
+  const [addPostModal, setAddPostModal] = useState(false);
   const [imageError, setImageError] = useState("");
   const users = useSelector((state) => state.consumer.users);
   const lists = useSelector((state) => state.list.lists);
@@ -197,48 +196,40 @@ const AddPostSection = ({ profile, businessId }) => {
   /*
    * @desc: to change file_name
    */
-  const fileName = (name, date) => {
-    return `${date}_${name}`;
+  const fileName = (name) => {
+    return `${Date.now()}-${name}`;
   };
 
   /*
    * @desc: post images upload function
    */
   const upload = async (e) => {
-    if (imageUrl.length < 5) {
-      const selectedFile = e.target.files[0];
-      const currentDate = Date.now();
-      const folder_name = folderName();
-      const file_name = fileName(selectedFile.name, currentDate);
-      const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${file_name}`;
-      const idxDot = selectedFile.name.lastIndexOf(".") + 1;
-      const extFile = selectedFile.name
-        .substr(idxDot, selectedFile.name.length)
-        .toLowerCase();
-      if (extFile === "jpeg" || extFile === "png" || extFile === "jpg") {
-        setImageError("");
-        setImageUrl([
-          ...imageUrl,
-          {
-            id: imageUrl.length + 1,
-            value: URL.createObjectURL(e.target.files[0]),
-            image: baseUrl,
-          },
-        ]);
-        setImageUpload([
-          ...imageUpload,
-          {
-            id: imageUrl.length + 1,
-            value: e.target.files[0],
-            image: baseUrl,
-            date: currentDate,
-          },
-        ]);
-        setImageCopy([...imageCopy, { image: baseUrl }]);
-        setImageUploadCopy([...imageUploadCopy, { image: baseUrl }]);
-      } else {
-        setImageError("Only jpg/jpeg and png,files are allowed!");
-      }
+    const selectedFile = e.target.files[0];
+    const folder_name = folderName();
+    const file_name = fileName(selectedFile.name);
+    const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${file_name}`;
+    const idxDot = selectedFile.name.lastIndexOf(".") + 1;
+    const extFile = selectedFile.name
+      .substr(idxDot, selectedFile.name.length)
+      .toLowerCase();
+    if (extFile === "jpeg" || extFile === "png" || extFile === "jpg") {
+      setImageError("");
+      setImageUrl([
+        ...imageUrl,
+        {
+          id: imageUrl.length + 1,
+          value: URL.createObjectURL(e.target.files[0]),
+          image: baseUrl,
+        },
+      ]);
+      setImageUpload([
+        ...imageUpload,
+        { id: imageUrl.length + 1, value: e.target.files[0], image: baseUrl },
+      ]);
+      setImageCopy([...imageCopy, { image: baseUrl }]);
+      setImageUploadCopy([...imageUploadCopy, { image: baseUrl }]);
+    } else {
+      setImageError("Only jpg/jpeg and png,files are allowed!");
     }
   };
 
@@ -260,11 +251,7 @@ const AddPostSection = ({ profile, businessId }) => {
   /*
    * @desc: handle change function called on post input change
    */
-  const handleChange = async (event, newValue, newPlainTextValue, mentions) => {
-    /** to fetch all users and list data */
-    if (users.length === 0) await dispatch(findAllUsers());
-    if (lists.length === 0) await dispatch(findAllLists());
-
+  const handleChange = (event, newValue, newPlainTextValue, mentions) => {
     if (mentions.length !== 0) {
       /** to find if the mention is of users or lists */
       const findUser = users.find((i) => i._id === mentions[0].id);
@@ -288,85 +275,91 @@ const AddPostSection = ({ profile, businessId }) => {
    * @desc: add post to specific business
    */
   const savePost = async () => {
-    if (imageError === "") {
-      setLoader(true);
-      const obj = {
-        business: businessId,
-        data: description,
-        media: imageCopy,
-        taggedUsers: mentionArrayUser,
-        taggedLists: mentionArrayList,
-        ownerId: profile._id,
-      };
-      const addPost = await dispatch(addPostToBusiness(obj));
-      const response = await unwrapResult(addPost);
-      if (response.success === true) {
-        ws.send(
-          JSON.stringify({
-            action: "post",
-            businessId: businessId,
-            post: {
-              postId: response.post._id,
-              postDetails: response.post,
-              totalComments: 0,
-              totalLikes: 0,
-              comments: [],
-            },
-          })
-        );
+    setLoader(true);
+    const obj = {
+      business: businessId,
+      data: description,
+      media: imageCopy,
+      taggedUsers: mentionArrayUser,
+      taggedLists: mentionArrayList,
+      ownerId: profile._id,
+    };
+    const addPost = await dispatch(addPostToBusiness(obj));
+    const response = await unwrapResult(addPost);
+    if (response.success === true) {
+      ws.send(
+        JSON.stringify({
+          action: "post",
+          businessId: businessId,
+          post: {
+            postId: response.post._id,
+            postDetails: response.post,
+            totalComments: 0,
+            totalLikes: 0,
+            comments: [],
+          },
+        })
+      );
 
-        /**if there are no images added */
-        if (imageUpload.length === 0) {
-          setLoader(false);
-          setDescription("");
-        } else {
-          imageUpload.map(async (i) => {
-            const file = i.value;
-            const folder_name = folderName();
-            const file_name = fileName(file.name, i.date);
-            const value = await fetch(
-              `${process.env.REACT_APP_API_URL}/api/upload_photo`,
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  Key: file_name,
-                  ContentType: file.type,
-                  folder_name: folder_name,
-                }),
-              }
-            );
-            const body = await value.text();
-            const Val = JSON.parse(body);
-
-            await fetch(Val, {
-              method: "PUT",
-              headers: {
-                "Content-Type": file.type,
-              },
-              body: file,
-            })
-              .then((response) => {})
-              .catch(
-                (error) => console.log(error) // Handle the error response object
-              );
-          });
-          setLoader(false);
-          setDescription("");
-          setImageUrl([]);
-          setImageCopy([]);
-          setImageUpload([]);
-        }
+      if (imageUpload.length === 0) {
+        setLoader(false);
+        setDescription("");
       }
+      imageUpload.map(async (i) => {
+        const file = i.value;
+        const folder_name = folderName();
+        const file_name = fileName(file.name);
+        const value = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/upload_photo`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              Key: file_name,
+              ContentType: file.type,
+              folder_name: folder_name,
+            }),
+          }
+        );
+        const body = await value.text();
+        const Val = JSON.parse(body);
+
+        await fetch(Val, {
+          method: "PUT",
+          headers: {
+            "Content-Type": file.type,
+          },
+          body: file,
+        })
+          .then((response) => {
+            setLoader(false);
+            setDescription("");
+            setImageUrl([]);
+            setImageCopy([]);
+            setImageUpload([]);
+          })
+          .catch(
+            (error) => console.log(error) // Handle the error response object
+          );
+      });
     }
   };
   return (
     <>
+      {addPostModal && (
+        <ModalComponent
+          closeOnOutsideClick={true}
+          isOpen={addPostModal}
+          closeModal={() => setAddPostModal(false)}
+        >
+          <AddPostModal />
+        </ModalComponent>
+      )}
       <AddPostSectionContent>
         <TopSection>
-          <TextAreaWrap>
+          <TextAreaWrap onClick={() => setAddPostModal(true)}>
             <MentionsInput
               markup="@(__id__)[__display__]"
               value={description}
@@ -380,11 +373,11 @@ const AddPostSection = ({ profile, businessId }) => {
                 trigger="@"
                 data={userMentionData}
                 className="mentions__mention"
-                appendSpaceOnAdd={true}
+                style={defaultMentionStyle}
               />
             </MentionsInput>
           </TextAreaWrap>
-          <RightWrap>
+          {/* <RightWrap>
             <Select disabled={loader}>
               <option>Posting Options</option>
               <option>Posting Options Options</option>
@@ -415,7 +408,7 @@ const AddPostSection = ({ profile, businessId }) => {
                 {loader ? <ValueLoader /> : "Post"}
               </SaveButton>
             </RightBottomWrap>
-          </RightWrap>
+          </RightWrap> */}
         </TopSection>
         <BottomBar>
           {imageUrl ? (
@@ -423,7 +416,7 @@ const AddPostSection = ({ profile, businessId }) => {
               {imageError !== "" ? (
                 <p>{imageError}</p>
               ) : (
-                imageUrl.map((v,key) => (
+                imageUrl.map((v) => (
                   <UploadImage
                     disabled={loader}
                     id={v.id}

@@ -96,7 +96,7 @@ const LoaderWrap = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 100px 0 0 0;
+  margin: 30px 0 10px;
 `;
 const Comments = ({ i, eventData, displayComments, setFlag, flag }) => {
   const [displayReply, setDisplayReply] = useState(false);
