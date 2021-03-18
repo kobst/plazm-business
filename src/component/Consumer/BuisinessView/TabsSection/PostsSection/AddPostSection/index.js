@@ -429,7 +429,6 @@ const AddPostSection = ({ profile, businessId }) => {
                     id={v.id}
                     onClick={() => deleteImage(v)}
                     key={v.id}
-                    key={key}
                   >
                     <img src={v.value} alt="Upload" />
                   </UploadImage>

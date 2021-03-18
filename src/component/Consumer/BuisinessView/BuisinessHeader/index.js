@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { IoMdClose } from "react-icons/io";
 import {
@@ -13,7 +13,12 @@ import TwitterImg from "../../../../images/Twitter-new.svg";
 import LinkedInImg from "../../../../images/Linkedin-new.svg";
 import InstagramImg from "../../../../images/Instagram-new.svg";
 import { useHistory } from "react-router-dom";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
+import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
+import {
+  AddBusinessFavorite,
+  RemoveBusinessFavorite,
+} from "../../../../reducers/userReducer";
 
 const BuisinessHeaderContent = styled.div`
   width: 100%;
@@ -87,11 +92,14 @@ const BottomBar = styled.div`
   justify-content: space-between;
   padding: 15px;
   align-items: flex-end;
+  .favoriteBusiness {
+    color: red;
+  }
   @media (max-width: 767px) {
     padding: 10px;
     position: relative;
   }
-  &.ProfileHeaderNam{
+  &.ProfileHeaderNam {
     justify-content: flex-end;
   }
 `;
@@ -128,7 +136,7 @@ const ArrowDown = styled.div`
     color: #fff;
   }
   svg: hover {
-    cursor:pointer;
+    cursor: pointer;
   }
 `;
 
@@ -176,15 +184,43 @@ const BuisinessHeader = ({
   isProfile,
 }) => {
   const history = useHistory();
+  const [favoriteBusiness, setFavoriteBusiness] = useState(false);
   const businessProfile = useSelector((state) => state.business.business)[0];
-  
+  const user = useSelector((state) => state.user.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const find = user.favorites.find((i) => i === businessProfile._id);
+    if (find) {
+      setFavoriteBusiness(true);
+    } else setFavoriteBusiness(false);
+  }, [user,businessProfile._id]);
+
   /*
-   * @desc: close tab function to be called on cross icon click 
+   * @desc: close tab function to be called on cross icon click
    */
   const closeTab = () => {
     setDisplayTab(false);
-    history.push("/")
-  }
+    history.push("/");
+  };
+
+  /** to add a business to user favorites */
+  const addFavorite = async () => {
+    const obj = {
+      businessId: businessProfile._id,
+      userId: user._id,
+    };
+    await dispatch(AddBusinessFavorite(obj));
+  };
+
+  /** to remove a business to user favorites */
+  const removeFavorite = async () => {
+    const obj = {
+      businessId: businessProfile._id,
+      userId: user._id,
+    };
+    await dispatch(RemoveBusinessFavorite(obj));
+  };
   return (
     <>
       <BuisinessHeaderContent>
@@ -195,7 +231,7 @@ const BuisinessHeader = ({
           <IoMdClose onClick={() => closeTab()} />
         </CloseDiv>
         <SectionSlider images={businessProfile.additional_media} />
-        <BottomBar className={isProfile?"ProfileHeaderNam":''}>
+        <BottomBar className={isProfile ? "ProfileHeaderNam" : ""}>
           {!isProfile ? (
             <BusinessIcon>
               <img
@@ -208,33 +244,55 @@ const BuisinessHeader = ({
               />
             </BusinessIcon>
           ) : null}
+          {/* business favorite toggle */}
+          {favoriteBusiness ? (
+            <MdFavorite onClick={() => removeFavorite()} className="favoriteBusiness"/>
+          ) : (
+            <MdFavoriteBorder onClick={() => addFavorite()} />
+          )}
           {!isProfile ? (
             <BusinessNameWrap>
               <BusinessName>{businessProfile.company_name}</BusinessName>
               <SocialIconsWrap>
                 {businessProfile.handles.instagram ? (
-                  <a href={businessProfile.handles.instagram} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={businessProfile.handles.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <SocialIcon>
                       <img src={InstagramImg} alt="" />
                     </SocialIcon>
                   </a>
                 ) : null}
                 {businessProfile.handles.twitter ? (
-                  <a href={businessProfile.handles.twitter} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={businessProfile.handles.twitter}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <SocialIcon>
                       <img src={TwitterImg} alt="" />
                     </SocialIcon>
                   </a>
                 ) : null}
                 {businessProfile.handles.linkedin ? (
-                  <a href={businessProfile.handles.linkedin} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={businessProfile.handles.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <SocialIcon>
                       <img src={LinkedInImg} alt="" />
                     </SocialIcon>
                   </a>
                 ) : null}
                 {businessProfile.handles.facebook ? (
-                  <a href={businessProfile.handles.facebook} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={businessProfile.handles.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <SocialIcon>
                       <img src={FacebookImg} alt="" />
                     </SocialIcon>
