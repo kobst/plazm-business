@@ -1,28 +1,21 @@
 import React from "react";
 import styled from "styled-components";
-import { MdClose } from "react-icons/md";
 import Textarea from '../../UI/Textarea'
+import Input from '../../UI/Input/Input.js'
 import BottomButtons from '../BottomButtons'
 import AddImageImg from "../../../../images/addImage.svg";
-import SelectedListing from '../SelectedListing'
-import PostImage from '../PostImage'
+
 
 const PostContent = styled.div`
   width: 100%;
   color: #fff;
-  textarea {
-    min-height: 100px;
-    font-weight: 500;
-    color: #000;
-    margin: 0 0 14px;
-  }
 `;
 
 const TopBar = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-  margin: 0 0 5px;
+  margin: 0 0 15px;
 `;
 
 const Heading = styled.h1`
@@ -36,13 +29,6 @@ const Heading = styled.h1`
   }
 `;
 
-const CloseModal = styled.div`
-  cursor: pointer;
-  svg{
-    color: #fff;
-    font-size: 22px;
-  }
-`;
 
 const AddYourPostBar = styled.div`
   display: flex;
@@ -84,19 +70,64 @@ const AddImageDiv = styled.div`
   }
 `;
 
-const ModalPostContent = ({}) => {
+const InputWrap = styled.div`
+    border: 1px solid #ffffff;
+    min-height: 60px;
+    font-size: 16px;
+    line-height: 21px;
+    width: 100%;
+    padding: 6px 8px;
+    margin: 0 0 20px;
+    background: #ffffff;
+    box-shadow: 0px 4px 8px rgb(44 39 56 / 4%);
+    border-radius: 0px;
+    display: flex;
+    flex-direction: column;
+    textarea {
+      min-height: 100px;
+      font-weight: 500;
+      color: #000;
+      margin: 0;
+      padding: 0;
+      font-size: 14px;
+    }
+    input {
+      font-weight: 500;
+      color: #000;
+      margin: 0;
+      height: 28px;
+      font-size: 14px;
+    }
+`;
+
+const LabelDiv = styled.label`
+    font-weight: bold;
+    font-size: 10px;
+    text-transform: uppercase;
+    color: #7f75bf;
+    line-height: normal;
+    margin: 0 0 5px;
+`;
+
+
+const CreateList = ({}) => {
   return (
     <>
       <PostContent>
           <TopBar>
-            <Heading>What’s Happening?</Heading>
-            <CloseModal>
-              <MdClose />
-            </CloseModal>
+            <Heading>Create List</Heading>
           </TopBar>
-          <Textarea></Textarea>
+          <InputWrap>
+            <LabelDiv>add title</LabelDiv>
+            <Input></Input>
+          </InputWrap>
+          <InputWrap>
+            <LabelDiv>add Description</LabelDiv>
+            <Textarea></Textarea>
+          </InputWrap>
+          
           <AddYourPostBar>
-            <AddYourPostLabel>Add to your Post</AddYourPostLabel>
+            <AddYourPostLabel>Add to Photo to your List (required)</AddYourPostLabel>
             <AddImageDiv>
                 <img
                   src={AddImageImg}
@@ -104,12 +135,10 @@ const ModalPostContent = ({}) => {
                 />
               </AddImageDiv>
           </AddYourPostBar>
-          <PostImage />
-          <SelectedListing />
           <BottomButtons />
       </PostContent>
     </>
   );
 };
 
-export default ModalPostContent;
+export default CreateList;

@@ -14,6 +14,9 @@ const BottomButtonsBar = styled.div`
     color: #000;
     margin: 0 0 14px;
   }
+  @media (max-width: 991px) and (orientation: landscape) { 
+    padding: 0 0 15px;
+  }
 `;
 
 

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import ModalPostContent from './ModalPostContent'
 import AllListingsContent from '../AddPostModal/AllListings'
-
+import CreateList from './CreateList'
 
 
 const ModalContent = styled.div`
@@ -18,6 +18,7 @@ const ModalContent = styled.div`
   @media (max-width: 767px) {
     padding: 15px;
     min-width: 300px;
+    max-width: 300px;
   }
   @media (max-width: 991px) and (orientation: landscape) {
     max-height: 80vh;
@@ -32,7 +33,8 @@ const AddPostModal = ({}) => {
     <>
       <ModalContent>
           {/* <ModalPostContent /> */}
-          <AllListingsContent />
+          {/* <AllListingsContent /> */}
+          <CreateList />
       </ModalContent>
     </>
   );
