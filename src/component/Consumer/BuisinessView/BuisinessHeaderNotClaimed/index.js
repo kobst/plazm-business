@@ -9,6 +9,7 @@ import LinkedInImg from "../../../../images/Linkedin-new.svg";
 import InstagramImg from "../../../../images/Instagram-new.svg";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import Favorites from '../../../../images/favorites.png';
 
 const BuisinessHeaderContent = styled.div`
   width: 100%;
@@ -107,34 +108,53 @@ const ArrowDown = styled.div`
 
 const BusinessNameWrap = styled.div`
   display: flex;
-  flex-direction: row;
-  max-width: 85%;
-  @media (max-width: 767px) {
-    max-width: 75%;
+  flex-direction: column;
+  margin: 0 0 0 10px;
+  max-width: calc(100% - 60px);
+  width: 100%;
+  .FavoritesIcon{
+    max-width: 18px;
+    margin: 0 0 0 10px;
+  }
+  svg {
+    font-size: 18px;
   }
 `;
+
+const LeftHeader = styled.div`
+  display: flex;
+  align-items: center;
+  /* width: 100%; */
+`;
+
 const BusinessName = styled.h1`
   font-size: 20px;
   line-height: normal;
   font-weight: 800;
   text-transform: uppercase;
   color: #ffffff;
-  margin: 0 30px 0 10px;
+  margin: 0;
   padding: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  span{
+    max-width: 90%;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
   @media (max-width: 767px) {
     font-size: 14px;
-    margin: 0 10px;
   }
 `;
 const SocialIconsWrap = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-direction: row;
   align-items: center;
+  margin-left: -2px;
 `;
 const SocialIcon = styled.div`
   width: 17px;
@@ -165,6 +185,7 @@ const BuisinessHeaderNotClaimed = ({
           <IoMdClose onClick={() => closeTab()} />
         </CloseDiv>
         <BottomBar className={isProfile?"ProfileHeaderNam":''}>
+        <LeftHeader>
           {!isProfile ? (
             <BusinessIcon>
               <img
@@ -177,9 +198,10 @@ const BuisinessHeaderNotClaimed = ({
               />
             </BusinessIcon>
           ) : null}
+          </LeftHeader>
           {!isProfile ? (
             <BusinessNameWrap>
-              <BusinessName>{businessProfile&&businessProfile[0].company_name}</BusinessName>
+              <BusinessName><span>{businessProfile&&businessProfile[0].company_name}</span> <img className="FavoritesIcon" src={Favorites} alt="" /></BusinessName>
               <SocialIconsWrap>
                 {businessProfile&&businessProfile[0].handles.instagram ? (
                   <a href={businessProfile&&businessProfile[0].handles.instagram}>
