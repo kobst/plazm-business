@@ -11,6 +11,7 @@ const getPlace = (obj) => {
               totalPosts
               place {
                 _id
+                userSub
                 hours_format {
                     StartDay
                     EndDay
