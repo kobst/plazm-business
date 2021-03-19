@@ -33,5 +33,39 @@ const CreateList = (values) => {
     };
     return graphQl;
   };
+
+/*
+@desc: add post to a list
+@params: name, description, media, ownerId
+*/
+const addPostToList = (values) => {
+  const graphQl = {
+    query: `
+          mutation addPostToList($listId: ID!, $postId:ID! ){
+            addPostToList(input: {listId:$listId, postId:$postId}) {
+              message
+              success
+              list {
+                  _id
+                  name
+                  description
+                  ownerId
+                  posts
+                  likes
+                  followers
+                  media {
+                    image
+                    thumbnail
+                  }
+                }
+            }
+          }`,
+    variables: {
+      listId: values.listId,
+      postId: values.postId,
+    },
+  };
+  return graphQl;
+};
   
-  export { CreateList };
+  export { CreateList, addPostToList };

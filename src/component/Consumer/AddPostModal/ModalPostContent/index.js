@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { MdClose } from "react-icons/md";
 import BottomButtons from "../BottomButtons";
@@ -8,7 +8,11 @@ import PostImage from "../PostImage";
 import { MentionsInput, Mention } from "react-mentions";
 import { useDispatch, useSelector } from "react-redux";
 import { findAllUsers } from "../../../../reducers/consumerReducer";
-import { findAllLists } from "../../../../reducers/listReducer";
+import { AddPostToList, findAllLists } from "../../../../reducers/listReducer";
+import { addPostToBusiness } from "../../../../reducers/businessReducer";
+import { unwrapResult } from "@reduxjs/toolkit";
+
+const bucket = process.env.REACT_APP_BUCKET;
 
 const PostContent = styled.div`
   width: 100%;
@@ -87,8 +91,10 @@ const Heading = styled.h1`
   }
 `;
 
-const CloseModal = styled.div`
+const CloseModal = styled.button`
   cursor: pointer;
+  background-color: transparent;
+  border: 0;
   svg {
     color: #fff;
     font-size: 22px;
@@ -134,11 +140,31 @@ const AddImageDiv = styled.div`
     color: #fff;
   }
 `;
+
+const ErrorDiv = styled.div`
+  color: #ff0000;
+  font-weight: 600;
+  font-size: 12px;
+  margin: 0;
+  margin-bottom: 10px;
+`;
 let myInput;
-const ModalPostContent = ({setDisplayList, selectedListForPost, setSelectedListForPost}) => {
-  const [description, setDescription] = useState("");
-  const [mentionArrayList, setMentionArrayList] = useState([]);
-  const [mentionArrayUser, setMentionArrayUser] = useState([]);
+const ModalPostContent = ({
+  setDisplayList,
+  selectedListForPost,
+  setSelectedListForPost,
+  businessId,
+  closeModal,
+  description,
+  setDescription,
+  mentionArrayList,
+  setMentionArrayList,
+  mentionArrayUser,
+  setMentionArrayUser
+}) => {
+
+  // const [mentionArrayList, setMentionArrayList] = useState([]);
+  // const [mentionArrayUser, setMentionArrayUser] = useState([]);
   const [loader, setLoader] = useState(false);
   const users = useSelector((state) => state.consumer.users);
   const lists = useSelector((state) => state.list.lists);
@@ -146,20 +172,31 @@ const ModalPostContent = ({setDisplayList, selectedListForPost, setSelectedListF
   const [imageUpload, setImageUpload] = useState(null);
   const [imageError, setImageError] = useState("");
   const ws = useSelector((state) => state.user.ws);
-  let data = [...users, ...lists];
+  const user = useSelector((state) => state.user.user);
+  let allData = [...users, ...lists];
+  let data = allData.sort(function (a, b) {
+    return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+  });
   const dispatch = useDispatch();
   let userMentionData = data.map((myUser) => ({
     id: myUser._id,
     display: `@${myUser.name}`,
   }));
+
+  /** to fetch tagging data */
+  useEffect(()=>{
+    const fetchTaggingData = async () => {
+      if (users.length === 0)
+      await dispatch(findAllUsers());
+      if (lists.length === 0)
+      await dispatch(findAllLists());
+    }
+    fetchTaggingData()
+  },[dispatch, lists.length, users.length])
   /*
    * @desc: handle change function called on post input change
    */
   const handleChange = async (event, newValue, newPlainTextValue, mentions) => {
-    /** to fetch all users and list data */
-    if (users.length === 0) await dispatch(findAllUsers());
-    if (lists.length === 0) await dispatch(findAllLists());
-
     if (mentions.length !== 0) {
       /** to find if the mention is of users or lists */
       const findUser = users.find((i) => i._id === mentions[0].id);
@@ -199,12 +236,121 @@ const ModalPostContent = ({setDisplayList, selectedListForPost, setSelectedListF
       }
     }
   };
+  /*
+   * @desc: to get folder_name in which image needs to be stored in s3 bucket
+   */
+  const folderName = () => {
+    /* to remove all special characters except space */
+    const removeSpecialCharacter = user.name.replace(/[^a-zA-Z ]/g, "");
+    /* to replace all spaces to underscore */
+    const replacedName = removeSpecialCharacter.split(" ").join("_");
+    /* return folder name */
+    return replacedName + "_" + user._id;
+  };
+
+  /*
+   * @desc: to change file_name
+   */
+  const fileName = (name) => {
+    return `${Date.now()}-${name}`;
+  };
+
+  /*
+   * @desc: add a post
+   */
+  const savePost = async () => {
+    /*set loader value */
+    setLoader(true);
+
+    /* to upload file to s3 bucket on save of profile button */
+    let imageUrl = null;
+    if (imageFile !== null) {
+      const folder_name = folderName(user.name, user._id);
+      const file_name = fileName(imageFile.name);
+      const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${file_name}`;
+      const value = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/upload_photo`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            Key: imageFile.name,
+            ContentType: imageFile.type,
+            folder_name: folder_name,
+          }),
+        }
+      );
+      const body = await value.text();
+      const Val = JSON.parse(body);
+
+      await fetch(Val, {
+        method: "PUT",
+        headers: {
+          "Content-Type": imageFile.type,
+        },
+        body: imageFile,
+      })
+        .then((response) => {
+          imageUrl = baseUrl;
+        })
+        .catch(
+          (error) => console.log(error) // Handle the error response object
+        );
+    }
+    const obj = {
+      business: businessId,
+      data: description,
+      taggedUsers: mentionArrayUser,
+      taggedLists: mentionArrayList,
+      ownerId: user._id,
+      listId: selectedListForPost? selectedListForPost: null,
+      media:
+        imageFile !== null
+          ? imageUrl !== null
+            ? [{ image: imageUrl, thumbnail: "" }]
+            : []
+          : [],
+    };
+    /* create a post api */
+    const addPost = await dispatch(addPostToBusiness(obj));
+    const response = await unwrapResult(addPost);
+    if (response.success === true) {
+      if(selectedListForPost) {
+        const addToList = await dispatch(AddPostToList({postId: response.post._id, listId: selectedListForPost}));
+        const res = await unwrapResult(addToList);
+        if(res.data.addPostToList.success === true) {
+          closeModal();
+          setLoader(false);
+          setDescription("");
+        }
+      } else {
+      closeModal();
+      setLoader(false);
+      setDescription("");
+      }
+      ws.send(
+        JSON.stringify({
+          action: "post",
+          businessId: businessId,
+          post: {
+            postId: response.post._id,
+            postDetails: response.post,
+            totalComments: 0,
+            totalLikes: 0,
+            comments: [],
+          },
+        })
+      );
+    }
+  };
   return (
     <>
       <PostContent>
         <TopBar>
           <Heading>What’s Happening?</Heading>
-          <CloseModal>
+          <CloseModal onClick={() => closeModal()} disabled={loader}>
             <MdClose />
           </CloseModal>
         </TopBar>
@@ -221,6 +367,7 @@ const ModalPostContent = ({setDisplayList, selectedListForPost, setSelectedListF
             trigger="@"
             data={userMentionData}
             className="mentions__mention"
+            appendSpaceOnAdd={true}
           />
         </MentionsInput>
         <AddYourPostBar>
@@ -230,6 +377,7 @@ const ModalPostContent = ({setDisplayList, selectedListForPost, setSelectedListF
               id="myInput"
               onChange={(e) => uploadImage(e)}
               type="file"
+              accept=".png, .jpg, .jpeg"
               ref={(ref) => (myInput = ref)}
               style={{ display: "none" }}
               disabled={loader}
@@ -240,8 +388,19 @@ const ModalPostContent = ({setDisplayList, selectedListForPost, setSelectedListF
         {imageUpload !== null ? (
           <PostImage image={imageUpload} setImageUpload={setImageUpload} />
         ) : null}
-        <SelectedListing selectedListForPost={selectedListForPost} setSelectedListForPost={setSelectedListForPost}/>
-        <BottomButtons type="post" setDisplayList={setDisplayList}/>
+        {imageError !== "" ? <ErrorDiv>{imageError}</ErrorDiv> : null}
+        <SelectedListing
+          selectedListForPost={selectedListForPost}
+          setSelectedListForPost={setSelectedListForPost}
+        />
+        <BottomButtons
+          type="post"
+          setDisplayList={setDisplayList}
+          loader={loader}
+          description={description}
+          setDescription={setDescription}
+          savePost={savePost}
+        />
       </PostContent>
     </>
   );

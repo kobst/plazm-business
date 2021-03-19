@@ -6,7 +6,7 @@ import history from "../../../utils/history";
 import ValueLoader from "../../../utils/loader";
 import { useDispatch } from "react-redux";
 import { fetchAllPlaces } from "../../../reducers/placeReducer";
-import { checkBusiness } from "../../../reducers/businessReducer";
+import { checkBusiness, getBusinessImages } from "../../../reducers/businessReducer";
 import { unwrapResult } from '@reduxjs/toolkit';
 import { fetchUserDetails,setWs } from "../../../reducers/userReducer";
 
@@ -54,6 +54,8 @@ const DashboardContainer = (props) => {
       const response =  await dispatch(checkBusiness({businessId:props.match.params.id,filters:{Business: true, PostsByMe: false, MySubscriptions:false}, value:0}));
       const data =  await unwrapResult(response);
       if(data.success === true && data.place.length > 0){
+        /** fetch business images */
+        await dispatch(getBusinessImages(props.match.params.id))
         setBusinessExists(true)
       }
       else {

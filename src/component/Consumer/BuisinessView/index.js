@@ -42,7 +42,7 @@ const BuisinessView = ({
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(setSideFilters());
-  },[]);
+  },[dispatch]);
   return (
     <>
       {!loading &&

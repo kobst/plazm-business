@@ -156,35 +156,59 @@ const AllListings = ({
   setDisplayList,
   setSelectedListForPost,
   selectedListForPost,
+  setDescription,
+  description,
+  mentionArrayList,
+  setMentionArrayList,
+  mentionArrayUser,
+  setMentionArrayUser,
+  setDisplayCreateList
 }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
-  const userLists = useSelector((state) => state.list.userLists);
+  const userListsFromStore = useSelector((state) => state.list.userLists);
+  const [userListsFiltered, setUserListsFiltered] = useState([]);
   const loadingUserLists = useSelector((state) => state.list.loadingUserLists);
   const [selectedList, setSelectedList] = useState(null);
+  const [search, setSearch] = useState("")
+
+  const userLists = userListsFiltered.length >0 ? userListsFiltered : userListsFromStore
 
   /**fetch user list */
   useEffect(() => {
+    if(userLists.length === 0)
     dispatch(fetchUserLists(user._id));
-  }, []);
+  }, [dispatch, user._id, userLists.length]);
 
+  /** to set selected list */
   useEffect(() => {
     if (selectedListForPost !== null) {
       setSelectedList(
         userLists.filter((i) => i._id === selectedListForPost)[0]._id
       );
     }
-  }, [selectedListForPost]);
+  }, [selectedListForPost, userLists]);
 
+  /** lists search functionality implemented */
+  useEffect(()=>{
+    setUserListsFiltered(userListsFromStore.filter(entry => entry.name.toLowerCase().indexOf(search)!==-1))
+  },[search,userListsFromStore])
+
+  /** to select a particular list */
   const selectList = (id) => {
     if (selectedList === id) setSelectedList(null);
     else setSelectedList(id);
   };
+
+  /** on change handler for search */
+  const searchList = (e) => {
+    setSearch(e.target.value);
+  }
   return (
     <>
       <AllListingsContent>
         <SearchWrap>
-          <Input />
+          <Input onChange={(e)=>searchList(e)}/>
           <SearchIconDiv>
             <FiSearch />
           </SearchIconDiv>
@@ -242,6 +266,13 @@ const AllListings = ({
           selectedList={selectedList}
           setDisplayList={setDisplayList}
           setSelectedListForPost={setSelectedListForPost}
+          setDescription={setDescription}
+          description={description}
+          mentionArrayList={mentionArrayList}
+          setMentionArrayList={setMentionArrayList}
+          mentionArrayUser={mentionArrayUser}
+          setMentionArrayUser={setMentionArrayUser}
+          setDisplayCreateList={setDisplayCreateList}
         />
       </AllListingsContent>
     </>

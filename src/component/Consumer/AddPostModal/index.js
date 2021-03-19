@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import ModalPostContent from "./ModalPostContent";
 import AllListingsContent from "../AddPostModal/AllListings";
-import CreateList from "./CreateList";
+import CreateListModel from "./createList";
 
 const ModalContent = styled.div`
   width: 100%;
@@ -26,27 +26,46 @@ const ModalContent = styled.div`
   }
 `;
 
-const AddPostModal = () => {
+const AddPostModal = ({ businessId, closeModal }) => {
   const [displayList, setDisplayList] = useState(false);
+  const [displayCreateList, setDisplayCreateList] = useState(false);
   const [selectedListForPost, setSelectedListForPost] = useState(null);
+  const [description, setDescription] = useState("");
+  const [mentionArrayList, setMentionArrayList] = useState([]);
+  const [mentionArrayUser, setMentionArrayUser] = useState([]);
   return (
     <>
       <ModalContent>
-        {/* <ModalPostContent /> */}
         {displayList ? (
           <AllListingsContent
             setDisplayList={setDisplayList}
             setSelectedListForPost={setSelectedListForPost}
             selectedListForPost={selectedListForPost}
+            setDescription={setDescription}
+            description={description}
+            mentionArrayList={mentionArrayList}
+            setMentionArrayList={setMentionArrayList}
+            mentionArrayUser={mentionArrayUser}
+            setMentionArrayUser={setMentionArrayUser}
+            setDisplayCreateList={setDisplayCreateList}
           />
+        ) : displayCreateList ? (
+          <CreateListModel setSelectedListForPost={setSelectedListForPost} setDisplayList={setDisplayList} setDisplayCreateList={setDisplayCreateList}/>
         ) : (
           <ModalPostContent
+            closeModal={closeModal}
+            businessId={businessId}
             setDisplayList={setDisplayList}
             selectedListForPost={selectedListForPost}
             setSelectedListForPost={setSelectedListForPost}
+            description={description}
+            setDescription={setDescription}
+            mentionArrayList={mentionArrayList}
+            setMentionArrayList={setMentionArrayList}
+            mentionArrayUser={mentionArrayUser}
+            setMentionArrayUser={setMentionArrayUser}
           />
         )}
-        {/* <CreateList /> */}
       </ModalContent>
     </>
   );

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { graphQlEndPoint } from "../Api/graphQl";
-import { CreateList, getAllLists, getUserLists } from "../graphQl";
+import { addPostToList, CreateList, getAllLists, getUserLists } from "../graphQl";
 
 
 /*
@@ -31,6 +31,16 @@ export const fetchUserLists = createAsyncThunk("data/fetchUserLists", async (obj
   const graphQl = getUserLists(obj);
   const response = await graphQlEndPoint(graphQl);
   return response.data.getUserLists.list;
+});
+
+/*
+ * @desc:  to add post to list
+ * @params: listId, postId
+ */
+export const AddPostToList = createAsyncThunk("data/AddPostToList", async (obj) => {
+  const graphQl = addPostToList(obj);
+  const response = await graphQlEndPoint(graphQl);
+  return response;
 });
 export const slice = createSlice({
     name: "list",
@@ -89,7 +99,6 @@ export const slice = createSlice({
         }
       },
       [createList.fulfilled]: (state, action) => {
-        console.log(action.payload)
         if (state.loadingCreateList) {
           state.loadingCreateList = false;
           if(action.payload) {

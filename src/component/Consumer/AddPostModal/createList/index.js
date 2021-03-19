@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import AddImageImg from "../../../images/addImage.svg";
+import AddImageImg from "../../../../images/addImage.svg";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import FormBody from "./formBody";
 import { validate } from "./validate";
-import ValueLoader from "../../../utils/loader";
+import ValueLoader from "../../../../utils/loader";
 import { useDispatch, useSelector } from "react-redux";
-import BackButton from "../UI/BackButton";
-import SaveButton from "../UI/SaveButton";
-import { createList } from "../../../reducers/listReducer";
-import PostImage from "../AddPostModal/PostImage";
+import BackButton from "../../UI/BackButton";
+import SaveButton from "../../UI/SaveButton";
+import { createList } from "../../../../reducers/listReducer";
+import PostImage from "../PostImage";
 import { unwrapResult } from "@reduxjs/toolkit";
 
 const bucket = process.env.REACT_APP_BUCKET;
@@ -94,66 +94,6 @@ const AddImageDiv = styled.div`
   }
 `;
 
-const InputWrap = styled.div`
-  border: 1px solid #ffffff;
-  min-height: 60px;
-  font-size: 16px;
-  line-height: 21px;
-  width: 100%;
-  padding: 6px 8px;
-  margin: 0 0 20px;
-  background: #ffffff;
-  box-shadow: 0px 4px 8px rgb(44 39 56 / 4%);
-  border-radius: 0px;
-  display: flex;
-  flex-direction: column;
-  textarea {
-    min-height: 100px;
-    font-weight: 500;
-    color: #000;
-    margin: 0;
-    padding: 0;
-    font-size: 14px;
-  }
-  input {
-    font-weight: 500;
-    color: #000;
-    margin: 0;
-    height: 28px;
-    font-size: 14px;
-  }
-`;
-
-const LabelDiv = styled.label`
-  font-weight: bold;
-  font-size: 10px;
-  text-transform: uppercase;
-  color: #7f75bf;
-  line-height: normal;
-  margin: 0 0 5px;
-`;
-
-const ModalContent = styled.div`
-  width: 100%;
-  position: relative;
-  display: flex;
-  padding: 20px;
-  max-width: 536px;
-  min-width: 536px;
-  background: #282352;
-  box-shadow: 0px 32px 70px rgba(0, 0, 0, 0.25);
-  color: #fff;
-  @media (max-width: 767px) {
-    padding: 15px;
-    min-width: 300px;
-    max-width: 300px;
-  }
-  @media (max-width: 991px) and (orientation: landscape) {
-    max-height: 80vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-`;
 const ErrorDiv = styled.div`
   color: #ff0000;
   font-weight: 600;
@@ -164,9 +104,9 @@ const ErrorDiv = styled.div`
 
 let myInput;
 const CreateListModel = ({
-  closeModal,
   setDisplayList,
   setSelectedListForPost,
+  setDisplayCreateList
 }) => {
   const [loader, setLoader] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
@@ -219,12 +159,11 @@ const CreateListModel = ({
   @params: form values
   */
   const addList = async (values) => {
-    /*set loader value */
-    setLoader(true);
-
     /* to upload file to s3 bucket on save of profile button */
     let imageUrl = null;
     if (imageFile !== null) {
+      /*set loader value */
+      setLoader(true);
       const folder_name = folderName(user.name, user._id);
       const file_name = fileName(imageFile.name);
       const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${file_name}`;
@@ -276,7 +215,7 @@ const CreateListModel = ({
         setResponse("List added successfully.");
         setError("");
         setLoader(false);
-        closeModal();
+        setDisplayCreateList(false);
         setDisplayList(false);
         setSelectedListForPost(data.data.createList.list._id);
       } else if (data && data.data.createList.success === false) {
@@ -288,8 +227,13 @@ const CreateListModel = ({
       setImageError("Image Is required");
     }
   };
+
+  /**cancel button functionality */
+  const cancelButton = () => {
+    setDisplayCreateList(false);
+    setDisplayList(true)
+  }
   return (
-    <ModalContent>
       <PostContent>
         <TopBar>
           <Heading>Create List</Heading>
@@ -324,6 +268,7 @@ const CreateListModel = ({
                     accept=".png, .jpg, .jpeg"
                     ref={(ref) => (myInput = ref)}
                     style={{ display: "none" }}
+                    disabled={loader}
                   />
                   <img
                     src={AddImageImg}
@@ -352,7 +297,7 @@ const CreateListModel = ({
               )}
               {/* bottom buttons bar */}
               <BottomButtonsBar>
-                <BackButton onClick={() => closeModal()} disabled={loader}>
+                <BackButton onClick={() => cancelButton()} disabled={loader}>
                   Cancel
                 </BackButton>
                 <SaveButton type="submit" disabled={loader}>
@@ -363,7 +308,6 @@ const CreateListModel = ({
           )}
         </Formik>
       </PostContent>
-    </ModalContent>
   );
 };
 

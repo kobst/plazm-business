@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import CreateListModel from "../../CreateListModel";
+import ValueLoader from "../../../../utils/loader";
 import BackButton from "../../UI/BackButton";
-import ModalComponent from "../../UI/Modal";
 import SaveButton from "../../UI/SaveButton";
 
 const BottomButtonsBar = styled.div`
@@ -27,13 +26,22 @@ const BottomButtons = ({
   setSelectedListForPost,
   selectedList,
   closeModal,
+  loader,
+  description,
+  savePost,
+  setDescription,
+  mentionArrayList,
+  setMentionArrayList,
+  mentionArrayUser,
+  setMentionArrayUser,
+  setDisplayCreateList
 }) => {
-  const [listModel, setListModel] = useState(false);
   /** left button functionality */
   const leftBtn = () => {
     if (type === "post") setDisplayList(true);
     else if (type === "list") {
-      setListModel(true);
+      setDisplayList(false);
+      setDisplayCreateList(true);
     } else {
       closeModal();
     }
@@ -44,37 +52,43 @@ const BottomButtons = ({
     if (type === "list") {
       setDisplayList(false);
       setSelectedListForPost(selectedList);
+      setMentionArrayList(mentionArrayList);
+      setMentionArrayUser(mentionArrayUser);
+      setDescription(description);
     } else if (type === "post") {
+      savePost();
     } else {
-      // onSubmit()
-      // closeModal();
+      closeModal();
     }
   };
   return (
     <>
-      {listModel && (
-        <ModalComponent
-          closeOnOutsideClick={true}
-          isOpen={listModel}
-          closeModal={() => setListModel(false)}
-        >
-          <CreateListModel
-            closeModal={() => setListModel(false)}
-            setDisplayList={setDisplayList}
-            setSelectedListForPost={setSelectedListForPost}
-          />
-        </ModalComponent>
-      )}
       <BottomButtonsBar>
-        <BackButton onClick={() => leftBtn()}>
+        <BackButton onClick={() => leftBtn()} disabled={loader}>
           {type === "post"
             ? "Add to List"
             : type === "list"
             ? "Create New List"
             : "Cancel"}
         </BackButton>
-        <SaveButton onClick={() => rightBtn()}>
-          {type === "post" ? "Post" : type === "list" ? "Select" : "Create"}
+        <SaveButton
+          onClick={() => rightBtn()}
+          disabled={
+            type === "post" &&
+            (loader || description === "" || !description.trim() === true)
+          }
+        >
+          {type === "post" ? (
+            loader ? (
+              <ValueLoader />
+            ) : (
+              "Post"
+            )
+          ) : type === "list" ? (
+            "Select"
+          ) : (
+            "Create"
+          )}
         </SaveButton>
       </BottomButtonsBar>
     </>

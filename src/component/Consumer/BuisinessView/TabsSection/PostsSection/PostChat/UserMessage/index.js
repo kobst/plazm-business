@@ -149,7 +149,9 @@ const UserMessage = ({ postData }) => {
       /** to add post via socket */
       if (message.businessId === business._id) {
         if (message.userId === user._id) {
-          if (filters.PostsByMe === true) {
+          if (filters.PostsByMe === true && message.post.postDetails.listId === null) {
+            dispatch(addPostViaSocket(message));
+          } else if(filters.MySubscriptions === true && message.post.postDetails.listId !== null) {
             dispatch(addPostViaSocket(message));
           }
         } else {
@@ -300,6 +302,8 @@ const UserMessage = ({ postData }) => {
             </ProfileThumb>
             <ProfileNameWrap>
               <ProfileName>
+                {postData.postDetails.listId!==null? postData.postDetails.listId.name: null}
+                {postData.postDetails.listId!==null?<span>by</span>: null}
                 {postData.postDetails.ownerId === null
                   ? business.company_name
                   : postData.postDetails.ownerId.name}{" "}

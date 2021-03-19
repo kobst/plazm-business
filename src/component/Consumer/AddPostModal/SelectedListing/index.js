@@ -39,7 +39,7 @@ const SelectedListing = ({ selectedListForPost, setSelectedListForPost }) => {
     if (selectedListForPost !== null) {
       setListName(userLists.filter((i) => i._id === selectedListForPost)[0].name);
     }
-  }, [selectedListForPost]);
+  }, [selectedListForPost, userLists]);
   return (
     <>
       {selectedListForPost !== null ? (

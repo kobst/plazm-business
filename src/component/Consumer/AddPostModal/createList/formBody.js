@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import Input from "../UI/FormikInput";
-import TextArea from "../UI/formikTextArea";
+import Input from "../../UI/FormikInput";
+import TextArea from "../../UI/formikTextArea";
 
 const InputContainer = styled.div`
   border: 1px solid ${(props) => (props.usererror ? "#FF7171" : "#ffffff")};

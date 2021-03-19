@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import error from "../../../constants";
+import error from "../../../../constants";
 
 /*
  * @desc: validation schema for update consumer profile

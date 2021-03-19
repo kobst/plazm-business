@@ -24,10 +24,14 @@ import { findPostComments, findCommentReplies } from "./query/comments";
 
 import { addLikeToEvents } from "./mutations/event";
 
-import { CreateList } from "./mutations/list";
+import { CreateList, addPostToList } from "./mutations/list";
+
+import { findBusinessPhotos } from './query/post';
 
 export {
+  findBusinessPhotos,
   getUserLists,
+  addPostToList,
   addFavoriteBusiness,
   removeFavoriteBusiness,
   findCommentReplies,

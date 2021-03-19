@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { IoMdCloseCircle } from "react-icons/io";
-import PostIng from '../../../../images/sliderimg.png'
 
 const AllListingsContent = styled.div`
   width: 100%;
