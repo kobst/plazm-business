@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import BackButton from '../../UI/BackButton'
-import SaveButton from '../../UI/SaveButton'
+import CreateListModel from "../../CreateListModel";
+import BackButton from "../../UI/BackButton";
+import ModalComponent from "../../UI/Modal";
+import SaveButton from "../../UI/SaveButton";
 
 const BottomButtonsBar = styled.div`
   width: 100%;
@@ -14,18 +16,61 @@ const BottomButtonsBar = styled.div`
     color: #000;
     margin: 0 0 14px;
   }
-  @media (max-width: 991px) and (orientation: landscape) { 
+  @media (max-width: 991px) and (orientation: landscape) {
     padding: 0 0 15px;
   }
 `;
 
+const BottomButtons = ({
+  setDisplayList,
+  type,
+  setSelectedListForPost,
+  selectedList,
+  closeModal,
+}) => {
+  const [listModel, setListModel] = useState(false);
+  /** left button functionality */
+  const leftBtn = () => {
+    if (type === "post") setDisplayList(true);
+    else if (type === "list") {
+      setListModel(true);
+    } else {
+      closeModal();
+    }
+  };
 
-const BottomButtons = ({}) => {
+  /** right button functionality */
+  const rightBtn = () => {
+    if (type === "list") {
+      setDisplayList(false);
+      setSelectedListForPost(selectedList);
+    } else if (type === "post") {
+    } else {
+      closeModal();
+    }
+  };
   return (
     <>
+      {listModel && (
+        <ModalComponent
+          closeOnOutsideClick={true}
+          isOpen={listModel}
+          closeModal={() => setListModel(false)}
+        >
+          <CreateListModel closeModal={() => setListModel(false)} />
+        </ModalComponent>
+      )}
       <BottomButtonsBar>
-          <BackButton>Add to List</BackButton>
-          <SaveButton>Post</SaveButton>
+        <BackButton onClick={() => leftBtn()}>
+          {type === "post"
+            ? "Add to List"
+            : type === "list"
+            ? "Create New List"
+            : "Cancel"}
+        </BackButton>
+        <SaveButton onClick={() => rightBtn()}>
+          {type === "post" ? "Post" : type === "list" ? "Select" : "Create"}
+        </SaveButton>
       </BottomButtonsBar>
     </>
   );

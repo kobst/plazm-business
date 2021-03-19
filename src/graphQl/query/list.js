@@ -25,5 +25,29 @@ const getAllLists = () => {
     return graphQl;
   };
 
-  export { getAllLists };
+/*
+@desc: getUserLists query
+*/
+const getUserLists = (ownerId) => {
+  const graphQl = {
+    query: `
+          query GetUserLists($id: ID!){
+            getUserLists(input: {id: $id}) {
+              message
+              success
+              list {
+                  _id
+                  name
+                  ownerId
+                }
+              }
+          }`,
+    variables: {
+      id: ownerId,
+    },
+  };
+  return graphQl;
+};
+
+  export { getAllLists, getUserLists };
   

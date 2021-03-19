@@ -41,14 +41,14 @@ const CloseList = styled.div`
 
 
 
-const PostImage = ({}) => {
+const PostImage = ({image, setImageUpload}) => {
   return (
     <>
       <AllListingsContent>
         <PostImageDiv>
-          <img src={PostIng} alt="" />
+          <img src={image} alt="" />
         <CloseList>
-          <IoMdCloseCircle />
+          <IoMdCloseCircle onClick={()=>setImageUpload(null)}/>
         </CloseList>
         </PostImageDiv>
       </AllListingsContent>

@@ -182,11 +182,13 @@ const BuisinessHeaderNotClaimed = ({
   const history = useHistory();
 
   useEffect(() => {
-    const find = user.favorites.find((i) => i === businessProfile[0]._id);
-    if (find) {
-      setFavoriteBusiness(true);
-    } else setFavoriteBusiness(false);
-  }, [user, businessProfile[0]._id]);
+    if (businessProfile && businessProfile.length>0) {
+      const find = user.favorites.find((i) => i === businessProfile[0]._id);
+      if (find) {
+        setFavoriteBusiness(true);
+      } else setFavoriteBusiness(false);
+    }
+  }, [user,businessProfile]);
 
   /*
    * @desc: close tab function to be called on cross icon click
@@ -196,23 +198,23 @@ const BuisinessHeaderNotClaimed = ({
     history.push("/");
   };
 
-    /** to add a business to user favorites */
-    const addFavorite = async () => {
-      const obj = {
-        businessId: businessProfile[0]._id,
-        userId: user._id,
-      };
-      await dispatch(AddBusinessFavorite(obj));
+  /** to add a business to user favorites */
+  const addFavorite = async () => {
+    const obj = {
+      businessId: businessProfile[0]._id,
+      userId: user._id,
     };
-  
-    /** to remove a business to user favorites */
-    const removeFavorite = async () => {
-      const obj = {
-        businessId: businessProfile[0]._id,
-        userId: user._id,
-      };
-      await dispatch(RemoveBusinessFavorite(obj));
+    await dispatch(AddBusinessFavorite(obj));
+  };
+
+  /** to remove a business to user favorites */
+  const removeFavorite = async () => {
+    const obj = {
+      businessId: businessProfile[0]._id,
+      userId: user._id,
     };
+    await dispatch(RemoveBusinessFavorite(obj));
+  };
   return (
     <>
       <BuisinessHeaderContent

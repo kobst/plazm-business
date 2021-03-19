@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { IoMdCloseCircle } from "react-icons/io";
+import { useSelector } from "react-redux";
 
 const AllListingsContent = styled.div`
   width: 100%;
@@ -13,10 +14,10 @@ const AllListingsContent = styled.div`
 const Listing = styled.div`
   font-weight: bold;
   font-size: 14px;
-  color: #FF2E9A;
+  color: #ff2e9a;
   display: -webkit-box;
   -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;  
+  -webkit-box-orient: vertical;
   overflow: hidden;
   max-width: calc(100% - 30px);
 `;
@@ -29,18 +30,26 @@ const CloseList = styled.div`
   }
 `;
 
-
-
-
-const SelectedListing = ({}) => {
+const SelectedListing = ({ selectedListForPost, setSelectedListForPost }) => {
+  const userLists = useSelector((state) => state.list.userLists);
+  const [listName, setListName] = useState("");
+  
+  /** to display the name of the selected list */
+  useEffect(() => {
+    if (selectedListForPost !== null) {
+      setListName(userLists.filter((i) => i._id === selectedListForPost)[0].name);
+    }
+  }, [selectedListForPost]);
   return (
     <>
-      <AllListingsContent>
-        <Listing>Top 10 Restaurant in NYC</Listing>
-        <CloseList>
-          <IoMdCloseCircle />
-        </CloseList>
-      </AllListingsContent>
+      {selectedListForPost !== null ? (
+        <AllListingsContent>
+          <Listing>{listName}</Listing>
+          <CloseList>
+            <IoMdCloseCircle onClick={()=>setSelectedListForPost(null)}/>
+          </CloseList>
+        </AllListingsContent>
+      ) : null}
     </>
   );
 };

@@ -9,7 +9,7 @@ import { getUser, getAllUsers } from "./query/user";
 
 import { getPlace, searchAllPlaces } from "./query/place";
 
-import { getAllLists } from "./query/list";
+import { getAllLists, getUserLists } from "./query/list";
 
 import { createPost, addLikeToPost } from "./mutations/post";
 
@@ -27,6 +27,7 @@ import { addLikeToEvents } from "./mutations/event";
 import { CreateList } from "./mutations/list";
 
 export {
+  getUserLists,
   addFavoriteBusiness,
   removeFavoriteBusiness,
   findCommentReplies,

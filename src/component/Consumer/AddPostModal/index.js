@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import ModalPostContent from './ModalPostContent'
-import AllListingsContent from '../AddPostModal/AllListings'
-import CreateList from './CreateList'
-
+import ModalPostContent from "./ModalPostContent";
+import AllListingsContent from "../AddPostModal/AllListings";
+import CreateList from "./CreateList";
 
 const ModalContent = styled.div`
   width: 100%;
@@ -27,14 +26,27 @@ const ModalContent = styled.div`
   }
 `;
 
-
-const AddPostModal = ({}) => {
+const AddPostModal = () => {
+  const [displayList, setDisplayList] = useState(false);
+  const [selectedListForPost, setSelectedListForPost] = useState(null);
   return (
     <>
       <ModalContent>
-          <ModalPostContent />
-          {/* <AllListingsContent /> */}
-          {/* <CreateList /> */}
+        {/* <ModalPostContent /> */}
+        {displayList ? (
+          <AllListingsContent
+            setDisplayList={setDisplayList}
+            setSelectedListForPost={setSelectedListForPost}
+            selectedListForPost={selectedListForPost}
+          />
+        ) : (
+          <ModalPostContent
+            setDisplayList={setDisplayList}
+            selectedListForPost={selectedListForPost}
+            setSelectedListForPost={setSelectedListForPost}
+          />
+        )}
+        {/* <CreateList /> */}
       </ModalContent>
     </>
   );
