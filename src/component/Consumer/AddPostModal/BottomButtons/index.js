@@ -46,7 +46,8 @@ const BottomButtons = ({
       setSelectedListForPost(selectedList);
     } else if (type === "post") {
     } else {
-      closeModal();
+      // onSubmit()
+      // closeModal();
     }
   };
   return (
@@ -57,7 +58,11 @@ const BottomButtons = ({
           isOpen={listModel}
           closeModal={() => setListModel(false)}
         >
-          <CreateListModel closeModal={() => setListModel(false)} />
+          <CreateListModel
+            closeModal={() => setListModel(false)}
+            setDisplayList={setDisplayList}
+            setSelectedListForPost={setSelectedListForPost}
+          />
         </ModalComponent>
       )}
       <BottomButtonsBar>

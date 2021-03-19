@@ -174,7 +174,10 @@ const AddPostSection = ({ profile, businessId }) => {
   const users = useSelector((state) => state.consumer.users);
   const lists = useSelector((state) => state.list.lists);
   const ws = useSelector((state) => state.user.ws);
-  let data = [...users, ...lists];
+  let allData = [...users, ...lists];
+  let data = allData.sort(function (a, b) {
+    return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+  });
 
   let userMentionData = data.map((myUser) => ({
     id: myUser._id,

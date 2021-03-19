@@ -27,11 +27,13 @@ const PostImageDiv = styled.div`
   }
 `;
 
-const CloseList = styled.div`
+const CloseList = styled.button`
   cursor: pointer;
   position: absolute;
   right: 5px;
   top: 5px;
+  background: transparent;
+  border: 0;
   svg {
     color: #fff;
     font-size: 20px;
@@ -41,14 +43,14 @@ const CloseList = styled.div`
 
 
 
-const PostImage = ({image, setImageUpload}) => {
+const PostImage = ({image, setImageUpload, loader}) => {
   return (
     <>
       <AllListingsContent>
         <PostImageDiv>
           <img src={image} alt="" />
-        <CloseList>
-          <IoMdCloseCircle onClick={()=>setImageUpload(null)}/>
+        <CloseList disabled={loader} onClick={()=>setImageUpload(null)}>
+          <IoMdCloseCircle/>
         </CloseList>
         </PostImageDiv>
       </AllListingsContent>

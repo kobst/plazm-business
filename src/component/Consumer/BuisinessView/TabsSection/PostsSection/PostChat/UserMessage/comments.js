@@ -156,7 +156,6 @@ const Comments = ({ i, postData, displayComments, setFlag, flag }) => {
         </ProfileThumb>
         <ProfileNameWrap>
           <ProfileName>
-            <span>by</span>
             {i.userId.name}{" "}
           </ProfileName>
           <ChatInput>

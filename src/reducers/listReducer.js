@@ -20,7 +20,7 @@ export const findAllLists = createAsyncThunk("data/findAllLists", async () => {
 export const createList = createAsyncThunk("data/createList", async (obj) => {
   const graphQl = CreateList(obj);
   const response = await graphQlEndPoint(graphQl);
-  return response.data.createList.list;
+  return response;
 });
 
 /*
@@ -38,6 +38,7 @@ export const slice = createSlice({
       loading: false,
       lists: [],
       loadingUserLists: false,
+      loadingCreateList: false,
       userLists: []
     },
     reducers: {
@@ -79,6 +80,26 @@ export const slice = createSlice({
       [fetchUserLists.rejected]: (state, action) => {
         if (state.loadingUserLists) {
           state.loadingUserLists = false;
+          state.error = action.payload;
+        }
+      },
+      [createList.pending]: (state) => {
+        if (!state.loadingCreateList) {
+          state.loadingCreateList = true;
+        }
+      },
+      [createList.fulfilled]: (state, action) => {
+        console.log(action.payload)
+        if (state.loadingCreateList) {
+          state.loadingCreateList = false;
+          if(action.payload) {
+            state.userLists = state.userLists.concat(action.payload.data.createList.list);
+          }
+        }
+      },
+      [createList.rejected]: (state, action) => {
+        if (state.loadingCreateList) {
+          state.loadingCreateList = false;
           state.error = action.payload;
         }
       },

@@ -5,11 +5,12 @@
 const CreateList = (values) => {
     const graphQl = {
       query: `
-            mutation CreateList($name: String, $description:String, $media:outputMedia, $ownerId: ID){
+            mutation CreateList($name: String, $description:String, $media:[media], $ownerId: ID){
                 createList(input: {name:$name, description:$description, media:$media, ownerId:$ownerId}) {
                 message
                 success
                 list {
+                    _id
                     name
                     description
                     ownerId

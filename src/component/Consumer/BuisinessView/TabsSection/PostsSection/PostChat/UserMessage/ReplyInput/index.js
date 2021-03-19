@@ -277,6 +277,7 @@ const ReplyInput = ({
                 placeholder={type === "reply" ? "Add Reply" : "Add Comment"}
                 className="replyInput"
                 onKeyPress={(event) => commentAddKeyPress(event)}
+                autoFocus
               >
                 <Mention
                   type="user"
