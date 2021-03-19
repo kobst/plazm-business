@@ -128,7 +128,6 @@ const UserMessage = ({ eventData }) => {
   const dispatch = useDispatch();
   ws.onmessage = (evt) => {
     const message = JSON.parse(evt.data);
-    console.log(message);
     if (message.commentInfo && message.commentInfo.type === "Events") {
       /** to add event comment via socket */
       setDescription("");

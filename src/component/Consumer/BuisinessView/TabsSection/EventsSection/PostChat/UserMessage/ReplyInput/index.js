@@ -259,7 +259,7 @@ const ReplyInput = ({
     if (res) {
       let x = res.map((myUser) => ({
         id: myUser._id,
-        display: `@${myUser.name}`,
+        display: `${myUser.name}`,
         image: myUser.photo ? myUser.photo : "",
       }));
       setSelectedUsers(res)
