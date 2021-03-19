@@ -165,7 +165,7 @@ const ReplyInput = ({
   const user = useSelector((state) => state.user.user);
   const [mentionArrayUser, setMentionArrayUser] = useState([]);
   const [displayEmoji, setDisplayEmoji] = useState(false);
-  const [selectedUsers, setSelectedUsers] = useState([])
+  const [selectedUsers, setSelectedUsers] = useState([]);
   const dispatch = useDispatch();
 
   /** on select of emoji */
@@ -251,7 +251,7 @@ const ReplyInput = ({
     if (res) {
       let x = res.map((myUser) => ({
         id: myUser._id,
-        display: `@${myUser.name}`,
+        display: `${myUser.name}`,
         image: myUser.photo ? myUser.photo : "",
       }));
       setSelectedUsers(res)
@@ -275,6 +275,7 @@ const ReplyInput = ({
                 placeholder={type === "reply" ? "Add Reply" : "Add Comment"}
                 className="replyInput"
                 onKeyPress={(event) => commentAddKeyPress(event)}
+                autoFocus
               >
                 <Mention
                   type="user"

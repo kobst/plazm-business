@@ -300,7 +300,6 @@ const UserMessage = ({ postData }) => {
             </ProfileThumb>
             <ProfileNameWrap>
               <ProfileName>
-                <span>by</span>
                 {postData.postDetails.ownerId === null
                   ? business.company_name
                   : postData.postDetails.ownerId.name}{" "}
