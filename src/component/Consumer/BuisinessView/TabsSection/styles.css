@@ -203,6 +203,14 @@
     overflow-x: hidden !important;
   }
 
+  aside.emoji-picker-react {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    width: 50px;
+    right: 27px;
+  }
+
   @media (max-width:767px){ 
     #scrollableDiv {
       height: auto !important;
