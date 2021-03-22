@@ -202,6 +202,7 @@ const ReplyInput = ({
         body: desc,
         created_on: new Date(),
         taggedUsers: mentionArrayUser,
+        userDetails: user
       };
       addComment(obj);
     } else if (type === "reply" && desc !== "" && !desc.trim() === false) {

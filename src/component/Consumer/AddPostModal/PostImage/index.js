@@ -37,6 +37,9 @@ const CloseList = styled.button`
     color: #fff;
     font-size: 20px;
   }
+  :hover, :focus {
+    outline: 0;
+  }
 `;
 
 

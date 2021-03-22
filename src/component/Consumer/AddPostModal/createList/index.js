@@ -116,7 +116,6 @@ const CreateListModel = ({
   const [response, setResponse] = useState("");
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
-
   /*
   @desc: to check input file format and throw error if invalid image is input
   @params: input file
@@ -161,7 +160,7 @@ const CreateListModel = ({
   const addList = async (values) => {
     /* to upload file to s3 bucket on save of profile button */
     let imageUrl = null;
-    if (imageFile !== null) {
+    if (imageFile !== null && profileImage!==null) {
       /*set loader value */
       setLoader(true);
       const folder_name = folderName(user.name, user._id);

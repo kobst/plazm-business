@@ -167,6 +167,12 @@ export const addLikeViaSocket = createAsyncThunk(
   }
 );
 
+export const addCommentToPost1 = createAsyncThunk(
+  "data/addCommentToPost1",
+  async (obj) => {
+    return obj;
+  }
+);
 /*
  * @desc:  to add like to comment via sockets
  * @params: obj
@@ -579,6 +585,43 @@ export const slice = createSlice({
       if (state.loadingAddFilteredPosts) {
         state.loadingAddFilteredPosts = false;
         state.error = action.payload;
+      }
+    },
+
+    [addCommentToPost1.fulfilled]: (state, action) => {
+      if (action.payload) {
+        let posts = current(state.posts).filter(
+          (i) => i.postId !== action.payload.itemId
+        );
+        let posts1 = current(state.posts).filter(
+          (i) => i.postId === action.payload.itemId
+        );
+        if (posts1 && posts1.length > 0) {
+          let comments = posts1[0].comments.concat({
+            userId: action.payload.userDetails,
+            itemId: action.payload.itemId,
+            taggedUsers: action.payload.taggedUsers,
+            body: action.payload.body,
+            createdAt: action.payload.created_on,
+            totalReplies: 0,
+            likes: [],
+          });
+          let dummy1 = [];
+          dummy1.push({
+            postId: action.payload.itemId,
+            postDetails: posts1[0].postDetails,
+            comments: comments,
+            totalComments: posts1[0].totalComments + 1,
+            totalLikes: posts1[0].totalLikes,
+          });
+          dummy1 = dummy1.concat(posts);
+          state.posts = dummy1.sort((a, b) => {
+            return (
+              new Date(b.postDetails.createdAt) -
+              new Date(a.postDetails.createdAt)
+            );
+          });
+        }
       }
     },
   },

@@ -191,7 +191,7 @@ const AllListings = ({
 
   /** lists search functionality implemented */
   useEffect(()=>{
-    setUserListsFiltered(userListsFromStore.filter(entry => entry.name.toLowerCase().indexOf(search)!==-1))
+    setUserListsFiltered(userListsFromStore.filter(entry => entry.name.toLowerCase().indexOf(search.toLowerCase())!==-1))
   },[search,userListsFromStore])
 
   /** to select a particular list */

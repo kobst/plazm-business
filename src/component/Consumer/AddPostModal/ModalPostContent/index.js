@@ -99,6 +99,9 @@ const CloseModal = styled.button`
     color: #fff;
     font-size: 22px;
   }
+  :hover, :focus {
+    outline: 0;
+  }
 `;
 
 const AddYourPostBar = styled.div`

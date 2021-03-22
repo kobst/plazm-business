@@ -93,7 +93,12 @@ const BottomBar = styled.div`
   padding: 15px;
   align-items: flex-end;
   .favoriteBusiness {
-    color: red;
+    color: #ee3840;
+    cursor: pointer;
+  }
+  .favoriteBusinessBorder {
+    color: #ee3840;
+    cursor: pointer;
   }
   @media (max-width: 767px) {
     padding: 10px;
@@ -167,13 +172,14 @@ const BusinessName = styled.h1`
   font-weight: 800;
   text-transform: uppercase;
   color: #ffffff;
-  margin: 0;
+  margin: 0;  
   padding: 0;
   display: flex;
   align-items: center;
   width: 100%;
   span {
     max-width: 90%;
+    margin: 0 10px 0 0;
     display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
@@ -275,7 +281,7 @@ const BuisinessHeader = ({
                       className="favoriteBusiness"
                     />
                   ) : (
-                    <MdFavoriteBorder onClick={() => addFavorite()} />
+                    <MdFavoriteBorder onClick={() => addFavorite()} className="favoriteBusinessBorder" />
                   )}
                 </BusinessName>
                 <SocialIconsWrap>
