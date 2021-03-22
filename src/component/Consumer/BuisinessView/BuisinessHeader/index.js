@@ -27,7 +27,7 @@ const BuisinessHeaderContent = styled.div`
   height: 294px;
   @media (max-width: 767px) {
     flex-direction: column;
-    height: 142px;
+    height: 200px;
   }
   .react-multiple-carousel__arrow {
     min-width: 24px;
