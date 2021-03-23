@@ -39,6 +39,7 @@ const LeftSide = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  width: 100%;
 `;
 
 const BusinessIcon = styled.div`
@@ -118,7 +119,7 @@ const SocialIcon = styled.div`
   cursor: pointer;
 `;
 
-const BuisinessProfileSection = ({ setDisplayTab, setDisplayBusinessProfile }) => {
+const BuisinessProfileSection = ({ setDisplayTab, setDisplayBusinessProfile, displayBusinessProfile }) => {
   const businessProfile = useSelector((state) => state.business.business)[0];
   return (
     <>

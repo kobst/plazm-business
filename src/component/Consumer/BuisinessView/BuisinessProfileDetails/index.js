@@ -26,6 +26,7 @@ const BottomContent = styled.div`
 const BuisinessProfileDetails = ({
   setDisplayBusinessProfile,
   setDisplayTab,
+  displayBusinessProfile,
 }) => {
   const businessProfile = useSelector((state) => state.business.business)[0];
   return (
@@ -33,6 +34,7 @@ const BuisinessProfileDetails = ({
       <BuisinessViewContent>
         {businessProfile.userSub !== null ? (
           <BuisinessHeader
+            displayBusinessProfile = {displayBusinessProfile}
             isProfile={true}
             setDisplayBusinessProfile={setDisplayBusinessProfile}
             setDisplayTab={setDisplayTab}

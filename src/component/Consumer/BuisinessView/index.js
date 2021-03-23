@@ -60,18 +60,20 @@ const BuisinessView = ({
           businessProfile.length > 0 &&
           businessProfile[0].userSub !== null ? (
             displayBusinessProfile ? (
-              <BuisinessProfileDetails
+              <BuisinessProfileDetails 
+                displayBusinessProfile = {displayBusinessProfile}
                 setDisplayBusinessProfile={setDisplayBusinessProfile}
                 setDisplayTab={setDisplayTab}
               />
             ) : (
-              <BuisinessHeader
+              <BuisinessHeader 
                 setDisplayTab={setDisplayTab}
                 setDisplayBusinessProfile={setDisplayBusinessProfile}
               />
             )
           ) : displayBusinessProfile ? (
             <BuisinessProfileDetails
+              displayBusinessProfile = {displayBusinessProfile}
               setDisplayBusinessProfile={setDisplayBusinessProfile}
               setDisplayTab={setDisplayTab}
             />

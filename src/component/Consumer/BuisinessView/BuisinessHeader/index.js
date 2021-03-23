@@ -29,6 +29,11 @@ const BuisinessHeaderContent = styled.div`
     flex-direction: column;
     height: 200px;
   }
+  &.HeaderSpacing {
+    @media (max-width: 767px) {
+      height: 140px;
+    }
+  }
   .react-multiple-carousel__arrow {
     min-width: 24px;
     min-height: 24px;
@@ -207,6 +212,7 @@ const BuisinessHeader = ({
   setDisplayTab,
   setDisplayBusinessProfile,
   isProfile,
+  displayBusinessProfile
 }) => {
   const history = useHistory();
   const [favoriteBusiness, setFavoriteBusiness] = useState(false);
@@ -248,7 +254,7 @@ const BuisinessHeader = ({
   };
   return (
     <>
-      <BuisinessHeaderContent>
+      <BuisinessHeaderContent className= {displayBusinessProfile ? 'HeaderSpacing' : ''}>
         <ArrowBack>
           <MdKeyboardArrowLeft onClick={() => history.push("/")} />
         </ArrowBack>

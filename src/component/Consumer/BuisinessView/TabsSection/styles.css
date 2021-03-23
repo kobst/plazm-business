@@ -164,6 +164,15 @@
     color: #000 !important;
   }
 
+  aside.emoji-picker-react .content-wrapper:before{
+    width: 80px;
+    right: 25px !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  } 
+
   .emoji-picker-react input.emoji-search {
     color: #000;
   }
