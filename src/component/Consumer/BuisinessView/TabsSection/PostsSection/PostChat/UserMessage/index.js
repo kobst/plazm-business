@@ -351,17 +351,15 @@ const UserMessage = ({ postData }) => {
             </ProfileThumb>
             <ProfileNameWrap>
               <ProfileName>
-                {postData.postDetails.listId!==null? postData.postDetails.listId.name: null}
-                {postData.postDetails.listId!==null?<span>by</span>: null}
                 {postData.postDetails.ownerId === null
                   ? business.company_name
                   : postData.postDetails.ownerId.name}{" "}
-                  <RightArrowSec>
+                  {postData.postDetails.listId!==null?<RightArrowSec>
                       <ArrowRight><RiArrowDropRightFill /></ArrowRight>
                       <DescriptionBox>
-                        <span>The 38 Essential Restaurants The 38 Essential Restaurants</span>
+                        <span>{postData.postDetails.listId.name}</span>
                       </DescriptionBox>
-                  </RightArrowSec>
+                  </RightArrowSec>:null}
               </ProfileName>
               <ChatInput>
                 <p>
