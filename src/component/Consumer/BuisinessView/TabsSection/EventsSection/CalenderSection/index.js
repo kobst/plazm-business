@@ -222,7 +222,6 @@ const CalenderSection = ({ businessId }) => {
   const today = days[currentDate.getDay()];
   const [count, setCount] = useState(0);
 
-
   useEffect(() => {
     const fetchData = async () => {
       if (
@@ -285,9 +284,11 @@ const CalenderSection = ({ businessId }) => {
   /** to fetch event for a particular day */
   const fetchEventsForAParticularDay = async (day, dayNo) => {
     if (
-      (dayNo >= currentDayNo && !previousBtnClicked) ||
-      nextBtnClicked ||
-      (previousBtnClicked && count !== 0)
+      (dayNo >= currentDayNo && !previousBtnClicked && !todayClicked) ||
+      (nextBtnClicked && !todayClicked) ||
+      (previousBtnClicked && count !== 0) ||
+      (dayNo >= currentDayNo && previousBtnClicked && count === 0) ||
+      (dayNo >= currentDayNo && nextBtnClicked && todayClicked)
     ) {
       const obj = {
         date: eventDate,
@@ -318,6 +319,7 @@ const CalenderSection = ({ businessId }) => {
 
   const todayFunction = () => {
     setTodayClicked(true);
+    console.log(currentDayNo);
     dispatch(setCurrentDate());
     dispatch(
       fetchEventsForTheDay({
@@ -372,6 +374,8 @@ const CalenderSection = ({ businessId }) => {
                   : nextBtnClicked
                   ? checkEventPresent(6) === true
                     ? "present"
+                    : 0 < currentDayNo && todayClicked
+                    ? "disabled"
                     : ""
                   : today === "sun"
                   ? "current"
@@ -387,7 +391,9 @@ const CalenderSection = ({ businessId }) => {
                 0 >= currentDayNo &&
                 count === 0 &&
                 checkEventPresent(6) === true) ||
-              (previousBtnClicked && checkEventPresent(6) === true && count!==0) ||
+              (previousBtnClicked &&
+                checkEventPresent(6) === true &&
+                count !== 0) ||
               (nextBtnClicked && checkEventPresent(6) === true) ||
               (0 >= currentDayNo && checkEventPresent(6) === true) ? (
                 <DaysIndicator />
@@ -408,6 +414,8 @@ const CalenderSection = ({ businessId }) => {
                   : nextBtnClicked
                   ? checkEventPresent(0) === true
                     ? "present"
+                    : 1 < currentDayNo && todayClicked
+                    ? "disabled"
                     : ""
                   : today === "mon"
                   ? "current"
@@ -423,7 +431,9 @@ const CalenderSection = ({ businessId }) => {
                 1 >= currentDayNo &&
                 count === 0 &&
                 checkEventPresent(0) === true) ||
-              (previousBtnClicked && checkEventPresent(0) === true && count!==0) ||
+              (previousBtnClicked &&
+                checkEventPresent(0) === true &&
+                count !== 0) ||
               (nextBtnClicked && checkEventPresent(0) === true) ||
               (1 >= currentDayNo && checkEventPresent(0) === true) ? (
                 <DaysIndicator />
@@ -444,6 +454,8 @@ const CalenderSection = ({ businessId }) => {
                   : nextBtnClicked
                   ? checkEventPresent(1) === true
                     ? "present"
+                    : 2 < currentDayNo && todayClicked
+                    ? "disabled"
                     : ""
                   : today === "tue"
                   ? "current"
@@ -459,7 +471,9 @@ const CalenderSection = ({ businessId }) => {
                 2 >= currentDayNo &&
                 count === 0 &&
                 checkEventPresent(1) === true) ||
-              (previousBtnClicked && checkEventPresent(1) === true && count!==0) ||
+              (previousBtnClicked &&
+                checkEventPresent(1) === true &&
+                count !== 0) ||
               (nextBtnClicked && checkEventPresent(1) === true) ||
               (2 >= currentDayNo && checkEventPresent(1) === true) ? (
                 <DaysIndicator />
@@ -480,6 +494,8 @@ const CalenderSection = ({ businessId }) => {
                   : nextBtnClicked
                   ? checkEventPresent(2) === true
                     ? "present"
+                    : 3 < currentDayNo && todayClicked
+                    ? "disabled"
                     : ""
                   : today === "wed"
                   ? "current"
@@ -495,7 +511,9 @@ const CalenderSection = ({ businessId }) => {
                 3 >= currentDayNo &&
                 count === 0 &&
                 checkEventPresent(2) === true) ||
-              (previousBtnClicked && checkEventPresent(2) === true && count!==0) ||
+              (previousBtnClicked &&
+                checkEventPresent(2) === true &&
+                count !== 0) ||
               (nextBtnClicked && checkEventPresent(2) === true) ||
               (3 >= currentDayNo && checkEventPresent(2) === true) ? (
                 <DaysIndicator />
@@ -512,6 +530,8 @@ const CalenderSection = ({ businessId }) => {
                     ? "disabled"
                     : checkEventPresent(3) === true
                     ? "present"
+                    : 4 < currentDayNo && todayClicked
+                    ? "disabled"
                     : ""
                   : nextBtnClicked
                   ? checkEventPresent(3) === true
@@ -531,7 +551,9 @@ const CalenderSection = ({ businessId }) => {
                 4 >= currentDayNo &&
                 count === 0 &&
                 checkEventPresent(3) === true) ||
-              (previousBtnClicked && checkEventPresent(3) === true && count!==0) ||
+              (previousBtnClicked &&
+                checkEventPresent(3) === true &&
+                count !== 0) ||
               (nextBtnClicked && checkEventPresent(3) === true) ||
               (4 >= currentDayNo && checkEventPresent(3) === true) ? (
                 <DaysIndicator />
@@ -552,6 +574,8 @@ const CalenderSection = ({ businessId }) => {
                   : nextBtnClicked
                   ? checkEventPresent(4) === true
                     ? "present"
+                    : 5 < currentDayNo && todayClicked
+                    ? "disabled"
                     : ""
                   : today === "fri"
                   ? "current"
@@ -567,7 +591,9 @@ const CalenderSection = ({ businessId }) => {
                 5 >= currentDayNo &&
                 count === 0 &&
                 checkEventPresent(4) === true) ||
-              (previousBtnClicked && checkEventPresent(4) === true && count!==0) ||
+              (previousBtnClicked &&
+                checkEventPresent(4) === true &&
+                count !== 0) ||
               (nextBtnClicked && checkEventPresent(4) === true) ||
               (5 >= currentDayNo && checkEventPresent(4) === true) ? (
                 <DaysIndicator />
@@ -588,6 +614,8 @@ const CalenderSection = ({ businessId }) => {
                   : nextBtnClicked
                   ? checkEventPresent(5) === true
                     ? "present"
+                    : 6 < currentDayNo && todayClicked
+                    ? "disabled"
                     : ""
                   : today === "sat"
                   ? "current"
@@ -603,7 +631,9 @@ const CalenderSection = ({ businessId }) => {
                 6 >= currentDayNo &&
                 count === 0 &&
                 checkEventPresent(5) === true) ||
-              (previousBtnClicked && checkEventPresent(5) === true && count!==0) ||
+              (previousBtnClicked &&
+                checkEventPresent(5) === true &&
+                count !== 0) ||
               (nextBtnClicked && checkEventPresent(5) === true) ||
               (6 >= currentDayNo && checkEventPresent(5) === true) ? (
                 <DaysIndicator />

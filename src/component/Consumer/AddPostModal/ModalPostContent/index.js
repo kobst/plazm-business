@@ -280,7 +280,7 @@ const ModalPostContent = ({
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            Key: imageFile.name,
+            Key: file_name,
             ContentType: imageFile.type,
             folder_name: folder_name,
           }),
