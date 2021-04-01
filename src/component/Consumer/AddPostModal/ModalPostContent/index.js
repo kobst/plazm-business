@@ -166,9 +166,6 @@ const ModalPostContent = ({
   mentionArrayUser,
   setMentionArrayUser
 }) => {
-
-  // const [mentionArrayList, setMentionArrayList] = useState([]);
-  // const [mentionArrayUser, setMentionArrayUser] = useState([]);
   const [loader, setLoader] = useState(false);
   const users = useSelector((state) => state.consumer.users);
   const lists = useSelector((state) => state.list.lists);

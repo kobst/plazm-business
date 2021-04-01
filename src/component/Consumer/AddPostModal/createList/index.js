@@ -228,7 +228,8 @@ const CreateListModel = ({
   };
 
   /**cancel button functionality */
-  const cancelButton = () => {
+  const cancelButton = (e) => {
+    e.preventDefault();
     setDisplayCreateList(false);
     setDisplayList(true)
   }
@@ -296,7 +297,7 @@ const CreateListModel = ({
               )}
               {/* bottom buttons bar */}
               <BottomButtonsBar>
-                <BackButton onClick={() => cancelButton()} disabled={loader}>
+                <BackButton onClick={(e) => cancelButton(e)} disabled={loader}>
                   Cancel
                 </BackButton>
                 <SaveButton type="submit" disabled={loader}>

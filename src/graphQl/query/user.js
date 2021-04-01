@@ -50,4 +50,32 @@ const getAllUsers = () => {
   };
   return graphQl;
 };
-export { getUser,getAllUsers };
+
+/*
+@desc: getUserFavoritesBusiness query
+*/
+const getUserFavorites = (id) => {
+  const graphQl = {
+    query: `
+          query GetUserFavoritesBusiness($id: ID!){
+            getUserFavoritesBusiness(input: {id:$id}) {
+              message
+              success
+              data {
+                favorites {
+                filter_tags
+                company_name
+                default_image_url
+                status
+                }
+                totalPosts
+              }
+            }
+          }`,
+    variables: {
+      id: id,
+    },
+  };
+  return graphQl;
+};
+export { getUser,getAllUsers,getUserFavorites };

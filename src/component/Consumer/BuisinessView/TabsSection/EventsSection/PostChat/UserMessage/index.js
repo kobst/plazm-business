@@ -14,9 +14,11 @@ import {
   addLikeViaSocket,
   addReplyViaSocket,
   addLikeToCommentViaSocket,
+  addEventViaSocket,
 } from "../../../../../../../reducers/eventReducer";
 import Comment from "./comments";
 import ScrollToBottom from "./ScrollToBottom";
+import moment from "moment";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -125,7 +127,10 @@ const UserMessage = ({ eventData }) => {
   );
   const ws = useSelector((state) => state.user.ws);
   const user = useSelector((state) => state.user.user);
+  const selectedDate = useSelector(state => state.event.selectedDate);
   const dispatch = useDispatch();
+
+
   ws.onmessage = (evt) => {
     const message = JSON.parse(evt.data);
     if (message.commentInfo && message.commentInfo.type === "Events") {
@@ -156,6 +161,13 @@ const UserMessage = ({ eventData }) => {
       ) {
         dispatch(addLikeViaSocket(message));
       }
+    } else if (
+      message.type === "newEvent" &&
+      message.userId !== user._id &&
+      message.businessId === business[0]._id &&
+      moment(message.event.eventSchedule.start_time).format("DD MMM YYYY") === moment(selectedDate).format("DD MMM YYYY")
+    ) {
+      dispatch(addEventViaSocket(message))
     }
   };
 

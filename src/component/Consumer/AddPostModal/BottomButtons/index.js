@@ -34,7 +34,8 @@ const BottomButtons = ({
   setMentionArrayList,
   mentionArrayUser,
   setMentionArrayUser,
-  setDisplayCreateList
+  setDisplayCreateList,
+  setDisplayCalendar,
 }) => {
   /** left button functionality */
   const leftBtn = () => {
@@ -42,6 +43,8 @@ const BottomButtons = ({
     else if (type === "list") {
       setDisplayList(false);
       setDisplayCreateList(true);
+    } else if (type === "schedule") {
+      setDisplayCalendar(false);
     } else {
       closeModal();
     }
@@ -69,6 +72,8 @@ const BottomButtons = ({
             ? "Add to List"
             : type === "list"
             ? "Create New List"
+            : type === "schedule"
+            ? "Back"
             : "Cancel"}
         </BackButton>
         <SaveButton
@@ -86,6 +91,8 @@ const BottomButtons = ({
             )
           ) : type === "list" ? (
             "Select"
+          ) : type === "schedule" ? (
+            "Confirm"
           ) : (
             "Create"
           )}

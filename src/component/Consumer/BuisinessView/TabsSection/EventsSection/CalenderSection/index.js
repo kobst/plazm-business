@@ -11,8 +11,11 @@ import {
   fetchEventsForTheWeek,
   fetchInitialWeekEvents,
   setCurrentDate,
+  setSelectedDate,
 } from "../../../../../../reducers/eventReducer";
 import ValueLoader from "../../../../../../utils/loader";
+import AddEventModal from "../../../../AddPostModal/addEventModal";
+import ModalComponent from "../../../../UI/Modal";
 
 const CalenderSectionWrap = styled.div`
   width: 100%;
@@ -221,6 +224,7 @@ const CalenderSection = ({ businessId }) => {
   const [todayClicked, setTodayClicked] = useState(false);
   const today = days[currentDate.getDay()];
   const [count, setCount] = useState(0);
+  const [addEventModal, setAddEventModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -243,7 +247,7 @@ const CalenderSection = ({ businessId }) => {
   /** to set week starting and end date */
   useEffect(() => {
     const curr = new Date(eventDate);
-    const first = curr.getDate() - curr.getDay() + 1;
+    const first = curr.getDate() - curr.getDay();
     const last = first + 6;
     const firstDay = new Date(curr.setDate(first)).toUTCString();
     const lastDay = new Date(curr.setDate(last)).toUTCString();
@@ -261,7 +265,7 @@ const CalenderSection = ({ businessId }) => {
         (i) =>
           moment(new Date(i.eventSchedule.start_time)).format("DD MMM YYYY") ===
           moment(
-            moment(dateToDisplay.firstDay).add(param, "day"),
+            moment(new Date(dateToDisplay.firstDay)).add(param, "day"),
             "DD-MM-YYYY"
           ).format("DD MMM YYYY")
       );
@@ -272,7 +276,7 @@ const CalenderSection = ({ businessId }) => {
         (i) =>
           moment(new Date(i.eventSchedule.start_time)).format("DD MMM YYYY") ===
           moment(
-            moment(dateToDisplay.firstDay).add(param, "day"),
+            moment(new Date(dateToDisplay.firstDay)).add(param, "day"),
             "DD-MM-YYYY"
           ).format("DD MMM YYYY")
       );
@@ -288,13 +292,15 @@ const CalenderSection = ({ businessId }) => {
       (nextBtnClicked && !todayClicked) ||
       (previousBtnClicked && count !== 0) ||
       (dayNo >= currentDayNo && previousBtnClicked && count === 0) ||
-      (dayNo >= currentDayNo && nextBtnClicked && todayClicked)
+      (dayNo >= currentDayNo && nextBtnClicked && todayClicked) || 
+      (dayNo >= currentDayNo && !previousBtnClicked && !nextBtnClicked && todayClicked)
     ) {
       const obj = {
         date: eventDate,
         day: day,
         businessId: businessId,
       };
+      dispatch(setSelectedDate(day))
       await dispatch(fetchEventsForTheDay(obj));
     }
   };
@@ -319,7 +325,6 @@ const CalenderSection = ({ businessId }) => {
 
   const todayFunction = () => {
     setTodayClicked(true);
-    console.log(currentDayNo);
     dispatch(setCurrentDate());
     dispatch(
       fetchEventsForTheDay({
@@ -331,6 +336,15 @@ const CalenderSection = ({ businessId }) => {
   };
   return (
     <>
+      {addEventModal && (
+        <ModalComponent
+          closeOnOutsideClick={true}
+          isOpen={addEventModal}
+          closeModal={() => setAddEventModal(false)}
+        >
+          <AddEventModal closeModal={() => setAddEventModal(false)} />
+        </ModalComponent>
+      )}
       {loader || loadingForWeek ? (
         <LoaderWrap>
           <ValueLoader />
@@ -368,11 +382,11 @@ const CalenderSection = ({ businessId }) => {
                   : previousBtnClicked
                   ? 0 < currentDayNo && count === 0
                     ? "disabled"
-                    : checkEventPresent(6) === true
+                    : checkEventPresent(0) === true
                     ? "present"
                     : ""
                   : nextBtnClicked
-                  ? checkEventPresent(6) === true
+                  ? checkEventPresent(0) === true && !todayClicked
                     ? "present"
                     : 0 < currentDayNo && todayClicked
                     ? "disabled"
@@ -381,7 +395,7 @@ const CalenderSection = ({ businessId }) => {
                   ? "current"
                   : 0 < currentDayNo
                   ? "disabled"
-                  : checkEventPresent(6) === true
+                  : checkEventPresent(0) === true
                   ? "present"
                   : ""
               }
@@ -390,12 +404,18 @@ const CalenderSection = ({ businessId }) => {
               {(previousBtnClicked &&
                 0 >= currentDayNo &&
                 count === 0 &&
-                checkEventPresent(6) === true) ||
+                checkEventPresent(0) === true) ||
               (previousBtnClicked &&
-                checkEventPresent(6) === true &&
+                checkEventPresent(0) === true &&
                 count !== 0) ||
-              (nextBtnClicked && checkEventPresent(6) === true) ||
-              (0 >= currentDayNo && checkEventPresent(6) === true) ? (
+              (nextBtnClicked &&
+                checkEventPresent(0) === true &&
+                !todayClicked) ||
+              (nextBtnClicked &&
+                checkEventPresent(0) === true &&
+                todayClicked &&
+                0 >= currentDayNo) ||
+              (0 >= currentDayNo && checkEventPresent(0) === true) ? (
                 <DaysIndicator />
               ) : null}
               sun
@@ -408,11 +428,11 @@ const CalenderSection = ({ businessId }) => {
                   : previousBtnClicked
                   ? 1 < currentDayNo && count === 0
                     ? "disabled"
-                    : checkEventPresent(0) === true
+                    : checkEventPresent(1) === true
                     ? "present"
                     : ""
                   : nextBtnClicked
-                  ? checkEventPresent(0) === true
+                  ? checkEventPresent(1) === true && !todayClicked
                     ? "present"
                     : 1 < currentDayNo && todayClicked
                     ? "disabled"
@@ -421,7 +441,7 @@ const CalenderSection = ({ businessId }) => {
                   ? "current"
                   : 1 < currentDayNo
                   ? "disabled"
-                  : checkEventPresent(0) === true
+                  : checkEventPresent(1) === true
                   ? "present"
                   : ""
               }
@@ -430,12 +450,18 @@ const CalenderSection = ({ businessId }) => {
               {(previousBtnClicked &&
                 1 >= currentDayNo &&
                 count === 0 &&
-                checkEventPresent(0) === true) ||
+                checkEventPresent(1) === true) ||
               (previousBtnClicked &&
-                checkEventPresent(0) === true &&
+                checkEventPresent(1) === true &&
                 count !== 0) ||
-              (nextBtnClicked && checkEventPresent(0) === true) ||
-              (1 >= currentDayNo && checkEventPresent(0) === true) ? (
+              (nextBtnClicked &&
+                checkEventPresent(1) === true &&
+                !todayClicked) ||
+              (nextBtnClicked &&
+                checkEventPresent(1) === true &&
+                todayClicked &&
+                1 >= currentDayNo) ||
+              (1 >= currentDayNo && checkEventPresent(1) === true) ? (
                 <DaysIndicator />
               ) : null}
               mon
@@ -448,11 +474,11 @@ const CalenderSection = ({ businessId }) => {
                   : previousBtnClicked
                   ? 2 < currentDayNo && count === 0
                     ? "disabled"
-                    : checkEventPresent(1) === true
+                    : checkEventPresent(2) === true
                     ? "present"
                     : ""
                   : nextBtnClicked
-                  ? checkEventPresent(1) === true
+                  ? checkEventPresent(2) === true && !todayClicked
                     ? "present"
                     : 2 < currentDayNo && todayClicked
                     ? "disabled"
@@ -461,7 +487,7 @@ const CalenderSection = ({ businessId }) => {
                   ? "current"
                   : 2 < currentDayNo
                   ? "disabled"
-                  : checkEventPresent(1) === true
+                  : checkEventPresent(2) === true
                   ? "present"
                   : ""
               }
@@ -470,12 +496,18 @@ const CalenderSection = ({ businessId }) => {
               {(previousBtnClicked &&
                 2 >= currentDayNo &&
                 count === 0 &&
-                checkEventPresent(1) === true) ||
+                checkEventPresent(2) === true) ||
               (previousBtnClicked &&
-                checkEventPresent(1) === true &&
+                checkEventPresent(2) === true &&
                 count !== 0) ||
-              (nextBtnClicked && checkEventPresent(1) === true) ||
-              (2 >= currentDayNo && checkEventPresent(1) === true) ? (
+              (nextBtnClicked &&
+                checkEventPresent(2) === true &&
+                !todayClicked) ||
+              (nextBtnClicked &&
+                checkEventPresent(2) === true &&
+                todayClicked &&
+                2 >= currentDayNo) ||
+              (2 >= currentDayNo && checkEventPresent(2) === true) ? (
                 <DaysIndicator />
               ) : null}
               tue
@@ -488,11 +520,11 @@ const CalenderSection = ({ businessId }) => {
                   : previousBtnClicked
                   ? 3 < currentDayNo && count === 0
                     ? "disabled"
-                    : checkEventPresent(2) === true
+                    : checkEventPresent(3) === true
                     ? "present"
                     : ""
                   : nextBtnClicked
-                  ? checkEventPresent(2) === true
+                  ? checkEventPresent(3) === true && !todayClicked
                     ? "present"
                     : 3 < currentDayNo && todayClicked
                     ? "disabled"
@@ -501,7 +533,7 @@ const CalenderSection = ({ businessId }) => {
                   ? "current"
                   : 3 < currentDayNo
                   ? "disabled"
-                  : checkEventPresent(2) === true
+                  : checkEventPresent(3) === true
                   ? "present"
                   : ""
               }
@@ -510,12 +542,18 @@ const CalenderSection = ({ businessId }) => {
               {(previousBtnClicked &&
                 3 >= currentDayNo &&
                 count === 0 &&
-                checkEventPresent(2) === true) ||
+                checkEventPresent(3) === true) ||
               (previousBtnClicked &&
-                checkEventPresent(2) === true &&
+                checkEventPresent(3) === true &&
                 count !== 0) ||
-              (nextBtnClicked && checkEventPresent(2) === true) ||
-              (3 >= currentDayNo && checkEventPresent(2) === true) ? (
+              (nextBtnClicked &&
+                checkEventPresent(3) === true &&
+                !todayClicked) ||
+              (nextBtnClicked &&
+                checkEventPresent(3) === true &&
+                todayClicked &&
+                3 >= currentDayNo) ||
+              (3 >= currentDayNo && checkEventPresent(3) === true) ? (
                 <DaysIndicator />
               ) : null}
               wed
@@ -528,20 +566,20 @@ const CalenderSection = ({ businessId }) => {
                   : previousBtnClicked
                   ? 4 < currentDayNo && count === 0
                     ? "disabled"
-                    : checkEventPresent(3) === true
+                    : checkEventPresent(4) === true
                     ? "present"
                     : 4 < currentDayNo && todayClicked
                     ? "disabled"
                     : ""
                   : nextBtnClicked
-                  ? checkEventPresent(3) === true
+                  ? checkEventPresent(4) === true && !todayClicked
                     ? "present"
                     : ""
                   : today === "thurs"
                   ? "current"
                   : 4 < currentDayNo
                   ? "disabled"
-                  : checkEventPresent(3) === true
+                  : checkEventPresent(4) === true
                   ? "present"
                   : ""
               }
@@ -550,12 +588,18 @@ const CalenderSection = ({ businessId }) => {
               {(previousBtnClicked &&
                 4 >= currentDayNo &&
                 count === 0 &&
-                checkEventPresent(3) === true) ||
+                checkEventPresent(4) === true) ||
               (previousBtnClicked &&
-                checkEventPresent(3) === true &&
+                checkEventPresent(4) === true &&
                 count !== 0) ||
-              (nextBtnClicked && checkEventPresent(3) === true) ||
-              (4 >= currentDayNo && checkEventPresent(3) === true) ? (
+              (nextBtnClicked &&
+                checkEventPresent(4) === true &&
+                !todayClicked) ||
+              (nextBtnClicked &&
+                checkEventPresent(4) === true &&
+                todayClicked &&
+                4 >= currentDayNo) ||
+              (4 >= currentDayNo && checkEventPresent(4) === true) ? (
                 <DaysIndicator />
               ) : null}
               thur
@@ -568,11 +612,11 @@ const CalenderSection = ({ businessId }) => {
                   : previousBtnClicked
                   ? 5 < currentDayNo && count === 0
                     ? "disabled"
-                    : checkEventPresent(4) === true
+                    : checkEventPresent(5) === true
                     ? "present"
                     : ""
                   : nextBtnClicked
-                  ? checkEventPresent(4) === true
+                  ? checkEventPresent(5) === true && !todayClicked
                     ? "present"
                     : 5 < currentDayNo && todayClicked
                     ? "disabled"
@@ -581,7 +625,7 @@ const CalenderSection = ({ businessId }) => {
                   ? "current"
                   : 5 < currentDayNo
                   ? "disabled"
-                  : checkEventPresent(4) === true
+                  : checkEventPresent(5) === true
                   ? "present"
                   : ""
               }
@@ -590,12 +634,18 @@ const CalenderSection = ({ businessId }) => {
               {(previousBtnClicked &&
                 5 >= currentDayNo &&
                 count === 0 &&
-                checkEventPresent(4) === true) ||
+                checkEventPresent(5) === true) ||
               (previousBtnClicked &&
-                checkEventPresent(4) === true &&
+                checkEventPresent(5) === true &&
                 count !== 0) ||
-              (nextBtnClicked && checkEventPresent(4) === true) ||
-              (5 >= currentDayNo && checkEventPresent(4) === true) ? (
+              (nextBtnClicked &&
+                checkEventPresent(5) === true &&
+                !todayClicked) ||
+              (nextBtnClicked &&
+                checkEventPresent(5) === true &&
+                todayClicked &&
+                5 >= currentDayNo) ||
+              (5 >= currentDayNo && checkEventPresent(5) === true) ? (
                 <DaysIndicator />
               ) : null}
               fri
@@ -608,11 +658,11 @@ const CalenderSection = ({ businessId }) => {
                   : previousBtnClicked
                   ? 6 < currentDayNo && count === 0
                     ? "disabled"
-                    : checkEventPresent(5) === true
+                    : checkEventPresent(6) === true
                     ? "present"
                     : ""
                   : nextBtnClicked
-                  ? checkEventPresent(5) === true
+                  ? checkEventPresent(6) === true && !todayClicked
                     ? "present"
                     : 6 < currentDayNo && todayClicked
                     ? "disabled"
@@ -621,7 +671,7 @@ const CalenderSection = ({ businessId }) => {
                   ? "current"
                   : 6 < currentDayNo
                   ? "disabled"
-                  : checkEventPresent(5) === true
+                  : checkEventPresent(6) === true
                   ? "present"
                   : ""
               }
@@ -630,19 +680,27 @@ const CalenderSection = ({ businessId }) => {
               {(previousBtnClicked &&
                 6 >= currentDayNo &&
                 count === 0 &&
-                checkEventPresent(5) === true) ||
+                checkEventPresent(6) === true) ||
               (previousBtnClicked &&
-                checkEventPresent(5) === true &&
+                checkEventPresent(6) === true &&
                 count !== 0) ||
-              (nextBtnClicked && checkEventPresent(5) === true) ||
-              (6 >= currentDayNo && checkEventPresent(5) === true) ? (
+              (nextBtnClicked &&
+                checkEventPresent(6) === true &&
+                !todayClicked) ||
+              (nextBtnClicked &&
+                checkEventPresent(6) === true &&
+                todayClicked &&
+                6 >= currentDayNo) ||
+              (6 >= currentDayNo && checkEventPresent(6) === true) ? (
                 <DaysIndicator />
               ) : null}
               sat
             </DaysDiv>
           </DaysWrap>
           <BtnWrap>
-            <SaveButton>Create Event</SaveButton>
+            <SaveButton onClick={() => setAddEventModal(true)}>
+              Create Event
+            </SaveButton>
           </BtnWrap>
         </CalenderSectionWrap>
       )}

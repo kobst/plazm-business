@@ -2,7 +2,7 @@ import * as Yup from "yup";
 import error from "../../../../constants";
 
 /*
- * @desc: validation schema for create a list
+ * @desc: validation schema for add event
  */
 export const validate = {
   title: Yup.string()
