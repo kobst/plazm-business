@@ -188,7 +188,7 @@ export const slice = createSlice({
             comments: [],
           }));
           state.events = arr.sort((a, b) => {
-            return new Date(b.createdAt) - new Date(a.createdAt);
+            return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
           });
         }
       }
@@ -215,10 +215,10 @@ export const slice = createSlice({
             comments: [],
           }));
           state.events = arr.sort((a, b) => {
-            return new Date(b.createdAt) - new Date(a.createdAt);
+            return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
           });
           state.initialWeekEvents = arr.sort((a, b) => {
-            return new Date(b.createdAt) - new Date(a.createdAt);
+            return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
           });
         }
       }
@@ -245,7 +245,7 @@ export const slice = createSlice({
             comments: [],
           }));
           state.initialWeekEvents = arr.sort((a, b) => {
-            return new Date(b.createdAt) - new Date(a.createdAt);
+            return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
           });
         }
       }
@@ -280,7 +280,7 @@ export const slice = createSlice({
           eventsArr.push({ ...findEvent, comments: arr });
           eventsArr = eventsArr.concat(findOtherEvents);
           state.events = eventsArr.sort((a, b) => {
-            return new Date(b.createdAt) - new Date(a.createdAt);
+            return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
           });
         }
       }
@@ -327,8 +327,8 @@ export const slice = createSlice({
             dummy1 = dummy1.concat(posts);
             state.events = dummy1.sort((a, b) => {
               return (
-                new Date(b.createdAt) -
-                new Date(a.createdAt)
+                new Date(b.eventSchedule.start_time) -
+                new Date(a.eventSchedule.start_time)
               );
             });
           }
@@ -352,7 +352,7 @@ export const slice = createSlice({
         if (
           findEvent &&
           findEvent.length > 0 &&
-          findEvent[0].comments.length > 0
+          findEvent[0].comments.length >= 0
         ) {
           const eventComments = findEvent[0].comments.concat({
             ...action.payload.commentInfo,
@@ -369,7 +369,7 @@ export const slice = createSlice({
           });
           eventsArr = eventsArr.concat(findOtherEvents);
           state.events = eventsArr.sort((a, b) => {
-            return new Date(b.createdAt) - new Date(a.createdAt);
+            return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
           });
         }
       }
@@ -409,7 +409,7 @@ export const slice = createSlice({
           });
           dummy1 = dummy1.concat(events);
           state.events = dummy1.sort((a, b) => {
-            return new Date(b.createdAt) - new Date(a.createdAt);
+            return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
           });
         }
       }
@@ -431,7 +431,7 @@ export const slice = createSlice({
           });
           dummy1 = dummy1.concat(findPost);
           state.events = dummy1.sort((a, b) => {
-            return new Date(b.createdAt) - new Date(a.createdAt);
+            return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
           });
         }
       }
@@ -467,7 +467,7 @@ export const slice = createSlice({
               });
               dummy1 = dummy1.concat(findPost);
               state.events = dummy1.sort((a, b) => {
-                return new Date(b.createdAt) - new Date(a.createdAt);
+                return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
               });
             }
           }
