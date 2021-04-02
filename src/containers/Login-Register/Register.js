@@ -6,11 +6,12 @@ import Wrapper from '../../component/Login-Register/Wrapper'
 import RegisterForm from '../../component/Login-Register/Form-Components/Register-Form'
 import {getMessage} from '../../config'
 import ValueLoader from '../../utils/loader'
-import {callApi,addBusiness, updateBusiness} from '../../Api'
+import {callApi,addBusiness, updateBusiness, addUserProfile} from '../../Api'
 
 const renderMessage= getMessage()
 
 const Register = (props) => {
+    const {userType} = props;
     const type = props.match.url
     const [username,setUser]= useState()
     const [password,setPassword]= useState()
@@ -37,11 +38,13 @@ const Register = (props) => {
     const [phoneLong,setPhoneLong]= useState(false)
     const [loginValue,setLoginValue]= useState(false)
     const [disable,setDisable]= useState(false)
+    const [phoneOnlyNumbers,setPhoneOnlyNumbers] = useState(false);
+
     useEffect(() => {
         let updateUser = async authState => {
           try {
              await Auth.currentAuthenticatedUser()
-             history.push('/dashboard')
+             history.push('/')
              window.location.reload() 
             
           } catch {
@@ -58,14 +61,30 @@ const Register = (props) => {
             username: email,
             password: password,
             attributes: {
-                email: email,
-                phone_number: phone_number, 
-                name: username,
+                'email': email,
+                'phone_number': phone_number, 
+                'name': username,
+                'custom:type': userType
             }
         })
         .then(async(res) => {
             if(res.userSub){
-         if(await checkUser(res.userSub)){
+                if(type.includes('consumer')){
+                    const obj = {
+                        name: username,
+                        email: email,
+                        phoneNumber: phone_number,
+                        userSub: res.userSub
+                    }
+                    const profile = await addUserProfile(obj)
+                    if(profile.data.addUser.success === true){
+                        form.reset()
+                        setVerified(true)
+                        setError(false)
+                        setLoader(false)
+                    }
+                }
+         if(type.includes('business')&&await checkUser(res.userSub)){
              form.reset()
             setVerified(true)
             setError(false)
@@ -93,7 +112,7 @@ const Register = (props) => {
                 password: password
             })
             // eslint-disable-next-line no-sequences
-            .then(() =>( history.push('/dashboard'),
+            .then(() =>( history.push('/'),
             window.location.reload() 
             ))
             .catch((err) => console.log(err))
@@ -124,7 +143,7 @@ const Register = (props) => {
             setFirstError(true)
             }
         }
-        if(!loc){
+        if(!loc && type.includes('business')){
             setLocError(true)
         }
         if(loc){
@@ -148,6 +167,9 @@ const Register = (props) => {
             else if(phone_number.length>=50){
                 setPhoneLong(true)
             }
+            else if(!phone_number.match(/^[^a-zA-Z]*$/)) {
+                setPhoneOnlyNumbers(true)
+            }
         }
         if(!validateEmail(email)){
             setEmailError(true)
@@ -161,7 +183,11 @@ const Register = (props) => {
             setMessage(renderMessage.pass_length)
     }
 }
-        if(username && loc && username.length>3 && phone_number && validateEmail(email) && password && name && password.length>7 && phone_number.length>=5 &&
+        if(type.includes('business')&&username && loc && username.length>3 && phone_number && phone_number.match(/^[^a-zA-Z]*$/) && validateEmail(email) && password && name && password.length>7 && phone_number.length>=5 &&
+        phone_number.length<=50 ){
+            return true
+        }
+        if(type.includes('consumer')&&username  && username.length>3 && phone_number && phone_number.match(/^[^a-zA-Z]*$/) && validateEmail(email) && password && password.length>7 && phone_number.length>=5 &&
         phone_number.length<=50 ){
             return true
         }
@@ -231,6 +257,7 @@ const Register = (props) => {
         setEmptyCodeError(false)
         setPhoneLong(false)
         setPhoneShort(false)
+        setPhoneOnlyNumbers(false)
         if (e.target.id === 'username') {
             setUser(e.target.value)
         }
@@ -252,7 +279,7 @@ const Register = (props) => {
 
     return(
         <>{loginValue=== true?
-        <Wrapper type ={type} page='register' welcomeMessage={renderMessage.New_Reg}>
+        <Wrapper type ={type} page='register' welcomeMessage={type.includes('business')?renderMessage.New_Reg:renderMessage.New_Reg_Consumer}>
             <RegisterForm
                   type ={type}
                   err={err}
@@ -277,6 +304,7 @@ const Register = (props) => {
                   phoneShort={phoneShort}
                   password={password}
                   disable={disable}
+                  phoneOnlyNumbers={phoneOnlyNumbers}
                   />
         </Wrapper>:<div style={{textAlign:'center' ,margin:' 40px auto 0'}}><ValueLoader height="100" width="100" /></div>
         }</>

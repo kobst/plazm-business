@@ -725,7 +725,7 @@ return (
     <row>
       <Card>
        <FlexRow>
-          <ButtonSmall onClick={() => (history.push(`/dashboard`), window.location.reload())} maxWidth="110px" bgColor="#FF7171" style={{ marginLeft: 'auto', marginRight: '10px' }}>Cancel</ButtonSmall>
+          <ButtonSmall onClick={() => (history.push(`/`), window.location.reload())} maxWidth="110px" bgColor="#FF7171" style={{ marginLeft: 'auto', marginRight: '10px' }}>Cancel</ButtonSmall>
           <ButtonSmall onClick={() => updateBusiness()} maxWidth="110px" >Save</ButtonSmall>
     </FlexRow>
     </Card>

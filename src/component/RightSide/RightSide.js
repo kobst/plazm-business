@@ -1,27 +1,27 @@
 /* eslint-disable eqeqeq */
 /* eslint-disable no-sequences */
 
-import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
-import Tabs from '../UI/Tabs/Tabs'
-import Card from '../UI/Card/Card'
-import { Auth } from 'aws-amplify';
-import AddModalBox from '../Add-Event/index'
-import { Calendar, momentLocalizer } from 'react-big-calendar'
-import moment from 'moment'
-import { callPlace, fetchPosts,fetchEvents, fetchUsers } from '../../Api'
-import ValueLoader from '../../utils/loader'
-import { RRule } from 'rrule'
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-import SubHeading from '../UI/SubHeading'
-import ButtonSmall from '../UI/ButtonSmall'
-import CrossIcon from '../../images/cross-icon.svg'
-import UserIcon from '../../images/user.svg'
-import CommentIcon from '../../images/comment.svg'
-import UploadIocn from '../../images/upload.svg'
-import Watermark from '../../images/watermark.png'
-import EventSkeleton from '../UI/Skeleton/EventsSkeleton'
-import PostSkeleton from '../UI/Skeleton/PostSkeleton'
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import Tabs from "../UI/Tabs/Tabs";
+import Card from "../UI/Card/Card";
+import { Auth } from "aws-amplify";
+import AddModalBox from "../Add-Event/index";
+import { Calendar, momentLocalizer } from "react-big-calendar";
+import moment from "moment";
+import { callPlace, fetchPosts, fetchEvents, fetchUsers } from "../../Api";
+import ValueLoader from "../../utils/loader";
+import { RRule } from "rrule";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import SubHeading from "../UI/SubHeading";
+import ButtonSmall from "../UI/ButtonSmall";
+import CrossIcon from "../../images/cross-icon.svg";
+import UserIcon from "../../images/user.svg";
+import CommentIcon from "../../images/comment.svg";
+import UploadIocn from "../../images/upload.svg";
+import Watermark from "../../images/watermark.png";
+import EventSkeleton from "../UI/Skeleton/EventsSkeleton";
+import PostSkeleton from "../UI/Skeleton/PostSkeleton";
 // import EventImg from '../../images/eventimg.png'
 // import Search from '../UI/Search/Search'
 // import UserImage from '../../images/user-img.png'
@@ -33,94 +33,99 @@ import PostSkeleton from '../UI/Skeleton/PostSkeleton'
 // import CommentGrey from '../../images/comment-grey.svg'
 // import Mention from 'react-textarea-mention';
 // import reactS3 from 'react-s3'
-import EditModalBox from '../Edit-Post'
-import DeleteModalBox from '../Delete-Post'
-import PostModalBox from '../Post-Modal'
-import Button from '@material-ui/core/Button';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import { MentionsInput, Mention } from 'react-mentions'
-import { Scrollbars } from 'react-custom-scrollbars';
+import EditModalBox from "../Edit-Post";
+import DeleteModalBox from "../Delete-Post";
+import PostModalBox from "../Post-Modal";
+import Button from "@material-ui/core/Button";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import { MentionsInput, Mention } from "react-mentions";
+import { Scrollbars } from "react-custom-scrollbars";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-const RightSection = styled.div`
-
-`
+const RightSection = styled.div``;
 const Row = styled.div`
-display:flex;
-justify-content: space-between;
-@media (max-width:767px){
-  margin-top:10px; 
-}
-`
+  display: flex;
+  justify-content: space-between;
+  @media (max-width: 767px) {
+    margin-top: 10px;
+  }
+`;
 const FlexRow = styled.div`
-display: flex;
-justify-content: space-between;
-align-items:center;
-flex-wrap:wrap;
-padding:0 15px;
-@media (max-width:767px){
-  padding:0px;
-}
-`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 0 15px;
+  @media (max-width: 767px) {
+    padding: 0px;
+  }
+`;
 
 const EventLeft = styled.div`
-display:flex;
-//max-width:804px;
-margin-right: 5px;
-width:61%;
-position:relative;
-&:after{
-  background: linear-gradient(180deg,rgba(255,255,255,0) -51.89%,#FFFFFF 79.25%);
-  border-radius: 0px 0px 24px 24px;
-  position: absolute;
-  width: 100%;
-  left: 0px;
-  bottom: 10px;
-  content: '';
-  height:92px;
-}
-@media (max-width:767px){
-max-width:inherit;
-width:100%;
-margin-right:0px;
-}
-`
-const CalenderSection = styled.div`
-margin-top:50px;
-min-height:463px
-@media (max-width:767px){
-  margin-top:20px;
-}
-`
-const EventRight = styled.div`
-padding:0px;
-//max-width: 595px;
-width:38%;
-margin-left:5px;
-position:relative;
->div:last-child{
-  min-height:897px;
-}
-&:after{
-  background: linear-gradient(180deg,rgba(255,255,255,0) -51.89%,#FFFFFF 79.25%);
-  border-radius: 0px 0px 24px 24px;
-  position: absolute;
-  width: 100%;
-  left: 0px;
-  bottom: 10px;
-  content: '';
-  height:92px;
-}
-@media (max-width:767px){
-  max-width:inherit;
-  width:100%;
-  margin-left:0px;
-  button{
-    margin:3px 0;
+  display: flex;
+  //max-width:804px;
+  margin-right: 5px;
+  width: 61%;
+  position: relative;
+  &:after {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0) -51.89%,
+      #ffffff 79.25%
+    );
+    border-radius: 0px 0px 24px 24px;
+    position: absolute;
+    width: 100%;
+    left: 0px;
+    bottom: 10px;
+    content: "";
+    height: 92px;
   }
-}
-`
+  @media (max-width: 767px) {
+    max-width: inherit;
+    width: 100%;
+    margin-right: 0px;
+  }
+`;
+const CalenderSection = styled.div`
+  margin-top: 50px;
+  min-height: 463px @media (max-width: 767px) {
+    margin-top: 20px;
+  }
+`;
+const EventRight = styled.div`
+  padding: 0px;
+  //max-width: 595px;
+  width: 38%;
+  margin-left: 5px;
+  position: relative;
+  > div:last-child {
+    min-height: 897px;
+  }
+  &:after {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0) -51.89%,
+      #ffffff 79.25%
+    );
+    border-radius: 0px 0px 24px 24px;
+    position: absolute;
+    width: 100%;
+    left: 0px;
+    bottom: 10px;
+    content: "";
+    height: 92px;
+  }
+  @media (max-width: 767px) {
+    max-width: inherit;
+    width: 100%;
+    margin-left: 0px;
+    button {
+      margin: 3px 0;
+    }
+  }
+`;
 const AllEvent = styled.div`
 margin-top:20px;
 clear:both;
@@ -136,92 +141,90 @@ h2{
   padding: 3px 19px;
   
 }
-`
+`;
 const EventOuter = styled.div`
-display:flex;
-width:100%;
-@media (max-width:767px){
-  flex-direction: column;
-}
-`
+  display: flex;
+  width: 100%;
+  @media (max-width: 767px) {
+    flex-direction: column;
+  }
+`;
 
 const EventList = styled.div`
-padding:0px;
-max-height:566px;
-//  overflow-y:auto;
-position:relative;
-padding-bottom: 70px;
-
-`
+  padding: 0px;
+  max-height: 566px;
+  //  overflow-y:auto;
+  position: relative;
+  padding-bottom: 70px;
+`;
 const EventMenu = styled.div`
-padding:0px;
-overflow-y:auto;
-width:350px;
-float:left;
-padding:15px;
-background: #f7fdff;
-border: 1px solid #f2acaa;
-border-radius:10px;
-max-height: 413px;
-@media (max-width:767px){
-  width: auto;
-}
-h2{
-  color: #FF479D;
-  font-size: 24px;
-  line-height: 28px;
-  font-weight:normal;
-}
-h4{
-  border-top:1px solid rgba(157, 157, 157, 0.5);
-  font-weight: 300;
-  font-size: 12px;
-  line-height: 36px;
-  color: #979797;
-  margin: 15px 0 7px;
-  padding-top: 15px;
-}
-`
+  padding: 0px;
+  overflow-y: auto;
+  width: 350px;
+  float: left;
+  padding: 15px;
+  background: #f7fdff;
+  border: 1px solid #f2acaa;
+  border-radius: 10px;
+  max-height: 413px;
+  @media (max-width: 767px) {
+    width: auto;
+  }
+  h2 {
+    color: #ff479d;
+    font-size: 24px;
+    line-height: 28px;
+    font-weight: normal;
+  }
+  h4 {
+    border-top: 1px solid rgba(157, 157, 157, 0.5);
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 36px;
+    color: #979797;
+    margin: 15px 0 7px;
+    padding-top: 15px;
+  }
+`;
 const MonthEventList = styled.div`
-background: linear-gradient(151.13deg, #C643FC 0%, #FF7171 114.93%);
-border: 1px solid #FFFFFF;
-box-sizing: border-box;
-border-radius: 5px;
-color:#fff;
-display: flex;
-justify-content: space-between;
-padding: 4px;
-margin-bottom:5px;
-p{
-font-weight: 500;
-font-size: 10px;
-line-height: inherit;
-}
-span{
-font-size: 9px;
-position: relative;
-top: 1px;
-margin-left:5px;
-}
-`
+  background: linear-gradient(151.13deg, #c643fc 0%, #ff7171 114.93%);
+  border: 1px solid #ffffff;
+  box-sizing: border-box;
+  border-radius: 5px;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  padding: 4px;
+  margin-bottom: 5px;
+  p {
+    font-weight: 500;
+    font-size: 10px;
+    line-height: inherit;
+  }
+  span {
+    font-size: 9px;
+    position: relative;
+    top: 1px;
+    margin-left: 5px;
+  }
+`;
 const EventListing = styled.div`
-padding: 15px;
-background: #FAFDFF;
-border: 1px solid #E2F1F8;
-box-sizing: border-box;
-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.03);
-border-radius: 16px;
-margin-top:10px;
-display: flex;
-justify-content: space-between;
-min-height:151px;
-margin-right:10px;
-:hover{
-  background: rgba(255, 79, 148, 0.05);
-border: 1px solid #FF479D;
-
-}
-`
+  padding: 15px;
+  background: #fafdff;
+  border: 1px solid #e2f1f8;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.03);
+  border-radius: 16px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  min-height: 151px;
+  margin-right: 10px;
+  :hover {
+    background: rgba(255, 79, 148, 0.05);
+    border: 1px solid #ff479d;
+  }
+`;
 const FeedListing = styled.div`
 padding: 15px 15px 15px;
 background: #FAFDFF;
@@ -247,7 +250,7 @@ p{
   margin-top:5px;
 }
 
-}`
+}`;
 // const WishlistImg = styled.div`
 // margin-left: 13px;
 // position:relative;
@@ -271,111 +274,109 @@ p{
 // }
 // `
 const Icon = styled.div`
-display: flex;
-align-items: center;
-justify-content: flex-end;
-margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 20px;
 
-sup{
-  font-size: 18px;
-  line-height: 15px;
-  color: #D2D2D2;
-  margin-left: 10px;
-}
-
-`
+  sup {
+    font-size: 18px;
+    line-height: 15px;
+    color: #d2d2d2;
+    margin-left: 10px;
+  }
+`;
 const FeedImage = styled.div`
-display: flex;
-width:53px;
-height:53px;
-border:2px solid #fff;
-overflow:hidden;
-margin-right:10px;
-border-radius:100%;
-box-shadow:0px 14px 10px rgba(0, 0, 0, 0.07);
-img{
-  max-width:100%
-}
-`
+  display: flex;
+  width: 53px;
+  height: 53px;
+  border: 2px solid #fff;
+  overflow: hidden;
+  margin-right: 10px;
+  border-radius: 100%;
+  box-shadow: 0px 14px 10px rgba(0, 0, 0, 0.07);
+  img {
+    max-width: 100%;
+  }
+`;
 const EventText = styled.div`
-padding:0px;
-h3{
-margin:0px;
-font-weight: normal;
-font-size: 18px;
-line-height: 20px;
-color: #FF479D;
-cursor:pointer;
-}
-span{
-  font-weight: normal;
-font-size: 12px;
-line-height:27px;
-color: #280A33;
-}
-h4, h2{
-  display:inline;
-  font-weight: normal;
-  font-size: 13px;
-  line-height: 15px;
-  color: #626262;
-}
-h2{
-  margin:0 2px 0 0;
-  color:rgb(255, 71, 157);
-}
-p{
-font-weight: normal;
-font-size: 13px;
-line-height: 15px;
-color:#626262;
-margin: 3px 0 0 0;
-}
-@media (max-width:991px){
-  width:calc(100% - 100px;)
-}
-`
+  padding: 0px;
+  h3 {
+    margin: 0px;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 20px;
+    color: #ff479d;
+    cursor: pointer;
+  }
+  span {
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 27px;
+    color: #280a33;
+  }
+  h4,
+  h2 {
+    display: inline;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 15px;
+    color: #626262;
+  }
+  h2 {
+    margin: 0 2px 0 0;
+    color: rgb(255, 71, 157);
+  }
+  p {
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 15px;
+    color: #626262;
+    margin: 3px 0 0 0;
+  }
+  @media (max-width: 991px) {
+    width: calc(100% - 100px;);
+  }
+`;
 const EditRomve = styled.div`
-position:relative;
-cursor:pointer;
-margin-right: auto;
-display:flex;
-align-items:center;
-div:first-child{
-  padding:0px;
-}
-div:empty{
-  display:none;
-}
-div{
-  padding:10px;
-}
-
-
-`
+  position: relative;
+  cursor: pointer;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  div:first-child {
+    padding: 0px;
+  }
+  div:empty {
+    display: none;
+  }
+  div {
+    padding: 10px;
+  }
+`;
 
 const EventImage = styled.div`
-border-radius: 9px;
-overflow:hidden;
-margin-left:30px;
-max-width:172px;
-max-height: 118px;
-display: flex;
-width: 100%;
-img{
-  max-width:100%;
-  display:block;
   border-radius: 9px;
-}
-`
+  overflow: hidden;
+  margin-left: 30px;
+  max-width: 172px;
+  max-height: 118px;
+  display: flex;
+  width: 100%;
+  img {
+    max-width: 100%;
+    display: block;
+    border-radius: 9px;
+  }
+`;
 const TabsOuter = styled.div`
-margin-left:auto;
-display:flex;
-align-items:center;
-div{
-  margin-left:20px;
-}
-`
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  div {
+    margin-left: 20px;
+  }
+`;
 // const SortSection = styled.div`
 // margin-left:auto;
 // display:flex;
@@ -388,35 +389,35 @@ div{
 // }
 // `
 const UploadImage = styled.div`
-width: 31px;
-height: 33px;
-border-radius: 5px;
-overflow:hidden;
-margin-right:3px;
-display: flex;
-position:relative;
-cursor:pointer;
-img{
-  max-width:100%
-}
-:hover{
-  :after{
-    content:"";
-    position: absolute;
-    background: rgba(0,0,0,0.7) url(${CrossIcon});
-    width: 31px;
-    height: 33px;
-    left: 0;
-    top: 0;
-    background-repeat: no-repeat;
-    background-position: center;
+  width: 31px;
+  height: 33px;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-right: 3px;
+  display: flex;
+  position: relative;
+  cursor: pointer;
+  img {
+    max-width: 100%;
   }
-}
-`
+  :hover {
+    :after {
+      content: "";
+      position: absolute;
+      background: rgba(0, 0, 0, 0.7) url(${CrossIcon});
+      width: 31px;
+      height: 33px;
+      left: 0;
+      top: 0;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }
+`;
 const UploadOuter = styled.div`
-display:flex;
-margin:0 10px;
-`
+  display: flex;
+  margin: 0 10px;
+`;
 // const UserListing = styled.div`
 // padding:0px;
 // max-height: 772px;
@@ -429,261 +430,264 @@ margin:0 10px;
 // margin-top:15px;
 // `
 
-moment.locale('en-GB')
-const localizer = momentLocalizer(moment)
-const bucket = process.env.REACT_APP_BUCKET
+moment.locale("en-GB");
+const localizer = momentLocalizer(moment);
+const bucket = process.env.REACT_APP_BUCKET;
 
-
-
-let myInput
+let myInput;
 const RightSide = (props) => {
   // const { loading } = props;
-  const [isOpen, setIsOpen] = useState(false)
-  const [place, setPlace] = useState({})
-  const [event, setEvent] = useState()
-  const [details, setDetails] = useState()
-  const [edit, setEdit] = useState(false)
-  const [eventList, setEventList] = useState()
-  const [feed, setFeed] = useState()
-  const [posts, setPosts] = useState()
-  const [mentions, setMention] = useState()
-  const [allFeed, setAllFeed] = useState()
-  const [description, setDescription] = useState('')
-  const [saveDisable, setSaveDisable] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
+  const [place, setPlace] = useState({});
+  const [event, setEvent] = useState();
+  const [details, setDetails] = useState();
+  const [edit, setEdit] = useState(false);
+  const [eventList, setEventList] = useState();
+  const [feed, setFeed] = useState();
+  const [posts, setPosts] = useState();
+  const [mentions, setMention] = useState();
+  const [allFeed, setAllFeed] = useState();
+  const [description, setDescription] = useState("");
+  const [saveDisable, setSaveDisable] = useState(false);
   // const [showTag, setShowTag] = useState(false)
-  const [curators, setCurators] = useState([])
-  const [activePublic, setActivePublic] = useState(false)
-  const [mess, setActiveMess] = useState(false)
-  const [allMentions, setAllMentions] = useState()
-  const [calenderView, setCalenderView] = useState()
-  const [id, setId] = useState()
-  const [isModelOpen, setIsModelOpen] = useState(false)
-  const [deleteOpen, setDeleteOpen] = useState(false)
-  const [content, setContent] = useState()
-  const [viewState,setViewState]= useState('day')
-  const [eventCopy,setEventCopy]= useState([])
-  const [upComingEvents,setUpcomingEvents]= useState()
-  const [postOpen,setPostOpen]= useState(false)
-  const [imageUrl,setImageUrl]=useState([])
-  const [imageCopy,setImageCopy]=useState([])
-  const [imageUpload,setImageUpload]=useState([])
-  const [imageUploadCopy,setImageUploadCopy]=useState([])
-  const [anchorEl, setAnchorEl]= useState(null)
-  const [mentionarray,setMentionArray]= useState([])
-  const [toolbarRef, setToolbarRef] = useState(null)
-  const [postRef,setPostRef]= useState(false)
-  const [arrPositon,setArrPosition]= useState(10)
-  const [eventPosition,setEventPosition]= useState(10)
-  const [webPost,setWebPost]= useState()
-  const [webComment,setNewComment]= useState()
+  const [consumers, setConsumers] = useState([]);
+  const [activePublic, setActivePublic] = useState(false);
+  const [mess, setActiveMess] = useState(false);
+  const [allMentions, setAllMentions] = useState();
+  const [calenderView, setCalenderView] = useState();
+  const [id, setId] = useState();
+  const [isModelOpen, setIsModelOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [content, setContent] = useState();
+  const [viewState, setViewState] = useState("day");
+  const [eventCopy, setEventCopy] = useState([]);
+  const [upComingEvents, setUpcomingEvents] = useState();
+  const [postOpen, setPostOpen] = useState(false);
+  const [imageUrl, setImageUrl] = useState([]);
+  const [imageCopy, setImageCopy] = useState([]);
+  const [imageUpload, setImageUpload] = useState([]);
+  const [imageUploadCopy, setImageUploadCopy] = useState([]);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [mentionarray, setMentionArray] = useState([]);
+  const [toolbarRef, setToolbarRef] = useState(null);
+  const [postRef, setPostRef] = useState(false);
+  const [arrPositon, setArrPosition] = useState(10);
+  const [eventPosition, setEventPosition] = useState(10);
+  const [webPost, setWebPost] = useState();
+  const [webComment, setNewComment] = useState();
   props.ws.onmessage = (evt) => {
     const message = JSON.parse(evt.data);
-    if(message.businessId && message.businessId===place._id){
-    setWebPost(message)
+    if (message.businessId && message.businessId === place._id) {
+      setWebPost(message);
+    } else if (message.postId) {
+      setNewComment(message);
     }
-    else if(message.postId){
-      setNewComment(message)
-      }
   };
   props.ws.onclose = () => {
     console.log("disconnected");
   };
   useEffect(() => {
-    let updateUser = async authState => {
+    let updateUser = async (authState) => {
       try {
-        const value = await Auth.currentAuthenticatedUser()
-        const place = await callPlace(value.attributes.sub)
-        const users = await fetchUsers()
+        const value = await Auth.currentAuthenticatedUser();
+        const place = await callPlace(value.attributes.sub);
+        const users = await fetchUsers();
         if (users) {
-          const userVal = []
-          users.map(v => {
-            return userVal.push({_id:v._id, name: v.name })
-          })
+          const userVal = [];
+          users.map((v) => {
+            return userVal.push({ _id: v._id, name: "@"+v.name });
+          });
           // const val = userVal.sort(dynamicSort("name"))
-          setCurators(userVal)
-
+          setConsumers(userVal);
         }
-        setPlace(place[0])
+        setPlace(place[0]);
         if (place && place.length !== 0) {
-
-          const val = await fetchPosts(place[0]._id)
-          const events = await fetchEvents(place[0]._id)
-          const upEvent = events.filter(v=>(new Date(v.eventSchedule.start_time)>=new Date()))
-          setUpcomingEvents(upEvent)
-          setEvent()
-          setMention('Public')
-          setActivePublic(true)
-          setPosts(val)
-          setEventList(events.reverse())
-          setFeed(val)
-          setAllFeed(val)
-          setAllMentions(val)
-          eventManage(events)
-          setPostRef(false)
-          setSaveDisable(false)
-          setDetails()
-        }
-        else {
-          let eventArr = []
-          setEvent(eventArr)
+          let val = await fetchPosts(place[0]._id);
+          val = val.sort((a, b) => {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+          });
+          const events = await fetchEvents(place[0]._id);
+          const upEvent = events.filter(
+            (v) => new Date(v.eventSchedule.start_time) >= new Date()
+          );
+          setUpcomingEvents(upEvent);
+          setEvent();
+          setMention("Public");
+          setActivePublic(true);
+          setPosts(val);
+          setEventList(events.reverse());
+          setFeed(val);
+          setAllFeed(val);
+          setAllMentions(val);
+          eventManage(events);
+          setPostRef(false);
+          setSaveDisable(false);
+          setDetails();
+        } else {
+          let eventArr = [];
+          setEvent(eventArr);
         }
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
-      window.scrollTo(0, 0)
-    }
-    updateUser()
+      window.scrollTo(0, 0);
+    };
+    updateUser();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen,postRef,isModelOpen,deleteOpen]);
-  
-  useEffect(() => {
+  }, [isOpen, postRef, isModelOpen, deleteOpen]);
 
+  useEffect(() => {
     const checkMentions = () => {
-      if (mentions === 'Public') {
-        setAllFeed(feed)
-        setActiveMess(false)
-        setActivePublic(true)
+      if (mentions === "Public") {
+        setAllFeed(feed);
+        setActiveMess(false);
+        setActivePublic(true);
+      } else if (mentions === "All Mentions") {
+        setAllFeed(allMentions);
+        setActiveMess(false);
+        setActivePublic(false);
+      } else {
+        setAllFeed(posts);
+        setActiveMess(true);
+        setActivePublic(false);
       }
-      else if (mentions === 'All Mentions') {
-        setAllFeed(allMentions)
-        setActiveMess(false)
-        setActivePublic(false)
-      }
-      else {
-        setAllFeed(posts)
-        setActiveMess(true)
-        setActivePublic(false)
-      }
-    }
-    checkMentions()
+    };
+    checkMentions();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mentions])
+  }, [mentions]);
 
   useEffect(() => {
-    const updateWebpost = async()=> {
-      if(typeof webPost !== 'undefined'){
-      const val = await fetchPosts(place._id)
-       setAllFeed(val)
+    const updateWebpost = async () => {
+      if (typeof webPost !== "undefined") {
+        const val = await fetchPosts(place._id);
+        setAllFeed(val);
       }
-    }
-    updateWebpost()
+    };
+    updateWebpost();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [webPost])
-  function onlyUnique(value, index, self) { 
+  }, [webPost]);
+  function onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
-}
-const formats = {
-  dayFormat: (date, culture, localizer) => localizer.format(date, 'Do dddd', culture),
-}
-
+  }
+  const formats = {
+    dayFormat: (date, culture, localizer) =>
+      localizer.format(date, "Do dddd", culture),
+  };
 
   const eventManage = (sol) => {
-    let eventArr = []
-    setEvent(eventArr)
-    if(viewState!=='month'){
-    // eslint-disable-next-line array-callback-return
-    sol.map(v => {
-      if (v.recurring === 'weekly' || v.recurring === 'Weekly') {
-        const weeklyStartRule = new RRule({
-          freq: RRule.WEEKLY,
-          dtstart: new Date(v.eventSchedule.start_time),
-          count: 30,
-          interval: 1
-        })
-        const weeklyEndRule = new RRule({
-          freq: RRule.WEEKLY,
-          dtstart: new Date(v.eventSchedule.end_time),
-          count: 30,
-          interval: 1
-        })
-        weeklyStartRule.all().filter(onlyUnique).forEach((num1, index) => {
-          const num2 = weeklyEndRule.all().filter(onlyUnique)[index];
+    let eventArr = [];
+    setEvent(eventArr);
+    if (viewState !== "month") {
+      // eslint-disable-next-line array-callback-return
+      sol.map((v) => {
+        if (v.recurring === "weekly" || v.recurring === "Weekly") {
+          const weeklyStartRule = new RRule({
+            freq: RRule.WEEKLY,
+            dtstart: new Date(v.eventSchedule.start_time),
+            count: 30,
+            interval: 1,
+          });
+          const weeklyEndRule = new RRule({
+            freq: RRule.WEEKLY,
+            dtstart: new Date(v.eventSchedule.end_time),
+            count: 30,
+            interval: 1,
+          });
+          weeklyStartRule
+            .all()
+            .filter(onlyUnique)
+            .forEach((num1, index) => {
+              const num2 = weeklyEndRule.all().filter(onlyUnique)[index];
+              eventArr.push({
+                id: v._id,
+                title: v.title,
+                start: num1,
+                end: num2,
+              });
+            });
+          setEvent(eventArr);
+          setEventCopy(eventArr);
+        } else if (v.recurring === "daily" || v.recurring === "Daily") {
+          const dailyStartRule = new RRule({
+            freq: RRule.DAILY,
+            dtstart: new Date(v.eventSchedule.start_time),
+            count: 30,
+            interval: 1,
+          });
+          const dailyEndRule = new RRule({
+            freq: RRule.DAILY,
+            dtstart: new Date(v.eventSchedule.end_time),
+            count: 30,
+            interval: 1,
+          });
+          dailyStartRule
+            .all()
+            .filter(onlyUnique)
+            .forEach((num1, index) => {
+              const num2 = dailyEndRule.all().filter(onlyUnique)[index];
+              eventArr.push({
+                id: v._id,
+                title: v.title,
+                start: num1,
+                end: num2,
+              });
+            });
+          setEventCopy(eventArr);
+          setEvent(eventArr);
+        } else if (
+          v.recurring === "mondayFriday" ||
+          v.recurring === "Monday-Friday"
+        ) {
+          const weekDayStartRule = new RRule({
+            freq: RRule.WEEKLY,
+            dtstart: new Date(v.eventSchedule.start_time),
+            count: 60,
+            interval: 1,
+            byweekday: [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR],
+          });
+          const weekDayEndRule = new RRule({
+            freq: RRule.WEEKLY,
+            dtstart: new Date(v.eventSchedule.end_time),
+            count: 60,
+            interval: 1,
+            byweekday: [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR],
+          });
+          weekDayStartRule
+            .all()
+            .filter(onlyUnique)
+            .forEach((num1, index) => {
+              const num2 = weekDayEndRule.all().filter(onlyUnique)[index];
+              eventArr.push({
+                id: v._id,
+                title: v.title,
+                start: num1,
+                end: num2,
+              });
+            });
+          setEventCopy(eventArr);
+          setEvent(eventArr);
+        } else {
           eventArr.push({
             id: v._id,
             title: v.title,
-            start: num1,
-            end: num2,
-          })
-        });
-        setEvent(eventArr)
-        setEventCopy(eventArr)
-      }
-      else if (v.recurring === 'daily' || v.recurring === 'Daily') {
-        const dailyStartRule = new RRule({
-          freq: RRule.DAILY,
-          dtstart: new Date(v.eventSchedule.start_time),
-          count: 30,
-          interval: 1
-        })
-        const dailyEndRule = new RRule({
-          freq: RRule.DAILY,
-          dtstart: new Date(v.eventSchedule.end_time),
-          count: 30,
-          interval: 1
-        })
-        dailyStartRule.all().filter(onlyUnique).forEach((num1, index) => {
-          const num2 = dailyEndRule.all().filter(onlyUnique)[index];
-          eventArr.push({
-            id: v._id,
-            title: v.title,
-            start: num1,
-            end: num2,
-          })
-        });
-        setEventCopy(eventArr)
-        setEvent(eventArr)
-      }
-      else if (v.recurring === 'mondayFriday' || v.recurring === 'Monday-Friday') {
-        const weekDayStartRule = new RRule({
-          freq: RRule.WEEKLY,
-          dtstart: new Date(v.eventSchedule.start_time),
-          count: 60,
-          interval: 1,
-          byweekday: [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR]
-        })
-        const weekDayEndRule = new RRule({
-          freq: RRule.WEEKLY,
-          dtstart: new Date(v.eventSchedule.end_time),
-          count: 60,
-          interval: 1,
-          byweekday: [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR]
-        })
-        weekDayStartRule.all().filter(onlyUnique).forEach((num1, index) => {
-          const num2 = weekDayEndRule.all().filter(onlyUnique)[index];
-          eventArr.push({
-            id: v._id,
-            title: v.title,
-            start: num1,
-            end: num2,
-          })
-        });
-        setEventCopy(eventArr)
-        setEvent(eventArr)
-      }
-      else {
-        eventArr.push({
-          id: v._id,
-          title: v.title,
-          start: new Date(v.eventSchedule.start_time),
-          end: new Date(v.eventSchedule.end_time),
-        })
-        setEventCopy(eventArr)
-        setEvent(eventArr)
-
-      }
-    })
-  }
-  else{
-    setEvent(eventArr)
-  }
-  }
+            start: new Date(v.eventSchedule.start_time),
+            end: new Date(v.eventSchedule.end_time),
+          });
+          setEventCopy(eventArr);
+          setEvent(eventArr);
+        }
+      });
+    } else {
+      setEvent(eventArr);
+    }
+  };
 
   const ConvertNumberToTwoDigitString = (n) => {
     return n > 9 ? "" + n : "0" + n;
-  }
+  };
   // const dynamicSort = (property) => {
   //   var sortOrder = 1;
 
@@ -702,83 +706,80 @@ const formats = {
   //   }
   // }
   const handleEdit = () => {
-    handleClose()
-    setIsModelOpen(true)
-
-  }
+    handleClose();
+    setIsModelOpen(true);
+  };
 
   const handleDelete = () => {
-    handleClose()
-    setDeleteOpen(true)
-  }
+    handleClose();
+    setDeleteOpen(true);
+  };
 
-  const returnTodayDate = ()=> {
+  const returnTodayDate = () => {
     let today = new Date();
-    const dateArr = today.toLocaleDateString("en-US", options).split(',')
-    return(
-    <>
-    <h4>{dateArr[0]}</h4>
-    <h3>{dateArr[1]}</h3>
-    <h2>{dateArr[2]}</h2>
-    </>
-    )
-    }
+    const dateArr = today.toLocaleDateString("en-US", options).split(",");
+    return (
+      <>
+        <h4>{dateArr[0]}</h4>
+        <h3>{dateArr[1]}</h3>
+        <h2>{dateArr[2]}</h2>
+      </>
+    );
+  };
 
-    const returnMonth = ()=> {
-      let today = new Date();
-      return today.toLocaleString('default', { month: 'long' })
-
-    }
+  const returnMonth = () => {
+    let today = new Date();
+    return today.toLocaleString("default", { month: "long" });
+  };
   const goToDateFromMonthView = (date) => {
-    if (!toolbarRef) return false
+    if (!toolbarRef) return false;
     toolbarRef.date.setMonth(date.getMonth());
     toolbarRef.date.setYear(date.getFullYear());
     toolbarRef.date.setDate(date.getDate());
-    toolbarRef.onView("day")
-    setViewState('day')
-    setEvent(eventCopy)
-    toolbarRef.onNavigate("current",date);
-  }
+    toolbarRef.onView("day");
+    setViewState("day");
+    setEvent(eventCopy);
+    toolbarRef.onNavigate("current", date);
+  };
 
   const getCustomToolbar = (toolbar) => {
-  //  const toolbarDate = toolbar.date;
-  const now = new Date()
+    //  const toolbarDate = toolbar.date;
+    const now = new Date();
     const goToDayView = () => {
-      setEvent(eventCopy)
-    toolbar.onView("day")
-    setViewState('day')
-    }
+      setEvent(eventCopy);
+      toolbar.onView("day");
+      setViewState("day");
+    };
     const goToWeekView = () => {
-      setEvent(eventCopy)
-    toolbar.onView("week")
-    setViewState('week')
+      setEvent(eventCopy);
+      toolbar.onView("week");
+      setViewState("week");
     };
     const goToMonthView = () => {
-      setEvent([])
-      if(toolbar.date.getMonth()===now.getMonth()){
+      setEvent([]);
+      if (toolbar.date.getMonth() === now.getMonth()) {
         toolbar.date.setMonth(now.getMonth());
         toolbar.date.setYear(now.getFullYear());
         toolbar.date.setDate(now.getDate());
         toolbar.onNavigate("current");
       }
-      toolbar.onView("month")
-      setViewState('month')
-      setToolbarRef(toolbar)
+      toolbar.onView("month");
+      setViewState("month");
+      setToolbarRef(toolbar);
     };
     const goToBack = () => {
-      let view = viewState
-      let mDate = toolbar.date
-      let newDate
+      let view = viewState;
+      let mDate = toolbar.date;
+      let newDate;
       if (view === "month") {
-        if(mDate.getMonth() - 1=== now.getMonth()){
+        if (mDate.getMonth() - 1 === now.getMonth()) {
           toolbar.date.setMonth(now.getMonth());
           toolbar.date.setYear(now.getFullYear());
           toolbar.date.setDate(now.getDate());
           toolbar.onNavigate("current");
-            }
-            else{
-            newDate = new Date(mDate.getFullYear(), mDate.getMonth() - 1, 1);
-            }
+        } else {
+          newDate = new Date(mDate.getFullYear(), mDate.getMonth() - 1, 1);
+        }
       } else if (view === "week") {
         newDate = new Date(
           mDate.getFullYear(),
@@ -801,14 +802,13 @@ const formats = {
       let mDate = toolbar.date;
       let newDate;
       if (view === "month") {
-        if(mDate.getMonth() + 1=== now.getMonth()){
-      toolbar.date.setMonth(now.getMonth());
-      toolbar.date.setYear(now.getFullYear());
-      toolbar.date.setDate(now.getDate());
-      toolbar.onNavigate("current");
-        }
-        else{
-        newDate = new Date(mDate.getFullYear(), mDate.getMonth() + 1, 1);
+        if (mDate.getMonth() + 1 === now.getMonth()) {
+          toolbar.date.setMonth(now.getMonth());
+          toolbar.date.setYear(now.getFullYear());
+          toolbar.date.setDate(now.getDate());
+          toolbar.onNavigate("current");
+        } else {
+          newDate = new Date(mDate.getFullYear(), mDate.getMonth() + 1, 1);
         }
       } else if (view === "week") {
         newDate = new Date(
@@ -846,118 +846,133 @@ const formats = {
       const date = moment(toolbar.date);
       let year = date.format("YYYY");
 
-      return (
-          <span className="rbc-toolbar-label">{year}</span>
-      );
+      return <span className="rbc-toolbar-label">{year}</span>;
     };
 
     const day = () => {
       let view = viewState;
       const date = moment(toolbar.date);
       let day;
-      if (view === "day"|| view==="week") {
+      if (view === "day" || view === "week") {
         day = date.format("Do");
       }
       return <span className="rbc-toolbar-label">{day}</span>;
     };
     return (
-        <div className="rbc-toolbar">
-          <span className="rbc-btn-group">
-            <button type="button" onClick={goToToday}>
-              <span className="next-icon">Today</span>
-            </button>
-            <button type="button" onClick={goToBack}>
-              <span className="prev-icon">Back</span>
-            </button>
-            <button type="button" onClick={goToNext}>
-              <span className="next-icon">Next</span>
-            </button>
-          </span>
-          <div className="monthDayYear">{day()}
+      <div className="rbc-toolbar">
+        <span className="rbc-btn-group">
+          <button type="button" onClick={goToToday}>
+            <span className="next-icon">Today</span>
+          </button>
+          <button type="button" onClick={goToBack}>
+            <span className="prev-icon">Back</span>
+          </button>
+          <button type="button" onClick={goToNext}>
+            <span className="next-icon">Next</span>
+          </button>
+        </span>
+        <div className="monthDayYear">
+          {day()}
           {month()}
           {year()}
-          </div>
-          <span className="rbc-btn-group">
-            <button className= {viewState==='day' ?"rbc-active": null} onClick={goToDayView}>
-              <span className="label-filter-off">Day</span>
-            </button>
-            <button className={viewState==='week' ?"rbc-active": null}  onClick={goToWeekView}>
-              <span className="label-filter-off">Week</span>
-            </button>
-            <button className={viewState==='month' ?"rbc-active": null}  onClick={goToMonthView}>
-              <span className="label-filter-off">Month</span>
-            </button>
-          </span>
         </div>
-        
-    
+        <span className="rbc-btn-group">
+          <button
+            className={viewState === "day" ? "rbc-active" : null}
+            onClick={goToDayView}
+          >
+            <span className="label-filter-off">Day</span>
+          </button>
+          <button
+            className={viewState === "week" ? "rbc-active" : null}
+            onClick={goToWeekView}
+          >
+            <span className="label-filter-off">Week</span>
+          </button>
+          <button
+            className={viewState === "month" ? "rbc-active" : null}
+            onClick={goToMonthView}
+          >
+            <span className="label-filter-off">Month</span>
+          </button>
+        </span>
+      </div>
     );
   };
 
   const getDate = (value) => {
     const date = new Date(value);
-    const time = ConvertNumberToTwoDigitString(date.getHours()) +
-      ":" + ConvertNumberToTwoDigitString(date.getMinutes()) + ", " + ((date.toLocaleString()).substring(0,new Date(date).toLocaleString().indexOf(",")).replace(/\//g,' - '));
-    return time
-
-  }
+    const time =
+      ConvertNumberToTwoDigitString(date.getHours()) +
+      ":" +
+      ConvertNumberToTwoDigitString(date.getMinutes()) +
+      ", " +
+      date
+        .toLocaleString()
+        .substring(0, new Date(date).toLocaleString().indexOf(","))
+        .replace(/\//g, " - ");
+    return time;
+  };
   const setMentions = (val) => {
-    if (val === 'Public') {
-      setMention('Public')
+    if (val === "Public") {
+      setMention("Public");
+    } else if (val === "All Mentions") {
+      setMention("All Mentions");
+    } else {
+      setMention("Messages");
     }
-    else if (val === 'All Mentions') {
-      setMention('All Mentions')
-    }
-    else {
-      setMention('Messages')
-    }
-  }
+  };
 
   const Validation = () => {
-    if (!(description.trim())) {
-      return false
+    if (!description.trim()) {
+      return false;
+    } else {
+      return true;
     }
-    else {
-      return true
-    }
-  }
-  
+  };
 
   const addPost = async () => {
     if (Validation()) {
-      setSaveDisable(true)
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/posts`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          business: place._id,
-          data: description,
-          media:imageUpload,
-          taggedUsers:mentionarray,
-        })
-      });
+      setSaveDisable(true);
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/posts`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            business: place._id,
+            data: description,
+            media: imageUpload,
+            taggedUsers: mentionarray,
+          }),
+        }
+      );
       const body = await response.text();
+      const val = JSON.parse(body);
       props.ws.send(
         JSON.stringify({
           action: "post",
-          post: description,
-          businessId: place._id
+          post: {
+            postId: val.post._id,
+            postDetails: {...val.post,ownerId: null, createdAt: new Date(), type:"Business"},
+            totalComments: 0,
+            totalLikes: 0,
+            comments: [],
+          },
+          businessId: place._id,
         })
-      )
-        setPostRef(true)
-        CancelPost()
-      return body
+      );
+      setPostRef(true);
+      CancelPost();
+      return body;
     }
+  };
 
-  }
-  
-
-  
-  const handleClick = (event,v) => {
-    setContent(v)
-    setId(v._id)
+  const handleClick = (event, v) => {
+    setContent(v);
+    setId(v._id);
     setAnchorEl(event.currentTarget);
   };
 
@@ -965,102 +980,108 @@ const formats = {
     setAnchorEl(null);
   };
   const handleChange = (event, newValue, newPlainTextValue, mentions) => {
-    const valueArr= mentionarray
-    if(mentions.length!==0){
-    valueArr.push(mentions[0].id)
-    setMentionArray(valueArr)
+    const valueArr = mentionarray;
+    if (mentions.length !== 0) {
+      valueArr.push(mentions[0].id);
+      setMentionArray(valueArr);
     }
-    setDescription(newPlainTextValue)
+    setDescription(newPlainTextValue);
+  };
+
+  const CancelPost = () => {
+    setDescription("");
+    setImageUrl([]);
+    setImageUpload([]);
+    setImageUploadCopy([]);
+    setImageCopy([]);
+  };
+  const postOpenFunc = (v) => {
+    setPostOpen(true);
+    setContent(v);
+  };
+
+  const findDesc = (value, mentions) => {
+    let divContent = value;
+    //  eslint-disable-next-line array-callback-return
+    mentions.map((v) => {
+      let re = new RegExp("@"+v.name, "g");
+      divContent = divContent.replace(re, "<h2>" +"@"+ v.name + "</h2>");
+    });
+    if (mentions.length !== 0) {
+      return (
+        <>
+          <div dangerouslySetInnerHTML={{ __html: divContent }}></div>
+        </>
+      );
+    } else {
+      return value;
     }
-  
-  const CancelPost= ()=>{
-    setDescription('')
-    setImageUrl([])
-    setImageUpload([])
-    setImageUploadCopy([])
-    setImageCopy([])
-  }
-  const postOpenFunc= (v)=> {
-    setPostOpen(true)
-    setContent(v)
-  }
-
-  const findDesc = (value,mentions)=>{
-  let divContent=value
-  //  eslint-disable-next-line array-callback-return
-   mentions.map(v=>{
-   let re = new RegExp(v.name, 'g');
-   divContent = divContent.replace(re, '<h2>' + v.name + '</h2>');
-   })
-   if(mentions.length!==0){
-   return (<>
-   <div dangerouslySetInnerHTML={{ __html: divContent }}>
-     </div>
-
-   </>)
-  }
-  else{
-    return value
-  }
-  }
-  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  };
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
   // const options = [{name: 'John Watson', id: 1},{name: 'Marie Curie', id: 2}]
 
   const fetchMoreData = () => {
     setTimeout(() => {
-      setArrPosition(arrPositon+10)
+      setArrPosition(arrPositon + 10);
     }, 4000);
   };
 
   const fetchMoreEvents = () => {
     setTimeout(() => {
-      setEventPosition(eventPosition+10)
+      setEventPosition(eventPosition + 10);
     }, 4000);
   };
 
-  const editName=(name)=>{
-    return `${place.company_name}-${name}`
-  }
+  const editName = (name) => {
+    return `${place.company_name}-${name}`;
+  };
 
-  const upload =async(e)=> {
-    const imageArr= imageCopy
-    const imgUpload= imageUploadCopy
-    const file = e.target.files[0]
-    const newName= editName(file.name)
-    const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${newName}`
-    if(imageCopy.length<5){
-    const value = await fetch(`${process.env.REACT_APP_API_URL}/api/upload_photo`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        Key:newName,
-        ContentType:file.type
+  const upload = async (e) => {
+    const imageArr = imageCopy;
+    const imgUpload = imageUploadCopy;
+    const file = e.target.files[0];
+    const newName = editName(file.name);
+    const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${newName}`;
+    if (imageCopy.length < 5) {
+      const value = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/upload_photo`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            Key: newName,
+            ContentType: file.type,
+          }),
+        }
+      );
+      const body = await value.text();
+      const Val = JSON.parse(body);
+
+      await fetch(Val, {
+        method: "PUT",
+        headers: {
+          "Content-Type": file.type,
+        },
+        body: file,
       })
-    });
-    const body =await value.text();
-    const Val = JSON.parse(body)
-
-    await fetch(Val, { 
-    method: 'PUT',
-    headers: {
-      "Content-Type": file.type,
-    },
-    body: file 
-  }).then(
-    response => {
-    imageArr.push({id:(imageCopy.length)+1,value:baseUrl})
-    imgUpload.push({image:baseUrl})
-    setImageUpload([...imgUpload])
-    setImageUploadCopy([...imgUpload])
-    setImageCopy([...imageArr])
-    setImageUrl([...imageArr])
-    
-  }
-  ).catch(
-    error => console.log(error) // Handle the error response object
-  )
+        .then((response) => {
+          imageArr.push({ id: imageCopy.length + 1, value: baseUrl });
+          imgUpload.push({ image: baseUrl });
+          setImageUpload([...imgUpload]);
+          setImageUploadCopy([...imgUpload]);
+          setImageCopy([...imageArr]);
+          setImageUrl([...imageArr]);
+        })
+        .catch(
+          (error) => console.log(error) // Handle the error response object
+        );
     }
 
     // if(imageCopy.length<5){
@@ -1069,34 +1090,36 @@ const formats = {
     //    s3.upload(params, function(err, data) {
     //       console.log(err, data);
     //  })
-  //  const data = await reactS3.uploadFile(e.target.files[0],config)
+    //  const data = await reactS3.uploadFile(e.target.files[0],config)
     // imageArr.push({id:(imageCopy.length)+1,value:data.location})
     // imgUpload.push(data.location)
     // setImageUpload([...imgUpload])
     // setImageUploadCopy([...imgUpload])
     // setImageCopy([...imageArr])
     // setImageUrl([...imageArr])
-    }
+  };
 
-    const deleteImage = (v)=> {
-      const deleteImage = imageUrl.filter((item) => item.id !== v.id)
-      const deleteImageUpload = imageUploadCopy.filter((item) => item !== v.value)
-      setImageUpload([...deleteImageUpload])
-      setImageUploadCopy([...deleteImageUpload])
-      setImageCopy([...deleteImage])
-      setImageUrl([...deleteImage])
-    }
-   
-    const userMentionData = curators.map(myUser => ({
-      id: myUser._id,
-      display: `${myUser.name}`
-    }))
+  const deleteImage = (v) => {
+    const deleteImage = imageUrl.filter((item) => item.id !== v.id);
+    const deleteImageUpload = imageUploadCopy.filter(
+      (item) => item !== v.value
+    );
+    setImageUpload([...deleteImageUpload]);
+    setImageUploadCopy([...deleteImageUpload]);
+    setImageCopy([...deleteImage]);
+    setImageUrl([...deleteImage]);
+  };
 
-    // const fetchMoreData = () =>{
-    //        setTimeout(()=>{
-    //          setPostLength(allFeed.length)
-    //        },2000)
-    // }
+  const userMentionData = consumers.map((myUser) => ({
+    id: myUser._id,
+    display: `${myUser.name}`,
+  }));
+
+  // const fetchMoreData = () =>{
+  //        setTimeout(()=>{
+  //          setPostLength(allFeed.length)
+  //        },2000)
+  // }
   return (
     <RightSection>
       <Row>
@@ -1106,105 +1129,170 @@ const formats = {
               {/* Claender Section */}
               <FlexRow>
                 <SubHeading name="Events" />
-                <ButtonSmall onClick={() => setIsOpen(true)}>Add Event</ButtonSmall>
+                <ButtonSmall onClick={() => setIsOpen(true)}>
+                  Add Event
+                </ButtonSmall>
               </FlexRow>
 
-              <AddModalBox setEvent={setEvent} editValue={edit} events={eventList} setEdit={setEdit} value={details} isOpen={isOpen} setIsOpen={setIsOpen} data={place} closeModal={() => (setEdit(false), setIsOpen(false))} />
+              <AddModalBox
+                setEvent={setEvent}
+                editValue={edit}
+                events={eventList}
+                setEdit={setEdit}
+                value={details}
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+                data={place}
+                closeModal={() => (setEdit(false), setIsOpen(false))}
+              />
               <CalenderSection>
-        <div className={ calenderView === 'month'? "monthView": null}>
-        {calenderView === 'month' && typeof event !== 'undefined' ?
-    <EventMenu>
-      <div className="dateWrap">{returnTodayDate()}</div>
-      <h4>Upcoming Events in {returnMonth()}</h4>
-      {upComingEvents ? upComingEvents.map(v =>
-        <>
-          {v.title ?
-            <MonthEventList>
-              <p>{v.title}</p>
-              <span>{getDate(v.eventSchedule.start_time)}</span>
-            </MonthEventList> : null
-          }
-        </>) : null
-      }
-    </EventMenu> : null
-  }
-          {typeof event !== 'undefined' ?
-            <Calendar
-              className="CalenderSec"
-              formats={formats}
-              localizer={localizer}
-              events={event}
-              startAccessor="start"
-              endAccessor="end"
-              onSelectEvent={(e) => (
-                // eslint-disable-next-line no-sequences
-                setEdit(true),
-                setIsOpen(true),
-                setDetails(e)
-              )}
-              components={{
-                toolbar: getCustomToolbar,
-                month: {
-                  dateHeader: (props) => {
-                    let highlightDate =
-                      eventCopy.find(event =>
-                        moment(props.date).isBetween(
-                          moment(event.start),
-                          moment(event.end),
-                          null,
-                          "[]"
-                        )||(moment(props.date).format('YYYY-MM-DD')===moment(event.start).format('YYYY-MM-DD'))||(moment(props.date).format('YYYY-MM-DD')===moment(event.end).format('YYYY-MM-DD'))
-                      ) != undefined;
-                    return (
-                      <div {...props} onClick={() => goToDateFromMonthView(props.date)} className="monthHeader" style={highlightDate ? { backgroundColor: "#f9a9d1", color: "#fff"} : null}>
-                      <span>{props.label}</span>
-                      </div>
-                    );
-                  }
-                },
-              }}
-              defaultView={viewState}
-              step={60}
-              onView={(e) => (setCalenderView(e),setViewState(e))}
-              views={['day', 'week', 'month',]}
-              style={{ height: 463, width:'100%'}}
-            /> : <div className="loader" style={{textAlign:'center' ,margin:' 40px auto 0'}}> <ValueLoader height="70" width="70" /></div>
-
-          }
-        </div>
-        </CalenderSection>
+                <div className={calenderView === "month" ? "monthView" : null}>
+                  {calenderView === "month" && typeof event !== "undefined" ? (
+                    <EventMenu>
+                      <div className="dateWrap">{returnTodayDate()}</div>
+                      <h4>Upcoming Events in {returnMonth()}</h4>
+                      {upComingEvents
+                        ? upComingEvents.map((v) => (
+                            <>
+                              {v.title ? (
+                                <MonthEventList>
+                                  <p>{v.title}</p>
+                                  <span>
+                                    {getDate(v.eventSchedule.start_time)}
+                                  </span>
+                                </MonthEventList>
+                              ) : null}
+                            </>
+                          ))
+                        : null}
+                    </EventMenu>
+                  ) : null}
+                  {typeof event !== "undefined" ? (
+                    <Calendar
+                      className="CalenderSec"
+                      formats={formats}
+                      localizer={localizer}
+                      events={event}
+                      startAccessor="start"
+                      endAccessor="end"
+                      onSelectEvent={(e) => (
+                        // eslint-disable-next-line no-sequences
+                        setEdit(true), setIsOpen(true), setDetails(e)
+                      )}
+                      components={{
+                        toolbar: getCustomToolbar,
+                        month: {
+                          dateHeader: (props) => {
+                            let highlightDate =
+                              eventCopy.find(
+                                (event) =>
+                                  moment(props.date).isBetween(
+                                    moment(event.start),
+                                    moment(event.end),
+                                    null,
+                                    "[]"
+                                  ) ||
+                                  moment(props.date).format("YYYY-MM-DD") ===
+                                    moment(event.start).format("YYYY-MM-DD") ||
+                                  moment(props.date).format("YYYY-MM-DD") ===
+                                    moment(event.end).format("YYYY-MM-DD")
+                              ) != undefined;
+                            return (
+                              <div
+                                {...props}
+                                onClick={() =>
+                                  goToDateFromMonthView(props.date)
+                                }
+                                className="monthHeader"
+                                style={
+                                  highlightDate
+                                    ? {
+                                        backgroundColor: "#f9a9d1",
+                                        color: "#fff",
+                                      }
+                                    : null
+                                }
+                              >
+                                <span>{props.label}</span>
+                              </div>
+                            );
+                          },
+                        },
+                      }}
+                      defaultView={viewState}
+                      step={60}
+                      onView={(e) => (setCalenderView(e), setViewState(e))}
+                      views={["day", "week", "month"]}
+                      style={{ height: 463, width: "100%" }}
+                    />
+                  ) : (
+                    <div
+                      className="loader"
+                      style={{ textAlign: "center", margin: " 40px auto 0" }}
+                    >
+                      {" "}
+                      <ValueLoader height="70" width="70" />
+                    </div>
+                  )}
+                </div>
+              </CalenderSection>
 
               {/* All Events */}
 
               <AllEvent>
                 <h2>All Events</h2>
-                
+
                 <EventList>
-                <Scrollbars autoHeight autoHeightMax={566}>
-                <InfiniteScroll
-          dataLength={eventPosition}
-          next={fetchMoreEvents}
-          hasMore={true}
-          loader={eventList && eventPosition<= eventList.length ? <div style={{textAlign:'center' ,margin:' 40px auto 0'}}> <ValueLoader height="40" width="40" /></div>:null}
-            >
-                  {eventList ? eventList.slice(0,eventPosition).map(v =>
-                    <>
-                      {v.title ?
-                        <EventListing>
-                          <EventText>
-                            <h3>{v.title}</h3>
-                            {/* <p>{v.eventSchedule.recurring}</p> */}
-                            <span>{getDate(v.eventSchedule.start_time)}</span>
-                            <p>{v.description}</p>
-                          </EventText>
-                          {v.media && v.media.length>0?
-                          <EventImage><img src={v.media[0].image} alt=""/></EventImage>
-                            :null }
-                        </EventListing> : null
+                  <Scrollbars autoHeight autoHeightMax={566}>
+                    <InfiniteScroll
+                      dataLength={eventPosition}
+                      next={fetchMoreEvents}
+                      hasMore={true}
+                      loader={
+                        eventList && eventPosition <= eventList.length ? (
+                          <div
+                            style={{
+                              textAlign: "center",
+                              margin: " 40px auto 0",
+                            }}
+                          >
+                            {" "}
+                            <ValueLoader height="40" width="40" />
+                          </div>
+                        ) : null
                       }
-                    </>) : <><EventSkeleton /><EventSkeleton /><EventSkeleton /><EventSkeleton /></>
-                  }
-                  </InfiniteScroll>
+                    >
+                      {eventList ? (
+                        eventList.slice(0, eventPosition).map((v) => (
+                          <>
+                            {v.title ? (
+                              <EventListing>
+                                <EventText>
+                                  <h3>{v.title}</h3>
+                                  {/* <p>{v.eventSchedule.recurring}</p> */}
+                                  <span>
+                                    {getDate(v.eventSchedule.start_time)}
+                                  </span>
+                                  <p>{v.description}</p>
+                                </EventText>
+                                {v.media && v.media.length > 0 ? (
+                                  <EventImage>
+                                    <img src={v.media[0].image} alt="" />
+                                  </EventImage>
+                                ) : null}
+                              </EventListing>
+                            ) : null}
+                          </>
+                        ))
+                      ) : (
+                        <>
+                          <EventSkeleton />
+                          <EventSkeleton />
+                          <EventSkeleton />
+                          <EventSkeleton />
+                        </>
+                      )}
+                    </InfiniteScroll>
                   </Scrollbars>
                 </EventList>
               </AllEvent>
@@ -1219,55 +1307,97 @@ const formats = {
                 // textAreaProps={{value:description}}
                  onChange={handleChange}
                   field="name"
-                  data={curators}
+                  data={consumers}
                 /> */}
-                <MentionsInput markup='@(__id__)[__display__]' value={description} onChange={handleChange} className="mentions">
-                <Mention
-                  type="user"
-                  trigger="@"
-                  data={userMentionData}
-                  className="mentions__mention"
-                />
-                  </MentionsInput>
+                <MentionsInput
+                  markup="@(__id__)[__display__]"
+                  value={description}
+                  onChange={handleChange}
+                  className="mentions"
+                >
+                  <Mention
+                    type="user"
+                    trigger="@"
+                    data={userMentionData}
+                    className="mentions__mention"
+                  />
+                </MentionsInput>
 
                 <div className="mt-10">
-                  <FlexRow style={{ padding: '0px' }}>
-                  <input id="myInput" onChange={(e)=> upload(e)} type="file"  ref={(ref) => myInput = ref} style={{ display: 'none' }} />
-                    <ButtonSmall className="btnhover" onClick={(e) => myInput.click()} bgColor="#0FB1D2"><img src={UploadIocn} alt="Upload" />Upload</ButtonSmall>
-                    {imageUrl ? <UploadOuter>{imageUrl.map(v=>
-                     
-                 <UploadImage id={v.id} onClick={()=>deleteImage(v)}><img src={v.value} alt="Upload" /></UploadImage>
-                    )}
-                    </UploadOuter>:null}
-                    { description||imageUrl.length>0?
+                  <FlexRow style={{ padding: "0px" }}>
+                    <input
+                      id="myInput"
+                      onChange={(e) => upload(e)}
+                      type="file"
+                      ref={(ref) => (myInput = ref)}
+                      style={{ display: "none" }}
+                    />
                     <ButtonSmall
-                      maxWidth="34px"
-                      bgColor="#FF7171"
-                      style={{ marginLeft: 'auto', marginRight: '9px' }}
-                      onClick={()=>CancelPost()}
+                      className="btnhover"
+                      onClick={(e) => myInput.click()}
+                      bgColor="#0FB1D2"
+                    >
+                      <img src={UploadIocn} alt="Upload" />
+                      Upload
+                    </ButtonSmall>
+                    {imageUrl ? (
+                      <UploadOuter>
+                        {imageUrl.map((v) => (
+                          <UploadImage id={v.id} onClick={() => deleteImage(v)}>
+                            <img src={v.value} alt="Upload" />
+                          </UploadImage>
+                        ))}
+                      </UploadOuter>
+                    ) : null}
+                    {description || imageUrl.length > 0 ? (
+                      <ButtonSmall
+                        maxWidth="34px"
+                        bgColor="#FF7171"
+                        style={{ marginLeft: "auto", marginRight: "9px" }}
+                        onClick={() => CancelPost()}
                       >
-                      <img src={CrossIcon} alt="Cross Icon" style={{ marginRight: '0px' }} />
-                    </ButtonSmall>:null
-                     }
-                    <ButtonSmall disabled={saveDisable} onClick={() => addPost()}>{saveDisable!==true?'Publish':<ValueLoader/>}</ButtonSmall>
+                        <img
+                          src={CrossIcon}
+                          alt="Cross Icon"
+                          style={{ marginRight: "0px" }}
+                        />
+                      </ButtonSmall>
+                    ) : null}
+                    <ButtonSmall
+                      disabled={saveDisable}
+                      onClick={() => addPost()}
+                    >
+                      {saveDisable !== true ? "Publish" : <ValueLoader />}
+                    </ButtonSmall>
                   </FlexRow>
                 </div>
               </div>
             </Card>
-            <Card style={{ minHeight: '897px' }}>
+            <Card style={{ minHeight: "897px" }}>
               <FlexRow>
                 <SubHeading name="Feed" />
                 <TabsOuter>
-                  <Tabs isActive={activePublic} setMentions={setMentions} name="Public" image={UserIcon} />
-                  <Tabs className="M2" isActive={mess} setMentions={setMentions} name="Public" image={CommentIcon} />
+                  <Tabs
+                    isActive={activePublic}
+                    setMentions={setMentions}
+                    name="Public"
+                    image={UserIcon}
+                  />
+                  <Tabs
+                    className="M2"
+                    isActive={mess}
+                    setMentions={setMentions}
+                    name="Public"
+                    image={CommentIcon}
+                  />
                 </TabsOuter>
               </FlexRow>
 
-              {mentions === 'Public' ?
-                       <>
+              {mentions === "Public" ? (
+                <>
                   <div className="mt-25">
-                  <Scrollbars autoHeight autoHeightMax={736} style={{ }}>
-                    {/* <FeedListing onClick={() => setIsOpen(true)}>
+                    <Scrollbars autoHeight autoHeightMax={736} style={{}}>
+                      {/* <FeedListing onClick={() => setIsOpen(true)}>
                       <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
                       <EventText>
                         <span>08:35 AM, 12 - 08 - 12</span>
@@ -1293,49 +1423,100 @@ const formats = {
                         </Icon>
                       </EventText>
                     </FeedListing> */}
-         <PostModalBox newComment={webComment} isOpen={postOpen} closeModal={() => setPostOpen(false)} value={content} place={place} />
-         <EditModalBox message={props.ws} user={place} setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={userMentionData} value={content} />
-          <DeleteModalBox message={props.ws} userId={place._id}  setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
-          <InfiniteScroll
-          dataLength={arrPositon}
-          next={fetchMoreData}
-          hasMore={true}
-          loader={allFeed && arrPositon<= allFeed.length ? <div style={{textAlign:'center' ,margin:' 40px auto 0'}}> <ValueLoader height="40" width="40" /></div>:null}
-            >
-                    {typeof allFeed !== 'undefined' ?
-                      allFeed.slice(0,arrPositon).map(v => (
-                        <FeedListing>
-                          <FeedImage><img src={place.default_image_url?place.default_image_url:Watermark} alt="Event" /></FeedImage>
-                          <EventText>
-                            <span>{(getDate(v.updatedAt))}</span>
-                            <h3 onClick={() => postOpenFunc(v)}>{v.name ? v.name : place.company_name}</h3>
-                            <p>{findDesc(v.data,v.taggedUsers)}</p>
-                            <Icon>
-                            <EditRomve>
-              
-                                  <Button aria-controls="simple-menu" aria-haspopup="true" onClick={(e)=>handleClick(e,v)}>
-                                  ...
-                                </Button>
-                          
-                      
-                                <Menu
-                                  id={v._id}
-                                  anchorEl={anchorEl}
-                                  keepMounted
-                                  open={Boolean(anchorEl)}
-                                  onClose={handleClose}
-                                >
-                                  <MenuItem onClick={()=>handleEdit()}>Edit</MenuItem>
-                                  <MenuItem onClick={() => handleDelete()}>Delete</MenuItem>
-                                
-                                </Menu>
-                                </EditRomve>
-                              
-                              {/* <EditRomve>
+                      <PostModalBox
+                        newComment={webComment}
+                        isOpen={postOpen}
+                        closeModal={() => setPostOpen(false)}
+                        value={content}
+                        place={place}
+                      />
+                      <EditModalBox
+                        message={props.ws}
+                        user={place}
+                        setIsOpen={setIsModelOpen}
+                        isOpen={isModelOpen}
+                        closeModal={() => setIsModelOpen(false)}
+                        users={userMentionData}
+                        value={content}
+                      />
+                      <DeleteModalBox
+                        message={props.ws}
+                        userId={place._id}
+                        setDeleteOpen={setDeleteOpen}
+                        postId={id}
+                        isOpen={deleteOpen}
+                        closeModal={() => setDeleteOpen(false)}
+                      />
+                      <InfiniteScroll
+                        dataLength={arrPositon}
+                        next={fetchMoreData}
+                        hasMore={true}
+                        loader={
+                          allFeed && arrPositon <= allFeed.length ? (
+                            <div
+                              style={{
+                                textAlign: "center",
+                                margin: " 40px auto 0",
+                              }}
+                            >
+                              {" "}
+                              <ValueLoader height="40" width="40" />
+                            </div>
+                          ) : null
+                        }
+                      >
+                        {typeof allFeed !== "undefined"
+                          ? allFeed.slice(0, arrPositon).map((v) => (
+                              <FeedListing>
+                                <FeedImage>
+                                  <img
+                                    src={
+                                      place.default_image_url
+                                        ? place.default_image_url
+                                        : Watermark
+                                    }
+                                    alt="Event"
+                                  />
+                                </FeedImage>
+                                <EventText>
+                                  <span>{getDate(v.updatedAt)}</span>
+                                  <h3 onClick={() => postOpenFunc(v)}>
+                                    {v.name ? v.name : place.company_name}
+                                  </h3>
+                                  <p>{findDesc(v.data, v.taggedUsers)}</p>
+                                  <Icon>
+                                    <EditRomve>
+                                      <Button
+                                        aria-controls="simple-menu"
+                                        aria-haspopup="true"
+                                        onClick={(e) => handleClick(e, v)}
+                                      >
+                                        ...
+                                      </Button>
+
+                                      <Menu
+                                        id={v._id}
+                                        anchorEl={anchorEl}
+                                        keepMounted
+                                        open={Boolean(anchorEl)}
+                                        onClose={handleClose}
+                                      >
+                                        <MenuItem onClick={() => handleEdit()}>
+                                          Edit
+                                        </MenuItem>
+                                        <MenuItem
+                                          onClick={() => handleDelete()}
+                                        >
+                                          Delete
+                                        </MenuItem>
+                                      </Menu>
+                                    </EditRomve>
+
+                                    {/* <EditRomve>
                                 <img onClick={() => setToggle(v._id)} src={MoreIcon} alt="More" />
                                 {toggle && id === v._id ?
                                   <Tooltip>
-                                    <EditModalBox setToggleMenu={setToggleMenu} setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={curators} value={content} />
+                                    <EditModalBox setToggleMenu={setToggleMenu} setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={consumers} value={content} />
                                     <DeleteModalBox setToggleMenu={setToggleMenu} setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
                                     <ul>
                                       <li onClick={() => handleEdit(v)}>Edit</li>
@@ -1344,21 +1525,24 @@ const formats = {
                                 }
                               </EditRomve> */}
 
-                              {/* <WishlistImg><img src={WishlistGrey} alt="" /><sup>3</sup></WishlistImg>
+                                    {/* <WishlistImg><img src={WishlistGrey} alt="" /><sup>3</sup></WishlistImg>
                               <CommentImg><img src={CommentGrey} alt="" /><sup>3</sup></CommentImg> */}
-
-                            </Icon>
-                          </EventText>
-                        </FeedListing>)) : null
-                    }
-                    </InfiniteScroll>
-                   
-
-
-                   </Scrollbars>
+                                  </Icon>
+                                </EventText>
+                              </FeedListing>
+                            ))
+                          : null}
+                      </InfiniteScroll>
+                    </Scrollbars>
                   </div>
-                         </> : <><PostSkeleton /><PostSkeleton /><PostSkeleton /></>
-              }
+                </>
+              ) : (
+                <>
+                  <PostSkeleton />
+                  <PostSkeleton />
+                  <PostSkeleton />
+                </>
+              )}
 
               {/* {mentions === 'Messages' ?
                 <>
@@ -1494,9 +1678,6 @@ const formats = {
                   </UserListing>
                 </> : null
               } */}
-
-
-
             </Card>
           </EventRight>
         </EventOuter>
@@ -1530,7 +1711,7 @@ const formats = {
               <FlexRow>
                 <LineButton setShowTag={setShowTag} name="Add Tags" />
                 {showTag ?
-                  <Multiselect options={curators} displayValue="name" /> : null
+                  <Multiselect options={consumers} displayValue="name" /> : null
                 }
                 <Anchor onClick={() => setDescription('')}>Cancel</Anchor>
                 <Button className="btn btn-primary" disabled={saveDisable} onClick={() => addPost()} buttontext="Publish" >{'Publish'}</Button>
@@ -1563,9 +1744,8 @@ const formats = {
           <ChatBox />
         </Card>
       </Row> */}
-
     </RightSection>
-  )
-}
+  );
+};
 
-export default RightSide
+export default RightSide;

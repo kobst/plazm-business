@@ -1753,3 +1753,6 @@ display: none;
 .postModalDetails{
   overflow-x: hidden;
 }
+.imgSlide_onTabOpen {
+background-color: red;
+}

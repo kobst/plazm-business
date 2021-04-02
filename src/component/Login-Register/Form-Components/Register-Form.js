@@ -51,7 +51,7 @@ margin-top: 6px;
 `
 
 
-const RegisterForm = ({ verified,disable,err,confirmationCode,password,phoneLong,phoneShort, firstError,emptyCode, business, loader, setbusiness, setBusinessInfo, setName, message, type, locationError, codeError, firstNameError, phoneError, emailError, passwordError, handleChange, handleSubmit }) => {
+const RegisterForm = ({ verified,disable,err,confirmationCode,password,phoneLong,phoneShort, firstError,emptyCode, business, loader, setbusiness, setBusinessInfo, setName, message, type, locationError, codeError, firstNameError, phoneError, emailError, passwordError, handleChange, handleSubmit, phoneOnlyNumbers }) => {
     return (
         <>
             {verified ? (<form>
@@ -65,14 +65,14 @@ const RegisterForm = ({ verified,disable,err,confirmationCode,password,phoneLong
                             <Input value={confirmationCode} id='confirmationCode' type='text' onChange={(e) => handleChange(e)} error={emptyCode} />
                             {codeError ? <ErrorMessage>Confirmation code does not match</ErrorMessage> : null}
                         </FormGroup> */}
-                         <Link to='/business/login' className="link-btn"><strong>Sign In</strong></Link>
+                        {type.includes('business')?<Link to='/business/login' className="link-btn"><strong>Sign In</strong></Link>:<Link to='/consumer/login' className="link-btn"><strong>Sign In</strong></Link>}
 
                     </>
             </form>) :
                 <form onSubmit={(e) => handleSubmit(e)}>
 
                     <FormGroup>
-                        <Label name="Business Name" />
+                        <Label name={type.includes('business')?"Business Name":"Name"} />
                         <Input disabled={disable} type="text" id="username" onChange={(e) => handleChange(e)}
                             error={firstNameError} placeholder="" />
                         {firstError ? <ErrorMessage>Username length should be greater than 3.</ErrorMessage> : null}
@@ -83,6 +83,7 @@ const RegisterForm = ({ verified,disable,err,confirmationCode,password,phoneLong
                         <Label name="Phone Number" />
                         <Input disabled={disable} id='phone_number' onChange={(e) => handleChange(e)}
                             error={phoneError} placeholder="" />
+                            {phoneOnlyNumbers ? <ErrorMessage>Phone Number should only contain numbers.</ErrorMessage> : null}
                             {phoneShort ? <ErrorMessage>Phone Number length should be greater than 5.</ErrorMessage> : null}
                             {phoneLong ? <ErrorMessage>Phone Number length should be less than 50.</ErrorMessage> : null}
                         {err && message && message.includes("number") ? <ErrorMessage>{message}</ErrorMessage> : null}
