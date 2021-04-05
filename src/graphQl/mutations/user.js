@@ -89,4 +89,54 @@ const getSelectedUser = (search) => {
   return graphQl;
 };
 
-export { AddUser, updateUserProfile, getSelectedUser };
+/*
+@desc: to add favorites to a business
+@params: businessId, userId
+*/
+const addFavoriteBusiness = (obj) => {
+  const graphQl = {
+    query: `
+          mutation AddFavoriteBusiness($userId:ID!, $businessId:ID!){
+            addFavoriteBusiness(input: { userId: $userId, businessId: $businessId }) {
+              message
+              success
+              user {
+                userId
+                businessId
+              }
+            }
+          }`,
+    variables: {
+      userId: obj.userId,
+      businessId: obj.businessId
+    },
+  };
+  return graphQl;
+};
+
+
+/*
+@desc: to remove favorites to a business
+@params: businessId, userId
+*/
+const removeFavoriteBusiness = (obj) => {
+  const graphQl = {
+    query: `
+          mutation RemoveFavoriteBusiness($userId:ID!, $businessId:ID!){
+            removeFavoriteBusiness(input: { userId: $userId, businessId: $businessId }) {
+              message
+              success
+              user {
+                userId
+                businessId
+              }
+            }
+          }`,
+    variables: {
+      userId: obj.userId,
+      businessId: obj.businessId
+    },
+  };
+  return graphQl;
+};
+export { AddUser, updateUserProfile, getSelectedUser, addFavoriteBusiness, removeFavoriteBusiness };

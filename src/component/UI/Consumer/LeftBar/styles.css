@@ -116,10 +116,10 @@
   }
 
   .MainTabs .react-tabs__tab.LIBefore{
-    border-radius: 0 0 20px;
+    border-radius: 0 0 15px;
   }
   .MainTabs .react-tabs__tab.LIAFter{
-    border-radius: 0 20px 0px 0;
+    border-radius: 0 15px 0px 0;
   }
 
   .MainTabs #react-tabs-0{

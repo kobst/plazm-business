@@ -170,13 +170,15 @@ const BuisinessProfileDescription = ({setDisplayTab}) => {
           {businessProfile.hours_format.length > 0
             ? businessProfile.hours_format.map((i) => {
                 return (
-                  <WeekDays>
+                  <>
+                   {i.StartDay !== null || i.EndDay !== null ?<WeekDays>
                     <span>
-                      {i.StartDay.slice(0, 3)} to {i.EndDay.slice(0, 3)}
+                      {i.StartDay.slice(0, 3)} to  {i.EndDay.slice(0, 3)}
                     </span>
                     <br></br>
                     {i.Start} Hours - {i.End} Hours
-                  </WeekDays>
+                  </WeekDays> : null}
+                  </>
                 );
               })
             : null}

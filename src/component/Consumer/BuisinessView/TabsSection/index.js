@@ -40,23 +40,23 @@ const TabsSection = ({ profile, businessId }) => {
         <Tabs>
           <TabList>
             <Tab>Posts</Tab>
-            <Tab>Media</Tab>
+            {/* <Tab>Media</Tab> */}
             <Tab onClick={() => eventTabChange()}>Events</Tab>
-            <Tab>Messages</Tab>
+            {/* <Tab>Messages</Tab> */}
           </TabList>
 
           <TabPanel>
             <PostsSection profile={profile} businessId={businessId} />
           </TabPanel>
-          <TabPanel>
+          {/* <TabPanel>
             <h2>Any content 2</h2>
-          </TabPanel>
+          </TabPanel> */}
           <TabPanel>
             <EventsSection businessId={businessId} />
           </TabPanel>
-          <TabPanel>
+          {/* <TabPanel>
             <h2>Any content 4</h2>
-          </TabPanel>
+          </TabPanel> */}
         </Tabs>
       </TabsSectionContent>
     </>

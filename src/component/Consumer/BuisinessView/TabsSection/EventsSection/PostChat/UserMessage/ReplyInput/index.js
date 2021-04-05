@@ -251,6 +251,7 @@ const ReplyInput = ({
       </MentionsImage>
     );
   };
+
   /** to search users for mentions */
   const fetchUsers = async (query, callback) => {
     if (!query) return;

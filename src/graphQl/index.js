@@ -1,9 +1,15 @@
-import { AddUser, updateUserProfile, getSelectedUser } from "./mutations/user";
+import {
+  AddUser,
+  updateUserProfile,
+  getSelectedUser,
+  addFavoriteBusiness,
+  removeFavoriteBusiness,
+} from "./mutations/user";
 import { getUser, getAllUsers } from "./query/user";
 
 import { getPlace, searchAllPlaces } from "./query/place";
 
-import { getAllLists } from "./query/list";
+import { getAllLists, getUserLists } from "./query/list";
 
 import { createPost, addLikeToPost } from "./mutations/post";
 
@@ -18,7 +24,16 @@ import { findPostComments, findCommentReplies } from "./query/comments";
 
 import { addLikeToEvents } from "./mutations/event";
 
+import { CreateList, addPostToList } from "./mutations/list";
+
+import { findBusinessPhotos } from './query/post';
+
 export {
+  findBusinessPhotos,
+  getUserLists,
+  addPostToList,
+  addFavoriteBusiness,
+  removeFavoriteBusiness,
   findCommentReplies,
   getSelectedUser,
   addLikeToEvents,
@@ -37,4 +52,5 @@ export {
   CreateReply,
   findPostComments,
   AddLikeToComment,
+  CreateList
 };

@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import Carousel from 'react-multi-carousel'
 import 'react-multi-carousel/lib/styles.css'
 import SliderItems from './SliderItems'
+import {useSelector} from 'react-redux'
 
 const SectionSliderWrapper = styled.div`
   position: relative;
@@ -16,7 +17,8 @@ const SectionSliderWrapper = styled.div`
   }
 `
 
-const SectionSlider = ({images}) => {
+const SectionSlider = () => {
+  const images = useSelector(state => state.business.images);
   const responsive = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
@@ -66,7 +68,7 @@ const SectionSlider = ({images}) => {
           autoPlaySpeed={2000}
         >
           {images.map((i,key)=><div key={key}>
-            <SliderItems image={i}/>
+            <SliderItems image={i.image}/>
           </div>)}
         </Carousel>
       </SectionSliderWrapper>

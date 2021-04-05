@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { IoMdClose } from "react-icons/io";
 import {
@@ -13,7 +13,12 @@ import TwitterImg from "../../../../images/Twitter-new.svg";
 import LinkedInImg from "../../../../images/Linkedin-new.svg";
 import InstagramImg from "../../../../images/Instagram-new.svg";
 import { useHistory } from "react-router-dom";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
+import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
+import {
+  AddBusinessFavorite,
+  RemoveBusinessFavorite,
+} from "../../../../reducers/userReducer";
 
 const BuisinessHeaderContent = styled.div`
   width: 100%;
@@ -22,7 +27,12 @@ const BuisinessHeaderContent = styled.div`
   height: 294px;
   @media (max-width: 767px) {
     flex-direction: column;
-    height: 142px;
+    height: 200px;
+  }
+  &.HeaderSpacing {
+    @media (max-width: 767px) {
+      height: 140px;
+    }
   }
   .react-multiple-carousel__arrow {
     min-width: 24px;
@@ -87,11 +97,19 @@ const BottomBar = styled.div`
   justify-content: space-between;
   padding: 15px;
   align-items: flex-end;
+  .favoriteBusiness {
+    color: #ee3840;
+    cursor: pointer;
+  }
+  .favoriteBusinessBorder {
+    color: #ee3840;
+    cursor: pointer;
+  }
   @media (max-width: 767px) {
     padding: 10px;
     position: relative;
   }
-  &.ProfileHeaderNam{
+  &.ProfileHeaderNam {
     justify-content: flex-end;
   }
 `;
@@ -128,40 +146,60 @@ const ArrowDown = styled.div`
     color: #fff;
   }
   svg: hover {
-    cursor:pointer;
+    cursor: pointer;
   }
 `;
 
 const BusinessNameWrap = styled.div`
   display: flex;
-  flex-direction: row;
-  max-width: 85%;
-  @media (max-width: 767px) {
-    max-width: 75%;
+  flex-direction: column;
+  margin: 0 0 0 10px;
+  max-width: calc(100% - 60px);
+  width: 100%;
+  .FavoritesIcon {
+    max-width: 18px;
+    margin: 0 0 0 10px;
+  }
+  svg {
+    font-size: 18px;
   }
 `;
+
+const LeftHeader = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+`;
+
 const BusinessName = styled.h1`
   font-size: 20px;
   line-height: normal;
   font-weight: 800;
   text-transform: uppercase;
   color: #ffffff;
-  margin: 0 30px 0 10px;
+  margin: 0;  
   padding: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  span {
+    max-width: 90%;
+    margin: 0 10px 0 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
   @media (max-width: 767px) {
     font-size: 14px;
-    margin: 0 10px;
   }
 `;
 const SocialIconsWrap = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-direction: row;
   align-items: center;
+  margin-left: -2px;
 `;
 const SocialIcon = styled.div`
   width: 17px;
@@ -174,20 +212,49 @@ const BuisinessHeader = ({
   setDisplayTab,
   setDisplayBusinessProfile,
   isProfile,
+  displayBusinessProfile
 }) => {
   const history = useHistory();
+  const [favoriteBusiness, setFavoriteBusiness] = useState(false);
   const businessProfile = useSelector((state) => state.business.business)[0];
-  
+  const user = useSelector((state) => state.user.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const find = user.favorites.find((i) => i === businessProfile._id);
+    if (find) {
+      setFavoriteBusiness(true);
+    } else setFavoriteBusiness(false);
+  }, [user, businessProfile._id]);
+
   /*
-   * @desc: close tab function to be called on cross icon click 
+   * @desc: close tab function to be called on cross icon click
    */
   const closeTab = () => {
     setDisplayTab(false);
-    history.push("/")
-  }
+    history.push("/");
+  };
+
+  /** to add a business to user favorites */
+  const addFavorite = async () => {
+    const obj = {
+      businessId: businessProfile._id,
+      userId: user._id,
+    };
+    await dispatch(AddBusinessFavorite(obj));
+  };
+
+  /** to remove a business to user favorites */
+  const removeFavorite = async () => {
+    const obj = {
+      businessId: businessProfile._id,
+      userId: user._id,
+    };
+    await dispatch(RemoveBusinessFavorite(obj));
+  };
   return (
     <>
-      <BuisinessHeaderContent>
+      <BuisinessHeaderContent className= {displayBusinessProfile ? 'HeaderSpacing' : ''}>
         <ArrowBack>
           <MdKeyboardArrowLeft onClick={() => history.push("/")} />
         </ArrowBack>
@@ -195,54 +262,83 @@ const BuisinessHeader = ({
           <IoMdClose onClick={() => closeTab()} />
         </CloseDiv>
         <SectionSlider images={businessProfile.additional_media} />
-        <BottomBar className={isProfile?"ProfileHeaderNam":''}>
-          {!isProfile ? (
-            <BusinessIcon>
-              <img
-                src={
-                  businessProfile.default_image_url
-                    ? businessProfile.default_image_url
-                    : ProfileImg
-                }
-                alt=""
-              />
-            </BusinessIcon>
-          ) : null}
-          {!isProfile ? (
-            <BusinessNameWrap>
-              <BusinessName>{businessProfile.company_name}</BusinessName>
-              <SocialIconsWrap>
-                {businessProfile.handles.instagram ? (
-                  <a href={businessProfile.handles.instagram} target="_blank" rel="noopener noreferrer">
-                    <SocialIcon>
-                      <img src={InstagramImg} alt="" />
-                    </SocialIcon>
-                  </a>
-                ) : null}
-                {businessProfile.handles.twitter ? (
-                  <a href={businessProfile.handles.twitter} target="_blank" rel="noopener noreferrer">
-                    <SocialIcon>
-                      <img src={TwitterImg} alt="" />
-                    </SocialIcon>
-                  </a>
-                ) : null}
-                {businessProfile.handles.linkedin ? (
-                  <a href={businessProfile.handles.linkedin} target="_blank" rel="noopener noreferrer">
-                    <SocialIcon>
-                      <img src={LinkedInImg} alt="" />
-                    </SocialIcon>
-                  </a>
-                ) : null}
-                {businessProfile.handles.facebook ? (
-                  <a href={businessProfile.handles.facebook} target="_blank" rel="noopener noreferrer">
-                    <SocialIcon>
-                      <img src={FacebookImg} alt="" />
-                    </SocialIcon>
-                  </a>
-                ) : null}
-              </SocialIconsWrap>
-            </BusinessNameWrap>
-          ) : null}
+        <BottomBar className={isProfile ? "ProfileHeaderNam" : ""}>
+          <LeftHeader>
+            {!isProfile ? (
+              <BusinessIcon>
+                <img
+                  src={
+                    businessProfile.default_image_url
+                      ? businessProfile.default_image_url
+                      : ProfileImg
+                  }
+                  alt=""
+                />
+              </BusinessIcon>
+            ) : null}
+            {!isProfile ? (
+              <BusinessNameWrap>
+                <BusinessName>
+                  <span>{businessProfile.company_name}</span>{" "}
+                  {/* business favorite toggle */}
+                  {favoriteBusiness ? (
+                    <MdFavorite
+                      onClick={() => removeFavorite()}
+                      className="favoriteBusiness"
+                    />
+                  ) : (
+                    <MdFavoriteBorder onClick={() => addFavorite()} className="favoriteBusinessBorder" />
+                  )}
+                </BusinessName>
+                <SocialIconsWrap>
+                  {businessProfile.handles.instagram ? (
+                    <a
+                      href={businessProfile.handles.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <SocialIcon>
+                        <img src={InstagramImg} alt="" />
+                      </SocialIcon>
+                    </a>
+                  ) : null}
+                  {businessProfile.handles.twitter ? (
+                    <a
+                      href={businessProfile.handles.twitter}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <SocialIcon>
+                        <img src={TwitterImg} alt="" />
+                      </SocialIcon>
+                    </a>
+                  ) : null}
+                  {businessProfile.handles.linkedin ? (
+                    <a
+                      href={businessProfile.handles.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <SocialIcon>
+                        <img src={LinkedInImg} alt="" />
+                      </SocialIcon>
+                    </a>
+                  ) : null}
+                  {businessProfile.handles.facebook ? (
+                    <a
+                      href={businessProfile.handles.facebook}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <SocialIcon>
+                        <img src={FacebookImg} alt="" />
+                      </SocialIcon>
+                    </a>
+                  ) : null}
+                </SocialIconsWrap>
+              </BusinessNameWrap>
+            ) : null}
+          </LeftHeader>
           <ArrowDown>
             {isProfile ? (
               <MdKeyboardArrowUp

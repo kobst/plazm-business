@@ -5,13 +5,17 @@
 const createPost = (values) => {
   const graphQl = {
     query: `
-          mutation CreatePost($business: ID, $data:String, $media:[media], $taggedUsers:[ID], $taggedLists: [ID], $ownerId: ID){
-              createPost(input: {business:$business, data:$data, media:$media, taggedUsers:$taggedUsers, taggedLists:$taggedLists, ownerId:$ownerId }) {
+          mutation CreatePost($business: ID, $data:String, $media:[media], $taggedUsers:[ID], $taggedLists: [ID], $ownerId: ID, $listId: ID){
+              createPost(input: {business:$business, data:$data, media:$media, taggedUsers:$taggedUsers, taggedLists:$taggedLists, ownerId:$ownerId, listId:$listId }) {
               message
               success
               post {
                 _id
                 data
+                listId {
+                  _id
+                  name
+                }
                 business {
                   _id
                 }
@@ -57,6 +61,7 @@ const createPost = (values) => {
       taggedUsers: values.taggedUsers,
       taggedLists: values.taggedLists,
       ownerId: values.ownerId,
+      listId: values.listId,
     },
   };
   return graphQl;

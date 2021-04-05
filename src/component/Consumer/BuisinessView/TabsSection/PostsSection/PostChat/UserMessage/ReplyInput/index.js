@@ -177,6 +177,8 @@ const ReplyInput = ({
 
   /** handle change input for mentions input */
   const handleChange = async (event, newValue, newPlainTextValue, mentions) => {
+    /** to fetch list of all users */
+
     if (mentions.length !== 0) {
       /** to find if the mention is of users or lists */
       const findUser = selectedUsers.find((i) => i._id === mentions[0].id);
@@ -200,6 +202,7 @@ const ReplyInput = ({
         body: desc,
         created_on: new Date(),
         taggedUsers: mentionArrayUser,
+        userDetails: user
       };
       addComment(obj);
     } else if (type === "reply" && desc !== "" && !desc.trim() === false) {

@@ -16,6 +16,7 @@ import {
 import Comment from "./comments";
 import ScrollToBottom from "./ScrollToBottom";
 import { setWs } from "../../../../../../../reducers/userReducer";
+import { RiArrowDropRightFill } from "react-icons/ri";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -82,13 +83,18 @@ const ProfileName = styled.div`
   font-style: normal;
   font-size: 13px;
   line-height: normal;
-  margin: 7px 0 5px 0;
+  margin: 7px 0 0px 0;
   font-weight: 700;
   color: #ff2e9a;
+  display: flex;
+  flex-direction: row;
   span {
     font-weight: 700;
     color: #fff;
     margin: 0 3px;
+  }
+  @media (max-width: 1024px) {
+    flex-direction: column;
   }
 `;
 
@@ -118,6 +124,49 @@ const LoaderWrap = styled.div`
   align-items: center;
   margin: 30px 0 10px;
 `;
+
+const RightArrowSec = styled.div`
+  display: flex;
+  align-items: flex-start;
+  @media (max-width: 767px) {
+    margin: 5px 0 0 0;
+  }
+`;
+
+const ArrowRight = styled.div`
+  margin: -3px 10px 0;
+  @media (max-width: 1024px) {
+    margin: -3px 0 0 -7px;
+  }
+  svg {
+    color: #fff;
+    font-size: 24px;
+  }
+`;
+
+const DescriptionBox = styled.div`
+  font-weight: bold;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #FFFFFF;
+  background: #FF2E9A;
+  border-radius: 12px;
+  padding: 2px 10px;
+  max-width: 190px;
+  cursor: pointer;
+  span {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
+    margin: 0;
+    font-weight: bold;
+    font-size: 10px;
+  }
+`;
+
 const UserMessage = ({ postData }) => {
   const dispatch = useDispatch();
   const [displayComments, setDisplayComments] = useState(false);
@@ -149,7 +198,9 @@ const UserMessage = ({ postData }) => {
       /** to add post via socket */
       if (message.businessId === business._id) {
         if (message.userId === user._id) {
-          if (filters.PostsByMe === true) {
+          if (filters.PostsByMe === true && message.post.postDetails.listId === null) {
+            dispatch(addPostViaSocket(message));
+          } else if(filters.MySubscriptions === true && message.post.postDetails.listId !== null) {
             dispatch(addPostViaSocket(message));
           }
         } else {
@@ -303,6 +354,12 @@ const UserMessage = ({ postData }) => {
                 {postData.postDetails.ownerId === null
                   ? business.company_name
                   : postData.postDetails.ownerId.name}{" "}
+                  {postData.postDetails.listId!==null?<RightArrowSec>
+                      <ArrowRight><RiArrowDropRightFill /></ArrowRight>
+                      <DescriptionBox>
+                        <span>{postData.postDetails.listId.name}</span>
+                      </DescriptionBox>
+                  </RightArrowSec>:null}
               </ProfileName>
               <ChatInput>
                 <p>
@@ -342,20 +399,20 @@ const UserMessage = ({ postData }) => {
             !loadingComments &&
             postData.comments.length > 0 ? (
               <>
-                {postData.comments.map((i, key) => {
-                  return (
-                    <Comment
-                      i={i}
-                      key={key}
-                      postData={postData}
-                      displayComments={displayComments}
-                      setFlag={setFlag}
-                      flag={flag}
-                    />
-                  );
-                })}
-                {flag === false ? <ScrollToBottom /> : null}
-              </>
+              {postData.comments.map((i, key) => {
+                return (
+                  <Comment
+                    i={i}
+                    key={key}
+                    postData={postData}
+                    displayComments={displayComments}
+                    setFlag={setFlag}
+                    flag={flag}
+                  />
+                );
+              })}
+               {flag === false ? <ScrollToBottom /> : null} 
+               </>
             ) : (displayComments || displayCommentInput) && loadingComments ? (
               <LoaderWrap>
                 <ValueLoader />

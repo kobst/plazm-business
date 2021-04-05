@@ -38,6 +38,10 @@ const getPlace = (obj) => {
                 postDetails {
                     _id
                     data
+                    listId {
+                      _id
+                      name
+                    }
                     taggedUsers {
                         list_ids
                         _id

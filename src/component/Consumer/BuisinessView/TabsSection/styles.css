@@ -104,7 +104,7 @@
   
   .InnerTabs .react-tabs__tab {
     height: auto;
-    width: 25%;
+    width: 50%;
   }
   
   .InnerTabs .react-tabs__tab--selected {
@@ -164,6 +164,15 @@
     color: #000 !important;
   }
 
+  aside.emoji-picker-react .content-wrapper:before{
+    width: 80px;
+    right: 25px !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  } 
+
   .emoji-picker-react input.emoji-search {
     color: #000;
   }
@@ -201,6 +210,14 @@
   }
   .InnerScroll>div:first-child {
     overflow-x: hidden !important;
+  }
+
+  aside.emoji-picker-react {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    width: 50px;
+    right: 27px;
   }
 
   @media (max-width:767px){ 

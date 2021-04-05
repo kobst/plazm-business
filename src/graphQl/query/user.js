@@ -16,6 +16,7 @@ const getUser = (userSub) => {
                   photo 
                   lockProfile
                   _id
+                  favorites
               }
             }
           }`,
