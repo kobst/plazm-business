@@ -67,8 +67,10 @@ const getUserFavorites = (id) => {
                 company_name
                 default_image_url
                 status
+                updatedAt
                 }
                 totalPosts
+                totalFollowers
               }
             }
           }`,

@@ -114,22 +114,6 @@ const RightWrap = styled.div`
   flex-wrap: wrap;
 `;
 
-const OpenCloseDiv = styled.div`
-  color: #ffffff;
-  font-weight: 700;
-  font-size: 10px;
-  line-height: normal;
-  margin: 0 5px 10px 0;
-  box-sizing: border-box;
-  border-radius: 28px;
-  padding: 4px 12px;
-  &.open {
-    background: #3fce56;
-  }
-  &.close {
-    background: #fe6f5b;
-  }
-`;
 /** display favorite business */
 const DisplayFavoriteBusiness = ({ data }) => {
   return (
@@ -151,13 +135,12 @@ const DisplayFavoriteBusiness = ({ data }) => {
               <ProfileName>
                 {data.favorites.company_name}
                 <RightWrap>
-                  <OpenCloseDiv className="open">OPEN</OpenCloseDiv>
                   <MdFavorite />
                 </RightWrap>
               </ProfileName>
               <ChatInput>
                 <p>
-                  <span>234</span> Followers{" "}
+                  <span>{data.totalFollowers}</span> Followers{" "}
                   <span className="postSpan">{data.totalPosts}</span> Posts
                 </p>
               </ChatInput>

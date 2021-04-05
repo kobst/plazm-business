@@ -132,11 +132,14 @@ export const fetchCommentReplies = createAsyncThunk(
  * @desc:  to add an event by user on a business
  * @params: obj
  */
-export const addEvent = createAsyncThunk("data/addEvent", async ({obj,user}) => {
-  const graphQl = createEvent(obj);
-  const response = await graphQlEndPoint(graphQl);
-  return {data:response.data.addEvent,user:user};
-});
+export const addEvent = createAsyncThunk(
+  "data/addEvent",
+  async ({ obj, user }) => {
+    const graphQl = createEvent(obj);
+    const response = await graphQlEndPoint(graphQl);
+    return { data: response.data.addEvent, user: user };
+  }
+);
 
 /*
  * @desc:  to fetch events of a complete week for a particular business
@@ -161,6 +164,28 @@ export const fetchInitialWeekEvents = createAsyncThunk(
  */
 export const addEventViaSocket = createAsyncThunk(
   "data/addEventViaSocket",
+  async (obj) => {
+    return obj;
+  }
+);
+
+/*
+ * @desc:  to delete an event via socket
+ * @params: eventId
+ */
+export const deleteEventViaSocket = createAsyncThunk(
+  "data/deleteEventViaSocket",
+  async (id) => {
+    return id;
+  }
+);
+
+/*
+ * @desc:  to edit an event via socket
+ * @params: obj
+ */
+export const editEventViaSocket = createAsyncThunk(
+  "data/editEventViaSocket",
   async (obj) => {
     return obj;
   }
@@ -218,7 +243,10 @@ export const slice = createSlice({
         { day: "sat", val: 6 },
       ];
       const x = arr.filter((i) => i.day === action.payload);
-      const startOfWeek = moment(currentDate).startOf("week").add(x[0].val+1,'d').toDate();
+      const startOfWeek = moment(currentDate)
+        .startOf("week")
+        .add(x[0].val + 1, "d")
+        .toDate();
       startOfWeek.setUTCHours(0, 0, 0, 0);
       state.selectedDate = startOfWeek;
     },
@@ -239,7 +267,10 @@ export const slice = createSlice({
             comments: [],
           }));
           state.events = arr.sort((a, b) => {
-            return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
+            return (
+              new Date(b.eventSchedule.start_time) -
+              new Date(a.eventSchedule.start_time)
+            );
           });
         }
       }
@@ -266,10 +297,16 @@ export const slice = createSlice({
             comments: [],
           }));
           state.events = arr.sort((a, b) => {
-            return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
+            return (
+              new Date(b.eventSchedule.start_time) -
+              new Date(a.eventSchedule.start_time)
+            );
           });
           state.initialWeekEvents = arr.sort((a, b) => {
-            return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
+            return (
+              new Date(b.eventSchedule.start_time) -
+              new Date(a.eventSchedule.start_time)
+            );
           });
         }
       }
@@ -296,7 +333,10 @@ export const slice = createSlice({
             comments: [],
           }));
           state.initialWeekEvents = arr.sort((a, b) => {
-            return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
+            return (
+              new Date(b.eventSchedule.start_time) -
+              new Date(a.eventSchedule.start_time)
+            );
           });
         }
       }
@@ -331,7 +371,10 @@ export const slice = createSlice({
           eventsArr.push({ ...findEvent, comments: arr });
           eventsArr = eventsArr.concat(findOtherEvents);
           state.events = eventsArr.sort((a, b) => {
-            return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
+            return (
+              new Date(b.eventSchedule.start_time) -
+              new Date(a.eventSchedule.start_time)
+            );
           });
         }
       }
@@ -381,7 +424,10 @@ export const slice = createSlice({
             });
             dummy1 = dummy1.concat(posts);
             state.events = dummy1.sort((a, b) => {
-              return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
+              return (
+                new Date(b.eventSchedule.start_time) -
+                new Date(a.eventSchedule.start_time)
+              );
             });
           }
         }
@@ -421,7 +467,10 @@ export const slice = createSlice({
           });
           eventsArr = eventsArr.concat(findOtherEvents);
           state.events = eventsArr.sort((a, b) => {
-            return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
+            return (
+              new Date(b.eventSchedule.start_time) -
+              new Date(a.eventSchedule.start_time)
+            );
           });
         }
       }
@@ -465,7 +514,10 @@ export const slice = createSlice({
           });
           dummy1 = dummy1.concat(events);
           state.events = dummy1.sort((a, b) => {
-            return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
+            return (
+              new Date(b.eventSchedule.start_time) -
+              new Date(a.eventSchedule.start_time)
+            );
           });
         }
       }
@@ -487,7 +539,10 @@ export const slice = createSlice({
           });
           dummy1 = dummy1.concat(findPost);
           state.events = dummy1.sort((a, b) => {
-            return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
+            return (
+              new Date(b.eventSchedule.start_time) -
+              new Date(a.eventSchedule.start_time)
+            );
           });
         }
       }
@@ -523,7 +578,10 @@ export const slice = createSlice({
               });
               dummy1 = dummy1.concat(findPost);
               state.events = dummy1.sort((a, b) => {
-                return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
+                return (
+                  new Date(b.eventSchedule.start_time) -
+                  new Date(a.eventSchedule.start_time)
+                );
               });
             }
           }
@@ -546,7 +604,10 @@ export const slice = createSlice({
             createdAt: new Date(Date.now()),
           });
           state.events = arr.sort((a, b) => {
-            return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
+            return (
+              new Date(b.eventSchedule.start_time) -
+              new Date(a.eventSchedule.start_time)
+            );
           });
 
           const initialWeekEvents = state.initialWeekEvents.concat({
@@ -557,7 +618,10 @@ export const slice = createSlice({
             createdAt: new Date(Date.now()),
           });
           state.initialWeekEvents = initialWeekEvents.sort((a, b) => {
-            return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
+            return (
+              new Date(b.eventSchedule.start_time) -
+              new Date(a.eventSchedule.start_time)
+            );
           });
         }
       }
@@ -565,13 +629,72 @@ export const slice = createSlice({
     [addEventViaSocket.fulfilled]: (state, action) => {
       const arr = state.events.concat(action.payload.event);
       state.events = arr.sort((a, b) => {
-        return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
+        return (
+          new Date(b.eventSchedule.start_time) -
+          new Date(a.eventSchedule.start_time)
+        );
       });
 
-      const initialWeekEvents = state.initialWeekEvents.concat(action.payload.event);
+      const initialWeekEvents = state.initialWeekEvents.concat(
+        action.payload.event
+      );
       state.initialWeekEvents = initialWeekEvents.sort((a, b) => {
-        return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
+        return (
+          new Date(b.eventSchedule.start_time) -
+          new Date(a.eventSchedule.start_time)
+        );
       });
+    },
+    [deleteEventViaSocket.fulfilled]: (state, action) => {
+      const arr = state.events.filter((i) => i._id !== action.payload);
+      state.events = arr.sort((a, b) => {
+        return (
+          new Date(b.eventSchedule.start_time) -
+          new Date(a.eventSchedule.start_time)
+        );
+      });
+
+      const deleteInitialWeekEvents = state.initialWeekEvents.filter(
+        (i) => i._id !== action.payload
+      );
+      state.initialWeekEvents = deleteInitialWeekEvents.sort((a, b) => {
+        return (
+          new Date(b.eventSchedule.start_time) -
+          new Date(a.eventSchedule.start_time)
+        );
+      });
+    },
+    [editEventViaSocket.fulfilled]: (state, action) => {
+      const findEvent = state.events.filter(
+        (i) => i._id === action.payload._id
+      );
+      if (findEvent && findEvent.length > 0) {
+        let arr = state.events.filter((i) => i._id !== action.payload._id);
+        arr = arr.concat(action.payload);
+        state.events = arr.sort((a, b) => {
+          return (
+            new Date(b.eventSchedule.start_time) -
+            new Date(a.eventSchedule.start_time)
+          );
+        });
+      }
+      const findInitialEvent = state.initialWeekEvents.filter(
+        (i) => i._id === action.payload._id
+      );
+      if (findInitialEvent) {
+        let deleteInitialWeekEvents = state.initialWeekEvents.filter(
+          (i) => i._id !== action.payload._id
+        );
+        deleteInitialWeekEvents = deleteInitialWeekEvents.concat(
+          action.payload
+        );
+        state.initialWeekEvents = deleteInitialWeekEvents.sort((a, b) => {
+          return (
+            new Date(b.eventSchedule.start_time) -
+            new Date(a.eventSchedule.start_time)
+          );
+        });
+      }
     },
   },
 });

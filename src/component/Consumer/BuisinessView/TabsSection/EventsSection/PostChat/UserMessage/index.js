@@ -15,6 +15,8 @@ import {
   addReplyViaSocket,
   addLikeToCommentViaSocket,
   addEventViaSocket,
+  deleteEventViaSocket,
+  editEventViaSocket,
 } from "../../../../../../../reducers/eventReducer";
 import Comment from "./comments";
 import ScrollToBottom from "./ScrollToBottom";
@@ -127,9 +129,8 @@ const UserMessage = ({ eventData }) => {
   );
   const ws = useSelector((state) => state.user.ws);
   const user = useSelector((state) => state.user.user);
-  const selectedDate = useSelector(state => state.event.selectedDate);
+  const selectedDate = useSelector((state) => state.event.selectedDate);
   const dispatch = useDispatch();
-
 
   ws.onmessage = (evt) => {
     const message = JSON.parse(evt.data);
@@ -163,11 +164,29 @@ const UserMessage = ({ eventData }) => {
       }
     } else if (
       message.type === "newEvent" &&
-      message.userId !== user._id &&
-      message.businessId === business[0]._id &&
-      moment(message.event.eventSchedule.start_time).format("DD MMM YYYY") === moment(selectedDate).format("DD MMM YYYY")
+      message.businessId === business[0]._id
     ) {
-      dispatch(addEventViaSocket(message))
+      /** to add new event */
+      if (
+        message.event.eventSchedule &&
+        moment(message.event.eventSchedule.start_time).format("DD MMM YYYY") ===
+          moment(selectedDate).format("DD MMM YYYY") &&
+        message.event.type === "addEvent"
+      ) {
+        if (message.userId) {
+          if (message.userId !== user._id) {
+            dispatch(addEventViaSocket(message));
+          }
+        } else {
+          dispatch(addEventViaSocket(message));
+        }
+      } else if (message.event.type === "deleteEvent") {
+        /** to delete an event deleted on admin app*/
+        dispatch(deleteEventViaSocket(message.event.id));
+      } else if (message.event.type === "editEvent") {
+        /** to edit an event edited on admin app*/
+        dispatch(editEventViaSocket(message.event));
+      }
     }
   };
 

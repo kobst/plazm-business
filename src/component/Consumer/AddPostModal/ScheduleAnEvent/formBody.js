@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import {  MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import { KeyboardTimePicker } from "@material-ui/pickers";
+import { TimePicker } from "@material-ui/pickers";
 import FormikSelect from "../../UI/FormikSelect";
 
 const InputContainer = styled.div`
@@ -54,19 +54,24 @@ const ErrorDiv = styled.div`
 /*
  *@desc: form body for add event schedule details
  */
-function FormBody({ formik }) {
+function FormBody({ formik, setStartDateFocus, setEndDateFocus }) {
+  const setFieldFocus = (val) => {
+    setStartDateFocus(val)
+    setEndDateFocus(!val)
+  }
   return (
     <>
       <InputContainer>
         <LabelText>Start Time</LabelText>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <>
-          <KeyboardTimePicker
+          <TimePicker
             name="startTime"
-            format="dd/mm/yyyy HH:mm a"
+            format="dd/MM/yyyy HH:mm a"
             ampm={true}
             value={formik.values.startTime}
             onChange={(e) => formik.setFieldValue("startTime", e)}
+            onFocus={()=>setFieldFocus(true)}
           />
           {formik.errors && formik.errors.startTime ? (
             <ErrorDiv>{formik.errors.startTime}</ErrorDiv>
@@ -78,15 +83,18 @@ function FormBody({ formik }) {
         <LabelText>End Time</LabelText>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <>
-          <KeyboardTimePicker
+          <TimePicker
             name="endTime"
-            format="dd/mm/yyyy HH:mm a"
+            format="dd/MM/yyyy HH:mm a"
             value={formik.values.endTime}
             onChange={(e) => formik.setFieldValue("endTime", e)}
+            onFocus={()=>setFieldFocus(false)}
           />
-          {formik.errors && formik.errors.endTime ? (
+          {formik.errors && formik.errors.endDate ? (
+            <ErrorDiv>{formik.errors.endDate}</ErrorDiv>
+          ) : formik.errors && formik.errors.endTime ? (
             <ErrorDiv>{formik.errors.endTime}</ErrorDiv>
-          ) : null}
+          ):null}
           </>
         </MuiPickersUtilsProvider>
       </InputContainer>

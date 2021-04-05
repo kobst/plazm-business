@@ -61,7 +61,7 @@ margin: 10px auto 40px;
 Modal.setAppElement('#root')
 
 const renderMessage = getMessage()
-const AddModalBox = ({ isOpen,setEvent,events,value, data, editValue, setEdit, setIsOpen, closeModal }) => {
+const AddModalBox = ({ isOpen,setEvent,events,value, data, editValue, setEdit, setIsOpen, closeModal, ws }) => {
   const [title, setTitle] = useState()
   const [description, setDescription] = useState()
   const [id, setId] = useState()
@@ -150,6 +150,22 @@ const AddModalBox = ({ isOpen,setEvent,events,value, data, editValue, setEdit, s
       })
     });
     const body = await response.text();
+    const val = JSON.parse(body);
+    ws.send(
+      JSON.stringify({
+        action: "event",
+        event: {
+          ...val.post,
+          type:"addEvent",
+          business:{_id: val.post.business},
+          user: null,
+          totalComments: 0,
+          likes: [],
+          comments:[],
+          createdAt: new Date(Date.now()),
+        },
+      })
+    );
     setIsOpen(false)
     setSaveDisable(false)
     setEvent()
@@ -182,6 +198,20 @@ const handleEdit= async () => {
     })
   });
     const body = await response.text();
+    const val = JSON.parse(body);
+    ws.send(
+      JSON.stringify({
+        action: "event",
+        event: {
+          type:"editEvent",
+          ...val.post,
+          comments:[],
+          totalComments: val.totalComments,
+          user: null,
+          business: {_id: val.post.business}
+        },
+      })
+    );
     setIsOpen(false)
     setEdit(false)
     setSaveDisable(false)
@@ -201,6 +231,17 @@ const handleEdit= async () => {
       })
     });
     const body = await response.text();
+     ws.send(
+      JSON.stringify({
+        action: "event",
+        event: {
+          type:"deleteEvent",
+          id: id,
+          user: null,
+          business: {_id: data._id}
+        },
+      })
+    );
     setIsOpen(false)
     setEdit(false)
     setSaveDisable(false)

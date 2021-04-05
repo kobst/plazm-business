@@ -141,9 +141,9 @@ const CreateEventModal = ({
   setEventDescription,
 }) => {
   const [loader, setLoader] = useState(false);
-  const [profileImage, setProfileImage] = useState(null);
+  // const [profileImage, setProfileImage] = useState(null);
   const [imageError, setImageError] = useState("");
-  const [imageFile, setImageFile] = useState(null);
+  // const [imageFile, setImageFile] = useState(null);
   const [formError, setError] = useState("");
   const [response, setResponse] = useState("");
   const user = useSelector((state) => state.user.user);
@@ -151,24 +151,91 @@ const CreateEventModal = ({
   const dispatch = useDispatch();
   const ws = useSelector((state) => state.user.ws);
 
+  const [imageUrl, setImageUrl] = useState([]);
+  const [imageCopy, setImageCopy] = useState([]);
+  const [imageUpload, setImageUpload] = useState([]);
+  const [imageUploadCopy, setImageUploadCopy] = useState([]);
+
   /*
   @desc: to check input file format and throw error if invalid image is input
   @params: input file
   */
   const uploadImage = (e) => {
-    const selectedFile = e.target.files[0];
-    const idxDot = selectedFile.name.lastIndexOf(".") + 1;
-    const extFile = selectedFile.name
-      .substr(idxDot, selectedFile.name.length)
-      .toLowerCase();
-    if (extFile === "jpeg" || extFile === "png" || extFile === "jpg") {
-      setImageError("");
-      setProfileImage(URL.createObjectURL(e.target.files[0]));
-      setImageFile(selectedFile);
-    } else {
-      setImageError("Only jpg/jpeg and png,files are allowed!");
+    if (imageUrl.length < 5) {
+      const selectedFile = e.target.files[0];
+      if (selectedFile) {
+        const currentDate = Date.now();
+        const folder_name = folderName(user.name, user._id);
+        const file_name = fileName(selectedFile.name, currentDate);
+        const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${file_name}`;
+        const idxDot = selectedFile.name.lastIndexOf(".") + 1;
+        const extFile = selectedFile.name
+          .substr(idxDot, selectedFile.name.length)
+          .toLowerCase();
+        if (extFile === "jpeg" || extFile === "png" || extFile === "jpg") {
+          setImageError("");
+          const findImage = imageUrl.filter(
+            (i) => i.imageFile.name === e.target.files[0].name
+          );
+          if (findImage.length === 0) {
+            setImageUrl([
+              ...imageUrl,
+              {
+                id: imageUrl.length + 1,
+                value: URL.createObjectURL(e.target.files[0]),
+                image: baseUrl,
+                imageFile: e.target.files[0]
+              },
+            ]);
+            setImageUpload([
+              ...imageUpload,
+              {
+                id: imageUrl.length + 1,
+                value: e.target.files[0],
+                image: baseUrl,
+                date: currentDate,
+              },
+            ]);
+            setImageCopy([...imageCopy, { image: baseUrl }]);
+            setImageUploadCopy([...imageUploadCopy, { image: baseUrl }]);
+          }
+        } else {
+          setImageError("Only jpg/jpeg and png,files are allowed!");
+          /** to set error empty after 3 sec */
+          setTimeout(() => {
+            setImageError("");
+          }, 3000);
+        }
+      }
     }
   };
+  /*
+   * @desc: to delete an image
+   * @params: image id
+   */
+  const deleteImage = (v) => {
+    const deleteImage = imageUrl.filter((item) => item.id !== v.id);
+    const deleteImageUpload = imageUploadCopy.filter(
+      (item) => item.image !== v.image
+    );
+    setImageUploadCopy([...deleteImageUpload]);
+    setImageUpload([...deleteImage]);
+    setImageCopy([...deleteImageUpload]);
+    setImageUrl([...deleteImage]);
+  };
+
+  // const selectedFile = e.target.files[0];
+  // const idxDot = selectedFile.name.lastIndexOf(".") + 1;
+  // const extFile = selectedFile.name
+  //   .substr(idxDot, selectedFile.name.length)
+  //   .toLowerCase();
+  // if (extFile === "jpeg" || extFile === "png" || extFile === "jpg") {
+  //   setImageError("");
+  //   setProfileImage(URL.createObjectURL(e.target.files[0]));
+  //   setImageFile(selectedFile);
+  // } else {
+  //   setImageError("Only jpg/jpeg and png,files are allowed!");
+  // }
 
   /*
   @desc: to get specific folder name to be created in aws
@@ -186,8 +253,8 @@ const CreateEventModal = ({
   /*
    * @desc: to change file_name
    */
-  const fileName = (name) => {
-    return `${Date.now()}-${name}`;
+  const fileName = (name, date) => {
+    return `${date}-${name}`;
   };
 
   /*
@@ -200,42 +267,77 @@ const CreateEventModal = ({
       /*set loader value */
       setLoader(true);
       /* to upload file to s3 bucket */
-      let imageUrl = null;
-      if (imageFile !== null) {
-        const folder_name = folderName(user.name, user._id);
-        const file_name = fileName(imageFile.name);
-        const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${file_name}`;
-        const value = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/upload_photo`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              Key: file_name,
-              ContentType: imageFile.type,
-              folder_name: folder_name,
-            }),
-          }
-        );
-        const body = await value.text();
-        const Val = JSON.parse(body);
-
-        await fetch(Val, {
-          method: "PUT",
-          headers: {
-            "Content-Type": imageFile.type,
-          },
-          body: imageFile,
-        })
-          .then((response) => {
-            imageUrl = baseUrl;
-          })
-          .catch(
-            (error) => console.log(error) // Handle the error response object
+      // let imageUrl = null;
+      if (imageUpload.length !== 0) {
+        imageUpload.map(async (i) => {
+          const file = i.value;
+          const folder_name = folderName(user.name, user._id);
+          const file_name = fileName(file.name, i.date);
+          const value = await fetch(
+            `${process.env.REACT_APP_API_URL}/api/upload_photo`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                Key: file_name,
+                ContentType: file.type,
+                folder_name: folder_name,
+              }),
+            }
           );
+          const body = await value.text();
+          const Val = JSON.parse(body);
+
+          await fetch(Val, {
+            method: "PUT",
+            headers: {
+              "Content-Type": file.type,
+            },
+            body: file,
+          })
+            .then((response) => {})
+            .catch(
+              (error) => console.log(error) // Handle the error response object
+            );
+        });
       }
+      // if (imageFile !== null) {
+      //   const folder_name = folderName(user.name, user._id);
+      //   const file_name = fileName(imageFile.name);
+      //   const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${file_name}`;
+      //   const value = await fetch(
+      //     `${process.env.REACT_APP_API_URL}/api/upload_photo`,
+      //     {
+      //       method: "POST",
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //       },
+      //       body: JSON.stringify({
+      //         Key: file_name,
+      //         ContentType: imageFile.type,
+      //         folder_name: folder_name,
+      //       }),
+      //     }
+      //   );
+      //   const body = await value.text();
+      //   const Val = JSON.parse(body);
+
+      //   await fetch(Val, {
+      //     method: "PUT",
+      //     headers: {
+      //       "Content-Type": imageFile.type,
+      //     },
+      //     body: imageFile,
+      //   })
+      //     .then((response) => {
+      //       imageUrl = baseUrl;
+      //     })
+      //     .catch(
+      //       (error) => console.log(error) // Handle the error response object
+      //     );
+      // }
       const obj = {
         user: user._id,
         business: business[0]._id,
@@ -247,16 +349,11 @@ const CreateEventModal = ({
         },
         recurring: eventDetails.eventRepeat,
         listId: selectedListForPost ? selectedListForPost : null,
-        media:
-          imageFile !== null
-            ? imageUrl !== null
-              ? [{ image: imageUrl, thumbnail: "" }]
-              : []
-            : [],
+        media: imageCopy,
       };
 
       /** add event */
-      const resultAction = await dispatch(addEvent({obj:obj,user:user}));
+      const resultAction = await dispatch(addEvent({ obj: obj, user: user }));
       const response = await unwrapResult(resultAction);
       if (response.data.success === true) {
         /** if any list is selected than add event to list */
@@ -273,18 +370,25 @@ const CreateEventModal = ({
             setLoader(false);
             setEventDescription("");
             setEventTitle("");
+            setImageUrl([]);
+            setImageCopy([]);
+            setImageUpload([]);
           }
         } else {
           closeModal();
           setLoader(false);
           setEventDescription("");
           setEventTitle("");
+          setImageUrl([]);
+          setImageCopy([]);
+          setImageUpload([]);
         }
         ws.send(
           JSON.stringify({
             action: "event",
             event: {
               ...response.event,
+              type: "addEvent",
               user: user,
               totalComments: 0,
               likes: [],
@@ -377,12 +481,17 @@ const CreateEventModal = ({
                 <img src={AddImageImg} alt="" onClick={() => myInput.click()} />
               </AddImageDiv>
             </AddYourPostBar>
-            {profileImage !== null ? (
-              <PostImage
-                loader={loader}
-                image={profileImage}
-                setImageUpload={setProfileImage}
-              />
+            {imageUrl.length > 0 ? (
+              <AddYourPostBar>
+                <PostImage
+                  loader={loader}
+                  type="eventImages"
+                  imageUrl={imageUrl}
+                  deleteImage={deleteImage}
+                  // image={profileImage}
+                  // setImageUpload={setProfileImage}
+                />
+              </AddYourPostBar>
             ) : null}
             <SelectedListing
               type="event"

@@ -146,11 +146,12 @@ export const slice = createSlice({
       if (state.loadingFavoriteBusiness) {
         state.loadingFavoriteBusiness = false;
         if (action.payload) {
-          state.favoriteBusiness = action.payload.sort(function (a, b) {
-            return a.favorites.company_name
-              .toLowerCase()
-              .localeCompare(b.favorites.company_name.toLowerCase());
-          });
+          state.favoriteBusiness = action.payload
+          // state.favoriteBusiness = action.payload.sort(function (a, b) {
+          //   return a.favorites.company_name
+          //     .toLowerCase()
+          //     .localeCompare(b.favorites.company_name.toLowerCase());
+          // });
         }
       }
     },

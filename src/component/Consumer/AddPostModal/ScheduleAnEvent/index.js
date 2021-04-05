@@ -7,7 +7,7 @@ import SaveButton from "../../UI/SaveButton";
 import * as Yup from "yup";
 import { validate } from "./validate";
 import Calendar from "./calendar";
-import moment from 'moment';
+import moment from "moment";
 
 const EventWrap = styled.div`
   width: 100%;
@@ -59,27 +59,39 @@ const BottomButtonsBar = styled.div`
   }
 `;
 
-const ScheduleAnEvent = ({ setDisplayCalendar, setEventDetails, setDisplayList }) => {
-  const [date, changeDate] = useState(new Date());
-
+const ScheduleAnEvent = ({
+  setDisplayCalendar,
+  setEventDetails,
+  setDisplayList,
+}) => {
+  const [date, changeDate] = useState(new Date(Date.now()));
+  const [endDate, setEndDate] = useState(new Date(Date.now()));
+  const [startDateFocus, setStartDateFocus] = useState(false);
+  const [endDateFocus, setEndDateFocus] = useState(false);
   const displayCalendar = (e) => {
     e.preventDefault();
     setDisplayCalendar(false);
-  }
+  };
   return (
     <EventWrap>
       <TopBar>
         <Heading>Schedule An Event</Heading>
       </TopBar>
       <CalendarWrap>
-        <Calendar date={date} changeDate={changeDate} />
+        {startDateFocus ? (
+          <Calendar date={date} changeDate={changeDate} minDate={null}/>
+        ) : endDateFocus ? (
+          <Calendar date={endDate} changeDate={setEndDate} minDate={date}/>
+        ) : null}
       </CalendarWrap>
       <FormWrap>
         <Formik
           enableReinitialize={true}
           initialValues={{
+            startDate: moment(date).format("MM-DD-YYYY"),
+            endDate: moment(endDate).format("MM-DD-YYYY"),
             startTime: date,
-            endTime: date,
+            endTime: endDate,
             repeat: "Once",
           }}
           /*validation schema */
@@ -89,12 +101,16 @@ const ScheduleAnEvent = ({ setDisplayCalendar, setEventDetails, setDisplayList }
           onSubmit={(values) => {
             /*to set event details*/
             const obj = {
-              eventDate: `${moment(date).format("DD MMM YYYY")} to ${moment(date).format("DD MMM YYYY")}`,
-              eventTime: `FROM: ${moment(values.startTime).format("HH:mm A")} to ${moment(values.endTime).format("HH:mm A")}`,
+              eventDate: `${moment(date).format("DD MMM YYYY")} to ${moment(
+                date
+              ).format("DD MMM YYYY")}`,
+              eventTime: `FROM: ${moment(values.startTime).format(
+                "HH:mm A"
+              )} to ${moment(values.endTime).format("HH:mm A")}`,
               eventRepeat: values.repeat,
               start_time: values.startTime,
-              end_time: values.endTime
-            }
+              end_time: values.endTime,
+            };
             setEventDetails(obj);
             setDisplayCalendar(false);
             setDisplayList(true);
@@ -102,7 +118,11 @@ const ScheduleAnEvent = ({ setDisplayCalendar, setEventDetails, setDisplayList }
         >
           {(formik) => (
             <form onSubmit={formik.handleSubmit} method="POST">
-              <FormBody formik={formik} />
+              <FormBody
+                formik={formik}
+                setStartDateFocus={setStartDateFocus}
+                setEndDateFocus={setEndDateFocus}
+              />
 
               {/* bottom buttons bar */}
               <BottomButtonsBar>
