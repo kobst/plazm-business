@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/static/css/main.49976435.chunk.css",
-    "main.js": "/static/js/main.7a909afd.chunk.js",
-    "main.js.map": "/static/js/main.7a909afd.chunk.js.map",
+    "main.css": "/static/css/main.6b1c9e4d.chunk.css",
+    "main.js": "/static/js/main.1a41ef2c.chunk.js",
+    "main.js.map": "/static/js/main.1a41ef2c.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.b89d9217.js",
     "runtime-main.js.map": "/static/js/runtime-main.b89d9217.js.map",
-    "static/css/2.6b8b4535.chunk.css": "/static/css/2.6b8b4535.chunk.css",
-    "static/js/2.76172c18.chunk.js": "/static/js/2.76172c18.chunk.js",
-    "static/js/2.76172c18.chunk.js.map": "/static/js/2.76172c18.chunk.js.map",
+    "static/css/2.288a8883.chunk.css": "/static/css/2.288a8883.chunk.css",
+    "static/js/2.616a74d7.chunk.js": "/static/js/2.616a74d7.chunk.js",
+    "static/js/2.616a74d7.chunk.js.map": "/static/js/2.616a74d7.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.be3177198b2d1c4af919141a72ff6e59.js": "/precache-manifest.be3177198b2d1c4af919141a72ff6e59.js",
+    "precache-manifest.637de59b6e218f1ff6ee95e6b0850f87.js": "/precache-manifest.637de59b6e218f1ff6ee95e6b0850f87.js",
     "service-worker.js": "/service-worker.js",
-    "static/css/2.6b8b4535.chunk.css.map": "/static/css/2.6b8b4535.chunk.css.map",
-    "static/css/main.49976435.chunk.css.map": "/static/css/main.49976435.chunk.css.map",
-    "static/js/2.76172c18.chunk.js.LICENSE.txt": "/static/js/2.76172c18.chunk.js.LICENSE.txt",
+    "static/css/2.288a8883.chunk.css.map": "/static/css/2.288a8883.chunk.css.map",
+    "static/css/main.6b1c9e4d.chunk.css.map": "/static/css/main.6b1c9e4d.chunk.css.map",
+    "static/js/2.616a74d7.chunk.js.LICENSE.txt": "/static/js/2.616a74d7.chunk.js.LICENSE.txt",
     "static/media/CommentStaticImg.png": "/static/media/CommentStaticImg.0746bab7.png",
     "static/media/Facebook-new.svg": "/static/media/Facebook-new.5aa6306b.svg",
     "static/media/Gridview.png": "/static/media/Gridview.e66f2dec.png",
@@ -21,7 +21,6 @@
     "static/media/Instagram.svg": "/static/media/Instagram.ff9b6ac3.svg",
     "static/media/Linkedin-new.svg": "/static/media/Linkedin-new.4c989c92.svg",
     "static/media/Mask.svg": "/static/media/Mask.dffb6f67.svg",
-    "static/media/SelectArrow.svg": "/static/media/SelectArrow.696e4c68.svg",
     "static/media/Twitter-new.svg": "/static/media/Twitter-new.9b6759a4.svg",
     "static/media/Twitter.svg": "/static/media/Twitter.c04e1330.svg",
     "static/media/addImage.svg": "/static/media/addImage.1baf14d5.svg",
@@ -52,9 +51,9 @@
   },
   "entrypoints": [
     "static/js/runtime-main.b89d9217.js",
-    "static/css/2.6b8b4535.chunk.css",
-    "static/js/2.76172c18.chunk.js",
-    "static/css/main.49976435.chunk.css",
-    "static/js/main.7a909afd.chunk.js"
+    "static/css/2.288a8883.chunk.css",
+    "static/js/2.616a74d7.chunk.js",
+    "static/css/main.6b1c9e4d.chunk.css",
+    "static/js/main.1a41ef2c.chunk.js"
   ]
 }
