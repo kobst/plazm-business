@@ -107,7 +107,7 @@ const getPlace = (obj) => {
       value: obj.value,
       filters: obj.filters,
       ownerId: obj.ownerId || null,
-      sideFilters: obj.sideFilters || {likes: false, recent: true}
+      sideFilters: obj.sideFilters || { likes: false, recent: true },
     },
   };
   return graphQl;
@@ -133,4 +133,140 @@ const searchAllPlaces = () => {
   };
   return graphQl;
 };
-export { getPlace, searchAllPlaces };
+
+/*
+@desc: homeSearch query
+*/
+const homeSearch = (obj) => {
+  const graphQl = {
+    query: `
+          query HomeSearch($search: String, $value:Int){
+            homeSearch(input: {search:$search, value:$value}) {
+              message
+              success
+              totalPlaces
+              data {
+                favorites {
+                filter_tags
+                company_name
+                default_image_url
+                status
+                updatedAt
+                }
+
+                posts {
+                  postId
+                  totalLikes
+                  totalComments
+                  postDetails {
+                      _id
+                      data
+                      listId {
+                        _id
+                        name
+                      }
+                      taggedUsers {
+                          list_ids
+                          _id
+                          name
+                          blurb
+                          photo
+                          createdAt
+                          updatedAt
+                      }
+                      taggedLists {
+                        _id
+                        name
+                        description
+                        items
+                        type
+                        photo
+                        account_id
+                        createdAt
+                      }
+                      ownerId {
+                        _id
+                        name
+                        email
+                        photo
+                      }
+                      likes {
+                        name
+                        _id
+                      }
+                      media {
+                          image
+                          thumbnail
+                      }
+                      location {
+                          type
+                          coordinates
+                      }
+                      createdAt
+                      updatedAt          
+                  }
+                  comments {
+                      userId {
+                        _id
+                        name
+                        }
+                      body
+                      replies {
+                          userId {
+                            _id
+                            name
+                            }
+                      body
+                      created_on
+                  }
+                  createdAt
+                  updatedAt
+                  }
+                }
+
+                events {
+                  _id
+                  totalComments
+                  likes {
+                    _id
+                    name
+                  }
+                  eventSchedule {
+                      start_time
+                      end_time
+                  }
+                  location {
+                      type
+                      coordinates
+                  }
+                  user {
+                    _id
+                    name
+                    email
+                    phoneNumber
+                    photo
+                  }
+                  title
+                  description
+                  type
+                  recurring
+                  media {
+                      image
+                      thumbnail
+                  }
+                  createdAt
+                  updatedAt
+              }
+                totalPosts
+                totalFollowers
+              }
+            }
+          }`,
+    variables: {
+      search: obj.search,
+      value: obj.value
+    },
+  };
+  return graphQl;
+};
+export { getPlace, searchAllPlaces, homeSearch };

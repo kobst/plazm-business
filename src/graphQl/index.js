@@ -7,7 +7,7 @@ import {
 } from "./mutations/user";
 import { getUser, getAllUsers, getUserFavorites } from "./query/user";
 
-import { getPlace, searchAllPlaces } from "./query/place";
+import { getPlace, searchAllPlaces, homeSearch } from "./query/place";
 
 import { getAllLists, getUserLists } from "./query/list";
 
@@ -29,6 +29,7 @@ import { CreateList, addPostToList, addEventToList } from "./mutations/list";
 import { findBusinessPhotos } from './query/post';
 
 export {
+  homeSearch,
   createEvent,
   addEventToList,
   findBusinessPhotos,

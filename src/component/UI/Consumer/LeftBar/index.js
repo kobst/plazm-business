@@ -16,6 +16,7 @@ import ProfileSettings from "../../../Consumer/ProfileSettings";
 import BuisinessView from "../../../Consumer/BuisinessView";
 import BusinessList from "../../../Consumer/BusinessList";
 import { useSelector } from "react-redux";
+import HomeSearch from "../../../Consumer/HomeSearch";
 
 const LeftBarContent = styled.div`
   width: 100px;
@@ -225,7 +226,7 @@ const LeftBar = ({
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              <h2>Any content 3</h2>
+              <HomeSearch/>
             </div>
           </TabPanel>
           <TabPanel>
