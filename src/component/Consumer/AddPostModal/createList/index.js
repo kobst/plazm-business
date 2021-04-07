@@ -106,7 +106,7 @@ let myInput;
 const CreateListModel = ({
   setDisplayList,
   setSelectedListForPost,
-  setDisplayCreateList
+  setDisplayCreateList,
 }) => {
   const [loader, setLoader] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
@@ -160,7 +160,7 @@ const CreateListModel = ({
   const addList = async (values) => {
     /* to upload file to s3 bucket on save of profile button */
     let imageUrl = null;
-    if (imageFile !== null && profileImage!==null) {
+    if (imageFile !== null && profileImage !== null) {
       /*set loader value */
       setLoader(true);
       const folder_name = folderName(user.name, user._id);
@@ -228,33 +228,41 @@ const CreateListModel = ({
   };
 
   /**cancel button functionality */
-  const cancelButton = () => {
+  const cancelButton = (e) => {
+    e.preventDefault();
     setDisplayCreateList(false);
-    setDisplayList(true)
-  }
+    setDisplayList(true);
+  };
   return (
-      <PostContent>
-        <TopBar>
-          <Heading>Create List</Heading>
-        </TopBar>
-        <Formik
-          enableReinitialize={true}
-          initialValues={{
-            title: "",
-            description: "",
-          }}
-          /*validation schema */
-          validationSchema={Yup.object(validate)}
-          validateOnChange={false}
-          validateOnBlur={false}
-          onSubmit={(values) => {
-            /*update profile function call*/
-            addList(values);
-          }}
-        >
-          {(formik) => (
-            <form onSubmit={formik.handleSubmit} method="POST">
-              <FormBody loader={loader} setResponse={setResponse} />
+    <PostContent>
+      <TopBar>
+        <Heading>Create List</Heading>
+      </TopBar>
+      <Formik
+        enableReinitialize={true}
+        initialValues={{
+          title: "",
+          description: "",
+        }}
+        /*validation schema */
+        validationSchema={Yup.object(validate)}
+        validateOnChange={false}
+        validateOnBlur={false}
+        onSubmit={(values) => {
+          /*update profile function call*/
+          addList(values);
+        }}
+      >
+        {(formik) => (
+          <form onSubmit={formik.handleSubmit} method="POST">
+            <FormBody loader={loader} setResponse={setResponse} />
+            {profileImage !== null ? (
+              <PostImage
+                loader={loader}
+                image={profileImage}
+                setImageUpload={setProfileImage}
+              />
+            ) : (
               <AddYourPostBar>
                 <AddYourPostLabel>
                   Add to Photo to your List (required)
@@ -276,37 +284,31 @@ const CreateListModel = ({
                   />
                 </AddImageDiv>
               </AddYourPostBar>
-              {profileImage !== null ? (
-                <PostImage
-                  loader={loader}
-                  image={profileImage}
-                  setImageUpload={setProfileImage}
-                />
-              ) : null}
-              {/* for displaying image error if any */}
-              {imageError !== "" ? <ErrorDiv>{imageError}</ErrorDiv> : null}
+            )}
+            {/* for displaying image error if any */}
+            {imageError !== "" ? <ErrorDiv>{imageError}</ErrorDiv> : null}
 
-              {/* for displaying the response of add list */}
-              {error !== "" ? (
-                <ErrorDiv>{error}</ErrorDiv>
-              ) : response !== "" ? (
-                <ErrorDiv>{response}</ErrorDiv>
-              ) : (
-                <></>
-              )}
-              {/* bottom buttons bar */}
-              <BottomButtonsBar>
-                <BackButton onClick={() => cancelButton()} disabled={loader}>
-                  Cancel
-                </BackButton>
-                <SaveButton type="submit" disabled={loader}>
-                  {loader ? <ValueLoader /> : "Create"}
-                </SaveButton>
-              </BottomButtonsBar>
-            </form>
-          )}
-        </Formik>
-      </PostContent>
+            {/* for displaying the response of add list */}
+            {error !== "" ? (
+              <ErrorDiv>{error}</ErrorDiv>
+            ) : response !== "" ? (
+              <ErrorDiv>{response}</ErrorDiv>
+            ) : (
+              <></>
+            )}
+            {/* bottom buttons bar */}
+            <BottomButtonsBar>
+              <BackButton onClick={(e) => cancelButton(e)} disabled={loader}>
+                Cancel
+              </BackButton>
+              <SaveButton type="submit" disabled={loader}>
+                {loader ? <ValueLoader /> : "Create"}
+              </SaveButton>
+            </BottomButtonsBar>
+          </form>
+        )}
+      </Formik>
+    </PostContent>
   );
 };
 

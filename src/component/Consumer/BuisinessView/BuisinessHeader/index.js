@@ -12,9 +12,10 @@ import FacebookImg from "../../../../images/Facebook-new.svg";
 import TwitterImg from "../../../../images/Twitter-new.svg";
 import LinkedInImg from "../../../../images/Linkedin-new.svg";
 import InstagramImg from "../../../../images/Instagram-new.svg";
+import FavoritesIcon from '../../../../images/favorites.png';
+import FavoritesIconFilled from '../../../../images/favorites-filled.png';
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
 import {
   AddBusinessFavorite,
   RemoveBusinessFavorite,
@@ -282,12 +283,13 @@ const BuisinessHeader = ({
                   <span>{businessProfile.company_name}</span>{" "}
                   {/* business favorite toggle */}
                   {favoriteBusiness ? (
-                    <MdFavorite
+                    <img src = {FavoritesIconFilled}
                       onClick={() => removeFavorite()}
                       className="favoriteBusiness"
+                      alt=""
                     />
                   ) : (
-                    <MdFavoriteBorder onClick={() => addFavorite()} className="favoriteBusinessBorder" />
+                    <img src={FavoritesIcon} onClick={() => addFavorite()} className="favoriteBusinessBorder" alt=""/>
                   )}
                 </BusinessName>
                 <SocialIconsWrap>

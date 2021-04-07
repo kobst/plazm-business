@@ -5,6 +5,7 @@ import BottomButtons from "../BottomButtons";
 import AddImageImg from "../../../../images/addImage.svg";
 import SelectedListing from "../SelectedListing";
 import PostImage from "../PostImage";
+import error from '../../../../constants'
 import { MentionsInput, Mention } from "react-mentions";
 import { useDispatch, useSelector } from "react-redux";
 import { findAllUsers } from "../../../../reducers/consumerReducer";
@@ -100,7 +101,8 @@ const CloseModal = styled.button`
     color: #fff;
     font-size: 22px;
   }
-  :hover, :focus {
+  :hover,
+  :focus {
     outline: 0;
   }
 `;
@@ -152,6 +154,21 @@ const ErrorDiv = styled.div`
   margin: 0;
   margin-bottom: 10px;
 `;
+
+const InputContainer = styled.div`
+  border: 1px solid ${(props) => (props.usererror ? "#FF7171" : "#ffffff")};
+  min-height: 60px;
+  font-size: 16px;
+  line-height: 21px;
+  width: 100%;
+  padding: 6px 8px;
+  margin: 0 0 20px;
+  background: #ffffff;
+  box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
+  border-radius: 0px;
+  display: flex;
+  flex-direction: column;
+`;
 let myInput;
 const ModalPostContent = ({
   setDisplayList,
@@ -164,19 +181,18 @@ const ModalPostContent = ({
   mentionArrayList,
   setMentionArrayList,
   mentionArrayUser,
-  setMentionArrayUser
+  setMentionArrayUser,
+  imageUpload,
+  setImageUpload
 }) => {
-
-  // const [mentionArrayList, setMentionArrayList] = useState([]);
-  // const [mentionArrayUser, setMentionArrayUser] = useState([]);
   const [loader, setLoader] = useState(false);
   const users = useSelector((state) => state.consumer.users);
   const lists = useSelector((state) => state.list.lists);
   const [imageFile, setImageFile] = useState(null);
-  const [imageUpload, setImageUpload] = useState(null);
   const [imageError, setImageError] = useState("");
   const ws = useSelector((state) => state.user.ws);
   const user = useSelector((state) => state.user.user);
+  const [descriptionError, setDescriptionError] = useState("");
   let allData = [...users, ...lists];
   let data = allData.sort(function (a, b) {
     return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
@@ -188,15 +204,13 @@ const ModalPostContent = ({
   }));
 
   /** to fetch tagging data */
-  useEffect(()=>{
+  useEffect(() => {
     const fetchTaggingData = async () => {
-      if (users.length === 0)
-      await dispatch(findAllUsers());
-      if (lists.length === 0)
-      await dispatch(findAllLists());
-    }
-    fetchTaggingData()
-  },[dispatch, lists.length, users.length])
+      if (users.length === 0) await dispatch(findAllUsers());
+      if (lists.length === 0) await dispatch(findAllLists());
+    };
+    fetchTaggingData();
+  }, [dispatch, lists.length, users.length]);
   /*
    * @desc: handle change function called on post input change
    */
@@ -263,90 +277,101 @@ const ModalPostContent = ({
    * @desc: add a post
    */
   const savePost = async () => {
-    /*set loader value */
-    setLoader(true);
+    if (description === "" || !description.trim() === true) {
+      setDescriptionError(error.REQUIRED);
+    } else {
+      /*set loader value */
+      setLoader(true);
 
-    /* to upload file to s3 bucket on save of profile button */
-    let imageUrl = null;
-    if (imageFile !== null) {
-      const folder_name = folderName(user.name, user._id);
-      const file_name = fileName(imageFile.name);
-      const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${file_name}`;
-      const value = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/upload_photo`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            Key: file_name,
-            ContentType: imageFile.type,
-            folder_name: folder_name,
-          }),
-        }
-      );
-      const body = await value.text();
-      const Val = JSON.parse(body);
+      setDescriptionError("");
 
-      await fetch(Val, {
-        method: "PUT",
-        headers: {
-          "Content-Type": imageFile.type,
-        },
-        body: imageFile,
-      })
-        .then((response) => {
-          imageUrl = baseUrl;
-        })
-        .catch(
-          (error) => console.log(error) // Handle the error response object
+      /* to upload file to s3 bucket on save of profile button */
+      let imageUrl = null;
+      if (imageFile !== null) {
+        const folder_name = folderName(user.name, user._id);
+        const file_name = fileName(imageFile.name);
+        const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${file_name}`;
+        const value = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/upload_photo`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              Key: file_name,
+              ContentType: imageFile.type,
+              folder_name: folder_name,
+            }),
+          }
         );
-    }
-    const obj = {
-      business: businessId,
-      data: description,
-      taggedUsers: mentionArrayUser,
-      taggedLists: mentionArrayList,
-      ownerId: user._id,
-      listId: selectedListForPost? selectedListForPost: null,
-      media:
-        imageFile !== null
-          ? imageUrl !== null
-            ? [{ image: imageUrl, thumbnail: "" }]
-            : []
-          : [],
-    };
-    /* create a post api */
-    const addPost = await dispatch(addPostToBusiness(obj));
-    const response = await unwrapResult(addPost);
-    if (response.success === true) {
-      if(selectedListForPost) {
-        const addToList = await dispatch(AddPostToList({postId: response.post._id, listId: selectedListForPost}));
-        const res = await unwrapResult(addToList);
-        if(res.data.addPostToList.success === true) {
+        const body = await value.text();
+        const Val = JSON.parse(body);
+
+        await fetch(Val, {
+          method: "PUT",
+          headers: {
+            "Content-Type": imageFile.type,
+          },
+          body: imageFile,
+        })
+          .then(() => {
+            imageUrl = baseUrl;
+          })
+          .catch(
+            (error) => console.log(error) // Handle the error response object
+          );
+      }
+      const obj = {
+        business: businessId,
+        data: description,
+        taggedUsers: mentionArrayUser,
+        taggedLists: mentionArrayList,
+        ownerId: user._id,
+        listId: selectedListForPost ? selectedListForPost : null,
+        media:
+          imageFile !== null
+            ? imageUrl !== null
+              ? [{ image: imageUrl, thumbnail: "" }]
+              : []
+            : [],
+      };
+      /* create a post api */
+      const addPost = await dispatch(addPostToBusiness(obj));
+      const response = await unwrapResult(addPost);
+      if (response.success === true) {
+        if (selectedListForPost) {
+          const addToList = await dispatch(
+            AddPostToList({
+              postId: response.post._id,
+              listId: selectedListForPost,
+            })
+          );
+          const res = await unwrapResult(addToList);
+          if (res.data.addPostToList.success === true) {
+            closeModal();
+            setLoader(false);
+            setDescription("");
+          }
+        } else {
           closeModal();
           setLoader(false);
           setDescription("");
         }
-      } else {
-      closeModal();
-      setLoader(false);
-      setDescription("");
+        ws.send(
+          JSON.stringify({
+            action: "post",
+            businessId: businessId,
+            post: {
+              postId: response.post._id,
+              postDetails: response.post,
+              totalComments: 0,
+              totalLikes: 0,
+              comments: [],
+            },
+          })
+        );
       }
-      ws.send(
-        JSON.stringify({
-          action: "post",
-          businessId: businessId,
-          post: {
-            postId: response.post._id,
-            postDetails: response.post,
-            totalComments: 0,
-            totalLikes: 0,
-            comments: [],
-          },
-        })
-      );
     }
   };
   return (
@@ -358,40 +383,46 @@ const ModalPostContent = ({
             <MdClose />
           </CloseModal>
         </TopBar>
-        <MentionsInput
-          markup="@(__id__)[__display__]"
-          value={description}
-          onChange={handleChange}
-          className="postInput_model"
-          placeholder="What’s Happening ?"
-          disabled={loader}
-        >
-          <Mention
-            type="user"
-            trigger="@"
-            data={userMentionData}
-            className="mentions__mention"
-            appendSpaceOnAdd={true}
-          />
-        </MentionsInput>
-        <AddYourPostBar>
-          <AddYourPostLabel>Add to your Post</AddYourPostLabel>
-          <AddImageDiv>
-            <input
-              id="myInput"
-              onChange={(e) => uploadImage(e)}
-              type="file"
-              accept=".png, .jpg, .jpeg"
-              ref={(ref) => (myInput = ref)}
-              style={{ display: "none" }}
-              disabled={loader}
+        <InputContainer>
+          <MentionsInput
+            markup="@(__id__)[__display__]"
+            value={description}
+            onChange={handleChange}
+            className="postInput_model"
+            placeholder="What’s Happening ?"
+            disabled={loader}
+          >
+            <Mention
+              type="user"
+              trigger="@"
+              data={userMentionData}
+              className="mentions__mention"
+              appendSpaceOnAdd={true}
             />
-            <img src={AddImageImg} alt="" onClick={(e) => myInput.click()} />
-          </AddImageDiv>
-        </AddYourPostBar>
+          </MentionsInput>
+          {descriptionError !== "" ? (
+            <ErrorDiv>{descriptionError}</ErrorDiv>
+          ) : null}
+        </InputContainer>
         {imageUpload !== null ? (
           <PostImage image={imageUpload} setImageUpload={setImageUpload} />
-        ) : null}
+        ) : (
+          <AddYourPostBar>
+            <AddYourPostLabel>Add to your Post</AddYourPostLabel>
+            <AddImageDiv>
+              <input
+                id="myInput"
+                onChange={(e) => uploadImage(e)}
+                type="file"
+                accept=".png, .jpg, .jpeg"
+                ref={(ref) => (myInput = ref)}
+                style={{ display: "none" }}
+                disabled={loader}
+              />
+              <img src={AddImageImg} alt="" onClick={(e) => myInput.click()} />
+            </AddImageDiv>
+          </AddYourPostBar>
+        )}
         {imageError !== "" ? <ErrorDiv>{imageError}</ErrorDiv> : null}
         <SelectedListing
           selectedListForPost={selectedListForPost}

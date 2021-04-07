@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import {
   addLikeToEvents,
-  fetchEvent,
   fetchEventForAWeek,
   findCommentReplies,
   findPostComments,
 } from "../graphQl";
 import { graphQlEndPoint } from "../Api/graphQl";
+import moment from "moment";
 
 /*
  * @desc:  to fetch events of current day for a particular business
@@ -14,15 +14,8 @@ import { graphQlEndPoint } from "../Api/graphQl";
  */
 export const fetchEventsForTheDay = createAsyncThunk(
   "data/fetchEventsForTheDay",
-  async ({ businessId, day, date }) => {
-    const obj = {
-      day: day,
-      date: date,
-      id: businessId,
-    };
-    const graphQl = fetchEvent(obj);
-    const response = await graphQlEndPoint(graphQl);
-    return response.data.getEventsForTheDay.event;
+  async () => {
+    return true;
   }
 );
 
@@ -150,6 +143,7 @@ export const slice = createSlice({
     loadingForAWeek: false,
     loadingEventComments: false,
     date: new Date(),
+    selectedDate: new Date(),
     events: [],
     loadingReplies: false,
     initialWeekEvents: [],
@@ -171,6 +165,26 @@ export const slice = createSlice({
     setCurrentDate: (state) => {
       state.date = new Date();
     },
+    setSelectedDate: (state, action) => {
+      const currentDate = new Date(state.date);
+      const arr = [
+        { day: "sun", val: 0 },
+        { day: "mon", val: 1 },
+        { day: "tue", val: 2 },
+        { day: "wed", val: 3 },
+        { day: "thurs", val: 4 },
+        { day: "fri", val: 5 },
+        { day: "sat", val: 6 },
+      ];
+      const x = arr.filter((i) => i.day === action.payload);
+      const startOfWeek = moment(currentDate)
+        .startOf("week")
+        .add(x[0].val + 1, "d")
+        .toDate();
+      startOfWeek.setUTCHours(0, 0, 0, 0);
+      state.selectedDate = startOfWeek;
+    },
+
   },
   extraReducers: {
     [fetchEventsForTheDay.pending]: (state) => {
@@ -183,10 +197,11 @@ export const slice = createSlice({
       if (state.loading) {
         state.loading = false;
         if (action.payload) {
-          let arr = action.payload.map((obj) => ({
-            ...obj,
-            comments: [],
-          }));
+          // let arr = action.payload.map((obj) => ({
+          //   ...obj,
+          //   comments: [],
+          // }));
+          let arr = current(state.initialWeekEvents).filter(i=>moment(i.eventSchedule.start_time).format("DD-MM-YYYY") === moment(state.selectedDate).format("DD-MM-YYYY") )
           state.events = arr.sort((a, b) => {
             return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
           });
@@ -215,10 +230,10 @@ export const slice = createSlice({
             comments: [],
           }));
           state.events = arr.sort((a, b) => {
-            return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
+            return new Date(a.eventSchedule.start_time) - new Date(b.eventSchedule.start_time);
           });
           state.initialWeekEvents = arr.sort((a, b) => {
-            return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
+            return new Date(a.eventSchedule.start_time) - new Date(b.eventSchedule.start_time);
           });
         }
       }
@@ -477,5 +492,5 @@ export const slice = createSlice({
   },
 });
 
-export const { nextWeekDate, previousWeekDate, setCurrentDate } = slice.actions;
+export const { nextWeekDate, previousWeekDate, setCurrentDate, setSelectedDate } = slice.actions;
 export default slice.reducer;
