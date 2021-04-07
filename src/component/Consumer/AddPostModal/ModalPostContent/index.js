@@ -24,6 +24,7 @@ const PostContent = styled.div`
     color: #000;
     margin: 0 0 14px;
     border: 0;
+    overflow-y: auto !important;
   }
   .postInput_model__suggestions {
     background-color: #fe02b9 !important;

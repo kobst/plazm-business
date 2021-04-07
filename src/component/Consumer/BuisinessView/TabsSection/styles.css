@@ -183,8 +183,12 @@
 
   .emoji-picker-react .emoji-group:before{
     font-size: 11px !important;
+    display: none;
   }
 
+  aside.emoji-picker-react .content-wrapper:before {
+    display: none !important;
+  }
   
   #scrollableDiv {
     overflow-x: hidden;

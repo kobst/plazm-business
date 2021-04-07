@@ -119,7 +119,6 @@ export const fetchCommentReplies = createAsyncThunk(
   }
 );
 
-
 /*
  * @desc:  to fetch events of a complete week for a particular business
  * @params: businessId,date
@@ -147,20 +146,20 @@ export const slice = createSlice({
     events: [],
     loadingReplies: false,
     initialWeekEvents: [],
-    loadingForInitialWeek: false
+    loadingForInitialWeek: false,
   },
   reducers: {
     nextWeekDate: (state) => {
       const currentDate = new Date(state.date);
       currentDate.setDate(currentDate.getDate() + 7);
       state.date = currentDate;
-      state.initialWeekEvents = []
+      state.initialWeekEvents = [];
     },
     previousWeekDate: (state) => {
       const currentDate = new Date(state.date);
       currentDate.setDate(currentDate.getDate() - 7);
       state.date = currentDate;
-      state.initialWeekEvents = []
+      state.initialWeekEvents = [];
     },
     setCurrentDate: (state) => {
       state.date = new Date();
@@ -184,7 +183,6 @@ export const slice = createSlice({
       startOfWeek.setUTCHours(0, 0, 0, 0);
       state.selectedDate = startOfWeek;
     },
-
   },
   extraReducers: {
     [fetchEventsForTheDay.pending]: (state) => {
@@ -201,9 +199,16 @@ export const slice = createSlice({
           //   ...obj,
           //   comments: [],
           // }));
-          let arr = current(state.initialWeekEvents).filter(i=>moment(i.eventSchedule.start_time).format("DD-MM-YYYY") === moment(state.selectedDate).format("DD-MM-YYYY") )
+          let arr = current(state.initialWeekEvents).filter(
+            (i) =>
+              moment(i.eventSchedule.start_time).format("DD-MM-YYYY") ===
+              moment(state.selectedDate).format("DD-MM-YYYY")
+          );
           state.events = arr.sort((a, b) => {
-            return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
+            return (
+              new Date(b.eventSchedule.start_time) -
+              new Date(a.eventSchedule.start_time)
+            );
           });
         }
       }
@@ -218,7 +223,7 @@ export const slice = createSlice({
       if (!state.loadingForAWeek) {
         state.loadingForAWeek = true;
         state.events = [];
-        state.initialWeekEvents = []
+        state.initialWeekEvents = [];
       }
     },
     [fetchEventsForTheWeek.fulfilled]: (state, action) => {
@@ -230,10 +235,16 @@ export const slice = createSlice({
             comments: [],
           }));
           state.events = arr.sort((a, b) => {
-            return new Date(a.eventSchedule.start_time) - new Date(b.eventSchedule.start_time);
+            return (
+              new Date(a.eventSchedule.start_time) -
+              new Date(b.eventSchedule.start_time)
+            );
           });
           state.initialWeekEvents = arr.sort((a, b) => {
-            return new Date(a.eventSchedule.start_time) - new Date(b.eventSchedule.start_time);
+            return (
+              new Date(a.eventSchedule.start_time) -
+              new Date(b.eventSchedule.start_time)
+            );
           });
         }
       }
@@ -260,7 +271,10 @@ export const slice = createSlice({
             comments: [],
           }));
           state.initialWeekEvents = arr.sort((a, b) => {
-            return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
+            return (
+              new Date(b.eventSchedule.start_time) -
+              new Date(a.eventSchedule.start_time)
+            );
           });
         }
       }
@@ -295,7 +309,10 @@ export const slice = createSlice({
           eventsArr.push({ ...findEvent, comments: arr });
           eventsArr = eventsArr.concat(findOtherEvents);
           state.events = eventsArr.sort((a, b) => {
-            return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
+            return (
+              new Date(b.eventSchedule.start_time) -
+              new Date(a.eventSchedule.start_time)
+            );
           });
         }
       }
@@ -315,24 +332,28 @@ export const slice = createSlice({
       if (state.loadingReplies) {
         state.loadingReplies = false;
         if (action.payload) {
-            let posts = current(state.events).filter(
-              (i) => i._id !== action.payload.postId
+          let posts = current(state.events).filter(
+            (i) => i._id !== action.payload.postId
+          );
+          let posts1 = current(state.events).filter(
+            (i) => i._id === action.payload.postId
+          )[0];
+          let dummy1 = [];
+          if (posts1.comments.length > 0) {
+            let findComment = posts1.comments.filter(
+              (i) => i._id === action.payload.commentId
             );
-            let posts1 = current(state.events).filter(
-              (i) => i._id === action.payload.postId
-            )[0];
-            let dummy1 = [];
-            if(posts1.comments.length>0) {
-            let findComment = posts1.comments.filter(i=>i._id === action.payload.commentId);
-            let findComment1 = posts1.comments.filter(i=>i._id !== action.payload.commentId);
-            let newArr = []
-            newArr = newArr.concat({...findComment[0],replies: action.payload.replies})            
-            newArr = newArr.concat(findComment1)
+            let findComment1 = posts1.comments.filter(
+              (i) => i._id !== action.payload.commentId
+            );
+            let newArr = [];
+            newArr = newArr.concat({
+              ...findComment[0],
+              replies: action.payload.replies,
+            });
+            newArr = newArr.concat(findComment1);
             newArr = newArr.sort((a, b) => {
-              return (
-                new Date(a.createdAt) -
-                new Date(b.createdAt)
-              );
+              return new Date(a.createdAt) - new Date(b.createdAt);
             });
             dummy1.push({
               ...posts1,
@@ -384,7 +405,10 @@ export const slice = createSlice({
           });
           eventsArr = eventsArr.concat(findOtherEvents);
           state.events = eventsArr.sort((a, b) => {
-            return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
+            return (
+              new Date(b.eventSchedule.start_time) -
+              new Date(a.eventSchedule.start_time)
+            );
           });
         }
       }
@@ -413,7 +437,11 @@ export const slice = createSlice({
             },
           });
           let commentsSort = findComment1
-            .concat({ ...findComment, replies: replies, totalReplies: findComment.totalReplies+1 })
+            .concat({
+              ...findComment,
+              replies: replies,
+              totalReplies: findComment.totalReplies + 1,
+            })
             .sort((a, b) => {
               return new Date(a.createdAt) - new Date(b.createdAt);
             });
@@ -424,7 +452,10 @@ export const slice = createSlice({
           });
           dummy1 = dummy1.concat(events);
           state.events = dummy1.sort((a, b) => {
-            return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
+            return (
+              new Date(b.eventSchedule.start_time) -
+              new Date(a.eventSchedule.start_time)
+            );
           });
         }
       }
@@ -446,7 +477,10 @@ export const slice = createSlice({
           });
           dummy1 = dummy1.concat(findPost);
           state.events = dummy1.sort((a, b) => {
-            return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
+            return (
+              new Date(b.eventSchedule.start_time) -
+              new Date(a.eventSchedule.start_time)
+            );
           });
         }
       }
@@ -482,7 +516,10 @@ export const slice = createSlice({
               });
               dummy1 = dummy1.concat(findPost);
               state.events = dummy1.sort((a, b) => {
-                return new Date(b.eventSchedule.start_time) - new Date(a.eventSchedule.start_time);
+                return (
+                  new Date(b.eventSchedule.start_time) -
+                  new Date(a.eventSchedule.start_time)
+                );
               });
             }
           }
@@ -492,5 +529,10 @@ export const slice = createSlice({
   },
 });
 
-export const { nextWeekDate, previousWeekDate, setCurrentDate, setSelectedDate } = slice.actions;
+export const {
+  nextWeekDate,
+  previousWeekDate,
+  setCurrentDate,
+  setSelectedDate,
+} = slice.actions;
 export default slice.reducer;

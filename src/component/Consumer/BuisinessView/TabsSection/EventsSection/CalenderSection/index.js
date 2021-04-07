@@ -231,8 +231,8 @@ const CalenderSection = ({ businessId }) => {
   useEffect(() => {
     const fetchData = async () => {
       if (
-        eventDate.toDateString() !== currentDate.toDateString() ||
-        previousBtnClicked
+        (eventDate.toDateString() !== currentDate.toDateString() ||
+        previousBtnClicked) && !todayClicked
       )
         await dispatch(
           fetchEventsForTheWeek({ businessId: businessId, date: eventDate })
@@ -296,7 +296,6 @@ const CalenderSection = ({ businessId }) => {
 
   /** to fetch event for a particular day */
   const fetchEventsForAParticularDay = async (day, dayNo) => {
-    setSelectedCapsule(day)
     if (
       (dayNo >= currentDayNo && !previousBtnClicked && !todayClicked) ||
       (nextBtnClicked && !todayClicked) ||
@@ -308,6 +307,7 @@ const CalenderSection = ({ businessId }) => {
         !nextBtnClicked &&
         todayClicked)
     ) {
+      setSelectedCapsule(day)
       const obj = {
         date: eventDate,
         day: day,

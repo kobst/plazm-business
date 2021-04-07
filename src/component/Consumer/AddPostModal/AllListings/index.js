@@ -63,7 +63,7 @@ const SearchIconDiv = styled.div`
   justify-content: center;
   cursor: pointer;
   svg {
-    font-size: 30px;
+    font-size: 24px;
     color: #c4c4c4;
     font-weight: bold;
   }
@@ -111,11 +111,11 @@ const ListingList = styled.div`
   font-weight: 500;
   font-size: 12px;
   color: #ffffff;
-  min-height: 30px;
+  min-height: 36px;
   align-items: center;
   display: flex;
   justify-content: space-between;
-  padding: 0 7px;
+  padding: 5px 7px;
   cursor: pointer;
   transition: 0.3s;
   .RightTickImg {

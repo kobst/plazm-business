@@ -123,7 +123,7 @@ const LoaderWrap = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 30px 0 10px;
+  margin: 30px 0 20px;
 `;
 
 const RightArrowSec = styled.div`
