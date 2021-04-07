@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import ProfileImg from "../../../../../images/profile-img.png";
 import BusinessHashTags from "../BusinessHashTags";
-import { MdFavorite } from "react-icons/md";
-// import UserMessage from "../UserMessage";
+import { MdFavorite, MdAdd, MdRemove } from "react-icons/md";
+import UserMessage from "../UserMessage";
+import UserMessageEvents from "../Events/UserMessageEvents";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -117,6 +118,7 @@ const RightWrap = styled.div`
 
 /** display favorite business */
 const DisplayFavoriteBusiness = ({ data }) => {
+  const [displayData, setDisplayData] = useState(false);
   return data ? (
     <>
       <UserMsgWrap>
@@ -137,6 +139,11 @@ const DisplayFavoriteBusiness = ({ data }) => {
                 {data.favorites.company_name}
                 <RightWrap>
                   <MdFavorite />
+                  {!displayData ? (
+                    <MdAdd onClick={() => setDisplayData(true)} />
+                  ) : (
+                    <MdRemove onClick={() => setDisplayData(false)} />
+                  )}
                 </RightWrap>
               </ProfileName>
               <ChatInput>
@@ -151,10 +158,27 @@ const DisplayFavoriteBusiness = ({ data }) => {
         </UserMessageContent>
       </UserMsgWrap>
 
-      {/* to display posts */}
-      {/* {data.posts.length > 0
-        ? data.posts.map((i, key) => <UserMessage postData={i} key={key} businessData={data}/>)
-        : null} */}
+      {displayData ? (
+        <>
+          {/* to display posts */}
+          {data.posts.length > 0
+            ? data.posts.map((i, key) => (
+                <UserMessage postData={i} key={key} businessData={data.favorites} />
+              ))
+            : null}
+
+          {/* to display events */}
+          {data.events.length > 0
+            ? data.events.map((i, key) => (
+                <UserMessageEvents
+                  eventData={i}
+                  key={key}
+                  businessInfo={data.favorites}
+                />
+              ))
+            : null}
+        </>
+      ) : null}
     </>
   ) : null;
 };

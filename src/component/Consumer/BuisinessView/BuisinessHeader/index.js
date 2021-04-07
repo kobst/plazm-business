@@ -19,6 +19,7 @@ import {
   AddBusinessFavorite,
   RemoveBusinessFavorite,
 } from "../../../../reducers/userReducer";
+import { clearBusinessData } from "../../../../reducers/businessReducer";
 
 const BuisinessHeaderContent = styled.div`
   width: 100%;
@@ -252,11 +253,17 @@ const BuisinessHeader = ({
     };
     await dispatch(RemoveBusinessFavorite(obj));
   };
+
+  /** to return to all business listing */
+  const backBusiness = () => {
+    dispatch(clearBusinessData());
+    history.push("/");
+  }
   return (
     <>
       <BuisinessHeaderContent className= {displayBusinessProfile ? 'HeaderSpacing' : ''}>
         <ArrowBack>
-          <MdKeyboardArrowLeft onClick={() => history.push("/")} />
+          <MdKeyboardArrowLeft onClick={() => backBusiness()} />
         </ArrowBack>
         <CloseDiv>
           <IoMdClose onClick={() => closeTab()} />

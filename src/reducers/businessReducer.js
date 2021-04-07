@@ -190,6 +190,7 @@ export const slice = createSlice({
     loading: false,
     loadingAddPosts: false,
     posts: [],
+    business: [],
     loadingAddComment: false,
     loadingPostComments: false,
     filters: {
@@ -237,6 +238,20 @@ export const slice = createSlice({
     setSideFilters: (state, action) => {
       state.filterByMostLiked = false;
       state.filterByMostRecent = false;
+    },
+    clearBusinessData: (state) => {
+      state.filterByMostLiked = false;
+      state.filterByMostRecent = false;
+      state.business = [];
+      state.posts = [];
+      state.images = [];
+      state.filters = {
+        Business: true,
+        PostsByMe: false,
+        MySubscriptions: false,
+        Others: false,
+      };
+      state.totalPosts = 0
     },
   },
   extraReducers: {
@@ -632,5 +647,6 @@ export const {
   setSideFiltersByMostRecent,
   setSideFiltersByMostLiked,
   setSideFilters,
+  clearBusinessData
 } = slice.actions;
 export default slice.reducer;

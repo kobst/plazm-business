@@ -6,6 +6,7 @@ import ValueLoader from "../../../../utils/loader";
 import SearchBar from "../SearchBar";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { HomeSearch } from "../../../../reducers/searchReducer";
+import error from "../../../../constants";
 
 const BusinessListWrap = styled.div`
   width: 100%;
@@ -48,13 +49,13 @@ const BusinessListing = () => {
   const search = useSelector((state) => state.search.searchData);
 
   useEffect(() => {
-      const obj = {
-        search: "",
-        value: offset,
-      }
-      dispatch(HomeSearch(obj));
+    const obj = {
+      search: "",
+      value: offset,
+    };
+    dispatch(HomeSearch(obj));
   }, [dispatch, offset]);
-  
+
   /** to fetch more places matching the search */
   const fetchMorePlaces = () => {
     if (offset + 20 < totalPlaces) {
@@ -92,16 +93,24 @@ const BusinessListing = () => {
               businessData.length > 20 && !loading ? (
                 <center>
                   <NoMorePost className="noMorePost">
-                    No more business to show
+                    {error.NO_MORE_BUSINESS_TO_DISPLAY}
                   </NoMorePost>
                 </center>
               ) : null
             }
           >
             <BusinessListWrap>
-              {businessData.map((i, key) => (
-                <DisplayFavoriteBusiness data={i} key={key} />
-              ))}
+              {businessData.length > 0 ? (
+                businessData.map((i, key) => (
+                  <DisplayFavoriteBusiness data={i} key={key} />
+                ))
+              ) : (
+                <center>
+                  <NoMorePost className="noMorePost">
+                    {error.NO_BUSINESS_FOUND}
+                  </NoMorePost>
+                </center>
+              )}
             </BusinessListWrap>
           </InfiniteScroll>
         </div>

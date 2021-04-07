@@ -20,5 +20,7 @@ export default {
   START_TIME_ERROR: "start time should be less than end time",
   EVENT_DETAILS_REQUIRED: "Event Details Is Required",
   START_DATE_ERROR: "start date should be less than end date",
-  SEARCH_ERROR: "minimum 4 characters is required"
+  SEARCH_ERROR: "minimum 4 characters is required",
+  NO_BUSINESS_FOUND: "No Business Found",
+  NO_MORE_BUSINESS_TO_DISPLAY:"No more business to show"
 };
