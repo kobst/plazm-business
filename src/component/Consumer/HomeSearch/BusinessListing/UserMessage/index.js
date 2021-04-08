@@ -170,12 +170,17 @@ const UserMessage = ({ postData, businessData }) => {
   const loadingComments = useSelector(
     (state) => state.search.loadingPostComments
   );
-  const business = useSelector((state) => state.business.business);
+  // const business = useSelector((state) => state.business.business);
   const [description, setDescription] = useState("");
   const [displayCommentInput, setDisplayCommentInput] = useState(false);
   const [flag, setFlag] = useState(false);
   const user = useSelector((state) => state.user.user);
   const ws = useSelector((state) => state.user.ws);
+
+  ws.onmessage = (evt) => {
+    const message = JSON.parse(evt.data);
+    console.log("socket", message)
+  }
   /** to add comment function */
   const addComment = async (obj) => {
     ws.send(
@@ -185,7 +190,7 @@ const UserMessage = ({ postData, businessData }) => {
         type: "Post",
         comment: obj.body,
         userId: obj.userId,
-        businessId: business._id,
+        businessId: businessData._id,
         taggedUsers: obj.taggedUsers,
       })
     );
