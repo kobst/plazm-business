@@ -7,18 +7,15 @@ import {
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  fetchPostComments,
   AddLikeToPost,
   addLikeToComment,
-  addLikeViaSocket,
-  fetchCommentReplies,
 } from "../../../../../reducers/businessReducer";
 import {
   fetchSearchPostComments,
-  fetchSearchCommentReplies
+  fetchSearchCommentReplies,
+  addLikeViaSocket,
 } from "../../../../../reducers/searchReducer";
 import { unwrapResult } from "@reduxjs/toolkit";
-
 
 const BottomBarLikes = styled.div`
   display: flex;
@@ -106,7 +103,7 @@ const LikesBar = ({
   commentId,
   commentLikes,
   setFlag,
-  business
+  business,
 }) => {
   const [eventDate, setEventDate] = useState();
   const [userLikedPost, setUserLikedPost] = useState(false);
@@ -174,10 +171,19 @@ const LikesBar = ({
     setDisplayComments(!displayComments);
     if (type === "comment") {
       setFlag(false);
-      if (displayComments === false) dispatch(fetchSearchPostComments({postId:postId,businessId: business._id}));
+      if (displayComments === false)
+        dispatch(
+          fetchSearchPostComments({ postId: postId, businessId: business._id })
+        );
     } else if (type === "reply") {
       setFlag(true);
-      if (displayComments === false) dispatch(fetchSearchCommentReplies({commentId:commentId,businessId: business._id}));
+      if (displayComments === false)
+        dispatch(
+          fetchSearchCommentReplies({
+            commentId: commentId,
+            businessId: business._id,
+          })
+        );
     }
   };
 
@@ -189,7 +195,7 @@ const LikesBar = ({
         userId: user._id,
       };
       dispatch(
-        addLikeViaSocket({ postId: postId, like: { ...obj, _id: user._id } })
+        addLikeViaSocket({ postId: postId, like: { ...obj, _id: user._id },businessId:business._id })
       );
       const data = await dispatch(AddLikeToPost(obj));
       const response = await unwrapResult(data);
@@ -199,7 +205,7 @@ const LikesBar = ({
             action: "like",
             postId: postId,
             like: response.like,
-            businessId: business[0]._id,
+            businessId: business._id,
             type: "Post",
           })
         );
@@ -223,7 +229,7 @@ const LikesBar = ({
             postId: response.postId,
             like: response.like,
             commentId: response.commentId,
-            businessId: business[0]._id,
+            businessId: business._id,
             type: "Post",
           })
         );
@@ -236,11 +242,20 @@ const LikesBar = ({
     if (type === "reply") {
       setDisplayComments(!displayComments);
       setFlag(true);
-      if (displayComments === false) dispatch(fetchSearchCommentReplies({commentId:commentId,businessId: business._id}));
+      if (displayComments === false)
+        dispatch(
+          fetchSearchCommentReplies({
+            commentId: commentId,
+            businessId: business._id,
+          })
+        );
     } else if (type === "comment") {
       setFlag(false);
       setDisplayComments(!displayComments);
-      if (displayComments === false) dispatch(fetchSearchPostComments({postId:postId,businessId: business._id}));
+      if (displayComments === false)
+        dispatch(
+          fetchSearchPostComments({ postId: postId, businessId: business._id })
+        );
     }
   };
   return (

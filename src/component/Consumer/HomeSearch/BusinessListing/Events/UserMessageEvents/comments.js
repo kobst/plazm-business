@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import ProfileImg from "../../../../../images/profile-img.png";
+import ProfileImg from "../../../../../../images/profile-img.png";
 import ReplyInput from "./ReplyInput";
-import LikesBar from "../LikesBar";
+import LikesBar from "../LikeBar";
 import { Scrollbars } from "react-custom-scrollbars";
 import { useSelector } from "react-redux";
-import ValueLoader from "../../../../../utils/loader";
+import ValueLoader from "../../../../../../utils/loader";
 import ScrollToBottom1 from "./ScrollToBottom1";
 
 const UserMessageContent = styled.div`
@@ -26,13 +26,11 @@ const UserMessageContent = styled.div`
   }
 `;
 
-const ReplyWrap = styled.div`
-  overflow-x: hidden;
-`;
+const ReplyWrap = styled.div``;
 
 const ProfileNameHeader = styled.div`
   display: flex;
-  padding: 0;
+  padding: 0 12px;
   margin: 15px 0;
 `;
 
@@ -98,32 +96,31 @@ const LoaderWrap = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 30px 0 30px;
+  margin: 30px 0 10px;
 `;
-
-const Comments = ({ i, postData, displayComments, setFlag, flag, business }) => {
+const Comments = ({ i, eventData, displayComments, setFlag, flag, business }) => {
   const [displayReply, setDisplayReply] = useState(false);
   const [displayReplyInput, setDisplayReplyInput] = useState(false);
   const [replyDescription, setReplyDescription] = useState("");
   const ws = useSelector((state) => state.user.ws);
-  const loadingReplies = useSelector((state) => state.search.loadingReplies);
-
+  const loadingReplies = useSelector((state) => state.search.loadingEventReplies);
   /** to add reply function */
   const addReply = async (obj) => {
-    setReplyDescription("");
     ws.send(
       JSON.stringify({
         action: "message",
         commentId: obj._id, //commentId
         userId: obj.userId, //userId
-        comment: "@" + i.userId.name + " " + obj.body,
+        comment: obj.replyUser + " " + obj.body,
         postId: obj.postId,
         businessId: business._id,
         taggedUsers: obj.taggedUsers,
-        type: "Post",
+        type: "Event",
       })
     );
+    setReplyDescription("");
   };
+
   /** to highlight the user mentions mentioned in post description */
   const findDesc = (value, mentions) => {
     let divContent = value;
@@ -163,85 +160,81 @@ const Comments = ({ i, postData, displayComments, setFlag, flag, business }) => 
           </ChatInput>
           <LikesBar
             type="reply"
+            business={business}
+            commentId={i._id}
             date={new Date(i.createdAt)}
-            setDisplayComments={setDisplayReply}
-            displayComments={displayReply}
-            name={i.userId.name}
             totalLikes={i.likes.length}
             totalComments={i.totalReplies}
-            commentId={i._id}
+            setDisplayReply={setDisplayReply}
+            displayReply={displayReply}
             commentLikes={i.likes}
             setDisplayReplyInput={setDisplayReplyInput}
             displayReplyInput={displayReplyInput}
+            eventId={eventData._id}
             flag={flag}
             setFlag={setFlag}
-            business={business}
           />
           <Scrollbars
             autoHeight
             autoHeightMin={0}
             autoHeightMax={300}
             thumbMinSize={30}
-            style={{ overflowX: "hidden" }}
             className="InnerScroll"
           >
-            <ReplyWrap style={{ overflowX: "hidden" }}>
-              {displayReply && i.replies.length > 0 && !loadingReplies ? (
-                <div>
-                  {i.replies.map((j, key) => (
-                    <>
-                      <UserMessageContent
-                        className="UserReplyContent"
-                        key={key}
-                      >
-                        <ProfileNameHeader>
-                          <ProfileThumb>
-                            <img
-                              src={j.userId.photo ? j.userId.photo : ProfileImg}
-                              alt=""
-                            />
-                          </ProfileThumb>
-                          <ProfileNameWrap>
-                            <ProfileName>
-                              <span>by</span>
-                              {j.userId.name}{" "}
-                            </ProfileName>
-                            <ChatInput>
-                              {" "}
-                              {findDesc(j.body, j.taggedUsers)}
-                            </ChatInput>
-                            <LikesBar
-                              date={new Date(j.created_on)}
-                              type="commentReply"
-                            />
-                          </ProfileNameWrap>
-                        </ProfileNameHeader>
-                      </UserMessageContent>
-                    </>
-                  ))}
-                  <ScrollToBottom1 />
-                </div>
-              ) : displayReply && loadingReplies ? (
+            <ReplyWrap>
+              {(displayReply || displayReplyInput) &&
+              i.replies.length > 0 &&
+              !loadingReplies ? (
+                i.replies.map((j, key) => (
+                  <>
+                    <UserMessageContent className="UserReplyContent" key={key}>
+                      <ProfileNameHeader>
+                        <ProfileThumb>
+                          <img
+                            src={j.userId.photo ? j.userId.photo : ProfileImg}
+                            alt=""
+                          />
+                        </ProfileThumb>
+                        <ProfileNameWrap>
+                          <ProfileName>
+                            <span>by</span>
+                            {j.userId.name}{" "}
+                          </ProfileName>
+                          <ChatInput>
+                            {" "}
+                            {findDesc(j.body, j.taggedUsers)}
+                          </ChatInput>
+                          <LikesBar
+                            date={new Date(j.created_on)}
+                            type="commentReply"
+                          />
+                        </ProfileNameWrap>
+                      </ProfileNameHeader>
+                    </UserMessageContent>
+                  </>
+                ))
+              ) : (displayReply || displayReplyInput) && loadingReplies ? (
                 <LoaderWrap>
                   <ValueLoader />
                 </LoaderWrap>
               ) : null}
+              {displayReply || displayReplyInput ? (
+                <>
+                  <ReplyInput
+                    type="reply"
+                    eventId={eventData._id}
+                    displayComments={displayComments}
+                    replyDescription={replyDescription}
+                    setReplyDescription={setReplyDescription}
+                    commentId={i._id}
+                    addReply={addReply}
+                    name={i.userId.name}
+                  />
+                  <ScrollToBottom1 />
+                </>
+              ) : null}
             </ReplyWrap>
           </Scrollbars>
-          {displayReply && !loadingReplies ? (
-            <>
-              <ReplyInput
-                type="reply"
-                postId={postData.postId}
-                displayComments={displayComments}
-                replyDescription={replyDescription}
-                setReplyDescription={setReplyDescription}
-                commentId={i._id}
-                addReply={addReply}
-                name={i.userId.name}
-              />
-            </>
-          ) : null}
         </ProfileNameWrap>
       </ProfileNameHeader>
     </UserMessageContent>

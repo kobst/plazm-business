@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ProfileImg from "../../../../../images/profile-img.png";
 import BusinessHashTags from "../BusinessHashTags";
-import { MdFavorite, MdAdd, MdRemove } from "react-icons/md";
+import { MdFavorite, MdFavoriteBorder, MdAdd, MdRemove } from "react-icons/md";
 import UserMessage from "../UserMessage";
 import UserMessageEvents from "../Events/UserMessageEvents";
+import { AddBusinessFavorite, RemoveBusinessFavorite } from "../../../../../reducers/userReducer";
+import { useDispatch, useSelector } from "react-redux";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -77,6 +79,9 @@ const ProfileName = styled.div`
     color: #ff0000;
     margin: 0;
   }
+  div {
+    cursor: pointer;
+  }
   display: flex;
   flex-direction: row;
   span {
@@ -119,6 +124,35 @@ const RightWrap = styled.div`
 /** display favorite business */
 const DisplayFavoriteBusiness = ({ data }) => {
   const [displayData, setDisplayData] = useState(false);
+  const [favoriteBusiness, setFavoriteBusiness] = useState(false);
+  const user = useSelector((state) => state.user.user);
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    const find = user.favorites.find((i) => i === data.favorites._id);
+    if (find) {
+      setFavoriteBusiness(true);
+    } else setFavoriteBusiness(false);
+  }, [user, data]);
+
+  /** to add a business to user favorites */
+  const addFavorite = async () => {
+    const obj = {
+      businessId: data.favorites._id,
+      userId: user._id,
+    };
+    await dispatch(AddBusinessFavorite(obj));
+  };
+
+  /** to remove a business to user favorites */
+  const removeFavorite = async () => {
+    const obj = {
+      businessId: data.favorites._id,
+      userId: user._id,
+    };
+    await dispatch(RemoveBusinessFavorite(obj));
+  };
+
   return data ? (
     <>
       <UserMsgWrap>
@@ -136,9 +170,25 @@ const DisplayFavoriteBusiness = ({ data }) => {
             </ProfileThumb>
             <ProfileNameWrap>
               <ProfileName>
-                {data.favorites.company_name}
+                <div
+                  onClick={() =>
+                    (window.location.href = `/b/${data.favorites._id}`)
+                  }
+                >
+                  {data.favorites.company_name}
+                </div>
                 <RightWrap>
-                  <MdFavorite />
+                  {favoriteBusiness ? (
+                    <MdFavorite
+                      onClick={() => removeFavorite()}
+                      className="favoriteBusiness"
+                    />
+                  ) : (
+                    <MdFavoriteBorder
+                      onClick={() => addFavorite()}
+                      className="favoriteBusinessBorder"
+                    />
+                  )}
                   {!displayData ? (
                     <MdAdd onClick={() => setDisplayData(true)} />
                   ) : (
@@ -163,7 +213,11 @@ const DisplayFavoriteBusiness = ({ data }) => {
           {/* to display posts */}
           {data.posts.length > 0
             ? data.posts.map((i, key) => (
-                <UserMessage postData={i} key={key} businessData={data.favorites} />
+                <UserMessage
+                  postData={i}
+                  key={key}
+                  businessData={data.favorites}
+                />
               ))
             : null}
 

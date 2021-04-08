@@ -72,8 +72,11 @@ const ProfileName = styled.div`
   font-weight: 700;
   color: #ff2e9a;
   svg {
-    color: #FF0000;
+    color: #ff0000;
     margin: 0;
+  }
+  div {
+    cursor: pointer;
   }
   display: flex;
   flex-direction: row;
@@ -133,7 +136,9 @@ const DisplayFavoriteBusiness = ({ data }) => {
             </ProfileThumb>
             <ProfileNameWrap>
               <ProfileName>
-                {data.favorites.company_name}
+                <div onClick={() => window.location.href = `/b/${data.favorites._id}`}>
+                  {data.favorites.company_name}
+                </div>
                 <RightWrap>
                   <MdFavorite />
                 </RightWrap>

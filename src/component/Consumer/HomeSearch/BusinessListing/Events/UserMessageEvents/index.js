@@ -1,11 +1,22 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import ProfileImg from "../../../../../../images/profile-img.png";
-import LikesBar from "../../LikesBar";
+import LikeBar from "../LikeBar";
 import DateBar from "../DateBar";
 import TimeBar from "../TimeBar";
 import ImageComment from "../ImageComment";
 import { useSelector, useDispatch } from "react-redux";
+import { Scrollbars } from "react-custom-scrollbars";
+import ValueLoader from "../../../../../../utils/loader";
+import ReplyInput from "./ReplyInput";
+import Comments from "./comments";
+import ScrollToBottom from "./ScrollToBottom";
+import {
+  addCommentToEvent,
+  addEventLikeToCommentViaSocket,
+  addEventLikeViaSocket,
+  addReplyToEventComment,
+} from "../../../../../../reducers/searchReducer";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -100,23 +111,43 @@ const LoaderWrap = styled.div`
   margin: 30px 0 10px;
 `;
 
-const UserMessageEvents = ({ eventData,businessInfo }) => {
-  console.log(eventData)
-//   const businessInfo = useSelector((state) => state.business.business);
+const UserMessageEvents = ({ eventData, businessInfo }) => {
   const [displayEventComments, setDisplayEventComments] = useState(false);
   const [flag, setFlag] = useState(false);
-  const business = useSelector((state) => state.business.business);
   const [displayEventCommentInput, setDisplayEventCommentInput] = useState(
     false
   );
   const [description, setDescription] = useState("");
   const loadingComments = useSelector(
-    (state) => state.event.loadingEventComments
+    (state) => state.search.loadingEventComments
   );
   const ws = useSelector((state) => state.user.ws);
   const user = useSelector((state) => state.user.user);
-  const selectedDate = useSelector((state) => state.event.selectedDate);
   const dispatch = useDispatch();
+
+  ws.onmessage = (evt) => {
+    const message = JSON.parse(evt.data);
+    if (message.commentInfo && message.commentInfo.type === "Events") {
+      /** to add event comment via socket */
+      setDescription("");
+      dispatch(addCommentToEvent(message));
+    } else if (
+      message.comment &&
+      message.commentId &&
+      message.type === "Event"
+    ) {
+      /** to add event reply via socket */
+      dispatch(addReplyToEventComment(message));
+    } else if (message.like && message.commentId && message.type === "Event") {
+      /** to add comment like via socket */
+      dispatch(addEventLikeToCommentViaSocket(message));
+    } else if (message.like && message.type === "Event") {
+      /** to add post like via socket */
+      if (message.like._id !== user._id) {
+        dispatch(addEventLikeViaSocket(message));
+      }
+    }
+  };
 
   /** to add comment on event function */
   const addComment = async (obj) => {
@@ -127,7 +158,7 @@ const UserMessageEvents = ({ eventData,businessInfo }) => {
         type: "Events",
         comment: obj.body,
         userId: obj.userId,
-        businessId: business[0]._id,
+        businessId: businessInfo._id,
         taggedUsers: obj.taggedUsers,
       })
     );
@@ -174,11 +205,20 @@ const UserMessageEvents = ({ eventData,businessInfo }) => {
               startTime={new Date(eventData.eventSchedule.start_time)}
               endTime={new Date(eventData.eventSchedule.end_time)}
             />
-            <LikesBar
+            <LikeBar
               type="comment"
+              eventId={eventData._id}
               date={new Date(eventData.createdAt)}
               totalLikes={eventData.likes.length}
               totalComments={eventData.totalComments}
+              setDisplayEventComments={setDisplayEventComments}
+              displayEventComments={displayEventComments}
+              postLikes={eventData.likes}
+              displayEventCommentInput={displayEventCommentInput}
+              setDisplayEventCommentInput={setDisplayEventCommentInput}
+              flag={flag}
+              setFlag={setFlag}
+              business={businessInfo}
             />
           </ProfileNameWrap>
         </ProfileNameHeader>
@@ -186,7 +226,7 @@ const UserMessageEvents = ({ eventData,businessInfo }) => {
           image={eventData.media.length > 0 ? eventData.media[0].image : ""}
         />
       </UserMessageContent>
-      {/* <Scrollbars
+      <Scrollbars
         autoHeight
         autoHeightMin={0}
         autoHeightMax={300}
@@ -199,12 +239,13 @@ const UserMessageEvents = ({ eventData,businessInfo }) => {
           eventData.comments.length > 0 ? (
             eventData.comments.map((i, key) => {
               return (
-                <Comment
+                <Comments
                   key={key}
                   i={i}
                   eventData={eventData}
                   flag={flag}
                   setFlag={setFlag}
+                  business={businessInfo}
                 />
               );
             })
@@ -226,7 +267,7 @@ const UserMessageEvents = ({ eventData,businessInfo }) => {
             </>
           ) : null}
         </ReplyWrap>
-      </Scrollbars> */}
+      </Scrollbars>
     </>
   );
 };

@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import ProfileImg from "../../../../../images/profile-img.png";
-// import ReplyInput from "./ReplyInput";
 import LikesBar from "../LikesBar";
 import { useSelector, useDispatch } from "react-redux";
-// import ValueLoader from "../../../../../../../utils/loader";
 import { Scrollbars } from "react-custom-scrollbars";
-// import Comment from "./comments";
-// import ScrollToBottom from "./ScrollToBottom";
-// import { setWs } from "../../../../../../../reducers/userReducer";
 import { RiArrowDropRightFill } from "react-icons/ri";
 import ValueLoader from "../../../../../utils/loader";
 import ReplyInput from "./ReplyInput";
 import Comments from "./Comments";
 import ScrollToBottom from "./ScrollToBottom";
+import {
+  addCommentToPost,
+  addLikeToCommentViaSocket,
+  addLikeViaSocket,
+  addReplyToComment,
+} from "../../../../../reducers/searchReducer";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -170,7 +171,6 @@ const UserMessage = ({ postData, businessData }) => {
   const loadingComments = useSelector(
     (state) => state.search.loadingPostComments
   );
-  // const business = useSelector((state) => state.business.business);
   const [description, setDescription] = useState("");
   const [displayCommentInput, setDisplayCommentInput] = useState(false);
   const [flag, setFlag] = useState(false);
@@ -179,8 +179,24 @@ const UserMessage = ({ postData, businessData }) => {
 
   ws.onmessage = (evt) => {
     const message = JSON.parse(evt.data);
-    console.log("socket", message)
-  }
+    /** to add reply via socket */
+    if (message.comment && message.commentId && message.type === "Post") {
+      dispatch(addReplyToComment(message));
+    } else if (message.commentInfo && message.commentInfo.type === "Post") {
+      /** to add comment via socket */
+      setDescription("");
+      dispatch(addCommentToPost(message));
+    } else if (message.like && message.commentId) {
+      /** to add comment like via socket */
+      dispatch(addLikeToCommentViaSocket(message));
+    } else if (message.like && message.type === "Post") {
+      /** to add post like via socket */
+      if (message.like._id !== user._id) {
+        dispatch(addLikeViaSocket(message));
+      }
+    }
+  };
+  
   /** to add comment function */
   const addComment = async (obj) => {
     ws.send(
