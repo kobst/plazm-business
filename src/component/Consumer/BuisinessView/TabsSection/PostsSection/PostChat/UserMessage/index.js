@@ -17,6 +17,7 @@ import Comment from "./comments";
 import ScrollToBottom from "./ScrollToBottom";
 import { setWs } from "../../../../../../../reducers/userReducer";
 import { RiArrowDropRightFill } from "react-icons/ri";
+import ReactTooltip from "react-tooltip";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -122,7 +123,7 @@ const LoaderWrap = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 30px 0 10px;
+  margin: 30px 0 20px;
 `;
 
 const RightArrowSec = styled.div`
@@ -150,8 +151,8 @@ const DescriptionBox = styled.div`
   display: flex;
   align-items: center;
   text-align: center;
-  color: #FFFFFF;
-  background: #FF2E9A;
+  color: #ffffff;
+  background: #ff2e9a;
   border-radius: 12px;
   padding: 2px 10px;
   max-width: 190px;
@@ -159,11 +160,12 @@ const DescriptionBox = styled.div`
   span {
     display: -webkit-box;
     -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;  
+    -webkit-box-orient: vertical;
     overflow: hidden;
     margin: 0;
     font-weight: bold;
     font-size: 10px;
+    max-width: 20ch
   }
 `;
 
@@ -198,9 +200,15 @@ const UserMessage = ({ postData }) => {
       /** to add post via socket */
       if (message.businessId === business._id) {
         if (message.userId === user._id) {
-          if (filters.PostsByMe === true && message.post.postDetails.listId === null) {
+          if (
+            filters.PostsByMe === true &&
+            message.post.postDetails.listId === null
+          ) {
             dispatch(addPostViaSocket(message));
-          } else if(filters.MySubscriptions === true && message.post.postDetails.listId !== null) {
+          } else if (
+            filters.MySubscriptions === true &&
+            message.post.postDetails.listId !== null
+          ) {
             dispatch(addPostViaSocket(message));
           }
         } else {
@@ -354,12 +362,29 @@ const UserMessage = ({ postData }) => {
                 {postData.postDetails.ownerId === null
                   ? business.company_name
                   : postData.postDetails.ownerId.name}{" "}
-                  {postData.postDetails.listId!==null?<RightArrowSec>
-                      <ArrowRight><RiArrowDropRightFill /></ArrowRight>
-                      <DescriptionBox>
+                {postData.postDetails.listId !== null ? (
+                  <RightArrowSec>
+                    <ArrowRight>
+                      <RiArrowDropRightFill />
+                    </ArrowRight>
+                    <DescriptionBox>
+                      <a
+                        data-for="custom-class"
+                        data-tip={postData.postDetails.listId.name}
+                        href="!#"
+                      >
                         <span>{postData.postDetails.listId.name}</span>
-                      </DescriptionBox>
-                  </RightArrowSec>:null}
+                      </a>
+                      <ReactTooltip
+                        id="custom-class"
+                        className="extraClass"
+                        effect="solid"
+                        backgroundColor="#ff2e9a"
+                        textColor="white"
+                      />
+                    </DescriptionBox>
+                  </RightArrowSec>
+                ) : null}
               </ProfileName>
               <ChatInput>
                 <p>
@@ -399,20 +424,20 @@ const UserMessage = ({ postData }) => {
             !loadingComments &&
             postData.comments.length > 0 ? (
               <>
-              {postData.comments.map((i, key) => {
-                return (
-                  <Comment
-                    i={i}
-                    key={key}
-                    postData={postData}
-                    displayComments={displayComments}
-                    setFlag={setFlag}
-                    flag={flag}
-                  />
-                );
-              })}
-               {flag === false ? <ScrollToBottom /> : null} 
-               </>
+                {postData.comments.map((i, key) => {
+                  return (
+                    <Comment
+                      i={i}
+                      key={key}
+                      postData={postData}
+                      displayComments={displayComments}
+                      setFlag={setFlag}
+                      flag={flag}
+                    />
+                  );
+                })}
+                {flag === false ? <ScrollToBottom /> : null}
+              </>
             ) : (displayComments || displayCommentInput) && loadingComments ? (
               <LoaderWrap>
                 <ValueLoader />

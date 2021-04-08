@@ -33,6 +33,7 @@ const AddPostModal = ({ businessId, closeModal }) => {
   const [description, setDescription] = useState("");
   const [mentionArrayList, setMentionArrayList] = useState([]);
   const [mentionArrayUser, setMentionArrayUser] = useState([]);
+  const [imageUpload, setImageUpload] = useState(null);
   return (
     <>
       <ModalContent>
@@ -50,7 +51,11 @@ const AddPostModal = ({ businessId, closeModal }) => {
             setDisplayCreateList={setDisplayCreateList}
           />
         ) : displayCreateList ? (
-          <CreateListModel setSelectedListForPost={setSelectedListForPost} setDisplayList={setDisplayList} setDisplayCreateList={setDisplayCreateList}/>
+          <CreateListModel
+            setSelectedListForPost={setSelectedListForPost}
+            setDisplayList={setDisplayList}
+            setDisplayCreateList={setDisplayCreateList}
+          />
         ) : (
           <ModalPostContent
             closeModal={closeModal}
@@ -64,6 +69,8 @@ const AddPostModal = ({ businessId, closeModal }) => {
             setMentionArrayList={setMentionArrayList}
             mentionArrayUser={mentionArrayUser}
             setMentionArrayUser={setMentionArrayUser}
+            imageUpload={imageUpload}
+            setImageUpload={setImageUpload}
           />
         )}
       </ModalContent>

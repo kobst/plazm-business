@@ -75,7 +75,7 @@ const BottomButtons = ({
           onClick={() => rightBtn()}
           disabled={
             type === "post" &&
-            (loader || description === "" || !description.trim() === true)
+            (loader)
           }
         >
           {type === "post" ? (

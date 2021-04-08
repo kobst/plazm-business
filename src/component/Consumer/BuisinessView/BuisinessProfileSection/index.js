@@ -1,13 +1,18 @@
-import React,{ useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ProfileImg from "../../../../images/profile-img.png";
 import FacebookImg from "../../../../images/Facebook-new.svg";
 import TwitterImg from "../../../../images/Twitter-new.svg";
 import LinkedInImg from "../../../../images/Linkedin-new.svg";
 import InstagramImg from "../../../../images/Instagram-new.svg";
+import FavoritesIcon from "../../../../images/favorites.png";
+import FavoritesIconFilled from "../../../../images/favorites-filled.png";
 import { useSelector, useDispatch } from "react-redux";
-import { MdFavoriteBorder, MdFavorite, MdKeyboardArrowUp } from "react-icons/md";
-import { AddBusinessFavorite, RemoveBusinessFavorite } from "../../../../reducers/userReducer";
+import { MdKeyboardArrowUp } from "react-icons/md";
+import {
+  AddBusinessFavorite,
+  RemoveBusinessFavorite,
+} from "../../../../reducers/userReducer";
 
 const ArrowDown = styled.div`
   background: #ff2e9a;
@@ -156,7 +161,7 @@ const BuisinessProfileSection = ({ setDisplayBusinessProfile }) => {
     };
     await dispatch(RemoveBusinessFavorite(obj));
   };
-  
+
   return (
     <>
       <BuisinessViewContent>
@@ -177,14 +182,18 @@ const BuisinessProfileSection = ({ setDisplayBusinessProfile }) => {
                 <span>{businessProfile.company_name}</span>
                 {/* business favorite toggle */}
                 {favoriteBusiness ? (
-                  <MdFavorite
+                  <img
+                    src={FavoritesIconFilled}
                     onClick={() => removeFavorite()}
                     className="favoriteBusiness"
+                    alt=""
                   />
                 ) : (
-                  <MdFavoriteBorder
+                  <img
+                    src={FavoritesIcon}
                     onClick={() => addFavorite()}
                     className="favoriteBusinessBorder"
+                    alt=""
                   />
                 )}
               </BusinessName>

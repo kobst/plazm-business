@@ -63,7 +63,7 @@ const SearchIconDiv = styled.div`
   justify-content: center;
   cursor: pointer;
   svg {
-    font-size: 30px;
+    font-size: 24px;
     color: #c4c4c4;
     font-weight: bold;
   }
@@ -100,7 +100,7 @@ const SelectedListed = styled.h1`
 
 const ListingWrap = styled.div`
   width: 100%;
-  border-bottom: 1px dashed #ffffff;
+  /* border-bottom: 1px dashed #ffffff; */
   padding: 0 0 8px;
   display: flex;
   flex-direction: column;
@@ -111,11 +111,11 @@ const ListingList = styled.div`
   font-weight: 500;
   font-size: 12px;
   color: #ffffff;
-  min-height: 30px;
+  min-height: 36px;
   align-items: center;
   display: flex;
   justify-content: space-between;
-  padding: 0 7px;
+  padding: 5px 7px;
   cursor: pointer;
   transition: 0.3s;
   .RightTickImg {
@@ -131,6 +131,9 @@ const ListingList = styled.div`
   }
   &.selectedList {
     background-color: #201d42;
+  }
+  @media (max-width: 767px) {
+    width: 93%;
   }
 `;
 
@@ -152,6 +155,14 @@ const LoaderWrap = styled.div`
   margin: 30px 0 10px;
 `;
 
+const NoListMessage = styled.div`
+  font-style: normal;
+  font-size: 12px;
+  line-height: normal;
+  margin: 0 0 5px;
+  color: #fff;
+`;
+
 const AllListings = ({
   setDisplayList,
   setSelectedListForPost,
@@ -162,7 +173,7 @@ const AllListings = ({
   setMentionArrayList,
   mentionArrayUser,
   setMentionArrayUser,
-  setDisplayCreateList
+  setDisplayCreateList,
 }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
@@ -170,14 +181,14 @@ const AllListings = ({
   const [userListsFiltered, setUserListsFiltered] = useState([]);
   const loadingUserLists = useSelector((state) => state.list.loadingUserLists);
   const [selectedList, setSelectedList] = useState(null);
-  const [search, setSearch] = useState("")
+  const [search, setSearch] = useState("");
 
-  const userLists = userListsFiltered.length >0 ? userListsFiltered : userListsFromStore
+  const userLists =
+    userListsFiltered.length > 0 ? userListsFiltered : userListsFromStore;
 
   /**fetch user list */
   useEffect(() => {
-    if(userLists.length === 0)
-    dispatch(fetchUserLists(user._id));
+    if (userLists.length === 0) dispatch(fetchUserLists(user._id));
   }, [dispatch, user._id, userLists.length]);
 
   /** to set selected list */
@@ -190,9 +201,13 @@ const AllListings = ({
   }, [selectedListForPost, userLists]);
 
   /** lists search functionality implemented */
-  useEffect(()=>{
-    setUserListsFiltered(userListsFromStore.filter(entry => entry.name.toLowerCase().indexOf(search.toLowerCase())!==-1))
-  },[search,userListsFromStore])
+  useEffect(() => {
+    setUserListsFiltered(
+      userListsFromStore.filter(
+        (entry) => entry.name.toLowerCase().indexOf(search.toLowerCase()) !== -1
+      )
+    );
+  }, [search, userListsFromStore]);
 
   /** to select a particular list */
   const selectList = (id) => {
@@ -203,12 +218,12 @@ const AllListings = ({
   /** on change handler for search */
   const searchList = (e) => {
     setSearch(e.target.value);
-  }
+  };
   return (
     <>
       <AllListingsContent>
         <SearchWrap>
-          <Input onChange={(e)=>searchList(e)}/>
+          <Input onChange={(e) => searchList(e)} />
           <SearchIconDiv>
             <FiSearch />
           </SearchIconDiv>
@@ -237,6 +252,8 @@ const AllListings = ({
               <LoaderWrap>
                 <ValueLoader />
               </LoaderWrap>
+            ) : userLists.length === 0 ? (
+              <NoListMessage><center>No User lists to display</center></NoListMessage>
             ) : (
               userLists.map((i, key) => {
                 return (
