@@ -100,7 +100,7 @@ const SelectedListed = styled.h1`
 
 const ListingWrap = styled.div`
   width: 100%;
-  border-bottom: 1px dashed #ffffff;
+  /* border-bottom: 1px dashed #ffffff; */
   padding: 0 0 8px;
   display: flex;
   flex-direction: column;
@@ -131,6 +131,9 @@ const ListingList = styled.div`
   }
   &.selectedList {
     background-color: #201d42;
+  }
+  @media (max-width: 767px) {
+    width: 93%;
   }
 `;
 
