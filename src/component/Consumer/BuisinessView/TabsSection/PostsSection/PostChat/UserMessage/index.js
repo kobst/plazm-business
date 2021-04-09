@@ -380,13 +380,12 @@ const UserMessage = ({ postData }) => {
                       <RiArrowDropRightFill />
                     </ArrowRight>
                     <DescriptionBox>
-                      <a
+                      <div
                         data-for="custom-class"
                         data-tip={postData.postDetails.listId.name}
-                        href="!#"
                       >
                         <span>{postData.postDetails.listId.name}</span>
-                      </a>
+                      </div>
                       <ReactTooltip
                         id="custom-class"
                         className="extraClass"
