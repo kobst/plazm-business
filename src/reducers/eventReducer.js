@@ -147,6 +147,7 @@ export const slice = createSlice({
     loadingReplies: false,
     initialWeekEvents: [],
     loadingForInitialWeek: false,
+    weekBtnClicked: false
   },
   reducers: {
     nextWeekDate: (state) => {
@@ -182,6 +183,9 @@ export const slice = createSlice({
         .toDate();
       startOfWeek.setUTCHours(0, 0, 0, 0);
       state.selectedDate = startOfWeek;
+    },
+    setWeekButtonClicked: (state,action) => {
+      state.weekBtnClicked = action.payload;
     },
   },
   extraReducers: {
@@ -308,12 +312,21 @@ export const slice = createSlice({
           }));
           eventsArr.push({ ...findEvent, comments: arr });
           eventsArr = eventsArr.concat(findOtherEvents);
+          if(state.weekBtnClicked) {
+            state.events = eventsArr.sort((a, b) => {
+              return (
+                new Date(a.eventSchedule.start_time) -
+                new Date(b.eventSchedule.start_time)
+              );
+            });
+          } else {
           state.events = eventsArr.sort((a, b) => {
             return (
               new Date(b.eventSchedule.start_time) -
               new Date(a.eventSchedule.start_time)
             );
           });
+          }
         }
       }
     },
@@ -534,5 +547,6 @@ export const {
   previousWeekDate,
   setCurrentDate,
   setSelectedDate,
+  setWeekButtonClicked
 } = slice.actions;
 export default slice.reducer;
