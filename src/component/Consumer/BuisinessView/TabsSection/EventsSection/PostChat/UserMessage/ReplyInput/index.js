@@ -16,6 +16,9 @@ const ChatContent = styled.div`
   flex-direction: column;
   &.InnerReply {
     margin: 30px 0 0;
+    @media (max-width: 767px) {
+      padding-left: 0;
+    }
   }
   /* overflow: hidden; */
   @media (max-width: 767px) {
@@ -96,6 +99,9 @@ const ProfileNameWrap = styled.div`
   }
   @media (max-width: 767px) {
     padding: 0 20px 0px 0px;
+  }
+  @media (max-width: 359px) {
+    padding: 0 10px 0px 0px;
   }
 `;
 
