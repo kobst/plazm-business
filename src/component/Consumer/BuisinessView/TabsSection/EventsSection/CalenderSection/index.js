@@ -126,6 +126,7 @@ const DaysDiv = styled.div`
       background: #ff2e9a;
       position: absolute;
       bottom: -6px;
+      left: 10px;
     }
   }
   &.selectedDay {

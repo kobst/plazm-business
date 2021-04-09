@@ -25,6 +25,7 @@ const PostContent = styled.div`
     margin: 0 0 14px;
     border: 0;
     overflow-y: auto !important;
+    padding: 0;
   }
   .postInput_model__suggestions {
     background-color: #fe02b9 !important;
@@ -390,7 +391,7 @@ const ModalPostContent = ({
             value={description}
             onChange={handleChange}
             className="postInput_model"
-            placeholder="What’s Happening ?"
+            placeholder=""
             disabled={loader}
           >
             <Mention

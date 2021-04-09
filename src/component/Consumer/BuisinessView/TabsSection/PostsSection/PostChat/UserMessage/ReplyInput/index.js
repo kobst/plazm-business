@@ -37,6 +37,12 @@ const ChatContent = styled.div`
       border: 0;
       outline: 0;
   }
+  @media (max-width: 767px) {
+      font-size: 11px;
+    }
+    @media (max-width: 359px) {
+      font-size: 10px;
+    }
   .replyInput__suggestions {
     background-color: #FE02B9 !important;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -89,6 +95,9 @@ const ProfileNameWrap = styled.div`
   @media (max-width: 1024px) {
     padding: 0 45px 0px 0px;
   }
+  @media (max-width: 767px) {
+    padding: 0 20px 0px 0px;
+  }
 `;
 
 const InputWrap = styled.div`
@@ -122,6 +131,13 @@ const InputWrap = styled.div`
     color: #fff;
     padding: 0;
     width: 110px;
+    @media (max-width: 767px) {
+      width: 60px;
+      font-size: 11px;
+    }
+    @media (max-width: 359px) {
+      width: 50px;
+    }
   }
 `;
 const EmojiWrap = styled.div`
@@ -269,7 +285,7 @@ const ReplyInput = ({
             <img src={user.photo ? user.photo : ProfileImg} alt="" />
           </ProfileThumb>
           <ProfileNameWrap>
-            <InputWrap>
+            <InputWrap className={type === "reply" ? "InnerReplySection" : ""}>
               {type === "reply" ? <input value={"@" + name} readOnly /> : null}
               <MentionsInput
                 markup="@(__id__)[__display__]"

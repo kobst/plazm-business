@@ -10,6 +10,9 @@ const BottomBarLikes = styled.div`
   max-width: 536px;
   max-height: 224px;
   margin: 0;
+  @media (max-width: 767px) {
+    margin: 0 auto;
+  }
   img{
     max-height: 224px;
     /* width: 100%;
