@@ -9,8 +9,10 @@ export default {
   MINIMUM_PHONE_NUMBER_LENGTH: "minimum length 5 is required.",
   MAXIMUM_PHONE_NUMBER_LENGTH: "maximum length 50 is allowed.",
   INCORRECT_OLD_PASSWORD: "Incorrect old password entered",
-  PHONE_NUMBER_FORMAT: "Phone number format should contain country code, Example:- +917599xxxxxx or +1257xxxx",
-  PHONE_NUMBER_SHOULD_NOT_CONTAIN_ALPHANUMERIC: "Phone number should only contain numbers with country code",
+  PHONE_NUMBER_FORMAT:
+    "Phone number format should contain country code, Example:- +917599xxxxxx or +1257xxxx",
+  PHONE_NUMBER_SHOULD_NOT_CONTAIN_ALPHANUMERIC:
+    "Phone number should only contain numbers with country code",
   MINIMUM_TITLE_LENGTH: "minimum length 3 is required.",
   MAXIMUM_TITLE_LENGTH: "maximum length 255 is allowed.",
   MINIMUM_DESCRIPTION_LENGTH: "minimum length 3 is required.",
