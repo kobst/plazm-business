@@ -91,26 +91,42 @@ const CloseDiv = styled.div`
   }
 `;
 
+const NoData = styled.div`
+  font-style: normal;
+  font-size: 12px;
+  line-height: normal;
+  margin: 0 0 5px;
+  color: #fff;
+  text-align: center;
+`;
 /*
  * @desc: to display all business lists
  */
 const BusinessList = ({ setDisplayTab }) => {
   const [search, setSearch] = useState("");
-  const [favoriteBusinessFiltered, setFavoriteBusinessFiltered] = useState([])
+  const [favoriteBusinessFiltered, setFavoriteBusinessFiltered] = useState([]);
   const user = useSelector((state) => state.user.user);
   const loadingFavoriteBusiness = useSelector(
     (state) => state.user.loadingFavoriteBusiness
   );
   const favoriteBusiness = useSelector((state) => state.user.favoriteBusiness);
   const dispatch = useDispatch();
-  
-  const userFavorites = favoriteBusinessFiltered.length > 0 ? favoriteBusinessFiltered : search!==""?[]:favoriteBusiness
+
+  const userFavorites =
+    favoriteBusinessFiltered.length > 0
+      ? favoriteBusinessFiltered
+      : search !== ""
+      ? []
+      : favoriteBusiness;
 
   /** favorites search functionality implemented */
   useEffect(() => {
     setFavoriteBusinessFiltered(
       favoriteBusiness.filter(
-        (entry) => entry.favorites.company_name.toLowerCase().indexOf(search.toLowerCase()) !== -1
+        (entry) =>
+          entry.favorites.company_name
+            .toLowerCase()
+            .indexOf(search.toLowerCase()) !== -1
       )
     );
   }, [search, favoriteBusiness]);
@@ -149,9 +165,13 @@ const BusinessList = ({ setDisplayTab }) => {
             thumbMinSize={30}
           >
             <BusinessListWrap>
-              {userFavorites.map((i, key) => (
-                <DisplayFavoriteBusiness data={i} key={key} />
-              ))}
+              {userFavorites.length > 0 ? (
+                userFavorites.map((i, key) => (
+                  <DisplayFavoriteBusiness data={i} key={key} />
+                ))
+              ) : (
+                <NoData>No Business To Display</NoData>
+              )}
             </BusinessListWrap>
           </Scrollbars>
         </BuisinessViewContent>

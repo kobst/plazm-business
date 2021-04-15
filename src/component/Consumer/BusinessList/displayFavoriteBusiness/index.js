@@ -72,7 +72,7 @@ const ProfileName = styled.div`
   font-weight: 700;
   color: #ff2e9a;
   svg {
-    color: #FF0000;
+    color: #ff0000;
     margin: 0;
   }
   display: flex;
@@ -84,6 +84,9 @@ const ProfileName = styled.div`
   }
   @media (max-width: 1024px) {
     flex-direction: column;
+  }
+  div {
+    cursor: pointer;
   }
 `;
 
@@ -133,7 +136,13 @@ const DisplayFavoriteBusiness = ({ data }) => {
             </ProfileThumb>
             <ProfileNameWrap>
               <ProfileName>
-                {data.favorites.company_name}
+                <div
+                  onClick={() =>
+                    (window.location.href = `/b/${data.favorites._id}`)
+                  }
+                >
+                  {data.favorites.company_name}
+                </div>
                 <RightWrap>
                   <MdFavorite />
                 </RightWrap>

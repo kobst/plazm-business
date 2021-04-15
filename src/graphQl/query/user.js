@@ -63,9 +63,16 @@ const getUserFavorites = (id) => {
               success
               data {
                 favorites {
+                _id
                 filter_tags
                 company_name
                 default_image_url
+                hours_format {
+                  StartDay
+                  EndDay
+                  Start
+                  End
+              }
                 status
                 updatedAt
                 }
