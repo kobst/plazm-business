@@ -7,7 +7,7 @@ import LocalNav from "../../../../images/LocalNav.png";
 import ProfileImg from "../../../../images/profile-img.png";
 import Mention from "../../../../images/Mentions.png";
 import Notifications from "../../../../images/notifications.png";
-import Favorites from "../../../../images/favorites.png";
+import Favorites from "../../../../images/Left-favourite.png";
 import GridIcon from "../../../../images/Grid_icon.png";
 import ProfileSettingImg from "../../../../images/Profile_Setting.png";
 import { BiSearchAlt2 } from "react-icons/bi";

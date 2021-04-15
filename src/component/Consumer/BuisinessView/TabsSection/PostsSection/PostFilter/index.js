@@ -77,9 +77,14 @@ const DropdownContent = styled.div`
     display: flex;
     text-align: center;
     left: 78px;
+    @media (max-width: 767px) {
+      left: 0;
+    }
   }
   @media (max-width: 767px) {
-    top: 76px;
+    top: 31px;
+    right: 0;
+    left: -5px;
   }
   ul {
     list-style: none;

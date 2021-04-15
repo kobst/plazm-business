@@ -224,6 +224,10 @@
     right: 27px;
   }
 
+  .__react_component_tooltip {
+    max-width: 280px;
+  }
+
   @media (max-width:767px){ 
     #scrollableDiv {
       height: auto !important;

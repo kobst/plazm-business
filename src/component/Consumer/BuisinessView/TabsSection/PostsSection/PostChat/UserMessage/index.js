@@ -31,6 +31,9 @@ const UserMessageContent = styled.div`
   }
   &.UserReplyContent {
     padding: 10px 0 0 40px;
+    @media (max-width: 767px) {
+      padding: 10px 0 0 0px;
+    }
   }
   .InnerScroll {
     overflow-x: hidden;
@@ -52,6 +55,9 @@ const ProfileNameHeader = styled.div`
   display: flex;
   padding: 0;
   margin: 15px 0;
+  @media (max-width: 767px) {
+    width: 100%;
+  }
 `;
 
 const ProfileThumb = styled.div`
@@ -77,6 +83,9 @@ const ProfileNameWrap = styled.div`
   width: 100%;
   @media (max-width: 1024px) {
     padding: 0 45px 15px 0px;
+  }
+  @media (max-width: 767px) {
+    padding: 0 0px 15px 0px;
   }
 `;
 
@@ -157,6 +166,9 @@ const DescriptionBox = styled.div`
   padding: 2px 10px;
   max-width: 190px;
   cursor: pointer;
+  a {
+    text-decoration: none;
+  }
   span {
     display: -webkit-box;
     -webkit-line-clamp: 1;
@@ -368,13 +380,12 @@ const UserMessage = ({ postData }) => {
                       <RiArrowDropRightFill />
                     </ArrowRight>
                     <DescriptionBox>
-                      <a
+                      <div
                         data-for="custom-class"
                         data-tip={postData.postDetails.listId.name}
-                        href="!#"
                       >
                         <span>{postData.postDetails.listId.name}</span>
-                      </a>
+                      </div>
                       <ReactTooltip
                         id="custom-class"
                         className="extraClass"

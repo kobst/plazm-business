@@ -12,6 +12,7 @@ import {
   fetchInitialWeekEvents,
   setCurrentDate,
   setSelectedDate,
+  setWeekButtonClicked,
 } from "../../../../../../reducers/eventReducer";
 import ValueLoader from "../../../../../../utils/loader";
 
@@ -126,6 +127,7 @@ const DaysDiv = styled.div`
       background: #ff2e9a;
       position: absolute;
       bottom: -6px;
+      left: 10px;
     }
   }
   &.selectedDay {
@@ -308,6 +310,7 @@ const CalenderSection = ({ businessId }) => {
         todayClicked)
     ) {
       setSelectedCapsule(day)
+      dispatch(setWeekButtonClicked(false))
       const obj = {
         date: eventDate,
         day: day,
@@ -320,6 +323,7 @@ const CalenderSection = ({ businessId }) => {
 
   /** to toggle event date to previous week */
   const previousWeek =  () => {
+    dispatch(setWeekButtonClicked(true))
     setSelectedCapsule("");
     setCount(count - 1);
     setTodayClicked(false);
@@ -330,6 +334,7 @@ const CalenderSection = ({ businessId }) => {
 
   /** to toggle event date to next week */
   const nextWeek =  () => {
+    dispatch(setWeekButtonClicked(true))
     setSelectedCapsule("");
     setCount(count + 1);
     dispatch(nextWeekDate());
@@ -340,6 +345,7 @@ const CalenderSection = ({ businessId }) => {
 
   /** today function */
   const todayFunction = () => {
+    dispatch(setWeekButtonClicked(false))
     setTodayClicked(true);
     dispatch(setCurrentDate());
     dispatch(setSelectedDate(days[currentDate.getDay()]));
