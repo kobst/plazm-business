@@ -50,4 +50,43 @@ const getAllUsers = () => {
   };
   return graphQl;
 };
-export { getUser,getAllUsers };
+
+/*
+@desc: getUserFavoritesBusiness query
+*/
+const getUserFavorites = ({id,value}) => {
+  const graphQl = {
+    query: `
+          query GetUserFavoritesBusiness($id: ID!, $value: Int){
+            getUserFavoritesBusiness(input: {id:$id, value:$value}) {
+              message
+              success
+              data {
+                favorites {
+                _id
+                filter_tags
+                company_name
+                default_image_url
+                hours_format {
+                  StartDay
+                  EndDay
+                  Start
+                  End
+              }
+                status
+                updatedAt
+                }
+                totalPosts
+                totalFollowers
+              }
+              totalFavorites
+            }
+          }`,
+    variables: {
+      id: id,
+      value:value
+    },
+  };
+  return graphQl;
+};
+export { getUser,getAllUsers,getUserFavorites };

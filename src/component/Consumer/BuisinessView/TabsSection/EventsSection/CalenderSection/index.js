@@ -15,6 +15,8 @@ import {
   setWeekButtonClicked,
 } from "../../../../../../reducers/eventReducer";
 import ValueLoader from "../../../../../../utils/loader";
+import AddEventModal from "../../../../AddPostModal/addEventModal";
+import ModalComponent from "../../../../UI/Modal";
 
 const CalenderSectionWrap = styled.div`
   width: 100%;
@@ -209,9 +211,7 @@ const CalenderSection = ({ businessId }) => {
   const dispatch = useDispatch();
   const eventDate = useSelector((state) => state.event.date);
   const loadingForWeek = useSelector((state) => state.event.loadingForAWeek);
-  const loadingForInitialWeek = useSelector(
-    (state) => state.event.loadingForInitialWeek
-  );
+  const loader = useSelector((state) => state.event.loading);
   const events = useSelector((state) => state.event.events);
   const initialWeekEvents = useSelector(
     (state) => state.event.initialWeekEvents
@@ -228,20 +228,33 @@ const CalenderSection = ({ businessId }) => {
   const [todayClicked, setTodayClicked] = useState(false);
   const today = days[currentDate.getDay()];
   const [count, setCount] = useState(0);
-  const [selectedCapsule, setSelectedCapsule] = useState(days[currentDate.getDay()]);
+  const [selectedCapsule, setSelectedCapsule] = useState(
+    days[currentDate.getDay()]
+  );
+  const [addEventModal, setAddEventModal] = useState(false);
+  const user = useSelector((state) => state.user.user);
 
   useEffect(() => {
     const fetchData = async () => {
       if (
         (eventDate.toDateString() !== currentDate.toDateString() ||
-        previousBtnClicked) && !todayClicked
+          previousBtnClicked) &&
+        !todayClicked
       )
         await dispatch(
-          fetchEventsForTheWeek({ businessId: businessId, date: eventDate })
+          fetchEventsForTheWeek({
+            businessId: businessId,
+            date: eventDate,
+            userId: user._id,
+          })
         );
       /** to fetch week data for initial week */ else {
         await dispatch(
-          fetchInitialWeekEvents({ businessId: businessId, date: eventDate })
+          fetchInitialWeekEvents({
+            businessId: businessId,
+            date: eventDate,
+            userId: user._id,
+          })
         );
         dispatch(
           fetchEventsForTheDay({
@@ -309,8 +322,8 @@ const CalenderSection = ({ businessId }) => {
         !nextBtnClicked &&
         todayClicked)
     ) {
-      setSelectedCapsule(day)
-      dispatch(setWeekButtonClicked(false))
+      setSelectedCapsule(day);
+      dispatch(setWeekButtonClicked(false));
       const obj = {
         date: eventDate,
         day: day,
@@ -322,8 +335,8 @@ const CalenderSection = ({ businessId }) => {
   };
 
   /** to toggle event date to previous week */
-  const previousWeek =  () => {
-    dispatch(setWeekButtonClicked(true))
+  const previousWeek = () => {
+    dispatch(setWeekButtonClicked(true));
     setSelectedCapsule("");
     setCount(count - 1);
     setTodayClicked(false);
@@ -333,8 +346,8 @@ const CalenderSection = ({ businessId }) => {
   };
 
   /** to toggle event date to next week */
-  const nextWeek =  () => {
-    dispatch(setWeekButtonClicked(true))
+  const nextWeek = () => {
+    dispatch(setWeekButtonClicked(true));
     setSelectedCapsule("");
     setCount(count + 1);
     dispatch(nextWeekDate());
@@ -345,7 +358,7 @@ const CalenderSection = ({ businessId }) => {
 
   /** today function */
   const todayFunction = () => {
-    dispatch(setWeekButtonClicked(false))
+    dispatch(setWeekButtonClicked(false));
     setTodayClicked(true);
     dispatch(setCurrentDate());
     dispatch(setSelectedDate(days[currentDate.getDay()]));
@@ -360,7 +373,16 @@ const CalenderSection = ({ businessId }) => {
   };
   return (
     <>
-      {loadingForInitialWeek || loadingForWeek ? (
+      {addEventModal && (
+        <ModalComponent
+          closeOnOutsideClick={true}
+          isOpen={addEventModal}
+          closeModal={() => setAddEventModal(false)}
+        >
+          <AddEventModal closeModal={() => setAddEventModal(false)} />
+        </ModalComponent>
+      )}
+      {loader || loadingForWeek ? (
         <LoaderWrap>
           <ValueLoader />
         </LoaderWrap>
@@ -395,20 +417,30 @@ const CalenderSection = ({ businessId }) => {
               className={
                 (today === "sun" && todayClicked) ||
                 (today === "sun" && !nextBtnClicked && count === 0)
-                  ? selectedCapsule === "sun"?"current selectedDay":"current"
+                  ? selectedCapsule === "sun"
+                    ? "current selectedDay"
+                    : "current"
                   : previousBtnClicked
                   ? 0 < currentDayNo && count === 0
                     ? "disabled"
-                  : selectedCapsule === "sun"?"selectedDay" : ""
+                    : selectedCapsule === "sun"
+                    ? "selectedDay"
+                    : ""
                   : nextBtnClicked
                   ? 0 < currentDayNo && todayClicked
                     ? "disabled"
-                    : selectedCapsule === "sun"?"selectedDay" : ""
+                    : selectedCapsule === "sun"
+                    ? "selectedDay"
+                    : ""
                   : today === "sun"
-                  ? selectedCapsule === "sun"?"current selectedDay":"current"
+                  ? selectedCapsule === "sun"
+                    ? "current selectedDay"
+                    : "current"
                   : 0 < currentDayNo
                   ? "disabled"
-                  : selectedCapsule === "sun"?"selectedDay" : ""
+                  : selectedCapsule === "sun"
+                  ? "selectedDay"
+                  : ""
               }
               onClick={() => fetchEventsForAParticularDay("sun", 0)}
             >
@@ -435,20 +467,30 @@ const CalenderSection = ({ businessId }) => {
               className={
                 (today === "mon" && todayClicked) ||
                 (today === "mon" && !nextBtnClicked && count === 0)
-                  ? selectedCapsule === "mon"?"current selectedDay":"current"
+                  ? selectedCapsule === "mon"
+                    ? "current selectedDay"
+                    : "current"
                   : previousBtnClicked
                   ? 1 < currentDayNo && count === 0
                     ? "disabled"
-                    : selectedCapsule === "mon"?"selectedDay" : ""
+                    : selectedCapsule === "mon"
+                    ? "selectedDay"
+                    : ""
                   : nextBtnClicked
                   ? 1 < currentDayNo && todayClicked
                     ? "disabled"
-                    : selectedCapsule === "mon"?"selectedDay" : ""
+                    : selectedCapsule === "mon"
+                    ? "selectedDay"
+                    : ""
                   : today === "mon"
-                  ? selectedCapsule === "mon"?"current selectedDay":"current"
+                  ? selectedCapsule === "mon"
+                    ? "current selectedDay"
+                    : "current"
                   : 1 < currentDayNo
                   ? "disabled"
-                  : selectedCapsule === "mon"?"selectedDay" : ""
+                  : selectedCapsule === "mon"
+                  ? "selectedDay"
+                  : ""
               }
               onClick={() => fetchEventsForAParticularDay("mon", 1)}
             >
@@ -475,20 +517,30 @@ const CalenderSection = ({ businessId }) => {
               className={
                 (today === "tue" && todayClicked) ||
                 (today === "tue" && !nextBtnClicked && count === 0)
-                  ? selectedCapsule === "tue"?"current selectedDay":"current"
+                  ? selectedCapsule === "tue"
+                    ? "current selectedDay"
+                    : "current"
                   : previousBtnClicked
                   ? 2 < currentDayNo && count === 0
                     ? "disabled"
-                    : selectedCapsule === "tue"?"selectedDay" : ""
+                    : selectedCapsule === "tue"
+                    ? "selectedDay"
+                    : ""
                   : nextBtnClicked
                   ? 2 < currentDayNo && todayClicked
                     ? "disabled"
-                    : selectedCapsule === "tue"?"selectedDay" : ""
+                    : selectedCapsule === "tue"
+                    ? "selectedDay"
+                    : ""
                   : today === "tue"
-                  ? selectedCapsule === "tue"?"current selectedDay":"current"
+                  ? selectedCapsule === "tue"
+                    ? "current selectedDay"
+                    : "current"
                   : 2 < currentDayNo
                   ? "disabled"
-                  : selectedCapsule === "tue"?"selectedDay" : ""
+                  : selectedCapsule === "tue"
+                  ? "selectedDay"
+                  : ""
               }
               onClick={() => fetchEventsForAParticularDay("tue", 2)}
             >
@@ -515,20 +567,30 @@ const CalenderSection = ({ businessId }) => {
               className={
                 (today === "wed" && todayClicked) ||
                 (today === "wed" && !nextBtnClicked && count === 0)
-                  ? selectedCapsule === "wed"?"current selectedDay":"current"
+                  ? selectedCapsule === "wed"
+                    ? "current selectedDay"
+                    : "current"
                   : previousBtnClicked
                   ? 3 < currentDayNo && count === 0
                     ? "disabled"
-                    : selectedCapsule === "wed"?"selectedDay" : ""
+                    : selectedCapsule === "wed"
+                    ? "selectedDay"
+                    : ""
                   : nextBtnClicked
                   ? 3 < currentDayNo && todayClicked
                     ? "disabled"
-                    : selectedCapsule === "wed"?"selectedDay" : ""
+                    : selectedCapsule === "wed"
+                    ? "selectedDay"
+                    : ""
                   : today === "wed"
-                  ? selectedCapsule === "wed"?"current selectedDay":"current"
+                  ? selectedCapsule === "wed"
+                    ? "current selectedDay"
+                    : "current"
                   : 3 < currentDayNo
                   ? "disabled"
-                  : selectedCapsule === "wed"?"selectedDay" : ""
+                  : selectedCapsule === "wed"
+                  ? "selectedDay"
+                  : ""
               }
               onClick={() => fetchEventsForAParticularDay("wed", 3)}
             >
@@ -555,20 +617,30 @@ const CalenderSection = ({ businessId }) => {
               className={
                 (today === "thurs" && todayClicked) ||
                 (today === "thurs" && !nextBtnClicked && count === 0)
-                  ? selectedCapsule === "thurs"?"current selectedDay":"current"
+                  ? selectedCapsule === "thurs"
+                    ? "current selectedDay"
+                    : "current"
                   : previousBtnClicked
                   ? 4 < currentDayNo && count === 0
                     ? "disabled"
                     : 4 < currentDayNo && todayClicked
                     ? "disabled"
-                    : selectedCapsule === "thurs"?"selectedDay" : ""
+                    : selectedCapsule === "thurs"
+                    ? "selectedDay"
+                    : ""
                   : nextBtnClicked
-                  ?  selectedCapsule === "thurs"?"selectedDay" : ""
+                  ? selectedCapsule === "thurs"
+                    ? "selectedDay"
+                    : ""
                   : today === "thurs"
-                  ? selectedCapsule === "thurs"?"current selectedDay":"current"
+                  ? selectedCapsule === "thurs"
+                    ? "current selectedDay"
+                    : "current"
                   : 4 < currentDayNo
                   ? "disabled"
-                  : selectedCapsule === "thurs"?"selectedDay" : ""
+                  : selectedCapsule === "thurs"
+                  ? "selectedDay"
+                  : ""
               }
               onClick={() => fetchEventsForAParticularDay("thurs", 4)}
             >
@@ -595,20 +667,30 @@ const CalenderSection = ({ businessId }) => {
               className={
                 (today === "fri" && todayClicked) ||
                 (today === "fri" && !nextBtnClicked && count === 0)
-                  ? selectedCapsule === "fri"?"current selectedDay":"current"
+                  ? selectedCapsule === "fri"
+                    ? "current selectedDay"
+                    : "current"
                   : previousBtnClicked
                   ? 5 < currentDayNo && count === 0
                     ? "disabled"
-                    : selectedCapsule === "fri"?"selectedDay" : ""
+                    : selectedCapsule === "fri"
+                    ? "selectedDay"
+                    : ""
                   : nextBtnClicked
                   ? 5 < currentDayNo && todayClicked
                     ? "disabled"
-                    : selectedCapsule === "fri"?"selectedDay" : ""
+                    : selectedCapsule === "fri"
+                    ? "selectedDay"
+                    : ""
                   : today === "fri"
-                  ? selectedCapsule === "fri"?"current selectedDay":"current"
+                  ? selectedCapsule === "fri"
+                    ? "current selectedDay"
+                    : "current"
                   : 5 < currentDayNo
                   ? "disabled"
-                  : selectedCapsule === "fri"?"selectedDay" : ""
+                  : selectedCapsule === "fri"
+                  ? "selectedDay"
+                  : ""
               }
               onClick={() => fetchEventsForAParticularDay("fri", 5)}
             >
@@ -635,20 +717,30 @@ const CalenderSection = ({ businessId }) => {
               className={
                 (today === "sat" && todayClicked) ||
                 (today === "sat" && !nextBtnClicked && count === 0)
-                  ? selectedCapsule === "sat"?"current selectedDay":"current"
+                  ? selectedCapsule === "sat"
+                    ? "current selectedDay"
+                    : "current"
                   : previousBtnClicked
                   ? 6 < currentDayNo && count === 0
                     ? "disabled"
-                    :selectedCapsule === "sat"? "selectedDay" : ""
+                    : selectedCapsule === "sat"
+                    ? "selectedDay"
+                    : ""
                   : nextBtnClicked
-                  ?  6 < currentDayNo && todayClicked
+                  ? 6 < currentDayNo && todayClicked
                     ? "disabled"
-                    :selectedCapsule === "sat"?"selectedDay" : ""
+                    : selectedCapsule === "sat"
+                    ? "selectedDay"
+                    : ""
                   : today === "sat"
-                  ? selectedCapsule === "sat"?"current selectedDay":"current"
+                  ? selectedCapsule === "sat"
+                    ? "current selectedDay"
+                    : "current"
                   : 6 < currentDayNo
                   ? "disabled"
-                  :selectedCapsule === "sat"?"selectedDay" : ""
+                  : selectedCapsule === "sat"
+                  ? "selectedDay"
+                  : ""
               }
               onClick={() => fetchEventsForAParticularDay("sat", 6)}
             >
@@ -673,7 +765,9 @@ const CalenderSection = ({ businessId }) => {
             </DaysDiv>
           </DaysWrap>
           <BtnWrap>
-            <SaveButton>Create Event</SaveButton>
+            <SaveButton onClick={() => setAddEventModal(true)}>
+              Create Event
+            </SaveButton>
           </BtnWrap>
         </CalenderSectionWrap>
       )}
