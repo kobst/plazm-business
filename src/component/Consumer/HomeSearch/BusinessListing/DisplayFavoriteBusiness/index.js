@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import ProfileImg from "../../../../../images/profile-img.png";
+import BusinessHashTags from "../BusinessHashTags";
+import { MdFavorite, MdFavoriteBorder, MdAdd, MdRemove } from "react-icons/md";
+import UserMessage from "../UserMessage";
+import UserMessageEvents from "../Events/UserMessageEvents";
+import { AddBusinessFavorite, RemoveBusinessFavorite } from "../../../../../reducers/userReducer";
 import { useDispatch, useSelector } from "react-redux";
-import ProfileImg from "../../../../images/profile-img.png";
-import BusinessHashTags from "../businessHashtags";
-import FavoritesIcon from "../../../../images/favorites.png";
-import FavoritesIconFilled from "../../../../images/favorites-filled.png";
-import {
-  AddBusinessFavorite,
-  RemoveUserBusinessFavorite,
-} from "../../../../reducers/userReducer";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -94,9 +92,6 @@ const ProfileName = styled.div`
   @media (max-width: 1024px) {
     flex-direction: column;
   }
-  div {
-    cursor: pointer;
-  }
 `;
 
 const ChatInput = styled.div`
@@ -128,16 +123,17 @@ const RightWrap = styled.div`
 
 /** display favorite business */
 const DisplayFavoriteBusiness = ({ data }) => {
+  const [displayData, setDisplayData] = useState(false);
   const [favoriteBusiness, setFavoriteBusiness] = useState(false);
   const user = useSelector((state) => state.user.user);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const find = user.favorites.find((i) => i === data.favorites._id);
     if (find) {
       setFavoriteBusiness(true);
     } else setFavoriteBusiness(false);
-  }, [user, data.favorites._id]);
+  }, [user, data]);
 
   /** to add a business to user favorites */
   const addFavorite = async () => {
@@ -154,9 +150,10 @@ const DisplayFavoriteBusiness = ({ data }) => {
       businessId: data.favorites._id,
       userId: user._id,
     };
-    await dispatch(RemoveUserBusinessFavorite(obj));
+    await dispatch(RemoveBusinessFavorite(obj));
   };
-  return (
+
+  return data ? (
     <>
       <UserMsgWrap>
         <UserMessageContent>
@@ -182,19 +179,20 @@ const DisplayFavoriteBusiness = ({ data }) => {
                 </div>
                 <RightWrap>
                   {favoriteBusiness ? (
-                    <img
-                      src={FavoritesIconFilled}
+                    <MdFavorite
                       onClick={() => removeFavorite()}
                       className="favoriteBusiness"
-                      alt=""
                     />
                   ) : (
-                    <img
-                      src={FavoritesIcon}
+                    <MdFavoriteBorder
                       onClick={() => addFavorite()}
                       className="favoriteBusinessBorder"
-                      alt=""
                     />
+                  )}
+                  {!displayData ? (
+                    <MdAdd onClick={() => setDisplayData(true)} />
+                  ) : (
+                    <MdRemove onClick={() => setDisplayData(false)} />
                   )}
                 </RightWrap>
               </ProfileName>
@@ -209,8 +207,34 @@ const DisplayFavoriteBusiness = ({ data }) => {
           </ProfileNameHeader>
         </UserMessageContent>
       </UserMsgWrap>
+
+      {displayData ? (
+        <>
+          {/* to display posts */}
+          {data.posts.length > 0
+            ? data.posts.map((i, key) => (
+                <UserMessage
+                  postData={i}
+                  key={key}
+                  businessData={data.favorites}
+                />
+              ))
+            : null}
+
+          {/* to display events */}
+          {data.events.length > 0
+            ? data.events.map((i, key) => (
+                <UserMessageEvents
+                  eventData={i}
+                  key={key}
+                  businessInfo={data.favorites}
+                />
+              ))
+            : null}
+        </>
+      ) : null}
     </>
-  );
+  ) : null;
 };
 
 export default DisplayFavoriteBusiness;

@@ -190,6 +190,7 @@ export const slice = createSlice({
     loading: false,
     loadingAddPosts: false,
     posts: [],
+    business: [],
     loadingAddComment: false,
     loadingPostComments: false,
     filters: {
@@ -237,6 +238,20 @@ export const slice = createSlice({
     setSideFilters: (state, action) => {
       state.filterByMostLiked = false;
       state.filterByMostRecent = false;
+    },
+    clearBusinessData: (state) => {
+      state.filterByMostLiked = false;
+      state.filterByMostRecent = false;
+      state.business = [];
+      state.posts = [];
+      state.images = [];
+      state.filters = {
+        Business: true,
+        PostsByMe: false,
+        MySubscriptions: false,
+        Others: false,
+      };
+      state.totalPosts = 0
     },
   },
   extraReducers: {
@@ -404,12 +419,12 @@ export const slice = createSlice({
         );
         let posts1 = current(state.posts).filter(
           (i) => i.postId === action.payload.postId
-        )[0];
-        if (posts1.comments.length > 0) {
-          let findComment = posts1.comments.filter(
+        );
+        if (posts1 && posts1.length>0 && posts1[0].comments.length > 0) {
+          let findComment = posts1[0].comments.filter(
             (i) => i._id === action.payload.commentId
           )[0];
-          let findComment1 = posts1.comments.filter(
+          let findComment1 = posts1[0].comments.filter(
             (i) => i._id !== action.payload.commentId
           );
           let replies = findComment.replies.concat({
@@ -428,10 +443,10 @@ export const slice = createSlice({
           let dummy1 = [];
           dummy1.push({
             postId: action.payload.postId,
-            postDetails: posts1.postDetails,
+            postDetails: posts1[0].postDetails,
             comments: commentsSort,
-            totalComments: posts1.totalComments + 1,
-            totalLikes: posts1.totalLikes,
+            totalComments: posts1[0].totalComments + 1,
+            totalLikes: posts1[0].totalLikes,
           });
           dummy1 = dummy1.concat(posts);
           state.posts = dummy1.sort((a, b) => {
@@ -632,5 +647,6 @@ export const {
   setSideFiltersByMostRecent,
   setSideFiltersByMostLiked,
   setSideFilters,
+  clearBusinessData
 } = slice.actions;
 export default slice.reducer;

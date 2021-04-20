@@ -5,7 +5,6 @@ import { Auth } from "aws-amplify";
 import history from "../../../utils/history";
 import ValueLoader from "../../../utils/loader";
 import { useDispatch } from "react-redux";
-import { fetchAllPlaces } from "../../../reducers/placeReducer";
 import { checkBusiness, getBusinessImages } from "../../../reducers/businessReducer";
 import { unwrapResult } from '@reduxjs/toolkit';
 import { fetchUserDetails,setWs } from "../../../reducers/userReducer";
@@ -31,7 +30,6 @@ const DashboardContainer = (props) => {
             dispatch(setWs(ws))
             setProfile(res.data.getUser.user);
           }
-          dispatch(fetchAllPlaces())
         } else {
           history.push("/business");
           window.location.reload();
