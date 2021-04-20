@@ -9,6 +9,7 @@ import {
   AddBusinessFavorite,
   RemoveUserBusinessFavorite,
 } from "../../../../reducers/userReducer";
+import moment from "moment";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -128,6 +129,42 @@ const DisplayFavoriteBusiness = ({ data }) => {
   const [favoriteBusiness, setFavoriteBusiness] = useState(false);
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
+  const getUtcHour = new Date().getUTCHours();
+  const getUtcMinutes = new Date().getUTCMinutes();
+  const currentUtcDay = new Date().getUTCDay();
+  const days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
+
+  /** to check if business is open/close */
+  const checkBusinessOpenClose = () => {
+    for (let i = 0; i < data.favorites.hours_format.length; i++) {
+      const startDayIndex = days.indexOf(data.favorites.hours_format[i].StartDay);
+      const endDayIndex = days.indexOf(data.favorites.hours_format[i].EndDay);
+      if (currentUtcDay >= startDayIndex && currentUtcDay <= endDayIndex) {
+        const time = moment(getUtcHour + ":" + getUtcMinutes, "HH:mm");
+        const beforeTime = moment(
+          data.favorites.hours_format[i].Start,
+          "HH:mm"
+        );
+        const afterTime = moment(data.favorites.hours_format[i].End, "HH:mm");
+        if (time.isBetween(beforeTime, afterTime)) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false
+      }
+    }
+  };
 
   useEffect(() => {
     const find = user.favorites.find((i) => i === data.favorites._id);
@@ -192,6 +229,13 @@ const DisplayFavoriteBusiness = ({ data }) => {
                       className="favoriteBusinessBorder"
                       alt=""
                     />
+                  )}
+                  {data.favorites.hours_format.length === 0 ? (
+                    <div>Close</div>
+                  ) : checkBusinessOpenClose() === true ? (
+                    <div>Open</div>
+                  ) : (
+                    <div>Close</div>
                   )}
                 </RightWrap>
               </ProfileName>
