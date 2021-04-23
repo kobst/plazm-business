@@ -15,7 +15,7 @@ const HomeSearch = () => {
 
   useEffect(()=>{
     dispatch(setSideFiltersHomeSearch())
-  })
+  },[dispatch])
   return (
     <>
       <ContentWrap>

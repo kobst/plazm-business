@@ -9,7 +9,11 @@ import { getUser, getAllUsers, getUserFavorites } from "./query/user";
 
 import { getPlace, searchAllPlaces, homeSearch } from "./query/place";
 
-import { getAllLists, getUserLists } from "./query/list";
+import {
+  getAllLists,
+  getUserLists,
+  getUserCreatedAndFollowedLists,
+} from "./query/list";
 
 import { createPost, addLikeToPost } from "./mutations/post";
 
@@ -24,12 +28,19 @@ import { findPostComments, findCommentReplies } from "./query/comments";
 
 import { addLikeToEvents, createEvent } from "./mutations/event";
 
-import { CreateList, addPostToList, addEventToList } from "./mutations/list";
+import {
+  CreateList,
+  addPostToList,
+  addEventToList,
+  DeleteList,
+} from "./mutations/list";
 
-import { findBusinessPhotos } from './query/post';
+import { findBusinessPhotos } from "./query/post";
 
 export {
   homeSearch,
+  DeleteList,
+  getUserCreatedAndFollowedLists,
   createEvent,
   addEventToList,
   findBusinessPhotos,
@@ -56,5 +67,5 @@ export {
   CreateReply,
   findPostComments,
   AddLikeToComment,
-  CreateList
+  CreateList,
 };

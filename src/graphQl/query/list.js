@@ -2,8 +2,8 @@
 @desc: getAllLists query
 */
 const getAllLists = () => {
-    const graphQl = {
-      query: `
+  const graphQl = {
+    query: `
             query GetLists{
                 getLists {
                 message
@@ -20,10 +20,10 @@ const getAllLists = () => {
                     updatedAt
                   }
                 }
-            }`
-    };
-    return graphQl;
+            }`,
   };
+  return graphQl;
+};
 
 /*
 @desc: getUserLists query
@@ -49,5 +49,41 @@ const getUserLists = (ownerId) => {
   return graphQl;
 };
 
-  export { getAllLists, getUserLists };
-  
+/*
+@desc: getUserCreatedAndFollowedLists query
+*/
+const getUserCreatedAndFollowedLists = (obj) => {
+  const graphQl = {
+    query: `
+          query GetUserCreatedAndFollowedLists($id: ID!, $value: Int){
+            getUserCreatedAndFollowedLists (input: {id: $id, value:$value}){
+              message
+              success
+              totalLists
+              list {
+                  _id
+                  ownerId
+                  followers {
+                    name
+                    photo
+                  }
+                  name
+                  description
+                  type
+                  media {
+                    image
+                  }
+                  createdAt
+                  updatedAt
+                }
+              }
+          }`,
+    variables: {
+      id: obj.id,
+      value: obj.value
+    },
+  };
+  return graphQl;
+};
+
+export { getAllLists, getUserLists, getUserCreatedAndFollowedLists };

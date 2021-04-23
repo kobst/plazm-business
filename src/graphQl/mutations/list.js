@@ -102,4 +102,38 @@ const addEventToList = (values) => {
   return graphQl;
 };
 
-export { CreateList, addPostToList, addEventToList };
+
+/*
+@desc: delete list
+@params: userId, listId
+*/
+const DeleteList = (values) => {
+  const graphQl = {
+    query: `
+            mutation DeleteUserList($listId: ID!, $userId:ID!){
+              deleteUserList(input: {listId:$listId, userId:$userId}) {
+                message
+                success
+                list {
+                    _id
+                    name
+                    description
+                    ownerId
+                    posts
+                    likes
+                    followers
+                    media {
+                      image
+                      thumbnail
+                    }
+                  }
+              }
+            }`,
+    variables: {
+      listId: values.listId,
+      userId: values.userId
+    },
+  };
+  return graphQl;
+};
+export { CreateList, addPostToList, addEventToList, DeleteList };
