@@ -1,11 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DisplayFavoriteBusiness from "./DisplayFavoriteBusiness";
 import styled from "styled-components";
 import ValueLoader from "../../../../utils/loader";
+import DropdwonArrowTop from "../../../../images/top_arrow.png";
+import { FaSort } from "react-icons/fa";
 import SearchBar from "../SearchBar";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { HomeSearch } from "../../../../reducers/searchReducer";
+import {
+  HomeSearch,
+  setSideFiltersByClosest,
+  setSideFiltersByUpdatedAt,
+} from "../../../../reducers/searchReducer";
 import error from "../../../../constants";
 
 const BusinessListWrap = styled.div`
@@ -39,6 +45,84 @@ const NoMorePost = styled.p`
   color: #fff;
 `;
 
+const CheckboxWrap = styled.div`
+  display: flex;
+  padding: 0;
+  flex-direction: row;
+  font-size: 13px;
+  font-weight: 500;
+  position: relative;
+  .container .checkmark:after {
+    left: 4px;
+    top: 1px;
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 1px 1px 0;
+  }
+  .container input:checked ~ .checkmark {
+    background-color: transparent;
+  }
+  @media (max-width: 767px) {
+    margin: 0 0 5px;
+  }
+  svg {
+    cursor: pointer;
+  }
+`;
+
+const DropdownContent = styled.div`
+  display: flex;
+  position: absolute;
+  min-width: 102px;
+  overflow: auto;
+  background: #fe02b9;
+  box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.3);
+  z-index: 1;
+  top: 25px;
+  width: 30px;
+  overflow: visible;
+  right: -5px;
+  padding: 5px;
+  :before {
+    background: url(${DropdwonArrowTop}) no-repeat top center;
+    width: 15px;
+    height: 15px;
+    content: " ";
+    top: -12px;
+    position: relative;
+    margin: 0 auto;
+    display: flex;
+    text-align: center;
+    left: 78px;
+    @media (max-width: 767px) {
+      left: 0;
+    }
+  }
+  @media (max-width: 767px) {
+    top: 31px;
+    right: 0;
+    left: -5px;
+  }
+  ul {
+    list-style: none;
+    margin: 0 0 0 -15px;
+    padding: 0;
+    width: 100%;
+    text-align: right;
+  }
+  li {
+    color: #fff;
+    padding: 0px 5px;
+    text-decoration: none;
+    font-size: 12px;
+  }
+  li:hover {
+    background-color: #fe02b9;
+    cursor: pointer;
+  }
+`;
+
 const BusinessListing = () => {
   const businessData = useSelector((state) => state.search.searchedPlace);
   const loading = useSelector((state) => state.search.loading);
@@ -47,14 +131,42 @@ const BusinessListing = () => {
   const totalPlaces = useSelector((state) => state.search.totalPlaces);
   const dispatch = useDispatch();
   const search = useSelector((state) => state.search.searchData);
+  const filterClosest = useSelector((state) => state.search.filterByClosest);
+  const updatedAtFilter = useSelector(
+    (state) => state.search.filterByUpdatedAt
+  );
+  const menuRef = useRef(null);
+  const [uploadMenu, setUploadMenu] = useState(false);
+  const [filterSelected, setFilterSelected] = useState(false);
 
+  /** useEffect called when initially tab is rendered */
   useEffect(() => {
-    const obj = {
-      search: "",
-      value: offset,
-    };
-    dispatch(HomeSearch(obj));
-  }, [dispatch, offset]);
+    if (offset === 0 && !filterClosest && !updatedAtFilter) {
+      const obj = {
+        search: "",
+        value: offset,
+        filters: { closest: filterClosest, updated: updatedAtFilter },
+        latitude: process.env.REACT_APP_LATITUDE,
+        longitude: process.env.REACT_APP_LONGITUDE,
+      };
+      dispatch(HomeSearch(obj));
+    }
+  }, [dispatch, offset, filterClosest, updatedAtFilter, filterSelected]);
+
+  /** useEffect called when any side filters are selected */
+  useEffect(() => {
+    if (filterSelected === true) {
+      const obj = {
+        search: search,
+        value: 0,
+        filters: { closest: filterClosest, updated: updatedAtFilter },
+        latitude: process.env.REACT_APP_LATITUDE,
+        longitude: process.env.REACT_APP_LONGITUDE,
+      };
+      dispatch(HomeSearch(obj));
+      setFilterSelected(false);
+    }
+  }, [dispatch, filterSelected, filterClosest, updatedAtFilter, offset, search]);
 
   /** to fetch more places matching the search */
   const fetchMorePlaces = () => {
@@ -63,13 +175,45 @@ const BusinessListing = () => {
       const obj = {
         search: search,
         value: offset + 20,
+        filters: { closest: filterClosest, updated: updatedAtFilter },
+        latitude: process.env.REACT_APP_LATITUDE,
+        longitude: process.env.REACT_APP_LONGITUDE,
       };
       dispatch(HomeSearch(obj));
     } else setHasMore(false);
   };
+
+  /** to toggle side filter menu */
+  const toggleUploadMenu = () => {
+    setUploadMenu(!uploadMenu);
+  };
+
+  /** to set side filter by closest */
+  const closestFilter = () => {
+    dispatch(setSideFiltersByClosest());
+    setFilterSelected(true);
+  };
+
+  /** to set side filter by recently updated */
+  const recentlyUpdatedFilter = () => {
+    dispatch(setSideFiltersByUpdatedAt());
+    setFilterSelected(true);
+  };
   return (
     <>
       <SearchBar offset={offset} />
+      <CheckboxWrap ref={menuRef}>
+        <FaSort onClick={toggleUploadMenu} />
+        {uploadMenu && (
+          <DropdownContent>
+            <ul>
+              <li onClick={() => closestFilter()}>Closest</li>
+
+              <li onClick={() => recentlyUpdatedFilter()}>Recently Updated</li>
+            </ul>
+          </DropdownContent>
+        )}
+      </CheckboxWrap>
       {loading && offset === 0 ? (
         <LoaderWrap>
           <ValueLoader />
@@ -104,13 +248,13 @@ const BusinessListing = () => {
                 businessData.map((i, key) => (
                   <DisplayFavoriteBusiness data={i} key={key} />
                 ))
-              ) : (
+              ) : !loading ? (
                 <center>
                   <NoMorePost className="noMorePost">
                     {error.NO_BUSINESS_FOUND}
                   </NoMorePost>
                 </center>
-              )}
+              ) : null}
             </BusinessListWrap>
           </InfiniteScroll>
         </div>

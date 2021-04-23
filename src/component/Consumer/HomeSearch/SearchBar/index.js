@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import Input from "../../UI/Input/Input";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { HomeSearch, setSearchData } from "../../../../reducers/searchReducer";
+import {
+  clearSearchedData,
+  HomeSearch,
+  setSearchData,
+  setSideFiltersHomeSearch,
+} from "../../../../reducers/searchReducer";
 import error from "../../../../constants";
 
 const SearchWrap = styled.div`
@@ -52,6 +57,10 @@ const SearchBar = ({ offset }) => {
   const [search, setSearch] = useState("");
   const loader = useSelector((state) => state.search.loading);
   const [searchError, setSearchError] = useState("");
+  const filterClosest = useSelector((state) => state.search.filterByClosest);
+  const updatedAtFilter = useSelector(
+    (state) => state.search.filterByUpdatedAt
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -64,9 +73,14 @@ const SearchBar = ({ offset }) => {
     if (event.key === "Enter") {
       event.preventDefault();
       if (search !== "" && search.length >= 4 && !search.trim() === false) {
+        dispatch(clearSearchedData());
+        dispatch(setSideFiltersHomeSearch());
         const obj = {
           search: search,
           value: offset,
+          filters: { closest: filterClosest, updated: updatedAtFilter },
+          latitude: process.env.REACT_APP_LATITUDE,
+          longitude: process.env.REACT_APP_LONGITUDE,
         };
         dispatch(HomeSearch(obj));
         setSearchError("");

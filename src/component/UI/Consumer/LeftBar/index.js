@@ -107,7 +107,7 @@ const LeftBar = ({
               }
             >
               <UserImage>
-                <img src={user.photo?user.photo:ProfileImg} alt="" />
+                <img src={user.photo ? user.photo : ProfileImg} alt="" />
               </UserImage>
             </Tab>
             <Tab

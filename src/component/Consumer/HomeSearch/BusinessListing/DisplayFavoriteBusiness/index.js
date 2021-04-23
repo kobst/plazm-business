@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import moment from "moment";
 import styled from "styled-components";
 import ProfileImg from "../../../../../images/profile-img.png";
+import FavoritesIcon from "../../../../../images/favorites.png";
+import FavoritesIconFilled from "../../../../../images/favorites-filled.png";
 import BusinessHashTags from "../BusinessHashTags";
-import { MdFavorite, MdFavoriteBorder, MdAdd, MdRemove } from "react-icons/md";
+import { MdAdd, MdRemove } from "react-icons/md";
 import UserMessage from "../UserMessage";
 import UserMessageEvents from "../Events/UserMessageEvents";
-import { AddBusinessFavorite, RemoveBusinessFavorite } from "../../../../../reducers/userReducer";
-import { useDispatch, useSelector } from "react-redux";
+import {
+  AddBusinessFavorite,
+  RemoveBusinessFavorite,
+} from "../../../../../reducers/userReducer";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -126,7 +132,44 @@ const DisplayFavoriteBusiness = ({ data }) => {
   const [displayData, setDisplayData] = useState(false);
   const [favoriteBusiness, setFavoriteBusiness] = useState(false);
   const user = useSelector((state) => state.user.user);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const getUtcHour = new Date().getUTCHours();
+  const getUtcMinutes = new Date().getUTCMinutes();
+  const currentUtcDay = new Date().getUTCDay();
+  const days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
+  /** to check if business is open/close */
+  const checkBusinessOpenClose = () => {
+    for (let i = 0; i < data.favorites.hours_format.length; i++) {
+      const startDayIndex = days.indexOf(
+        data.favorites.hours_format[i].StartDay
+      );
+      const endDayIndex = days.indexOf(data.favorites.hours_format[i].EndDay);
+      if (currentUtcDay >= startDayIndex && currentUtcDay <= endDayIndex) {
+        const time = moment(getUtcHour + ":" + getUtcMinutes, "HH:mm");
+        const beforeTime = moment(
+          data.favorites.hours_format[i].Start,
+          "HH:mm"
+        );
+        const afterTime = moment(data.favorites.hours_format[i].End, "HH:mm");
+        if (time.isBetween(beforeTime, afterTime)) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    }
+  };
 
   useEffect(() => {
     const find = user.favorites.find((i) => i === data.favorites._id);
@@ -177,16 +220,27 @@ const DisplayFavoriteBusiness = ({ data }) => {
                 >
                   {data.favorites.company_name}
                 </div>
+                {data.favorites.hours_format.length === 0 ? (
+                  <div className="open">Close</div>
+                ) : checkBusinessOpenClose() === true ? (
+                  <div className="open">Open</div>
+                ) : (
+                  <div className="open">Close</div>
+                )}
                 <RightWrap>
                   {favoriteBusiness ? (
-                    <MdFavorite
+                    <img
+                      src={FavoritesIconFilled}
                       onClick={() => removeFavorite()}
                       className="favoriteBusiness"
+                      alt=""
                     />
                   ) : (
-                    <MdFavoriteBorder
+                    <img
+                      src={FavoritesIcon}
                       onClick={() => addFavorite()}
                       className="favoriteBusinessBorder"
+                      alt=""
                     />
                   )}
                   {!displayData ? (

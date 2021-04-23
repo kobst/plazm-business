@@ -140,8 +140,8 @@ const searchAllPlaces = () => {
 const homeSearch = (obj) => {
   const graphQl = {
     query: `
-          query HomeSearch($search: String, $value:Int){
-            homeSearch(input: {search:$search, value:$value}) {
+          query HomeSearch($search: String, $value:Int, $filters: homeSearchFilterInput!, $longitude: Float!, $latitude: Float!){
+            homeSearch(input: {search:$search, value:$value, filters:$filters, longitude:$longitude, latitude:$latitude}) {
               message
               success
               totalPlaces
@@ -271,7 +271,10 @@ const homeSearch = (obj) => {
           }`,
     variables: {
       search: obj.search,
-      value: obj.value
+      value: obj.value,
+      filters: obj.filters,
+      longitude: parseFloat(obj.longitude),
+      latitude: parseFloat(obj.latitude)
     },
   };
   return graphQl;

@@ -166,10 +166,30 @@ export const slice = createSlice({
     loadingReplies: false,
     loadingEventComments: false,
     loadingEventReplies: false,
+    filterByUpdatedAt: false,
+    filterByClosest: false,
   },
   reducers: {
     setSearchData: (state, action) => {
       state.searchData = action.payload;
+    },
+    setSideFiltersByUpdatedAt: (state) => {
+      state.searchedPlace = [];
+      state.filterByUpdatedAt = true;
+      state.filterByClosest = false;
+    },
+    setSideFiltersByClosest: (state) => {
+      state.searchedPlace = [];
+      state.filterByClosest = true;
+      state.filterByUpdatedAt = false;
+    },
+    setSideFiltersHomeSearch: (state) => {
+      state.searchedPlace = [];
+      state.filterByUpdatedAt = false;
+      state.filterByClosest = false;
+    },
+    clearSearchedData: (state) => {
+      state.searchedPlace = [];
     },
   },
   extraReducers: {
@@ -182,7 +202,6 @@ export const slice = createSlice({
       if (state.loading) {
         state.loading = false;
         if (action.payload) {
-          state.searchedPlace = [];
           state.searchedPlace = state.searchedPlace.concat(action.payload.data);
           state.totalPlaces = action.payload.totalPlaces;
         }
@@ -761,7 +780,11 @@ export const slice = createSlice({
             (i) => i._id !== action.payload.commentInfo.itemId
           );
           let dummy1 = [];
-          if (findBusinessEvent && findBusinessEvent.length > 0 && findBusinessEvent[0].comments) {
+          if (
+            findBusinessEvent &&
+            findBusinessEvent.length > 0 &&
+            findBusinessEvent[0].comments
+          ) {
             let comments = findBusinessEvent[0].comments.concat({
               ...action.payload.commentInfo,
               totalReplies: 0,
@@ -988,5 +1011,11 @@ export const slice = createSlice({
   },
 });
 
-export const { setSearchData } = slice.actions;
+export const {
+  setSearchData,
+  setSideFiltersByClosest,
+  setSideFiltersByUpdatedAt,
+  setSideFiltersHomeSearch,
+  clearSearchedData,
+} = slice.actions;
 export default slice.reducer;
