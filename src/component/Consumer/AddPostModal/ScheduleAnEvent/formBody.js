@@ -51,6 +51,9 @@ const ErrorDiv = styled.div`
   font-size: 11px;
   margin: 0;
 `;
+const FormWrap = styled.div`
+  width: 100%;
+`;
 
 /*
  *@desc: form body for add event schedule details
@@ -62,7 +65,7 @@ function FormBody({ formik, setStartDateFocus, setEndDateFocus }) {
     setEndDateFocus(!val);
   };
   return (
-    <>
+    <FormWrap>
       <InputContainer>
         <LabelText>Start Time</LabelText>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -103,6 +106,7 @@ function FormBody({ formik, setStartDateFocus, setEndDateFocus }) {
         </MuiPickersUtilsProvider>
       </InputContainer>
       <InputContainer>
+        <LabelText>Repeat</LabelText>
         <FormikSelect name="repeat">
           <option value="once">ONCE</option>
           <option value="Daily">DAILY</option>
@@ -111,7 +115,7 @@ function FormBody({ formik, setStartDateFocus, setEndDateFocus }) {
           <option value="Weekend">WEEKEND (SAT-SUN)</option>
         </FormikSelect>
       </InputContainer>
-    </>
+    </FormWrap>
   );
 }
 export default FormBody;

@@ -138,6 +138,7 @@ const ErrorDiv = styled.div`
 `;
 
 const BottomBtnWrap = styled.div`
+  display: flex;
   .MR-15 {
     margin-right: 10px;
   }

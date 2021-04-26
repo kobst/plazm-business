@@ -15,10 +15,15 @@ const EventWrap = styled.div`
   margin: 0 0 15px;
   display: flex;
   flex-flow: row wrap;
+  form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const CalendarWrap = styled.div`
-  width: 50%;
+  /* width: 50%; */
   @media (max-width: 767px) {
     width: 100%;
   }
@@ -37,7 +42,9 @@ const CalendarWrap = styled.div`
 `;
 
 const FormWrap = styled.div`
-  width: 50%;
+  /* width: 50%; */
+  width: 100%;
+  display: flex;
   @media (max-width: 767px) {
     width: 100%;
   }
@@ -88,6 +95,17 @@ const CalenderTopWrap = styled.div`
   }
 `;
 
+const CustomFirst = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin: 0px;
+  flex-direction: row;
+  @media (max-width: 767px) {
+    flex-direction: column;
+  }
+`;
+
 
 const ScheduleAnEvent = ({
   setDisplayCalendar,
@@ -108,13 +126,7 @@ const ScheduleAnEvent = ({
         <Heading>Schedule An Event</Heading>
       </TopBar>
       <CalenderTopWrap>
-      <CalendarWrap>
-        {startDateFocus ? (
-          <Calendar date={date} changeDate={changeDate} minDate={null}/>
-        ) : endDateFocus ? (
-          <Calendar date={endDate} changeDate={setEndDate} minDate={date}/>
-        ) : null}
-      </CalendarWrap>
+      
       <FormWrap>
         <Formik
           enableReinitialize={true}
@@ -133,7 +145,7 @@ const ScheduleAnEvent = ({
             /*to set event details*/
             const obj = {
               eventDate: `${moment(date).format("DD MMM YYYY")} to ${moment(
-                endDate
+                date
               ).format("DD MMM YYYY")}`,
               eventTime: `FROM: ${moment(values.startTime).format(
                 "HH:mm A"
@@ -149,12 +161,20 @@ const ScheduleAnEvent = ({
         >
           {(formik) => (
             <form onSubmit={formik.handleSubmit} method="POST">
+              <CustomFirst>
+              <CalendarWrap>
+                {startDateFocus ? (
+                  <Calendar date={date} changeDate={changeDate} minDate={null}/>
+                ) : endDateFocus ? (
+                  <Calendar date={endDate} changeDate={setEndDate} minDate={date}/>
+                ) : null}
+              </CalendarWrap>
               <FormBody
                 formik={formik}
                 setStartDateFocus={setStartDateFocus}
                 setEndDateFocus={setEndDateFocus}
               />
-
+              </CustomFirst>
               {/* bottom buttons bar */}
               <BottomButtonsBar>
                 <BackButton onClick={(e) => displayCalendar(e)}>
