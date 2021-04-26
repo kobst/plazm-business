@@ -19,10 +19,28 @@ const EventWrap = styled.div`
 
 const CalendarWrap = styled.div`
   width: 50%;
+  @media (max-width: 767px) {
+    width: 100%;
+  }
+  .MuiPickersStaticWrapper-staticWrapperRoot {
+    @media (max-width: 767px) {
+      min-width: inherit;
+    }
+  }
+  .MuiPickersBasePicker-pickerViewLandscape {
+    @media (max-width: 767px) {
+      padding: 0;
+      min-width: 200px;
+      max-width: 100%;
+    }
+  }
 `;
 
 const FormWrap = styled.div`
   width: 50%;
+  @media (max-width: 767px) {
+    width: 100%;
+  }
 `;
 
 const TopBar = styled.div`
@@ -59,6 +77,18 @@ const BottomButtonsBar = styled.div`
   }
 `;
 
+const CalenderTopWrap = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin: 0px;
+  flex-direction: row;
+  @media (max-width: 767px) {
+    flex-direction: column;
+  }
+`;
+
+
 const ScheduleAnEvent = ({
   setDisplayCalendar,
   setEventDetails,
@@ -77,6 +107,7 @@ const ScheduleAnEvent = ({
       <TopBar>
         <Heading>Schedule An Event</Heading>
       </TopBar>
+      <CalenderTopWrap>
       <CalendarWrap>
         {startDateFocus ? (
           <Calendar date={date} changeDate={changeDate} minDate={null}/>
@@ -135,6 +166,7 @@ const ScheduleAnEvent = ({
           )}
         </Formik>
       </FormWrap>
+      </CalenderTopWrap>
     </EventWrap>
   );
 };

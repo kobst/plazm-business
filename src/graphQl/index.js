@@ -13,6 +13,7 @@ import {
   getAllLists,
   getUserLists,
   getUserCreatedAndFollowedLists,
+  GetListDetails
 } from "./query/list";
 
 import { createPost, addLikeToPost } from "./mutations/post";
@@ -38,6 +39,7 @@ import {
 import { findBusinessPhotos } from "./query/post";
 
 export {
+  GetListDetails,
   homeSearch,
   DeleteList,
   getUserCreatedAndFollowedLists,

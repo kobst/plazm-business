@@ -19,6 +19,9 @@ const ModalContent = styled.div`
     padding: 15px;
     min-width: 300px;
     max-width: 300px;
+    max-height: 80vh;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
   @media (max-width: 991px) and (orientation: landscape) {
     max-height: 80vh;
@@ -38,6 +41,10 @@ const AddEventModal = ({ closeModal }) => {
   const [eventDetails, setEventDetails] = useState(null);
   const [eventTitle, setEventTitle] = useState("");
   const [eventDescription, setEventDescription] = useState("");
+  const [imageUrl, setImageUrl] = useState([]);
+  const [imageCopy, setImageCopy] = useState([]);
+  const [imageUpload, setImageUpload] = useState([]);
+  const [imageUploadCopy, setImageUploadCopy] = useState([]);
   return (
     <>
       <ModalContent>
@@ -75,6 +82,14 @@ const AddEventModal = ({ closeModal }) => {
             setEventTitle={setEventTitle}
             eventDescription={eventDescription}
             setEventDescription={setEventDescription}
+            imageUrl={imageUrl}
+            setImageUrl={setImageUrl}
+            imageCopy={imageCopy}
+            setImageCopy={setImageCopy}
+            imageUpload={imageUpload}
+            setImageUpload={setImageUpload}
+            imageUploadCopy={imageUploadCopy}
+            setImageUploadCopy={setImageUploadCopy}
           />
         )}
       </ModalContent>

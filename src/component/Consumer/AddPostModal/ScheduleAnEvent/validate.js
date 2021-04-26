@@ -36,7 +36,7 @@ export const validate = {
     .when("startTime", (startTime, schema) => {
       return schema.test({
         test: (endTime) => {
-          if (startTime.toUTCString() < endTime.toUTCString()) return true;
+          if (startTime < endTime) return true;
           return false;
         },
         message: error.START_TIME_ERROR,

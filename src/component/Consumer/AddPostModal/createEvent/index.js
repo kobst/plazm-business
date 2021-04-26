@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import AddImageImg from "../../../../images/addImage.svg";
+import CalenderImg from "../../../../images/calender_img.png";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import FormBody from "./formBody";
@@ -33,6 +34,15 @@ const BottomButtonsBar = styled.div`
   }
   @media (max-width: 991px) and (orientation: landscape) {
     padding: 0 0 15px;
+  }
+  button {
+    @media (max-width: 767px) {
+      width: 100%;
+      margin: 5px 0;
+    }
+  }
+  @media (max-width: 767px) {
+    flex-direction: column;
   }
 `;
 
@@ -69,6 +79,7 @@ const AddYourPostBar = styled.div`
   button {
     outline: 0;
     border: none;
+    background: transparent;
   }
   @media (max-width: 767px) {
     padding: 7px;
@@ -126,6 +137,15 @@ const ErrorDiv = styled.div`
   margin-bottom: 10px;
 `;
 
+const BottomBtnWrap = styled.div`
+  .MR-15 {
+    margin-right: 10px;
+  }
+  @media (max-width: 767px) {
+    flex-direction: column;
+  }
+`;
+
 let myInput;
 const CreateEventModal = ({
   setDisplayList,
@@ -139,11 +159,17 @@ const CreateEventModal = ({
   setEventTitle,
   eventDescription,
   setEventDescription,
+  imageUrl,
+  setImageUrl,
+  imageCopy,
+  setImageCopy,
+  imageUpload,
+  setImageUpload,
+  imageUploadCopy,
+  setImageUploadCopy
 }) => {
   const [loader, setLoader] = useState(false);
-  // const [profileImage, setProfileImage] = useState(null);
   const [imageError, setImageError] = useState("");
-  // const [imageFile, setImageFile] = useState(null);
   const [formError, setError] = useState("");
   const [response, setResponse] = useState("");
   const user = useSelector((state) => state.user.user);
@@ -151,10 +177,6 @@ const CreateEventModal = ({
   const dispatch = useDispatch();
   const ws = useSelector((state) => state.user.ws);
 
-  const [imageUrl, setImageUrl] = useState([]);
-  const [imageCopy, setImageCopy] = useState([]);
-  const [imageUpload, setImageUpload] = useState([]);
-  const [imageUploadCopy, setImageUploadCopy] = useState([]);
 
   /*
   @desc: to check input file format and throw error if invalid image is input
@@ -419,7 +441,7 @@ const CreateEventModal = ({
                 <AddYourTimeLabel>Add Time</AddYourTimeLabel>
                 <button onClick={(e) => displayCalendar(e)} disabled={loader}>
                   <AddImageDiv>
-                    <img src={AddImageImg} alt="" />
+                    <img src={CalenderImg} alt="" />
                   </AddImageDiv>
                 </button>
               </AddYourPostBar>
@@ -466,12 +488,14 @@ const CreateEventModal = ({
               <BackButton disabled={loader} onClick={(e) => listDisplay(e)}>
                 Add to List
               </BackButton>
-              <ButtonGrey onClick={(e) => cancelButton(e)} disabled={loader}>
-                Cancel
-              </ButtonGrey>
-              <SaveButton type="submit" disabled={loader}>
-                {loader ? <ValueLoader /> : "Create"}
-              </SaveButton>
+              <BottomBtnWrap>
+                <ButtonGrey className="MR-15" onClick={(e) => cancelButton(e)} disabled={loader}>
+                  Cancel
+                </ButtonGrey>
+                <SaveButton type="submit" disabled={loader}>
+                  {loader ? <ValueLoader /> : "Create"}
+                </SaveButton>
+              </BottomBtnWrap>
             </BottomButtonsBar>
           </form>
         )}

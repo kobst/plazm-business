@@ -8,6 +8,7 @@ import {
   getUserCreatedAndFollowedLists,
   getUserLists,
   DeleteList,
+  GetListDetails,
 } from "../graphQl";
 
 /*
@@ -95,6 +96,19 @@ export const deleteUserCreatedList = createAsyncThunk(
   }
 );
 
+/*
+ * @desc:  to fetch selected list details
+ * @params: listId, value
+ */
+export const fetchSelectedListDetails = createAsyncThunk(
+  "data/fetchSelectedListDetails",
+  async (obj) => {
+    const graphQl = GetListDetails(obj);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.getListDetails;
+  }
+);
+
 export const slice = createSlice({
   name: "list",
   initialState: {
@@ -106,6 +120,10 @@ export const slice = createSlice({
     loadingUserCreatedAndFollowed: false,
     data: [],
     totalList: 0,
+    loadingSelectedList: false,
+    totalPostInList: 0,
+    selectedListData: [],
+    selectedListDetails: {},
   },
   reducers: {},
   extraReducers: {
@@ -196,6 +214,27 @@ export const slice = createSlice({
             (i) => i._id !== action.payload.list._id
           );
         }
+      }
+    },
+    [fetchSelectedListDetails.pending]: (state) => {
+      if (!state.loadingSelectedList) {
+        state.loadingSelectedList = true;
+      }
+    },
+    [fetchSelectedListDetails.fulfilled]: (state, action) => {
+      if (state.loadingSelectedList) {
+        state.loadingSelectedList = false;
+        if (action.payload) {
+          state.selectedListData = action.payload.data;
+          state.totalPostInList = action.payload.totalLists;
+          state.selectedListDetails = action.payload.listDetails;
+        }
+      }
+    },
+    [fetchSelectedListDetails.rejected]: (state, action) => {
+      if (state.loadingSelectedList) {
+        state.loadingSelectedList = false;
+        state.error = action.payload;
       }
     },
   },

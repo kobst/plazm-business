@@ -38,7 +38,10 @@ const getUserLists = (ownerId) => {
               list {
                   _id
                   name
-                  ownerId
+                  ownerId {
+                    _id
+                    name
+                  }
                 }
               }
           }`,
@@ -80,10 +83,68 @@ const getUserCreatedAndFollowedLists = (obj) => {
           }`,
     variables: {
       id: obj.id,
-      value: obj.value
+      value: obj.value,
+    },
+  };
+  return graphQl;
+};
+/*
+@desc: getListDetails query
+*/
+const GetListDetails = (obj) => {
+  const graphQl = {
+    query: `
+          query GetListDetails($id: ID!, $value: Int){
+            getListDetails (input: {id: $id, value:$value}){
+              message
+              success
+              totalLists 
+              listDetails {
+                name
+                description
+                ownerId {
+                  name
+                }
+                updatedAt
+              }
+              data {
+                _id
+                data
+                business {
+                  company_name
+                  favorites
+                  filter_tags
+                }
+                taggedUsers {
+                  name
+                }
+                taggedLists {
+                  name
+                }
+                ownerId {
+                  name
+                  photo
+                }
+                listId {
+                  _id
+                  name
+                }
+                totalPosts {
+                  totalPosts
+                }
+                totalComments{
+                  totalCount
+                }
+                createdAt
+              }
+              }
+          }`,
+    variables: {
+      id: obj.id,
+      value: obj.value,
     },
   };
   return graphQl;
 };
 
-export { getAllLists, getUserLists, getUserCreatedAndFollowedLists };
+export { getAllLists, getUserLists, getUserCreatedAndFollowedLists, GetListDetails };

@@ -72,7 +72,7 @@ function FormBody({ formik, setStartDateFocus, setEndDateFocus }) {
               value={moment(formik.values.startTime).format(
                 "DD/MM/yyyy HH:mm a"
               )}
-              onChange={(e) => formik.setFieldValue("startTime", moment(e).format("HH:mm a"))}
+              onChange={(e) => formik.setFieldValue("startTime", moment(e).format("DD/MM/yyyy HH:mm a"))}
               onFocus={() => setFieldFocus(true)}
             />
             {formik.errors && formik.errors.startTime ? (
@@ -91,7 +91,7 @@ function FormBody({ formik, setStartDateFocus, setEndDateFocus }) {
             <Input
               name="endTime"
               value={moment(formik.values.endTime).format("DD/MM/yyyy HH:mm a")}
-              onChange={(e) => formik.setFieldValue("endTime", moment(e).format("HH:mm a"))}
+              onChange={(e) => formik.setFieldValue("endTime", moment(e).format("DD/MM/yyyy HH:mm a"))}
               onFocus={() => setFieldFocus(false)}
             />
             {/* {formik.errors && formik.errors.endDate ? (
