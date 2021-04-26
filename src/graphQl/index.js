@@ -5,7 +5,7 @@ import {
   addFavoriteBusiness,
   removeFavoriteBusiness,
 } from "./mutations/user";
-import { getUser, getAllUsers, getUserFavorites } from "./query/user";
+import { getUser, getAllUsers, getUserFavorites, GetMyFeedData } from "./query/user";
 
 import { getPlace, searchAllPlaces } from "./query/place";
 
@@ -29,6 +29,7 @@ import { CreateList, addPostToList, addEventToList } from "./mutations/list";
 import { findBusinessPhotos } from './query/post';
 
 export {
+  GetMyFeedData,
   createEvent,
   addEventToList,
   findBusinessPhotos,

@@ -16,6 +16,7 @@ import ProfileSettings from "../../../Consumer/ProfileSettings";
 import BuisinessView from "../../../Consumer/BuisinessView";
 import BusinessList from "../../../Consumer/BusinessList";
 import { useSelector } from "react-redux";
+import MyFeed from "../../../Consumer/MyFeed";
 
 const LeftBarContent = styled.div`
   width: 100px;
@@ -106,7 +107,7 @@ const LeftBar = ({
               }
             >
               <UserImage>
-                <img src={user.photo?user.photo:ProfileImg} alt="" />
+                <img src={user.photo ? user.photo : ProfileImg} alt="" />
               </UserImage>
             </Tab>
             <Tab
@@ -235,7 +236,7 @@ const LeftBar = ({
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              <h2>Any content 5</h2>
+              <MyFeed setDisplayTab={() => setTabIndex(0)} />
             </div>
           </TabPanel>
           <TabPanel>

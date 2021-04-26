@@ -89,4 +89,73 @@ const getUserFavorites = ({id,value}) => {
   };
   return graphQl;
 };
-export { getUser,getAllUsers,getUserFavorites };
+
+/*
+@desc: GetMyFeedData query
+*/
+const GetMyFeedData = (obj) => {
+  const graphQl = {
+    query: `
+          query GetMyFeedData($id: ID!, $value: Int){
+            getMyFeedData (input: {id: $id, value:$value}){
+              message
+              success
+              totalPlaces 
+              data {
+                _id
+                data
+                business {
+                  company_name
+                  favorites
+                  filter_tags
+                  hours_format {
+                    Start
+                    End
+                    StartDay
+                    EndDay
+                  }
+                }
+                taggedUsers {
+                  _id
+                  name
+                }
+                taggedLists {
+                  name
+                }
+                ownerId {
+                  name
+                  photo
+                }
+                listId {
+                  _id
+                  name
+                }
+                title
+                description
+                type
+                eventSchedule {
+                  start_time
+                  end_time
+                }
+                location {
+                  type
+                  coordinates
+                }
+                totalPosts {
+                  totalPosts
+                }
+                totalComments{
+                  totalCount
+                }
+                createdAt
+              }
+              }
+          }`,
+    variables: {
+      id: obj.id,
+      value: obj.value,
+    },
+  };
+  return graphQl;
+};
+export { getUser,getAllUsers,getUserFavorites, GetMyFeedData };
