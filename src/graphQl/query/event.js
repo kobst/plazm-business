@@ -58,8 +58,8 @@ const fetchEvent = (values) => {
 const fetchEventForAWeek = (values) => {
   const graphQl = {
     query: `
-      query GetEventsForTheWeek($id: ID, $date:Date){
-        getEventsForTheWeek(input: {id:$id, date:$date}) {
+      query GetEventsForTheWeek($id: ID, $date:Date, $userId: ID){
+        getEventsForTheWeek(input: {id:$id, date:$date, userId:$userId}) {
           message
           success
           event {
@@ -95,7 +95,8 @@ const fetchEventForAWeek = (values) => {
       }`,
     variables: {
       id:values.id,
-      date: values.date
+      date: values.date,
+      userId: values.userId
     },
   };
   return graphQl;

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { graphQlEndPoint } from "../Api/graphQl";
-import { addPostToList, CreateList, getAllLists, getUserLists } from "../graphQl";
+import { addEventToList, addPostToList, CreateList, getAllLists, getUserLists } from "../graphQl";
 
 
 /*
@@ -39,6 +39,16 @@ export const fetchUserLists = createAsyncThunk("data/fetchUserLists", async (obj
  */
 export const AddPostToList = createAsyncThunk("data/AddPostToList", async (obj) => {
   const graphQl = addPostToList(obj);
+  const response = await graphQlEndPoint(graphQl);
+  return response;
+});
+
+/*
+ * @desc:  to add event to list
+ * @params: listId, eventId
+ */
+export const AddEventToList = createAsyncThunk("data/AddEventToList", async (obj) => {
+  const graphQl = addEventToList(obj);
   const response = await graphQlEndPoint(graphQl);
   return response;
 });

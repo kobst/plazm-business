@@ -17,4 +17,8 @@ export default {
   MAXIMUM_TITLE_LENGTH: "maximum length 255 is allowed.",
   MINIMUM_DESCRIPTION_LENGTH: "minimum length 3 is required.",
   MAXIMUM_DESCRIPTION_LENGTH: "maximum length 500 is allowed.",
+  START_TIME_ERROR: "start time should be less than end time",
+  EVENT_DETAILS_REQUIRED: "Event Details Is Required",
+  START_DATE_ERROR: "start date should be less than end date",
+  START_DATE_GREATER_THAN_CURRENT: "start date should be greater than current date"
 };

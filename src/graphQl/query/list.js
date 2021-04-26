@@ -38,7 +38,10 @@ const getUserLists = (ownerId) => {
               list {
                   _id
                   name
-                  ownerId
+                  ownerId {
+                    _id
+                    name
+                  }
                 }
               }
           }`,

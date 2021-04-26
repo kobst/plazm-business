@@ -1,12 +1,14 @@
 import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
+import moment from "moment";
 import {
   addLikeToEvents,
+  createEvent,
+  // fetchEvent,
   fetchEventForAWeek,
   findCommentReplies,
   findPostComments,
 } from "../graphQl";
 import { graphQlEndPoint } from "../Api/graphQl";
-import moment from "moment";
 
 /*
  * @desc:  to fetch events of current day for a particular business
@@ -25,10 +27,11 @@ export const fetchEventsForTheDay = createAsyncThunk(
  */
 export const fetchEventsForTheWeek = createAsyncThunk(
   "data/fetchEventsForTheWeek",
-  async ({ businessId, date }) => {
+  async ({ businessId, date, userId }) => {
     const obj = {
       date: date,
       id: businessId,
+      userId:userId
     };
     const graphQl = fetchEventForAWeek(obj);
     const response = await graphQlEndPoint(graphQl);
@@ -120,19 +123,66 @@ export const fetchCommentReplies = createAsyncThunk(
 );
 
 /*
+ * @desc:  to add an event by user on a business
+ * @params: obj
+ */
+export const addEvent = createAsyncThunk(
+  "data/addEvent",
+  async ({ obj, user }) => {
+    const graphQl = createEvent(obj);
+    const response = await graphQlEndPoint(graphQl);
+    return { data: response.data.addEvent, user: user };
+  }
+);
+
+/*
  * @desc:  to fetch events of a complete week for a particular business
  * @params: businessId,date
  */
 export const fetchInitialWeekEvents = createAsyncThunk(
   "data/fetchInitialWeekEvents",
-  async ({ businessId, date }) => {
+  async ({ businessId, date, userId }) => {
     const obj = {
       date: date,
       id: businessId,
+      userId:userId
     };
     const graphQl = fetchEventForAWeek(obj);
     const response = await graphQlEndPoint(graphQl);
     return response.data.getEventsForTheWeek.event;
+  }
+);
+
+/*
+ * @desc:  to add an event via socket
+ * @params: obj
+ */
+export const addEventViaSocket = createAsyncThunk(
+  "data/addEventViaSocket",
+  async (obj) => {
+    return obj;
+  }
+);
+
+/*
+ * @desc:  to delete an event via socket
+ * @params: eventId
+ */
+export const deleteEventViaSocket = createAsyncThunk(
+  "data/deleteEventViaSocket",
+  async (id) => {
+    return id;
+  }
+);
+
+/*
+ * @desc:  to edit an event via socket
+ * @params: obj
+ */
+export const editEventViaSocket = createAsyncThunk(
+  "data/editEventViaSocket",
+  async (obj) => {
+    return obj;
   }
 );
 export const slice = createSlice({
@@ -155,12 +205,24 @@ export const slice = createSlice({
       currentDate.setDate(currentDate.getDate() + 7);
       state.date = currentDate;
       state.initialWeekEvents = [];
+
+      const firstDateOfTheWeek = currentDate.getDate() - currentDate.getDay();
+      const firstDay = new Date();
+      firstDay.setDate(firstDateOfTheWeek);
+      firstDay.setMonth(currentDate.getMonth());
+      firstDay.setUTCHours(0, 0, 0, 0);
+      state.selectedDate = firstDay;
     },
     previousWeekDate: (state) => {
       const currentDate = new Date(state.date);
+      const currentDate1 = new Date(state.date);
       currentDate.setDate(currentDate.getDate() - 7);
       state.date = currentDate;
       state.initialWeekEvents = [];
+
+      const endOfWeek = moment(currentDate1).startOf("week").toDate();
+      endOfWeek.setUTCHours(0, 0, 0, 0);
+      state.selectedDate = endOfWeek;
     },
     setCurrentDate: (state) => {
       state.date = new Date();
@@ -537,6 +599,114 @@ export const slice = createSlice({
             }
           }
         }
+      }
+    },
+    [addEvent.fulfilled]: (state, action) => {
+      if (action.payload) {
+        if (
+          moment(state.selectedDate).format("DD MMM YYYY") ===
+          moment(action.payload.data.event.eventSchedule.start_time).format(
+            "DD MMM YYYY"
+          )
+        ) {
+          const arr = state.events.concat({
+            ...action.payload.data.event,
+            user: action.payload.user,
+            likes: [],
+            totalComments: 0,
+            createdAt: new Date(Date.now()),
+          });
+          state.events = arr.sort((a, b) => {
+            return (
+              new Date(b.eventSchedule.start_time) -
+              new Date(a.eventSchedule.start_time)
+            );
+          });
+
+          const initialWeekEvents = state.initialWeekEvents.concat({
+            ...action.payload.data.event,
+            user: action.payload.user,
+            likes: [],
+            totalComments: 0,
+            createdAt: new Date(Date.now()),
+          });
+          state.initialWeekEvents = initialWeekEvents.sort((a, b) => {
+            return (
+              new Date(b.eventSchedule.start_time) -
+              new Date(a.eventSchedule.start_time)
+            );
+          });
+        }
+      }
+    },
+    [addEventViaSocket.fulfilled]: (state, action) => {
+      const arr = state.events.concat(action.payload.event);
+      state.events = arr.sort((a, b) => {
+        return (
+          new Date(b.eventSchedule.start_time) -
+          new Date(a.eventSchedule.start_time)
+        );
+      });
+
+      const initialWeekEvents = state.initialWeekEvents.concat(
+        action.payload.event
+      );
+      state.initialWeekEvents = initialWeekEvents.sort((a, b) => {
+        return (
+          new Date(b.eventSchedule.start_time) -
+          new Date(a.eventSchedule.start_time)
+        );
+      });
+    },
+    [deleteEventViaSocket.fulfilled]: (state, action) => {
+      const arr = state.events.filter((i) => i._id !== action.payload);
+      state.events = arr.sort((a, b) => {
+        return (
+          new Date(b.eventSchedule.start_time) -
+          new Date(a.eventSchedule.start_time)
+        );
+      });
+
+      const deleteInitialWeekEvents = state.initialWeekEvents.filter(
+        (i) => i._id !== action.payload
+      );
+      state.initialWeekEvents = deleteInitialWeekEvents.sort((a, b) => {
+        return (
+          new Date(b.eventSchedule.start_time) -
+          new Date(a.eventSchedule.start_time)
+        );
+      });
+    },
+    [editEventViaSocket.fulfilled]: (state, action) => {
+      const findEvent = state.events.filter(
+        (i) => i._id === action.payload._id
+      );
+      if (findEvent && findEvent.length > 0) {
+        let arr = state.events.filter((i) => i._id !== action.payload._id);
+        arr = arr.concat(action.payload);
+        state.events = arr.sort((a, b) => {
+          return (
+            new Date(b.eventSchedule.start_time) -
+            new Date(a.eventSchedule.start_time)
+          );
+        });
+      }
+      const findInitialEvent = state.initialWeekEvents.filter(
+        (i) => i._id === action.payload._id
+      );
+      if (findInitialEvent) {
+        let deleteInitialWeekEvents = state.initialWeekEvents.filter(
+          (i) => i._id !== action.payload._id
+        );
+        deleteInitialWeekEvents = deleteInitialWeekEvents.concat(
+          action.payload
+        );
+        state.initialWeekEvents = deleteInitialWeekEvents.sort((a, b) => {
+          return (
+            new Date(b.eventSchedule.start_time) -
+            new Date(a.eventSchedule.start_time)
+          );
+        });
       }
     },
   },

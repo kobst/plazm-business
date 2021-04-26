@@ -1143,6 +1143,7 @@ const RightSide = (props) => {
                 isOpen={isOpen}
                 setIsOpen={setIsOpen}
                 data={place}
+                ws={props.ws}
                 closeModal={() => (setEdit(false), setIsOpen(false))}
               />
               <CalenderSection>
