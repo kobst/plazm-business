@@ -159,11 +159,17 @@ const CreateEventModal = ({
   setEventTitle,
   eventDescription,
   setEventDescription,
+  imageUrl,
+  setImageUrl,
+  imageCopy,
+  setImageCopy,
+  imageUpload,
+  setImageUpload,
+  imageUploadCopy,
+  setImageUploadCopy
 }) => {
   const [loader, setLoader] = useState(false);
-  // const [profileImage, setProfileImage] = useState(null);
   const [imageError, setImageError] = useState("");
-  // const [imageFile, setImageFile] = useState(null);
   const [formError, setError] = useState("");
   const [response, setResponse] = useState("");
   const user = useSelector((state) => state.user.user);
@@ -171,10 +177,6 @@ const CreateEventModal = ({
   const dispatch = useDispatch();
   const ws = useSelector((state) => state.user.ws);
 
-  const [imageUrl, setImageUrl] = useState([]);
-  const [imageCopy, setImageCopy] = useState([]);
-  const [imageUpload, setImageUpload] = useState([]);
-  const [imageUploadCopy, setImageUploadCopy] = useState([]);
 
   /*
   @desc: to check input file format and throw error if invalid image is input

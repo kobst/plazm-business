@@ -195,7 +195,7 @@ const DisplayFavoriteBusiness = ({ data }) => {
       const startDayIndex = days.indexOf(data.favorites.hours_format[i].StartDay);
       const endDayIndex = days.indexOf(data.favorites.hours_format[i].EndDay);
       if (currentUtcDay >= startDayIndex && currentUtcDay <= endDayIndex) {
-        const time = moment(getUtcHour + ":" + getUtcMinutes, "HH:mm");
+        const time = moment(getUtcHour + ":" + getUtcMinutes, "HH:mm");        
         const beforeTime = moment(
           data.favorites.hours_format[i].Start,
           "HH:mm"

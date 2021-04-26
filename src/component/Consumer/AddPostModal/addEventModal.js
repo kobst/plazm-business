@@ -41,6 +41,10 @@ const AddEventModal = ({ closeModal }) => {
   const [eventDetails, setEventDetails] = useState(null);
   const [eventTitle, setEventTitle] = useState("");
   const [eventDescription, setEventDescription] = useState("");
+  const [imageUrl, setImageUrl] = useState([]);
+  const [imageCopy, setImageCopy] = useState([]);
+  const [imageUpload, setImageUpload] = useState([]);
+  const [imageUploadCopy, setImageUploadCopy] = useState([]);
   return (
     <>
       <ModalContent>
@@ -78,6 +82,14 @@ const AddEventModal = ({ closeModal }) => {
             setEventTitle={setEventTitle}
             eventDescription={eventDescription}
             setEventDescription={setEventDescription}
+            imageUrl={imageUrl}
+            setImageUrl={setImageUrl}
+            imageCopy={imageCopy}
+            setImageCopy={setImageCopy}
+            imageUpload={imageUpload}
+            setImageUpload={setImageUpload}
+            imageUploadCopy={imageUploadCopy}
+            setImageUploadCopy={setImageUploadCopy}
           />
         )}
       </ModalContent>
