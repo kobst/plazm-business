@@ -25,6 +25,14 @@ const EventListing = styled.div`
   span {
     color: #ffffff;
   }
+  .TitleSpan {
+    min-width: 100px;
+    display: inline-flex;
+    color: #ff2e9a;
+    text-align: right;
+    justify-content: flex-end;
+    margin: 0 5px 0 0;
+  }
 `;
 
 const CloseList = styled.div`
@@ -43,17 +51,17 @@ const PostEvent = ({ eventDetails, setEventDetails }) => {
           <div>
             <span>
               <EventListing>
-                Event Date : <span>{eventDetails.eventDate}</span>
+                <span className="TitleSpan">Event Date :</span> <span>{eventDetails.eventDate}</span>
               </EventListing>
             </span>
             <span>
               <EventListing>
-                Event Timing : <span>{eventDetails.eventTime}</span>
+                <span className="TitleSpan">Event Timing :</span> <span>{eventDetails.eventTime}</span>
               </EventListing>
             </span>
             <span>
               <EventListing>
-                Event Repeat : <span>{eventDetails.eventRepeat}</span>
+               <span className="TitleSpan">Event Repeat :</span> <span>{eventDetails.eventRepeat}</span>
               </EventListing>
             </span>
           </div>

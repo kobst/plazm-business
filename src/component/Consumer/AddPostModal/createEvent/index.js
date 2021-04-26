@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import AddImageImg from "../../../../images/addImage.svg";
+import CalenderImg from "../../../../images/calender_img.png";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import FormBody from "./formBody";
@@ -33,6 +34,15 @@ const BottomButtonsBar = styled.div`
   }
   @media (max-width: 991px) and (orientation: landscape) {
     padding: 0 0 15px;
+  }
+  button {
+    @media (max-width: 767px) {
+      width: 100%;
+      margin: 5px 0;
+    }
+  }
+  @media (max-width: 767px) {
+    flex-direction: column;
   }
 `;
 
@@ -69,6 +79,7 @@ const AddYourPostBar = styled.div`
   button {
     outline: 0;
     border: none;
+    background: transparent;
   }
   @media (max-width: 767px) {
     padding: 7px;
@@ -124,6 +135,15 @@ const ErrorDiv = styled.div`
   font-size: 12px;
   margin: 0;
   margin-bottom: 10px;
+`;
+
+const BottomBtnWrap = styled.div`
+  .MR-15 {
+    margin-right: 10px;
+  }
+  @media (max-width: 767px) {
+    flex-direction: column;
+  }
 `;
 
 let myInput;
@@ -419,7 +439,7 @@ const CreateEventModal = ({
                 <AddYourTimeLabel>Add Time</AddYourTimeLabel>
                 <button onClick={(e) => displayCalendar(e)} disabled={loader}>
                   <AddImageDiv>
-                    <img src={AddImageImg} alt="" />
+                    <img src={CalenderImg} alt="" />
                   </AddImageDiv>
                 </button>
               </AddYourPostBar>
@@ -466,12 +486,14 @@ const CreateEventModal = ({
               <BackButton disabled={loader} onClick={(e) => listDisplay(e)}>
                 Add to List
               </BackButton>
-              <ButtonGrey onClick={(e) => cancelButton(e)} disabled={loader}>
-                Cancel
-              </ButtonGrey>
-              <SaveButton type="submit" disabled={loader}>
-                {loader ? <ValueLoader /> : "Create"}
-              </SaveButton>
+              <BottomBtnWrap>
+                <ButtonGrey className="MR-15" onClick={(e) => cancelButton(e)} disabled={loader}>
+                  Cancel
+                </ButtonGrey>
+                <SaveButton type="submit" disabled={loader}>
+                  {loader ? <ValueLoader /> : "Create"}
+                </SaveButton>
+              </BottomBtnWrap>
             </BottomButtonsBar>
           </form>
         )}

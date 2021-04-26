@@ -19,6 +19,9 @@ const ModalContent = styled.div`
     padding: 15px;
     min-width: 300px;
     max-width: 300px;
+    max-height: 80vh;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
   @media (max-width: 991px) and (orientation: landscape) {
     max-height: 80vh;

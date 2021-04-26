@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ValueLoader from "../../../utils/loader";
 import { IoMdClose } from "react-icons/io";
+import { FaSort } from "react-icons/fa";
 import Input from "../../UI/Input/Input";
 import DisplayFavoriteBusiness from "./displayFavoriteBusiness";
 import { fetchUserFavoritesBusiness } from "../../../reducers/userReducer";
@@ -40,6 +41,12 @@ const BuisinessViewContent = styled.div`
     font-weight: 600;
     @media (max-width: 767px) {
       font-size: 18px;
+    }
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    svg {
+      font-size: 12px;
     }
   }
   p {
@@ -174,14 +181,14 @@ const BusinessList = ({ setDisplayTab }) => {
             <CloseDiv>
               <IoMdClose onClick={() => setDisplayTab(false)} />
             </CloseDiv>
-            <h3>Favorites</h3>
+            <h3>Favorites <FaSort /></h3>
             <div className="dashed" />
             <Input
               placeholder="Search Favorites"
               onChange={(e) => searchList(e)}
             />
           </HeadingWrap>
-        <div id="scrollableDiv" style={{ height: "100vh", overflow: "auto" }}> 
+        <div id="scrollableDiv" style={{ height: "calc(100vh - 175px)", overflow: "auto" }}> 
         <InfiniteScroll
           dataLength={userFavorites? userFavorites.length: 0}
           next={fetchMoreBusiness}
