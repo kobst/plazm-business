@@ -9,6 +9,7 @@ const createPost = (values) => {
               createPost(input: {business:$business, data:$data, media:$media, taggedUsers:$taggedUsers, taggedLists:$taggedLists, ownerId:$ownerId, listId:$listId }) {
               message
               success
+              totalPosts
               post {
                 _id
                 data

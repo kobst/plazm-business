@@ -5,7 +5,11 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { IoMdClose } from "react-icons/io";
 import { FaSort } from "react-icons/fa";
 import ValueLoader from "../../../utils/loader";
-import { fetchMyFeedData } from "../../../reducers/myFeedReducer";
+import {
+  clearMyFeedData,
+  fetchMyFeedData,
+} from "../../../reducers/myFeedReducer";
+import DisplayBusinessDetails from "./DisplayBusinessDetails";
 
 const LoaderWrap = styled.div`
   width: 100%;
@@ -127,15 +131,17 @@ const MyFeed = ({ setDisplayTab }) => {
       value: 0,
     };
 
+    dispatch(clearMyFeedData());
     dispatch(fetchMyFeedData(obj));
   }, []);
 
   const fetchMoreData = () => {
-    if (offset + 20 < feedData) {
+    if (offset + 20 < totalData) {
       setOffSet(offset + 20);
       dispatch(fetchMyFeedData({ id: user._id, value: offset + 20 }));
     } else setHasMore(false);
   };
+
   return (
     <>
       {loading && offset === 0 ? (
@@ -153,19 +159,14 @@ const MyFeed = ({ setDisplayTab }) => {
             </h3>
             <div className="dashed" />
           </HeadingWrap>
-          <div
-            id="scrollableDiv"
-            style={{ height: "calc(100vh - 175px)", overflow: "auto" }}
-          >
+          <div id="scrollableDiv" style={{ height: "calc(100vh - 116px)", overflow: "auto" }}>
             <InfiniteScroll
               dataLength={feedData ? feedData.length : 0}
               next={fetchMoreData}
               hasMore={hasMore}
               loader={
-                feedData &&
-                feedData.length > 20 &&
                 offset + 20 < totalData &&
-                !loading ? (
+                loading ? (
                   <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
                     {" "}
                     <ValueLoader height="40" width="40" />
@@ -185,10 +186,9 @@ const MyFeed = ({ setDisplayTab }) => {
             >
               <BusinessListWrap>
                 {feedData.length > 0 ? (
-                  feedData.map((i, key) =>
-                    console.log(i)
-                    // <DisplayFavoriteBusiness data={i} key={key} />
-                  )
+                  feedData.map((i, key) => (
+                    <DisplayBusinessDetails data={i} key={key} />
+                  ))
                 ) : (
                   <NoData>No Data To Display</NoData>
                 )}

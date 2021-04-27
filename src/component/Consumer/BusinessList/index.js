@@ -121,7 +121,7 @@ const BusinessList = ({ setDisplayTab }) => {
   const [search, setSearch] = useState("");
   const [favoriteBusinessFiltered, setFavoriteBusinessFiltered] = useState([]);
   const [offset, setOffSet] = useState(0);
-  const totalFavorites = useSelector(state => state.user.totalFavorites)
+  const totalFavorites = useSelector((state) => state.user.totalFavorites);
   const [hasMore, setHasMore] = useState(true);
   const user = useSelector((state) => state.user.user);
   const loadingFavoriteBusiness = useSelector(
@@ -150,19 +150,20 @@ const BusinessList = ({ setDisplayTab }) => {
   }, [search, favoriteBusiness]);
 
   useEffect(() => {
-    dispatch(fetchUserFavoritesBusiness({id:user._id,value:offset}));
+    dispatch(fetchUserFavoritesBusiness({ id: user._id, value: offset }));
   }, [user, dispatch, offset]);
-
 
   useEffect(() => {
     setOffSet(0);
     setHasMore(true);
   }, []);
-  
+
   const fetchMoreBusiness = () => {
     if (offset + 20 < totalFavorites) {
       setOffSet(offset + 20);
-      dispatch(fetchUserFavoritesBusiness({id:user._id,value:offset+20}));
+      dispatch(
+        fetchUserFavoritesBusiness({ id: user._id, value: offset + 20 })
+      );
     } else setHasMore(false);
   };
   /** on change handler for search */
@@ -171,7 +172,7 @@ const BusinessList = ({ setDisplayTab }) => {
   };
   return (
     <>
-      {loadingFavoriteBusiness && offset === 0? (
+      {loadingFavoriteBusiness && offset === 0 ? (
         <LoaderWrap>
           <ValueLoader />
         </LoaderWrap>
@@ -225,7 +226,7 @@ const BusinessList = ({ setDisplayTab }) => {
               )}
             </BusinessListWrap>
             </InfiniteScroll>
-            </div>
+          </div>
         </BuisinessViewContent>
       )}
     </>

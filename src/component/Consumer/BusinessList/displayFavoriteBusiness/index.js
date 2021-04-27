@@ -82,6 +82,9 @@ const ProfileName = styled.div`
     color: #ff0000;
     margin: 0;
   }
+  div {
+    cursor: pointer;
+  }
   display: flex;
   flex-direction: row;
   justify-content: space-between;

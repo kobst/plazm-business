@@ -17,6 +17,7 @@ const getUser = (userSub) => {
                   lockProfile
                   _id
                   favorites
+                  listFollowed
               }
             }
           }`,
@@ -105,6 +106,7 @@ const GetMyFeedData = (obj) => {
                 _id
                 data
                 business {
+                  _id
                   company_name
                   favorites
                   filter_tags
@@ -114,6 +116,7 @@ const GetMyFeedData = (obj) => {
                     StartDay
                     EndDay
                   }
+                  default_image_url
                 }
                 taggedUsers {
                   _id
@@ -136,6 +139,15 @@ const GetMyFeedData = (obj) => {
                 eventSchedule {
                   start_time
                   end_time
+                }
+                user {
+                  name
+                  photo
+                }
+                likes
+                media {
+                  image
+                  thumbnail
                 }
                 location {
                   type
