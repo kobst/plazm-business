@@ -131,7 +131,7 @@ const ListDetailWrap = styled.div`
   width: calc(100% - 165px);
   display: flex;
   flex-direction: column;
-  padding: 14px 0;
+  padding: 14px 10px 14px 0;
   @media (max-width: 767px) {
     width: 100%;
     margin:8px;
