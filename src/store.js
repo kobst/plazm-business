@@ -6,7 +6,6 @@ import listReducer from './reducers/listReducer';
 import placeReducer from './reducers/placeReducer';
 import userReducer from './reducers/userReducer';
 import myFeedReducer from './reducers/myFeedReducer';
-import searchReducer from './reducers/searchReducer';
 
 export default configureStore({
   reducer: {
@@ -17,7 +16,6 @@ export default configureStore({
     place: placeReducer,
     user: userReducer,
     myFeed: myFeedReducer,
-    search: searchReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

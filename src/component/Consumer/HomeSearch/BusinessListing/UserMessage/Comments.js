@@ -151,7 +151,7 @@ const Comments = ({ i, postData, displayComments, setFlag, flag, business }) => 
     <UserMessageContent className="UserReplyContent">
       <ProfileNameHeader>
         <ProfileThumb>
-          <img src={i.userId.photo ? i.userId.photo : ProfileImg} alt="" />
+          <img src={i.userId.length>0 ? i.userId[0].photo : i.userId? i.userId.photo : ProfileImg} alt="" />
         </ProfileThumb>
         <ProfileNameWrap>
           <ProfileName>
@@ -162,13 +162,13 @@ const Comments = ({ i, postData, displayComments, setFlag, flag, business }) => 
             <p>{findDesc(i.body, i.taggedUsers)}</p>
           </ChatInput>
           <LikesBar
-            type="reply"
+            type="disabled"
             date={new Date(i.createdAt)}
             setDisplayComments={setDisplayReply}
             displayComments={displayReply}
             name={i.userId.name}
-            totalLikes={i.likes.length}
-            totalComments={i.totalReplies}
+            totalLikes={i.likes ? i.likes.length : 0}
+            totalComments={i.totalReplies ? i.totalReplies : 0}
             commentId={i._id}
             commentLikes={i.likes}
             setDisplayReplyInput={setDisplayReplyInput}

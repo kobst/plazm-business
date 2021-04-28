@@ -4,6 +4,7 @@ import {
   GetMyFeedData,
   findPostComments,
   findCommentReplies,
+  homeSearch
 } from "../graphQl";
 
 /*
@@ -130,6 +131,15 @@ export const addPostViaSocket = createAsyncThunk(
   }
 );
 
+/*
+ * @desc:  home search
+ * @params: search data
+ */
+export const HomeSearch = createAsyncThunk("data/HomeSearch", async (obj) => {
+  const graphQl = homeSearch(obj);
+  const response = await graphQlEndPoint(graphQl);
+  return response.data.homeSearch;
+});
 export const slice = createSlice({
   name: "myFeed",
   initialState: {
@@ -140,9 +150,33 @@ export const slice = createSlice({
     loadingReplies: false,
     loadingEventComments: false,
     loadingEventReplies: false,
+    searchData: "",
+    filterByUpdatedAt: false,
+    filterByClosest: false,
   },
   reducers: {
     clearMyFeedData: (state) => {
+      state.myFeed = [];
+    },
+    setSearchData: (state, action) => {
+      state.searchData = action.payload;
+    },
+    setSideFiltersByUpdatedAt: (state) => {
+      state.myFeed = [];
+      state.filterByUpdatedAt = true;
+      state.filterByClosest = false;
+    },
+    setSideFiltersByClosest: (state) => {
+      state.myFeed = [];
+      state.filterByClosest = true;
+      state.filterByUpdatedAt = false;
+    },
+    setSideFiltersHomeSearch: (state) => {
+      state.myFeed = [];
+      state.filterByUpdatedAt = false;
+      state.filterByClosest = false;
+    },
+    clearSearchedData: (state) => {
       state.myFeed = [];
     },
   },
@@ -526,10 +560,42 @@ export const slice = createSlice({
         return new Date(b.createdAt) - new Date(a.createdAt);
       });
     },
+    [HomeSearch.pending]: (state) => {
+      if (!state.loading) {
+        state.loading = true;
+      }
+    },
+    [HomeSearch.fulfilled]: (state, action) => {
+      if (state.loading) {
+        state.loading = false;
+        if (action.payload) {
+          const data = action.payload.data.map((obj) => ({
+            ...obj,
+            comments: [],
+          }));
+          state.myFeed = state.myFeed.concat(data);
+          state.totalData = action.payload.totalPlaces;
+        }
+      }
+    },
+    [HomeSearch.rejected]: (state, action) => {
+      if (state.loading) {
+        state.loading = false;
+        state.error = action.payload;
+      }
+    },
   },
 });
 
 export const {
   clearMyFeedData
+} = slice.actions;
+
+export const {
+  setSearchData,
+  setSideFiltersByClosest,
+  setSideFiltersByUpdatedAt,
+  setSideFiltersHomeSearch,
+  clearSearchedData,
 } = slice.actions;
 export default slice.reducer;

@@ -11,7 +11,7 @@ import {
   HomeSearch,
   setSideFiltersByClosest,
   setSideFiltersByUpdatedAt,
-} from "../../../../reducers/searchReducer";
+} from "../../../../reducers/myFeedReducer";
 import error from "../../../../constants";
 
 const BusinessListWrap = styled.div`
@@ -124,16 +124,16 @@ const DropdownContent = styled.div`
 `;
 
 const BusinessListing = () => {
-  const businessData = useSelector((state) => state.search.searchedPlace);
-  const loading = useSelector((state) => state.search.loading);
+  const businessData = useSelector((state) => state.myFeed.myFeed);
+  const loading = useSelector((state) => state.myFeed.loading);
   const [offset, setOffset] = useState(0);
   const [hasMore, setHasMore] = useState(true);
-  const totalPlaces = useSelector((state) => state.search.totalPlaces);
+  const totalPlaces = useSelector((state) => state.myFeed.totalData);
   const dispatch = useDispatch();
-  const search = useSelector((state) => state.search.searchData);
-  const filterClosest = useSelector((state) => state.search.filterByClosest);
+  const search = useSelector((state) => state.myFeed.searchData);
+  const filterClosest = useSelector((state) => state.myFeed.filterByClosest);
   const updatedAtFilter = useSelector(
-    (state) => state.search.filterByUpdatedAt
+    (state) => state.myFeed.filterByUpdatedAt
   );
   const menuRef = useRef(null);
   const [uploadMenu, setUploadMenu] = useState(false);
@@ -225,7 +225,7 @@ const BusinessListing = () => {
             next={fetchMorePlaces}
             hasMore={hasMore}
             loader={
-              offset + 20 < totalPlaces && loading ? (
+              offset < totalPlaces && loading ? (
                 <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
                   {" "}
                   <ValueLoader height="40" width="40" />

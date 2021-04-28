@@ -133,7 +133,7 @@ const MyFeed = ({ setDisplayTab }) => {
 
     dispatch(clearMyFeedData());
     dispatch(fetchMyFeedData(obj));
-  }, []);
+  }, [dispatch, user._id,]);
 
   const fetchMoreData = () => {
     if (offset + 20 < totalData) {

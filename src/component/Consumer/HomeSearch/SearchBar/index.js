@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import Input from "../../UI/Input/Input";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
+import error from "../../../../constants";
 import {
-  clearSearchedData,
   HomeSearch,
+  clearSearchedData,
   setSearchData,
   setSideFiltersHomeSearch,
-} from "../../../../reducers/searchReducer";
-import error from "../../../../constants";
+} from "../../../../reducers/myFeedReducer";
 
 const SearchWrap = styled.div`
   width: 100%;
