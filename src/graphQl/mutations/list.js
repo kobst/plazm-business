@@ -118,9 +118,10 @@ const DeleteList = (values) => {
                     _id
                     name
                     description
-                    ownerId
+                    ownerId {
+                      name
+                    }
                     posts
-                    likes
                     followers
                     media {
                       image

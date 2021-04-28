@@ -114,6 +114,12 @@ const GetListDetails = (obj) => {
                   company_name
                   favorites
                   filter_tags
+                  hours_format {
+                    StartDay
+                    EndDay
+                    Start
+                    End 
+                  }
                 }
                 taggedUsers {
                   name

@@ -125,7 +125,11 @@ export const slice = createSlice({
     selectedListData: [],
     selectedListDetails: {},
   },
-  reducers: {},
+  reducers: {
+    clearListData: (state, action) => {
+      state.data = [];
+    },
+  },
   extraReducers: {
     [findAllLists.pending]: (state) => {
       if (!state.loading) {
@@ -195,7 +199,7 @@ export const slice = createSlice({
       if (state.loadingUserCreatedAndFollowed) {
         state.loadingUserCreatedAndFollowed = false;
         if (action.payload) {
-          state.data = action.payload.list;
+          state.data = state.data.concat(action.payload.list);
           state.totalList = action.payload.totalLists;
         }
       }
@@ -207,14 +211,11 @@ export const slice = createSlice({
       }
     },
     [deleteUserCreatedList.fulfilled]: (state, action) => {
-      if (state.loadingUserLists) {
-        state.loadingUserLists = false;
         if (action.payload.success) {
           state.data = state.data.filter(
             (i) => i._id !== action.payload.list._id
           );
         }
-      }
     },
     [fetchSelectedListDetails.pending]: (state) => {
       if (!state.loadingSelectedList) {
@@ -240,4 +241,7 @@ export const slice = createSlice({
   },
 });
 
+export const {
+  clearListData
+} = slice.actions;
 export default slice.reducer;

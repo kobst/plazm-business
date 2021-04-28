@@ -16,8 +16,8 @@ import ProfileSettings from "../../../Consumer/ProfileSettings";
 import BuisinessView from "../../../Consumer/BuisinessView";
 import BusinessList from "../../../Consumer/BusinessList";
 import { useSelector } from "react-redux";
-import HomeSearch from "../../../Consumer/HomeSearch";
-import ListView from "../../../Consumer/ListView";
+import ListOptionView from "../../../Consumer/ListOptionView";
+import ListDescriptionView from "../../../Consumer/ListDescriptionView";
 
 const LeftBarContent = styled.div`
   width: 100px;
@@ -67,6 +67,7 @@ const LeftBar = ({
   const [displayChangePassword, setDisplayChangePassword] = useState(false);
   const [tabIndex, setTabIndex] = useState(isBusinessOpen ? 6 : 0);
   const user = useSelector((state) => state.user.user);
+  const [selectedListId, setSelectedListId] = useState(null);
   return (
     <>
       <LeftBarContent className="MainTabs">
@@ -227,7 +228,7 @@ const LeftBar = ({
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              <HomeSearch/>
+              <h2>Any content 3</h2>
             </div>
           </TabPanel>
           <TabPanel>
@@ -261,8 +262,19 @@ const LeftBar = ({
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              <ListView/>
-              {/* <h2>Any content 8</h2> */}
+              {!selectedListId ? (
+                <ListOptionView
+                  setDisplayTab={() => setTabIndex(0)}
+                  setSelectedListId={setSelectedListId}
+                  selectedListId={selectedListId}
+                />
+              ) : (
+                <ListDescriptionView
+                  setDisplayTab={() => setTabIndex(0)}
+                  setSelectedListId={setSelectedListId}
+                  selectedListId={selectedListId}
+                />
+              )}
             </div>
           </TabPanel>
           <TabPanel>
