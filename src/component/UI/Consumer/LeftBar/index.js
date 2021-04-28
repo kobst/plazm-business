@@ -16,6 +16,7 @@ import ProfileSettings from "../../../Consumer/ProfileSettings";
 import BuisinessView from "../../../Consumer/BuisinessView";
 import BusinessList from "../../../Consumer/BusinessList";
 import { useSelector } from "react-redux";
+import ListOptionView from "../../../Consumer/ListOptionView"
 
 const LeftBarContent = styled.div`
   width: 100px;
@@ -259,7 +260,7 @@ const LeftBar = ({
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              <h2>Any content 8</h2>
+              <ListOptionView />
             </div>
           </TabPanel>
           <TabPanel>
