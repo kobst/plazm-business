@@ -4,6 +4,7 @@ import {
   addFavoriteBusiness,
   getUser,
   getUserFavorites,
+  GetUserProfileData,
   removeFavoriteBusiness,
 } from "../graphQl";
 
@@ -15,6 +16,19 @@ export const fetchUserDetails = createAsyncThunk(
   "data/fetchUserDetails",
   async (userSub) => {
     const graphQl = getUser(userSub);
+    const response = graphQlEndPoint(graphQl);
+    return response;
+  }
+);
+
+/*
+ * @desc:  fetchUserProfileData
+ * @params: userId
+ */
+export const fetchUserProfileData = createAsyncThunk(
+  "data/fetchUserProfileData",
+  async (id) => {
+    const graphQl = GetUserProfileData(id);
     const response = graphQlEndPoint(graphQl);
     return response;
   }
@@ -78,6 +92,8 @@ export const slice = createSlice({
   name: "user",
   initialState: {
     loading: false,
+    loadingProfile: false,
+    selectedUser: {},
     loadingAddFavorite: false,
     loadingRemoveFavorite: false,
     loadingFavoriteBusiness: false,
@@ -162,7 +178,9 @@ export const slice = createSlice({
       if (state.loadingFavoriteBusiness) {
         state.loadingFavoriteBusiness = false;
         if (action.payload) {
-          state.favoriteBusiness = state.favoriteBusiness.concat(action.payload.data);
+          state.favoriteBusiness = state.favoriteBusiness.concat(
+            action.payload.data
+          );
           state.totalFavorites = action.payload.totalFavorites;
           // state.favoriteBusiness = action.payload.sort(function (a, b) {
           //   return a.favorites.company_name
@@ -183,6 +201,29 @@ export const slice = createSlice({
         state.favoriteBusiness = state.favoriteBusiness.filter(
           (i) => i.favorites._id !== action.payload.businessId
         );
+      }
+    },
+    [fetchUserProfileData.pending]: (state) => {
+      if (!state.loadingProfile) {
+        state.loadingProfile = true;
+      }
+    },
+    [fetchUserProfileData.fulfilled]: (state, action) => {
+      if (state.loadingProfile) {
+        state.loadingProfile = false;
+        if (action.payload) {
+          state.selectedUser = {
+            ...action.payload.data.getUserProfileData.user,
+            totalPosts: action.payload.data.getUserProfileData.findTotalPostByUser,
+            totalLists: action.payload.data.getUserProfileData.listCreatedByUser,
+          };
+        }
+      }
+    },
+    [fetchUserProfileData.rejected]: (state, action) => {
+      if (state.loadingProfile) {
+        state.loadingProfile = false;
+        state.error = action.payload;
       }
     },
   },

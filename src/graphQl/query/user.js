@@ -170,4 +170,30 @@ const GetMyFeedData = (obj) => {
   };
   return graphQl;
 };
-export { getUser,getAllUsers,getUserFavorites, GetMyFeedData };
+
+/*
+@desc: getUserProfileData query
+*/
+const GetUserProfileData = (id) => {
+  const graphQl = {
+    query: `
+          query GetUserProfileData($id: ID!){
+            getUserProfileData(input: {id:$id}) {
+              success
+              message
+              findTotalPostByUser
+              listCreatedByUser
+              user {
+                name
+                photo
+                listFollowed
+              }
+            }
+          }`,
+    variables: {
+      id: id,
+    },
+  };
+  return graphQl;
+};
+export { getUser,getAllUsers,getUserFavorites, GetMyFeedData, GetUserProfileData };
