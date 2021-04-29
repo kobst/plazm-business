@@ -7,7 +7,10 @@ import Select from "../../Consumer/UI/Select";
 import selectarrow from "../../../images/sortingselectarrow.png";
 import SearchIcon from "../../../images/subscriptionSearchIcon.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserCreatedAndFollowedList, clearListData } from "../../../reducers/listReducer";
+import {
+  fetchUserCreatedAndFollowedList,
+  clearListData,
+} from "../../../reducers/listReducer";
 import ValueLoader from "../../../utils/loader";
 import DisplayListSection from "./DisplayListSection";
 
@@ -130,16 +133,23 @@ const NoData = styled.div`
 /*
  * @desc: to display all business lists
  */
-const ListOptionView = ({ setDisplayTab, setSelectedListId, selectedListId }) => {
+const ListOptionView = ({
+  setDisplayTab,
+  setSelectedListId,
+  selectedListId,
+}) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const loading = useSelector(
     (state) => state.list.loadingUserCreatedAndFollowed
   );
   const totalList = useSelector((state) => state.list.totalList);
-  const list = useSelector((state) => state.list.data);
+  const listData = useSelector((state) => state.list.data);
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffSet] = useState(0);
+  const [search, setSearch] = useState("");
+  const [filteredList, setFilteredList] = useState([]);
+  const list = filteredList.length > 0 ? filteredList : listData;
 
   useEffect(() => {
     if (offset === 0) {
@@ -147,10 +157,19 @@ const ListOptionView = ({ setDisplayTab, setSelectedListId, selectedListId }) =>
         id: user._id,
         value: offset,
       };
-      dispatch(clearListData())
+      dispatch(clearListData());
       dispatch(fetchUserCreatedAndFollowedList(obj));
     }
   }, [dispatch, user._id, offset]);
+
+  /** lists search functionality implemented */
+  useEffect(() => {
+    setFilteredList(
+      listData.filter(
+        (entry) => entry.name.toLowerCase().indexOf(search.toLowerCase()) !== -1
+      )
+    );
+  }, [search, listData]);
 
   useEffect(() => {
     setOffSet(0);
@@ -189,6 +208,7 @@ const ListOptionView = ({ setDisplayTab, setSelectedListId, selectedListId }) =>
             <Input
               className="SearchSubscriptionsInput"
               placeholder="Search Subscriptions"
+              onChange={(e) => setSearch(e.target.value)}
             />
           </SearchWrap>
         </HeadingWrap>
@@ -221,7 +241,13 @@ const ListOptionView = ({ setDisplayTab, setSelectedListId, selectedListId }) =>
           >
             <ListingOptionWrap>
               {list.length > 0 ? (
-                list.map((i, key) => <DisplayListSection data={i} key={key} setSelectedListId={setSelectedListId}/>)
+                list.map((i, key) => (
+                  <DisplayListSection
+                    data={i}
+                    key={key}
+                    setSelectedListId={setSelectedListId}
+                  />
+                ))
               ) : (
                 <NoData>No Lists To Display</NoData>
               )}

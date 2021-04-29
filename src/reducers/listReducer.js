@@ -8,7 +8,7 @@ import {
   getUserCreatedAndFollowedLists,
   getUserLists,
   DeleteList,
-  GetListDetails,
+  UnsubscribeToAList,
 } from "../graphQl";
 
 /*
@@ -97,15 +97,15 @@ export const deleteUserCreatedList = createAsyncThunk(
 );
 
 /*
- * @desc:  to fetch selected list details
- * @params: listId, value
+ * @desc:  to unsubscribe to a list
+ * @params: businessId
  */
-export const fetchSelectedListDetails = createAsyncThunk(
-  "data/fetchSelectedListDetails",
+export const UnSubscribeToAList = createAsyncThunk(
+  "data/UnSubscribeToAList",
   async (obj) => {
-    const graphQl = GetListDetails(obj);
+    const graphQl = UnsubscribeToAList(obj);
     const response = await graphQlEndPoint(graphQl);
-    return response.data.getListDetails;
+    if (response.data.unSubscribeToAList.success === true) return obj;
   }
 );
 
@@ -124,6 +124,7 @@ export const slice = createSlice({
     totalPostInList: 0,
     selectedListData: [],
     selectedListDetails: {},
+    loadingUnSubscribe: false,
   },
   reducers: {
     clearListData: (state, action) => {
@@ -211,37 +212,35 @@ export const slice = createSlice({
       }
     },
     [deleteUserCreatedList.fulfilled]: (state, action) => {
-        if (action.payload.success) {
+      if (action.payload.success) {
+        state.data = state.data.filter(
+          (i) => i._id !== action.payload.list._id
+        );
+      }
+    },
+    [UnSubscribeToAList.pending]: (state) => {
+      if (!state.loadingUnSubscribe) {
+        state.loadingUnSubscribe = true;
+      }
+    },
+    [UnSubscribeToAList.fulfilled]: (state, action) => {
+      if (state.loadingUnSubscribe) {
+        state.loadingUnSubscribe = false;
+        if (action.payload) {
           state.data = state.data.filter(
-            (i) => i._id !== action.payload.list._id
+            (i) => i._id !== action.payload.listId
           );
         }
-    },
-    [fetchSelectedListDetails.pending]: (state) => {
-      if (!state.loadingSelectedList) {
-        state.loadingSelectedList = true;
       }
     },
-    [fetchSelectedListDetails.fulfilled]: (state, action) => {
-      if (state.loadingSelectedList) {
-        state.loadingSelectedList = false;
-        if (action.payload) {
-          state.selectedListData = action.payload.data;
-          state.totalPostInList = action.payload.totalLists;
-          state.selectedListDetails = action.payload.listDetails;
-        }
-      }
-    },
-    [fetchSelectedListDetails.rejected]: (state, action) => {
-      if (state.loadingSelectedList) {
-        state.loadingSelectedList = false;
+    [UnSubscribeToAList.rejected]: (state, action) => {
+      if (state.loadingUnSubscribe) {
+        state.loadingUnSubscribe = false;
         state.error = action.payload;
       }
     },
   },
 });
 
-export const {
-  clearListData
-} = slice.actions;
+export const { clearListData } = slice.actions;
 export default slice.reducer;

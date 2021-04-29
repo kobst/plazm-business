@@ -6,16 +6,14 @@ import {
   MdFavorite,
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  AddLikeToEvent,
-} from "../../../../../../reducers/eventReducer";
+import { AddLikeToEvent } from "../../../../../../reducers/eventReducer";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { addLikeToComment } from "../../../../../../reducers/businessReducer";
 import {
-  fetchEventComments,
   fetchEventCommentReplies,
-  addEventLikeViaSocket
-} from "../../../../../../reducers/searchReducer";
+  fetchEventComments,
+  addLikeViaSocket,
+} from "../../../../../../reducers/myFeedReducer";
 
 const BottomBarLikes = styled.div`
   display: flex;
@@ -103,12 +101,11 @@ const LikesBar = ({
   commentLikes,
   flag,
   setFlag,
-  business
+  business,
 }) => {
   const [eventDate, setEventDate] = useState();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
-  // const business = useSelector((state) => state.business.business);
   const ws = useSelector((state) => state.user.ws);
   const [userLikedEvent, setUserLikedEvent] = useState(false);
   const [userLikedComment, setUserLikedComment] = useState(false);
@@ -147,7 +144,7 @@ const LikesBar = ({
 
     if (type === "comment") {
       if (postLikes.length > 0) {
-        const findUser = postLikes.find((i) => i._id === user._id);
+        const findUser = postLikes.find((i) => i === user._id);
         if (findUser) {
           setUserLikedEvent(true);
         }
@@ -160,19 +157,27 @@ const LikesBar = ({
         }
       }
     }
-
   }, [date, commentLikes, postLikes, type, user._id]);
 
-   /** to display comments on a particular event */
-   const displayCommentsWithEvents = () => {
+  /** to display comments on a particular event */
+  const displayCommentsWithEvents = () => {
     if (type === "comment") {
       setDisplayEventComments(!displayEventComments);
       setFlag(false);
-      if (displayEventComments === false) dispatch(fetchEventComments({eventId: eventId, businessId:business._id}));
+      if (displayEventComments === false)
+        dispatch(
+          fetchEventComments({ eventId: eventId, businessId: business._id })
+        );
     } else if (type === "reply") {
       setDisplayReply(!displayReply);
       setFlag(true);
-      if (displayReply === false) dispatch(fetchEventCommentReplies({commentId: commentId, businessId:business._id}));
+      if (displayReply === false)
+        dispatch(
+          fetchEventCommentReplies({
+            commentId: commentId,
+            businessId: business._id,
+          })
+        );
     }
   };
 
@@ -184,7 +189,11 @@ const LikesBar = ({
         userId: user._id,
       };
       dispatch(
-        addEventLikeViaSocket({ postId: eventId, like: { ...obj, _id: user._id }, businessId: business._id })
+        addLikeViaSocket({
+          postId: eventId,
+          like: { ...obj, _id: user._id },
+          businessId: business._id,
+        })
       );
       const data = await dispatch(AddLikeToEvent(obj));
       const response = await unwrapResult(data);
@@ -228,11 +237,20 @@ const LikesBar = ({
     if (type === "comment") {
       setDisplayEventComments(!displayEventComments);
       setFlag(false);
-      if (displayEventComments === false) dispatch(fetchEventComments({eventId: eventId, businessId:business._id}));
+      if (displayEventComments === false)
+        dispatch(
+          fetchEventComments({ eventId: eventId, businessId: business._id })
+        );
     } else if (type === "reply") {
       setFlag(true);
       setDisplayReply(!displayReply);
-      if (displayReply === false) dispatch(fetchEventCommentReplies({commentId: commentId, businessId:business._id}));
+      if (displayReply === false)
+        dispatch(
+          fetchEventCommentReplies({
+            commentId: commentId,
+            businessId: business._id,
+          })
+        );
     }
   };
 

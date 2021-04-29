@@ -6,10 +6,17 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import styled from "styled-components";
 import {
   clearListData,
-  fetchSelectedListDetails,
+  deleteUserCreatedList,
+  UnSubscribeToAList,
 } from "../../../reducers/listReducer";
+import {
+  fetchSelectedListDetails,
+  clearMyFeedData,
+} from "../../../reducers/myFeedReducer";
 import ValueLoader from "../../../utils/loader";
 import DisplayPostInAList from "./DisplayPostsInAList";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { removeSubscribedList } from "../../../reducers/userReducer";
 
 const ListOptionSection = styled.div`
   width: 100%;
@@ -103,7 +110,7 @@ const ArrowBack = styled.div`
   position: absolute;
   left: 15px;
   cursor: pointer;
-  top: 15px;
+  top: 66px;
   z-index: 1;
   svg {
     font-size: 34px;
@@ -114,6 +121,12 @@ const ArrowBack = styled.div`
     height: 24px;
   }
 `;
+
+const ButtonWrapperDiv = styled.div`
+  padding-top: 50px;
+  display: flex;
+  flex-direction: row-reverse;
+`;
 /*
  * @desc: to display list description
  */
@@ -123,26 +136,35 @@ const ListDescriptionView = ({
   selectedListId,
 }) => {
   const dispatch = useDispatch();
-  const loading = useSelector((state) => state.list.loadingSelectedList);
-  const totalData = useSelector((state) => state.list.totalPostInList);
-  const postsInList = useSelector((state) => state.list.selectedListData);
+  const loading = useSelector((state) => state.myFeed.loadingSelectedList);
+  const loadingUnSubScribe = useSelector(
+    (state) => state.list.loadingUnSubscribe
+  );
+  const totalData = useSelector((state) => state.myFeed.totalData);
+  const postsInList = useSelector((state) => state.myFeed.myFeed);
+  const selectedList = useSelector((state) => state.myFeed.selectedListDetails);
+  const user = useSelector((state) => state.user.user);
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffSet] = useState(0);
+
+  /** to clear all the data initially */
+  useEffect(() => {
+    dispatch(clearMyFeedData());
+    setOffSet(0);
+    setHasMore(true);
+  }, [dispatch]);
 
   /** to return to all business listing */
   const backBusiness = () => {
     dispatch(clearListData());
     setSelectedListId(null);
   };
+
+  /** to fetch initial posts in a list */
   useEffect(() => {
     if (offset === 0)
       dispatch(fetchSelectedListDetails({ id: selectedListId, value: offset }));
   }, [dispatch, selectedListId, offset]);
-
-  useEffect(() => {
-    setOffSet(0);
-    setHasMore(true);
-  }, []);
 
   const fetchMorePosts = () => {
     if (offset + 20 < totalData) {
@@ -152,7 +174,35 @@ const ListDescriptionView = ({
       );
     } else setHasMore(false);
   };
-  return loading && offset === 0 ? (
+
+  /** to unsubscribe from a list */
+  const listUnSubscribe = async () => {
+    const obj = {
+      userId: user._id,
+      listId: selectedList._id,
+    };
+    const list = await dispatch(UnSubscribeToAList(obj));
+    const response = await unwrapResult(list);
+    if (response) {
+      dispatch(removeSubscribedList(response.listId));
+      setSelectedListId(null);
+    }
+  };
+
+  /** to delete a list */
+  const deleteList = async () => {
+    const obj = {
+      userId: user._id,
+      listId: selectedList._id,
+    };
+    const data = await dispatch(deleteUserCreatedList(obj));
+    const response = await unwrapResult(data);
+    if (response) {
+      setSelectedListId(null);
+    }
+  };
+  return (loading && offset === 0 && !loadingUnSubScribe) ||
+    loadingUnSubScribe ? (
     <LoaderWrap>
       <ValueLoader />
     </LoaderWrap>
@@ -166,9 +216,22 @@ const ListDescriptionView = ({
             </CloseDiv>
           </TopHeadingWrap>
         </HeadingWrap>
-        <ArrowBack>
-          <MdKeyboardArrowLeft onClick={() => backBusiness()} />
-        </ArrowBack>
+        <ButtonWrapperDiv>
+          <ArrowBack>
+            <MdKeyboardArrowLeft onClick={() => backBusiness()} />
+          </ArrowBack>
+          {selectedList &&
+          selectedList.ownerId &&
+          selectedList.ownerId._id === user._id ? (
+            <>
+              <button>Make Public</button>
+              <button>Invite</button>
+              <button onClick={()=>deleteList()}>Delete</button>
+            </>
+          ) : (
+            <button onClick={() => listUnSubscribe()}>Unsubscribe</button>
+          )}
+        </ButtonWrapperDiv>
         <div
           id="scrollableDiv"
           style={{ height: "calc(100vh - 175px)", overflow: "auto" }}

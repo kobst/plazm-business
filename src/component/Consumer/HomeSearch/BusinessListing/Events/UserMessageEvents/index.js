@@ -5,18 +5,12 @@ import LikeBar from "../LikeBar";
 import DateBar from "../DateBar";
 import TimeBar from "../TimeBar";
 import ImageComment from "../ImageComment";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Scrollbars } from "react-custom-scrollbars";
 import ValueLoader from "../../../../../../utils/loader";
 import ReplyInput from "./ReplyInput";
 import Comments from "./comments";
 import ScrollToBottom from "./ScrollToBottom";
-import {
-  addCommentToEvent,
-  addEventLikeToCommentViaSocket,
-  addEventLikeViaSocket,
-  addReplyToEventComment,
-} from "../../../../../../reducers/searchReducer";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -119,35 +113,10 @@ const UserMessageEvents = ({ eventData, businessInfo }) => {
   );
   const [description, setDescription] = useState("");
   const loadingComments = useSelector(
-    (state) => state.search.loadingEventComments
+    (state) => state.myFeed.loadingEventComments
   );
   const ws = useSelector((state) => state.user.ws);
-  const user = useSelector((state) => state.user.user);
-  const dispatch = useDispatch();
 
-  ws.onmessage = (evt) => {
-    const message = JSON.parse(evt.data);
-    if (message.commentInfo && message.commentInfo.type === "Events") {
-      /** to add event comment via socket */
-      setDescription("");
-      dispatch(addCommentToEvent(message));
-    } else if (
-      message.comment &&
-      message.commentId &&
-      message.type === "Event"
-    ) {
-      /** to add event reply via socket */
-      dispatch(addReplyToEventComment(message));
-    } else if (message.like && message.commentId && message.type === "Event") {
-      /** to add comment like via socket */
-      dispatch(addEventLikeToCommentViaSocket(message));
-    } else if (message.like && message.type === "Event") {
-      /** to add post like via socket */
-      if (message.like._id !== user._id) {
-        dispatch(addEventLikeViaSocket(message));
-      }
-    }
-  };
 
   /** to add comment on event function */
   const addComment = async (obj) => {
@@ -162,6 +131,7 @@ const UserMessageEvents = ({ eventData, businessInfo }) => {
         taggedUsers: obj.taggedUsers,
       })
     );
+    setDescription("");
   };
 
   const days = [
@@ -210,7 +180,7 @@ const UserMessageEvents = ({ eventData, businessInfo }) => {
               eventId={eventData._id}
               date={new Date(eventData.createdAt)}
               totalLikes={eventData.likes.length}
-              totalComments={eventData.totalComments}
+              totalComments={eventData.totalComments.length>0 ? eventData.totalComments[0].totalCount : 0}
               setDisplayEventComments={setDisplayEventComments}
               displayEventComments={displayEventComments}
               postLikes={eventData.likes}

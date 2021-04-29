@@ -18,6 +18,8 @@ import BusinessList from "../../../Consumer/BusinessList";
 import { useSelector } from "react-redux";
 import ListOptionView from "../../../Consumer/ListOptionView";
 import ListDescriptionView from "../../../Consumer/ListDescriptionView";
+import MyFeed from "../../../Consumer/MyFeed";
+// import HomeSearch from "../../../Consumer/HomeSearch";
 
 const LeftBarContent = styled.div`
   width: 100px;
@@ -238,7 +240,7 @@ const LeftBar = ({
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              <h2>Any content 5</h2>
+              <MyFeed setDisplayTab={() => setTabIndex(0)} />
             </div>
           </TabPanel>
           <TabPanel>

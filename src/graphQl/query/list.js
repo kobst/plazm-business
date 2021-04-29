@@ -100,9 +100,11 @@ const GetListDetails = (obj) => {
               success
               totalLists 
               listDetails {
+                _id
                 name
                 description
                 ownerId {
+                  _id
                   name
                 }
                 updatedAt
@@ -111,9 +113,11 @@ const GetListDetails = (obj) => {
                 _id
                 data
                 business {
+                  _id
                   company_name
                   favorites
                   filter_tags
+                  default_image_url
                   hours_format {
                     StartDay
                     EndDay
@@ -121,6 +125,7 @@ const GetListDetails = (obj) => {
                     End 
                   }
                 }
+                likes
                 taggedUsers {
                   name
                 }

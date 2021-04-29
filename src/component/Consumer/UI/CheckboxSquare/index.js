@@ -20,11 +20,11 @@ const CheckboxSquare = () => (
     <DivText className="checkbox-button">
       <input
         type="checkbox"
-        class="checkbox-button__input"
+        className="checkbox-button__input"
         id="choice1-1"
         name="choice1"
       />
-      <span class="checkbox-button__control"></span>
+      <span className="checkbox-button__control"></span>
     </DivText>
   </>
 );

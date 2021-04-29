@@ -6,13 +6,14 @@ import ProfileImg from "../../../../../images/profile-img.png";
 import FavoritesIcon from "../../../../../images/favorites.png";
 import FavoritesIconFilled from "../../../../../images/favorites-filled.png";
 import BusinessHashTags from "../BusinessHashTags";
-import { MdAdd, MdRemove } from "react-icons/md";
 import UserMessage from "../UserMessage";
 import UserMessageEvents from "../Events/UserMessageEvents";
 import {
   AddBusinessFavorite,
   RemoveBusinessFavorite,
 } from "../../../../../reducers/userReducer";
+import DisplayComment from "../DisplayComments";
+import DisplayCommentForEvent from "../DisplayCommentForEvent";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -46,7 +47,7 @@ const UserMsgWrap = styled.div`
 const ProfileNameHeader = styled.div`
   display: flex;
   padding: 0;
-  margin: 15px 0;
+  margin: 15px 0 0;
 `;
 
 const ProfileThumb = styled.div`
@@ -67,10 +68,10 @@ const ProfileNameWrap = styled.div`
   align-items: flex-start;
   justify-content: center;
   max-width: calc(100% - 40px);
-  padding: 0 25px 15px 0px;
+  padding: 0 25px 5px 0px;
   width: 100%;
   @media (max-width: 1024px) {
-    padding: 0 45px 15px 0px;
+    padding: 0 0px 15px 0px;
   }
 `;
 
@@ -90,6 +91,8 @@ const ProfileName = styled.div`
   }
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
   span {
     font-weight: 700;
     color: #fff;
@@ -98,23 +101,41 @@ const ProfileName = styled.div`
   @media (max-width: 1024px) {
     flex-direction: column;
   }
+  div {
+    cursor: pointer;
+  }
+  .ListName {
+    max-width: calc(100% - 95px);
+    @media (max-width: 767px) {
+      max-width: 100%;
+      margin: 0 0 5px;
+    }
+  }
 `;
 
 const ChatInput = styled.div`
-  font-style: normal;
+  font-weight: 400;
   font-size: 12px;
   line-height: normal;
   margin: 0 0 5px;
   color: #fff;
   width: 100%;
   span {
-    font-size: 13px;
+    font-size: 12px;
     color: #ff2e9a;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
+    margin: 0 4px 0 0px;
   }
   .postSpan {
     margin-left: 4%;
+  }
+  p {
+    display: flex;
+    font-size: 12px !important;
+    @media (max-width: 767px) {
+      margin: 5px 0 0 !important;
+    }
   }
 `;
 
@@ -125,11 +146,43 @@ const RightWrap = styled.div`
   margin: 0px;
   align-items: center;
   flex-wrap: wrap;
+  .OpenDiv {
+    font-size: 10px;
+    line-height: normal;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-transform: uppercase;
+    color: #ffffff;
+    background: #3fce56;
+    border-radius: 50px;
+    padding: 3px 11px;
+  }
+  .CloseDiv {
+    font-size: 10px;
+    line-height: normal;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-transform: uppercase;
+    color: #ffffff;
+    background: #fe6f5b;
+    border-radius: 50px;
+    padding: 3px 11px;
+  }
+  .favoriteBusiness,
+  .favoriteBusinessBorder {
+    margin: 0 0 0 11px;
+  }
 `;
 
 /** display favorite business */
 const DisplayFavoriteBusiness = ({ data }) => {
-  const [displayData, setDisplayData] = useState(false);
+  const businessInfo =
+    data.business && data.business.length > 0 ? data.business[0] : data;
+
   const [favoriteBusiness, setFavoriteBusiness] = useState(false);
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
@@ -148,40 +201,44 @@ const DisplayFavoriteBusiness = ({ data }) => {
 
   /** to check if business is open/close */
   const checkBusinessOpenClose = () => {
-    for (let i = 0; i < data.favorites.hours_format.length; i++) {
-      const startDayIndex = days.indexOf(
-        data.favorites.hours_format[i].StartDay
-      );
-      const endDayIndex = days.indexOf(data.favorites.hours_format[i].EndDay);
-      if (currentUtcDay >= startDayIndex && currentUtcDay <= endDayIndex) {
-        const time = moment(getUtcHour + ":" + getUtcMinutes, "HH:mm");
-        const beforeTime = moment(
-          data.favorites.hours_format[i].Start,
-          "HH:mm"
+    if (businessInfo.hours_format) {
+      for (let i = 0; i < businessInfo.hours_format.length; i++) {
+        const startDayIndex = days.indexOf(
+          businessInfo.hours_format[i].StartDay
         );
-        const afterTime = moment(data.favorites.hours_format[i].End, "HH:mm");
-        if (time.isBetween(beforeTime, afterTime)) {
-          return true;
+        const endDayIndex = days.indexOf(businessInfo.hours_format[i].EndDay);
+        if (currentUtcDay >= startDayIndex && currentUtcDay <= endDayIndex) {
+          const time = moment(getUtcHour + ":" + getUtcMinutes, "HH:mm");
+          const beforeTime = moment(
+            businessInfo.hours_format[i].Start,
+            "HH:mm"
+          );
+          const afterTime = moment(businessInfo.hours_format[i].End, "HH:mm");
+          if (time.isBetween(beforeTime, afterTime)) {
+            return true;
+          } else {
+            return false;
+          }
         } else {
           return false;
         }
-      } else {
-        return false;
       }
+    } else {
+      return false;
     }
   };
 
   useEffect(() => {
-    const find = user.favorites.find((i) => i === data.favorites._id);
+    const find = user.favorites.find((i) => i === businessInfo._id);
     if (find) {
       setFavoriteBusiness(true);
     } else setFavoriteBusiness(false);
-  }, [user, data]);
+  }, [user, businessInfo._id]);
 
   /** to add a business to user favorites */
   const addFavorite = async () => {
     const obj = {
-      businessId: data.favorites._id,
+      businessId: businessInfo._id,
       userId: user._id,
     };
     await dispatch(AddBusinessFavorite(obj));
@@ -190,7 +247,7 @@ const DisplayFavoriteBusiness = ({ data }) => {
   /** to remove a business to user favorites */
   const removeFavorite = async () => {
     const obj = {
-      businessId: data.favorites._id,
+      businessId: businessInfo._id,
       userId: user._id,
     };
     await dispatch(RemoveBusinessFavorite(obj));
@@ -204,8 +261,8 @@ const DisplayFavoriteBusiness = ({ data }) => {
             <ProfileThumb>
               <img
                 src={
-                  data.favorites.default_image_url
-                    ? data.favorites.default_image_url
+                  businessInfo.default_image_url
+                    ? businessInfo.default_image_url
                     : ProfileImg
                 }
                 alt=""
@@ -215,19 +272,21 @@ const DisplayFavoriteBusiness = ({ data }) => {
               <ProfileName>
                 <div
                   onClick={() =>
-                    (window.location.href = `/b/${data.favorites._id}`)
+                    (window.location.href = `/b/${businessInfo._id}`)
                   }
                 >
-                  {data.favorites.company_name}
+                  {businessInfo.company_name}
                 </div>
-                {data.favorites.hours_format.length === 0 ? (
-                  <div className="open">Close</div>
-                ) : checkBusinessOpenClose() === true ? (
-                  <div className="open">Open</div>
-                ) : (
-                  <div className="open">Close</div>
-                )}
                 <RightWrap>
+                  {businessInfo.hours_format &&
+                  businessInfo.hours_format.length === 0 ? (
+                    <div className="CloseDiv">Close</div>
+                  ) : checkBusinessOpenClose() === true ? (
+                    <div className="OpenDiv">Open</div>
+                  ) : (
+                    <div className="CloseDiv">Close</div>
+                  )}
+
                   {favoriteBusiness ? (
                     <img
                       src={FavoritesIconFilled}
@@ -243,49 +302,38 @@ const DisplayFavoriteBusiness = ({ data }) => {
                       alt=""
                     />
                   )}
-                  {!displayData ? (
-                    <MdAdd onClick={() => setDisplayData(true)} />
-                  ) : (
-                    <MdRemove onClick={() => setDisplayData(false)} />
-                  )}
                 </RightWrap>
               </ProfileName>
               <ChatInput>
                 <p>
-                  <span>{data.totalFollowers}</span> Followers{" "}
-                  <span className="postSpan">{data.totalPosts}</span> Posts
+                  <span>
+                    {businessInfo.favorites !== null
+                      ? businessInfo.favorites.length
+                      : 0}
+                  </span>{" "}
+                  Followers{" "}
+                  <span className="postSpan">
+                    {data.totalPosts && data.totalPosts.length > 0
+                      ? data.totalPosts[0].totalPosts
+                      : 0}
+                  </span>{" "}
+                  Posts
                 </p>
               </ChatInput>
-              <BusinessHashTags data={data.favorites.filter_tags} />
+              <BusinessHashTags data={businessInfo.filter_tags} />
             </ProfileNameWrap>
           </ProfileNameHeader>
         </UserMessageContent>
       </UserMsgWrap>
 
-      {displayData ? (
-        <>
-          {/* to display posts */}
-          {data.posts.length > 0
-            ? data.posts.map((i, key) => (
-                <UserMessage
-                  postData={i}
-                  key={key}
-                  businessData={data.favorites}
-                />
-              ))
-            : null}
-
-          {/* to display events */}
-          {data.events.length > 0
-            ? data.events.map((i, key) => (
-                <UserMessageEvents
-                  eventData={i}
-                  key={key}
-                  businessInfo={data.favorites}
-                />
-              ))
-            : null}
-        </>
+      {data.eventSchedule !== null ? (
+        <UserMessageEvents eventData={data} businessInfo={businessInfo} />
+      ) : data.data !== null ? (
+        <UserMessage postData={data} businessData={businessInfo} />
+      ) : data.body !== null && data.type === "Post" ? (
+        <DisplayComment postData={data} businessData={businessInfo} />
+      ) : data.body !== null && data.type === "Events" ? (
+        <DisplayCommentForEvent postData={data} businessData={businessInfo} />
       ) : null}
     </>
   ) : null;

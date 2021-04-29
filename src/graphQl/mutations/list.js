@@ -102,7 +102,6 @@ const addEventToList = (values) => {
   return graphQl;
 };
 
-
 /*
 @desc: delete list
 @params: userId, listId
@@ -132,9 +131,51 @@ const DeleteList = (values) => {
             }`,
     variables: {
       listId: values.listId,
-      userId: values.userId
+      userId: values.userId,
     },
   };
   return graphQl;
 };
-export { CreateList, addPostToList, addEventToList, DeleteList };
+
+/*
+@desc: to subscribe to a list
+@params: userId, listId
+*/
+const SubscribeToAList = (values) => {
+  const graphQl = {
+    query: `
+            mutation SubscribeToAList($listId: ID!, $userId:ID!){
+              subscribeToAList(input: {listId:$listId, userId:$userId}) {
+                message
+                success
+              }
+            }`,
+    variables: {
+      listId: values.listId,
+      userId: values.userId,
+    },
+  };
+  return graphQl;
+};
+
+/*
+@desc: to unSubscribe to a list
+@params: userId, listId
+*/
+const UnsubscribeToAList = (values) => {
+  const graphQl = {
+    query: `
+            mutation UnSubscribeToAList($listId: ID!, $userId:ID!){
+              unSubscribeToAList(input: {listId:$listId, userId:$userId}) {
+                message
+                success
+              }
+            }`,
+    variables: {
+      listId: values.listId,
+      userId: values.userId,
+    },
+  };
+  return graphQl;
+};
+export { CreateList, addPostToList, addEventToList, DeleteList, UnsubscribeToAList, SubscribeToAList };

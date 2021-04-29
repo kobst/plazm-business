@@ -10,12 +10,12 @@ import {
   AddLikeToPost,
   addLikeToComment,
 } from "../../../../../reducers/businessReducer";
-import {
-  fetchSearchPostComments,
-  fetchSearchCommentReplies,
-  addLikeViaSocket,
-} from "../../../../../reducers/searchReducer";
 import { unwrapResult } from "@reduxjs/toolkit";
+import {
+  addLikeViaSocket,
+  fetchSearchCommentReplies,
+  fetchSearchPostComments,
+} from "../../../../../reducers/myFeedReducer";
 
 const BottomBarLikes = styled.div`
   display: flex;
@@ -145,7 +145,7 @@ const LikesBar = ({
     setEventDate(`${day} ${monthName} ${year}`);
     if (type === "comment" && totalLikes > 0) {
       if (postLikes.length > 0) {
-        const findUser = postLikes.find((i) => i._id === user._id);
+        const findUser = postLikes.find((i) => i === user._id);
         if (findUser) {
           setUserLikedPost(true);
           setUserLikedComment(false);
@@ -168,22 +168,27 @@ const LikesBar = ({
 
   /** to display comments or replies of the post */
   const displayCommentsWithPosts = () => {
-    setDisplayComments(!displayComments);
-    if (type === "comment") {
-      setFlag(false);
-      if (displayComments === false)
-        dispatch(
-          fetchSearchPostComments({ postId: postId, businessId: business._id })
-        );
-    } else if (type === "reply") {
-      setFlag(true);
-      if (displayComments === false)
-        dispatch(
-          fetchSearchCommentReplies({
-            commentId: commentId,
-            businessId: business._id,
-          })
-        );
+    if (type !== "disabled") {
+      setDisplayComments(!displayComments);
+      if (type === "comment") {
+        setFlag(false);
+        if (displayComments === false)
+          dispatch(
+            fetchSearchPostComments({
+              postId: postId,
+              businessId: business._id,
+            })
+          );
+      } else if (type === "reply") {
+        setFlag(true);
+        if (displayComments === false)
+          dispatch(
+            fetchSearchCommentReplies({
+              commentId: commentId,
+              businessId: business._id,
+            })
+          );
+      }
     }
   };
 
@@ -195,7 +200,11 @@ const LikesBar = ({
         userId: user._id,
       };
       dispatch(
-        addLikeViaSocket({ postId: postId, like: { ...obj, _id: user._id },businessId:business._id })
+        addLikeViaSocket({
+          postId: postId,
+          like: { ...obj, _id: user._id },
+          businessId: business._id,
+        })
       );
       const data = await dispatch(AddLikeToPost(obj));
       const response = await unwrapResult(data);

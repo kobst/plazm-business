@@ -6,6 +6,7 @@ import ProfileImg from "../../../../images/profile-img.png";
 import FavoritesIcon from "../../../../images/favorites.png";
 import FavoritesIconFilled from "../../../../images/favorites-filled.png";
 import UserMessage from "../../HomeSearch/BusinessListing/UserMessage";
+import UserMessageEvents from "../../HomeSearch/BusinessListing/Events/UserMessageEvents";
 import {
   AddBusinessFavorite,
   RemoveBusinessFavorite,
@@ -176,7 +177,7 @@ const RightWrap = styled.div`
 `;
 
 /** display business details */
-const DisplayPostInAList = ({ data }) => {
+const DisplayBusinessDetails = ({ data }) => {
   const [favoriteBusiness, setFavoriteBusiness] = useState(false);
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
@@ -229,7 +230,7 @@ const DisplayPostInAList = ({ data }) => {
   /** to add a business to user favorites */
   const addFavorite = async () => {
     const obj = {
-      businessId: data.business[0]._id,
+      businessId: data.favorites._id,
       userId: user._id,
     };
     await dispatch(AddBusinessFavorite(obj));
@@ -238,7 +239,7 @@ const DisplayPostInAList = ({ data }) => {
   /** to remove a business to user favorites */
   const removeFavorite = async () => {
     const obj = {
-      businessId: data.business[0]._id,
+      businessId: data.favorites._id,
       userId: user._id,
     };
     await dispatch(RemoveBusinessFavorite(obj));
@@ -316,9 +317,15 @@ const DisplayPostInAList = ({ data }) => {
         </UserMessageContent>
       </UserMsgWrap>
 
-      <UserMessage postData={data} businessData={data.business[0]} />
+      {/* to display event for the business */}
+      {data.eventSchedule !== null ? (
+        <UserMessageEvents eventData={data} businessInfo={data.business[0]} />
+      ) : (
+        //   to display post for the business
+        <UserMessage postData={data} businessData={data.business[0]} />
+      )}
     </>
   ) : null;
 };
 
-export default DisplayPostInAList;
+export default DisplayBusinessDetails;

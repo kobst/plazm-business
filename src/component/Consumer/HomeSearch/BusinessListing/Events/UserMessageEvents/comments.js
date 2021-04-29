@@ -103,7 +103,7 @@ const Comments = ({ i, eventData, displayComments, setFlag, flag, business }) =>
   const [displayReplyInput, setDisplayReplyInput] = useState(false);
   const [replyDescription, setReplyDescription] = useState("");
   const ws = useSelector((state) => state.user.ws);
-  const loadingReplies = useSelector((state) => state.search.loadingEventReplies);
+  const loadingReplies = useSelector((state) => state.myFeed.loadingEventReplies);
   /** to add reply function */
   const addReply = async (obj) => {
     ws.send(

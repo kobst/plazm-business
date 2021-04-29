@@ -18,6 +18,7 @@ const getPlace = (obj) => {
                     Start
                     End
                 }
+                favorites
                 additional_media
                 filter_tags
                 company_name
@@ -146,127 +147,103 @@ const homeSearch = (obj) => {
               success
               totalPlaces
               data {
-                favorites {
                   _id
-                hours_format {
-                  StartDay
-                  EndDay
-                  Start
-                  End
-                }
-                filter_tags
-                company_name
-                default_image_url
-                status
-                updatedAt
-                }
-
-                posts {
-                  postId
-                  totalLikes
-                  totalComments
-                  postDetails {
-                      _id
-                      data
-                      listId {
-                        _id
-                        name
-                      }
-                      taggedUsers {
-                          list_ids
-                          _id
-                          name
-                          blurb
-                          photo
-                          createdAt
-                          updatedAt
-                      }
-                      taggedLists {
-                        _id
-                        name
-                        description
-                        items
-                        type
-                        photo
-                        account_id
-                        createdAt
-                      }
-                      ownerId {
-                        _id
-                        name
-                        email
-                        photo
-                      }
-                      likes {
-                        name
-                        _id
-                      }
-                      media {
-                          image
-                          thumbnail
-                      }
-                      location {
-                          type
-                          coordinates
-                      }
-                      createdAt
-                      updatedAt          
-                  }
-                  comments {
-                      userId {
-                        _id
-                        name
-                        }
-                      body
-                      replies {
-                          userId {
-                            _id
-                            name
-                            }
-                      body
-                      created_on
-                  }
-                  createdAt
-                  updatedAt
-                  }
-                }
-
-                events {
-                  _id
-                  totalComments
-                  likes {
-                    _id
-                    name
-                  }
                   eventSchedule {
-                      start_time
-                      end_time
+                    start_time
+                    end_time
                   }
                   location {
-                      type
-                      coordinates
+                    coordinates
+                  }
+                  business {
+                    _id
+                    company_name
+                    favorites
+                    filter_tags
+                    hours_format {
+                      Start
+                      End
+                      StartDay
+                      EndDay
+                    }
+                    default_image_url                  
                   }
                   user {
-                    _id
                     name
-                    email
-                    phoneNumber
+                    photo
+                  }
+                  ownerId {
+                    name
                     photo
                   }
                   title
                   description
                   type
-                  recurring
                   media {
-                      image
-                      thumbnail
+                    image
+                  }
+                  likes 
+                  list {
+                    _id
+                    name
                   }
                   createdAt
                   updatedAt
-              }
-                totalPosts
-                totalFollowers
-              }
+                  data
+                  listId {
+                    name
+                  }
+                  taggedUsers {
+                    _id
+                    name
+                  }
+                  taggedLists {
+                    name
+                  }
+                  ownerId {
+                    name
+                  }
+                  totalComments {
+                    totalCount
+                  }
+                  hours_format {
+                    Start
+                    End
+                    StartDay
+                    EndDay
+                  }
+                  totalPosts {
+                    totalPosts
+                  }
+                  filter_tags
+                  company_name
+                  default_image_url
+                  status
+                  favorites                  
+                  
+                  itemId {
+                    data
+                    taggedUsers {
+                      name
+                      photo
+                    }
+                    taggedLists {
+                      _id
+                      name
+                    }
+                    ownerId {
+                      photo
+                      name
+                    }
+                    likes
+                    createdAt
+                  }
+                  userId {
+                    name
+                    photo
+                  }
+                  body
+                }             
             }
           }`,
     variables: {
