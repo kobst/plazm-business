@@ -145,7 +145,7 @@ const ScheduleAnEvent = ({
             /*to set event details*/
             const obj = {
               eventDate: `${moment(date).format("DD MMM YYYY")} to ${moment(
-                date
+                endDate
               ).format("DD MMM YYYY")}`,
               eventTime: `FROM: ${moment(values.startTime).format(
                 "HH:mm A"
