@@ -131,8 +131,8 @@ const ScheduleAnEvent = ({
         <Formik
           enableReinitialize={true}
           initialValues={{
-            startDate: moment(date).format("MM-DD-YYYY"),
-            endDate: moment(endDate).format("MM-DD-YYYY"),
+            startDate: moment(date),
+            endDate: moment(endDate),
             startTime: date,
             endTime: endDate,
             repeat: "Once",

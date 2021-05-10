@@ -90,6 +90,9 @@ export const slice = createSlice({
     setWs: (state, action) => {
       state.ws = action.payload;
     },
+    clearUserFavorites: (state, action) => {
+      state.favoriteBusiness = [];
+    },
   },
   extraReducers: {
     [fetchUserDetails.pending]: (state) => {
@@ -162,7 +165,9 @@ export const slice = createSlice({
       if (state.loadingFavoriteBusiness) {
         state.loadingFavoriteBusiness = false;
         if (action.payload) {
-          state.favoriteBusiness = state.favoriteBusiness.concat(action.payload.data);
+          state.favoriteBusiness = state.favoriteBusiness.concat(
+            action.payload.data
+          );
           state.totalFavorites = action.payload.totalFavorites;
           // state.favoriteBusiness = action.payload.sort(function (a, b) {
           //   return a.favorites.company_name
@@ -188,5 +193,5 @@ export const slice = createSlice({
   },
 });
 
-export const { setWs } = slice.actions;
+export const { setWs, clearUserFavorites } = slice.actions;
 export default slice.reducer;

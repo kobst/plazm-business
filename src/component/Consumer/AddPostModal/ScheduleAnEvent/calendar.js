@@ -7,6 +7,15 @@ import {
 import DateFnsUtils from "@date-io/date-fns";
 import styled from "styled-components";
 import moment from "moment";
+import MomentUtils from "@date-io/moment";
+
+moment.updateLocale("en", {
+  week: {
+    dow: 1
+  }
+});
+
+const localeData = moment.localeData();
 
 const CalendarWrap = styled.div`
   .MuiPickersDatePickerRoot-toolbarLandscape {
@@ -66,7 +75,7 @@ function Calendar({ date, changeDate }) {
   };
   return (
     <CalendarWrap>
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <MuiPickersUtilsProvider utils={MomentUtils}>
         <DatePicker
           autoOk
           orientation="landscape"
@@ -79,7 +88,6 @@ function Calendar({ date, changeDate }) {
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <TimePicker
           open={open}
-          autoOk
           label="12 hours"
           value={date}
           onChange={onChangeTime}

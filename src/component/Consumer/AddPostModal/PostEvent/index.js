@@ -35,15 +35,19 @@ const EventListing = styled.div`
   }
 `;
 
-const CloseList = styled.div`
+const CloseList = styled.button`
   cursor: pointer;
   svg {
     color: #fff;
     font-size: 20px;
   }
+  :hover,
+  :focus {
+    outline: 0;
+  }
 `;
 
-const PostEvent = ({ eventDetails, setEventDetails }) => {
+const PostEvent = ({ eventDetails, setEventDetails, loader }) => {
   return (
     <>
       {eventDetails !== null ? (
@@ -51,23 +55,26 @@ const PostEvent = ({ eventDetails, setEventDetails }) => {
           <div>
             <span>
               <EventListing>
-                <span className="TitleSpan">Event Date :</span> <span>{eventDetails.eventDate}</span>
+                <span className="TitleSpan">Event Date :</span>{" "}
+                <span>{eventDetails.eventDate}</span>
               </EventListing>
             </span>
             <span>
               <EventListing>
-                <span className="TitleSpan">Event Timing :</span> <span>{eventDetails.eventTime}</span>
+                <span className="TitleSpan">Event Timing :</span>{" "}
+                <span>{eventDetails.eventTime}</span>
               </EventListing>
             </span>
             <span>
               <EventListing>
-               <span className="TitleSpan">Event Repeat :</span> <span>{eventDetails.eventRepeat}</span>
+                <span className="TitleSpan">Event Repeat :</span>{" "}
+                <span>{eventDetails.eventRepeat}</span>
               </EventListing>
             </span>
           </div>
 
-          <CloseList>
-            <IoMdCloseCircle onClick={() => setEventDetails(null)} />
+          <CloseList onClick={() => setEventDetails(null)} disabled={loader}>
+            <IoMdCloseCircle />
           </CloseList>
         </AllListingsContent>
       ) : null}
