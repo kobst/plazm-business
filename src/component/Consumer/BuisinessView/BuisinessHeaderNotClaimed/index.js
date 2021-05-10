@@ -9,7 +9,8 @@ import LinkedInImg from "../../../../images/Linkedin-new.svg";
 import InstagramImg from "../../../../images/Instagram-new.svg";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
+import FavoritesIcon from "../../../../images/favorites.png";
+import FavoritesIconFilled from "../../../../images/favorites-filled.png";
 import {
   AddBusinessFavorite,
   RemoveBusinessFavorite,
@@ -182,13 +183,13 @@ const BuisinessHeaderNotClaimed = ({
   const history = useHistory();
 
   useEffect(() => {
-    if (businessProfile && businessProfile.length>0) {
+    if (businessProfile && businessProfile.length > 0) {
       const find = user.favorites.find((i) => i === businessProfile[0]._id);
       if (find) {
         setFavoriteBusiness(true);
       } else setFavoriteBusiness(false);
     }
-  }, [user,businessProfile]);
+  }, [user, businessProfile]);
 
   /*
    * @desc: close tab function to be called on cross icon click
@@ -250,12 +251,19 @@ const BuisinessHeaderNotClaimed = ({
                 </span>{" "}
                 {/* business favorite toggle */}
                 {favoriteBusiness ? (
-                  <MdFavorite
+                  <img
+                    src={FavoritesIconFilled}
                     onClick={() => removeFavorite()}
                     className="favoriteBusiness"
+                    alt=""
                   />
                 ) : (
-                  <MdFavoriteBorder onClick={() => addFavorite()} />
+                  <img
+                    src={FavoritesIcon}
+                    onClick={() => addFavorite()}
+                    className="favoriteBusinessBorder"
+                    alt=""
+                  />
                 )}
               </BusinessName>
               <SocialIconsWrap>
