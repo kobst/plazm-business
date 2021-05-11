@@ -16,6 +16,7 @@ import ProfileSettings from "../../../Consumer/ProfileSettings";
 import BuisinessView from "../../../Consumer/BuisinessView";
 import BusinessList from "../../../Consumer/BusinessList";
 import { useSelector } from "react-redux";
+import Profile from "../../../Consumer/Profile";
 
 const LeftBarContent = styled.div`
   width: 100px;
@@ -189,6 +190,7 @@ const LeftBar = ({
             >
               <img src={ProfileSettingImg} alt="" />
             </Tab>
+            
             <Tab
               className={
                 9 === tabIndex - 1
@@ -200,7 +202,9 @@ const LeftBar = ({
                   : "react-tabs__tab"
               }
             >
-              &nbsp;
+             <SearchIcon>
+                <BiSearchAlt2 />
+              </SearchIcon>
             </Tab>
             <Tab
               className={
@@ -214,6 +218,19 @@ const LeftBar = ({
               }
             >
               &nbsp;
+            </Tab>
+            <Tab
+              className={
+                11 === tabIndex - 1
+                  ? "react-tabs__tab LIBefore"
+                  : tabIndex + 1 === 11
+                  ? "react-tabs__tab LIAFter"
+                  : tabIndex === 11
+                  ? "react-tabs__tab react-tabs__tab--selected"
+                  : "react-tabs__tab"
+              }
+            >
+               &nbsp;
             </Tab>
           </TabList>
 
@@ -277,6 +294,11 @@ const LeftBar = ({
                   setFlag={setFlag}
                 />
               )}
+            </div>
+          </TabPanel>
+          <TabPanel>
+            <div className="panel-content">                           
+              <Profile />
             </div>
           </TabPanel>
         </Tabs>
