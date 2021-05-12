@@ -4,7 +4,6 @@ import moment from "moment";
 import styled from "styled-components";
 import ProfileImg from "../../../../images/profile-img.png";
 import FavoritesIcon from "../../../../images/favorites.png";
-import FavoritesIconFilled from "../../../../images/favorites-filled.png";
 import RedHeartIcon from "../../../../images/heart.png";
 import UserMessage from "../../HomeSearch/BusinessListing/UserMessage";
 import {
@@ -43,7 +42,7 @@ const UserMsgWrap = styled.div`
     background-color: #221e45;
   }
   &:after {
-    content: '';
+    content: "";
     position: absolute;
     width: 1px;
     height: calc(100% - 4px);
@@ -289,21 +288,24 @@ const DisplayPostInAList = ({ data }) => {
                     <div className="CloseDiv">Close</div>
                   )}
 
-                  {favoriteBusiness ? (
-                    <img
-                      src={RedHeartIcon}
-                      onClick={() => removeFavorite()}
-                      className="favoriteBusiness"
-                      alt=""
-                    />
-                  ) : (
-                    <img
-                      src={FavoritesIcon}
-                      onClick={() => addFavorite()}
-                      className="favoriteBusinessBorder"
-                      alt=""
-                    />
-                  )}
+                  {data.business[0].hours_format.length > 0 &&
+                  checkBusinessOpenClose() === true ? (
+                    favoriteBusiness ? (
+                      <img
+                        src={RedHeartIcon}
+                        onClick={() => removeFavorite()}
+                        className="favoriteBusiness"
+                        alt=""
+                      />
+                    ) : (
+                      <img
+                        src={FavoritesIcon}
+                        onClick={() => addFavorite()}
+                        className="favoriteBusinessBorder"
+                        alt=""
+                      />
+                    )
+                  ) : null}
                 </RightWrap>
               </ProfileName>
               <ChatInput>
@@ -328,7 +330,11 @@ const DisplayPostInAList = ({ data }) => {
         </UserMessageContent>
       </UserMsgWrap>
 
-      <UserMessage postData={data} businessData={data.business[0]} />
+      <UserMessage
+        postData={data}
+        businessData={data.business[0]}
+        listView={true}
+      />
     </>
   ) : null;
 };

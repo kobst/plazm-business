@@ -107,6 +107,9 @@ const GetListDetails = (obj) => {
                   _id
                   name
                 }
+                media {
+                  image
+                }
                 updatedAt
               }
               data {

@@ -176,7 +176,7 @@ const DescriptionBox = styled.div`
   }
 `;
 
-const UserMessage = ({ postData, businessData }) => {
+const UserMessage = ({ postData, businessData, listView }) => {
   const dispatch = useDispatch();
   const [displayComments, setDisplayComments] = useState(false);
   const loadingComments = useSelector(
@@ -420,6 +420,7 @@ const UserMessage = ({ postData, businessData }) => {
                       setFlag={setFlag}
                       flag={flag}
                       business={businessData}
+                      listView={listView}
                     />
                   );
                 })}

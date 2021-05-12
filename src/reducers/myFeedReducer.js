@@ -167,7 +167,7 @@ export const slice = createSlice({
     searchData: "",
     filterByUpdatedAt: false,
     filterByClosest: false,
-    selectedListDetails: {},
+    selectedListDetails: null,
     loadingSelectedList: false,
   },
   reducers: {

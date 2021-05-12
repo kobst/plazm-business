@@ -41,7 +41,7 @@ const HeadingWrap = styled.div`
 const TopHeadingWrap = styled.div`
   padding: 0;
   display: flex;
-  flex-direction: column;  
+  flex-direction: column;
 `;
 
 const CloseDiv = styled.div`
@@ -106,9 +106,9 @@ const ArrowBack = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  
+
   cursor: pointer;
-  
+
   z-index: 1;
   svg {
     font-size: 34px;
@@ -135,8 +135,8 @@ const ButtonWrapperDiv = styled.div`
     border-radius: 2px;
     padding: 5px 10px;
     cursor: pointer;
-    background-color: #FF6067;
-  } 
+    background-color: #ff6067;
+  }
 `;
 
 const ListBannerSection = styled.div`
@@ -183,7 +183,7 @@ const ListBannerSection = styled.div`
     color:#fff;
   }
 }
-`
+`;
 
 const ButtonOuterDiv = styled.div`
   button {
@@ -200,10 +200,10 @@ const ButtonOuterDiv = styled.div`
     margin-right: 0;
   }
   button.PinkColor {
-    background-color: #FF2E9A;
+    background-color: #ff2e9a;
   }
   button.OrangeColor {
-    background-color: #FF6067;
+    background-color: #ff6067;
   }
 `;
 
@@ -212,7 +212,7 @@ const LockDiv = styled.div`
   height: 18px;
   border-radius: 3px;
   border: 0;
-  background: #FF2E9A;
+  background: #ff2e9a;
   display: inline-block;
   text-align: center;
   line-height: 18px;
@@ -237,6 +237,9 @@ const ListDescriptionView = ({
   const loading = useSelector((state) => state.myFeed.loadingSelectedList);
   const loadingUnSubScribe = useSelector(
     (state) => state.list.loadingUnSubscribe
+  );
+  const loadingSelectedList = useSelector(
+    (state) => state.myFeed.loadingSelectedList
   );
   const totalData = useSelector((state) => state.myFeed.totalData);
   const postsInList = useSelector((state) => state.myFeed.myFeed);
@@ -299,21 +302,37 @@ const ListDescriptionView = ({
       setSelectedListId(null);
     }
   };
-  return (loading && offset === 0 && !loadingUnSubScribe) ||
-    loadingUnSubScribe ? (
+  return (loading &&
+    offset === 0 &&
+    !loadingUnSubScribe &&
+    !loadingSelectedList) ||
+    loadingUnSubScribe ||
+    loadingSelectedList ? (
     <LoaderWrap>
       <ValueLoader />
     </LoaderWrap>
   ) : (
     <>
-      <ListOptionSection>
+      {selectedList?<ListOptionSection>
         <HeadingWrap>
           <TopHeadingWrap>
             <ListBannerSection>
-                <img src={BannerImg} />
-                <h1>The 38 Essential Restaurants in New York City, Winter 2020</h1>
-                <h5>by <span>Edward Han</span> <strong>Updated Jan 7, 2020, 9:27am EST</strong> <LockDiv><CgLock /></LockDiv></h5>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla amet viverra enim viverra faucibus. Amet purus ac, lacus risus ac viverra posuere quam gravida.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla amet viverra enim viverra faucibus. Amet purus ac, lacus risus ac viverra posuere quam gravida.</p>
+              <img
+                src={
+                  selectedList.media.length > 0
+                    ? selectedList.media[0].image
+                    : BannerImg
+                }
+              />
+              <h1>{selectedList.name}</h1>
+              <h5>
+                by <span>{selectedList.ownerId.name}</span>{" "}
+                <strong>Updated {selectedList.updatedAt}</strong>{" "}
+                <LockDiv>
+                  <CgLock />
+                </LockDiv>
+              </h5>
+              <p>{selectedList.description}</p>
             </ListBannerSection>
             <CloseDiv>
               <IoMdClose onClick={() => setDisplayTab(false)} />
@@ -331,11 +350,15 @@ const ListDescriptionView = ({
               <ButtonOuterDiv>
                 <button className="PinkColor">Make Public</button>
                 <button className="PinkColor">Invite</button>
-                <button className="OrangeColor" onClick={()=>deleteList()}>Delete</button>
+                <button className="OrangeColor" onClick={() => deleteList()}>
+                  Delete
+                </button>
               </ButtonOuterDiv>
             </>
           ) : (
-            <button className="unsubscribe" onClick={() => listUnSubscribe()}>Unsubscribe</button>
+            <button className="unsubscribe" onClick={() => listUnSubscribe()}>
+              Unsubscribe
+            </button>
           )}
         </ButtonWrapperDiv>
         <div
@@ -376,7 +399,7 @@ const ListDescriptionView = ({
             </ListingOptionWrap>
           </InfiniteScroll>
         </div>
-      </ListOptionSection>
+      </ListOptionSection> : null}
     </>
   );
 };

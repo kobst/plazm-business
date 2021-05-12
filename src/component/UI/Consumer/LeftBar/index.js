@@ -15,10 +15,11 @@ import ChangePassword from "../../../Consumer/ChangePassword";
 import ProfileSettings from "../../../Consumer/ProfileSettings";
 import BuisinessView from "../../../Consumer/BuisinessView";
 import BusinessList from "../../../Consumer/BusinessList";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ListOptionView from "../../../Consumer/ListOptionView";
 import ListDescriptionView from "../../../Consumer/ListDescriptionView";
-import MyFeed from "../../../Consumer/MyFeed";
+// import MyFeed from "../../../Consumer/MyFeed";
+import { clearMyFeedData } from "../../../../reducers/myFeedReducer";
 // import HomeSearch from "../../../Consumer/HomeSearch";
 
 const LeftBarContent = styled.div`
@@ -70,6 +71,13 @@ const LeftBar = ({
   const [tabIndex, setTabIndex] = useState(isBusinessOpen ? 6 : 0);
   const user = useSelector((state) => state.user.user);
   const [selectedListId, setSelectedListId] = useState(null);
+  const dispatch = useDispatch();
+
+  /** to clear selected data on tab click */
+  const listView = () => {
+    dispatch(clearMyFeedData());
+    setSelectedListId(null);
+  };
   return (
     <>
       <LeftBarContent className="MainTabs">
@@ -139,6 +147,7 @@ const LeftBar = ({
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
+              onClick={() => dispatch(clearMyFeedData())}
             >
               <img src={Mention} alt="" />
             </Tab>
@@ -178,6 +187,7 @@ const LeftBar = ({
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
+              onClick={() => listView()}
             >
               <img src={GridIcon} alt="" />
             </Tab>
@@ -240,7 +250,8 @@ const LeftBar = ({
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              <MyFeed setDisplayTab={() => setTabIndex(0)} />
+              <h2>Any content 5</h2>
+              {/* <MyFeed setDisplayTab={() => setTabIndex(0)} /> */}
             </div>
           </TabPanel>
           <TabPanel>

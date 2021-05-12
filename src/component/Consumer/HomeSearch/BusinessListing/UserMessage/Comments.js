@@ -101,7 +101,7 @@ const LoaderWrap = styled.div`
   margin: 30px 0 30px;
 `;
 
-const Comments = ({ i, postData, displayComments, setFlag, flag, business }) => {
+const Comments = ({ i, postData, displayComments, setFlag, flag, business, listView }) => {
   const [displayReply, setDisplayReply] = useState(false);
   const [displayReplyInput, setDisplayReplyInput] = useState(false);
   const [replyDescription, setReplyDescription] = useState("");
@@ -162,7 +162,7 @@ const Comments = ({ i, postData, displayComments, setFlag, flag, business }) => 
             <p>{findDesc(i.body, i.taggedUsers)}</p>
           </ChatInput>
           <LikesBar
-            type="disabled"
+            type={listView? "reply":"disabled"}
             date={new Date(i.createdAt)}
             setDisplayComments={setDisplayReply}
             displayComments={displayReply}
