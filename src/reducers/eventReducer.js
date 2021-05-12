@@ -436,12 +436,21 @@ export const slice = createSlice({
               totalComments: posts1.totalComments,
             });
             dummy1 = dummy1.concat(posts);
+            if(state.weekBtnClicked) {
+              state.events = dummy1.sort((a, b) => {
+                return (
+                  new Date(a.eventSchedule.start_time) -
+                  new Date(b.eventSchedule.start_time)
+                );
+              });
+            } else {
             state.events = dummy1.sort((a, b) => {
               return (
                 new Date(b.eventSchedule.start_time) -
                 new Date(a.eventSchedule.start_time)
               );
             });
+            }
           }
         }
       }
