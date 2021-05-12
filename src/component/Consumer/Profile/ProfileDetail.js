@@ -78,18 +78,6 @@ const ProfileItemCategory = styled.div`
   width: calc(100% - 40px);
 `;
 
-const ProfileThumb = styled.div`
-  width: 45px;
-  height: 45px;
-  margin: 0 10px 0 0;
-  border: 3px solid #ffffff;
-  border-radius: 50%;
-  overflow: hidden;
-  img {
-    width: 45px;
-    height: 45px;
-  }
-`;
 const ProfileLock = ({ setDisplayTab }) => {
   const userProfile = useSelector((state) => state.user.selectedUser);
   const history = useHistory();

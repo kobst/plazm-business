@@ -21,21 +21,21 @@ const LoaderWrap = styled.div`
   }
 `;
 
-const ProfileContent = ({userId, setDisplayTab}) => {
+const ProfileContent = ({ userId, setDisplayTab }) => {
   const loading = useSelector((state) => state.user.loadingProfile);
   const dispatch = useDispatch();
   const userProfile = useSelector((state) => state.user.selectedUser);
   /** to fetch profile information */
   useEffect(() => {
     dispatch(fetchUserProfileData(userId));
-  }, [dispatch]);
+  }, [dispatch, userId]);
   return loading ? (
     <LoaderWrap>
       <ValueLoader />
     </LoaderWrap>
   ) : userProfile !== null ? (
     <div>
-      <ProfileDetail setDisplayTab={setDisplayTab}/>
+      <ProfileDetail setDisplayTab={setDisplayTab} />
       <ProfileTabs />
       <ProfileLock />
     </div>

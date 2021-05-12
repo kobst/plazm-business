@@ -16,7 +16,7 @@ import ProfileSettings from "../../../Consumer/ProfileSettings";
 import BuisinessView from "../../../Consumer/BuisinessView";
 import BusinessList from "../../../Consumer/BusinessList";
 import { useSelector } from "react-redux";
-import MyFeed from "../../../Consumer/MyFeed";
+// import MyFeed from "../../../Consumer/MyFeed";
 import Profile from "../../../Consumer/Profile";
 
 const LeftBarContent = styled.div`
@@ -246,7 +246,8 @@ const LeftBar = ({
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              <MyFeed setDisplayTab={() => setTabIndex(0)} />
+              <h2>Any content 5</h2>
+              {/* <MyFeed setDisplayTab={() => setTabIndex(0)} /> */}
             </div>
           </TabPanel>
           <TabPanel>
