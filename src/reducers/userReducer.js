@@ -106,6 +106,9 @@ export const slice = createSlice({
     setWs: (state, action) => {
       state.ws = action.payload;
     },
+    clearUserFavorites: (state, action) => {
+      state.favoriteBusiness = [];
+    },
   },
   extraReducers: {
     [fetchUserDetails.pending]: (state) => {
@@ -229,5 +232,5 @@ export const slice = createSlice({
   },
 });
 
-export const { setWs } = slice.actions;
+export const { setWs, clearUserFavorites } = slice.actions;
 export default slice.reducer;

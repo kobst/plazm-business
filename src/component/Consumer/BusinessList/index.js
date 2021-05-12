@@ -7,7 +7,10 @@ import { IoMdClose } from "react-icons/io";
 import { FaSort } from "react-icons/fa";
 import Input from "../../UI/Input/Input";
 import DisplayFavoriteBusiness from "./displayFavoriteBusiness";
-import { fetchUserFavoritesBusiness } from "../../../reducers/userReducer";
+import {
+  clearUserFavorites,
+  fetchUserFavoritesBusiness,
+} from "../../../reducers/userReducer";
 
 const LoaderWrap = styled.div`
   width: 100%;
@@ -54,7 +57,6 @@ const BuisinessViewContent = styled.div`
     font-weight: 500;
     margin: 0 0 10px;
     padding: 0;
-    cursor: pointer;
     transition: all 0.2s ease-in-out 0s;
     @media (max-width: 767px) {
       font-size: 13px;
@@ -150,7 +152,10 @@ const BusinessList = ({ setDisplayTab }) => {
   }, [search, favoriteBusiness]);
 
   useEffect(() => {
-    dispatch(fetchUserFavoritesBusiness({ id: user._id, value: offset }));
+    if (offset === 0) {
+      dispatch(clearUserFavorites());
+      dispatch(fetchUserFavoritesBusiness({ id: user._id, value: offset }));
+    }
   }, [user, dispatch, offset]);
 
   useEffect(() => {
@@ -182,49 +187,51 @@ const BusinessList = ({ setDisplayTab }) => {
             <CloseDiv>
               <IoMdClose onClick={() => setDisplayTab(false)} />
             </CloseDiv>
-            <h3>Favorites <FaSort /></h3>
+            <h3>
+              Favorites <FaSort />
+            </h3>
             <div className="dashed" />
             <Input
               placeholder="Search Favorites"
               onChange={(e) => searchList(e)}
             />
           </HeadingWrap>
-        <div id="scrollableDiv" style={{ height: "calc(100vh - 175px)", overflow: "auto" }}> 
-        <InfiniteScroll
-          dataLength={userFavorites? userFavorites.length: 0}
-          next={fetchMoreBusiness}
-          hasMore={hasMore}
-          loader={
-            userFavorites &&
-            userFavorites.length > 20 &&
-            offset + 20 < totalFavorites &&
-            !loadingFavoriteBusiness ? (
-              <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
-                {" "}
-                <ValueLoader height="40" width="40" />
-              </div>
-            ) : null
-          }
-          scrollableTarget="scrollableDiv"
-          endMessage={
-            userFavorites.length > 20 && !loadingFavoriteBusiness ? (
-              <center>
-                <NoMorePost className="noMorePost">
-                  No more Business to show
-                </NoMorePost>
-              </center>
-            ) : null
-          }
-        >
-            <BusinessListWrap>
-              {userFavorites.length > 0 ? (
-                userFavorites.map((i, key) => (
-                  <DisplayFavoriteBusiness data={i} key={key} />
-                ))
-              ) : (
-                <NoData>No Business To Display</NoData>
-              )}
-            </BusinessListWrap>
+          <div
+            id="scrollableDiv"
+            style={{ height: "calc(100vh - 175px)", overflow: "auto" }}
+          >
+            <InfiniteScroll
+              dataLength={userFavorites ? userFavorites.length : 0}
+              next={fetchMoreBusiness}
+              hasMore={hasMore}
+              loader={
+                offset < totalFavorites && loadingFavoriteBusiness ? (
+                  <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
+                    {" "}
+                    <ValueLoader height="40" width="40" />
+                  </div>
+                ) : null
+              }
+              scrollableTarget="scrollableDiv"
+              endMessage={
+                userFavorites.length > 20 && !loadingFavoriteBusiness ? (
+                  <center>
+                    <NoMorePost className="noMorePost">
+                      No more Business to show
+                    </NoMorePost>
+                  </center>
+                ) : null
+              }
+            >
+              <BusinessListWrap>
+                {userFavorites.length > 0 ? (
+                  userFavorites.map((i, key) => (
+                    <DisplayFavoriteBusiness data={i} key={key} />
+                  ))
+                ) : (
+                  <NoData>No Business To Display</NoData>
+                )}
+              </BusinessListWrap>
             </InfiniteScroll>
           </div>
         </BuisinessViewContent>

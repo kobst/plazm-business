@@ -17,7 +17,7 @@ import BuisinessView from "../../../Consumer/BuisinessView";
 import BusinessList from "../../../Consumer/BusinessList";
 import { useSelector } from "react-redux";
 import MyFeed from "../../../Consumer/MyFeed";
-import UserLockedProfile from "../../../Consumer/UserLockedProfile";
+import Profile from "../../../Consumer/Profile";
 
 const LeftBarContent = styled.div`
   width: 100px;
@@ -63,9 +63,13 @@ const LeftBar = ({
   isBusinessOpen,
   businessExists,
   businessId,
+  isUserOpen,
+  userId,
 }) => {
   const [displayChangePassword, setDisplayChangePassword] = useState(false);
-  const [tabIndex, setTabIndex] = useState(isBusinessOpen ? 6 : 0);
+  const [tabIndex, setTabIndex] = useState(
+    isBusinessOpen ? 6 : isUserOpen ? 3 : 0
+  );
   const user = useSelector((state) => state.user.user);
   return (
     <>
@@ -191,13 +195,14 @@ const LeftBar = ({
             >
               <img src={ProfileSettingImg} alt="" />
             </Tab>
+
             <Tab
               className={
-                9 === tabIndex - 1
+                10 === tabIndex - 1
                   ? "react-tabs__tab LIBefore"
-                  : tabIndex + 1 === 9
+                  : tabIndex + 1 === 10
                   ? "react-tabs__tab LIAFter"
-                  : tabIndex === 9
+                  : tabIndex === 10
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
@@ -206,11 +211,11 @@ const LeftBar = ({
             </Tab>
             <Tab
               className={
-                10 === tabIndex - 1
+                11 === tabIndex - 1
                   ? "react-tabs__tab LIBefore"
-                  : tabIndex + 1 === 10
+                  : tabIndex + 1 === 11
                   ? "react-tabs__tab LIAFter"
-                  : tabIndex === 10
+                  : tabIndex === 11
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
@@ -227,12 +232,16 @@ const LeftBar = ({
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              <UserLockedProfile setDisplayTab={() => setTabIndex(0)}/>
+              <h2>Any content 3</h2>
             </div>
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              <h2>Any content 4</h2>
+              {isUserOpen ? (
+                <Profile setDisplayTab={() => setTabIndex(0)} userId={userId} />
+              ) : (
+                <h2>Any content 4</h2>
+              )}
             </div>
           </TabPanel>
           <TabPanel>
