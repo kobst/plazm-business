@@ -5,6 +5,7 @@ import styled from "styled-components";
 import ProfileImg from "../../../../images/profile-img.png";
 import FavoritesIcon from "../../../../images/favorites.png";
 import FavoritesIconFilled from "../../../../images/favorites-filled.png";
+import RedHeartIcon from "../../../../images/heart.png";
 import UserMessage from "../../HomeSearch/BusinessListing/UserMessage";
 import {
   AddBusinessFavorite,
@@ -33,18 +34,29 @@ const UserMsgWrap = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 12px;
+  position: relative;
+  margin-top: 15px;
   :nth-child(even) {
     background-color: #282352;
   }
   :nth-child(odd) {
     background-color: #221e45;
   }
+  &:after {
+    content: '';
+    position: absolute;
+    width: 1px;
+    height: calc(100% - 4px);
+    background: #878787;
+    top: 35px;
+    left: 26px;
+  }
 `;
 
 const ProfileNameHeader = styled.div`
   display: flex;
-  padding: 0;
-  margin: 15px 0 0;
+  padding: 0 0 5px 0;
+  margin: 0;
 `;
 
 const ProfileThumb = styled.div`
@@ -65,7 +77,7 @@ const ProfileNameWrap = styled.div`
   align-items: flex-start;
   justify-content: center;
   max-width: calc(100% - 40px);
-  padding: 0 25px 5px 0px;
+  padding: 0 0 0 0px;
   width: 100%;
   @media (max-width: 1024px) {
     padding: 0 0px 15px 0px;
@@ -76,7 +88,7 @@ const ProfileName = styled.div`
   font-style: normal;
   font-size: 13px;
   line-height: normal;
-  margin: 7px 0 0px 0;
+  margin: 0;
   font-weight: 700;
   color: #ff2e9a;
   svg {
@@ -279,7 +291,7 @@ const DisplayPostInAList = ({ data }) => {
 
                   {favoriteBusiness ? (
                     <img
-                      src={FavoritesIconFilled}
+                      src={RedHeartIcon}
                       onClick={() => removeFavorite()}
                       className="favoriteBusiness"
                       alt=""

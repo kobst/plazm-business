@@ -38,7 +38,7 @@ const UserMessageContent = styled.div`
 const UserMsgWrap = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0 12px;
+  padding: 0;
   :nth-child(even) {
     background-color: #282352;
   }
@@ -51,6 +51,16 @@ const ProfileNameHeader = styled.div`
   display: flex;
   padding: 0;
   margin: 15px 0;
+  padding-left: 40px;
+  &:before {
+    content: '';
+    position: absolute;
+    left: 26px;
+    background: #878787;
+    width: 10px;
+    height: 1px;
+    top: 30px;
+  }
 `;
 
 const ProfileThumb = styled.div`
@@ -70,12 +80,11 @@ const ProfileNameWrap = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  max-width: calc(100% - 40px);
-  border-bottom: 0.25px solid #878787;
-  padding: 0 25px 15px 0px;
+  max-width: calc(100% - 40px);  
+  padding: 0 25px 0 0px;
   width: 100%;
   @media (max-width: 1024px) {
-    padding: 0 45px 15px 0px;
+    padding: 0 45px 0 0px;
   }
 `;
 
@@ -83,7 +92,7 @@ const ProfileName = styled.div`
   font-style: normal;
   font-size: 13px;
   line-height: normal;
-  margin: 7px 0 0px 0;
+  margin: 0;
   font-weight: 700;
   color: #ff2e9a;
   display: flex;
