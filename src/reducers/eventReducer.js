@@ -241,7 +241,7 @@ export const slice = createSlice({
       const x = arr.filter((i) => i.day === action.payload);
       const startOfWeek = moment(currentDate)
         .startOf("week")
-        .add(x[0].val + 1, "d")
+        .add(x[0].val, "d")
         .toDate();
       startOfWeek.setUTCHours(0, 0, 0, 0);
       state.selectedDate = startOfWeek;
