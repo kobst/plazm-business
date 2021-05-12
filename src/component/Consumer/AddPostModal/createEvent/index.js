@@ -18,6 +18,7 @@ import SelectedListing from "../SelectedListing";
 import PostEvent from "../PostEvent";
 import { addEvent } from "../../../../reducers/eventReducer";
 import error from "../../../../constants";
+import moment from 'moment'
 
 const bucket = process.env.REACT_APP_BUCKET;
 
@@ -184,7 +185,7 @@ const CreateEventModal = ({
   */
   const uploadImage = (e) => {
     if (imageUrl.length < 5) {
-      if (e.target.files.length > 1) {
+      if (e.target.files.length > 1 && e.target.files.length <= 5) {
         let a1 = [],
           a2 = [],
           a3 = [],
@@ -236,6 +237,12 @@ const CreateEventModal = ({
         setImageUpload(a2);
         setImageCopy(a3);
         setImageUploadCopy(a4);
+      } else if (e.target.files.length > 5) {
+        setImageError("Maximum 5 images are allowed");
+        /** to set error empty after 3 sec */
+        setTimeout(() => {
+          setImageError("");
+        }, 3000);
       } else {
         const selectedFile = e.target.files[0];
         if (selectedFile) {
