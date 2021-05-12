@@ -7,7 +7,7 @@ const ProfileLockOuter = styled.div`
     text-align: center;    
     box-sizing: border-box;
     padding: 0px 32px;
-    margin-top: 133px;
+    margin-top: 125px;
 `;
 
 const ProfileLockHeading = styled.div`
