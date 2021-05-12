@@ -15,7 +15,6 @@ moment.updateLocale("en", {
   }
 });
 
-const localeData = moment.localeData();
 
 const CalendarWrap = styled.div`
   .MuiPickersDatePickerRoot-toolbarLandscape {
