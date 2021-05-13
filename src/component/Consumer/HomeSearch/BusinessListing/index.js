@@ -4,6 +4,7 @@ import DisplayFavoriteBusiness from "./DisplayFavoriteBusiness";
 import styled from "styled-components";
 import ValueLoader from "../../../../utils/loader";
 import DropdwonArrowTop from "../../../../images/top_arrow.png";
+import selectarrow from "../../../../images/sortingselectarrow.png";
 import { FaSort } from "react-icons/fa";
 import SearchBar from "../SearchBar";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -13,6 +14,7 @@ import {
   setSideFiltersByUpdatedAt,
 } from "../../../../reducers/myFeedReducer";
 import error from "../../../../constants";
+import Select from "../../../Consumer/UI/Select";
 
 const BusinessListWrap = styled.div`
   width: 100%;
@@ -123,6 +125,21 @@ const DropdownContent = styled.div`
   }
 `;
 
+const SortingSelect = styled.div`
+  max-width: 200px;
+  margin: 15px 0;
+  select {
+    border: 0;
+    color: #fff;
+    font-weight: bold;
+    font-size: 20px;
+    padding-left: 0;
+    background: url(${selectarrow}) no-repeat right 10px center transparent;
+    @media (max-width: 767px) {
+      font-size: 14px;
+    }
+  }
+`;
 const BusinessListing = () => {
   const businessData = useSelector((state) => state.myFeed.myFeed);
   const loading = useSelector((state) => state.myFeed.loading);
@@ -166,7 +183,14 @@ const BusinessListing = () => {
       dispatch(HomeSearch(obj));
       setFilterSelected(false);
     }
-  }, [dispatch, filterSelected, filterClosest, updatedAtFilter, offset, search]);
+  }, [
+    dispatch,
+    filterSelected,
+    filterClosest,
+    updatedAtFilter,
+    offset,
+    search,
+  ]);
 
   /** to fetch more places matching the search */
   const fetchMorePlaces = () => {
@@ -202,6 +226,11 @@ const BusinessListing = () => {
   return (
     <>
       <SearchBar offset={offset} />
+      <SortingSelect>
+        <Select>
+          <option>All</option>
+        </Select>
+      </SortingSelect>
       <CheckboxWrap ref={menuRef}>
         <FaSort onClick={toggleUploadMenu} />
         {uploadMenu && (

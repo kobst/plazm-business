@@ -67,6 +67,7 @@ const ProfileName = styled.div`
   margin: 7px 0 5px 0;
   font-weight: 700;
   color: #ff2e9a;
+  cursor: pointer;
   span {
     font-weight: 700;
     color: #fff;
@@ -85,6 +86,9 @@ const ChatInput = styled.div`
     color: #ff2e9a;
     font-weight: 600;
     cursor: pointer;
+  }
+  p {
+    cursor: default;
   }
 `;
 
@@ -167,7 +171,9 @@ const Comments = ({
           </ProfileName>
           <ChatInput>
             {" "}
-            <p>{findDesc(i.body, i.taggedUsers)}</p>
+            <p style={{ cursor: "default" }}>
+              {findDesc(i.body, i.taggedUsers)}
+            </p>
           </ChatInput>
           <LikesBar
             type="reply"
@@ -208,7 +214,7 @@ const Comments = ({
                         </ProfileThumb>
                         <ProfileNameWrap>
                           <ProfileName>
-                            <span>by</span>
+                            <span style={{ cursor: "default" }}>by</span>
                             <span
                               onClick={() =>
                                 window.open(`/u/${j.userId._id}`, "_self")

@@ -69,6 +69,7 @@ const ProfileName = styled.div`
   margin: 7px 0 5px 0;
   font-weight: 700;
   color: #ff2e9a;
+  cursor: pointer;
   span {
     font-weight: 700;
     color: #fff;
