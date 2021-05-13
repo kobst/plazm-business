@@ -27,7 +27,7 @@ const UserMessageContent = styled.div`
 const UserMsgWrap = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0 12px;
+  padding: 0;
   :nth-child(even) {
     background-color: #282352;
   }
@@ -40,6 +40,16 @@ const ProfileNameHeader = styled.div`
   display: flex;
   padding: 0;
   margin: 15px 0;
+  padding-left: 40px;
+  &:before {
+    content: '';
+    position: absolute;
+    left: 26px;
+    background: #878787;
+    width: 10px;
+    height: 1px;
+    top: 30px;
+  }
 `;
 
 const ProfileThumb = styled.div`
@@ -60,7 +70,6 @@ const ProfileNameWrap = styled.div`
   align-items: flex-start;
   justify-content: center;
   max-width: calc(100% - 40px);
-  border-bottom: 0.25px solid #878787;
   padding: 0 25px 15px 0px;
   width: 100%;
   @media (max-width: 1024px) {

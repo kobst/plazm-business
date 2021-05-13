@@ -5,7 +5,7 @@ import BusinessListing from "./BusinessListing";
 import { clearMyFeedData, setSideFiltersHomeSearch } from "../../../reducers/myFeedReducer";
 
 const ContentWrap = styled.div`
-  padding: 30px;
+  padding: 0px;
 `;
 
 const HomeSearch = () => {

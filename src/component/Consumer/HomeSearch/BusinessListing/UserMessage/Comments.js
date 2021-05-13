@@ -19,7 +19,7 @@ const UserMessageContent = styled.div`
     align-items: flex-start;
   }
   &.UserReplyContent {
-    padding: 10px 0 0 40px;
+    padding: 10px 0 0 40px;    
   }
   .InnerScroll {
     overflow-x: hidden;
@@ -54,7 +54,6 @@ const ProfileNameWrap = styled.div`
   align-items: flex-start;
   justify-content: center;
   max-width: calc(100% - 40px);
-  border-bottom: 0.25px solid #878787;
   padding: 0 25px 15px 0px;
   width: 100%;
   @media (max-width: 1024px) {

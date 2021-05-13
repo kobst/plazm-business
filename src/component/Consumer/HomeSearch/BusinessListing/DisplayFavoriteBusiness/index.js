@@ -8,6 +8,8 @@ import FavoritesIconFilled from "../../../../../images/favorites-filled.png";
 import BusinessHashTags from "../BusinessHashTags";
 import UserMessage from "../UserMessage";
 import UserMessageEvents from "../Events/UserMessageEvents";
+import RedHeartIcon from "../../../../../images/heart.png";
+
 import {
   AddBusinessFavorite,
   RemoveBusinessFavorite,
@@ -36,12 +38,19 @@ const UserMsgWrap = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 12px;
-  :nth-child(even) {
-    background-color: #282352;
-  }
-  :nth-child(odd) {
-    background-color: #221e45;
-  }
+  position: relative;
+  &.search-active {
+    &:after {
+      content: "";
+      position: absolute;
+      width: 1px;
+      height: calc(100% - 20px);
+      background: #878787;
+      top: 50px;
+      left: 26px;
+      z-index: 1;
+    } 
+  }  
 `;
 
 const ProfileNameHeader = styled.div`
@@ -68,7 +77,7 @@ const ProfileNameWrap = styled.div`
   align-items: flex-start;
   justify-content: center;
   max-width: calc(100% - 40px);
-  padding: 0 25px 5px 0px;
+  padding: 0 0 5px 0px;
   width: 100%;
   @media (max-width: 1024px) {
     padding: 0 0px 15px 0px;
@@ -138,6 +147,24 @@ const ChatInput = styled.div`
     }
   }
 `;
+
+const SearchWrapper = styled.div`
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 0px;
+  &:after{
+    content: "";
+    position: absolute;
+    width: 1px;
+    height: calc(100% - 20px);
+    background: #878787;
+    top: 50px;
+    left: 26px;
+    z-index: 1;
+  }
+` ;
 
 const RightWrap = styled.div`
   display: flex;
@@ -255,7 +282,7 @@ const DisplayFavoriteBusiness = ({ data }) => {
 
   return data ? (
     <>
-      <UserMsgWrap>
+      <UserMsgWrap className={data.eventSchedule !== null || data.data !== null || data.body !== null && data.type === "Post" || data.body !== null && data.type === "Events" ? 'search-active' : ''}>
         <UserMessageContent>
           <ProfileNameHeader>
             <ProfileThumb>
@@ -289,7 +316,7 @@ const DisplayFavoriteBusiness = ({ data }) => {
 
                   {favoriteBusiness ? (
                     <img
-                      src={FavoritesIconFilled}
+                      src={RedHeartIcon}
                       onClick={() => removeFavorite()}
                       className="favoriteBusiness"
                       alt=""

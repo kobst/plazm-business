@@ -76,27 +76,26 @@ const CheckboxWrap = styled.div`
 const DropdownContent = styled.div`
   display: flex;
   position: absolute;
-  min-width: 102px;
+  min-width: 130px;
   overflow: auto;
   background: #fe02b9;
   box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.3);
   z-index: 1;
-  top: 25px;
-  width: 30px;
+  top: 22px;
   overflow: visible;
   right: -5px;
   padding: 5px;
   :before {
     background: url(${DropdwonArrowTop}) no-repeat top center;
-    width: 15px;
-    height: 15px;
+    width: 10px;
+    height: 6px;
     content: " ";
-    top: -12px;
-    position: relative;
+    top: -6px;
+    position: absolute;
     margin: 0 auto;
     display: flex;
     text-align: center;
-    left: 78px;
+    right: 6px;
     @media (max-width: 767px) {
       left: 0;
     }
@@ -108,14 +107,14 @@ const DropdownContent = styled.div`
   }
   ul {
     list-style: none;
-    margin: 0 0 0 -15px;
+    margin: 0;
     padding: 0;
     width: 100%;
     text-align: right;
   }
   li {
     color: #fff;
-    padding: 0px 5px;
+    padding: 2px 5px;
     text-decoration: none;
     font-size: 12px;
   }
@@ -127,7 +126,8 @@ const DropdownContent = styled.div`
 
 const SortingSelect = styled.div`
   max-width: 200px;
-  margin: 15px 0;
+  width: 100%;
+  margin: 0;
   select {
     border: 0;
     color: #fff;
@@ -135,11 +135,20 @@ const SortingSelect = styled.div`
     font-size: 20px;
     padding-left: 0;
     background: url(${selectarrow}) no-repeat right 10px center transparent;
+    margin: 0px;
     @media (max-width: 767px) {
       font-size: 14px;
     }
   }
 `;
+
+const SearchDropdownOption = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding:0 20px;
+`;
+
 const BusinessListing = () => {
   const businessData = useSelector((state) => state.myFeed.myFeed);
   const loading = useSelector((state) => state.myFeed.loading);
@@ -226,23 +235,25 @@ const BusinessListing = () => {
   return (
     <>
       <SearchBar offset={offset} />
-      <SortingSelect>
-        <Select>
-          <option>All</option>
-        </Select>
-      </SortingSelect>
-      <CheckboxWrap ref={menuRef}>
-        <FaSort onClick={toggleUploadMenu} />
-        {uploadMenu && (
-          <DropdownContent>
-            <ul>
-              <li onClick={() => closestFilter()}>Closest</li>
+      <SearchDropdownOption>
+          <SortingSelect>
+            <Select>
+              <option>All</option>
+            </Select>
+          </SortingSelect>
+          <CheckboxWrap ref={menuRef}>
+            <FaSort onClick={toggleUploadMenu} />
+            {uploadMenu && (
+              <DropdownContent>
+                <ul>
+                  <li onClick={() => closestFilter()}>Closest</li>
 
-              <li onClick={() => recentlyUpdatedFilter()}>Recently Updated</li>
-            </ul>
-          </DropdownContent>
-        )}
-      </CheckboxWrap>
+                  <li onClick={() => recentlyUpdatedFilter()}>Recently Updated</li>
+                </ul>
+              </DropdownContent>
+            )}
+          </CheckboxWrap>
+        </SearchDropdownOption>
       {loading && offset === 0 ? (
         <LoaderWrap>
           <ValueLoader />
