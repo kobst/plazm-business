@@ -32,11 +32,44 @@ const CalendarWrap = styled.div`
     color: #0094ff;
     font-weight: 600;
     text-transform: uppercase;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-right: 22px;
+    width:16px;
+  }
+  .MuiPickersCalendarHeader-daysHeader span:nth-child(5) {
+    position: relative;
+    left: 5px;
+    width: 15px;
+  }
+  .MuiPickersCalendarHeader-daysHeader span:nth-child(4) {
+    position: relative;
+    left: 5px;
+  }
+  .MuiPickersCalendarHeader-daysHeader span:nth-child(3) {
+    position: relative;
+    left: 5px;
+  }
+  .MuiPickersCalendarHeader-daysHeader span:nth-child(2) {
+    position: relative;
+    left: 5px;
+  }
+  .MuiPickersCalendarHeader-daysHeader span:nth-child(1) {
+    width:20px;
+    position: relative;
+    left:8px;
+  }
+  .MuiPickersCalendarHeader-daysHeader span:nth-child(6) {
+    width:16px;
+    position: relative;
+    left: 5px;
   }
   .MuiPickersCalendarHeader-dayLabel:last-child {
     color: #ee3840;
     font-weight: 600;
     text-transform: uppercase;
+    position: relative;
+    left: 5px;
   }
   .MuiPickersCalendarHeader-iconButton {
     background-color: transparent;
