@@ -98,12 +98,21 @@ const LoaderWrap = styled.div`
   align-items: center;
   margin: 30px 0 10px;
 `;
-const Comments = ({ i, eventData, displayComments, setFlag, flag, business }) => {
+const Comments = ({
+  i,
+  eventData,
+  displayComments,
+  setFlag,
+  flag,
+  business,
+}) => {
   const [displayReply, setDisplayReply] = useState(false);
   const [displayReplyInput, setDisplayReplyInput] = useState(false);
   const [replyDescription, setReplyDescription] = useState("");
   const ws = useSelector((state) => state.user.ws);
-  const loadingReplies = useSelector((state) => state.myFeed.loadingEventReplies);
+  const loadingReplies = useSelector(
+    (state) => state.myFeed.loadingEventReplies
+  );
   /** to add reply function */
   const addReply = async (obj) => {
     ws.send(
@@ -151,7 +160,9 @@ const Comments = ({ i, eventData, displayComments, setFlag, flag, business }) =>
           <img src={i.userId.photo ? i.userId.photo : ProfileImg} alt="" />
         </ProfileThumb>
         <ProfileNameWrap>
-          <ProfileName>
+          <ProfileName
+            onClick={() => window.open(`/u/${i.userId._id}`, "_self")}
+          >
             {i.userId.name}{" "}
           </ProfileName>
           <ChatInput>
@@ -198,7 +209,14 @@ const Comments = ({ i, eventData, displayComments, setFlag, flag, business }) =>
                         <ProfileNameWrap>
                           <ProfileName>
                             <span>by</span>
-                            {j.userId.name}{" "}
+                            <span
+                              onClick={() =>
+                                window.open(`/u/${j.userId._id}`, "_self")
+                              }
+                              style={{ color: "#ff2e9a" }}
+                            >
+                              {j.userId.name}
+                            </span>{" "}
                           </ProfileName>
                           <ChatInput>
                             {" "}

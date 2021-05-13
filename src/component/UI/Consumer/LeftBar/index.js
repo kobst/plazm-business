@@ -20,6 +20,7 @@ import ListOptionView from "../../../Consumer/ListOptionView";
 import ListDescriptionView from "../../../Consumer/ListDescriptionView";
 import MyFeed from "../../../Consumer/MyFeed";
 import { clearMyFeedData } from "../../../../reducers/myFeedReducer";
+import Profile from "../../../Consumer/Profile";
 // import HomeSearch from "../../../Consumer/HomeSearch";
 
 const LeftBarContent = styled.div`
@@ -66,9 +67,13 @@ const LeftBar = ({
   isBusinessOpen,
   businessExists,
   businessId,
+  isUserOpen,
+  userId,
 }) => {
   const [displayChangePassword, setDisplayChangePassword] = useState(false);
-  const [tabIndex, setTabIndex] = useState(isBusinessOpen ? 6 : 0);
+  const [tabIndex, setTabIndex] = useState(
+    isBusinessOpen ? 6 : isUserOpen ? 3 : 0
+  );
   const user = useSelector((state) => state.user.user);
   const [selectedListId, setSelectedListId] = useState(null);
   const dispatch = useDispatch();
@@ -204,13 +209,14 @@ const LeftBar = ({
             >
               <img src={ProfileSettingImg} alt="" />
             </Tab>
+
             <Tab
               className={
-                9 === tabIndex - 1
+                10 === tabIndex - 1
                   ? "react-tabs__tab LIBefore"
-                  : tabIndex + 1 === 9
+                  : tabIndex + 1 === 10
                   ? "react-tabs__tab LIAFter"
-                  : tabIndex === 9
+                  : tabIndex === 10
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
@@ -219,11 +225,11 @@ const LeftBar = ({
             </Tab>
             <Tab
               className={
-                10 === tabIndex - 1
+                11 === tabIndex - 1
                   ? "react-tabs__tab LIBefore"
-                  : tabIndex + 1 === 10
+                  : tabIndex + 1 === 11
                   ? "react-tabs__tab LIAFter"
-                  : tabIndex === 10
+                  : tabIndex === 11
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
@@ -245,7 +251,11 @@ const LeftBar = ({
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              <h2>Any content 4</h2>
+              {isUserOpen ? (
+                <Profile setDisplayTab={() => setTabIndex(0)} userId={userId} />
+              ) : (
+                <h2>Any content 4</h2>
+              )}
             </div>
           </TabPanel>
           <TabPanel>

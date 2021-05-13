@@ -101,7 +101,15 @@ const LoaderWrap = styled.div`
   margin: 30px 0 30px;
 `;
 
-const Comments = ({ i, postData, displayComments, setFlag, flag, business, listView }) => {
+const Comments = ({
+  i,
+  postData,
+  displayComments,
+  setFlag,
+  flag,
+  business,
+  listView,
+}) => {
   const [displayReply, setDisplayReply] = useState(false);
   const [displayReplyInput, setDisplayReplyInput] = useState(false);
   const [replyDescription, setReplyDescription] = useState("");
@@ -151,10 +159,21 @@ const Comments = ({ i, postData, displayComments, setFlag, flag, business, listV
     <UserMessageContent className="UserReplyContent">
       <ProfileNameHeader>
         <ProfileThumb>
-          <img src={i.userId.length>0 ? i.userId[0].photo : i.userId? i.userId.photo : ProfileImg} alt="" />
+          <img
+            src={
+              i.userId.length > 0
+                ? i.userId[0].photo
+                : i.userId
+                ? i.userId.photo
+                : ProfileImg
+            }
+            alt=""
+          />
         </ProfileThumb>
         <ProfileNameWrap>
-          <ProfileName>
+          <ProfileName
+            onClick={() => window.open(`/u/${i.userId._id}`, "_self")}
+          >
             {i.userId.name}{" "}
           </ProfileName>
           <ChatInput>
@@ -162,7 +181,7 @@ const Comments = ({ i, postData, displayComments, setFlag, flag, business, listV
             <p>{findDesc(i.body, i.taggedUsers)}</p>
           </ChatInput>
           <LikesBar
-            type={listView? "reply":"disabled"}
+            type={listView ? "reply" : "disabled"}
             date={new Date(i.createdAt)}
             setDisplayComments={setDisplayReply}
             displayComments={displayReply}
@@ -204,7 +223,14 @@ const Comments = ({ i, postData, displayComments, setFlag, flag, business, listV
                           <ProfileNameWrap>
                             <ProfileName>
                               <span>by</span>
-                              {j.userId.name}{" "}
+                              <span
+                                onClick={() =>
+                                  window.open(`/u/${j.userId._id}`, "_self")
+                                }
+                                style={{ color: "#ff2e9a" }}
+                              >
+                                {j.userId.name}
+                              </span>{" "}
                             </ProfileName>
                             <ChatInput>
                               {" "}

@@ -97,10 +97,8 @@ const ProfileName = styled.div`
   @media (max-width: 1024px) {
     flex-direction: column;
   }
-  div {
-    cursor: pointer;
-  }
   .ListName {
+    cursor: pointer;
     max-width: calc(100% - 95px);
     @media (max-width: 767px) {
       max-width: 100%;
@@ -110,6 +108,7 @@ const ProfileName = styled.div`
 `;
 
 const ChatInput = styled.div`
+  cursor: default;
   font-weight: 400;
   font-size: 12px;
   line-height: normal;
@@ -120,13 +119,12 @@ const ChatInput = styled.div`
     font-size: 12px;
     color: #ff2e9a;
     font-weight: 700;
-    cursor: pointer;
     margin: 0 4px 0 0px;
   }
   .postSpan {
     margin-left: 4%;
   }
-  p{
+  p {
     display: flex;
     font-size: 12px !important;
     @media (max-width: 767px) {
@@ -150,10 +148,11 @@ const RightWrap = styled.div`
     justify-content: center;
     text-align: center;
     text-transform: uppercase;
-    color: #FFFFFF;
-    background: #3FCE56;
+    color: #ffffff;
+    background: #3fce56;
     border-radius: 50px;
     padding: 3px 11px;
+    cursor: default;
   }
   .CloseDiv {
     font-size: 10px;
@@ -163,13 +162,18 @@ const RightWrap = styled.div`
     justify-content: center;
     text-align: center;
     text-transform: uppercase;
-    color: #FFFFFF;
-    background: #FE6F5B;
+    color: #ffffff;
+    background: #fe6f5b;
     border-radius: 50px;
     padding: 3px 11px;
+    cursor: default;
   }
-  .favoriteBusiness, .favoriteBusinessBorder {
-    margin:0 0 0 11px;
+  img {
+    cursor: pointer;
+  }
+  .favoriteBusiness,
+  .favoriteBusinessBorder {
+    margin: 0 0 0 11px;
   }
 `;
 
@@ -182,23 +186,24 @@ const DisplayFavoriteBusiness = ({ data }) => {
   const getUtcMinutes = new Date().getUTCMinutes();
   const currentUtcDay = new Date().getUTCDay();
   const days = [
-    "Sunday",
     "Monday",
     "Tuesday",
     "Wednesday",
     "Thursday",
     "Friday",
     "Saturday",
+    "Sunday",
   ];
-
 
   /** to check if business is open/close */
   const checkBusinessOpenClose = () => {
     for (let i = 0; i < data.favorites.hours_format.length; i++) {
-      const startDayIndex = days.indexOf(data.favorites.hours_format[i].StartDay);
+      const startDayIndex = days.indexOf(
+        data.favorites.hours_format[i].StartDay
+      );
       const endDayIndex = days.indexOf(data.favorites.hours_format[i].EndDay);
       if (currentUtcDay >= startDayIndex && currentUtcDay <= endDayIndex) {
-        const time = moment(getUtcHour + ":" + getUtcMinutes, "HH:mm");        
+        const time = moment(getUtcHour + ":" + getUtcMinutes, "HH:mm");
         const beforeTime = moment(
           data.favorites.hours_format[i].Start,
           "HH:mm"
@@ -206,13 +211,10 @@ const DisplayFavoriteBusiness = ({ data }) => {
         const afterTime = moment(data.favorites.hours_format[i].End, "HH:mm");
         if (time.isBetween(beforeTime, afterTime)) {
           return true;
-        } else {
-          return false;
         }
-      } else {
-        return false
       }
     }
+    return false;
   };
 
   useEffect(() => {

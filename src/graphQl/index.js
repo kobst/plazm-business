@@ -10,6 +10,7 @@ import {
   getAllUsers,
   getUserFavorites,
   GetMyFeedData,
+  GetUserProfileData,
 } from "./query/user";
 
 import { getPlace, searchAllPlaces, homeSearch } from "./query/place";
@@ -47,6 +48,7 @@ import { findBusinessPhotos } from "./query/post";
 
 export {
   GetListDetails,
+  GetUserProfileData,
   GetMyFeedData,
   homeSearch,
   DeleteList,

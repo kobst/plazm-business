@@ -11,7 +11,6 @@ import ForgotPassword from "../containers/Login-Register/Forgot-Password";
 import Dashboard from "../containers/Dashboard/Dashboard";
 import EditProfile from "../containers/Profile/";
 import ConsumerDashboard from "../containers/Consumer/Dashboard/Dashboard";
-import UserProfileContainer from "../containers/Consumer/UserProfile";
 
 const Routes = () => (
   <Router>
@@ -35,8 +34,8 @@ const Routes = () => (
       <Route path="/business" exact component={Dashboard} />
       <Route path="/" exact component={ConsumerDashboard} />
       <Route path="/edit-profile" component={EditProfile} />
-      <Route path="/b/:id" exact render={(props) => <ConsumerDashboard isBusinessOpen={true} {...props} />} />
-      <Route path="/u/:id" exact render={(props) => <UserProfileContainer/>} />
+      <Route path="/b/:id" exact render={(props) => <ConsumerDashboard isBusinessOpen={true} isUserOpen={false} {...props} />} />
+      <Route path="/u/:id" exact render={(props) => <ConsumerDashboard isUserOpen={true} isBusinessOpen={false} {...props}/>} />
       <Redirect exact from="/*" to="/business/login" />
     </Switch>
   </Router>

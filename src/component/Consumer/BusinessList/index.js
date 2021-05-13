@@ -7,7 +7,10 @@ import { IoMdClose } from "react-icons/io";
 import { FaSort } from "react-icons/fa";
 import Input from "../../UI/Input/Input";
 import DisplayFavoriteBusiness from "./displayFavoriteBusiness";
-import { fetchUserFavoritesBusiness } from "../../../reducers/userReducer";
+import {
+  clearUserFavorites,
+  fetchUserFavoritesBusiness,
+} from "../../../reducers/userReducer";
 
 const LoaderWrap = styled.div`
   width: 100%;
@@ -54,7 +57,6 @@ const BuisinessViewContent = styled.div`
     font-weight: 500;
     margin: 0 0 10px;
     padding: 0;
-    cursor: pointer;
     transition: all 0.2s ease-in-out 0s;
     @media (max-width: 767px) {
       font-size: 13px;
@@ -150,7 +152,10 @@ const BusinessList = ({ setDisplayTab }) => {
   }, [search, favoriteBusiness]);
 
   useEffect(() => {
-    dispatch(fetchUserFavoritesBusiness({ id: user._id, value: offset }));
+    if (offset === 0) {
+      dispatch(clearUserFavorites());
+      dispatch(fetchUserFavoritesBusiness({ id: user._id, value: offset }));
+    }
   }, [user, dispatch, offset]);
 
   useEffect(() => {
@@ -200,10 +205,7 @@ const BusinessList = ({ setDisplayTab }) => {
               next={fetchMoreBusiness}
               hasMore={hasMore}
               loader={
-                userFavorites &&
-                userFavorites.length > 20 &&
-                offset + 20 < totalFavorites &&
-                !loadingFavoriteBusiness ? (
+                offset < totalFavorites && loadingFavoriteBusiness ? (
                   <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
                     {" "}
                     <ValueLoader height="40" width="40" />
