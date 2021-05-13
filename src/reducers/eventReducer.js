@@ -436,12 +436,21 @@ export const slice = createSlice({
               totalComments: posts1.totalComments,
             });
             dummy1 = dummy1.concat(posts);
+            if(state.weekBtnClicked) {
+              state.events = dummy1.sort((a, b) => {
+                return (
+                  new Date(a.eventSchedule.start_time) -
+                  new Date(b.eventSchedule.start_time)
+                );
+              });
+            } else {
             state.events = dummy1.sort((a, b) => {
               return (
                 new Date(b.eventSchedule.start_time) -
                 new Date(a.eventSchedule.start_time)
               );
             });
+            }
           }
         }
       }
@@ -602,7 +611,7 @@ export const slice = createSlice({
       }
     },
     [addEvent.fulfilled]: (state, action) => {
-      if (action.payload) {
+      if (action.payload && action.payload.success) {
         if (
           moment(state.selectedDate).format("DD MMM YYYY") ===
           moment(action.payload.data.event.eventSchedule.start_time).format(
