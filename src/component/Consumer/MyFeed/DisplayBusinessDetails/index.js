@@ -4,7 +4,6 @@ import moment from "moment";
 import styled from "styled-components";
 import ProfileImg from "../../../../images/profile-img.png";
 import FavoritesIcon from "../../../../images/favorites.png";
-import FavoritesIconFilled from "../../../../images/favorites-filled.png";
 import UserMessage from "../../HomeSearch/BusinessListing/UserMessage";
 import UserMessageEvents from "../../HomeSearch/BusinessListing/Events/UserMessageEvents";
 import RedHeartIcon from "../../../../images/heart.png";
@@ -35,7 +34,7 @@ const UserMessageContent = styled.div`
 const UserMsgWrap = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0; 
+  padding: 0;
   position: relative;
   &:after {
     content: "";
@@ -130,7 +129,6 @@ const ChatInput = styled.div`
     font-size: 12px;
     color: #ff2e9a;
     font-weight: 700;
-    cursor: pointer;
     margin: 0 4px 0 0px;
   }
   .postSpan {
@@ -149,8 +147,8 @@ const FeedListItem = styled.div`
   .background-active {
     background-color: #221e45;
   }
-  .background-inactive{
-    background-color:#282352;
+  .background-inactive {
+    background-color: #282352;
   }
 `;
 
@@ -173,6 +171,7 @@ const RightWrap = styled.div`
     background: #3fce56;
     border-radius: 50px;
     padding: 3px 11px;
+    cursor: default;
   }
   .CloseDiv {
     font-size: 10px;
@@ -186,6 +185,7 @@ const RightWrap = styled.div`
     background: #fe6f5b;
     border-radius: 50px;
     padding: 3px 11px;
+    cursor: default;
   }
   .favoriteBusiness,
   .favoriteBusinessBorder {
@@ -193,11 +193,8 @@ const RightWrap = styled.div`
   }
 `;
 
-
-
 /** display business details */
 const DisplayBusinessDetails = ({ data, id }) => {
-  console.log(id);
   const [favoriteBusiness, setFavoriteBusiness] = useState(false);
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
@@ -267,57 +264,58 @@ const DisplayBusinessDetails = ({ data, id }) => {
 
   return data ? (
     <FeedListItem>
-    <div className={id%2 === 0 ? 'background-active' : 'background-inactive'}>
-      <UserMsgWrap>
-        <UserMessageContent>
-          <ProfileNameHeader>
-            <ProfileThumb>
-              <img
-                src={
-                  data.business[0].default_image_url
-                    ? data.business[0].default_image_url
-                    : ProfileImg
-                }
-                alt=""
-              />
-            </ProfileThumb>
-            <ProfileNameWrap>
-              <ProfileName>
-                <div
-                  onClick={() =>
-                    (window.location.href = `/b/${data.business[0]._id}`)
+      <div
+        className={id % 2 === 0 ? "background-active" : "background-inactive"}
+      >
+        <UserMsgWrap>
+          <UserMessageContent>
+            <ProfileNameHeader>
+              <ProfileThumb>
+                <img
+                  src={
+                    data.business[0].default_image_url
+                      ? data.business[0].default_image_url
+                      : ProfileImg
                   }
-                >
-                  {data.business[0].company_name}
-                </div>
-                <RightWrap>
-                  {data.business[0].hours_format.length === 0 ? (
-                    <div className="CloseDiv">Close</div>
-                  ) : checkBusinessOpenClose() === true ? (
-                    <div className="OpenDiv">Open</div>
-                  ) : (
-                    <div className="CloseDiv">Close</div>
-                  )}
+                  alt=""
+                />
+              </ProfileThumb>
+              <ProfileNameWrap>
+                <ProfileName>
+                  <div
+                    onClick={() =>
+                      (window.location.href = `/b/${data.business[0]._id}`)
+                    }
+                  >
+                    {data.business[0].company_name}
+                  </div>
+                  <RightWrap>
+                    {data.business[0].hours_format.length === 0 ? (
+                      <div className="CloseDiv">Close</div>
+                    ) : checkBusinessOpenClose() === true ? (
+                      <div className="OpenDiv">Open</div>
+                    ) : (
+                      <div className="CloseDiv">Close</div>
+                    )}
 
-                  {favoriteBusiness ? (
-                    <img
-                      src={RedHeartIcon}
-                      onClick={() => removeFavorite()}
-                      className="favoriteBusiness"
-                      alt=""
-                    />
-                  ) : (
-                    <img
-                      src={FavoritesIcon}
-                      onClick={() => addFavorite()}
-                      className="favoriteBusinessBorder"
-                      alt=""
-                    />
-                  )}
-                </RightWrap>
-              </ProfileName>
-              <ChatInput>
-                <p>
+                    {favoriteBusiness ? (
+                      <img
+                        src={RedHeartIcon}
+                        onClick={() => removeFavorite()}
+                        className="favoriteBusiness"
+                        alt=""
+                      />
+                    ) : (
+                      <img
+                        src={FavoritesIcon}
+                        onClick={() => addFavorite()}
+                        className="favoriteBusinessBorder"
+                        alt=""
+                      />
+                    )}
+                  </RightWrap>
+                </ProfileName>
+                <ChatInput>
                   <span>
                     {data.business[0].favorites !== null
                       ? data.business[0].favorites.length
@@ -330,22 +328,21 @@ const DisplayBusinessDetails = ({ data, id }) => {
                       : 0}
                   </span>{" "}
                   Posts
-                </p>
-              </ChatInput>
-              <BusinessHashTags data={data.business[0].filter_tags} />
-            </ProfileNameWrap>
-          </ProfileNameHeader>
-        </UserMessageContent>
-      </UserMsgWrap>
+                </ChatInput>
+                <BusinessHashTags data={data.business[0].filter_tags} />
+              </ProfileNameWrap>
+            </ProfileNameHeader>
+          </UserMessageContent>
+        </UserMsgWrap>
 
-      {/* to display event for the business */}
-      {data.eventSchedule !== null ? (
-        <UserMessageEvents eventData={data} businessInfo={data.business[0]} />
-      ) : (
-        //   to display post for the business
-        <UserMessage postData={data} businessData={data.business[0]} />
-      )}
-    </div>
+        {/* to display event for the business */}
+        {data.eventSchedule !== null ? (
+          <UserMessageEvents eventData={data} businessInfo={data.business[0]} />
+        ) : (
+          //   to display post for the business
+          <UserMessage postData={data} businessData={data.business[0]} />
+        )}
+      </div>
     </FeedListItem>
   ) : null;
 };

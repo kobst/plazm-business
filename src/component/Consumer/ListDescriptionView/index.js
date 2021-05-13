@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { IoMdClose } from "react-icons/io";
+import moment from "moment";
 import InfiniteScroll from "react-infinite-scroll-component";
 import BannerImg from "../../../images/sliderimg.png";
 import { MdKeyboardArrowLeft } from "react-icons/md";
@@ -313,93 +314,102 @@ const ListDescriptionView = ({
     </LoaderWrap>
   ) : (
     <>
-      {selectedList?<ListOptionSection>
-        <HeadingWrap>
-          <TopHeadingWrap>
-            <ListBannerSection>
-              <img
-                src={
-                  selectedList.media.length > 0
-                    ? selectedList.media[0].image
-                    : BannerImg
-                }
-              />
-              <h1>{selectedList.name}</h1>
-              <h5>
-                by <span>{selectedList.ownerId.name}</span>{" "}
-                <strong>Updated {selectedList.updatedAt}</strong>{" "}
-                <LockDiv>
-                  <CgLock />
-                </LockDiv>
-              </h5>
-              <p>{selectedList.description}</p>
-            </ListBannerSection>
-            <CloseDiv>
-              <IoMdClose onClick={() => setDisplayTab(false)} />
-            </CloseDiv>
-          </TopHeadingWrap>
-        </HeadingWrap>
-        <ButtonWrapperDiv>
-          <ArrowBack>
-            <MdKeyboardArrowLeft onClick={() => backBusiness()} />
-          </ArrowBack>
-          {selectedList &&
-          selectedList.ownerId &&
-          selectedList.ownerId._id === user._id ? (
-            <>
-              <ButtonOuterDiv>
-                <button className="PinkColor">Make Public</button>
-                <button className="PinkColor">Invite</button>
-                <button className="OrangeColor" onClick={() => deleteList()}>
-                  Delete
-                </button>
-              </ButtonOuterDiv>
-            </>
-          ) : (
-            <button className="unsubscribe" onClick={() => listUnSubscribe()}>
-              Unsubscribe
-            </button>
-          )}
-        </ButtonWrapperDiv>
-        <div
-          id="scrollableDiv"
-          style={{ height: "calc(100vh - 258px)", overflow: "auto" }}
-        >
-          <InfiniteScroll
-            dataLength={postsInList ? postsInList.length : 0}
-            next={fetchMorePosts}
-            hasMore={hasMore}
-            loader={
-              offset < totalData && loading ? (
-                <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
-                  {" "}
-                  <ValueLoader height="40" width="40" />
-                </div>
-              ) : null
-            }
-            scrollableTarget="scrollableDiv"
-            endMessage={
-              postsInList.length > 20 && !loading ? (
-                <center>
-                  <NoMorePost className="noMorePost">
-                    No more List to show
-                  </NoMorePost>
-                </center>
-              ) : null
-            }
+      {selectedList ? (
+        <ListOptionSection>
+          <HeadingWrap>
+            <TopHeadingWrap>
+              <ListBannerSection>
+                <img
+                  src={
+                    selectedList.media.length > 0
+                      ? selectedList.media[0].image
+                      : BannerImg
+                  }
+                  alt=""
+                />
+                <h1>{selectedList.name}</h1>
+                <h5>
+                  by <span>{selectedList.ownerId.name}</span>{" "}
+                  <strong>
+                    Updated{" "}
+                    {moment(selectedList.updatedAt).format(
+                      "MMM DD,YYYY, hh:MM a"
+                    )}{" "}
+                    EST
+                  </strong>{" "}
+                  <LockDiv>
+                    <CgLock />
+                  </LockDiv>
+                </h5>
+                <p>{selectedList.description}</p>
+              </ListBannerSection>
+              <CloseDiv>
+                <IoMdClose onClick={() => setDisplayTab(false)} />
+              </CloseDiv>
+            </TopHeadingWrap>
+          </HeadingWrap>
+          <ButtonWrapperDiv>
+            <ArrowBack>
+              <MdKeyboardArrowLeft onClick={() => backBusiness()} />
+            </ArrowBack>
+            {selectedList &&
+            selectedList.ownerId &&
+            selectedList.ownerId._id === user._id ? (
+              <>
+                <ButtonOuterDiv>
+                  <button className="PinkColor">Make Public</button>
+                  <button className="PinkColor">Invite</button>
+                  <button className="OrangeColor" onClick={() => deleteList()}>
+                    Delete
+                  </button>
+                </ButtonOuterDiv>
+              </>
+            ) : (
+              <button className="unsubscribe" onClick={() => listUnSubscribe()}>
+                Unsubscribe
+              </button>
+            )}
+          </ButtonWrapperDiv>
+          <div
+            id="scrollableDiv"
+            style={{ height: "calc(100vh - 258px)", overflow: "auto" }}
           >
-            <ListingOptionWrap>
-              {postsInList.length > 0 ? (
-                postsInList.map((i, key) => (
-                  <DisplayPostInAList data={i} key={key} id={key} />
-                ))
-              ) : (
-                <NoData>No Posts In A List To Display</NoData>
-              )}
-            </ListingOptionWrap>
-          </InfiniteScroll>
-        </div>
-      </ListOptionSection> : null}
+            <InfiniteScroll
+              dataLength={postsInList ? postsInList.length : 0}
+              next={fetchMorePosts}
+              hasMore={hasMore}
+              loader={
+                offset < totalData && loading ? (
+                  <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
+                    {" "}
+                    <ValueLoader height="40" width="40" />
+                  </div>
+                ) : null
+              }
+              scrollableTarget="scrollableDiv"
+              endMessage={
+                postsInList.length > 20 && !loading ? (
+                  <center>
+                    <NoMorePost className="noMorePost">
+                      No more List to show
+                    </NoMorePost>
+                  </center>
+                ) : null
+              }
+            >
+              <ListingOptionWrap>
+                {postsInList.length > 0 ? (
+                  postsInList.map((i, key) => (
+                    <DisplayPostInAList data={i} key={key} id={key} />
+                  ))
+                ) : (
+                  <NoData>No Posts In A List To Display</NoData>
+                )}
+              </ListingOptionWrap>
+            </InfiniteScroll>
+          </div>
+        </ListOptionSection>
+      ) : null}
     </>
   );
 };
