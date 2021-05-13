@@ -39,12 +39,12 @@ const UserMsgWrap = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0;
-  :nth-child(even) {
-    background-color: #282352;
-  }
-  :nth-child(odd) {
-    background-color: #221e45;
-  }
+  // :nth-child(even) {
+  //   background-color: #282352;
+  // }
+  // :nth-child(odd) {
+  //   background-color: #221e45;
+  // }
 `;
 
 const ProfileNameHeader = styled.div`
