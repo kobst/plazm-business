@@ -18,7 +18,6 @@ import SelectedListing from "../SelectedListing";
 import PostEvent from "../PostEvent";
 import { addEvent } from "../../../../reducers/eventReducer";
 import error from "../../../../constants";
-import moment from 'moment'
 
 const bucket = process.env.REACT_APP_BUCKET;
 
