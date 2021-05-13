@@ -21,7 +21,7 @@ import ListDescriptionView from "../../../Consumer/ListDescriptionView";
 import MyFeed from "../../../Consumer/MyFeed";
 import { clearMyFeedData } from "../../../../reducers/myFeedReducer";
 import Profile from "../../../Consumer/Profile";
-// import HomeSearch from "../../../Consumer/HomeSearch";
+import HomeSearch from "../../../Consumer/HomeSearch";
 
 const LeftBarContent = styled.div`
   width: 100px;
@@ -137,6 +137,7 @@ const LeftBar = ({
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
+              onClick={() => dispatch(clearMyFeedData())}
             >
               <SearchIcon>
                 <BiSearchAlt2 />
@@ -254,7 +255,7 @@ const LeftBar = ({
               {isUserOpen ? (
                 <Profile setDisplayTab={() => setTabIndex(0)} userId={userId} />
               ) : (
-                <h2>Any content 4</h2>
+                <HomeSearch setDisplayTab={() => setTabIndex(0)} />
               )}
             </div>
           </TabPanel>

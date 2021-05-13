@@ -5,6 +5,7 @@ import ProfileImg from "../../../../../images/profile-img.png";
 import LikesBar from "../LikesBar";
 import DateBar from "../Events/DateBar";
 import TimeBar from "../Events/TimeBar";
+import ImageComment from "../Events/ImageComment";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -125,83 +126,6 @@ const DisplayCommentForEvent = ({ postData, businessData }) => {
     "Saturday",
   ];
 
-  /** to highlight the user mentions mentioned in post description */
-  const findDesc = (value, mentions, mentionsList) => {
-    let divContent = value;
-    if (mentions.length > 0 && mentionsList.length > 0) {
-      mentions.map((v) => {
-        let re = new RegExp("@" + v.name, "g");
-        divContent = divContent.replace(
-          re,
-          `<span className='mentionData' onClick={window.open("/u/${
-            v._id
-          }")}> ${"@" + v.name}  </span>`
-        );
-        return divContent;
-      });
-      mentionsList.map((v) => {
-        let re = new RegExp("@" + v.name, "g");
-        divContent = divContent.replace(
-          re,
-          `<span className='mentionData' onClick={window.open("/u/${
-            v._id
-          }")}> ${"@" + v.name}  </span>`
-        );
-        return divContent;
-      });
-      if (mentions.length !== 0) {
-        return (
-          <>
-            <div dangerouslySetInnerHTML={{ __html: divContent }}></div>
-          </>
-        );
-      } else {
-        return value;
-      }
-    } else if (mentions.length > 0) {
-      mentions.map((v) => {
-        let re = new RegExp("@" + v.name, "g");
-        divContent = divContent.replace(
-          re,
-          `<span className='mentionData' onClick={window.open("/u/${
-            v._id
-          }")}> ${"@" + v.name}  </span>`
-        );
-        return divContent;
-      });
-      if (mentions.length !== 0) {
-        return (
-          <>
-            <div dangerouslySetInnerHTML={{ __html: divContent }}></div>
-          </>
-        );
-      } else {
-        return value;
-      }
-    } else if (mentionsList.length > 0) {
-      mentionsList.map((v) => {
-        let re = new RegExp("@" + v.name, "g");
-        divContent = divContent.replace(
-          re,
-          `<span className='mentionData' onClick={window.open("/u/${
-            v._id
-          }")}> ${"@" + v.name}  </span>`
-        );
-        return divContent;
-      });
-      if (mentionsList.length !== 0) {
-        return (
-          <>
-            <div dangerouslySetInnerHTML={{ __html: divContent }}></div>
-          </>
-        );
-      } else {
-        return value;
-      }
-    } else {
-      return value;
-    }
-  };
   return (
     <>
       <UserMsgWrap>
@@ -227,23 +151,21 @@ const DisplayCommentForEvent = ({ postData, businessData }) => {
               <ChatInput>{postData.description}</ChatInput>
               <DateBar
                 startDay={
-                  days[new Date(postData.eventSchedule.start_time).getDay()]
+                  days[
+                    new Date(postData.itemId.eventSchedule.start_time).getDay()
+                  ]
                 }
                 endDay={
-                  days[new Date(postData.eventSchedule.end_time).getDay()]
+                  days[
+                    new Date(postData.itemId.eventSchedule.end_time).getDay()
+                  ]
                 }
               />
               <TimeBar
-                startTime={new Date(postData.eventSchedule.start_time)}
-                endTime={new Date(postData.eventSchedule.end_time)}
+                startTime={new Date(postData.itemId.eventSchedule.start_time)}
+                endTime={new Date(postData.itemId.eventSchedule.end_time)}
               />
-              <ChatInput>
-                {findDesc(
-                  postData.itemId.data,
-                  postData.itemId.taggedUsers,
-                  postData.itemId.taggedLists
-                )}
-              </ChatInput>
+              <ChatInput>{postData.body}</ChatInput>
               <LikesBar
                 type="disabled"
                 totalLikes={postData.itemId.likes.length}
@@ -265,6 +187,13 @@ const DisplayCommentForEvent = ({ postData, businessData }) => {
               />
             </ProfileNameWrap>
           </ProfileNameHeader>
+          <ImageComment
+            image={
+              postData.itemId.media.length > 0
+                ? postData.itemId.media[0].image
+                : ""
+            }
+          />
         </UserMessageContent>
 
         <ReplyWrap>

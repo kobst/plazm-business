@@ -55,11 +55,11 @@ const ErrorDiv = styled.div`
 
 const SearchBar = ({ offset }) => {
   const [search, setSearch] = useState("");
-  const loader = useSelector((state) => state.search.loading);
+  const loader = useSelector((state) => state.myFeed.loading);
   const [searchError, setSearchError] = useState("");
-  const filterClosest = useSelector((state) => state.search.filterByClosest);
+  const filterClosest = useSelector((state) => state.myFeed.filterByClosest);
   const updatedAtFilter = useSelector(
-    (state) => state.search.filterByUpdatedAt
+    (state) => state.myFeed.filterByUpdatedAt
   );
   const dispatch = useDispatch();
 

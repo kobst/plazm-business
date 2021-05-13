@@ -223,6 +223,14 @@ const homeSearch = (obj) => {
                   
                   itemId {
                     data
+                    eventSchedule {
+                      start_time
+                      end_time
+                    }
+                    media {
+                      image
+                      thumbnail
+                    }
                     taggedUsers {
                       name
                       photo
