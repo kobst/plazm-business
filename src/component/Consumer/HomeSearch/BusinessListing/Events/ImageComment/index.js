@@ -7,14 +7,9 @@ const BottomBarLikes = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 536px;
   max-height: 224px;
-  margin: 0;
-  img{
-    max-height: 224px;
-    /* width: 100%;
-    height: 100%; */
-  }
+  overflow: hidden;
+  margin: 0;  
 `
 
 const ImageComment = ({image}) => {

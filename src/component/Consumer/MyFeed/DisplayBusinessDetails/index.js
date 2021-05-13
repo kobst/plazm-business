@@ -7,6 +7,8 @@ import FavoritesIcon from "../../../../images/favorites.png";
 import FavoritesIconFilled from "../../../../images/favorites-filled.png";
 import UserMessage from "../../HomeSearch/BusinessListing/UserMessage";
 import UserMessageEvents from "../../HomeSearch/BusinessListing/Events/UserMessageEvents";
+import RedHeartIcon from "../../../../images/heart.png";
+
 import {
   AddBusinessFavorite,
   RemoveBusinessFavorite,
@@ -33,19 +35,25 @@ const UserMessageContent = styled.div`
 const UserMsgWrap = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0 12px;
-  :nth-child(even) {
-    background-color: #282352;
-  }
-  :nth-child(odd) {
-    background-color: #221e45;
+  padding: 0; 
+  position: relative;
+  &:after {
+    content: "";
+    position: absolute;
+    width: 1px;
+    height: calc(100% - 20px);
+    background: #878787;
+    top: 50px;
+    left: 26px;
+    z-index: 1;
   }
 `;
 
 const ProfileNameHeader = styled.div`
   display: flex;
-  padding: 0;
-  margin: 15px 0 0;
+  padding: 0 12px;
+  margin-top: 15px;
+  position: relative;
 `;
 
 const ProfileThumb = styled.div`
@@ -66,7 +74,7 @@ const ProfileNameWrap = styled.div`
   align-items: flex-start;
   justify-content: center;
   max-width: calc(100% - 40px);
-  padding: 0 25px 5px 0px;
+  padding: 0 0 5px 0px;
   width: 100%;
   @media (max-width: 1024px) {
     padding: 0 0px 15px 0px;
@@ -137,6 +145,15 @@ const ChatInput = styled.div`
   }
 `;
 
+const FeedListItem = styled.div`
+  .background-active {
+    background-color: #221e45;
+  }
+  .background-inactive{
+    background-color:#282352;
+  }
+`;
+
 const RightWrap = styled.div`
   display: flex;
   flex-direction: row;
@@ -176,8 +193,11 @@ const RightWrap = styled.div`
   }
 `;
 
+
+
 /** display business details */
-const DisplayBusinessDetails = ({ data }) => {
+const DisplayBusinessDetails = ({ data, id }) => {
+  console.log(id);
   const [favoriteBusiness, setFavoriteBusiness] = useState(false);
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
@@ -246,7 +266,8 @@ const DisplayBusinessDetails = ({ data }) => {
   };
 
   return data ? (
-    <>
+    <FeedListItem>
+    <div className={id%2 === 0 ? 'background-active' : 'background-inactive'}>
       <UserMsgWrap>
         <UserMessageContent>
           <ProfileNameHeader>
@@ -280,7 +301,7 @@ const DisplayBusinessDetails = ({ data }) => {
 
                   {favoriteBusiness ? (
                     <img
-                      src={FavoritesIconFilled}
+                      src={RedHeartIcon}
                       onClick={() => removeFavorite()}
                       className="favoriteBusiness"
                       alt=""
@@ -324,7 +345,8 @@ const DisplayBusinessDetails = ({ data }) => {
         //   to display post for the business
         <UserMessage postData={data} businessData={data.business[0]} />
       )}
-    </>
+    </div>
+    </FeedListItem>
   ) : null;
 };
 

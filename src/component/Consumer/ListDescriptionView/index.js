@@ -391,7 +391,7 @@ const ListDescriptionView = ({
             <ListingOptionWrap>
               {postsInList.length > 0 ? (
                 postsInList.map((i, key) => (
-                  <DisplayPostInAList data={i} key={key} />
+                  <DisplayPostInAList data={i} key={key} id={key} />
                 ))
               ) : (
                 <NoData>No Posts In A List To Display</NoData>

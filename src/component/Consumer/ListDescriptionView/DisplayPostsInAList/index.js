@@ -32,23 +32,17 @@ const UserMessageContent = styled.div`
 const UserMsgWrap = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0 12px;
-  position: relative;
-  margin-top: 15px;
-  :nth-child(even) {
-    background-color: #282352;
-  }
-  :nth-child(odd) {
-    background-color: #221e45;
-  }
+  padding: 15px 12px 0 12px;
+  position: relative;  
   &:after {
     content: "";
     position: absolute;
     width: 1px;
-    height: calc(100% - 4px);
+    height: calc(100% - 20px);
     background: #878787;
-    top: 35px;
+    top: 50px;
     left: 26px;
+    z-index: 1;
   }
 `;
 
@@ -186,8 +180,17 @@ const RightWrap = styled.div`
   }
 `;
 
+const DescriptionViewItem = styled.div`
+  .background-active {
+    background-color: #221e45;
+  }
+  .background-inactive{
+    background-color:#282352;
+  }
+`;
+
 /** display business details */
-const DisplayPostInAList = ({ data }) => {
+const DisplayPostInAList = ({ data, id }) => {
   const [favoriteBusiness, setFavoriteBusiness] = useState(false);
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
@@ -256,7 +259,8 @@ const DisplayPostInAList = ({ data }) => {
   };
 
   return data ? (
-    <>
+    <DescriptionViewItem>
+    <div className={id%2 === 0 ? 'background-active' : 'background-inactive'}>
       <UserMsgWrap>
         <UserMessageContent>
           <ProfileNameHeader>
@@ -335,7 +339,8 @@ const DisplayPostInAList = ({ data }) => {
         businessData={data.business[0]}
         listView={true}
       />
-    </>
+    </div>
+    </DescriptionViewItem>
   ) : null;
 };
 

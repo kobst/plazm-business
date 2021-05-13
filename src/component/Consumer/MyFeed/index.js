@@ -38,7 +38,7 @@ const BuisinessViewContent = styled.div`
   h3 {
     color: #ffffff;
     padding: 0;
-    margin: 0 0 15px;
+    margin: 0 0 11px;
     font-size: 24px;
     font-weight: 600;
     @media (max-width: 767px) {
@@ -73,14 +73,14 @@ const BuisinessViewContent = styled.div`
 `;
 
 const HeadingWrap = styled.div`
-  padding: 30px;
+  padding: 47px 22px 0;
 `;
 
 const BusinessListWrap = styled.div`
   width: 100%;
   position: relative;
   display: flex;
-  padding: 12px 0;
+  padding: 10px 0;
   flex-direction: column;
   overflow: hidden;
 `;
@@ -93,7 +93,7 @@ const CloseDiv = styled.div`
   position: absolute;
   right: 17px;
   cursor: pointer;
-  top: 17px;
+  top: 12px;
   svg {
     font-size: 24px;
     color: #fff;
@@ -156,9 +156,9 @@ const MyFeed = ({ setDisplayTab }) => {
             </CloseDiv>
             <h3>
               My Feed <FaSort />
-            </h3>
-            <div className="dashed" />
+            </h3>            
           </HeadingWrap>
+          <div className="dashed" />
           <div id="scrollableDiv" style={{ height: "calc(100vh - 116px)", overflow: "auto" }}>
             <InfiniteScroll
               dataLength={feedData ? feedData.length : 0}
@@ -187,7 +187,7 @@ const MyFeed = ({ setDisplayTab }) => {
               <BusinessListWrap>
                 {feedData.length > 0 ? (
                   feedData.map((i, key) => (
-                    <DisplayBusinessDetails data={i} key={key} />
+                    <DisplayBusinessDetails data={i} id={key} />
                   ))
                 ) : (
                   <NoData>No Data To Display</NoData>
