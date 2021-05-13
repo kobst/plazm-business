@@ -21,7 +21,7 @@ import ListDescriptionView from "../../../Consumer/ListDescriptionView";
 import MyFeed from "../../../Consumer/MyFeed";
 import { clearMyFeedData } from "../../../../reducers/myFeedReducer";
 import Profile from "../../../Consumer/Profile";
-import HomeSearch from "../../../Consumer/HomeSearch";
+// import HomeSearch from "../../../Consumer/HomeSearch";
 
 const LeftBarContent = styled.div`
   width: 100px;
@@ -255,7 +255,8 @@ const LeftBar = ({
               {isUserOpen ? (
                 <Profile setDisplayTab={() => setTabIndex(0)} userId={userId} />
               ) : (
-                <HomeSearch setDisplayTab={() => setTabIndex(0)} />
+                <h2>Any content 4</h2>
+                // <HomeSearch setDisplayTab={() => setTabIndex(0)} />
               )}
             </div>
           </TabPanel>
