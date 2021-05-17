@@ -4,6 +4,7 @@ import {
   addFavoriteBusiness,
   getUser,
   getUserFavorites,
+  GetUserProfileData,
   removeFavoriteBusiness,
 } from "../graphQl";
 
@@ -15,6 +16,19 @@ export const fetchUserDetails = createAsyncThunk(
   "data/fetchUserDetails",
   async (userSub) => {
     const graphQl = getUser(userSub);
+    const response = graphQlEndPoint(graphQl);
+    return response;
+  }
+);
+
+/*
+ * @desc:  fetchUserProfileData
+ * @params: userId
+ */
+export const fetchUserProfileData = createAsyncThunk(
+  "data/fetchUserProfileData",
+  async (id) => {
+    const graphQl = GetUserProfileData(id);
     const response = graphQlEndPoint(graphQl);
     return response;
   }
@@ -78,6 +92,8 @@ export const slice = createSlice({
   name: "user",
   initialState: {
     loading: false,
+    loadingProfile: false,
+    selectedUser: {},
     loadingAddFavorite: false,
     loadingRemoveFavorite: false,
     loadingFavoriteBusiness: false,
@@ -89,6 +105,14 @@ export const slice = createSlice({
   reducers: {
     setWs: (state, action) => {
       state.ws = action.payload;
+    },
+    removeSubscribedList: (state, action) => {
+      state.user = {
+        ...state.user,
+        listFollowed: state.user.listFollowed.filter(
+          (i) => i !== action.payload
+        ),
+      };
     },
     clearUserFavorites: (state, action) => {
       state.favoriteBusiness = [];
@@ -190,8 +214,34 @@ export const slice = createSlice({
         );
       }
     },
+    [fetchUserProfileData.pending]: (state) => {
+      if (!state.loadingProfile) {
+        state.loadingProfile = true;
+      }
+    },
+    [fetchUserProfileData.fulfilled]: (state, action) => {
+      if (state.loadingProfile) {
+        state.loadingProfile = false;
+        if (action.payload) {
+          state.selectedUser = {
+            ...action.payload.data.getUserProfileData.user,
+            totalPosts:
+              action.payload.data.getUserProfileData.findTotalPostByUser,
+            totalLists:
+              action.payload.data.getUserProfileData.listCreatedByUser,
+          };
+        }
+      }
+    },
+    [fetchUserProfileData.rejected]: (state, action) => {
+      if (state.loadingProfile) {
+        state.loadingProfile = false;
+        state.error = action.payload;
+      }
+    },
   },
 });
 
-export const { setWs, clearUserFavorites } = slice.actions;
+export const { setWs, clearUserFavorites, removeSubscribedList } =
+  slice.actions;
 export default slice.reducer;

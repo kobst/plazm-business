@@ -18,6 +18,7 @@ const Hashtags = styled.div`
   box-sizing: border-box;
   border-radius: 28px;
   padding: 4px 7px;
+  cursor:default;
 `;
 /** display favorite business hash tags */
 const BusinessHashTags = ({ data }) => {

@@ -102,4 +102,80 @@ const addEventToList = (values) => {
   return graphQl;
 };
 
-export { CreateList, addPostToList, addEventToList };
+/*
+@desc: delete list
+@params: userId, listId
+*/
+const DeleteList = (values) => {
+  const graphQl = {
+    query: `
+            mutation DeleteUserList($listId: ID!, $userId:ID!){
+              deleteUserList(input: {listId:$listId, userId:$userId}) {
+                message
+                success
+                list {
+                    _id
+                    name
+                    description
+                    ownerId {
+                      name
+                    }
+                    posts
+                    followers
+                    media {
+                      image
+                      thumbnail
+                    }
+                  }
+              }
+            }`,
+    variables: {
+      listId: values.listId,
+      userId: values.userId,
+    },
+  };
+  return graphQl;
+};
+
+/*
+@desc: to subscribe to a list
+@params: userId, listId
+*/
+const SubscribeToAList = (values) => {
+  const graphQl = {
+    query: `
+            mutation SubscribeToAList($listId: ID!, $userId:ID!){
+              subscribeToAList(input: {listId:$listId, userId:$userId}) {
+                message
+                success
+              }
+            }`,
+    variables: {
+      listId: values.listId,
+      userId: values.userId,
+    },
+  };
+  return graphQl;
+};
+
+/*
+@desc: to unSubscribe to a list
+@params: userId, listId
+*/
+const UnsubscribeToAList = (values) => {
+  const graphQl = {
+    query: `
+            mutation UnSubscribeToAList($listId: ID!, $userId:ID!){
+              unSubscribeToAList(input: {listId:$listId, userId:$userId}) {
+                message
+                success
+              }
+            }`,
+    variables: {
+      listId: values.listId,
+      userId: values.userId,
+    },
+  };
+  return graphQl;
+};
+export { CreateList, addPostToList, addEventToList, DeleteList, UnsubscribeToAList, SubscribeToAList };

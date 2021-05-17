@@ -24,5 +24,8 @@ export default {
   EVENT_DETAILS_REQUIRED: "Event Details are Required",
   START_DATE_ERROR: "start date should be less than end date",
   START_DATE_GREATER_THAN_CURRENT: "start date should be greater than current date",
+  SEARCH_ERROR: "minimum 4 characters is required",
+  NO_BUSINESS_FOUND: "No Business Found",
+  NO_MORE_BUSINESS_TO_DISPLAY:"No more business to show",
   END_DAY_ERROR: "start day cannot be greater than end day"
 };

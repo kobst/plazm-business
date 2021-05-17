@@ -82,6 +82,9 @@ const ProfileName = styled.div`
     color: #ff0000;
     margin: 0;
   }
+  div {
+    cursor: pointer;
+  }
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -105,7 +108,7 @@ const ProfileName = styled.div`
 `;
 
 const ChatInput = styled.div`
-  cursor: auto;
+  cursor: default;
   font-weight: 400;
   font-size: 12px;
   line-height: normal;
@@ -149,6 +152,7 @@ const RightWrap = styled.div`
     background: #3fce56;
     border-radius: 50px;
     padding: 3px 11px;
+    cursor: default;
   }
   .CloseDiv {
     font-size: 10px;
@@ -162,6 +166,7 @@ const RightWrap = styled.div`
     background: #fe6f5b;
     border-radius: 50px;
     padding: 3px 11px;
+    cursor: default;
   }
   img {
     cursor: pointer;

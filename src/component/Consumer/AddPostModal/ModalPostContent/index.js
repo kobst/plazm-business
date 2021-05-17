@@ -5,7 +5,7 @@ import BottomButtons from "../BottomButtons";
 import AddImageImg from "../../../../images/addImage.svg";
 import SelectedListing from "../SelectedListing";
 import PostImage from "../PostImage";
-import error from '../../../../constants'
+import error from "../../../../constants";
 import { MentionsInput, Mention } from "react-mentions";
 import { useDispatch, useSelector } from "react-redux";
 import { findAllUsers } from "../../../../reducers/consumerReducer";
@@ -185,7 +185,7 @@ const ModalPostContent = ({
   mentionArrayUser,
   setMentionArrayUser,
   imageUpload,
-  setImageUpload
+  setImageUpload,
 }) => {
   const [loader, setLoader] = useState(false);
   const users = useSelector((state) => state.consumer.users);
@@ -194,6 +194,7 @@ const ModalPostContent = ({
   const [imageError, setImageError] = useState("");
   const ws = useSelector((state) => state.user.ws);
   const user = useSelector((state) => state.user.user);
+  const business = useSelector((state) => state.business.business);
   const [descriptionError, setDescriptionError] = useState("");
   let allData = [...users, ...lists];
   let data = allData.sort(function (a, b) {
@@ -366,7 +367,11 @@ const ModalPostContent = ({
             businessId: businessId,
             post: {
               postId: response.post._id,
-              postDetails: response.post,
+              postDetails: {
+                ...response.post,
+                businessDetails: business[0],
+                totalPosts: [{ totalPosts: response.totalPosts }],
+              },
               totalComments: 0,
               totalLikes: 0,
               comments: [],

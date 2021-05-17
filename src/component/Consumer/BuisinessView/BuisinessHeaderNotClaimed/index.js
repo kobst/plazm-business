@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { IoMdClose } from "react-icons/io";
-import { MdKeyboardArrowDown } from "react-icons/md";
+import { MdKeyboardArrowDown, MdKeyboardArrowLeft } from "react-icons/md";
 import ProfileImg from "../../../../images/profile-img.png";
 import FacebookImg from "../../../../images/Facebook-new.svg";
 import TwitterImg from "../../../../images/Twitter-new.svg";
@@ -15,6 +15,7 @@ import {
   AddBusinessFavorite,
   RemoveBusinessFavorite,
 } from "../../../../reducers/userReducer";
+import { clearBusinessData } from "../../../../reducers/businessReducer";
 
 const BuisinessHeaderContent = styled.div`
   width: 100%;
@@ -171,6 +172,28 @@ const SocialIcon = styled.div`
   cursor: pointer;
 `;
 
+const ArrowBack = styled.div`
+  background: #ff2e9a;
+  border-radius: 3px;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 15px;
+  cursor: pointer;
+  top: 15px;
+  z-index: 1;
+  svg {
+    font-size: 34px;
+    color: #fff;
+  }
+  @media (max-width: 767px) {
+    width: 24px;
+    height: 24px;
+  }
+`;
 const BuisinessHeaderNotClaimed = ({
   setDisplayTab,
   setDisplayBusinessProfile,
@@ -216,6 +239,12 @@ const BuisinessHeaderNotClaimed = ({
     };
     await dispatch(RemoveBusinessFavorite(obj));
   };
+
+  /** to return to all business listing */
+  const backBusiness = () => {
+    dispatch(clearBusinessData());
+    history.push("/");
+  };
   return (
     <>
       <BuisinessHeaderContent
@@ -225,6 +254,9 @@ const BuisinessHeaderNotClaimed = ({
             : ""
         }
       >
+        <ArrowBack>
+          <MdKeyboardArrowLeft onClick={() => backBusiness()} />
+        </ArrowBack>
         <CloseDiv>
           <IoMdClose onClick={() => closeTab()} />
         </CloseDiv>

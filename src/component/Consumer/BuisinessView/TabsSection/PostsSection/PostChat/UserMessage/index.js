@@ -284,7 +284,7 @@ const UserMessage = ({ postData }) => {
           re,
           `<span className='mentionData' onClick={window.open("/u/${
             v._id
-          }")}> ${"@" + v.name}  </span>`
+          }",'_self')}> ${"@" + v.name}  </span>`
         );
         return divContent;
       });
@@ -294,7 +294,7 @@ const UserMessage = ({ postData }) => {
           re,
           `<span className='mentionData' onClick={window.open("/u/${
             v._id
-          }")}> ${"@" + v.name}  </span>`
+          }",'_self')}> ${"@" + v.name}  </span>`
         );
         return divContent;
       });
@@ -314,7 +314,7 @@ const UserMessage = ({ postData }) => {
           re,
           `<span className='mentionData' onClick={window.open("/u/${
             v._id
-          }")}> ${"@" + v.name}  </span>`
+          }",'_self')}> ${"@" + v.name}  </span>`
         );
         return divContent;
       });

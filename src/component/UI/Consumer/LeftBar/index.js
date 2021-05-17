@@ -15,7 +15,13 @@ import ChangePassword from "../../../Consumer/ChangePassword";
 import ProfileSettings from "../../../Consumer/ProfileSettings";
 import BuisinessView from "../../../Consumer/BuisinessView";
 import BusinessList from "../../../Consumer/BusinessList";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import ListOptionView from "../../../Consumer/ListOptionView";
+import ListDescriptionView from "../../../Consumer/ListDescriptionView";
+import MyFeed from "../../../Consumer/MyFeed";
+import { clearMyFeedData } from "../../../../reducers/myFeedReducer";
+import Profile from "../../../Consumer/Profile";
+// import HomeSearch from "../../../Consumer/HomeSearch";
 
 const LeftBarContent = styled.div`
   width: 100px;
@@ -61,10 +67,22 @@ const LeftBar = ({
   isBusinessOpen,
   businessExists,
   businessId,
+  isUserOpen,
+  userId,
 }) => {
   const [displayChangePassword, setDisplayChangePassword] = useState(false);
-  const [tabIndex, setTabIndex] = useState(isBusinessOpen ? 6 : 0);
+  const [tabIndex, setTabIndex] = useState(
+    isBusinessOpen ? 6 : isUserOpen ? 3 : 0
+  );
   const user = useSelector((state) => state.user.user);
+  const [selectedListId, setSelectedListId] = useState(null);
+  const dispatch = useDispatch();
+
+  /** to clear selected data on tab click */
+  const listView = () => {
+    dispatch(clearMyFeedData());
+    setSelectedListId(null);
+  };
   return (
     <>
       <LeftBarContent className="MainTabs">
@@ -106,7 +124,7 @@ const LeftBar = ({
               }
             >
               <UserImage>
-                <img src={user.photo?user.photo:ProfileImg} alt="" />
+                <img src={user.photo ? user.photo : ProfileImg} alt="" />
               </UserImage>
             </Tab>
             <Tab
@@ -119,6 +137,7 @@ const LeftBar = ({
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
+              onClick={() => dispatch(clearMyFeedData())}
             >
               <SearchIcon>
                 <BiSearchAlt2 />
@@ -134,6 +153,7 @@ const LeftBar = ({
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
+              onClick={() => dispatch(clearMyFeedData())}
             >
               <img src={Mention} alt="" />
             </Tab>
@@ -173,6 +193,7 @@ const LeftBar = ({
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
+              onClick={() => listView()}
             >
               <img src={GridIcon} alt="" />
             </Tab>
@@ -189,13 +210,14 @@ const LeftBar = ({
             >
               <img src={ProfileSettingImg} alt="" />
             </Tab>
+
             <Tab
               className={
-                9 === tabIndex - 1
+                10 === tabIndex - 1
                   ? "react-tabs__tab LIBefore"
-                  : tabIndex + 1 === 9
+                  : tabIndex + 1 === 10
                   ? "react-tabs__tab LIAFter"
-                  : tabIndex === 9
+                  : tabIndex === 10
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
@@ -204,11 +226,11 @@ const LeftBar = ({
             </Tab>
             <Tab
               className={
-                10 === tabIndex - 1
+                11 === tabIndex - 1
                   ? "react-tabs__tab LIBefore"
-                  : tabIndex + 1 === 10
+                  : tabIndex + 1 === 11
                   ? "react-tabs__tab LIAFter"
-                  : tabIndex === 10
+                  : tabIndex === 11
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
@@ -230,12 +252,17 @@ const LeftBar = ({
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              <h2>Any content 4</h2>
+              {isUserOpen ? (
+                <Profile setDisplayTab={() => setTabIndex(0)} userId={userId} />
+              ) : (
+                <h2>Any content 4</h2>
+                // <HomeSearch setDisplayTab={() => setTabIndex(0)} />
+              )}
             </div>
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              <h2>Any content 5</h2>
+              <MyFeed setDisplayTab={() => setTabIndex(0)} />
             </div>
           </TabPanel>
           <TabPanel>
@@ -259,7 +286,19 @@ const LeftBar = ({
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              <h2>Any content 8</h2>
+              {!selectedListId ? (
+                <ListOptionView
+                  setDisplayTab={() => setTabIndex(0)}
+                  setSelectedListId={setSelectedListId}
+                  selectedListId={selectedListId}
+                />
+              ) : (
+                <ListDescriptionView
+                  setDisplayTab={() => setTabIndex(0)}
+                  setSelectedListId={setSelectedListId}
+                  selectedListId={selectedListId}
+                />
+              )}
             </div>
           </TabPanel>
           <TabPanel>
