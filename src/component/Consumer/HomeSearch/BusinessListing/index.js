@@ -259,7 +259,7 @@ const BusinessListing = () => {
           <ValueLoader />
         </LoaderWrap>
       ) : (
-        <div id="scrollableDiv" style={{ height: "100vh", overflow: "auto" }}>
+        <div id="scrollableDiv" style={{ height: "calc(100vh - 110px)", overflow: "auto" }}>
           <InfiniteScroll
             dataLength={businessData ? businessData.length : 0}
             next={fetchMorePlaces}
