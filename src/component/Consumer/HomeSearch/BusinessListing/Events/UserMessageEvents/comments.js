@@ -139,10 +139,12 @@ const Comments = ({
     let divContent = value;
     if (mentions.length > 0) {
       mentions.map((v) => {
-        let re = new RegExp("@" + v.name, "g");
+        let re = new RegExp(v.name, "g");
         divContent = divContent.replace(
           re,
-          `<span className='mentionData'> ${"@" + v.name}  </span>`
+          `<span className='mentionData' onClick={window.open("/u/${
+            v._id
+          }",'_self')}> ${"@" + v.name}  </span>`
         );
         return divContent;
       });

@@ -137,7 +137,6 @@ const LeftBar = ({
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
-              onClick={() => dispatch(clearMyFeedData())}
             >
               <SearchIcon>
                 <BiSearchAlt2 />

@@ -140,7 +140,9 @@ const Comments = ({
         let re = new RegExp("@" + v.name, "g");
         divContent = divContent.replace(
           re,
-          `<span className='mentionData'> ${"@" + v.name}  </span>`
+          `<span className='mentionData' onClick={window.open("/u/${
+            v._id
+          }",'_self')}> ${"@" + v.name}  </span>`
         );
         return divContent;
       });
@@ -162,10 +164,10 @@ const Comments = ({
           <img
             src={
               i.userId.length > 0
-                ? i.userId[0].photo
-                : i.userId
+                ? i.userId[0].photo !== "" ? i.userId[0].photo
+                : i.userId.photo
                 ? i.userId.photo
-                : ProfileImg
+                : ProfileImg : ProfileImg
             }
             alt=""
           />

@@ -8,6 +8,7 @@ import {
   clearSearchedData,
   setSearchData,
   setSideFiltersHomeSearch,
+  setEnterClicked,
 } from "../../../../reducers/myFeedReducer";
 
 const SearchWrap = styled.div`
@@ -86,6 +87,7 @@ const SearchBar = ({ offset }) => {
           latitude: process.env.REACT_APP_LATITUDE,
           longitude: process.env.REACT_APP_LONGITUDE,
         };
+        dispatch(setEnterClicked(true))
         dispatch(HomeSearch(obj));
         setSearchError("");
       } else if (search.length >= 0 && search.length < 4) {

@@ -169,6 +169,7 @@ export const slice = createSlice({
     filterByClosest: false,
     selectedListDetails: null,
     loadingSelectedList: false,
+    enterClicked:false
   },
   reducers: {
     clearMyFeedData: (state) => {
@@ -176,6 +177,10 @@ export const slice = createSlice({
     },
     setSearchData: (state, action) => {
       state.searchData = action.payload;
+      state.enterClicked = false;
+    },
+    setEnterClicked: (state, action) => {
+      state.enterClicked = action.payload;
     },
     setSideFiltersByUpdatedAt: (state) => {
       state.myFeed = [];
@@ -632,5 +637,6 @@ export const {
   setSideFiltersByUpdatedAt,
   setSideFiltersHomeSearch,
   clearSearchedData,
+  setEnterClicked
 } = slice.actions;
 export default slice.reducer;

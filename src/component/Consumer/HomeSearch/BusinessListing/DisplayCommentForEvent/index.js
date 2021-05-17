@@ -6,6 +6,7 @@ import LikesBar from "../LikesBar";
 import DateBar from "../Events/DateBar";
 import TimeBar from "../Events/TimeBar";
 import ImageComment from "../Events/ImageComment";
+import { useSelector } from "react-redux";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -41,14 +42,16 @@ const ProfileNameHeader = styled.div`
   padding: 0;
   margin: 15px 0;
   padding-left: 40px;
-  &:before {
-    content: '';
-    position: absolute;
-    left: 26px;
-    background: #878787;
-    width: 10px;
-    height: 1px;
-    top: 30px;
+  &.line-active {
+    &:before {
+      content: "";
+      position: absolute;
+      left: 26px;
+      background: #878787;
+      width: 10px;
+      height: 1px;
+      top: 30px;
+    }
   }
 `;
 
@@ -123,6 +126,7 @@ const SubHeading = styled.div`
 const DisplayCommentForEvent = ({ postData, businessData }) => {
   const [displayComments, setDisplayComments] = useState(false);
   const [displayCommentInput, setDisplayCommentInput] = useState(false);
+  const search = useSelector((state) => state.myFeed.enterClicked);
   const [flag, setFlag] = useState(false);
 
   const days = [
@@ -139,7 +143,15 @@ const DisplayCommentForEvent = ({ postData, businessData }) => {
     <>
       <UserMsgWrap>
         <UserMessageContent>
-          <ProfileNameHeader>
+          <ProfileNameHeader
+            className={
+              (postData.body !== null && postData.type === "Post") ||
+              postData.data !== null ||
+              !search
+                ? "line-active"
+                : "line-inactive"
+            }
+          >
             <ProfileThumb>
               <img
                 src={

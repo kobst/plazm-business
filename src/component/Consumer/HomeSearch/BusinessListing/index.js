@@ -9,6 +9,7 @@ import { FaSort } from "react-icons/fa";
 import SearchBar from "../SearchBar";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {
+  clearMyFeedData,
   HomeSearch,
   setSideFiltersByClosest,
   setSideFiltersByUpdatedAt,
@@ -175,6 +176,7 @@ const BusinessListing = () => {
         latitude: process.env.REACT_APP_LATITUDE,
         longitude: process.env.REACT_APP_LONGITUDE,
       };
+      dispatch(clearMyFeedData())
       dispatch(HomeSearch(obj));
     }
   }, [dispatch, offset, filterClosest, updatedAtFilter, filterSelected]);

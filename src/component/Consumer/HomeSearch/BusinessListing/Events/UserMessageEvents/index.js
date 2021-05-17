@@ -34,14 +34,16 @@ const ProfileNameHeader = styled.div`
   padding: 0;
   margin: 15px 0;
   padding-left: 40px;
-  &:before {
-    content: '';
-    position: absolute;
-    left: 26px;
-    background: #878787;
-    width: 10px;
-    height: 1px;
-    top: 30px;
+  &.line-active {
+    &:before {
+      content: "";
+      position: absolute;
+      left: 26px;
+      background: #878787;
+      width: 10px;
+      height: 1px;
+      top: 30px;
+    }
   }
 `;
 
@@ -117,15 +119,14 @@ const LoaderWrap = styled.div`
 const UserMessageEvents = ({ eventData, businessInfo }) => {
   const [displayEventComments, setDisplayEventComments] = useState(false);
   const [flag, setFlag] = useState(false);
-  const [displayEventCommentInput, setDisplayEventCommentInput] = useState(
-    false
-  );
+  const [displayEventCommentInput, setDisplayEventCommentInput] =
+    useState(false);
   const [description, setDescription] = useState("");
   const loadingComments = useSelector(
     (state) => state.myFeed.loadingEventComments
   );
   const ws = useSelector((state) => state.user.ws);
-
+  const search = useSelector((state) => state.myFeed.enterClicked);
 
   /** to add comment on event function */
   const addComment = async (obj) => {
@@ -155,7 +156,15 @@ const UserMessageEvents = ({ eventData, businessInfo }) => {
   return (
     <>
       <UserMessageContent>
-        <ProfileNameHeader>
+        <ProfileNameHeader
+          className={
+            (eventData.body !== null && eventData.type === "Post") ||
+            eventData.data !== null ||
+            !search
+              ? "line-active"
+              : "line-inactive"
+          }
+        >
           <ProfileThumb>
             <img
               src={
@@ -189,7 +198,11 @@ const UserMessageEvents = ({ eventData, businessInfo }) => {
               eventId={eventData._id}
               date={new Date(eventData.createdAt)}
               totalLikes={eventData.likes.length}
-              totalComments={eventData.totalComments.length>0 ? eventData.totalComments[0].totalCount : 0}
+              totalComments={
+                eventData.totalComments.length > 0
+                  ? eventData.totalComments[0].totalCount
+                  : 0
+              }
               setDisplayEventComments={setDisplayEventComments}
               displayEventComments={displayEventComments}
               postLikes={eventData.likes}
