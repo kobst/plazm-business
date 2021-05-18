@@ -60,7 +60,8 @@ const ChatContent = styled.div`
 `;
 const ProfileNameHeader = styled.div`
   display: flex;
-  padding: 0px;
+  // padding: 0px;
+  padding-top:10px;
   margin: 0;
   width: 100%;
 `;

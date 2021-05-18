@@ -173,6 +173,7 @@ const homeSearch = (obj) => {
                     photo
                   }
                   ownerId {
+                    _id
                     name
                     photo
                   }
@@ -191,6 +192,7 @@ const homeSearch = (obj) => {
                   updatedAt
                   data
                   listId {
+                    _id
                     name
                   }
                   taggedUsers {

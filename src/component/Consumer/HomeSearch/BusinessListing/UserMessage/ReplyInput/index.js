@@ -161,6 +161,7 @@ const ReplyInput = ({
   setReplyDescription,
   commentId,
   addReply,
+  commentsRef
 }) => {
   const user = useSelector((state) => state.user.user);
   const [mentionArrayUser, setMentionArrayUser] = useState([]);

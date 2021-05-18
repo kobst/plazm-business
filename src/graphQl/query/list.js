@@ -136,6 +136,7 @@ const GetListDetails = (obj) => {
                   name
                 }
                 ownerId {
+                  _id
                   name
                   photo
                 }

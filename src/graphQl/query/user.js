@@ -126,6 +126,7 @@ const GetMyFeedData = (obj) => {
                   name
                 }
                 ownerId {
+                  _id
                   name
                   photo
                 }

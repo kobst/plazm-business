@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -6,7 +6,6 @@ import { IoMdClose } from "react-icons/io";
 import { FaSort } from "react-icons/fa";
 import ValueLoader from "../../../utils/loader";
 import {
-  clearMyFeedData,
   fetchMyFeedData,
 } from "../../../reducers/myFeedReducer";
 import DisplayBusinessDetails from "./DisplayBusinessDetails";
@@ -125,15 +124,6 @@ const MyFeed = ({ setDisplayTab }) => {
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffSet] = useState(0);
   const dispatch = useDispatch();
-  useEffect(() => {
-    const obj = {
-      id: user._id,
-      value: 0,
-    };
-
-    dispatch(clearMyFeedData());
-    dispatch(fetchMyFeedData(obj));
-  }, [dispatch, user._id,]);
 
   const fetchMoreData = () => {
     if (offset + 20 < totalData) {
@@ -156,17 +146,19 @@ const MyFeed = ({ setDisplayTab }) => {
             </CloseDiv>
             <h3>
               My Feed <FaSort />
-            </h3>            
+            </h3>
           </HeadingWrap>
           <div className="dashed" />
-          <div id="scrollableDiv" style={{ height: "calc(100vh - 116px)", overflow: "auto" }}>
+          <div
+            id="scrollableDiv"
+            style={{ height: "calc(100vh - 116px)", overflow: "auto" }}
+          >
             <InfiniteScroll
               dataLength={feedData ? feedData.length : 0}
               next={fetchMoreData}
               hasMore={hasMore}
               loader={
-                offset + 20 < totalData &&
-                loading ? (
+                offset + 20 < totalData && loading ? (
                   <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
                     {" "}
                     <ValueLoader height="40" width="40" />
@@ -189,9 +181,9 @@ const MyFeed = ({ setDisplayTab }) => {
                   feedData.map((i, key) => (
                     <DisplayBusinessDetails data={i} id={key} />
                   ))
-                ) : (
+                ) : !loading ? (
                   <NoData>No Data To Display</NoData>
-                )}
+                ) : null}
               </BusinessListWrap>
             </InfiniteScroll>
           </div>

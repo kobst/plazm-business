@@ -187,7 +187,7 @@ const RightWrap = styled.div`
 `;
 
 /** display favorite business */
-const DisplayFavoriteBusiness = ({ data }) => {
+const DisplayFavoriteBusiness = ({ data, setSelectedListId, setListClickedFromSearch }) => {
   const businessInfo =
     data.business && data.business.length > 0 ? data.business[0] : data;
 
@@ -355,6 +355,9 @@ const DisplayFavoriteBusiness = ({ data }) => {
           postData={data}
           businessData={businessInfo}
           listView={true}
+          setSelectedListId={setSelectedListId}
+          setListClickedFromSearch={setListClickedFromSearch}
+          type="search"
         />
       ) : data.body !== null && data.type === "Post" ? (
         <DisplayComment postData={data} businessData={businessInfo} />

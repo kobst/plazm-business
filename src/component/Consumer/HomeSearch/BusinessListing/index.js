@@ -9,7 +9,6 @@ import { FaSort } from "react-icons/fa";
 import SearchBar from "../SearchBar";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {
-  clearMyFeedData,
   HomeSearch,
   setSideFiltersByClosest,
   setSideFiltersByUpdatedAt,
@@ -147,10 +146,10 @@ const SearchDropdownOption = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding:0 20px;
+  padding: 0 20px;
 `;
 
-const BusinessListing = () => {
+const BusinessListing = ({ setSelectedListId, setListClickedFromSearch }) => {
   const businessData = useSelector((state) => state.myFeed.myFeed);
   const loading = useSelector((state) => state.myFeed.loading);
   const [offset, setOffset] = useState(0);
@@ -165,21 +164,6 @@ const BusinessListing = () => {
   const menuRef = useRef(null);
   const [uploadMenu, setUploadMenu] = useState(false);
   const [filterSelected, setFilterSelected] = useState(false);
-
-  /** useEffect called when initially tab is rendered */
-  useEffect(() => {
-    if (offset === 0 && !filterClosest && !updatedAtFilter) {
-      const obj = {
-        search: "",
-        value: offset,
-        filters: { closest: filterClosest, updated: updatedAtFilter },
-        latitude: process.env.REACT_APP_LATITUDE,
-        longitude: process.env.REACT_APP_LONGITUDE,
-      };
-      dispatch(clearMyFeedData())
-      dispatch(HomeSearch(obj));
-    }
-  }, [dispatch, offset, filterClosest, updatedAtFilter, filterSelected]);
 
   /** useEffect called when any side filters are selected */
   useEffect(() => {
@@ -238,30 +222,35 @@ const BusinessListing = () => {
     <>
       <SearchBar offset={offset} />
       <SearchDropdownOption>
-          <SortingSelect>
-            <Select>
-              <option>All</option>
-            </Select>
-          </SortingSelect>
-          <CheckboxWrap ref={menuRef}>
-            <FaSort onClick={toggleUploadMenu} />
-            {uploadMenu && (
-              <DropdownContent>
-                <ul>
-                  <li onClick={() => closestFilter()}>Closest</li>
+        <SortingSelect>
+          <Select>
+            <option>All</option>
+          </Select>
+        </SortingSelect>
+        <CheckboxWrap ref={menuRef}>
+          <FaSort onClick={toggleUploadMenu} />
+          {uploadMenu && (
+            <DropdownContent>
+              <ul>
+                <li onClick={() => closestFilter()}>Closest</li>
 
-                  <li onClick={() => recentlyUpdatedFilter()}>Recently Updated</li>
-                </ul>
-              </DropdownContent>
-            )}
-          </CheckboxWrap>
-        </SearchDropdownOption>
+                <li onClick={() => recentlyUpdatedFilter()}>
+                  Recently Updated
+                </li>
+              </ul>
+            </DropdownContent>
+          )}
+        </CheckboxWrap>
+      </SearchDropdownOption>
       {loading && offset === 0 ? (
         <LoaderWrap>
           <ValueLoader />
         </LoaderWrap>
       ) : (
-        <div id="scrollableDiv" style={{ height: "calc(100vh - 110px)", overflow: "auto" }}>
+        <div
+          id="scrollableDiv"
+          style={{ height: "calc(100vh - 110px)", overflow: "auto" }}
+        >
           <InfiniteScroll
             dataLength={businessData ? businessData.length : 0}
             next={fetchMorePlaces}
@@ -288,7 +277,12 @@ const BusinessListing = () => {
             <BusinessListWrap>
               {businessData.length > 0 ? (
                 businessData.map((i, key) => (
-                  <DisplayFavoriteBusiness data={i} key={key} />
+                  <DisplayFavoriteBusiness
+                    data={i}
+                    key={key}
+                    setSelectedListId={setSelectedListId}
+                    setListClickedFromSearch={setListClickedFromSearch}
+                  />
                 ))
               ) : !loading ? (
                 <center>

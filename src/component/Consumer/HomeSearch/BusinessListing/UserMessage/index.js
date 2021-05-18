@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import ReactTooltip from "react-tooltip";
 import { useSelector, useDispatch } from "react-redux";
@@ -7,7 +7,6 @@ import { RiArrowDropRightFill } from "react-icons/ri";
 import ValueLoader from "../../../../../utils/loader";
 import ReplyInput from "./ReplyInput";
 import Comments from "./Comments";
-import ScrollToBottom from "./ScrollToBottom";
 import ProfileImg from "../../../../../images/profile-img.png";
 import LikesBar from "../LikesBar";
 import {
@@ -53,7 +52,7 @@ const ProfileNameHeader = styled.div`
   margin: 15px 0;
   padding-left: 40px;
   &:before {
-    content: '';
+    content: "";
     position: absolute;
     left: 26px;
     background: #878787;
@@ -80,7 +79,7 @@ const ProfileNameWrap = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  max-width: calc(100% - 40px);  
+  max-width: calc(100% - 40px);
   padding: 0 25px 0 0px;
   width: 100%;
   @media (max-width: 1024px) {
@@ -101,6 +100,12 @@ const ProfileName = styled.div`
     font-weight: 700;
     color: #fff;
     margin: 0 3px;
+  }
+  .ownerId-name {
+    margin: 0px;
+    color: #ff2e9a;
+    font-weight: 700;
+    cursor: pointer;
   }
   @media (max-width: 1024px) {
     flex-direction: column;
@@ -176,7 +181,14 @@ const DescriptionBox = styled.div`
   }
 `;
 
-const UserMessage = ({ postData, businessData, listView }) => {
+const UserMessage = ({
+  postData,
+  businessData,
+  listView,
+  setSelectedListId,
+  setListClickedFromSearch,
+  type,
+}) => {
   const dispatch = useDispatch();
   const [displayComments, setDisplayComments] = useState(false);
   const loadingComments = useSelector(
@@ -187,7 +199,17 @@ const UserMessage = ({ postData, businessData, listView }) => {
   const [flag, setFlag] = useState(false);
   const user = useSelector((state) => state.user.user);
   const ws = useSelector((state) => state.user.ws);
+  const commentsRef = useRef();
+  const selectedPostId = useSelector(
+    (state) => state.myFeed.selectedPostIdForComments
+  );
 
+  const listNavigate = () => {
+    if (type === "search") {
+      setSelectedListId(postData.listId[0]._id);
+      setListClickedFromSearch(true);
+    }
+  };
   ws.onmessage = (evt) => {
     const message = JSON.parse(evt.data);
     /** to add reply via socket */
@@ -225,8 +247,11 @@ const UserMessage = ({ postData, businessData, listView }) => {
       dispatch(addReplyToComment(message));
     } else if (message.post) {
       /** to add post via socket */
-      if (user.favorites.indexOf(message.businessId)!==-1 || user.listFollowed.indexOf(message.post.postDetails.listId._id)) {
-        dispatch(addPostViaSocket(message))
+      if (
+        user.favorites.indexOf(message.businessId) !== -1 ||
+        user.listFollowed.indexOf(message.post.postDetails.listId._id)
+      ) {
+        dispatch(addPostViaSocket(message));
       }
     }
   };
@@ -245,6 +270,20 @@ const UserMessage = ({ postData, businessData, listView }) => {
       })
     );
   };
+
+  /** to scroll to bottom of comments */
+  useEffect(() => {
+    if (
+      (displayCommentInput || displayComments) &&
+      !loadingComments &&
+      postData._id === selectedPostId
+    ) {
+      commentsRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }, [displayComments, displayCommentInput, loadingComments, postData._id, selectedPostId ]);
 
   /** to highlight the user mentions mentioned in post description */
   const findDesc = (value, mentions, mentionsList) => {
@@ -343,10 +382,19 @@ const UserMessage = ({ postData, businessData, listView }) => {
             </ProfileThumb>
             <ProfileNameWrap>
               <ProfileName>
-                {postData.ownerId === null || postData.ownerId.length === 0
-                  ? businessData.company_name
-                  : postData.ownerId[0].name}{" "}
-                {postData.listId!==null && postData.listId.length !== 0 ? (
+                {postData.ownerId === null || postData.ownerId.length === 0 ? (
+                  businessData.company_name
+                ) : (
+                  <span
+                    className="ownerId-name"
+                    onClick={() =>
+                      window.open(`/u/${postData.ownerId[0]._id}`, "_self")
+                    }
+                  >
+                    {postData.ownerId[0].name}
+                  </span>
+                )}
+                {postData.listId !== null && postData.listId.length !== 0 ? (
                   <RightArrowSec>
                     <ArrowRight>
                       <RiArrowDropRightFill />
@@ -355,6 +403,7 @@ const UserMessage = ({ postData, businessData, listView }) => {
                       <div
                         data-for="custom-class"
                         data-tip={postData.listId[0].name}
+                        onClick={() => listNavigate()}
                       >
                         <span>{postData.listId[0].name}</span>
                       </div>
@@ -394,6 +443,7 @@ const UserMessage = ({ postData, businessData, listView }) => {
                 setFlag={setFlag}
                 flag={flag}
                 business={businessData}
+                commentsRef={commentsRef}
               />
             </ProfileNameWrap>
           </ProfileNameHeader>
@@ -424,7 +474,8 @@ const UserMessage = ({ postData, businessData, listView }) => {
                     />
                   );
                 })}
-                {flag === false ? <ScrollToBottom /> : null}
+                <div ref={commentsRef}></div>
+                {/* {flag === false ? <ScrollToBottom /> : null} */}
               </>
             ) : (displayComments || displayCommentInput) && loadingComments ? (
               <LoaderWrap>
@@ -442,6 +493,7 @@ const UserMessage = ({ postData, businessData, listView }) => {
               description={description}
               setDescription={setDescription}
               addComment={addComment}
+              commentsRef={commentsRef}
             />
           </>
         ) : null}

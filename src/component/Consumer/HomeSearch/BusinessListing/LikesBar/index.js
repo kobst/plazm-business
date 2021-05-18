@@ -15,6 +15,7 @@ import {
   addLikeViaSocket,
   fetchSearchCommentReplies,
   fetchSearchPostComments,
+  setPostId,
 } from "../../../../../reducers/myFeedReducer";
 
 const BottomBarLikes = styled.div`
@@ -104,6 +105,7 @@ const LikesBar = ({
   commentLikes,
   setFlag,
   business,
+  commentsRef,
 }) => {
   const [eventDate, setEventDate] = useState();
   const [userLikedPost, setUserLikedPost] = useState(false);
@@ -172,13 +174,17 @@ const LikesBar = ({
       setDisplayComments(!displayComments);
       if (type === "comment") {
         setFlag(false);
-        if (displayComments === false)
+        if (displayComments === false) {
+          dispatch(setPostId(postId));
           dispatch(
             fetchSearchPostComments({
               postId: postId,
               businessId: business._id,
             })
           );
+        } else {
+          dispatch(setPostId(null));
+        }
       } else if (type === "reply") {
         setFlag(true);
         if (displayComments === false)
@@ -261,10 +267,14 @@ const LikesBar = ({
     } else if (type === "comment") {
       setFlag(false);
       setDisplayComments(!displayComments);
-      if (displayComments === false)
+      if (displayComments === false) {
+        dispatch(setPostId(postId));
         dispatch(
           fetchSearchPostComments({ postId: postId, businessId: business._id })
         );
+      } else {
+        dispatch(setPostId(null));
+      }
     }
   };
   return (

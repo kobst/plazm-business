@@ -9,6 +9,7 @@ import {
   getUserLists,
   DeleteList,
   UnsubscribeToAList,
+  SubscribeToAList,
 } from "../graphQl";
 
 /*
@@ -109,6 +110,19 @@ export const UnSubscribeToAList = createAsyncThunk(
   }
 );
 
+/*
+ * @desc:  to subscribe to a list
+ * @params: businessId
+ */
+export const SubscribeToAListAction = createAsyncThunk(
+  "data/SubscribeToAList",
+  async (obj) => {
+    const graphQl = SubscribeToAList(obj);
+    const response = await graphQlEndPoint(graphQl);
+    if (response.data.subscribeToAList.success === true) return obj;
+  }
+);
+
 export const slice = createSlice({
   name: "list",
   initialState: {
@@ -125,6 +139,7 @@ export const slice = createSlice({
     selectedListData: [],
     selectedListDetails: {},
     loadingUnSubscribe: false,
+    loadingSubscribe: false,
   },
   reducers: {
     clearListData: (state, action) => {
@@ -227,9 +242,11 @@ export const slice = createSlice({
       if (state.loadingUnSubscribe) {
         state.loadingUnSubscribe = false;
         if (action.payload) {
-          state.data = state.data.filter(
-            (i) => i._id !== action.payload.listId
-          );
+          if (state.data.length > 0) {
+            state.data = state.data.filter(
+              (i) => i._id !== action.payload.listId
+            );
+          }
         }
       }
     },
