@@ -132,20 +132,21 @@ const UserMessageEvents = ({ eventData, businessInfo }) => {
   const selectedEventId = useSelector(
     (state) => state.myFeed.selectedEventIdForComments
   );
+  const commentAdded = useSelector(state => state.myFeed.commentAdded)
 
   /** to scroll to bottom of comments */
   useEffect(() => {
     if (
-      displayEventComments &&
+      (displayEventComments &&
       !loadingComments &&
-      eventData._id === selectedEventId
+      eventData._id === selectedEventId) || (commentAdded && eventData._id === selectedEventId)
     ) {
       commentsRef.current.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
     }
-  }, [displayEventComments, loadingComments, eventData._id, selectedEventId]);
+  }, [displayEventComments, loadingComments, eventData._id, selectedEventId,commentAdded]);
   /** to add comment on event function */
   const addComment = async (obj) => {
     ws.send(

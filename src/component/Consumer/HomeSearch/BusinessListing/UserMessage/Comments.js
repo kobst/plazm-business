@@ -167,7 +167,7 @@ const Comments = ({
                 ? i.userId[0].photo !== "" ? i.userId[0].photo
                 : i.userId.photo
                 ? i.userId.photo
-                : ProfileImg : ProfileImg
+                : ProfileImg : i.userId.photo ? i.userId.photo : ProfileImg
             }
             alt=""
           />
