@@ -145,7 +145,7 @@ const UserMessageEvents = ({ eventData, businessInfo }) => {
         block: "center",
       });
     }
-  }, [displayEventComments, loadingComments,eventData._id,selectedEventId]);
+  }, [displayEventComments, loadingComments, eventData._id, selectedEventId]);
   /** to add comment on event function */
   const addComment = async (obj) => {
     ws.send(
@@ -261,7 +261,6 @@ const UserMessageEvents = ({ eventData, businessInfo }) => {
                   />
                 );
               })}
-              <div ref={commentsRef}></div>
               {/* {flag === false ? <ScrollToBottom /> : null} */}
             </>
           ) : displayEventComments && loadingComments ? (
@@ -269,6 +268,7 @@ const UserMessageEvents = ({ eventData, businessInfo }) => {
               <ValueLoader />
             </LoaderWrap>
           ) : null}
+          <div ref={commentsRef}></div>
         </ReplyWrap>
       </Scrollbars>
       {displayEventComments ? (

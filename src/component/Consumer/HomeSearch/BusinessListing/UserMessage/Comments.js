@@ -19,7 +19,7 @@ const UserMessageContent = styled.div`
     align-items: flex-start;
   }
   &.UserReplyContent {
-    padding: 0px 0 0 80px;  
+    padding: 6px 0 0 80px;  
   }
   .InnerScroll {
     overflow-x: hidden;

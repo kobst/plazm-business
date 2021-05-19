@@ -474,7 +474,7 @@ const UserMessage = ({
                     />
                   );
                 })}
-                <div ref={commentsRef}></div>
+                
                 {/* {flag === false ? <ScrollToBottom /> : null} */}
               </>
             ) : (displayComments || displayCommentInput) && loadingComments ? (
@@ -482,10 +482,12 @@ const UserMessage = ({
                 <ValueLoader />
               </LoaderWrap>
             ) : null}
+            <div ref={commentsRef}></div>
           </ReplyWrap>
         </Scrollbars>
         {displayComments || displayCommentInput ? (
           <>
+          
             <ReplyInput
               type="comment"
               postId={postData._id}
