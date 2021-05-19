@@ -31,7 +31,7 @@ export const fetchEventsForTheWeek = createAsyncThunk(
     const obj = {
       date: date,
       id: businessId,
-      userId:userId
+      userId: userId,
     };
     const graphQl = fetchEventForAWeek(obj);
     const response = await graphQlEndPoint(graphQl);
@@ -145,7 +145,7 @@ export const fetchInitialWeekEvents = createAsyncThunk(
     const obj = {
       date: date,
       id: businessId,
-      userId:userId
+      userId: userId,
     };
     const graphQl = fetchEventForAWeek(obj);
     const response = await graphQlEndPoint(graphQl);
@@ -197,7 +197,7 @@ export const slice = createSlice({
     loadingReplies: false,
     initialWeekEvents: [],
     loadingForInitialWeek: false,
-    weekBtnClicked: false
+    weekBtnClicked: false,
   },
   reducers: {
     nextWeekDate: (state) => {
@@ -246,7 +246,7 @@ export const slice = createSlice({
       startOfWeek.setUTCHours(0, 0, 0, 0);
       state.selectedDate = startOfWeek;
     },
-    setWeekButtonClicked: (state,action) => {
+    setWeekButtonClicked: (state, action) => {
       state.weekBtnClicked = action.payload;
     },
   },
@@ -374,7 +374,7 @@ export const slice = createSlice({
           }));
           eventsArr.push({ ...findEvent, comments: arr });
           eventsArr = eventsArr.concat(findOtherEvents);
-          if(state.weekBtnClicked) {
+          if (state.weekBtnClicked) {
             state.events = eventsArr.sort((a, b) => {
               return (
                 new Date(a.eventSchedule.start_time) -
@@ -382,12 +382,12 @@ export const slice = createSlice({
               );
             });
           } else {
-          state.events = eventsArr.sort((a, b) => {
-            return (
-              new Date(b.eventSchedule.start_time) -
-              new Date(a.eventSchedule.start_time)
-            );
-          });
+            state.events = eventsArr.sort((a, b) => {
+              return (
+                new Date(b.eventSchedule.start_time) -
+                new Date(a.eventSchedule.start_time)
+              );
+            });
           }
         }
       }
@@ -436,7 +436,7 @@ export const slice = createSlice({
               totalComments: posts1.totalComments,
             });
             dummy1 = dummy1.concat(posts);
-            if(state.weekBtnClicked) {
+            if (state.weekBtnClicked) {
               state.events = dummy1.sort((a, b) => {
                 return (
                   new Date(a.eventSchedule.start_time) -
@@ -444,12 +444,12 @@ export const slice = createSlice({
                 );
               });
             } else {
-            state.events = dummy1.sort((a, b) => {
-              return (
-                new Date(b.eventSchedule.start_time) -
-                new Date(a.eventSchedule.start_time)
-              );
-            });
+              state.events = dummy1.sort((a, b) => {
+                return (
+                  new Date(b.eventSchedule.start_time) -
+                  new Date(a.eventSchedule.start_time)
+                );
+              });
             }
           }
         }
@@ -488,7 +488,7 @@ export const slice = createSlice({
             totalComments: findEvent[0].totalComments + 1,
           });
           eventsArr = eventsArr.concat(findOtherEvents);
-          if(state.weekBtnClicked) {
+          if (state.weekBtnClicked) {
             state.events = eventsArr.sort((a, b) => {
               return (
                 new Date(a.eventSchedule.start_time) -
@@ -496,12 +496,12 @@ export const slice = createSlice({
               );
             });
           } else {
-          state.events = eventsArr.sort((a, b) => {
-            return (
-              new Date(b.eventSchedule.start_time) -
-              new Date(a.eventSchedule.start_time)
-            );
-          });
+            state.events = eventsArr.sort((a, b) => {
+              return (
+                new Date(b.eventSchedule.start_time) -
+                new Date(a.eventSchedule.start_time)
+              );
+            });
           }
         }
       }
@@ -544,7 +544,7 @@ export const slice = createSlice({
             comments: commentsSort,
           });
           dummy1 = dummy1.concat(events);
-          if(state.weekBtnClicked) {
+          if (state.weekBtnClicked) {
             state.events = dummy1.sort((a, b) => {
               return (
                 new Date(a.eventSchedule.start_time) -
@@ -552,12 +552,12 @@ export const slice = createSlice({
               );
             });
           } else {
-          state.events = dummy1.sort((a, b) => {
-            return (
-              new Date(b.eventSchedule.start_time) -
-              new Date(a.eventSchedule.start_time)
-            );
-          });
+            state.events = dummy1.sort((a, b) => {
+              return (
+                new Date(b.eventSchedule.start_time) -
+                new Date(a.eventSchedule.start_time)
+              );
+            });
           }
         }
       }
@@ -578,12 +578,21 @@ export const slice = createSlice({
             likes: likes,
           });
           dummy1 = dummy1.concat(findPost);
-          state.events = dummy1.sort((a, b) => {
-            return (
-              new Date(b.eventSchedule.start_time) -
-              new Date(a.eventSchedule.start_time)
-            );
-          });
+          if (state.weekBtnClicked) {
+            state.events = dummy1.sort((a, b) => {
+              return (
+                new Date(a.eventSchedule.start_time) -
+                new Date(b.eventSchedule.start_time)
+              );
+            });
+          } else {
+            state.events = dummy1.sort((a, b) => {
+              return (
+                new Date(b.eventSchedule.start_time) -
+                new Date(a.eventSchedule.start_time)
+              );
+            });
+          }
         }
       }
     },
@@ -617,12 +626,21 @@ export const slice = createSlice({
                 comments: commentsSort,
               });
               dummy1 = dummy1.concat(findPost);
-              state.events = dummy1.sort((a, b) => {
-                return (
-                  new Date(b.eventSchedule.start_time) -
-                  new Date(a.eventSchedule.start_time)
-                );
-              });
+              if (state.weekBtnClicked) {
+                state.events = dummy1.sort((a, b) => {
+                  return (
+                    new Date(a.eventSchedule.start_time) -
+                    new Date(b.eventSchedule.start_time)
+                  );
+                });
+              } else {
+                state.events = dummy1.sort((a, b) => {
+                  return (
+                    new Date(b.eventSchedule.start_time) -
+                    new Date(a.eventSchedule.start_time)
+                  );
+                });
+              }
             }
           }
         }
@@ -744,6 +762,6 @@ export const {
   previousWeekDate,
   setCurrentDate,
   setSelectedDate,
-  setWeekButtonClicked
+  setWeekButtonClicked,
 } = slice.actions;
 export default slice.reducer;

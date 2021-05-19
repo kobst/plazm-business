@@ -608,6 +608,7 @@ export const slice = createSlice({
           const data = action.payload.data.map((obj) => ({
             ...obj,
             comments: [],
+            likes: obj.likes!==null?obj.likes:[]
           }));
           state.myFeed = state.myFeed.concat(data);
           state.totalData = action.payload.totalPlaces;
