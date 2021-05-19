@@ -340,7 +340,7 @@ const DisplayBusinessDetails = ({ data, id }) => {
           <UserMessageEvents eventData={data} businessInfo={data.business[0]} />
         ) : (
           //   to display post for the business
-          <UserMessage postData={data} businessData={data.business[0]} />
+          <UserMessage postData={data} businessData={data.business[0]} listView={true}/>
         )}
       </div>
     </FeedListItem>

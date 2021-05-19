@@ -8,29 +8,34 @@ import {
   clearSearchedData,
   setSearchData,
   setSideFiltersHomeSearch,
+  setEnterClicked,
 } from "../../../../reducers/myFeedReducer";
 
 const SearchWrap = styled.div`
-  width: 100%;
   background: #fff;
-  height: 50px;
-  border-radius: 2px;
+  height: 45px;
+  border-radius: 3px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 0 0 15px;
+  margin:23px 20px 16px 20px;
+  box-sizing: border-box;
   input {
     border: 0;
     outline: 0;
     padding: 0 10px;
     width: calc(100% - 70px);
-    height: 50px;
+    height: 45px;
+    font-size: 18px;
+    font-weight: normal;
+    border-radius: 3px;
+    box-shadow: none;
   }
 `;
 
 const SearchIconDiv = styled.div`
-  width: 140px;
-  height: 50px;
+  width: 195px;
+  height: 45px;
   font-size: 12px;
   color: #5a5a5a;
   text-align: center;
@@ -82,6 +87,7 @@ const SearchBar = ({ offset }) => {
           latitude: process.env.REACT_APP_LATITUDE,
           longitude: process.env.REACT_APP_LONGITUDE,
         };
+        dispatch(setEnterClicked(true))
         dispatch(HomeSearch(obj));
         setSearchError("");
       } else if (search.length >= 0 && search.length < 4) {

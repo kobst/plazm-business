@@ -13,6 +13,7 @@ import {
   fetchEventCommentReplies,
   fetchEventComments,
   addLikeViaSocket,
+  setEventId,
 } from "../../../../../../reducers/myFeedReducer";
 
 const BottomBarLikes = styled.div`
@@ -102,6 +103,7 @@ const LikesBar = ({
   flag,
   setFlag,
   business,
+  commentsRef,
 }) => {
   const [eventDate, setEventDate] = useState();
   const dispatch = useDispatch();
@@ -164,10 +166,14 @@ const LikesBar = ({
     if (type === "comment") {
       setDisplayEventComments(!displayEventComments);
       setFlag(false);
-      if (displayEventComments === false)
+      if (displayEventComments === false) {
+        dispatch(setEventId(eventId));
         dispatch(
           fetchEventComments({ eventId: eventId, businessId: business._id })
         );
+      } else {
+        dispatch(setEventId(null));
+      }
     } else if (type === "reply") {
       setDisplayReply(!displayReply);
       setFlag(true);
@@ -237,10 +243,14 @@ const LikesBar = ({
     if (type === "comment") {
       setDisplayEventComments(!displayEventComments);
       setFlag(false);
-      if (displayEventComments === false)
+      if (displayEventComments === false) {
+        dispatch(setEventId(eventId));
         dispatch(
           fetchEventComments({ eventId: eventId, businessId: business._id })
         );
+      } else {
+        dispatch(setEventId(null));
+      }
     } else if (type === "reply") {
       setFlag(true);
       setDisplayReply(!displayReply);

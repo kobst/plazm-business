@@ -12,6 +12,7 @@ import {
   clearListData,
   deleteUserCreatedList,
   UnSubscribeToAList,
+  SubscribeToAListAction,
 } from "../../../reducers/listReducer";
 import {
   fetchSelectedListDetails,
@@ -20,7 +21,10 @@ import {
 import ValueLoader from "../../../utils/loader";
 import DisplayPostInAList from "./DisplayPostsInAList";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { removeSubscribedList } from "../../../reducers/userReducer";
+import {
+  addSubscribedList,
+  removeSubscribedList,
+} from "../../../reducers/userReducer";
 
 const ListOptionSection = styled.div`
   width: 100%;
@@ -137,6 +141,17 @@ const ButtonWrapperDiv = styled.div`
     padding: 5px 10px;
     cursor: pointer;
     background-color: #ff6067;
+  }
+  button.subscribe {
+    border: 0px;
+    margin-right: 8px;
+    font-size: 9px;
+    font-weight: bold;
+    color: #fff;
+    border-radius: 2px;
+    padding: 5px 10px;
+    cursor: pointer;
+    background-color: #ff2e9a;
   }
 `;
 
@@ -287,7 +302,19 @@ const ListDescriptionView = ({
     const response = await unwrapResult(list);
     if (response) {
       dispatch(removeSubscribedList(response.listId));
-      setSelectedListId(null);
+    }
+  };
+
+  /** to subscribe from a list */
+  const listSubscribe = async () => {
+    const obj = {
+      userId: user._id,
+      listId: selectedList._id,
+    };
+    const list = await dispatch(SubscribeToAListAction(obj));
+    const response = await unwrapResult(list);
+    if (response) {
+      dispatch(addSubscribedList(response.listId));
     }
   };
 
@@ -302,6 +329,11 @@ const ListDescriptionView = ({
     if (response) {
       setSelectedListId(null);
     }
+  };
+
+  const onCloseTab = () => {
+    setDisplayTab(false);
+    dispatch(clearMyFeedData());
   };
   return (loading &&
     offset === 0 &&
@@ -344,7 +376,7 @@ const ListDescriptionView = ({
                 <p>{selectedList.description}</p>
               </ListBannerSection>
               <CloseDiv>
-                <IoMdClose onClick={() => setDisplayTab(false)} />
+                <IoMdClose onClick={() => onCloseTab()} />
               </CloseDiv>
             </TopHeadingWrap>
           </HeadingWrap>
@@ -364,6 +396,10 @@ const ListDescriptionView = ({
                   </button>
                 </ButtonOuterDiv>
               </>
+            ) : !user.listFollowed.includes(selectedList._id) ? (
+              <button className="subscribe" onClick={() => listSubscribe()}>
+                Subscribe
+              </button>
             ) : (
               <button className="unsubscribe" onClick={() => listUnSubscribe()}>
                 Unsubscribe

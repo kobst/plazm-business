@@ -114,6 +114,12 @@ export const slice = createSlice({
         ),
       };
     },
+    addSubscribedList: (state, action) => {
+      state.user = {
+        ...state.user,
+        listFollowed: [...state.user.listFollowed, action.payload],
+      };
+    },
     clearUserFavorites: (state, action) => {
       state.favoriteBusiness = [];
     },
@@ -242,6 +248,10 @@ export const slice = createSlice({
   },
 });
 
-export const { setWs, clearUserFavorites, removeSubscribedList } =
-  slice.actions;
+export const {
+  setWs,
+  clearUserFavorites,
+  removeSubscribedList,
+  addSubscribedList,
+} = slice.actions;
 export default slice.reducer;

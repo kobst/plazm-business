@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
 import ProfileImg from "../../../../../../images/profile-img.png";
 import LikeBar from "../LikeBar";
@@ -10,7 +10,6 @@ import { Scrollbars } from "react-custom-scrollbars";
 import ValueLoader from "../../../../../../utils/loader";
 import ReplyInput from "./ReplyInput";
 import Comments from "./comments";
-import ScrollToBottom from "./ScrollToBottom";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -34,14 +33,16 @@ const ProfileNameHeader = styled.div`
   padding: 0;
   margin: 15px 0;
   padding-left: 40px;
-  &:before {
-    content: '';
-    position: absolute;
-    left: 26px;
-    background: #878787;
-    width: 10px;
-    height: 1px;
-    top: 30px;
+  &.line-active {
+    &:before {
+      content: "";
+      position: absolute;
+      left: 26px;
+      background: #878787;
+      width: 10px;
+      height: 1px;
+      top: 30px;
+    }
   }
 `;
 
@@ -101,7 +102,9 @@ const SubHeading = styled.div`
   color: #00c2ff;
 `;
 
-const ReplyWrap = styled.div``;
+const ReplyWrap = styled.div`
+  // max-height: 335px;
+`;
 
 const LoaderWrap = styled.div`
   width: 100%;
@@ -117,16 +120,32 @@ const LoaderWrap = styled.div`
 const UserMessageEvents = ({ eventData, businessInfo }) => {
   const [displayEventComments, setDisplayEventComments] = useState(false);
   const [flag, setFlag] = useState(false);
-  const [displayEventCommentInput, setDisplayEventCommentInput] = useState(
-    false
-  );
+  const [displayEventCommentInput, setDisplayEventCommentInput] =
+    useState(false);
   const [description, setDescription] = useState("");
   const loadingComments = useSelector(
     (state) => state.myFeed.loadingEventComments
   );
   const ws = useSelector((state) => state.user.ws);
+  const search = useSelector((state) => state.myFeed.enterClicked);
+  const commentsRef = useRef(null);
+  const selectedEventId = useSelector(
+    (state) => state.myFeed.selectedEventIdForComments
+  );
 
-
+  /** to scroll to bottom of comments */
+  useEffect(() => {
+    if (
+      displayEventComments &&
+      !loadingComments &&
+      eventData._id === selectedEventId
+    ) {
+      commentsRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }, [displayEventComments, loadingComments, eventData._id, selectedEventId]);
   /** to add comment on event function */
   const addComment = async (obj) => {
     ws.send(
@@ -155,7 +174,15 @@ const UserMessageEvents = ({ eventData, businessInfo }) => {
   return (
     <>
       <UserMessageContent>
-        <ProfileNameHeader>
+        <ProfileNameHeader
+          className={
+            (eventData.body !== null && eventData.type === "Post") ||
+            eventData.data !== null ||
+            !search
+              ? "line-active"
+              : "line-inactive"
+          }
+        >
           <ProfileThumb>
             <img
               src={
@@ -189,7 +216,11 @@ const UserMessageEvents = ({ eventData, businessInfo }) => {
               eventId={eventData._id}
               date={new Date(eventData.createdAt)}
               totalLikes={eventData.likes.length}
-              totalComments={eventData.totalComments.length>0 ? eventData.totalComments[0].totalCount : 0}
+              totalComments={
+                eventData.totalComments.length > 0
+                  ? eventData.totalComments[0].totalCount
+                  : 0
+              }
               setDisplayEventComments={setDisplayEventComments}
               displayEventComments={displayEventComments}
               postLikes={eventData.likes}
@@ -198,6 +229,7 @@ const UserMessageEvents = ({ eventData, businessInfo }) => {
               flag={flag}
               setFlag={setFlag}
               business={businessInfo}
+              commentsRef={commentsRef}
             />
           </ProfileNameWrap>
         </ProfileNameHeader>
@@ -216,37 +248,42 @@ const UserMessageEvents = ({ eventData, businessInfo }) => {
           {displayEventComments &&
           !loadingComments &&
           eventData.comments.length > 0 ? (
-            eventData.comments.map((i, key) => {
-              return (
-                <Comments
-                  key={key}
-                  i={i}
-                  eventData={eventData}
-                  flag={flag}
-                  setFlag={setFlag}
-                  business={businessInfo}
-                />
-              );
-            })
+            <>
+              {eventData.comments.map((i, key) => {
+                return (
+                  <Comments
+                    key={key}
+                    i={i}
+                    eventData={eventData}
+                    flag={flag}
+                    setFlag={setFlag}
+                    business={businessInfo}
+                  />
+                );
+              })}
+              {/* {flag === false ? <ScrollToBottom /> : null} */}
+            </>
           ) : displayEventComments && loadingComments ? (
             <LoaderWrap>
               <ValueLoader />
             </LoaderWrap>
           ) : null}
-          {displayEventComments ? (
-            <>
-              <ReplyInput
-                type="comment"
-                eventId={eventData._id}
-                description={description}
-                setDescription={setDescription}
-                addComment={addComment}
-              />
-              {flag === false ? <ScrollToBottom /> : null}
-            </>
-          ) : null}
+          <div ref={commentsRef}></div>
         </ReplyWrap>
       </Scrollbars>
+      {displayEventComments ? (
+        <>
+          <ReplyInput
+            type="comment"
+            eventId={eventData._id}
+            description={description}
+            setDescription={setDescription}
+            addComment={addComment}
+            commentsRef={commentsRef}
+          />
+          {/* {flag === false ? <ScrollToBottom /> : null} */}
+        </>
+      ) : null}
     </>
   );
 };

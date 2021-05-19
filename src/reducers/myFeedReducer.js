@@ -169,13 +169,26 @@ export const slice = createSlice({
     filterByClosest: false,
     selectedListDetails: null,
     loadingSelectedList: false,
+    enterClicked:false,
+    selectedPostIdForComments:null,
+    selectedEventIdForComments: null
   },
   reducers: {
     clearMyFeedData: (state) => {
       state.myFeed = [];
     },
+    setPostId: (state,action) => {
+      state.selectedPostIdForComments = action.payload;
+    },
+    setEventId: (state,action) => {
+      state.selectedEventIdForComments = action.payload;
+    },
     setSearchData: (state, action) => {
       state.searchData = action.payload;
+      state.enterClicked = false;
+    },
+    setEnterClicked: (state, action) => {
+      state.enterClicked = action.payload;
     },
     setSideFiltersByUpdatedAt: (state) => {
       state.myFeed = [];
@@ -632,5 +645,8 @@ export const {
   setSideFiltersByUpdatedAt,
   setSideFiltersHomeSearch,
   clearSearchedData,
+  setEnterClicked,
+  setPostId,
+  setEventId
 } = slice.actions;
 export default slice.reducer;

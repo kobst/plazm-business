@@ -19,7 +19,7 @@ const UserMessageContent = styled.div`
     align-items: flex-start;
   }
   &.UserReplyContent {
-    padding: 10px 0 0 40px;
+    padding: 6px 0 0 80px;  
   }
   .InnerScroll {
     overflow-x: hidden;
@@ -54,11 +54,10 @@ const ProfileNameWrap = styled.div`
   align-items: flex-start;
   justify-content: center;
   max-width: calc(100% - 40px);
-  border-bottom: 0.25px solid #878787;
-  padding: 0 25px 15px 0px;
+  padding: 0 25px 0 0px;
   width: 100%;
   @media (max-width: 1024px) {
-    padding: 0 45px 15px 0px;
+    padding: 0 45px 0 0px;
   }
 `;
 
@@ -141,7 +140,9 @@ const Comments = ({
         let re = new RegExp("@" + v.name, "g");
         divContent = divContent.replace(
           re,
-          `<span className='mentionData'> ${"@" + v.name}  </span>`
+          `<span className='mentionData' onClick={window.open("/u/${
+            v._id
+          }",'_self')}> ${"@" + v.name}  </span>`
         );
         return divContent;
       });
@@ -163,10 +164,10 @@ const Comments = ({
           <img
             src={
               i.userId.length > 0
-                ? i.userId[0].photo
-                : i.userId
+                ? i.userId[0].photo !== "" ? i.userId[0].photo
+                : i.userId.photo
                 ? i.userId.photo
-                : ProfileImg
+                : ProfileImg : ProfileImg
             }
             alt=""
           />

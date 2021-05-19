@@ -318,12 +318,13 @@ const DisplayListSection = ({ data, setSelectedListId }) => {
   };
 
   /** to delete a list */
-  const deleteList = () => {
+  const deleteList = async () => {
     const obj = {
       userId: user._id,
       listId: data._id,
     };
-    dispatch(deleteUserCreatedList(obj));
+    await dispatch(deleteUserCreatedList(obj));
+    setUploadMenu(false)
   };
   return (
     <>
