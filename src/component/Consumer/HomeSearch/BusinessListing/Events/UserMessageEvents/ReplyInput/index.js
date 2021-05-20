@@ -123,6 +123,14 @@ const InputWrap = styled.div`
     padding: 0;
     width: 110px;
   }
+  .taggedUserInput {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-right: 7px;
+    font-size: 13px;
+    width: 200px;
+  }
 `;
 const EmojiWrap = styled.div`
   width: 15px;
@@ -277,7 +285,7 @@ const ReplyInput = ({
           </ProfileThumb>
           <ProfileNameWrap>
             <InputWrap>
-              {type === "reply" ? <input value={"@" + name} readOnly /> : null}
+              {type === "reply" ? <div className="taggedUserInput">{"@" + name}</div> : null}
               {type === "comment" ? (
                 <MentionsInput
                   markup="@(__id__)[__display__]"
