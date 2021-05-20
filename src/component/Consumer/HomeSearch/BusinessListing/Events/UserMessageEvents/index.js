@@ -30,9 +30,8 @@ const UserMessageContent = styled.div`
 `;
 const ProfileNameHeader = styled.div`
   display: flex;
-  padding: 0;
+  padding: 0 0 0 12px;
   margin: 15px 0;
-  padding-left: 40px;
   &.line-active {
     &:before {
       content: "";
@@ -117,7 +116,7 @@ const LoaderWrap = styled.div`
   margin: 30px 0 10px;
 `;
 
-const UserMessageEvents = ({ eventData, businessInfo }) => {
+const UserMessageEvents = ({ eventData, businessInfo, type }) => {
   const [displayEventComments, setDisplayEventComments] = useState(false);
   const [flag, setFlag] = useState(false);
   const [displayEventCommentInput, setDisplayEventCommentInput] =
@@ -177,9 +176,10 @@ const UserMessageEvents = ({ eventData, businessInfo }) => {
       <UserMessageContent>
         <ProfileNameHeader
           className={
+            type !== "MyFeedEvent" && (
             (eventData.body !== null && eventData.type === "Post") ||
             eventData.data !== null ||
-            !search
+            !search )
               ? "line-active"
               : "line-inactive"
           }

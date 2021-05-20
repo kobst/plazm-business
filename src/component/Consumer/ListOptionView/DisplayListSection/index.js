@@ -34,14 +34,16 @@ const ListSection = styled.div`
 
 const ListImageWrap = styled.div`
   width: 157px;
-  height: 115px;
+  height: 136px;
   position: relative;
   display: flex;
   flex-direction: row;
   margin: 0px 8px 0;
+  padding-bottom: 1px;
   img {
     width: 100%;
     height: 100%;
+    object-fit: cover;
   }
 `;
 
