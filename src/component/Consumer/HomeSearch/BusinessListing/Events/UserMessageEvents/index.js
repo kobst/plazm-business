@@ -30,9 +30,8 @@ const UserMessageContent = styled.div`
 `;
 const ProfileNameHeader = styled.div`
   display: flex;
-  padding: 0;
+  padding: 0 0 0 12px;
   margin: 15px 0;
-  padding-left: 40px;
   &.line-active {
     &:before {
       content: "";
@@ -78,6 +77,7 @@ const ProfileName = styled.div`
   margin: 7px 0 5px 0;
   font-weight: 700;
   color: #ff2e9a;
+  cursor: pointer;
   span {
     font-weight: 700;
     color: #fff;
@@ -117,7 +117,7 @@ const LoaderWrap = styled.div`
   margin: 30px 0 10px;
 `;
 
-const UserMessageEvents = ({ eventData, businessInfo }) => {
+const UserMessageEvents = ({ eventData, businessInfo, type }) => {
   const [displayEventComments, setDisplayEventComments] = useState(false);
   const [flag, setFlag] = useState(false);
   const [displayEventCommentInput, setDisplayEventCommentInput] =
@@ -132,20 +132,28 @@ const UserMessageEvents = ({ eventData, businessInfo }) => {
   const selectedEventId = useSelector(
     (state) => state.myFeed.selectedEventIdForComments
   );
+  const commentAdded = useSelector((state) => state.myFeed.commentAdded);
 
   /** to scroll to bottom of comments */
   useEffect(() => {
     if (
-      displayEventComments &&
-      !loadingComments &&
-      eventData._id === selectedEventId
+      (displayEventComments &&
+        !loadingComments &&
+        eventData._id === selectedEventId) ||
+      (commentAdded && eventData._id === selectedEventId)
     ) {
       commentsRef.current.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
     }
-  }, [displayEventComments, loadingComments, eventData._id, selectedEventId]);
+  }, [
+    displayEventComments,
+    loadingComments,
+    eventData._id,
+    selectedEventId,
+    commentAdded,
+  ]);
   /** to add comment on event function */
   const addComment = async (obj) => {
     ws.send(
@@ -176,9 +184,10 @@ const UserMessageEvents = ({ eventData, businessInfo }) => {
       <UserMessageContent>
         <ProfileNameHeader
           className={
-            (eventData.body !== null && eventData.type === "Post") ||
-            eventData.data !== null ||
-            !search
+            type !== "MyFeedEvent" &&
+            ((eventData.body !== null && eventData.type === "Post") ||
+              eventData.data !== null ||
+              !search)
               ? "line-active"
               : "line-inactive"
           }
@@ -192,13 +201,21 @@ const UserMessageEvents = ({ eventData, businessInfo }) => {
                   ? businessInfo.default_image_url
                     ? businessInfo.default_image_url
                     : ProfileImg
+                  : businessInfo.default_image_url
+                  ? businessInfo.default_image_url
                   : ProfileImg
               }
               alt=""
             />
           </ProfileThumb>
           <ProfileNameWrap>
-            <ProfileName>{businessInfo.company_name}</ProfileName>
+            <ProfileName
+              onClick={() =>
+                window.open(`/b/${eventData.business[0]._id}`, "_self")
+              }
+            >
+              {businessInfo.company_name}
+            </ProfileName>
             <SubHeading>{eventData.title}</SubHeading>
             <ChatInput>{eventData.description}</ChatInput>
             <DateBar

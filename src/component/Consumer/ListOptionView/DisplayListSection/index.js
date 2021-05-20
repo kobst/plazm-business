@@ -34,14 +34,16 @@ const ListSection = styled.div`
 
 const ListImageWrap = styled.div`
   width: 157px;
-  height: 115px;
+  height: 136px;
   position: relative;
   display: flex;
   flex-direction: row;
   margin: 0px 8px 0;
+  padding-bottom: 1px;
   img {
     width: 100%;
     height: 100%;
+    object-fit: cover;
   }
 `;
 
@@ -77,6 +79,9 @@ const ListHeading = styled.div`
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  @media (max-width: 767px) {
+    width: calc(100% - 30px)
+  }
 `;
 
 const DotsDiv = styled.div`
@@ -84,10 +89,13 @@ const DotsDiv = styled.div`
   display: flex;
   align-items: flex-start;
   cursor: pointer;
+  @media (max-width: 767px) {
+    position: relative;
+  }
   svg {
     font-size: 14px;
     color: #fff;
-  }
+  }  
 `;
 
 const FollowedSection = styled.div`
@@ -218,6 +226,9 @@ const SubscribedBtn = styled.button`
   :focus {
     outline: 0;
   }
+  @media (max-width:767px) {
+    margin: 0 10px 0 0;
+  }
 `;
 
 const MyListBtn = styled.button`
@@ -236,6 +247,9 @@ const MyListBtn = styled.button`
   :hover,
   :focus {
     outline: 0;
+  }
+  @media (max-width:767px) {
+    margin: 0 10px 0 0;
   }
 `;
 
@@ -263,15 +277,11 @@ const DropdownContent = styled.div`
     display: flex;
     text-align: center;
     right: -96px;
-    transform: rotate(90deg);
-    @media (max-width: 767px) {
-      left: 0;
-    }
+    transform: rotate(90deg);    
   }
   @media (max-width: 767px) {
-    top: 31px;
-    right: 0;
-    left: -5px;
+    top: -29px;
+    right: 38px;
   }
   ul {
     list-style: none;

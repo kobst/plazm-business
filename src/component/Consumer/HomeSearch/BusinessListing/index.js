@@ -220,7 +220,7 @@ const BusinessListing = ({ setSelectedListId, setListClickedFromSearch }) => {
   };
   return (
     <>
-      <SearchBar offset={offset} />
+      <SearchBar offset={offset} setOffset={setOffset}/>
       <SearchDropdownOption>
         <SortingSelect>
           <Select>
@@ -249,7 +249,7 @@ const BusinessListing = ({ setSelectedListId, setListClickedFromSearch }) => {
       ) : (
         <div
           id="scrollableDiv"
-          style={{ height: "calc(100vh - 110px)", overflow: "auto" }}
+          style={{ height: "calc(100vh - 116px)", overflow: "auto" }}
         >
           <InfiniteScroll
             dataLength={businessData ? businessData.length : 0}

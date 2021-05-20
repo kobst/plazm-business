@@ -267,6 +267,7 @@ const DisplayBusinessDetails = ({ data, id }) => {
       <div
         className={id % 2 === 0 ? "background-active" : "background-inactive"}
       >
+        {data.eventSchedule === null ? 
         <UserMsgWrap>
           <UserMessageContent>
             <ProfileNameHeader>
@@ -334,10 +335,10 @@ const DisplayBusinessDetails = ({ data, id }) => {
             </ProfileNameHeader>
           </UserMessageContent>
         </UserMsgWrap>
-
+          : null }
         {/* to display event for the business */}
         {data.eventSchedule !== null ? (
-          <UserMessageEvents eventData={data} businessInfo={data.business[0]} />
+          <UserMessageEvents eventData={data} businessInfo={data.business[0]} type={"MyFeedEvent"} />
         ) : (
           //   to display post for the business
           <UserMessage postData={data} businessData={data.business[0]} listView={true}/>

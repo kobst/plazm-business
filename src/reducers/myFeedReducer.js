@@ -169,19 +169,25 @@ export const slice = createSlice({
     filterByClosest: false,
     selectedListDetails: null,
     loadingSelectedList: false,
-    enterClicked:false,
-    selectedPostIdForComments:null,
-    selectedEventIdForComments: null
+    enterClicked: false,
+    selectedPostIdForComments: null,
+    selectedEventIdForComments: null,
+    commentAdded: false,
   },
   reducers: {
     clearMyFeedData: (state) => {
       state.myFeed = [];
     },
-    setPostId: (state,action) => {
-      state.selectedPostIdForComments = action.payload;
+    setCommentAdded: (state) => {
+      state.commentAdded = false;
     },
-    setEventId: (state,action) => {
+    setPostId: (state, action) => {
+      state.selectedPostIdForComments = action.payload;
+      state.selectedEventIdForComments = null;
+    },
+    setEventId: (state, action) => {
       state.selectedEventIdForComments = action.payload;
+      state.selectedPostIdForComments = null;
     },
     setSearchData: (state, action) => {
       state.searchData = action.payload;
@@ -515,6 +521,7 @@ export const slice = createSlice({
           state.myFeed = findBusinessPost1.sort((a, b) => {
             return new Date(b.createdAt) - new Date(a.createdAt);
           });
+          state.commentAdded = true;
         }
       }
     },
@@ -601,6 +608,7 @@ export const slice = createSlice({
           const data = action.payload.data.map((obj) => ({
             ...obj,
             comments: [],
+            likes: obj.likes!==null?obj.likes:[]
           }));
           state.myFeed = state.myFeed.concat(data);
           state.totalData = action.payload.totalPlaces;
@@ -647,6 +655,7 @@ export const {
   clearSearchedData,
   setEnterClicked,
   setPostId,
-  setEventId
+  setEventId,
+  setCommentAdded,
 } = slice.actions;
 export default slice.reducer;

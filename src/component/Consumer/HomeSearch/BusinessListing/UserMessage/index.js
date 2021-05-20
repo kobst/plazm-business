@@ -15,6 +15,9 @@ import {
   addCommentToPost,
   addReplyToComment,
   addPostViaSocket,
+  setCommentAdded,
+  setPostId,
+  setEventId,
 } from "../../../../../reducers/myFeedReducer";
 
 const UserMessageContent = styled.div`
@@ -203,6 +206,7 @@ const UserMessage = ({
   const selectedPostId = useSelector(
     (state) => state.myFeed.selectedPostIdForComments
   );
+  const commentAdded = useSelector((state) => state.myFeed.commentAdded);
 
   const listNavigate = () => {
     if (type === "search") {
@@ -212,6 +216,7 @@ const UserMessage = ({
   };
   ws.onmessage = (evt) => {
     const message = JSON.parse(evt.data);
+    dispatch(setCommentAdded());
     /** to add reply via socket */
     if (message.comment && message.commentId && message.type === "Post") {
       dispatch(addReplyToComment(message));
@@ -219,6 +224,7 @@ const UserMessage = ({
       /** to add comment via socket */
       setDescription("");
       dispatch(addCommentToPost(message));
+      dispatch(setPostId(message.commentInfo.itemId));
     } else if (message.like && message.commentId) {
       /** to add comment like via socket */
       dispatch(addLikeToCommentViaSocket(message));
@@ -237,6 +243,7 @@ const UserMessage = ({
       }
     } else if (message.commentInfo && message.commentInfo.type === "Events") {
       /** to add event comment via socket */
+      dispatch(setEventId(message.commentInfo.itemId));
       dispatch(addCommentToPost(message));
     } else if (
       message.comment &&
@@ -274,16 +281,24 @@ const UserMessage = ({
   /** to scroll to bottom of comments */
   useEffect(() => {
     if (
-      (displayCommentInput || displayComments) &&
-      !loadingComments &&
-      postData._id === selectedPostId
+      ((displayCommentInput || displayComments) &&
+        !loadingComments &&
+        postData._id === selectedPostId) ||
+      (commentAdded && postData._id === selectedPostId)
     ) {
       commentsRef.current.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
     }
-  }, [displayComments, displayCommentInput, loadingComments, postData._id, selectedPostId ]);
+  }, [
+    displayComments,
+    displayCommentInput,
+    loadingComments,
+    postData._id,
+    selectedPostId,
+    commentAdded,
+  ]);
 
   /** to highlight the user mentions mentioned in post description */
   const findDesc = (value, mentions, mentionsList) => {
@@ -474,7 +489,7 @@ const UserMessage = ({
                     />
                   );
                 })}
-                
+
                 {/* {flag === false ? <ScrollToBottom /> : null} */}
               </>
             ) : (displayComments || displayCommentInput) && loadingComments ? (
@@ -487,7 +502,6 @@ const UserMessage = ({
         </Scrollbars>
         {displayComments || displayCommentInput ? (
           <>
-          
             <ReplyInput
               type="comment"
               postId={postData._id}
