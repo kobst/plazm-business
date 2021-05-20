@@ -90,6 +90,9 @@ const ProfileName = styled.div`
   margin: 7px 0 0px 0;
   font-weight: 700;
   color: #ff2e9a;
+  .businessNameTitle {
+    width: calc(100% - 95px)
+  }
   svg {
     color: #ff0000;
     margin: 0;
@@ -293,7 +296,7 @@ const DisplayFavoriteBusiness = ({
               </ProfileThumb>
               <ProfileNameWrap>
                 <ProfileName>
-                  <div
+                  <div className="businessNameTitle"
                     onClick={() =>
                       (window.location.href = `/b/${businessInfo._id}`)
                     }
