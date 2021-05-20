@@ -229,17 +229,17 @@
   }
 
   @media (max-width:767px){ 
-    #scrollableDiv {
+    /* #scrollableDiv {
       height: auto !important;
-    }
+    } */
     aside.emoji-picker-react {
       right: -30px !important;
     }
   }
 
   @media (max-width: 991px) and (orientation: landscape) {
-    #scrollableDiv {
+    /* #scrollableDiv {
       height: auto !important;
-    }
+    } */
   }
   

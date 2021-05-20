@@ -89,6 +89,7 @@ const ProfileName = styled.div`
   color: #ff2e9a;
   display: flex;
   flex-direction: row;
+  cursor: pointer;
   span {
     font-weight: 700;
     color: #fff;
@@ -167,9 +168,15 @@ const DisplayCommentForEvent = ({ postData, businessData }) => {
               />
             </ProfileThumb>
             <ProfileNameWrap>
-              <ProfileName>{businessData.company_name}</ProfileName>
-              <SubHeading>{postData.title}</SubHeading>
-              <ChatInput>{postData.description}</ChatInput>
+              <ProfileName
+                onClick={() =>
+                  window.open(`/b/${businessData._id}`, "_self")
+                }
+              >
+                {businessData.company_name}
+              </ProfileName>
+              <SubHeading>{postData.itemId.title}</SubHeading>
+              <ChatInput>{postData.itemId.description}</ChatInput>
               <DateBar
                 startDay={
                   days[
@@ -186,7 +193,6 @@ const DisplayCommentForEvent = ({ postData, businessData }) => {
                 startTime={new Date(postData.itemId.eventSchedule.start_time)}
                 endTime={new Date(postData.itemId.eventSchedule.end_time)}
               />
-              <ChatInput>{postData.body}</ChatInput>
               <LikesBar
                 type="disabled"
                 totalLikes={postData.itemId.likes.length}

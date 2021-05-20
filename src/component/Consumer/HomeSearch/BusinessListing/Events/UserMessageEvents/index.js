@@ -77,6 +77,7 @@ const ProfileName = styled.div`
   margin: 7px 0 5px 0;
   font-weight: 700;
   color: #ff2e9a;
+  cursor: pointer;
   span {
     font-weight: 700;
     color: #fff;
@@ -131,21 +132,28 @@ const UserMessageEvents = ({ eventData, businessInfo, type }) => {
   const selectedEventId = useSelector(
     (state) => state.myFeed.selectedEventIdForComments
   );
-  const commentAdded = useSelector(state => state.myFeed.commentAdded)
+  const commentAdded = useSelector((state) => state.myFeed.commentAdded);
 
   /** to scroll to bottom of comments */
   useEffect(() => {
     if (
       (displayEventComments &&
-      !loadingComments &&
-      eventData._id === selectedEventId) || (commentAdded && eventData._id === selectedEventId)
+        !loadingComments &&
+        eventData._id === selectedEventId) ||
+      (commentAdded && eventData._id === selectedEventId)
     ) {
       commentsRef.current.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
     }
-  }, [displayEventComments, loadingComments, eventData._id, selectedEventId,commentAdded]);
+  }, [
+    displayEventComments,
+    loadingComments,
+    eventData._id,
+    selectedEventId,
+    commentAdded,
+  ]);
   /** to add comment on event function */
   const addComment = async (obj) => {
     ws.send(
@@ -176,10 +184,10 @@ const UserMessageEvents = ({ eventData, businessInfo, type }) => {
       <UserMessageContent>
         <ProfileNameHeader
           className={
-            type !== "MyFeedEvent" && (
-            (eventData.body !== null && eventData.type === "Post") ||
-            eventData.data !== null ||
-            !search )
+            type !== "MyFeedEvent" &&
+            ((eventData.body !== null && eventData.type === "Post") ||
+              eventData.data !== null ||
+              !search)
               ? "line-active"
               : "line-inactive"
           }
@@ -193,13 +201,21 @@ const UserMessageEvents = ({ eventData, businessInfo, type }) => {
                   ? businessInfo.default_image_url
                     ? businessInfo.default_image_url
                     : ProfileImg
+                  : businessInfo.default_image_url
+                  ? businessInfo.default_image_url
                   : ProfileImg
               }
               alt=""
             />
           </ProfileThumb>
           <ProfileNameWrap>
-            <ProfileName>{businessInfo.company_name}</ProfileName>
+            <ProfileName
+              onClick={() =>
+                window.open(`/b/${eventData.business[0]._id}`, "_self")
+              }
+            >
+              {businessInfo.company_name}
+            </ProfileName>
             <SubHeading>{eventData.title}</SubHeading>
             <ChatInput>{eventData.description}</ChatInput>
             <DateBar

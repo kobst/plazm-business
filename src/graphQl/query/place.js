@@ -224,7 +224,10 @@ const homeSearch = (obj) => {
                   favorites                  
                   
                   itemId {
+                    _id
                     data
+                    title
+                    description
                     eventSchedule {
                       start_time
                       end_time

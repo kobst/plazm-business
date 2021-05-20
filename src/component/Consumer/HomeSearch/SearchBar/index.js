@@ -18,7 +18,7 @@ const SearchWrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin:23px 20px 16px 20px;
+  margin: 23px 20px 16px 20px;
   box-sizing: border-box;
   input {
     border: 0;
@@ -56,9 +56,10 @@ const ErrorDiv = styled.div`
   font-size: 12px;
   margin: 0;
   margin-bottom: 10px;
+  margin-left: 20px;
 `;
 
-const SearchBar = ({ offset }) => {
+const SearchBar = ({ offset, setOffset }) => {
   const [search, setSearch] = useState("");
   const loader = useSelector((state) => state.myFeed.loading);
   const [searchError, setSearchError] = useState("");
@@ -78,16 +79,17 @@ const SearchBar = ({ offset }) => {
     if (event.key === "Enter") {
       event.preventDefault();
       if (search !== "" && search.length >= 4 && !search.trim() === false) {
+        setOffset(0)
         dispatch(clearSearchedData());
         dispatch(setSideFiltersHomeSearch());
         const obj = {
           search: search,
-          value: offset,
+          value: 0,
           filters: { closest: filterClosest, updated: updatedAtFilter },
           latitude: process.env.REACT_APP_LATITUDE,
           longitude: process.env.REACT_APP_LONGITUDE,
         };
-        dispatch(setEnterClicked(true))
+        dispatch(setEnterClicked(true));
         dispatch(HomeSearch(obj));
         setSearchError("");
       } else if (search.length >= 0 && search.length < 4) {
