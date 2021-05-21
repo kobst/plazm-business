@@ -5,7 +5,7 @@ import ProfileImg from "../../../../../../images/profile-img.png";
 import { useDispatch, useSelector } from "react-redux";
 import { MentionsInput, Mention } from "react-mentions";
 import Picker from "emoji-picker-react";
-import {  findSelectedUsers } from "../../../../../../reducers/consumerReducer";
+import { findSelectedUsers } from "../../../../../../reducers/consumerReducer";
 import { unwrapResult } from "@reduxjs/toolkit";
 
 const ChatContent = styled.div`
@@ -123,6 +123,14 @@ const InputWrap = styled.div`
     padding: 0;
     width: 110px;
   }
+  .taggedUserInput {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-right: 7px;
+    font-size: 13px;
+    width: 200px;
+  }
 `;
 const EmojiWrap = styled.div`
   width: 15px;
@@ -161,12 +169,12 @@ const ReplyInput = ({
   setReplyDescription,
   commentId,
   addReply,
-  commentsRef
+  commentsRef,
 }) => {
   const user = useSelector((state) => state.user.user);
   const [mentionArrayUser, setMentionArrayUser] = useState([]);
   const [displayEmoji, setDisplayEmoji] = useState(false);
-  const [selectedUsers, setSelectedUsers] = useState([])
+  const [selectedUsers, setSelectedUsers] = useState([]);
   const dispatch = useDispatch();
 
   /** on select of emoji */
@@ -203,7 +211,7 @@ const ReplyInput = ({
         body: desc,
         created_on: new Date(),
         taggedUsers: mentionArrayUser,
-        userDetails: user
+        userDetails: user,
       };
       addComment(obj);
     } else if (type === "reply" && desc !== "" && !desc.trim() === false) {
@@ -258,20 +266,22 @@ const ReplyInput = ({
         display: `@${myUser.name}`,
         image: myUser.photo ? myUser.photo : "",
       }));
-      setSelectedUsers(res)
+      setSelectedUsers(res);
       return callback(x);
     }
   };
   return (
     <>
-      <ChatContent className={type==="reply" ? "InnerReply" : ""} >
+      <ChatContent className={type === "reply" ? "InnerReply" : ""}>
         <ProfileNameHeader>
           <ProfileThumb>
             <img src={user.photo ? user.photo : ProfileImg} alt="" />
           </ProfileThumb>
           <ProfileNameWrap>
             <InputWrap>
-              {type === "reply" ? <input value={"@" + name} readOnly /> : null}
+              {type === "reply" ? (
+                <div className="taggedUserInput">{"@" + name}</div>
+              ) : null}
               <MentionsInput
                 markup="@(__id__)[__display__]"
                 value={type === "reply" ? replyDescription : description}
