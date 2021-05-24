@@ -91,7 +91,7 @@ const ProfileName = styled.div`
   font-weight: 700;
   color: #ff2e9a;
   .businessNameTitle {
-    width: calc(100% - 95px)
+    width: calc(100% - 95px);
   }
   svg {
     color: #ff0000;
@@ -296,7 +296,8 @@ const DisplayFavoriteBusiness = ({
               </ProfileThumb>
               <ProfileNameWrap>
                 <ProfileName>
-                  <div className="businessNameTitle"
+                  <div
+                    className="businessNameTitle"
                     onClick={() =>
                       (window.location.href = `/b/${businessInfo._id}`)
                     }
@@ -368,7 +369,7 @@ const DisplayFavoriteBusiness = ({
         <DisplayComment postData={data} businessData={businessInfo} />
       ) : data.body !== null && data.type === "Events" ? (
         <DisplayCommentForEvent postData={data} businessData={businessInfo} />
-      ) : search ? (
+      ) : search && businessInfo.company_name!==null ? (
         <UserMsgWrap
           className={
             data.eventSchedule !== null ||
@@ -383,11 +384,8 @@ const DisplayFavoriteBusiness = ({
             <ProfileNameHeader>
               <ProfileThumb>
                 <img
-                  src={
-                    businessInfo.default_image_url
-                      ? businessInfo.default_image_url
-                      : ProfileImg
-                  }
+                  src={businessInfo.default_image_url ? image : ProfileImg}
+                  onError={() => setImage(ProfileImg)}
                   alt=""
                 />
               </ProfileThumb>

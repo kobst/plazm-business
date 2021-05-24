@@ -307,6 +307,7 @@ const ReplyInput = ({
               ) : (
                 <input
                   value={replyDescription}
+                  placeholder="Add Reply"
                   onChange={(e) => setReplyDescription(e.target.value)}
                   onKeyPress={(event) => commentAddKeyPress(event)}
                 />
