@@ -274,7 +274,7 @@ const DisplayFavoriteBusiness = ({
     <>
       {(data.body !== null && data.type === "Post") ||
       data.data !== null ||
-      !search ? (
+      (!search && businessInfo.company_name!==null) ? (
         <UserMsgWrap
           className={
             data.eventSchedule !== null ||
