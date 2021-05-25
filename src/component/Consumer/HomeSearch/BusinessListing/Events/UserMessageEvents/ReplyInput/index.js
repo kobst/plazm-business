@@ -119,7 +119,8 @@ const InputWrap = styled.div`
     background: transparent;
     outline: 0;
     width: auto;
-    color: #fff;
+    font-size: 12px;
+    color: #6C6C6C;
     padding: 0;
     width: 110px;
   }
@@ -129,7 +130,7 @@ const InputWrap = styled.div`
     text-overflow: ellipsis;
     margin-right: 7px;
     font-size: 13px;
-    width: 200px;
+    width: 110px;
   }
 `;
 const EmojiWrap = styled.div`
