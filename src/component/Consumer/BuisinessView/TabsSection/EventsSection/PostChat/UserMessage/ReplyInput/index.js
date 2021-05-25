@@ -136,6 +136,8 @@ const InputWrap = styled.div`
     color: #fff;
     padding: 0;
     width: 110px;
+    font-size: 12px;
+    color: #6C6C6C;
     @media (max-width: 767px) {
       width: 60px;
     }
@@ -149,7 +151,7 @@ const InputWrap = styled.div`
     text-overflow: ellipsis;
     margin-right: 7px;
     font-size: 13px;
-    width: 200px;
+    width: 110px;
   }
 `;
 const EmojiWrap = styled.div`
@@ -327,6 +329,7 @@ const ReplyInput = ({
                 </MentionsInput>
               ) : (
                 <input
+                  placeholder="Add Reply"
                   value={replyDescription}
                   onChange={(e) => setReplyDescription(e.target.value)}
                   onKeyPress={(event) => commentAddKeyPress(event)}
