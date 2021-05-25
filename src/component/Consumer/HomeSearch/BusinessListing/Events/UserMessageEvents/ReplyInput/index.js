@@ -15,7 +15,7 @@ const ChatContent = styled.div`
   padding: 12px 0 12px 12px;
   flex-direction: column;
   &.InnerReply {
-    margin: 30px 0 0;
+    margin: 0px 0 0;
   }
   /* overflow: hidden; */
   @media (max-width: 767px) {

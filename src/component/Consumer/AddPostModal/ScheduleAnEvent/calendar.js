@@ -86,6 +86,38 @@ const CalendarWrap = styled.div`
   .MuiFormControl-root {
     display: none
   }
+  @media only screen and (max-width: 767px) {
+  .MuiPickersCalendarHeader-daysHeader span:nth-child(1) {
+      width: 29px;
+      left: 3px;
+  }
+  .MuiPickersCalendarHeader-daysHeader span:nth-child(2) {
+      left: 0px;
+      width: 23px;
+  }
+  .MuiPickersCalendarHeader-daysHeader span:nth-child(3) {
+      left: 0px;
+      width: 25px;
+  }
+  .MuiPickersCalendarHeader-daysHeader span:nth-child(4) {
+      left: -1px;
+      width: 23px;
+  }
+  .MuiPickersCalendarHeader-daysHeader span:nth-child(5) {
+      left: -3px;
+      width: 20px;
+      margin-right: 14px;
+  }  
+  .MuiPickersCalendarHeader-daysHeader span:nth-child(6) {
+      width: 21px;
+      left: 4px;
+      margin-right: 13px;
+  }  
+  .MuiPickersCalendarHeader-dayLabel:last-child {
+      left: 13px;
+      width: 22px;
+  }  
+  }
 `;
 
 /*

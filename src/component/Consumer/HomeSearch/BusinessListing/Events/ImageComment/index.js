@@ -10,6 +10,7 @@ const BottomBarLikes = styled.div`
   max-height: 224px;
   overflow: hidden;
   margin: 0;  
+  width: 100%;
 `
 
 const ImageComment = ({image}) => {
