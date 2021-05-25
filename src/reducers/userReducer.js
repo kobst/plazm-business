@@ -1,6 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { graphQlEndPoint } from "../Api/graphQl";
-import { getUser } from "../graphQl";
+import {
+  addFavoriteBusiness,
+  getUser,
+  getUserFavorites,
+  GetUserProfileData,
+  removeFavoriteBusiness,
+} from "../graphQl";
 
 /*
  * @desc:  get User Profile of the signIn consumer
@@ -15,16 +21,107 @@ export const fetchUserDetails = createAsyncThunk(
   }
 );
 
+/*
+ * @desc:  fetchUserProfileData
+ * @params: userId
+ */
+export const fetchUserProfileData = createAsyncThunk(
+  "data/fetchUserProfileData",
+  async (id) => {
+    const graphQl = GetUserProfileData(id);
+    const response = graphQlEndPoint(graphQl);
+    return response;
+  }
+);
+
+/*
+ * @desc:  to add a business to favorites
+ * @params: businessId, userId
+ */
+export const AddBusinessFavorite = createAsyncThunk(
+  "data/AddBusinessFavorite",
+  async (obj) => {
+    const graphQl = addFavoriteBusiness(obj);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.addFavoriteBusiness.user;
+  }
+);
+
+/*
+ * @desc:  to remove a business to favorites
+ * @params: businessId, userId
+ */
+export const RemoveBusinessFavorite = createAsyncThunk(
+  "data/RemoveBusinessFavorite",
+  async (obj) => {
+    const graphQl = removeFavoriteBusiness(obj);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.removeFavoriteBusiness.user;
+  }
+);
+
+/*
+ * @desc:  to fetch user favorites business
+ * @params:  userId
+ */
+export const fetchUserFavoritesBusiness = createAsyncThunk(
+  "data/fetchUserFavoritesBusiness",
+  async ({ id, value }) => {
+    const graphQl = getUserFavorites({ id: id, value: value });
+    const response = await graphQlEndPoint(graphQl);
+    return {
+      data: response.data.getUserFavoritesBusiness.data,
+      totalFavorites: response.data.getUserFavoritesBusiness.totalFavorites,
+    };
+  }
+);
+
+/*
+ * @desc:  to remove a business to favorites
+ * @params: businessId, userId
+ */
+export const RemoveUserBusinessFavorite = createAsyncThunk(
+  "data/RemoveUserBusinessFavorite",
+  async (obj) => {
+    const graphQl = removeFavoriteBusiness(obj);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.removeFavoriteBusiness.user;
+  }
+);
 export const slice = createSlice({
   name: "user",
   initialState: {
     loading: false,
+    loadingProfile: false,
+    selectedUser: {},
+    loadingAddFavorite: false,
+    loadingRemoveFavorite: false,
+    loadingFavoriteBusiness: false,
+    favoriteBusiness: [],
+    totalFavorites: 0,
     user: {},
-    ws: {}
+    ws: {},
   },
   reducers: {
-    setWs: (state,action) => {
-      state.ws = action.payload
+    setWs: (state, action) => {
+      state.ws = action.payload;
+    },
+    removeSubscribedList: (state, action) => {
+      state.user = {
+        ...state.user,
+        listFollowed: state.user.listFollowed.filter(
+          (i) => i !== action.payload
+        ),
+      };
+    },
+    addSubscribedList: (state, action) => {
+      state.user = {
+        ...state.user,
+        listFollowed: [...state.user.listFollowed, action.payload],
+      };
+    },
+    clearUserFavorites: (state, action) => {
+      state.favoriteBusiness = [];
     },
   },
   extraReducers: {
@@ -47,8 +144,114 @@ export const slice = createSlice({
         state.error = action.payload;
       }
     },
+    [AddBusinessFavorite.pending]: (state) => {
+      if (!state.loadingRemoveFavorite) {
+        state.loadingRemoveFavorite = true;
+      }
+    },
+    [AddBusinessFavorite.fulfilled]: (state, action) => {
+      if (state.loadingRemoveFavorite) {
+        state.loadingRemoveFavorite = false;
+        if (action.payload) {
+          let favorites = [...state.user.favorites, action.payload.businessId];
+          state.user = { ...state.user, favorites: favorites };
+        }
+      }
+    },
+    [AddBusinessFavorite.rejected]: (state, action) => {
+      if (state.loadingRemoveFavorite) {
+        state.loadingRemoveFavorite = false;
+        state.error = action.payload;
+      }
+    },
+    [RemoveBusinessFavorite.pending]: (state) => {
+      if (!state.loadingAddFavorite) {
+        state.loadingAddFavorite = true;
+      }
+    },
+    [RemoveBusinessFavorite.fulfilled]: (state, action) => {
+      if (state.loadingAddFavorite) {
+        state.loadingAddFavorite = false;
+        if (action.payload) {
+          let favorites = state.user.favorites.filter(
+            (i) => i !== action.payload.businessId
+          );
+          state.user = { ...state.user, favorites: favorites };
+        }
+      }
+    },
+    [RemoveBusinessFavorite.rejected]: (state, action) => {
+      if (state.loadingAddFavorite) {
+        state.loadingAddFavorite = false;
+        state.error = action.payload;
+      }
+    },
+    [fetchUserFavoritesBusiness.pending]: (state) => {
+      if (!state.loadingFavoriteBusiness) {
+        state.loadingFavoriteBusiness = true;
+      }
+    },
+    [fetchUserFavoritesBusiness.fulfilled]: (state, action) => {
+      if (state.loadingFavoriteBusiness) {
+        state.loadingFavoriteBusiness = false;
+        if (action.payload) {
+          state.favoriteBusiness = state.favoriteBusiness.concat(
+            action.payload.data
+          );
+          state.totalFavorites = action.payload.totalFavorites;
+          // state.favoriteBusiness = action.payload.sort(function (a, b) {
+          //   return a.favorites.company_name
+          //     .toLowerCase()
+          //     .localeCompare(b.favorites.company_name.toLowerCase());
+          // });
+        }
+      }
+    },
+    [fetchUserFavoritesBusiness.rejected]: (state, action) => {
+      if (state.loadingFavoriteBusiness) {
+        state.loadingFavoriteBusiness = false;
+        state.error = action.payload;
+      }
+    },
+    [RemoveUserBusinessFavorite.fulfilled]: (state, action) => {
+      if (action.payload) {
+        state.favoriteBusiness = state.favoriteBusiness.filter(
+          (i) => i.favorites._id !== action.payload.businessId
+        );
+      }
+    },
+    [fetchUserProfileData.pending]: (state) => {
+      if (!state.loadingProfile) {
+        state.loadingProfile = true;
+      }
+    },
+    [fetchUserProfileData.fulfilled]: (state, action) => {
+      if (state.loadingProfile) {
+        state.loadingProfile = false;
+        if (action.payload) {
+          state.selectedUser = {
+            ...action.payload.data.getUserProfileData.user,
+            totalPosts:
+              action.payload.data.getUserProfileData.findTotalPostByUser,
+            totalLists:
+              action.payload.data.getUserProfileData.listCreatedByUser,
+          };
+        }
+      }
+    },
+    [fetchUserProfileData.rejected]: (state, action) => {
+      if (state.loadingProfile) {
+        state.loadingProfile = false;
+        state.error = action.payload;
+      }
+    },
   },
 });
 
-export const { setWs } = slice.actions
+export const {
+  setWs,
+  clearUserFavorites,
+  removeSubscribedList,
+  addSubscribedList,
+} = slice.actions;
 export default slice.reducer;

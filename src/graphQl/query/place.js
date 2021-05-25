@@ -18,6 +18,7 @@ const getPlace = (obj) => {
                     Start
                     End
                 }
+                favorites
                 additional_media
                 filter_tags
                 company_name
@@ -38,6 +39,10 @@ const getPlace = (obj) => {
                 postDetails {
                     _id
                     data
+                    listId {
+                      _id
+                      name
+                    }
                     taggedUsers {
                         list_ids
                         _id
@@ -103,7 +108,7 @@ const getPlace = (obj) => {
       value: obj.value,
       filters: obj.filters,
       ownerId: obj.ownerId || null,
-      sideFilters: obj.sideFilters || {likes: false, recent: true}
+      sideFilters: obj.sideFilters || { likes: false, recent: true },
     },
   };
   return graphQl;
@@ -129,4 +134,139 @@ const searchAllPlaces = () => {
   };
   return graphQl;
 };
-export { getPlace, searchAllPlaces };
+
+/*
+@desc: homeSearch query
+*/
+const homeSearch = (obj) => {
+  const graphQl = {
+    query: `
+          query HomeSearch($search: String, $value:Int, $filters: homeSearchFilterInput!, $longitude: Float!, $latitude: Float!){
+            homeSearch(input: {search:$search, value:$value, filters:$filters, longitude:$longitude, latitude:$latitude}) {
+              message
+              success
+              totalPlaces
+              data {
+                  _id
+                  eventSchedule {
+                    start_time
+                    end_time
+                  }
+                  location {
+                    coordinates
+                  }
+                  business {
+                    _id
+                    company_name
+                    favorites
+                    filter_tags
+                    hours_format {
+                      Start
+                      End
+                      StartDay
+                      EndDay
+                    }
+                    default_image_url                  
+                  }
+                  user {
+                    name
+                    photo
+                  }
+                  ownerId {
+                    _id
+                    name
+                    photo
+                  }
+                  title
+                  description
+                  type
+                  media {
+                    image
+                  }
+                  likes 
+                  list {
+                    _id
+                    name
+                  }
+                  createdAt
+                  updatedAt
+                  data
+                  listId {
+                    _id
+                    name
+                  }
+                  taggedUsers {
+                    _id
+                    name
+                  }
+                  taggedLists {
+                    name
+                  }
+                  ownerId {
+                    name
+                  }
+                  totalComments {
+                    totalCount
+                  }
+                  hours_format {
+                    Start
+                    End
+                    StartDay
+                    EndDay
+                  }
+                  totalPosts {
+                    totalPosts
+                  }
+                  filter_tags
+                  company_name
+                  default_image_url
+                  status
+                  favorites                  
+                  
+                  itemId {
+                    _id
+                    data
+                    title
+                    description
+                    eventSchedule {
+                      start_time
+                      end_time
+                    }
+                    media {
+                      image
+                      thumbnail
+                    }
+                    taggedUsers {
+                      name
+                      photo
+                    }
+                    taggedLists {
+                      _id
+                      name
+                    }
+                    ownerId {
+                      photo
+                      name
+                    }
+                    likes
+                    createdAt
+                  }
+                  userId {
+                    name
+                    photo
+                  }
+                  body
+                }             
+            }
+          }`,
+    variables: {
+      search: obj.search,
+      value: obj.value,
+      filters: obj.filters,
+      longitude: parseFloat(obj.longitude),
+      latitude: parseFloat(obj.latitude)
+    },
+  };
+  return graphQl;
+};
+export { getPlace, searchAllPlaces, homeSearch };

@@ -5,17 +5,20 @@ import ProfileImg from "../../../../../../../../images/profile-img.png";
 import { useDispatch, useSelector } from "react-redux";
 import { MentionsInput, Mention } from "react-mentions";
 import Picker from "emoji-picker-react";
-import {  findSelectedUsers } from "../../../../../../../../reducers/consumerReducer";
+import { findSelectedUsers } from "../../../../../../../../reducers/consumerReducer";
 import { unwrapResult } from "@reduxjs/toolkit";
 
 const ChatContent = styled.div`
   width: 100%;
   position: relative;
   display: flex;
-  padding: 12px 0 12px 12px;
+  padding: 30px 0 12px 12px;
   flex-direction: column;
   &.InnerReply {
     margin: 30px 0 0;
+    @media (max-width: 767px) {
+      padding-left: 0;
+    }
   }
   /* overflow: hidden; */
   @media (max-width: 767px) {
@@ -35,7 +38,13 @@ const ChatContent = styled.div`
     :hover, :focus {
       border: 0;
       outline: 0;
-  }
+    }
+    @media (max-width: 767px) {
+      font-size: 11px;
+    }
+    @media (max-width: 359px) {
+      font-size: 10px;
+    }
   .replyInput__suggestions {
     background-color: #FE02B9 !important;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -88,6 +97,12 @@ const ProfileNameWrap = styled.div`
   @media (max-width: 1024px) {
     padding: 0 45px 0px 0px;
   }
+  @media (max-width: 767px) {
+    padding: 0 20px 0px 0px;
+  }
+  @media (max-width: 359px) {
+    padding: 0 10px 0px 0px;
+  }
 `;
 
 const InputWrap = styled.div`
@@ -120,6 +135,22 @@ const InputWrap = styled.div`
     width: auto;
     color: #fff;
     padding: 0;
+    width: 110px;
+    font-size: 12px;
+    color: #6C6C6C;
+    @media (max-width: 767px) {
+      width: 60px;
+    }
+    @media (max-width: 359px) {
+      width: 50px;
+    }
+  }
+  .taggedUserInput {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-right: 7px;
+    font-size: 13px;
     width: 110px;
   }
 `;
@@ -163,13 +194,12 @@ const ReplyInput = ({
 }) => {
   const user = useSelector((state) => state.user.user);
   const [mentionArrayUser, setMentionArrayUser] = useState([]);
-  const [selectedUsers, setSelectedUsers] = useState([])
+  const [selectedUsers, setSelectedUsers] = useState([]);
   const [displayEmoji, setDisplayEmoji] = useState(false);
   const dispatch = useDispatch();
 
   /** handle change method for mentions input */
   const handleChange = async (event, newValue, newPlainTextValue, mentions) => {
-
     if (mentions.length !== 0) {
       /** to find if the mention is of users or lists */
       const findUser = selectedUsers.find((i) => i._id === mentions[0].id);
@@ -251,6 +281,7 @@ const ReplyInput = ({
       </MentionsImage>
     );
   };
+
   /** to search users for mentions */
   const fetchUsers = async (query, callback) => {
     if (!query) return;
@@ -262,20 +293,22 @@ const ReplyInput = ({
         display: `${myUser.name}`,
         image: myUser.photo ? myUser.photo : "",
       }));
-      setSelectedUsers(res)
+      setSelectedUsers(res);
       return callback(x);
     }
   };
   return (
     <>
-      <ChatContent className={type==="reply" ? "InnerReply" : ""}>
+      <ChatContent className={type === "reply" ? "InnerReply" : ""}>
         <ProfileNameHeader>
           <ProfileThumb>
             <img src={user.photo ? user.photo : ProfileImg} alt="" />
           </ProfileThumb>
           <ProfileNameWrap>
             <InputWrap>
-              {type === "reply" ? <input value={"@" + name} readOnly /> : null}
+              {type === "reply" ? (
+                <div className="taggedUserInput">{"@" + name}</div>
+              ) : null}
               {type === "comment" ? (
                 <MentionsInput
                   markup="@(__id__)[__display__]"
@@ -296,6 +329,7 @@ const ReplyInput = ({
                 </MentionsInput>
               ) : (
                 <input
+                  placeholder="Add Reply"
                   value={replyDescription}
                   onChange={(e) => setReplyDescription(e.target.value)}
                   onKeyPress={(event) => commentAddKeyPress(event)}

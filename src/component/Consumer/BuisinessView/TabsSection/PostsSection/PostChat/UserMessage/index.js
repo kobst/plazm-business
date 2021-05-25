@@ -16,6 +16,8 @@ import {
 import Comment from "./comments";
 import ScrollToBottom from "./ScrollToBottom";
 import { setWs } from "../../../../../../../reducers/userReducer";
+import { RiArrowDropRightFill } from "react-icons/ri";
+import ReactTooltip from "react-tooltip";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -29,6 +31,9 @@ const UserMessageContent = styled.div`
   }
   &.UserReplyContent {
     padding: 10px 0 0 40px;
+    @media (max-width: 767px) {
+      padding: 10px 0 0 0px;
+    }
   }
   .InnerScroll {
     overflow-x: hidden;
@@ -50,6 +55,9 @@ const ProfileNameHeader = styled.div`
   display: flex;
   padding: 0;
   margin: 15px 0;
+  @media (max-width: 767px) {
+    width: 100%;
+  }
 `;
 
 const ProfileThumb = styled.div`
@@ -76,19 +84,27 @@ const ProfileNameWrap = styled.div`
   @media (max-width: 1024px) {
     padding: 0 45px 15px 0px;
   }
+  @media (max-width: 767px) {
+    padding: 0 0px 15px 0px;
+  }
 `;
 
 const ProfileName = styled.div`
   font-style: normal;
   font-size: 13px;
   line-height: normal;
-  margin: 7px 0 5px 0;
+  margin: 7px 0 0px 0;
   font-weight: 700;
   color: #ff2e9a;
+  display: flex;
+  flex-direction: row;
   span {
     font-weight: 700;
     color: #fff;
     margin: 0 3px;
+  }
+  @media (max-width: 1024px) {
+    flex-direction: column;
   }
 `;
 
@@ -116,8 +132,55 @@ const LoaderWrap = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 30px 0 10px;
+  margin: 30px 0 20px;
 `;
+
+const RightArrowSec = styled.div`
+  display: flex;
+  align-items: flex-start;
+  @media (max-width: 767px) {
+    margin: 5px 0 0 0;
+  }
+`;
+
+const ArrowRight = styled.div`
+  margin: -3px 10px 0;
+  @media (max-width: 1024px) {
+    margin: -3px 0 0 -7px;
+  }
+  svg {
+    color: #fff;
+    font-size: 24px;
+  }
+`;
+
+const DescriptionBox = styled.div`
+  font-weight: bold;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #ffffff;
+  background: #ff2e9a;
+  border-radius: 12px;
+  padding: 2px 10px;
+  max-width: 190px;
+  cursor: pointer;
+  a {
+    text-decoration: none;
+  }
+  span {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin: 0;
+    font-weight: bold;
+    font-size: 10px;
+    max-width: 20ch
+  }
+`;
+
 const UserMessage = ({ postData }) => {
   const dispatch = useDispatch();
   const [displayComments, setDisplayComments] = useState(false);
@@ -149,7 +212,15 @@ const UserMessage = ({ postData }) => {
       /** to add post via socket */
       if (message.businessId === business._id) {
         if (message.userId === user._id) {
-          if (filters.PostsByMe === true) {
+          if (
+            filters.PostsByMe === true &&
+            message.post.postDetails.listId === null
+          ) {
+            dispatch(addPostViaSocket(message));
+          } else if (
+            filters.MySubscriptions === true &&
+            message.post.postDetails.listId !== null
+          ) {
             dispatch(addPostViaSocket(message));
           }
         } else {
@@ -213,7 +284,7 @@ const UserMessage = ({ postData }) => {
           re,
           `<span className='mentionData' onClick={window.open("/u/${
             v._id
-          }")}> ${"@" + v.name}  </span>`
+          }",'_self')}> ${"@" + v.name}  </span>`
         );
         return divContent;
       });
@@ -223,7 +294,7 @@ const UserMessage = ({ postData }) => {
           re,
           `<span className='mentionData' onClick={window.open("/u/${
             v._id
-          }")}> ${"@" + v.name}  </span>`
+          }",'_self')}> ${"@" + v.name}  </span>`
         );
         return divContent;
       });
@@ -243,7 +314,7 @@ const UserMessage = ({ postData }) => {
           re,
           `<span className='mentionData' onClick={window.open("/u/${
             v._id
-          }")}> ${"@" + v.name}  </span>`
+          }",'_self')}> ${"@" + v.name}  </span>`
         );
         return divContent;
       });
@@ -303,6 +374,28 @@ const UserMessage = ({ postData }) => {
                 {postData.postDetails.ownerId === null
                   ? business.company_name
                   : postData.postDetails.ownerId.name}{" "}
+                {postData.postDetails.listId !== null ? (
+                  <RightArrowSec>
+                    <ArrowRight>
+                      <RiArrowDropRightFill />
+                    </ArrowRight>
+                    <DescriptionBox>
+                      <div
+                        data-for="custom-class"
+                        data-tip={postData.postDetails.listId.name}
+                      >
+                        <span>{postData.postDetails.listId.name}</span>
+                      </div>
+                      <ReactTooltip
+                        id="custom-class"
+                        className="extraClass"
+                        effect="solid"
+                        backgroundColor="#ff2e9a"
+                        textColor="white"
+                      />
+                    </DescriptionBox>
+                  </RightArrowSec>
+                ) : null}
               </ProfileName>
               <ChatInput>
                 <p>

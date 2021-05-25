@@ -20,6 +20,9 @@ const UserMessageContent = styled.div`
   }
   &.UserReplyContent {
     padding: 10px 0 0 40px;
+    @media (max-width: 767px) {
+      padding: 10px 0 0 20px;
+    }
   }
   .InnerScroll {
     overflow-x: hidden;
@@ -57,6 +60,9 @@ const ProfileNameWrap = styled.div`
   width: 100%;
   @media (max-width: 1024px) {
     padding: 0 45px 15px 0px;
+  }
+  @media (max-width: 767px) {
+    padding: 0 0px 15px 0px;
   }
 `;
 
@@ -96,7 +102,7 @@ const LoaderWrap = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 30px 0 10px;
+  margin: 30px 0 20px;
 `;
 const Comments = ({ i, eventData, displayComments, setFlag, flag }) => {
   const [displayReply, setDisplayReply] = useState(false);
@@ -130,7 +136,9 @@ const Comments = ({ i, eventData, displayComments, setFlag, flag }) => {
         let re = new RegExp("@" + v.name, "g");
         divContent = divContent.replace(
           re,
-          `<span className='mentionData'> ${"@" + v.name}  </span>`
+          `<span className='mentionData' onClick={window.open("/u/${
+            v._id
+          }",'_self')}> ${"@" + v.name}  </span>`
         );
         return divContent;
       });
@@ -152,7 +160,9 @@ const Comments = ({ i, eventData, displayComments, setFlag, flag }) => {
           <img src={i.userId.photo ? i.userId.photo : ProfileImg} alt="" />
         </ProfileThumb>
         <ProfileNameWrap>
-          <ProfileName>
+          <ProfileName
+            onClick={() => window.open(`/u/${i.userId._id}`, "_self")}
+          >
             {i.userId.name}{" "}
           </ProfileName>
           <ChatInput>
@@ -198,7 +208,14 @@ const Comments = ({ i, eventData, displayComments, setFlag, flag }) => {
                         <ProfileNameWrap>
                           <ProfileName>
                             <span>by</span>
-                            {j.userId.name}{" "}
+                            <span
+                              onClick={() =>
+                                window.open(`/u/${j.userId._id}`, "_self")
+                              }
+                              style={{ color: "#ff2e9a" }}
+                            >
+                              {j.userId.name}
+                            </span>{" "}
                           </ProfileName>
                           <ChatInput>
                             {" "}

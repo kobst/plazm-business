@@ -1,13 +1,18 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ProfileImg from "../../../../images/profile-img.png";
 import FacebookImg from "../../../../images/Facebook-new.svg";
 import TwitterImg from "../../../../images/Twitter-new.svg";
 import LinkedInImg from "../../../../images/Linkedin-new.svg";
 import InstagramImg from "../../../../images/Instagram-new.svg";
-import { useSelector } from "react-redux";
-import {  MdKeyboardArrowUp } from "react-icons/md";
-
+import FavoritesIcon from "../../../../images/favorites.png";
+import FavoritesIconFilled from "../../../../images/favorites-filled.png";
+import { useSelector, useDispatch } from "react-redux";
+import { MdKeyboardArrowUp } from "react-icons/md";
+import {
+  AddBusinessFavorite,
+  RemoveBusinessFavorite,
+} from "../../../../reducers/userReducer";
 
 const ArrowDown = styled.div`
   background: #ff2e9a;
@@ -38,6 +43,7 @@ const LeftSide = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  width: 100%;
 `;
 
 const BusinessIcon = styled.div`
@@ -61,35 +67,62 @@ const BusinessIcon = styled.div`
 `;
 const BusinessNameWrap = styled.div`
   display: flex;
-  flex-direction: row;
-  max-width: 85%;
-  align-items: center;
-  @media (max-width: 767px) {
-    max-width: 75%;
+  flex-direction: column;
+  margin: 0 0 0 10px;
+  max-width: calc(100% - 60px);
+  width: 100%;
+  .FavoritesIcon {
+    max-width: 18px;
+    margin: 0 0 0 10px;
+  }
+  svg {
+    font-size: 18px;
   }
 `;
+
+const LeftHeader = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+`;
+
 const BusinessName = styled.h1`
   font-size: 20px;
   line-height: normal;
   font-weight: 800;
   text-transform: uppercase;
   color: #ffffff;
-  margin: 0 30px 0 10px;
+  margin: 0;
   padding: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  span {
+    max-width: 90%;
+    margin: 0 10px 0 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .favoriteBusiness {
+    color: #ee3840;
+    cursor: pointer;
+  }
+  .favoriteBusinessBorder {
+    color: #ee3840;
+    cursor: pointer;
+  }
   @media (max-width: 767px) {
     font-size: 14px;
-    margin: 0 10px;
   }
 `;
 const SocialIconsWrap = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-direction: row;
   align-items: center;
+  margin-left: -2px;
 `;
 const SocialIcon = styled.div`
   width: 17px;
@@ -98,64 +131,129 @@ const SocialIcon = styled.div`
   cursor: pointer;
 `;
 
-const BuisinessProfileSection = ({ setDisplayTab, setDisplayBusinessProfile }) => {
+const BuisinessProfileSection = ({ setDisplayBusinessProfile }) => {
   const businessProfile = useSelector((state) => state.business.business)[0];
+  const [favoriteBusiness, setFavoriteBusiness] = useState(false);
+  const user = useSelector((state) => state.user.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const find = user.favorites.find((i) => i === businessProfile._id);
+    if (find) {
+      setFavoriteBusiness(true);
+    } else setFavoriteBusiness(false);
+  }, [user, businessProfile._id]);
+
+  /** to add a business to user favorites */
+  const addFavorite = async () => {
+    const obj = {
+      businessId: businessProfile._id,
+      userId: user._id,
+    };
+    await dispatch(AddBusinessFavorite(obj));
+  };
+
+  /** to remove a business to user favorites */
+  const removeFavorite = async () => {
+    const obj = {
+      businessId: businessProfile._id,
+      userId: user._id,
+    };
+    await dispatch(RemoveBusinessFavorite(obj));
+  };
+
   return (
     <>
       <BuisinessViewContent>
         <LeftSide>
-        <BusinessIcon>
-          <img
-            src={
-              businessProfile.default_image_url
-                ? businessProfile.default_image_url
-                : ProfileImg
-            }
-            alt=""
-          />
-        </BusinessIcon>
-        <BusinessNameWrap>
-          <BusinessName>{businessProfile.company_name}</BusinessName>
-          <SocialIconsWrap>
-            {businessProfile.handles.instagram ? (
-              <a href={businessProfile.handles.instagram} target="_blank" rel="noopener noreferrer">
-                <SocialIcon>
-                  <img src={InstagramImg} alt="" />
-                </SocialIcon>
-              </a>
-            ) : null}
-            {businessProfile.handles.twitter ? (
-              <a href={businessProfile.handles.twitter} target="_blank" rel="noopener noreferrer">
-                <SocialIcon>
-                  <img src={TwitterImg} alt="" />
-                </SocialIcon>
-              </a>
-            ) : null}
-            {businessProfile.handles.linkedin ? (
-              <a href={businessProfile.handles.linkedin} target="_blank" rel="noopener noreferrer">
-                <SocialIcon>
-                  <img src={LinkedInImg} alt="" />
-                </SocialIcon>
-              </a>
-            ) : null}
-            {businessProfile.handles.facebook ? (
-              <a href={businessProfile.handles.facebook} target="_blank" rel="noopener noreferrer">
-                <SocialIcon>
-                  <img src={FacebookImg} alt="" />
-                </SocialIcon>
-              </a>
-            ) : null}
-          </SocialIconsWrap>
-        </BusinessNameWrap>
+          <LeftHeader>
+            <BusinessIcon>
+              <img
+                src={
+                  businessProfile.default_image_url
+                    ? businessProfile.default_image_url
+                    : ProfileImg
+                }
+                alt=""
+              />
+            </BusinessIcon>
+            <BusinessNameWrap>
+              <BusinessName>
+                <span>{businessProfile.company_name}</span>
+                {/* business favorite toggle */}
+                {favoriteBusiness ? (
+                  <img
+                    src={FavoritesIconFilled}
+                    onClick={() => removeFavorite()}
+                    className="favoriteBusiness"
+                    alt=""
+                  />
+                ) : (
+                  <img
+                    src={FavoritesIcon}
+                    onClick={() => addFavorite()}
+                    className="favoriteBusinessBorder"
+                    alt=""
+                  />
+                )}
+              </BusinessName>
+              <SocialIconsWrap>
+                {businessProfile.handles.instagram ? (
+                  <a
+                    href={businessProfile.handles.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <SocialIcon>
+                      <img src={InstagramImg} alt="" />
+                    </SocialIcon>
+                  </a>
+                ) : null}
+                {businessProfile.handles.twitter ? (
+                  <a
+                    href={businessProfile.handles.twitter}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <SocialIcon>
+                      <img src={TwitterImg} alt="" />
+                    </SocialIcon>
+                  </a>
+                ) : null}
+                {businessProfile.handles.linkedin ? (
+                  <a
+                    href={businessProfile.handles.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <SocialIcon>
+                      <img src={LinkedInImg} alt="" />
+                    </SocialIcon>
+                  </a>
+                ) : null}
+                {businessProfile.handles.facebook ? (
+                  <a
+                    href={businessProfile.handles.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <SocialIcon>
+                      <img src={FacebookImg} alt="" />
+                    </SocialIcon>
+                  </a>
+                ) : null}
+              </SocialIconsWrap>
+            </BusinessNameWrap>
+          </LeftHeader>
         </LeftSide>
 
-        {businessProfile.userSub===null?
-        <ArrowDown>
-        <MdKeyboardArrowUp
-          onClick={() => setDisplayBusinessProfile(false)}
-        />
-        </ArrowDown>:null}
-        
+        {businessProfile.userSub === null ? (
+          <ArrowDown>
+            <MdKeyboardArrowUp
+              onClick={() => setDisplayBusinessProfile(false)}
+            />
+          </ArrowDown>
+        ) : null}
       </BuisinessViewContent>
     </>
   );

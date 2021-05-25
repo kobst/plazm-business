@@ -5,7 +5,7 @@ import ProfileImg from "../../../../../../../../images/profile-img.png";
 import { useDispatch, useSelector } from "react-redux";
 import { MentionsInput, Mention } from "react-mentions";
 import Picker from "emoji-picker-react";
-import {  findSelectedUsers } from "../../../../../../../../reducers/consumerReducer";
+import { findSelectedUsers } from "../../../../../../../../reducers/consumerReducer";
 import { unwrapResult } from "@reduxjs/toolkit";
 
 const ChatContent = styled.div`
@@ -16,6 +16,9 @@ const ChatContent = styled.div`
   flex-direction: column;
   &.InnerReply{
     margin: 30px 0 0;
+    @media (max-width: 767px) {
+      padding-left: 0;
+    }
   }
   /* overflow: hidden; */
   /* overflow-x: hidden; */
@@ -37,6 +40,12 @@ const ChatContent = styled.div`
       border: 0;
       outline: 0;
   }
+  @media (max-width: 767px) {
+      font-size: 11px;
+    }
+    @media (max-width: 359px) {
+      font-size: 10px;
+    }
   .replyInput__suggestions {
     background-color: #FE02B9 !important;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -89,6 +98,12 @@ const ProfileNameWrap = styled.div`
   @media (max-width: 1024px) {
     padding: 0 45px 0px 0px;
   }
+  @media (max-width: 767px) {
+    padding: 0 20px 0px 0px;
+  }
+  @media (max-width: 359px) {
+    padding: 0 10px 0px 0px;
+  }
 `;
 
 const InputWrap = styled.div`
@@ -122,6 +137,21 @@ const InputWrap = styled.div`
     color: #fff;
     padding: 0;
     width: 110px;
+    @media (max-width: 767px) {
+      width: 60px;
+      font-size: 11px;
+    }
+    @media (max-width: 359px) {
+      width: 50px;
+    }
+  }
+  .taggedUserInput {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-right: 7px;
+    font-size: 13px;
+    width: 200px;
   }
 `;
 const EmojiWrap = styled.div`
@@ -177,6 +207,8 @@ const ReplyInput = ({
 
   /** handle change input for mentions input */
   const handleChange = async (event, newValue, newPlainTextValue, mentions) => {
+    /** to fetch list of all users */
+
     if (mentions.length !== 0) {
       /** to find if the mention is of users or lists */
       const findUser = selectedUsers.find((i) => i._id === mentions[0].id);
@@ -200,6 +232,7 @@ const ReplyInput = ({
         body: desc,
         created_on: new Date(),
         taggedUsers: mentionArrayUser,
+        userDetails: user,
       };
       addComment(obj);
     } else if (type === "reply" && desc !== "" && !desc.trim() === false) {
@@ -254,20 +287,22 @@ const ReplyInput = ({
         display: `${myUser.name}`,
         image: myUser.photo ? myUser.photo : "",
       }));
-      setSelectedUsers(res)
+      setSelectedUsers(res);
       return callback(x);
     }
   };
   return (
     <>
-      <ChatContent className={type==="reply" ? "InnerReply" : ""} >
+      <ChatContent className={type === "reply" ? "InnerReply" : ""}>
         <ProfileNameHeader>
           <ProfileThumb>
             <img src={user.photo ? user.photo : ProfileImg} alt="" />
           </ProfileThumb>
           <ProfileNameWrap>
-            <InputWrap>
-              {type === "reply" ? <input value={"@" + name} readOnly /> : null}
+            <InputWrap className={type === "reply" ? "InnerReplySection" : ""}>
+              {type === "reply" ? (
+                <div className="taggedUserInput">{"@" + name}</div>
+              ) : null}
               <MentionsInput
                 markup="@(__id__)[__display__]"
                 value={type === "reply" ? replyDescription : description}

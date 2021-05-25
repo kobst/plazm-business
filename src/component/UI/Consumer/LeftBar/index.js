@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import "./styles.css";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
@@ -7,7 +7,7 @@ import LocalNav from "../../../../images/LocalNav.png";
 import ProfileImg from "../../../../images/profile-img.png";
 import Mention from "../../../../images/Mentions.png";
 import Notifications from "../../../../images/notifications.png";
-import Favorites from "../../../../images/favorites.png";
+import Favorites from "../../../../images/Left-favourite.png";
 import GridIcon from "../../../../images/Grid_icon.png";
 import ProfileSettingImg from "../../../../images/Profile_Setting.png";
 import { BiSearchAlt2 } from "react-icons/bi";
@@ -15,7 +15,17 @@ import ChangePassword from "../../../Consumer/ChangePassword";
 import ProfileSettings from "../../../Consumer/ProfileSettings";
 import BuisinessView from "../../../Consumer/BuisinessView";
 import BusinessList from "../../../Consumer/BusinessList";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import ListOptionView from "../../../Consumer/ListOptionView";
+import ListDescriptionView from "../../../Consumer/ListDescriptionView";
+import MyFeed from "../../../Consumer/MyFeed";
+import {
+  clearMyFeedData,
+  fetchMyFeedData,
+  HomeSearch,
+} from "../../../../reducers/myFeedReducer";
+import Profile from "../../../Consumer/Profile";
+import HomeSearchComponent from "../../../Consumer/HomeSearch";
 
 const LeftBarContent = styled.div`
   width: 100px;
@@ -61,16 +71,64 @@ const LeftBar = ({
   isBusinessOpen,
   businessExists,
   businessId,
+  isUserOpen,
+  userId,
 }) => {
   const [displayChangePassword, setDisplayChangePassword] = useState(false);
-  const [tabIndex, setTabIndex] = useState(isBusinessOpen ? 6 : 0);
+  const [tabIndex, setTabIndex] = useState(
+    isBusinessOpen ? 6 : isUserOpen ? 3 : 0
+  );
   const user = useSelector((state) => state.user.user);
+  const [selectedListId, setSelectedListId] = useState(null);
+  const [listClickedFromSearch, setListClickedFromSearch] = useState(false);
+  const loading = useSelector((state) => state.myFeed.loading);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (selectedListId !== null) setTabIndex(7);
+  }, [selectedListId]);
+
+  /** to clear selected data on tab click */
+  const listView = () => {
+    if (tabIndex !== 7 && !loading) {
+      dispatch(clearMyFeedData());
+      setSelectedListId(null);
+    }
+  };
+
+  /** to clear selected data on tab click */
+  const myFeedFunction = () => {
+    if (tabIndex !== 4 && !loading) {
+      const obj = {
+        id: user._id,
+        value: 0,
+      };
+      dispatch(clearMyFeedData());
+      dispatch(fetchMyFeedData(obj));
+    }
+  };
+
+  /** to clear selected data on tab click */
+  const homeSearchFunction = () => {
+    if (tabIndex !== 3 && !loading) {
+      const obj = {
+        search: "",
+        value: 0,
+        filters: { closest: false, updated: false },
+        latitude: process.env.REACT_APP_LATITUDE,
+        longitude: process.env.REACT_APP_LONGITUDE,
+      };
+      dispatch(clearMyFeedData());
+      dispatch(HomeSearch(obj));
+    }
+  };
   return (
     <>
       <LeftBarContent className="MainTabs">
         <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
           <TabList>
             <Tab
+              disabled={loading || tabIndex === 0}
               className={
                 0 === tabIndex - 1
                   ? "react-tabs__tab LIBefore"
@@ -84,6 +142,7 @@ const LeftBar = ({
               <img src={PlazmLogo} alt="" />
             </Tab>
             <Tab
+              disabled={loading || tabIndex === 1}
               className={
                 1 === tabIndex - 1
                   ? "react-tabs__tab LIBefore"
@@ -95,6 +154,7 @@ const LeftBar = ({
               <img src={LocalNav} alt="" />
             </Tab>
             <Tab
+              disabled={loading || tabIndex === 2}
               className={
                 2 === tabIndex - 1
                   ? "react-tabs__tab LIBefore"
@@ -106,10 +166,11 @@ const LeftBar = ({
               }
             >
               <UserImage>
-                <img src={user.photo?user.photo:ProfileImg} alt="" />
+                <img src={user.photo ? user.photo : ProfileImg} alt="" />
               </UserImage>
             </Tab>
             <Tab
+              disabled={loading || tabIndex === 3}
               className={
                 3 === tabIndex - 1
                   ? "react-tabs__tab LIBefore"
@@ -119,12 +180,14 @@ const LeftBar = ({
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
+              onClick={() => homeSearchFunction()}
             >
               <SearchIcon>
                 <BiSearchAlt2 />
               </SearchIcon>
             </Tab>
             <Tab
+              disabled={loading || tabIndex === 4}
               className={
                 4 === tabIndex - 1
                   ? "react-tabs__tab LIBefore"
@@ -134,10 +197,12 @@ const LeftBar = ({
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
+              onClick={() => myFeedFunction()}
             >
               <img src={Mention} alt="" />
             </Tab>
             <Tab
+              disabled={loading || tabIndex === 5}
               className={
                 5 === tabIndex - 1
                   ? "react-tabs__tab LIBefore"
@@ -151,6 +216,7 @@ const LeftBar = ({
               <img src={Notifications} alt="" />
             </Tab>
             <Tab
+              disabled={loading || tabIndex === 6}
               className={
                 6 === tabIndex - 1
                   ? "react-tabs__tab LIBefore"
@@ -164,6 +230,7 @@ const LeftBar = ({
               <img src={Favorites} alt="" />
             </Tab>
             <Tab
+              disabled={loading || tabIndex === 7}
               className={
                 7 === tabIndex - 1
                   ? "react-tabs__tab LIBefore"
@@ -173,10 +240,12 @@ const LeftBar = ({
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
+              onClick={() => listView()}
             >
               <img src={GridIcon} alt="" />
             </Tab>
             <Tab
+              disabled={loading || tabIndex === 8}
               className={
                 8 === tabIndex - 1
                   ? "react-tabs__tab LIBefore"
@@ -189,13 +258,15 @@ const LeftBar = ({
             >
               <img src={ProfileSettingImg} alt="" />
             </Tab>
+
             <Tab
+              disabled={loading}
               className={
-                9 === tabIndex - 1
+                10 === tabIndex - 1
                   ? "react-tabs__tab LIBefore"
-                  : tabIndex + 1 === 9
+                  : tabIndex + 1 === 10
                   ? "react-tabs__tab LIAFter"
-                  : tabIndex === 9
+                  : tabIndex === 10
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
@@ -203,12 +274,13 @@ const LeftBar = ({
               &nbsp;
             </Tab>
             <Tab
+              disabled={loading}
               className={
-                10 === tabIndex - 1
+                11 === tabIndex - 1
                   ? "react-tabs__tab LIBefore"
-                  : tabIndex + 1 === 10
+                  : tabIndex + 1 === 11
                   ? "react-tabs__tab LIAFter"
-                  : tabIndex === 10
+                  : tabIndex === 11
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
@@ -230,12 +302,20 @@ const LeftBar = ({
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              <h2>Any content 4</h2>
+              {isUserOpen ? (
+                <Profile setDisplayTab={() => setTabIndex(0)} userId={userId} />
+              ) : (
+                <HomeSearchComponent
+                  setDisplayTab={() => setTabIndex(0)}
+                  setSelectedListId={setSelectedListId}
+                  setListClickedFromSearch={setListClickedFromSearch}
+                />
+              )}
             </div>
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              <h2>Any content 5</h2>
+              <MyFeed setDisplayTab={() => setTabIndex(0)} />
             </div>
           </TabPanel>
           <TabPanel>
@@ -259,7 +339,21 @@ const LeftBar = ({
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              <h2>Any content 8</h2>
+              {!selectedListId ? (
+                <ListOptionView
+                  setDisplayTab={() => setTabIndex(0)}
+                  setSelectedListId={setSelectedListId}
+                  selectedListId={selectedListId}
+                />
+              ) : (
+                <ListDescriptionView
+                  setDisplayTab={() => setTabIndex(0)}
+                  setSelectedListId={setSelectedListId}
+                  selectedListId={selectedListId}
+                  listClickedFromSearch={listClickedFromSearch}
+                  setListClickedFromSearch={setListClickedFromSearch}
+                />
+              )}
             </div>
           </TabPanel>
           <TabPanel>
