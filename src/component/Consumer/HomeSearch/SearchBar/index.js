@@ -24,7 +24,7 @@ const SearchWrap = styled.div`
     border: 0;
     outline: 0;
     padding: 0 10px;
-    width: calc(100% - 70px);
+    width: calc(100% - 115px);
     height: 45px;
     font-size: 18px;
     font-weight: normal;
