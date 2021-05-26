@@ -88,7 +88,7 @@ const CalendarWrap = styled.div`
   }
   @media only screen and (max-width: 767px) {
   .MuiPickersCalendarHeader-daysHeader span:nth-child(1) {
-      width: 29px;
+      width: 27px;
       left: 3px;
   }
   .MuiPickersCalendarHeader-daysHeader span:nth-child(2) {

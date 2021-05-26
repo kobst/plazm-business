@@ -56,6 +56,7 @@ const ProfileNameHeader = styled.div`
   display: flex;
   padding: 0;
   margin: 15px 0 0;
+  width: 100%;
 `;
 
 const ProfileThumb = styled.div`
@@ -110,7 +111,7 @@ const ProfileName = styled.div`
     margin: 0 3px;
   }
   @media (max-width: 1024px) {
-    flex-direction: column;
+    // flex-direction: column;
   }
   div {
     cursor: pointer;
