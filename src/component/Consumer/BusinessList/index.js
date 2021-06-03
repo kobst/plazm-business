@@ -261,11 +261,13 @@ const BusinessList = ({ setDisplayTab }) => {
   /** to set side filter by closest */
   const closestFilter = () => {
     dispatch(setSideFiltersByClosest());
+    setUploadMenu(false)
   };
 
   /** to set side filter by recently updated */
   const recentlyUpdatedFilter = () => {
     dispatch(setSideFiltersByUpdatedAt());
+    setUploadMenu(false)
   };
 
   return (
