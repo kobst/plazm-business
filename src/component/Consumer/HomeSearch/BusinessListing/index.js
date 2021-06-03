@@ -149,7 +149,7 @@ const SearchDropdownOption = styled.div`
   padding: 0 20px;
 `;
 
-const BusinessListing = ({ setSelectedListId, setListClickedFromSearch }) => {
+const BusinessListing = ({ setSelectedListId, setListClickedFromSearch, setSearchIndex }) => {
   const businessData = useSelector((state) => state.myFeed.myFeed);
   const loading = useSelector((state) => state.myFeed.loading);
   const [offset, setOffset] = useState(0);
@@ -167,7 +167,7 @@ const BusinessListing = ({ setSelectedListId, setListClickedFromSearch }) => {
 
   /** useEffect called when any side filters are selected */
   useEffect(() => {
-    if (filterSelected === true) {
+    // if (filterSelected === true) {
       const obj = {
         search: search,
         value: 0,
@@ -177,14 +177,13 @@ const BusinessListing = ({ setSelectedListId, setListClickedFromSearch }) => {
       };
       dispatch(HomeSearch(obj));
       setFilterSelected(false);
-    }
+    // }
   }, [
     dispatch,
     filterSelected,
     filterClosest,
     updatedAtFilter,
     offset,
-    search,
   ]);
 
   /** to fetch more places matching the search */
@@ -282,6 +281,7 @@ const BusinessListing = ({ setSelectedListId, setListClickedFromSearch }) => {
                     key={key}
                     setSelectedListId={setSelectedListId}
                     setListClickedFromSearch={setListClickedFromSearch}
+                    setSearchIndex={setSearchIndex}
                   />
                 ))
               ) : !loading ? (

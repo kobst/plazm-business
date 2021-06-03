@@ -10,6 +10,7 @@ import { Scrollbars } from "react-custom-scrollbars";
 import ValueLoader from "../../../../../../utils/loader";
 import ReplyInput from "./ReplyInput";
 import Comments from "./comments";
+import { useHistory } from "react-router";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -117,7 +118,12 @@ const LoaderWrap = styled.div`
   margin: 30px 0 10px;
 `;
 
-const UserMessageEvents = ({ eventData, businessInfo, type }) => {
+const UserMessageEvents = ({
+  eventData,
+  businessInfo,
+  type,
+  setSearchIndex,
+}) => {
   const [displayEventComments, setDisplayEventComments] = useState(false);
   const [flag, setFlag] = useState(false);
   const [displayEventCommentInput, setDisplayEventCommentInput] =
@@ -133,6 +139,7 @@ const UserMessageEvents = ({ eventData, businessInfo, type }) => {
     (state) => state.myFeed.selectedEventIdForComments
   );
   const commentAdded = useSelector((state) => state.myFeed.commentAdded);
+  const history = useHistory();
 
   /** to scroll to bottom of comments */
   useEffect(() => {
@@ -170,6 +177,11 @@ const UserMessageEvents = ({ eventData, businessInfo, type }) => {
     setDescription("");
   };
 
+  /** to display business details page */
+  const displayBusinessDetail = () => {
+    setSearchIndex(businessInfo._id);
+    history.push(`/b/${businessInfo._id}`);
+  };
   const days = [
     "Sunday",
     "Monday",
@@ -209,11 +221,7 @@ const UserMessageEvents = ({ eventData, businessInfo, type }) => {
             />
           </ProfileThumb>
           <ProfileNameWrap>
-            <ProfileName
-              onClick={() =>
-                window.open(`/b/${eventData.business[0]._id}`, "_self")
-              }
-            >
+            <ProfileName onClick={() => displayBusinessDetail()}>
               {businessInfo.company_name}
             </ProfileName>
             <SubHeading>{eventData.title}</SubHeading>

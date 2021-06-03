@@ -156,7 +156,7 @@ const ScheduleAnEvent = ({
             };
             setEventDetails(obj);
             setDisplayCalendar(false);
-            setDisplayList(true);
+            setDisplayList(false);
           }}
         >
           {(formik) => (

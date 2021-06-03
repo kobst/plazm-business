@@ -198,9 +198,17 @@ const BuisinessHeaderNotClaimed = ({
   setDisplayTab,
   setDisplayBusinessProfile,
   isProfile,
+  searchIndex,
+  setTabIndex,
+  setSearchIndex,
+  setMyFeedIndex,
+  myFeedIndex,
 }) => {
   const [favoriteBusiness, setFavoriteBusiness] = useState(false);
   const businessProfile = useSelector((state) => state.business.business);
+  const [image, setImage] = useState(
+    businessProfile[0] ? businessProfile[0].default_image_url : ProfileImg
+  );
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -243,10 +251,20 @@ const BuisinessHeaderNotClaimed = ({
   /** to return to all business listing */
   const backBusiness = () => {
     dispatch(clearBusinessData());
-    history.push("/");
+    if (searchIndex) {
+      history.push("/");
+      setTabIndex(3);
+      setSearchIndex(null);
+    } else if (myFeedIndex) {
+      history.push("/");
+      setTabIndex(4);
+      setMyFeedIndex(null);
+    } else {
+      history.push("/");
+    }
   };
   return (
-    <>
+    businessProfile.length>0? <>
       <BuisinessHeaderContent
         className={
           isProfile && businessProfile && businessProfile[0].userSub === null
@@ -265,11 +283,8 @@ const BuisinessHeaderNotClaimed = ({
             {!isProfile ? (
               <BusinessIcon>
                 <img
-                  src={
-                    businessProfile && businessProfile[0].default_image_url
-                      ? businessProfile[0].default_image_url
-                      : ProfileImg
-                  }
+                  src={businessProfile && image ? image : ProfileImg}
+                  onError={() => setImage(ProfileImg)}
                   alt=""
                 />
               </BusinessIcon>
@@ -349,7 +364,7 @@ const BuisinessHeaderNotClaimed = ({
           ) : null}
         </BottomBar>
       </BuisinessHeaderContent>
-    </>
+    </>:null
   );
 };
 

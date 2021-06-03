@@ -11,6 +11,7 @@ import {
   RemoveBusinessFavorite,
 } from "../../../../reducers/userReducer";
 import BusinessHashTags from "../../BusinessList/businessHashtags";
+import { useHistory } from "react-router";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -33,7 +34,7 @@ const UserMsgWrap = styled.div`
   display: flex;
   flex-direction: column;
   padding: 15px 12px 0 12px;
-  position: relative;  
+  position: relative;
   &:after {
     content: "";
     position: absolute;
@@ -184,19 +185,20 @@ const DescriptionViewItem = styled.div`
   .background-active {
     background-color: #221e45;
   }
-  .background-inactive{
-    background-color:#282352;
+  .background-inactive {
+    background-color: #282352;
   }
 `;
 
 /** display business details */
-const DisplayPostInAList = ({ data, id }) => {
+const DisplayPostInAList = ({ data, id, setListIndex }) => {
   const [favoriteBusiness, setFavoriteBusiness] = useState(false);
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   const getUtcHour = new Date().getUTCHours();
   const getUtcMinutes = new Date().getUTCMinutes();
   const currentUtcDay = new Date().getUTCDay();
+  const history = useHistory();
   const days = [
     "Sunday",
     "Monday",
@@ -258,88 +260,92 @@ const DisplayPostInAList = ({ data, id }) => {
     await dispatch(RemoveBusinessFavorite(obj));
   };
 
+  /** to display business details page */
+  const displayBusinessDetail = () => {
+    setListIndex(data.business[0]._id);
+    history.push(`/b/${data.business[0]._id}`);
+  };
+
   return data ? (
     <DescriptionViewItem>
-    <div className={id%2 === 0 ? 'background-active' : 'background-inactive'}>
-      <UserMsgWrap>
-        <UserMessageContent>
-          <ProfileNameHeader>
-            <ProfileThumb>
-              <img
-                src={
-                  data.business[0].default_image_url
-                    ? data.business[0].default_image_url
-                    : ProfileImg
-                }
-                alt=""
-              />
-            </ProfileThumb>
-            <ProfileNameWrap>
-              <ProfileName>
-                <div
-                  onClick={() =>
-                    (window.location.href = `/b/${data.business[0]._id}`)
+      <div
+        className={id % 2 === 0 ? "background-active" : "background-inactive"}
+      >
+        <UserMsgWrap>
+          <UserMessageContent>
+            <ProfileNameHeader>
+              <ProfileThumb>
+                <img
+                  src={
+                    data.business[0].default_image_url
+                      ? data.business[0].default_image_url
+                      : ProfileImg
                   }
-                >
-                  {data.business[0].company_name}
-                </div>
-                <RightWrap>
-                  {data.business[0].hours_format.length === 0 ? (
-                    <div className="CloseDiv">Close</div>
-                  ) : checkBusinessOpenClose() === true ? (
-                    <div className="OpenDiv">Open</div>
-                  ) : (
-                    <div className="CloseDiv">Close</div>
-                  )}
-
-                  {data.business[0].hours_format.length > 0 &&
-                  checkBusinessOpenClose() === true ? (
-                    favoriteBusiness ? (
-                      <img
-                        src={RedHeartIcon}
-                        onClick={() => removeFavorite()}
-                        className="favoriteBusiness"
-                        alt=""
-                      />
+                  alt=""
+                />
+              </ProfileThumb>
+              <ProfileNameWrap>
+                <ProfileName>
+                  <div onClick={() => displayBusinessDetail()}>
+                    {data.business[0].company_name}
+                  </div>
+                  <RightWrap>
+                    {data.business[0].hours_format.length === 0 ? (
+                      <div className="CloseDiv">Close</div>
+                    ) : checkBusinessOpenClose() === true ? (
+                      <div className="OpenDiv">Open</div>
                     ) : (
-                      <img
-                        src={FavoritesIcon}
-                        onClick={() => addFavorite()}
-                        className="favoriteBusinessBorder"
-                        alt=""
-                      />
-                    )
-                  ) : null}
-                </RightWrap>
-              </ProfileName>
-              <ChatInput>
-                <p>
-                  <span>
-                    {data.business[0].favorites !== null
-                      ? data.business[0].favorites.length
-                      : 0}
-                  </span>{" "}
-                  Followers{" "}
-                  <span className="postSpan">
-                    {data.totalPosts.length > 0
-                      ? data.totalPosts[0].totalPosts
-                      : 0}
-                  </span>{" "}
-                  Posts
-                </p>
-              </ChatInput>
-              <BusinessHashTags data={data.business[0].filter_tags} />
-            </ProfileNameWrap>
-          </ProfileNameHeader>
-        </UserMessageContent>
-      </UserMsgWrap>
+                      <div className="CloseDiv">Close</div>
+                    )}
 
-      <UserMessage
-        postData={data}
-        businessData={data.business[0]}
-        listView={true}
-      />
-    </div>
+                    {data.business[0].hours_format.length > 0 &&
+                    checkBusinessOpenClose() === true ? (
+                      favoriteBusiness ? (
+                        <img
+                          src={RedHeartIcon}
+                          onClick={() => removeFavorite()}
+                          className="favoriteBusiness"
+                          alt=""
+                        />
+                      ) : (
+                        <img
+                          src={FavoritesIcon}
+                          onClick={() => addFavorite()}
+                          className="favoriteBusinessBorder"
+                          alt=""
+                        />
+                      )
+                    ) : null}
+                  </RightWrap>
+                </ProfileName>
+                <ChatInput>
+                  <p>
+                    <span>
+                      {data.business[0].favorites !== null
+                        ? data.business[0].favorites.length
+                        : 0}
+                    </span>{" "}
+                    Followers{" "}
+                    <span className="postSpan">
+                      {data.totalPosts.length > 0
+                        ? data.totalPosts[0].totalPosts
+                        : 0}
+                    </span>{" "}
+                    Posts
+                  </p>
+                </ChatInput>
+                <BusinessHashTags data={data.business[0].filter_tags} />
+              </ProfileNameWrap>
+            </ProfileNameHeader>
+          </UserMessageContent>
+        </UserMsgWrap>
+
+        <UserMessage
+          postData={data}
+          businessData={data.business[0]}
+          listView={true}
+        />
+      </div>
     </DescriptionViewItem>
   ) : null;
 };

@@ -12,8 +12,8 @@ import FacebookImg from "../../../../images/Facebook-new.svg";
 import TwitterImg from "../../../../images/Twitter-new.svg";
 import LinkedInImg from "../../../../images/Linkedin-new.svg";
 import InstagramImg from "../../../../images/Instagram-new.svg";
-import FavoritesIcon from '../../../../images/favorites.png';
-import FavoritesIconFilled from '../../../../images/favorites-filled.png';
+import FavoritesIcon from "../../../../images/favorites.png";
+import FavoritesIconFilled from "../../../../images/favorites-filled.png";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -179,7 +179,7 @@ const BusinessName = styled.h1`
   font-weight: 800;
   text-transform: uppercase;
   color: #ffffff;
-  margin: 0;  
+  margin: 0;
   padding: 0;
   display: flex;
   align-items: center;
@@ -214,11 +214,23 @@ const BuisinessHeader = ({
   setDisplayTab,
   setDisplayBusinessProfile,
   isProfile,
-  displayBusinessProfile
+  displayBusinessProfile,
+  searchIndex,
+  setTabIndex,
+  setSearchIndex,
+  myFeedIndex,
+  setMyFeedIndex,
+  listIndex,
+  setListIndex,
 }) => {
   const history = useHistory();
   const [favoriteBusiness, setFavoriteBusiness] = useState(false);
   const businessProfile = useSelector((state) => state.business.business)[0];
+  const [image, setImage] = useState(
+    businessProfile.default_image_url
+      ? businessProfile.default_image_url
+      : ProfileImg
+  );
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
 
@@ -258,11 +270,27 @@ const BuisinessHeader = ({
   /** to return to all business listing */
   const backBusiness = () => {
     dispatch(clearBusinessData());
-    history.push("/");
-  }
+    if (searchIndex) {
+      history.push("/");
+      setTabIndex(3);
+      setSearchIndex(null);
+    } else if (myFeedIndex) {
+      history.push("/");
+      setTabIndex(4);
+      setMyFeedIndex(null);
+    } else if (listIndex) {
+      history.push("/");
+      setTabIndex(7);
+      setListIndex(null);
+    } else {
+      history.push("/");
+    }
+  };
   return (
     <>
-      <BuisinessHeaderContent className= {displayBusinessProfile ? 'HeaderSpacing' : ''}>
+      <BuisinessHeaderContent
+        className={displayBusinessProfile ? "HeaderSpacing" : ""}
+      >
         <ArrowBack>
           <MdKeyboardArrowLeft onClick={() => backBusiness()} />
         </ArrowBack>
@@ -275,12 +303,9 @@ const BuisinessHeader = ({
             {!isProfile ? (
               <BusinessIcon>
                 <img
-                  src={
-                    businessProfile.default_image_url
-                      ? businessProfile.default_image_url
-                      : ProfileImg
-                  }
+                  src={image ? image : ProfileImg}
                   alt=""
+                  onError={() => setImage(ProfileImg)}
                 />
               </BusinessIcon>
             ) : null}
@@ -290,13 +315,19 @@ const BuisinessHeader = ({
                   <span>{businessProfile.company_name}</span>{" "}
                   {/* business favorite toggle */}
                   {favoriteBusiness ? (
-                    <img src = {FavoritesIconFilled}
+                    <img
+                      src={FavoritesIconFilled}
                       onClick={() => removeFavorite()}
                       className="favoriteBusiness"
                       alt=""
                     />
                   ) : (
-                    <img src={FavoritesIcon} onClick={() => addFavorite()} className="favoriteBusinessBorder" alt=""/>
+                    <img
+                      src={FavoritesIcon}
+                      onClick={() => addFavorite()}
+                      className="favoriteBusinessBorder"
+                      alt=""
+                    />
                   )}
                 </BusinessName>
                 <SocialIconsWrap>

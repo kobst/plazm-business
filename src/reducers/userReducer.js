@@ -66,8 +66,14 @@ export const RemoveBusinessFavorite = createAsyncThunk(
  */
 export const fetchUserFavoritesBusiness = createAsyncThunk(
   "data/fetchUserFavoritesBusiness",
-  async ({ id, value }) => {
-    const graphQl = getUserFavorites({ id: id, value: value });
+  async ({ id, value, filters, latitude, longitude }) => {
+    const graphQl = getUserFavorites({
+      id: id,
+      value: value,
+      filters: filters,
+      latitude: latitude,
+      longitude: longitude,
+    });
     const response = await graphQlEndPoint(graphQl);
     return {
       data: response.data.getUserFavoritesBusiness.data,
