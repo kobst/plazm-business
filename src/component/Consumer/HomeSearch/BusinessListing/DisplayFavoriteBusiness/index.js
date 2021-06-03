@@ -15,6 +15,7 @@ import {
 } from "../../../../../reducers/userReducer";
 import DisplayComment from "../DisplayComments";
 import DisplayCommentForEvent from "../DisplayCommentForEvent";
+import { useHistory } from "react-router";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -195,6 +196,7 @@ const DisplayFavoriteBusiness = ({
   data,
   setSelectedListId,
   setListClickedFromSearch,
+  setSearchIndex,
 }) => {
   const businessInfo =
     data.business && data.business.length > 0 ? data.business[0] : data;
@@ -207,6 +209,7 @@ const DisplayFavoriteBusiness = ({
   const getUtcMinutes = new Date().getUTCMinutes();
   const currentUtcDay = new Date().getUTCDay();
   const [image, setImage] = useState(businessInfo.default_image_url);
+  const history = useHistory();
   const days = [
     "Sunday",
     "Monday",
@@ -271,11 +274,18 @@ const DisplayFavoriteBusiness = ({
     await dispatch(RemoveBusinessFavorite(obj));
   };
 
+  /** to display business details page */
+  const displayBusinessDetail = () => {
+    setSearchIndex(businessInfo._id);
+    history.push(`/b/${businessInfo._id}`);
+    // window.location.href = `/b/${businessInfo._id}`;
+  };
+
   return data ? (
     <>
       {(data.body !== null && data.type === "Post") ||
       data.data !== null ||
-      (!search && businessInfo.company_name!==null) ? (
+      (!search && businessInfo.company_name !== null) ? (
         <UserMsgWrap
           className={
             data.eventSchedule !== null ||
@@ -299,9 +309,7 @@ const DisplayFavoriteBusiness = ({
                 <ProfileName>
                   <div
                     className="businessNameTitle"
-                    onClick={() =>
-                      (window.location.href = `/b/${businessInfo._id}`)
-                    }
+                    onClick={() => displayBusinessDetail()}
                   >
                     {businessInfo.company_name}
                   </div>
@@ -356,7 +364,11 @@ const DisplayFavoriteBusiness = ({
       ) : null}
 
       {data.eventSchedule !== null ? (
-        <UserMessageEvents eventData={data} businessInfo={businessInfo} />
+        <UserMessageEvents
+          eventData={data}
+          businessInfo={businessInfo}
+          setSearchIndex={setSearchIndex}
+        />
       ) : data.data !== null ? (
         <UserMessage
           postData={data}
@@ -370,7 +382,7 @@ const DisplayFavoriteBusiness = ({
         <DisplayComment postData={data} businessData={businessInfo} />
       ) : data.body !== null && data.type === "Events" ? (
         <DisplayCommentForEvent postData={data} businessData={businessInfo} />
-      ) : search && businessInfo.company_name!==null ? (
+      ) : search && businessInfo.company_name !== null ? (
         <UserMsgWrap
           className={
             data.eventSchedule !== null ||
@@ -392,11 +404,7 @@ const DisplayFavoriteBusiness = ({
               </ProfileThumb>
               <ProfileNameWrap>
                 <ProfileName>
-                  <div
-                    onClick={() =>
-                      (window.location.href = `/b/${businessInfo._id}`)
-                    }
-                  >
+                  <div onClick={() => displayBusinessDetail()}>
                     {businessInfo.company_name}
                   </div>
                   <RightWrap>

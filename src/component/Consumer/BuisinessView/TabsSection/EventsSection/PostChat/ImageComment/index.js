@@ -1,7 +1,6 @@
-import React from "react"
-import styled from "styled-components"
-import CommentStaticImg from '../../../../../../../images/CommentStaticImg.png'
-
+import React from "react";
+import styled from "styled-components";
+import CommentStaticImg from "../../../../../../../images/CommentStaticImg.png";
 
 const BottomBarLikes = styled.div`
   display: flex;
@@ -13,21 +12,23 @@ const BottomBarLikes = styled.div`
   @media (max-width: 767px) {
     margin: 0 auto;
   }
-  img{
+  img {
     max-height: 224px;
     /* width: 100%;
     height: 100%; */
   }
-`
+`;
 
-const ImageComment = ({image}) => {
-    return (
+const ImageComment = ({ image }) => {
+  return (
     <>
-    <BottomBarLikes>
-      <img src={image!==""?image:CommentStaticImg} alt="" />
-    </BottomBarLikes>
+      {image !== "" ? (
+        <BottomBarLikes>
+          <img src={image !== "" ? image : CommentStaticImg} alt="" />
+        </BottomBarLikes>
+      ) : null}
     </>
-    )
-}
-  
-export default ImageComment
+  );
+};
+
+export default ImageComment;
