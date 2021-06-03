@@ -224,7 +224,10 @@ export const slice = createSlice({
         state.favoriteBusiness = state.favoriteBusiness.filter(
           (i) => i.favorites._id !== action.payload.businessId
         );
-      }
+        state.user = {...state.user, favorites:state.user.favorites.filter(
+          (i) => i !== action.payload.businessId
+        )
+      }}
     },
     [fetchUserProfileData.pending]: (state) => {
       if (!state.loadingProfile) {
