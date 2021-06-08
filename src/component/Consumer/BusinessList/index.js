@@ -6,11 +6,16 @@ import ValueLoader from "../../../utils/loader";
 import { IoMdClose } from "react-icons/io";
 import { FaSort } from "react-icons/fa";
 import Input from "../../UI/Input/Input";
+import DropdwonArrowTop from "../../../images/top_arrow.png";
 import DisplayFavoriteBusiness from "./displayFavoriteBusiness";
 import {
   clearUserFavorites,
   fetchUserFavoritesBusiness,
 } from "../../../reducers/userReducer";
+import {
+  setSideFiltersByClosest,
+  setSideFiltersByUpdatedAt,
+} from "../../../reducers/myFeedReducer";
 
 const LoaderWrap = styled.div`
   width: 100%;
@@ -116,11 +121,64 @@ const NoMorePost = styled.p`
   margin: 0 0 5px;
   color: #fff;
 `;
+
+const DropdownContent = styled.div`
+  display: flex;
+  position: absolute;
+  min-width: 130px;
+  overflow: auto;
+  background: #fe02b9;
+  box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.3);
+  z-index: 1;
+  top: 65px;
+  overflow: visible;
+  right: 24px;
+  padding: 5px;
+  :before {
+    background: url(${DropdwonArrowTop}) no-repeat top center;
+    width: 10px;
+    height: 6px;
+    content: " ";
+    top: -6px;
+    position: absolute;
+    margin: 0 auto;
+    display: flex;
+    text-align: center;
+    right: 6px;
+    @media (max-width: 767px) {
+      left: 0;
+    }
+  }
+  @media (max-width: 767px) {
+    top: 31px;
+    right: 0;
+    left: -5px;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    text-align: right;
+  }
+  li {
+    color: #fff;
+    padding: 2px 5px;
+    text-decoration: none;
+    font-size: 12px;
+  }
+  li:hover {
+    background-color: #fe02b9;
+    cursor: pointer;
+  }
+`;
+
 /*
  * @desc: to display all business lists
  */
 const BusinessList = ({ setDisplayTab }) => {
   const [search, setSearch] = useState("");
+  const [uploadMenu, setUploadMenu] = useState(false);
   const [favoriteBusinessFiltered, setFavoriteBusinessFiltered] = useState([]);
   const [offset, setOffSet] = useState(0);
   const totalFavorites = useSelector((state) => state.user.totalFavorites);
@@ -130,6 +188,10 @@ const BusinessList = ({ setDisplayTab }) => {
     (state) => state.user.loadingFavoriteBusiness
   );
   const favoriteBusiness = useSelector((state) => state.user.favoriteBusiness);
+  const filterByClosest = useSelector((state) => state.myFeed.filterByClosest);
+  const filterByUpdatedAt = useSelector(
+    (state) => state.myFeed.filterByUpdatedAt
+  );
   const dispatch = useDispatch();
 
   const userFavorites =
@@ -154,9 +216,17 @@ const BusinessList = ({ setDisplayTab }) => {
   useEffect(() => {
     if (offset === 0) {
       dispatch(clearUserFavorites());
-      dispatch(fetchUserFavoritesBusiness({ id: user._id, value: offset }));
+      dispatch(
+        fetchUserFavoritesBusiness({
+          id: user._id,
+          value: offset,
+          latitude: process.env.REACT_APP_LATITUDE,
+          longitude: process.env.REACT_APP_LONGITUDE,
+          filters: { closest: filterByClosest, updated: filterByUpdatedAt },
+        })
+      );
     }
-  }, [user, dispatch, offset]);
+  }, [user, dispatch, offset, filterByClosest, filterByUpdatedAt]);
 
   useEffect(() => {
     setOffSet(0);
@@ -167,14 +237,39 @@ const BusinessList = ({ setDisplayTab }) => {
     if (offset + 20 < totalFavorites) {
       setOffSet(offset + 20);
       dispatch(
-        fetchUserFavoritesBusiness({ id: user._id, value: offset + 20 })
+        fetchUserFavoritesBusiness({
+          id: user._id,
+          value: offset + 20,
+          latitude: process.env.REACT_APP_LATITUDE,
+          longitude: process.env.REACT_APP_LONGITUDE,
+          filters: { closest: filterByClosest, updated: filterByUpdatedAt },
+        })
       );
     } else setHasMore(false);
   };
+
   /** on change handler for search */
   const searchList = (e) => {
     setSearch(e.target.value);
   };
+
+  /** to toggle side filter menu */
+  const toggleUploadMenu = () => {
+    setUploadMenu(!uploadMenu);
+  };
+
+  /** to set side filter by closest */
+  const closestFilter = () => {
+    dispatch(setSideFiltersByClosest());
+    setUploadMenu(false)
+  };
+
+  /** to set side filter by recently updated */
+  const recentlyUpdatedFilter = () => {
+    dispatch(setSideFiltersByUpdatedAt());
+    setUploadMenu(false)
+  };
+
   return (
     <>
       {loadingFavoriteBusiness && offset === 0 ? (
@@ -188,7 +283,18 @@ const BusinessList = ({ setDisplayTab }) => {
               <IoMdClose onClick={() => setDisplayTab(false)} />
             </CloseDiv>
             <h3>
-              Favorites <FaSort />
+              Favorites <FaSort onClick={toggleUploadMenu} />
+              {uploadMenu && (
+                <DropdownContent>
+                  <ul>
+                    <li onClick={() => closestFilter()}>Closest</li>
+
+                    <li onClick={() => recentlyUpdatedFilter()}>
+                      Recently Updated
+                    </li>
+                  </ul>
+                </DropdownContent>
+              )}
             </h3>
             <div className="dashed" />
             <Input

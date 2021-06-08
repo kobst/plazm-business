@@ -55,11 +55,11 @@ const getAllUsers = () => {
 /*
 @desc: getUserFavoritesBusiness query
 */
-const getUserFavorites = ({id,value}) => {
+const getUserFavorites = ({id,value,filters,longitude,latitude}) => {
   const graphQl = {
     query: `
-          query GetUserFavoritesBusiness($id: ID!, $value: Int){
-            getUserFavoritesBusiness(input: {id:$id, value:$value}) {
+          query GetUserFavoritesBusiness($id: ID!, $value: Int, $filters:homeSearchFilterInput!,$latitude: Float!,$longitude: Float!){
+            getUserFavoritesBusiness(input: {id:$id, value:$value, filters:$filters, latitude:$latitude, longitude:$longitude}) {
               message
               success
               data {
@@ -85,7 +85,10 @@ const getUserFavorites = ({id,value}) => {
           }`,
     variables: {
       id: id,
-      value:value
+      value:value,
+      filters: filters,
+      longitude: parseFloat(longitude),
+      latitude: parseFloat(latitude)
     },
   };
   return graphQl;

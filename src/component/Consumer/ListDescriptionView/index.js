@@ -248,6 +248,7 @@ const ListDescriptionView = ({
   setDisplayTab,
   setSelectedListId,
   selectedListId,
+  setListIndex,
 }) => {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.myFeed.loadingSelectedList);
@@ -436,7 +437,12 @@ const ListDescriptionView = ({
               <ListingOptionWrap>
                 {postsInList.length > 0 ? (
                   postsInList.map((i, key) => (
-                    <DisplayPostInAList data={i} key={key} id={key} />
+                    <DisplayPostInAList
+                      data={i}
+                      key={key}
+                      id={key}
+                      setListIndex={setListIndex}
+                    />
                   ))
                 ) : (
                   <NoData>No Posts In A List To Display</NoData>

@@ -82,7 +82,16 @@ const LeftBar = ({
   const [selectedListId, setSelectedListId] = useState(null);
   const [listClickedFromSearch, setListClickedFromSearch] = useState(false);
   const loading = useSelector((state) => state.myFeed.loading);
+  const [searchIndex, setSearchIndex] = useState(null);
+  const [myFeedIndex, setMyFeedIndex] = useState(null);
+  const [listIndex, setListIndex] = useState(null);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (searchIndex || myFeedIndex || listIndex) {
+      setTabIndex(6);
+    }
+  }, [searchIndex, myFeedIndex, listIndex]);
 
   useEffect(() => {
     if (selectedListId !== null) setTabIndex(7);
@@ -309,13 +318,17 @@ const LeftBar = ({
                   setDisplayTab={() => setTabIndex(0)}
                   setSelectedListId={setSelectedListId}
                   setListClickedFromSearch={setListClickedFromSearch}
+                  setSearchIndex={setSearchIndex}
                 />
               )}
             </div>
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              <MyFeed setDisplayTab={() => setTabIndex(0)} />
+              <MyFeed
+                setDisplayTab={() => setTabIndex(0)}
+                setMyFeedIndex={setMyFeedIndex}
+              />
             </div>
           </TabPanel>
           <TabPanel>
@@ -331,9 +344,18 @@ const LeftBar = ({
                   profile={profile}
                   businessExists={businessExists}
                   businessId={businessId}
+                  searchIndex={searchIndex}
+                  setTabIndex={setTabIndex}
+                  setSearchIndex={setSearchIndex}
+                  myFeedIndex={myFeedIndex}
+                  setMyFeedIndex={setMyFeedIndex}
+                  setListIndex={setListIndex}
+                  listIndex={listIndex}
                 />
               ) : (
-                <BusinessList setDisplayTab={() => setTabIndex(0)} />
+                <BusinessList
+                  setDisplayTab={() => setTabIndex(0)}
+                />
               )}
             </div>
           </TabPanel>
@@ -352,6 +374,7 @@ const LeftBar = ({
                   selectedListId={selectedListId}
                   listClickedFromSearch={listClickedFromSearch}
                   setListClickedFromSearch={setListClickedFromSearch}
+                  setListIndex={setListIndex}
                 />
               )}
             </div>

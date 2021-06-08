@@ -10,6 +10,7 @@ import {
   RemoveUserBusinessFavorite,
 } from "../../../../reducers/userReducer";
 import moment from "moment";
+import { useHistory } from "react-router";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -178,13 +179,19 @@ const RightWrap = styled.div`
 `;
 
 /** display favorite business */
-const DisplayFavoriteBusiness = ({ data }) => {
+const DisplayFavoriteBusiness = ({ data, setFavoriteIndex }) => {
   const [favoriteBusiness, setFavoriteBusiness] = useState(false);
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   const getUtcHour = new Date().getUTCHours();
   const getUtcMinutes = new Date().getUTCMinutes();
   const currentUtcDay = new Date().getUTCDay();
+  const [image, setImage] = useState(
+    data.favorites.default_image_url
+      ? data.favorites.default_image_url
+      : ProfileImg
+  );
+  const history = useHistory();
   const days = [
     "Monday",
     "Tuesday",
@@ -241,28 +248,24 @@ const DisplayFavoriteBusiness = ({ data }) => {
     };
     await dispatch(RemoveUserBusinessFavorite(obj));
   };
+
+  /** to display business details page */
+  const displayBusinessDetail = () => {
+    history.push(`/b/${data.favorites._id}`);
+  };
   return (
     <>
       <UserMsgWrap>
         <UserMessageContent>
           <ProfileNameHeader>
             <ProfileThumb>
-              <img
-                src={
-                  data.favorites.default_image_url
-                    ? data.favorites.default_image_url
-                    : ProfileImg
-                }
-                alt=""
-              />
+              <img src={image} onError={() => setImage(ProfileImg)} alt="" />
             </ProfileThumb>
             <ProfileNameWrap>
               <ProfileName>
                 <div
                   className="ListName"
-                  onClick={() =>
-                    (window.location.href = `/b/${data.favorites._id}`)
-                  }
+                  onClick={() => displayBusinessDetail()}
                 >
                   {data.favorites.company_name}
                 </div>

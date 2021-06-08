@@ -442,7 +442,7 @@ const UserMessage = ({
               </ChatInput>
               <LikesBar
                 type="comment"
-                totalLikes={postData.likes.length}
+                totalLikes={postData.likes ? postData.likes.length : 0}
                 totalComments={
                   postData.totalComments.length > 0
                     ? postData.totalComments[0].totalCount

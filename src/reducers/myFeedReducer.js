@@ -263,12 +263,10 @@ export const slice = createSlice({
               totalReplies: obj.totalReplies,
               replies: [],
             }));
-
             const filterPost1 = posts.concat({
               ...posts1,
-              comments: arr,
+              comments: arr || [],
             });
-
             state.myFeed = filterPost1.sort((a, b) => {
               return new Date(b.createdAt) - new Date(a.createdAt);
             });
@@ -630,7 +628,11 @@ export const slice = createSlice({
       if (state.loadingSelectedList) {
         state.loadingSelectedList = false;
         if (action.payload) {
-          state.myFeed = action.payload.data;
+          const data = action.payload.data.map((obj) => ({
+            ...obj,
+            comments: [],
+          }));
+          state.myFeed = state.myFeed.concat(data);
           state.totalData = action.payload.totalLists;
           state.selectedListDetails = action.payload.listDetails;
         }

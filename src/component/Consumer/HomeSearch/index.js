@@ -11,7 +11,7 @@ const ContentWrap = styled.div`
   padding: 0px;
 `;
 
-const HomeSearch = ({ setSelectedListId, setListClickedFromSearch }) => {
+const HomeSearch = ({ setSelectedListId, setListClickedFromSearch, setSearchIndex }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -24,6 +24,7 @@ const HomeSearch = ({ setSelectedListId, setListClickedFromSearch }) => {
         <BusinessListing
           setSelectedListId={setSelectedListId}
           setListClickedFromSearch={setListClickedFromSearch}
+          setSearchIndex={setSearchIndex}
         />
       </ContentWrap>
     </>

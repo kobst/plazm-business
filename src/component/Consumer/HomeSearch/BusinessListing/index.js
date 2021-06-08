@@ -149,7 +149,11 @@ const SearchDropdownOption = styled.div`
   padding: 0 20px;
 `;
 
-const BusinessListing = ({ setSelectedListId, setListClickedFromSearch }) => {
+const BusinessListing = ({
+  setSelectedListId,
+  setListClickedFromSearch,
+  setSearchIndex,
+}) => {
   const businessData = useSelector((state) => state.myFeed.myFeed);
   const loading = useSelector((state) => state.myFeed.loading);
   const [offset, setOffset] = useState(0);
@@ -167,25 +171,18 @@ const BusinessListing = ({ setSelectedListId, setListClickedFromSearch }) => {
 
   /** useEffect called when any side filters are selected */
   useEffect(() => {
-    if (filterSelected === true) {
-      const obj = {
-        search: search,
-        value: 0,
-        filters: { closest: filterClosest, updated: updatedAtFilter },
-        latitude: process.env.REACT_APP_LATITUDE,
-        longitude: process.env.REACT_APP_LONGITUDE,
-      };
-      dispatch(HomeSearch(obj));
-      setFilterSelected(false);
-    }
-  }, [
-    dispatch,
-    filterSelected,
-    filterClosest,
-    updatedAtFilter,
-    offset,
-    search,
-  ]);
+    // if (filterSelected === true) {
+    const obj = {
+      search: search,
+      value: 0,
+      filters: { closest: filterClosest, updated: updatedAtFilter },
+      latitude: process.env.REACT_APP_LATITUDE,
+      longitude: process.env.REACT_APP_LONGITUDE,
+    };
+    dispatch(HomeSearch(obj));
+    setFilterSelected(false);
+    // }
+  }, [dispatch, filterSelected, filterClosest, updatedAtFilter, offset]);
 
   /** to fetch more places matching the search */
   const fetchMorePlaces = () => {
@@ -211,16 +208,18 @@ const BusinessListing = ({ setSelectedListId, setListClickedFromSearch }) => {
   const closestFilter = () => {
     dispatch(setSideFiltersByClosest());
     setFilterSelected(true);
+    setUploadMenu(false);
   };
 
   /** to set side filter by recently updated */
   const recentlyUpdatedFilter = () => {
     dispatch(setSideFiltersByUpdatedAt());
     setFilterSelected(true);
+    setUploadMenu(false);
   };
   return (
     <>
-      <SearchBar offset={offset} setOffset={setOffset}/>
+      <SearchBar offset={offset} setOffset={setOffset} />
       <SearchDropdownOption>
         <SortingSelect>
           <Select>
@@ -282,6 +281,7 @@ const BusinessListing = ({ setSelectedListId, setListClickedFromSearch }) => {
                     key={key}
                     setSelectedListId={setSelectedListId}
                     setListClickedFromSearch={setListClickedFromSearch}
+                    setSearchIndex={setSearchIndex}
                   />
                 ))
               ) : !loading ? (

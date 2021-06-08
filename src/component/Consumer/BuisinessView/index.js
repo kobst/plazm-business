@@ -35,6 +35,13 @@ const BuisinessView = ({
   profile,
   businessExists,
   businessId,
+  searchIndex,
+  setTabIndex,
+  setSearchIndex,
+  myFeedIndex,
+  setMyFeedIndex,
+  listIndex,
+  setListIndex,
 }) => {
   const loading = useSelector((state) => state.business.loading);
   const businessProfile = useSelector((state) => state.business.business);
@@ -42,7 +49,7 @@ const BuisinessView = ({
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(setSideFilters());
-  },[dispatch]);
+  }, [dispatch]);
   return (
     <>
       {!loading &&
@@ -60,20 +67,27 @@ const BuisinessView = ({
           businessProfile.length > 0 &&
           businessProfile[0].userSub !== null ? (
             displayBusinessProfile ? (
-              <BuisinessProfileDetails 
-                displayBusinessProfile = {displayBusinessProfile}
+              <BuisinessProfileDetails
+                displayBusinessProfile={displayBusinessProfile}
                 setDisplayBusinessProfile={setDisplayBusinessProfile}
                 setDisplayTab={setDisplayTab}
               />
             ) : (
-              <BuisinessHeader 
+              <BuisinessHeader
                 setDisplayTab={setDisplayTab}
                 setDisplayBusinessProfile={setDisplayBusinessProfile}
+                searchIndex={searchIndex}
+                setTabIndex={setTabIndex}
+                setSearchIndex={setSearchIndex}
+                myFeedIndex={myFeedIndex}
+                setMyFeedIndex={setMyFeedIndex}
+                listIndex={listIndex}
+                setListIndex={setListIndex}
               />
             )
           ) : displayBusinessProfile ? (
             <BuisinessProfileDetails
-              displayBusinessProfile = {displayBusinessProfile}
+              displayBusinessProfile={displayBusinessProfile}
               setDisplayBusinessProfile={setDisplayBusinessProfile}
               setDisplayTab={setDisplayTab}
             />
@@ -81,6 +95,11 @@ const BuisinessView = ({
             <BuisinessHeaderNotClaimed
               setDisplayTab={setDisplayTab}
               setDisplayBusinessProfile={setDisplayBusinessProfile}
+              searchIndex={searchIndex}
+              setTabIndex={setTabIndex}
+              setSearchIndex={setSearchIndex}
+              myFeedIndex={myFeedIndex}
+              setMyFeedIndex={setMyFeedIndex}
             />
           )}
           {!displayBusinessProfile ? (

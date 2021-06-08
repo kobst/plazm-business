@@ -5,9 +5,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { IoMdClose } from "react-icons/io";
 import { FaSort } from "react-icons/fa";
 import ValueLoader from "../../../utils/loader";
-import {
-  fetchMyFeedData,
-} from "../../../reducers/myFeedReducer";
+import { fetchMyFeedData } from "../../../reducers/myFeedReducer";
 import DisplayBusinessDetails from "./DisplayBusinessDetails";
 
 const LoaderWrap = styled.div`
@@ -116,7 +114,7 @@ const NoMorePost = styled.p`
   color: #fff;
 `;
 
-const MyFeed = ({ setDisplayTab }) => {
+const MyFeed = ({ setDisplayTab, setMyFeedIndex }) => {
   const user = useSelector((state) => state.user.user);
   const loading = useSelector((state) => state.myFeed.loading);
   const feedData = useSelector((state) => state.myFeed.myFeed);
@@ -179,7 +177,11 @@ const MyFeed = ({ setDisplayTab }) => {
               <BusinessListWrap>
                 {feedData.length > 0 ? (
                   feedData.map((i, key) => (
-                    <DisplayBusinessDetails data={i} id={key} />
+                    <DisplayBusinessDetails
+                      data={i}
+                      id={key}
+                      setMyFeedIndex={setMyFeedIndex}
+                    />
                   ))
                 ) : !loading ? (
                   <NoData>No Data To Display</NoData>
