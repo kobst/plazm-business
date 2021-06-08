@@ -240,7 +240,7 @@ const UserMessageEvents = ({
               type="comment"
               eventId={eventData._id}
               date={new Date(eventData.createdAt)}
-              totalLikes={eventData.likes.length}
+              totalLikes={eventData.likes ? eventData.likes.length : 0}
               totalComments={
                 eventData.totalComments.length > 0
                   ? eventData.totalComments[0].totalCount
@@ -248,7 +248,7 @@ const UserMessageEvents = ({
               }
               setDisplayEventComments={setDisplayEventComments}
               displayEventComments={displayEventComments}
-              postLikes={eventData.likes}
+              postLikes={eventData.likes || []}
               displayEventCommentInput={displayEventCommentInput}
               setDisplayEventCommentInput={setDisplayEventCommentInput}
               flag={flag}

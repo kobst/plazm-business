@@ -194,6 +194,11 @@ const DescriptionViewItem = styled.div`
 const DisplayPostInAList = ({ data, id, setListIndex }) => {
   const [favoriteBusiness, setFavoriteBusiness] = useState(false);
   const user = useSelector((state) => state.user.user);
+  const [image, setImage] = useState(
+    data.business[0].default_image_url
+      ? data.business[0].default_image_url
+      : ProfileImg
+  );
   const dispatch = useDispatch();
   const getUtcHour = new Date().getUTCHours();
   const getUtcMinutes = new Date().getUTCMinutes();
@@ -211,27 +216,38 @@ const DisplayPostInAList = ({ data, id, setListIndex }) => {
 
   /** to check if business is open/close */
   const checkBusinessOpenClose = () => {
-    for (let i = 0; i < data.business[0].hours_format.length; i++) {
-      const startDayIndex = days.indexOf(
-        data.business[0].hours_format[i].StartDay
-      );
-      const endDayIndex = days.indexOf(data.business[0].hours_format[i].EndDay);
-      if (currentUtcDay >= startDayIndex && currentUtcDay <= endDayIndex) {
-        const time = moment(getUtcHour + ":" + getUtcMinutes, "HH:mm");
-        const beforeTime = moment(
-          data.business[0].hours_format[i].Start,
-          "HH:mm"
+    if (
+      data.business[0].hours_format &&
+      data.business[0].hours_format.length > 0
+    ) {
+      for (let i = 0; i < data.business[0].hours_format.length; i++) {
+        const startDayIndex = days.indexOf(
+          data.business[0].hours_format[i].StartDay
         );
-        const afterTime = moment(data.business[0].hours_format[i].End, "HH:mm");
-        if (time.isBetween(beforeTime, afterTime)) {
-          return true;
+        const endDayIndex = days.indexOf(
+          data.business[0].hours_format[i].EndDay
+        );
+        if (currentUtcDay >= startDayIndex && currentUtcDay <= endDayIndex) {
+          const time = moment(getUtcHour + ":" + getUtcMinutes, "HH:mm");
+          const beforeTime = moment(
+            data.business[0].hours_format[i].Start,
+            "HH:mm"
+          );
+          const afterTime = moment(
+            data.business[0].hours_format[i].End,
+            "HH:mm"
+          );
+          if (time.isBetween(beforeTime, afterTime)) {
+            return true;
+          } else {
+            return false;
+          }
         } else {
           return false;
         }
-      } else {
-        return false;
       }
     }
+    return false;
   };
 
   /** to check if the business is liked */
@@ -275,14 +291,7 @@ const DisplayPostInAList = ({ data, id, setListIndex }) => {
           <UserMessageContent>
             <ProfileNameHeader>
               <ProfileThumb>
-                <img
-                  src={
-                    data.business[0].default_image_url
-                      ? data.business[0].default_image_url
-                      : ProfileImg
-                  }
-                  alt=""
-                />
+                <img src={image} onError={() => setImage(ProfileImg)} alt="" />
               </ProfileThumb>
               <ProfileNameWrap>
                 <ProfileName>
@@ -290,7 +299,8 @@ const DisplayPostInAList = ({ data, id, setListIndex }) => {
                     {data.business[0].company_name}
                   </div>
                   <RightWrap>
-                    {data.business[0].hours_format.length === 0 ? (
+                    {data.business[0].hours_format &&
+                    data.business[0].hours_format.length === 0 ? (
                       <div className="CloseDiv">Close</div>
                     ) : checkBusinessOpenClose() === true ? (
                       <div className="OpenDiv">Open</div>
@@ -298,7 +308,8 @@ const DisplayPostInAList = ({ data, id, setListIndex }) => {
                       <div className="CloseDiv">Close</div>
                     )}
 
-                    {data.business[0].hours_format.length > 0 &&
+                    {data.business[0].hours_format &&
+                    data.business[0].hours_format.length > 0 &&
                     checkBusinessOpenClose() === true ? (
                       favoriteBusiness ? (
                         <img

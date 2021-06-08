@@ -186,6 +186,11 @@ const DisplayFavoriteBusiness = ({ data, setFavoriteIndex }) => {
   const getUtcHour = new Date().getUTCHours();
   const getUtcMinutes = new Date().getUTCMinutes();
   const currentUtcDay = new Date().getUTCDay();
+  const [image, setImage] = useState(
+    data.favorites.default_image_url
+      ? data.favorites.default_image_url
+      : ProfileImg
+  );
   const history = useHistory();
   const days = [
     "Monday",
@@ -254,14 +259,7 @@ const DisplayFavoriteBusiness = ({ data, setFavoriteIndex }) => {
         <UserMessageContent>
           <ProfileNameHeader>
             <ProfileThumb>
-              <img
-                src={
-                  data.favorites.default_image_url
-                    ? data.favorites.default_image_url
-                    : ProfileImg
-                }
-                alt=""
-              />
+              <img src={image} onError={() => setImage(ProfileImg)} alt="" />
             </ProfileThumb>
             <ProfileNameWrap>
               <ProfileName>
