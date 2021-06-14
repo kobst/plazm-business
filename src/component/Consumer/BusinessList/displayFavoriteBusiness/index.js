@@ -251,6 +251,7 @@ const DisplayFavoriteBusiness = ({ data, setFavoriteIndex }) => {
 
   /** to display business details page */
   const displayBusinessDetail = () => {
+    setFavoriteIndex(data.favorites._id);
     history.push(`/b/${data.favorites._id}`);
   };
   return (

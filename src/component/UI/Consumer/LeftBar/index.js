@@ -86,13 +86,8 @@ const LeftBar = ({
   const [searchIndex, setSearchIndex] = useState(null);
   const [myFeedIndex, setMyFeedIndex] = useState(null);
   const [listIndex, setListIndex] = useState(null);
+  const [favoriteIndex, setFavoriteIndex] = useState(null);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (searchIndex || myFeedIndex || listIndex) {
-      setTabIndex(6);
-    }
-  }, [searchIndex, myFeedIndex, listIndex]);
 
   useEffect(() => {
     if (selectedListId !== null) setTabIndex(7);
@@ -103,7 +98,7 @@ const LeftBar = ({
     if (tabIndex !== 7 && !loading) {
       dispatch(clearMyFeedData());
       setSelectedListId(null);
-      setListIndex(null)
+      setListIndex(null);
     }
   };
 
@@ -121,6 +116,7 @@ const LeftBar = ({
 
   /** to clear selected data on tab click */
   const homeSearchFunction = () => {
+    setFavoriteIndex(null)
     if (tabIndex !== 3 && !loading) {
       const obj = {
         search: "",
@@ -315,32 +311,14 @@ const LeftBar = ({
             <div className="panel-content">
               {isUserOpen ? (
                 <Profile setDisplayTab={() => setTabIndex(0)} userId={userId} />
-              ) : (
+              ) : !searchIndex ? (
                 <HomeSearchComponent
                   setDisplayTab={() => setTabIndex(0)}
                   setSelectedListId={setSelectedListId}
                   setListClickedFromSearch={setListClickedFromSearch}
                   setSearchIndex={setSearchIndex}
                 />
-              )}
-            </div>
-          </TabPanel>
-          <TabPanel>
-            <div className="panel-content">
-              <MyFeed
-                setDisplayTab={() => setTabIndex(0)}
-                setMyFeedIndex={setMyFeedIndex}
-              />
-            </div>
-          </TabPanel>
-          <TabPanel>
-            <div className="panel-content">
-              <h2>Any content 6</h2>
-            </div>
-          </TabPanel>
-          <TabPanel>
-            <div className="panel-content">
-              {isBusinessOpen === true ? (
+              ) : (
                 <BuisinessView
                   setDisplayTab={() => setTabIndex(0)}
                   profile={profile}
@@ -353,9 +331,63 @@ const LeftBar = ({
                   setMyFeedIndex={setMyFeedIndex}
                   setListIndex={setListIndex}
                   listIndex={listIndex}
+                  favoriteIndex={favoriteIndex}
+                  setFavoriteIndex={setFavoriteIndex}
+                />
+              )}
+            </div>
+          </TabPanel>
+          <TabPanel>
+            <div className="panel-content">
+              {!myFeedIndex ? (
+                <MyFeed
+                  setDisplayTab={() => setTabIndex(0)}
+                  setMyFeedIndex={setMyFeedIndex}
                 />
               ) : (
-                <BusinessList setDisplayTab={() => setTabIndex(0)} />
+                <BuisinessView
+                  setDisplayTab={() => setTabIndex(0)}
+                  profile={profile}
+                  businessExists={businessExists}
+                  businessId={businessId}
+                  searchIndex={searchIndex}
+                  setTabIndex={setTabIndex}
+                  setSearchIndex={setSearchIndex}
+                  myFeedIndex={myFeedIndex}
+                  setMyFeedIndex={setMyFeedIndex}
+                  setListIndex={setListIndex}
+                  listIndex={listIndex}
+                  favoriteIndex={favoriteIndex}
+                  setFavoriteIndex={setFavoriteIndex}
+                />
+              )}
+            </div>
+          </TabPanel>
+          <TabPanel>
+            <div className="panel-content">
+              <h2>Any content 6</h2>
+            </div>
+          </TabPanel>
+          <TabPanel>
+            <div className="panel-content">
+              {favoriteIndex ? (
+                <BuisinessView
+                  setDisplayTab={() => setTabIndex(0)}
+                  profile={profile}
+                  businessExists={businessExists}
+                  businessId={businessId}
+                  searchIndex={searchIndex}
+                  setTabIndex={setTabIndex}
+                  setSearchIndex={setSearchIndex}
+                  myFeedIndex={myFeedIndex}
+                  setMyFeedIndex={setMyFeedIndex}
+                  setListIndex={setListIndex}
+                  listIndex={listIndex}
+                  favoriteIndex={favoriteIndex}
+                  setFavoriteIndex={setFavoriteIndex}
+                />
+              ) : (
+                <BusinessList setDisplayTab={() => setTabIndex(0)} setFavoriteIndex={setFavoriteIndex}/>
               )}
             </div>
           </TabPanel>
@@ -367,7 +399,7 @@ const LeftBar = ({
                   setSelectedListId={setSelectedListId}
                   selectedListId={selectedListId}
                 />
-              ) : (
+              ) : !listIndex ? (
                 <ListDescriptionView
                   setDisplayTab={() => setTabIndex(0)}
                   setSelectedListId={setSelectedListId}
@@ -375,6 +407,22 @@ const LeftBar = ({
                   listClickedFromSearch={listClickedFromSearch}
                   setListClickedFromSearch={setListClickedFromSearch}
                   setListIndex={setListIndex}
+                />
+              ) : (
+                <BuisinessView
+                  setDisplayTab={() => setTabIndex(0)}
+                  profile={profile}
+                  businessExists={businessExists}
+                  businessId={businessId}
+                  searchIndex={searchIndex}
+                  setTabIndex={setTabIndex}
+                  setSearchIndex={setSearchIndex}
+                  myFeedIndex={myFeedIndex}
+                  setMyFeedIndex={setMyFeedIndex}
+                  setListIndex={setListIndex}
+                  listIndex={listIndex}
+                  favoriteIndex={favoriteIndex}
+                  setFavoriteIndex={setFavoriteIndex}
                 />
               )}
             </div>
