@@ -106,6 +106,8 @@ const BuisinessView = ({
               setMyFeedIndex={setMyFeedIndex}
               favoriteIndex={favoriteIndex}
               setFavoriteIndex={setFavoriteIndex}
+              listIndex={listIndex}
+              setListIndex={setListIndex}
             />
           )}
           {!displayBusinessProfile ? (

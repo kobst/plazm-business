@@ -26,7 +26,6 @@ import {
 } from "../../../../reducers/myFeedReducer";
 import Profile from "../../../Consumer/Profile";
 import HomeSearchComponent from "../../../Consumer/HomeSearch";
-import { useHistory } from "react-router";
 
 const LeftBarContent = styled.div`
   width: 100px;
