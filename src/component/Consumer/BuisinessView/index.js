@@ -42,6 +42,8 @@ const BuisinessView = ({
   setMyFeedIndex,
   listIndex,
   setListIndex,
+  favoriteIndex,
+  setFavoriteIndex
 }) => {
   const loading = useSelector((state) => state.business.loading);
   const businessProfile = useSelector((state) => state.business.business);
@@ -83,6 +85,8 @@ const BuisinessView = ({
                 setMyFeedIndex={setMyFeedIndex}
                 listIndex={listIndex}
                 setListIndex={setListIndex}
+                favoriteIndex={favoriteIndex}
+                setFavoriteIndex={setFavoriteIndex}
               />
             )
           ) : displayBusinessProfile ? (
@@ -100,6 +104,8 @@ const BuisinessView = ({
               setSearchIndex={setSearchIndex}
               myFeedIndex={myFeedIndex}
               setMyFeedIndex={setMyFeedIndex}
+              favoriteIndex={favoriteIndex}
+              setFavoriteIndex={setFavoriteIndex}
             />
           )}
           {!displayBusinessProfile ? (
