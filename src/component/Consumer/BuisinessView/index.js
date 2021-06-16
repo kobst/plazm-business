@@ -43,7 +43,7 @@ const BuisinessView = ({
   listIndex,
   setListIndex,
   favoriteIndex,
-  setFavoriteIndex
+  setFavoriteIndex,
 }) => {
   const loading = useSelector((state) => state.business.loading);
   const businessProfile = useSelector((state) => state.business.business);
@@ -73,6 +73,15 @@ const BuisinessView = ({
                 displayBusinessProfile={displayBusinessProfile}
                 setDisplayBusinessProfile={setDisplayBusinessProfile}
                 setDisplayTab={setDisplayTab}
+                searchIndex={searchIndex}
+                setTabIndex={setTabIndex}
+                setSearchIndex={setSearchIndex}
+                myFeedIndex={myFeedIndex}
+                setMyFeedIndex={setMyFeedIndex}
+                favoriteIndex={favoriteIndex}
+                setFavoriteIndex={setFavoriteIndex}
+                listIndex={listIndex}
+                setListIndex={setListIndex}
               />
             ) : (
               <BuisinessHeader
@@ -94,6 +103,15 @@ const BuisinessView = ({
               displayBusinessProfile={displayBusinessProfile}
               setDisplayBusinessProfile={setDisplayBusinessProfile}
               setDisplayTab={setDisplayTab}
+              searchIndex={searchIndex}
+              setTabIndex={setTabIndex}
+              setSearchIndex={setSearchIndex}
+              myFeedIndex={myFeedIndex}
+              setMyFeedIndex={setMyFeedIndex}
+              favoriteIndex={favoriteIndex}
+              setFavoriteIndex={setFavoriteIndex}
+              listIndex={listIndex}
+              setListIndex={setListIndex}
             />
           ) : (
             <BuisinessHeaderNotClaimed
