@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import "./styles.css";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
@@ -23,6 +23,7 @@ import {
   clearMyFeedData,
   fetchMyFeedData,
   HomeSearch,
+  setSearchData,
 } from "../../../../reducers/myFeedReducer";
 import Profile from "../../../Consumer/Profile";
 import HomeSearchComponent from "../../../Consumer/HomeSearch";
@@ -88,9 +89,9 @@ const LeftBar = ({
   const [favoriteIndex, setFavoriteIndex] = useState(null);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (selectedListId !== null) setTabIndex(7);
-  }, [selectedListId]);
+  // useEffect(() => {
+  //   if (selectedListId !== null) setTabIndex(7);
+  // }, [selectedListId]);
 
   /** to clear selected data on tab click */
   const listView = () => {
@@ -124,6 +125,7 @@ const LeftBar = ({
         latitude: process.env.REACT_APP_LATITUDE,
         longitude: process.env.REACT_APP_LONGITUDE,
       };
+      dispatch(setSearchData(""))
       dispatch(clearMyFeedData());
       dispatch(HomeSearch(obj));
     }
@@ -310,14 +312,24 @@ const LeftBar = ({
             <div className="panel-content">
               {isUserOpen ? (
                 <Profile setDisplayTab={() => setTabIndex(0)} userId={userId} />
-              ) : !searchIndex ? (
+              ) :  (
+                selectedListId?
+                <ListDescriptionView
+                setDisplayTab={() => setTabIndex(0)}
+                setSelectedListId={setSelectedListId}
+                selectedListId={selectedListId}
+                listClickedFromSearch={listClickedFromSearch}
+                setListClickedFromSearch={setListClickedFromSearch}
+                setListIndex={setListIndex}
+              /> :!searchIndex ? (
                 <HomeSearchComponent
                   setDisplayTab={() => setTabIndex(0)}
                   setSelectedListId={setSelectedListId}
                   setListClickedFromSearch={setListClickedFromSearch}
                   setSearchIndex={setSearchIndex}
                 />
-              ) : (
+              ) :
+
                 <BuisinessView
                   setDisplayTab={() => setTabIndex(0)}
                   profile={profile}

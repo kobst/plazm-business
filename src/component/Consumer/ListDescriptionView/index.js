@@ -275,6 +275,7 @@ const ListDescriptionView = ({
   /** to return to all business listing */
   const backBusiness = () => {
     dispatch(clearListData());
+    dispatch(clearMyFeedData())
     setSelectedListId(null);
   };
 

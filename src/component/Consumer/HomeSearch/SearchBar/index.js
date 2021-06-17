@@ -59,7 +59,7 @@ const ErrorDiv = styled.div`
   margin-left: 20px;
 `;
 
-const SearchBar = ({ offset, setOffset }) => {
+const SearchBar = ({ setOffset }) => {
   const [search, setSearch] = useState("");
   const loader = useSelector((state) => state.myFeed.loading);
   const [searchError, setSearchError] = useState("");
@@ -67,12 +67,12 @@ const SearchBar = ({ offset, setOffset }) => {
   const updatedAtFilter = useSelector(
     (state) => state.myFeed.filterByUpdatedAt
   );
+  const searchData = useSelector(state => state.myFeed.searchData)
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    setSearch("");
-    dispatch(setSearchData(""));
-  }, [dispatch]);
+  useEffect(()=>{
+    setSearch(searchData)
+  },[searchData])
 
   /** on key press handler for search */
   const searchList = (event) => {
