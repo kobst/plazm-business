@@ -19,6 +19,9 @@ import {
   setPostId,
   setEventId,
 } from "../../../../../reducers/myFeedReducer";
+import { useHistory } from "react-router-dom";
+
+const reactStringReplace = require("react-string-replace");
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -203,6 +206,7 @@ const UserMessage = ({
   const user = useSelector((state) => state.user.user);
   const ws = useSelector((state) => state.user.ws);
   const commentsRef = useRef();
+  const history = useHistory();
   const selectedPostId = useSelector(
     (state) => state.myFeed.selectedPostIdForComments
   );
@@ -304,21 +308,29 @@ const UserMessage = ({
   const findDesc = (value, mentions, mentionsList) => {
     let divContent = value;
     if (mentions.length > 0 && mentionsList.length > 0) {
-      mentions.map((v) => {
-        let re = new RegExp("@" + v.name, "g");
-        divContent = divContent.replace(
-          re,
-          `<span className='mentionData' onClick={window.open("/u/${
-            v._id
-          }",'_self')}> ${"@" + v.name}  </span>`
-        );
-        return divContent;
-      });
+      for (let i = 0; i < mentions.length; i++) {
+        if (value.search(new RegExp("@" + mentions[i].name, "g") !== -1)) {
+          return (
+            <div>
+              {reactStringReplace(value, "@" + mentions[i].name, (match, j) => (
+                <span
+                  className="mentionData"
+                  onClick={() => history.push(`/u/${mentions[i]._id}`)}
+                >
+                  {match}
+                </span>
+              ))}
+            </div>
+          );
+        } else {
+          return <div>{value}</div>
+        }
+      }
       mentionsList.map((v) => {
         let re = new RegExp("@" + v.name, "g");
         divContent = divContent.replace(
           re,
-          `<span className='mentionData' onClick={window.open("/u/${
+          `<span className='mentionData'  onClick={history.push("/u/${
             v._id
           }",'_self')}> ${"@" + v.name}  </span>`
         );
@@ -334,33 +346,30 @@ const UserMessage = ({
         return value;
       }
     } else if (mentions.length > 0) {
-      mentions.map((v) => {
-        let re = new RegExp("@" + v.name, "g");
-        divContent = divContent.replace(
-          re,
-          `<span className='mentionData' onClick={window.open("/u/${
-            v._id
-          }",'_self')}> ${"@" + v.name}  </span>`
-        );
-        return divContent;
-      });
-      if (mentions.length !== 0) {
-        return (
-          <>
-            <div dangerouslySetInnerHTML={{ __html: divContent }}></div>
-          </>
-        );
-      } else {
-        return value;
+      for (let i = 0; i < mentions.length; i++) {
+        if (value.search(new RegExp("@" + mentions[i].name, "g") !== -1)) {
+          return (
+            <div>
+              {reactStringReplace(value, "@" + mentions[i].name, (match, j) => (
+                <span
+                  className="mentionData"
+                  onClick={() => history.push(`/u/${mentions[i]._id}`)}
+                >
+                  {match}
+                </span>
+              ))}
+            </div>
+          );
+        } else {
+          return <div>{value}</div>
+        }
       }
     } else if (mentionsList.length > 0) {
       mentionsList.map((v) => {
         let re = new RegExp("@" + v.name, "g");
         divContent = divContent.replace(
           re,
-          `<span className='mentionData' onClick={window.open("/u/${
-            v._id
-          }",'_self')}> ${"@" + v.name}  </span>`
+          `<span className='mentionData'> ${"@" + v.name}  </span>`
         );
         return divContent;
       });
@@ -403,7 +412,7 @@ const UserMessage = ({
                   <span
                     className="ownerId-name"
                     onClick={() =>
-                      window.open(`/u/${postData.ownerId[0]._id}`, "_self")
+                      history.push(`/u/${postData.ownerId[0]._id}`)
                     }
                   >
                     {postData.ownerId[0].name}

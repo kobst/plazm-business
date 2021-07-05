@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useHistory } from "react-router-dom";
 import ProfileImg from "../../../../../../../images/profile-img.png";
 import ReplyInput from "./ReplyInput";
 import LikesBar from "../LikesBar";
@@ -7,6 +8,8 @@ import { Scrollbars } from "react-custom-scrollbars";
 import { useSelector } from "react-redux";
 import ValueLoader from "../../../../../../../utils/loader";
 import ScrollToBottom1 from "./ScrollToBottom1";
+
+const reactStringReplace = require("react-string-replace");
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -118,6 +121,7 @@ const Comments = ({ i, postData, displayComments, setFlag, flag }) => {
   const ws = useSelector((state) => state.user.ws);
   const business = useSelector((state) => state.business.business);
   const loadingReplies = useSelector((state) => state.business.loadingReplies);
+  const history = useHistory();
 
   /** to add reply function */
   const addReply = async (obj) => {
@@ -137,28 +141,28 @@ const Comments = ({ i, postData, displayComments, setFlag, flag }) => {
   };
   /** to highlight the user mentions mentioned in post description */
   const findDesc = (value, mentions) => {
-    let divContent = value;
     if (mentions.length > 0) {
-      mentions.map((v) => {
-        let re = new RegExp("@" + v.name, "g");
-        divContent = divContent.replace(
-          re,
-          `<span className='mentionData' onClick={window.open("/u/${
-            v._id
-          }",'_self')}> ${"@" + v.name}  </span>`
-        );
-        return divContent;
-      });
-      if (mentions.length !== 0) {
-        return (
-          <>
-            <div dangerouslySetInnerHTML={{ __html: divContent }}></div>
-          </>
-        );
-      } else {
-        return value;
+      for (let i = 0; i < mentions.length; i++) {
+        if (value.search(new RegExp(mentions[i].name, "g") !== -1)) {
+          return (
+            <div>
+              {reactStringReplace(value, "@" + mentions[i].name, (match, j) => (
+                <span
+                  className="mentionData"
+                  onClick={() => history.push(`/u/${mentions[i]._id}`)}
+                >
+                  {match}
+                </span>
+              ))}
+            </div>
+          );
+        } else {
+          return <div>{value}</div>;
+        }
       }
-    } else return value;
+    } else {
+      return value;
+    }
   };
   return (
     <UserMessageContent className="UserReplyContent">
@@ -167,15 +171,10 @@ const Comments = ({ i, postData, displayComments, setFlag, flag }) => {
           <img src={i.userId.photo ? i.userId.photo : ProfileImg} alt="" />
         </ProfileThumb>
         <ProfileNameWrap>
-          <ProfileName
-            onClick={() => window.open(`/u/${i.userId._id}`, "_self")}
-          >
+          <ProfileName onClick={() => history.push(`/u/${i.userId._id}`)}>
             {i.userId.name}{" "}
           </ProfileName>
-          <ChatInput>
-            {" "}
-            <p>{findDesc(i.body, i.taggedUsers)}</p>
-          </ChatInput>
+          <ChatInput> {findDesc(i.body, i.taggedUsers)}</ChatInput>
           <LikesBar
             type="reply"
             date={new Date(i.createdAt)}
@@ -220,7 +219,7 @@ const Comments = ({ i, postData, displayComments, setFlag, flag }) => {
                               <span>by</span>
                               <span
                                 onClick={() =>
-                                  window.open(`/u/${j.userId._id}`, "_self")
+                                  history.push(`/u/${j.userId._id}`)
                                 }
                                 style={{ color: "#ff2e9a" }}
                               >

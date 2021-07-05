@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useHistory } from "react-router-dom";
 import ProfileImg from "../../../../../../../images/profile-img.png";
 import ReplyInput from "./ReplyInput";
 import LikesBar from "../LikesBar";
@@ -18,6 +19,8 @@ import ScrollToBottom from "./ScrollToBottom";
 import { setWs } from "../../../../../../../reducers/userReducer";
 import { RiArrowDropRightFill } from "react-icons/ri";
 import ReactTooltip from "react-tooltip";
+
+const reactStringReplace = require("react-string-replace");
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -98,6 +101,7 @@ const ProfileName = styled.div`
   color: #ff2e9a;
   display: flex;
   flex-direction: row;
+
   span {
     font-weight: 700;
     color: #fff;
@@ -177,7 +181,7 @@ const DescriptionBox = styled.div`
     margin: 0;
     font-weight: bold;
     font-size: 10px;
-    max-width: 20ch
+    max-width: 20ch;
   }
 `;
 
@@ -194,6 +198,7 @@ const UserMessage = ({ postData }) => {
   const filters = useSelector((state) => state.business.filters);
   const user = useSelector((state) => state.user.user);
   const ws = useSelector((state) => state.user.ws);
+  const history = useHistory();
 
   ws.onmessage = (evt) => {
     const message = JSON.parse(evt.data);
@@ -278,21 +283,29 @@ const UserMessage = ({ postData }) => {
   const findDesc = (value, mentions, mentionsList) => {
     let divContent = value;
     if (mentions.length > 0 && mentionsList.length > 0) {
-      mentions.map((v) => {
-        let re = new RegExp("@" + v.name, "g");
-        divContent = divContent.replace(
-          re,
-          `<span className='mentionData' onClick={window.open("/u/${
-            v._id
-          }",'_self')}> ${"@" + v.name}  </span>`
-        );
-        return divContent;
-      });
+      for (let i = 0; i < mentions.length; i++) {
+        if (value.search(new RegExp("@" + mentions[i].name, "g") !== -1)) {
+          return (
+            <div>
+              {reactStringReplace(value, "@" + mentions[i].name, (match, j) => (
+                <span
+                  className="mentionData"
+                  onClick={() => history.push(`/u/${mentions[i]._id}`)}
+                >
+                  {match}
+                </span>
+              ))}
+            </div>
+          );
+        } else {
+          return <div>{value}</div>;
+        }
+      }
       mentionsList.map((v) => {
         let re = new RegExp("@" + v.name, "g");
         divContent = divContent.replace(
           re,
-          `<span className='mentionData' onClick={window.open("/u/${
+          `<span className='mentionData'  onClick={history.push("/u/${
             v._id
           }",'_self')}> ${"@" + v.name}  </span>`
         );
@@ -308,33 +321,31 @@ const UserMessage = ({ postData }) => {
         return value;
       }
     } else if (mentions.length > 0) {
-      mentions.map((v) => {
-        let re = new RegExp("@" + v.name, "g");
-        divContent = divContent.replace(
-          re,
-          `<span className='mentionData' onClick={window.open("/u/${
-            v._id
-          }",'_self')}> ${"@" + v.name}  </span>`
-        );
-        return divContent;
-      });
-      if (mentions.length !== 0) {
-        return (
-          <>
-            <div dangerouslySetInnerHTML={{ __html: divContent }}></div>
-          </>
-        );
-      } else {
-        return value;
+      for (let i = 0; i < mentions.length; i++) {
+        if (value.search(new RegExp("@" + mentions[i].name, "g") !== -1)) {
+          return (
+            <div>
+              {reactStringReplace(value, "@" + mentions[i].name, (match, j) => (
+                <span
+                  key={j}
+                  className="mentionData"
+                  onClick={() => history.push(`/u/${mentions[i]._id}`)}
+                >
+                  {match}
+                </span>
+              ))}
+            </div>
+          );
+        } else {
+          return <div>{value}</div>;
+        }
       }
     } else if (mentionsList.length > 0) {
       mentionsList.map((v) => {
         let re = new RegExp("@" + v.name, "g");
         divContent = divContent.replace(
           re,
-          `<span className='mentionData' onClick={window.open("/u/${
-            v._id
-          }")}> ${"@" + v.name}  </span>`
+          `<span className='mentionData'> ${"@" + v.name}  </span>`
         );
         return divContent;
       });
@@ -371,9 +382,18 @@ const UserMessage = ({ postData }) => {
             </ProfileThumb>
             <ProfileNameWrap>
               <ProfileName>
-                {postData.postDetails.ownerId === null
-                  ? business.company_name
-                  : postData.postDetails.ownerId.name}{" "}
+                {postData.postDetails.ownerId === null ? (
+                  business.company_name
+                ) : (
+                  <span
+                    onClick={() =>
+                      history.push(`/u/${postData.postDetails.ownerId._id}`)
+                    }
+                    style={{ cursor: "pointer" }}
+                  >
+                    {postData.postDetails.ownerId.name}
+                  </span>
+                )}{" "}
                 {postData.postDetails.listId !== null ? (
                   <RightArrowSec>
                     <ArrowRight>
@@ -398,13 +418,11 @@ const UserMessage = ({ postData }) => {
                 ) : null}
               </ProfileName>
               <ChatInput>
-                <p>
-                  {findDesc(
-                    postData.postDetails.data,
-                    postData.postDetails.taggedUsers,
-                    postData.postDetails.taggedLists
-                  )}
-                </p>
+                {findDesc(
+                  postData.postDetails.data,
+                  postData.postDetails.taggedUsers,
+                  postData.postDetails.taggedLists
+                )}
               </ChatInput>
               <LikesBar
                 type="comment"

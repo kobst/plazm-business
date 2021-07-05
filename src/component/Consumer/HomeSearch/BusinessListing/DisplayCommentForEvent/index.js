@@ -7,6 +7,7 @@ import DateBar from "../Events/DateBar";
 import TimeBar from "../Events/TimeBar";
 import ImageComment from "../Events/ImageComment";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -129,6 +130,7 @@ const DisplayCommentForEvent = ({ postData, businessData }) => {
   const [displayCommentInput, setDisplayCommentInput] = useState(false);
   const search = useSelector((state) => state.myFeed.enterClicked);
   const [flag, setFlag] = useState(false);
+  const history = useHistory()
 
   const days = [
     "Sunday",
@@ -170,7 +172,7 @@ const DisplayCommentForEvent = ({ postData, businessData }) => {
             <ProfileNameWrap>
               <ProfileName
                 onClick={() =>
-                  window.open(`/b/${businessData._id}`, "_self")
+                  history.push(`/b/${businessData._id}`)
                 }
               >
                 {businessData.company_name}
