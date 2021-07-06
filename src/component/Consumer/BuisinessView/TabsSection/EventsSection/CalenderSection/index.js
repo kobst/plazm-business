@@ -364,6 +364,7 @@ const CalenderSection = ({ businessId }) => {
 
   /** today function */
   const todayFunction = () => {
+    setCount(0)
     dispatch(setWeekButtonClicked(false));
     setTodayClicked(true);
     dispatch(setCurrentDate());
