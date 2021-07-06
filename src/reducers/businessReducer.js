@@ -209,7 +209,9 @@ export const slice = createSlice({
     loadingReplies: false,
     totalPosts: 0,
     images: [],
-    loadingImages: false
+    loadingImages: false,
+    selectedPostIdForComments: null,
+    selectedEventIdForComments: null
   },
   reducers: {
     setFilters: (state, action) => {
@@ -252,6 +254,14 @@ export const slice = createSlice({
         Others: false,
       };
       state.totalPosts = 0
+    },
+    setPostId: (state, action) => {
+      state.selectedPostIdForComments = action.payload;
+      state.selectedEventIdForComments = null;
+    },
+    setEventId: (state, action) => {
+      state.selectedEventIdForComments = action.payload;
+      state.selectedPostIdForComments = null;
     },
   },
   extraReducers: {
@@ -647,6 +657,8 @@ export const {
   setSideFiltersByMostRecent,
   setSideFiltersByMostLiked,
   setSideFilters,
-  clearBusinessData
+  clearBusinessData,
+  setPostId,
+  setEventId
 } = slice.actions;
 export default slice.reducer;

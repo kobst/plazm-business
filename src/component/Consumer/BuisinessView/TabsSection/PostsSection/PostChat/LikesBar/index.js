@@ -12,6 +12,7 @@ import {
   addLikeToComment,
   addLikeViaSocket,
   fetchCommentReplies,
+  setPostId,
 } from "../../../../../../../reducers/businessReducer";
 import { unwrapResult } from "@reduxjs/toolkit";
 
@@ -167,6 +168,7 @@ const LikesBar = ({
   /** to display comments or replies of the post */
   const displayCommentsWithPosts = () => {
     setDisplayComments(!displayComments);
+    dispatch(setPostId(postId))
     if (type === "comment") {
       setFlag(false)
       if (displayComments === false) dispatch(fetchPostComments(postId));
@@ -228,6 +230,7 @@ const LikesBar = ({
 
   /** to display comments of the post on click of comment icon */
   const setReplyDisplay = () => {
+    dispatch(setPostId(postId))
     if (type === "reply") {
       setDisplayComments(!displayComments);
       setFlag(true)

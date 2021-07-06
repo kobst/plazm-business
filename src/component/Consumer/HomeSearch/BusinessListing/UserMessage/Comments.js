@@ -19,7 +19,7 @@ const UserMessageContent = styled.div`
     align-items: flex-start;
   }
   &.UserReplyContent {
-    padding: 6px 0 0 80px;  
+    padding: 6px 0 0 80px;
   }
   .InnerScroll {
     overflow-x: hidden;
@@ -164,10 +164,14 @@ const Comments = ({
           <img
             src={
               i.userId.length > 0
-                ? i.userId[0].photo !== "" ? i.userId[0].photo
+                ? i.userId[0].photo !== ""
+                  ? i.userId[0].photo
+                  : i.userId.photo
+                  ? i.userId.photo
+                  : ProfileImg
                 : i.userId.photo
                 ? i.userId.photo
-                : ProfileImg : i.userId.photo ? i.userId.photo : ProfileImg
+                : ProfileImg
             }
             alt=""
           />
@@ -176,7 +180,7 @@ const Comments = ({
           <ProfileName
             onClick={() => window.open(`/u/${i.userId._id}`, "_self")}
           >
-            {i.userId.name}{" "}
+            {i.userId.name ? i.userId.name : i.userId[0].name}{" "}
           </ProfileName>
           <ChatInput>
             {" "}
@@ -197,6 +201,7 @@ const Comments = ({
             flag={flag}
             setFlag={setFlag}
             business={business}
+            postId={postData._id}
           />
           <Scrollbars
             autoHeight

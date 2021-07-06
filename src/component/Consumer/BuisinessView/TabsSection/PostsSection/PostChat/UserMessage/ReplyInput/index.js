@@ -198,6 +198,10 @@ const ReplyInput = ({
   const [selectedUsers, setSelectedUsers] = useState([]);
   const dispatch = useDispatch();
 
+  const selectedPostId = useSelector(
+    (state) => state.business.selectedPostIdForComments
+  );
+
   /** on select of emoji */
   const onEmojiClick = (event, emojiObject) => {
     if (type === "comment") setDescription(description + emojiObject.emoji);
@@ -310,7 +314,13 @@ const ReplyInput = ({
                 placeholder={type === "reply" ? "Add Reply" : "Add Comment"}
                 className="replyInput"
                 onKeyPress={(event) => commentAddKeyPress(event)}
-                autoFocus
+                autoFocus={
+                  type === "reply"
+                    ? selectedPostId === postId
+                      ? true
+                      : false
+                    : true
+                }
               >
                 <Mention
                   type="user"

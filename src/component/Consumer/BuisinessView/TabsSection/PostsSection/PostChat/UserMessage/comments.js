@@ -190,6 +190,7 @@ const Comments = ({ i, postData, displayComments, setFlag, flag }) => {
             displayReplyInput={displayReplyInput}
             flag={flag}
             setFlag={setFlag}
+            postId={postData.postId}
           />
           <Scrollbars
             autoHeight
