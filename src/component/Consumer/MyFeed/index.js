@@ -180,6 +180,7 @@ const MyFeed = ({ setDisplayTab, setMyFeedIndex }) => {
                     <DisplayBusinessDetails
                       data={i}
                       id={key}
+                      key={key}
                       setMyFeedIndex={setMyFeedIndex}
                     />
                   ))

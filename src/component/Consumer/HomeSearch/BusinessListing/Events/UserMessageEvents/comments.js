@@ -204,63 +204,66 @@ const Comments = ({
               {(displayReply || displayReplyInput) &&
               i.replies.length > 0 &&
               !loadingReplies ? (
-                i.replies.map((j, key) => (
-                  <>
-                    <UserMessageContent className="UserReplyContent" key={key}>
-                      <ProfileNameHeader>
-                        <ProfileThumb>
-                          <img
-                            src={j.userId.photo ? j.userId.photo : ProfileImg}
-                            alt=""
-                          />
-                        </ProfileThumb>
-                        <ProfileNameWrap>
-                          <ProfileName>
-                            <span style={{ cursor: "default" }}>by</span>
-                            <span
-                              onClick={() =>
-                                window.open(`/u/${j.userId._id}`, "_self")
-                              }
-                              style={{ color: "#ff2e9a" }}
-                            >
-                              {j.userId.name}
-                            </span>{" "}
-                          </ProfileName>
-                          <ChatInput>
-                            {" "}
-                            {findDesc(j.body, j.taggedUsers)}
-                          </ChatInput>
-                          <LikesBar
-                            date={new Date(j.created_on)}
-                            type="commentReply"
-                          />
-                        </ProfileNameWrap>
-                      </ProfileNameHeader>
-                    </UserMessageContent>
-                  </>
-                ))
+                <div>
+                  {i.replies.map((j, key) => (
+                    <div key={key}>
+                      <UserMessageContent
+                        className="UserReplyContent">
+                        <ProfileNameHeader>
+                          <ProfileThumb>
+                            <img
+                              src={j.userId.photo ? j.userId.photo : ProfileImg}
+                              alt=""
+                            />
+                          </ProfileThumb>
+                          <ProfileNameWrap>
+                            <ProfileName>
+                              <span style={{ cursor: "default" }}>by</span>
+                              <span
+                                onClick={() =>
+                                  window.open(`/u/${j.userId._id}`, "_self")
+                                }
+                                style={{ color: "#ff2e9a" }}
+                              >
+                                {j.userId.name}
+                              </span>{" "}
+                            </ProfileName>
+                            <ChatInput>
+                              {" "}
+                              {findDesc(j.body, j.taggedUsers)}
+                            </ChatInput>
+                            <LikesBar
+                              date={new Date(j.created_on)}
+                              type="commentReply"
+                            />
+                          </ProfileNameWrap>
+                        </ProfileNameHeader>
+                      </UserMessageContent>
+                    </div>
+                  ))}
+                  <ScrollToBottom1 />
+                </div>
               ) : (displayReply || displayReplyInput) && loadingReplies ? (
                 <LoaderWrap>
                   <ValueLoader />
                 </LoaderWrap>
               ) : null}
-              {displayReply || displayReplyInput ? (
-                <>
-                  <ReplyInput
-                    type="reply"
-                    eventId={eventData._id}
-                    displayComments={displayComments}
-                    replyDescription={replyDescription}
-                    setReplyDescription={setReplyDescription}
-                    commentId={i._id}
-                    addReply={addReply}
-                    name={i.userId.name}
-                  />
-                  <ScrollToBottom1 />
-                </>
-              ) : null}
             </ReplyWrap>
           </Scrollbars>
+          {displayReply || displayReplyInput ? (
+            <>
+              <ReplyInput
+                type="reply"
+                eventId={eventData._id}
+                displayComments={displayComments}
+                replyDescription={replyDescription}
+                setReplyDescription={setReplyDescription}
+                commentId={i._id}
+                addReply={addReply}
+                name={i.userId.name}
+              />
+            </>
+          ) : null}
         </ProfileNameWrap>
       </ProfileNameHeader>
     </UserMessageContent>

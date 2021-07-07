@@ -13,7 +13,10 @@ import {
   fetchEventComments,
 } from "../../../../../../../reducers/eventReducer";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { addLikeToComment } from "../../../../../../../reducers/businessReducer";
+import {
+  addLikeToComment,
+  setEventId,
+} from "../../../../../../../reducers/businessReducer";
 
 const BottomBarLikes = styled.div`
   display: flex;
@@ -160,6 +163,7 @@ const LikesBar = ({
 
   /** to display comments on a particular event */
   const displayCommentsWithEvents = () => {
+    dispatch(setEventId(eventId));
     if (type === "comment") {
       setDisplayEventComments(!displayEventComments);
       setFlag(false);
@@ -220,6 +224,7 @@ const LikesBar = ({
 
   /** to display comments of a particular event */
   const displayComments = () => {
+    dispatch(setEventId(eventId));
     if (type === "comment") {
       setDisplayEventComments(!displayEventComments);
       setFlag(false);

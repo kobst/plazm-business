@@ -5,7 +5,7 @@ import ProfileImg from "../../../../../../../images/profile-img.png";
 import { useDispatch, useSelector } from "react-redux";
 import { MentionsInput, Mention } from "react-mentions";
 import Picker from "emoji-picker-react";
-import {  findSelectedUsers } from "../../../../../../../reducers/consumerReducer";
+import { findSelectedUsers } from "../../../../../../../reducers/consumerReducer";
 import { unwrapResult } from "@reduxjs/toolkit";
 
 const ChatContent = styled.div`
@@ -61,7 +61,7 @@ const ChatContent = styled.div`
 const ProfileNameHeader = styled.div`
   display: flex;
   // padding: 0px;
-  padding-top:10px;
+  padding-top: 10px;
   margin: 0;
   width: 100%;
 `;
@@ -120,7 +120,7 @@ const InputWrap = styled.div`
     outline: 0;
     width: auto;
     font-size: 12px;
-    color: #6C6C6C;
+    color: #6c6c6c;
     padding: 0;
     width: 110px;
   }
@@ -173,13 +173,16 @@ const ReplyInput = ({
 }) => {
   const user = useSelector((state) => state.user.user);
   const [mentionArrayUser, setMentionArrayUser] = useState([]);
-  const [selectedUsers, setSelectedUsers] = useState([])
+  const [selectedUsers, setSelectedUsers] = useState([]);
   const [displayEmoji, setDisplayEmoji] = useState(false);
   const dispatch = useDispatch();
 
+  const selectedEventId = useSelector(
+    (state) => state.myFeed.selectedEventIdForComments
+  );
+
   /** handle change method for mentions input */
   const handleChange = async (event, newValue, newPlainTextValue, mentions) => {
-
     if (mentions.length !== 0) {
       /** to find if the mention is of users or lists */
       const findUser = selectedUsers.find((i) => i._id === mentions[0].id);
@@ -273,20 +276,22 @@ const ReplyInput = ({
         display: `${myUser.name}`,
         image: myUser.photo ? myUser.photo : "",
       }));
-      setSelectedUsers(res)
+      setSelectedUsers(res);
       return callback(x);
     }
   };
   return (
     <>
-      <ChatContent className={type==="reply" ? "InnerReply" : ""}>
+      <ChatContent className={type === "reply" ? "InnerReply" : ""}>
         <ProfileNameHeader>
           <ProfileThumb>
             <img src={user.photo ? user.photo : ProfileImg} alt="" />
           </ProfileThumb>
           <ProfileNameWrap>
             <InputWrap>
-              {type === "reply" ? <div className="taggedUserInput">{"@" + name}</div> : null}
+              {type === "reply" ? (
+                <div className="taggedUserInput">{"@" + name}</div>
+              ) : null}
               {type === "comment" ? (
                 <MentionsInput
                   markup="@(__id__)[__display__]"
@@ -295,7 +300,13 @@ const ReplyInput = ({
                   placeholder={type === "reply" ? "Add Reply" : "Add Comment"}
                   className="replyInput"
                   onKeyPress={(event) => commentAddKeyPress(event)}
-                  autoFocus
+                  autoFocus={
+                    type === "reply"
+                      ? selectedEventId === eventId
+                        ? true
+                        : false
+                      : true
+                  }
                 >
                   <Mention
                     type="user"
@@ -311,6 +322,13 @@ const ReplyInput = ({
                   placeholder="Add Reply"
                   onChange={(e) => setReplyDescription(e.target.value)}
                   onKeyPress={(event) => commentAddKeyPress(event)}
+                  autoFocus={
+                    type === "reply"
+                      ? selectedEventId === eventId
+                        ? true
+                        : false
+                      : true
+                  }
                 />
               )}
               <EmojiWrap>

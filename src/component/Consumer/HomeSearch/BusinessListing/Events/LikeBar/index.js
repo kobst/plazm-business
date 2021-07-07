@@ -175,6 +175,7 @@ const LikesBar = ({
         dispatch(setEventId(null));
       }
     } else if (type === "reply") {
+      dispatch(setEventId(eventId));
       setDisplayReply(!displayReply);
       setFlag(true);
       if (displayReply === false)
@@ -252,6 +253,7 @@ const LikesBar = ({
         dispatch(setEventId(null));
       }
     } else if (type === "reply") {
+      dispatch(setEventId(eventId));
       setFlag(true);
       setDisplayReply(!displayReply);
       if (displayReply === false)
