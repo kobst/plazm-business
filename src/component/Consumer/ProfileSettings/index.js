@@ -270,6 +270,12 @@ const ProfileSettings = ({
       setError("Could not update profile");
     }
   };
+
+  /**to toggle to change password screen */
+  const changePasswordFunc = (e) => {
+    e.preventDefault()
+    setDisplayChangePassword(true)
+  }
   return (
     <>
       <ChangePasswordContent>
@@ -347,7 +353,7 @@ const ProfileSettings = ({
                 <BottomBtns>
                   <BackButton
                     disabled={loader}
-                    onClick={() => setDisplayChangePassword(true)}
+                    onClick={(e) => changePasswordFunc(e)}
                   >
                     Change Password
                   </BackButton>

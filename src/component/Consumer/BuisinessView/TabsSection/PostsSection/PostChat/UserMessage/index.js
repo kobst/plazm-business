@@ -398,13 +398,11 @@ const UserMessage = ({ postData }) => {
                 ) : null}
               </ProfileName>
               <ChatInput>
-                <p>
                   {findDesc(
                     postData.postDetails.data,
                     postData.postDetails.taggedUsers,
                     postData.postDetails.taggedLists
                   )}
-                </p>
               </ChatInput>
               <LikesBar
                 type="comment"

@@ -206,11 +206,9 @@ const Comments = ({
               !loadingReplies ? (
                 <div>
                   {i.replies.map((j, key) => (
-                    <>
+                    <div key={key}>
                       <UserMessageContent
-                        className="UserReplyContent"
-                        key={key}
-                      >
+                        className="UserReplyContent">
                         <ProfileNameHeader>
                           <ProfileThumb>
                             <img
@@ -241,7 +239,7 @@ const Comments = ({
                           </ProfileNameWrap>
                         </ProfileNameHeader>
                       </UserMessageContent>
-                    </>
+                    </div>
                   ))}
                   <ScrollToBottom1 />
                 </div>

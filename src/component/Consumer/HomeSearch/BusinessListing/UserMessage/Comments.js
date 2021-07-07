@@ -184,7 +184,7 @@ const Comments = ({
           </ProfileName>
           <ChatInput>
             {" "}
-            <p>{findDesc(i.body, i.taggedUsers)}</p>
+            {findDesc(i.body, i.taggedUsers)}
           </ChatInput>
           <LikesBar
             type={listView ? "reply" : "disabled"}
@@ -215,11 +215,9 @@ const Comments = ({
               {displayReply && i.replies.length > 0 && !loadingReplies ? (
                 <div>
                   {i.replies.map((j, key) => (
-                    <>
+                    <div key={key}>
                       <UserMessageContent
-                        className="UserReplyContent"
-                        key={key}
-                      >
+                        className="UserReplyContent">
                         <ProfileNameHeader>
                           <ProfileThumb>
                             <img
@@ -250,7 +248,7 @@ const Comments = ({
                           </ProfileNameWrap>
                         </ProfileNameHeader>
                       </UserMessageContent>
-                    </>
+                    </div>
                   ))}
                   <ScrollToBottom1 />
                 </div>

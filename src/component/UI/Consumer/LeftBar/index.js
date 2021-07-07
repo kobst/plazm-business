@@ -455,6 +455,8 @@ const LeftBar = ({
               )}
             </div>
           </TabPanel>
+          <TabPanel></TabPanel>
+          <TabPanel></TabPanel>
         </Tabs>
       </LeftBarContent>
     </>

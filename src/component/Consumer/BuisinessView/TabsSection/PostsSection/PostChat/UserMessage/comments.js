@@ -174,7 +174,7 @@ const Comments = ({ i, postData, displayComments, setFlag, flag }) => {
           </ProfileName>
           <ChatInput>
             {" "}
-            <p>{findDesc(i.body, i.taggedUsers)}</p>
+            {findDesc(i.body, i.taggedUsers)}
           </ChatInput>
           <LikesBar
             type="reply"
@@ -204,11 +204,9 @@ const Comments = ({ i, postData, displayComments, setFlag, flag }) => {
               {displayReply && i.replies.length > 0 && !loadingReplies ? (
                 <div>
                   {i.replies.map((j, key) => (
-                    <>
+                    <div key={key}>
                       <UserMessageContent
-                        className="UserReplyContent"
-                        key={key}
-                      >
+                        className="UserReplyContent">
                         <ProfileNameHeader>
                           <ProfileThumb>
                             <img
@@ -239,7 +237,7 @@ const Comments = ({ i, postData, displayComments, setFlag, flag }) => {
                           </ProfileNameWrap>
                         </ProfileNameHeader>
                       </UserMessageContent>
-                    </>
+                    </div>
                   ))}
                   <ScrollToBottom1 />
                 </div>
