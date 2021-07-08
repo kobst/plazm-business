@@ -183,11 +183,13 @@ const PostFilter = () => {
   const setMostLiked = () => {
     setSideFilterFlag(!sideFilterFlag);
     dispatch(setSideFiltersByMostLiked());
+    setUploadMenu(false)
   };
 
   const setMostRecent = () => {
     setSideFilterFlag(!sideFilterFlag);
     dispatch(setSideFiltersByMostRecent());
+    setUploadMenu(false)
   };
   return (
     <>

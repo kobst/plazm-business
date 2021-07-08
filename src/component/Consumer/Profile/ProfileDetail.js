@@ -1,7 +1,6 @@
 import React from "react";
 import { IoMdClose } from "react-icons/io";
 import { useSelector } from "react-redux";
-import { useHistory } from "react-router";
 import styled from "styled-components";
 import ProfileImg from "../../../images/profile-img.png";
 
@@ -78,16 +77,16 @@ const ProfileItemCategory = styled.div`
   width: calc(100% - 40px);
 `;
 
-const ProfileLock = ({ setDisplayTab }) => {
+const ProfileLock = ({ setDisplayTab, setProfileClosed }) => {
   const userProfile = useSelector((state) => state.user.selectedUser);
-  const history = useHistory();
 
   /*
    * @desc: close tab function to be called on cross icon click
    */
   const closeTab = () => {
-    setDisplayTab();
-    history.push("/");
+    // setDisplayTab();
+    setProfileClosed(true)
+    // history.push("/");
   };
   return (
     <ProfileOuter>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { useHistory } from "react-router-dom";
 import ProfileImg from "../../../../../images/profile-img.png";
 import ReplyInput from "./ReplyInput";
 import LikesBar from "../LikesBar";
@@ -12,6 +13,8 @@ import {
   replaceBucket,
 } from "../../../../../utilities/checkResizedImage";
 import ReplyImage from "./replyImage";
+
+const reactStringReplace = require("react-string-replace");
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -121,6 +124,7 @@ const Comments = ({
   const ws = useSelector((state) => state.user.ws);
   const [image, setImage] = useState(null);
   const loadingReplies = useSelector((state) => state.myFeed.loadingReplies);
+  const history = useHistory()
 
   /** to find resized image */
   useEffect(() => {
@@ -159,28 +163,28 @@ const Comments = ({
   };
   /** to highlight the user mentions mentioned in post description */
   const findDesc = (value, mentions) => {
-    let divContent = value;
     if (mentions.length > 0) {
-      mentions.map((v) => {
-        let re = new RegExp("@" + v.name, "g");
-        divContent = divContent.replace(
-          re,
-          `<span className='mentionData' onClick={window.open("/u/${
-            v._id
-          }",'_self')}> ${"@" + v.name}  </span>`
-        );
-        return divContent;
-      });
-      if (mentions.length !== 0) {
-        return (
-          <>
-            <div dangerouslySetInnerHTML={{ __html: divContent }}></div>
-          </>
-        );
-      } else {
-        return value;
+      for (let i = 0; i < mentions.length; i++) {
+        if (value.search(new RegExp(mentions[i].name, "g") !== -1)) {
+          return (
+            <div>
+              {reactStringReplace(value, "@" + mentions[i].name, (match, j) => (
+                <span
+                  className="mentionData"
+                  onClick={() => history.push(`/u/${mentions[i]._id}`)}
+                >
+                  {match}
+                </span>
+              ))}
+            </div>
+          );
+        } else {
+          return <div>{value}</div>;
+        }
       }
-    } else return value;
+    } else {
+      return value;
+    }
   };
 
   /** to check image error */
@@ -204,7 +208,7 @@ const Comments = ({
         </ProfileThumb>
         <ProfileNameWrap>
           <ProfileName
-            onClick={() => window.open(`/u/${i.userId._id}`, "_self")}
+            onClick={() => history.push(`/u/${i.userId._id}`)}
           >
             {i.userId.name ? i.userId.name : i.userId[0].name}{" "}
           </ProfileName>
@@ -249,7 +253,7 @@ const Comments = ({
                               <span>by</span>
                               <span
                                 onClick={() =>
-                                  window.open(`/u/${j.userId._id}`, "_self")
+                                  history.push(`/u/${j.userId._id}`)
                                 }
                                 style={{ color: "#ff2e9a" }}
                               >

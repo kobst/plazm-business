@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { useHistory } from "react-router-dom";
 import ProfileImg from "../../../../../../../images/profile-img.png";
 import ReplyInput from "./ReplyInput";
 import LikesBar from "../LikesBar";
@@ -12,6 +13,8 @@ import {
   replaceBucket,
 } from "../../../../../../../utilities/checkResizedImage";
 import ReplyImage from "../../../../../HomeSearch/BusinessListing/UserMessage/replyImage";
+
+const reactStringReplace = require("react-string-replace");
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -128,6 +131,8 @@ const Comments = ({ i, eventData, displayComments, setFlag, flag }) => {
       setImage(ProfileImg);
     }
   }, [i]);
+  const history = useHistory();
+
   /** to add reply function */
   const addReply = async (obj) => {
     ws.send(
@@ -147,28 +152,28 @@ const Comments = ({ i, eventData, displayComments, setFlag, flag }) => {
 
   /** to highlight the user mentions mentioned in post description */
   const findDesc = (value, mentions) => {
-    let divContent = value;
     if (mentions.length > 0) {
-      mentions.map((v) => {
-        let re = new RegExp("@" + v.name, "g");
-        divContent = divContent.replace(
-          re,
-          `<span className='mentionData' onClick={window.open("/u/${
-            v._id
-          }",'_self')}> ${"@" + v.name}  </span>`
-        );
-        return divContent;
-      });
-      if (mentions.length !== 0) {
-        return (
-          <>
-            <div dangerouslySetInnerHTML={{ __html: divContent }}></div>
-          </>
-        );
-      } else {
-        return value;
+      for (let i = 0; i < mentions.length; i++) {
+        if (value.search(new RegExp(mentions[i].name, "g") !== -1)) {
+          return (
+            <div>
+              {reactStringReplace(value, "@" + mentions[i].name, (match, j) => (
+                <span
+                  className="mentionData"
+                  onClick={() => history.push(`/u/${mentions[i]._id}`)}
+                >
+                  {match}
+                </span>
+              ))}
+            </div>
+          );
+        } else {
+          return <div>{value}</div>;
+        }
       }
-    } else return value;
+    } else {
+      return value;
+    }
   };
 
   /** to check image error */
@@ -179,6 +184,7 @@ const Comments = ({ i, eventData, displayComments, setFlag, flag }) => {
       setImage(ProfileImg);
     }
   };
+
   return (
     <UserMessageContent className="UserReplyContent">
       <ProfileNameHeader>
@@ -187,7 +193,8 @@ const Comments = ({ i, eventData, displayComments, setFlag, flag }) => {
         </ProfileThumb>
         <ProfileNameWrap>
           <ProfileName
-            onClick={() => window.open(`/u/${i.userId._id}`, "_self")}
+            style={{ cursor: "pointer" }}
+            onClick={() => history.push(`/u/${i.userId._id}`)}
           >
             {i.userId.name}{" "}
           </ProfileName>
@@ -232,10 +239,8 @@ const Comments = ({ i, eventData, displayComments, setFlag, flag }) => {
                           <ProfileName>
                             <span>by</span>
                             <span
-                              onClick={() =>
-                                window.open(`/u/${j.userId._id}`, "_self")
-                              }
-                              style={{ color: "#ff2e9a" }}
+                              onClick={() => history.push(`/u/${j.userId._id}`)}
+                              style={{ color: "#ff2e9a", cursor: "pointer" }}
                             >
                               {j.userId.name}
                             </span>{" "}

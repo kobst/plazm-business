@@ -87,8 +87,8 @@ const DashboardContainer = (props) => {
       isBusinessOpen={props.isBusinessOpen}
       isUserOpen={props.isUserOpen}
       businessExists={businessExists}
-      businessId={businessId}
-      userId={props.match.params.id}
+      businessId={props.match.params.id? businessId: null}
+      userId={props.isUserOpen? props.match.params.id: null}
     />
   ) : (
     <div

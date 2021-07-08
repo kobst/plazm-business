@@ -1,41 +1,45 @@
-import React from 'react';
+import React from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
-import Frame from '../../../images/Frame.png'
+import Frame from "../../../images/Frame.png";
 
 const ProfileLockOuter = styled.div`
-    width: 100%;
-    text-align: center;    
-    box-sizing: border-box;
-    padding: 0px 32px;
-    margin-top: 125px;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+  padding: 0px 32px;
+  margin-top: 125px;
 `;
 
 const ProfileLockHeading = styled.div`
-    font-weight: bold;
-    font-size: 18px;
-    color: #FF2E9A;
-    margin-bottom:10px;
+  font-weight: bold;
+  font-size: 18px;
+  color: #ff2e9a;
+  margin-bottom: 10px;
 `;
 
 const ProfileLockContent = styled.div`
-    font-weight: 500;
-    font-size: 14px;
-    color:#FFFFFF;
+  font-weight: 500;
+  font-size: 14px;
+  color: #ffffff;
 `;
 const ProfileImg = styled.div`
-    margin-bottom: 21px;
+  margin-bottom: 21px;
 `;
 
-const ProfileLock = (props) => (    
+const ProfileLock = () => {
+    const userProfile = useSelector((state) => state.user.selectedUser);
+  return (
     <ProfileLockOuter>
-        <ProfileImg><img src={Frame} alt={Frame} /></ProfileImg>    
-        <ProfileLockHeading>
-            Jane Cooper locked Her Profile
-        </ProfileLockHeading>
-        <ProfileLockContent>
-            Only her friends can see what she shares on her timeline.
-        </ProfileLockContent>
-    </ProfileLockOuter>    
-)
+      <ProfileImg>
+        <img src={Frame} alt={Frame} />
+      </ProfileImg>
+      <ProfileLockHeading>{userProfile.name} locked Her Profile</ProfileLockHeading>
+      <ProfileLockContent>
+        Only her friends can see what she shares on her timeline.
+      </ProfileLockContent>
+    </ProfileLockOuter>
+  );
+};
 
 export default ProfileLock;

@@ -375,7 +375,7 @@ export const slice = createSlice({
                 postDetails: findPost1[0].postDetails,
                 comments: commentsSort,
                 totalComments: findPost1[0].totalComments,
-                totalLikes: findPost1[0].totalLikes + 1,
+                totalLikes: findPost1[0].totalLikes,
               });
               dummy1 = dummy1.concat(findPost);
               state.posts = dummy1.sort((a, b) => {

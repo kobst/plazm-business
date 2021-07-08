@@ -25,6 +25,7 @@ import {
   addSubscribedList,
   removeSubscribedList,
 } from "../../../reducers/userReducer";
+import { useHistory } from "react-router-dom";
 
 const ListOptionSection = styled.div`
   width: 100%;
@@ -187,6 +188,7 @@ const ListBannerSection = styled.div`
       color:#FF2E9A;
       border-right: 1px solid #fff;
       padding-right: 10px;
+      cursor: pointer;
     }
     strong {
       margin-left: 10px;
@@ -264,6 +266,7 @@ const ListDescriptionView = ({
   const user = useSelector((state) => state.user.user);
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffSet] = useState(0);
+  const history = useHistory();
 
   /** to clear all the data initially */
   useEffect(() => {
@@ -275,7 +278,7 @@ const ListDescriptionView = ({
   /** to return to all business listing */
   const backBusiness = () => {
     dispatch(clearListData());
-    dispatch(clearMyFeedData())
+    dispatch(clearMyFeedData());
     setSelectedListId(null);
   };
 
@@ -363,7 +366,14 @@ const ListDescriptionView = ({
                 />
                 <h1>{selectedList.name}</h1>
                 <h5>
-                  by <span>{selectedList.ownerId.name}</span>{" "}
+                  by{" "}
+                  <span
+                    onClick={() =>
+                      history.push(`/u/${selectedList.ownerId._id}`)
+                    }
+                  >
+                    {selectedList.ownerId.name}
+                  </span>{" "}
                   <strong>
                     Updated{" "}
                     {moment(selectedList.updatedAt).format(
