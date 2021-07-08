@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ProfileImg from "../../../../../../../images/profile-img.png";
 import ReplyInput from "./ReplyInput";
@@ -21,6 +21,10 @@ import {
 import Comment from "./comments";
 import ScrollToBottom from "./ScrollToBottom";
 import moment from "moment";
+import {
+  checkMime,
+  replaceBucket,
+} from "../../../../../../../utilities/checkResizedImage";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -128,10 +132,10 @@ const UserMessage = ({ eventData }) => {
   const businessInfo = useSelector((state) => state.business.business)[0];
   const [displayEventComments, setDisplayEventComments] = useState(false);
   const [flag, setFlag] = useState(false);
+  const [image, setImage] = useState(null);
   const business = useSelector((state) => state.business.business);
-  const [displayEventCommentInput, setDisplayEventCommentInput] = useState(
-    false
-  );
+  const [displayEventCommentInput, setDisplayEventCommentInput] =
+    useState(false);
   const [description, setDescription] = useState("");
   const loadingComments = useSelector(
     (state) => state.event.loadingEventComments
@@ -224,23 +228,61 @@ const UserMessage = ({ eventData }) => {
     "Friday",
     "Saturday",
   ];
+
+  /** to find resized image */
+  useEffect(() => {
+    if (eventData.user !== null && eventData.user.photo) {
+      const findMime = checkMime(eventData.user.photo);
+      const image = replaceBucket(eventData.user.photo, findMime, 30, 30);
+      setImage(image);
+    } else if (eventData.user == null) {
+      if (businessInfo.default_image_url) {
+        const findMime = checkMime(businessInfo.default_image_url);
+        const image = replaceBucket(
+          businessInfo.default_image_url,
+          findMime,
+          30,
+          30
+        );
+        setImage(image);
+      } else {
+        setImage(ProfileImg);
+      }
+    } else if (businessInfo.default_image_url) {
+      const findMime = checkMime(businessInfo.default_image_url);
+      const image = replaceBucket(
+        businessInfo.default_image_url,
+        findMime,
+        30,
+        30
+      );
+      setImage(image);
+    } else {
+      setImage(ProfileImg);
+    }
+  }, [eventData, businessInfo.default_image_url]);
+
+  const checkError = () => {
+    if (eventData.user !== null && eventData.user.photo) {
+      setImage(eventData.user.photo);
+    } else if (eventData.user == null) {
+      if (businessInfo.default_image_url) {
+        setImage(businessInfo.default_image_url);
+      } else {
+        setImage(ProfileImg);
+      }
+    } else if (businessInfo.default_image_url) {
+      setImage(businessInfo.default_image_url);
+    } else {
+      setImage(ProfileImg);
+    }
+  };
   return (
     <>
       <UserMessageContent>
         <ProfileNameHeader>
           <ProfileThumb>
-            <img
-              src={
-                eventData.user !== null && eventData.user.photo
-                  ? eventData.user.photo
-                  : eventData.user == null
-                  ? businessInfo.default_image_url
-                    ? businessInfo.default_image_url
-                    : ProfileImg
-                  : ProfileImg
-              }
-              alt=""
-            />
+            <img src={image} onError={() => checkError()} alt="" />
           </ProfileThumb>
           <ProfileNameWrap>
             <ProfileName>{businessInfo.company_name}</ProfileName>

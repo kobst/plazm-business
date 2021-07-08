@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ProfileImg from "../../../../../../../images/profile-img.png";
 import ReplyInput from "./ReplyInput";
@@ -18,6 +18,10 @@ import ScrollToBottom from "./ScrollToBottom";
 import { setWs } from "../../../../../../../reducers/userReducer";
 import { RiArrowDropRightFill } from "react-icons/ri";
 import ReactTooltip from "react-tooltip";
+import {
+  checkMime,
+  replaceBucket,
+} from "../../../../../../../utilities/checkResizedImage";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -177,7 +181,7 @@ const DescriptionBox = styled.div`
     margin: 0;
     font-weight: bold;
     font-size: 10px;
-    max-width: 20ch
+    max-width: 20ch;
   }
 `;
 
@@ -189,6 +193,7 @@ const UserMessage = ({ postData }) => {
   );
   const business = useSelector((state) => state.business.business)[0];
   const [description, setDescription] = useState("");
+  const [image, setImage] = useState(null);
   const [displayCommentInput, setDisplayCommentInput] = useState(false);
   const [flag, setFlag] = useState(false);
   const filters = useSelector((state) => state.business.filters);
@@ -259,6 +264,42 @@ const UserMessage = ({ postData }) => {
     }
   };
 
+  /** to check for resized image */
+  useEffect(() => {
+    if (postData.postDetails.ownerId === null) {
+      const findMime = checkMime(business.default_image_url);
+      const image = replaceBucket(business.default_image_url, findMime, 30, 30);
+      setImage(image);
+    } else if (
+      postData.postDetails.ownerId.photo !== "" &&
+      postData.postDetails.ownerId.photo !== null
+    ) {
+      const findMime = checkMime(postData.postDetails.ownerId.photo);
+      const image = replaceBucket(
+        postData.postDetails.ownerId.photo,
+        findMime,
+        30,
+        30
+      );
+      setImage(image);
+    } else {
+      setImage(ProfileImg);
+    }
+  }, [postData, business.default_image_url]);
+
+  /** to check image error */
+  const checkError = () => {
+    if (postData.postDetails.ownerId === null) {
+      setImage(business.default_image_url);
+    } else if (
+      postData.postDetails.ownerId.photo !== "" &&
+      postData.postDetails.ownerId.photo !== null
+    ) {
+      setImage(postData.postDetails.ownerId.photo);
+    } else {
+      setImage(ProfileImg);
+    }
+  };
   /** to add comment function */
   const addComment = async (obj) => {
     ws.send(
@@ -357,17 +398,7 @@ const UserMessage = ({ postData }) => {
         <UserMessageContent>
           <ProfileNameHeader>
             <ProfileThumb>
-              <img
-                src={
-                  postData.postDetails.ownerId === null
-                    ? business.default_image_url
-                    : postData.postDetails.ownerId.photo !== "" &&
-                      postData.postDetails.ownerId.photo !== null
-                    ? postData.postDetails.ownerId.photo
-                    : ProfileImg
-                }
-                alt=""
-              />
+              <img src={image} onError={() => checkError()} alt="" />
             </ProfileThumb>
             <ProfileNameWrap>
               <ProfileName>
@@ -398,11 +429,11 @@ const UserMessage = ({ postData }) => {
                 ) : null}
               </ProfileName>
               <ChatInput>
-                  {findDesc(
-                    postData.postDetails.data,
-                    postData.postDetails.taggedUsers,
-                    postData.postDetails.taggedLists
-                  )}
+                {findDesc(
+                  postData.postDetails.data,
+                  postData.postDetails.taggedUsers,
+                  postData.postDetails.taggedLists
+                )}
               </ChatInput>
               <LikesBar
                 type="comment"

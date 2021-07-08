@@ -19,6 +19,7 @@ import {
   setPostId,
   setEventId,
 } from "../../../../../reducers/myFeedReducer";
+import { checkMime, replaceBucket } from "../../../../../utilities/checkResizedImage";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -200,6 +201,7 @@ const UserMessage = ({
   const [description, setDescription] = useState("");
   const [displayCommentInput, setDisplayCommentInput] = useState(false);
   const [flag, setFlag] = useState(false);
+  const [image, setImage] = useState(null);
   const user = useSelector((state) => state.user.user);
   const ws = useSelector((state) => state.user.ws);
   const commentsRef = useRef();
@@ -262,6 +264,27 @@ const UserMessage = ({
       }
     }
   };
+
+  /** to find resized image */
+  useEffect(() => {
+    if (postData.ownerId === null || postData.ownerId.length === 0) {
+      const findMime = checkMime(businessData.default_image_url);
+      const image = replaceBucket(
+        businessData.default_image_url,
+        findMime,
+        30,
+        30
+      );
+      setImage(image);
+    } else if (
+      postData.ownerId[0].photo !== "" &&
+      postData.ownerId[0].photo !== null
+    ) {
+      const findMime = checkMime(postData.ownerId[0].photo);
+      const image = replaceBucket(postData.ownerId[0].photo, findMime, 30, 30);
+      setImage(image);
+    } else setImage(ProfileImg);
+  }, [postData, businessData.default_image_url]);
 
   /** to add comment function */
   const addComment = async (obj) => {
@@ -377,23 +400,26 @@ const UserMessage = ({
       return value;
     }
   };
+
+  /** to check image error */
+  const checkError = () => {
+    if (postData.ownerId === null || postData.ownerId.length === 0) {
+      setImage(businessData.default_image_url);
+    } else if (
+      postData.ownerId[0].photo !== "" &&
+      postData.ownerId[0].photo !== null
+    ) {
+      setImage(postData.ownerId[0].photo);
+    } else setImage(ProfileImg);
+  };
+
   return (
     <>
       <UserMsgWrap>
         <UserMessageContent>
           <ProfileNameHeader>
             <ProfileThumb>
-              <img
-                src={
-                  postData.ownerId === null || postData.ownerId.length === 0
-                    ? businessData.default_image_url
-                    : postData.ownerId[0].photo !== "" &&
-                      postData.ownerId[0].photo !== null
-                    ? postData.ownerId[0].photo
-                    : ProfileImg
-                }
-                alt=""
-              />
+              <img src={image} onError={() => checkError()} alt="" />
             </ProfileThumb>
             <ProfileNameWrap>
               <ProfileName>

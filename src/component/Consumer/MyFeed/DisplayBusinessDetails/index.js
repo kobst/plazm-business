@@ -14,6 +14,7 @@ import {
 } from "../../../../reducers/userReducer";
 import BusinessHashTags from "../../BusinessList/businessHashtags";
 import { useHistory } from "react-router";
+import { checkMime, replaceBucket } from "../../../../utilities/checkResizedImage";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -201,11 +202,8 @@ const DisplayBusinessDetails = ({ data, id, setMyFeedIndex }) => {
   const getUtcMinutes = new Date().getUTCMinutes();
   const currentUtcDay = new Date().getUTCDay();
   const history = useHistory();
-  const [image, setImage] = useState(
-    data.business[0].default_image_url
-      ? data.business[0].default_image_url
-      : ProfileImg
-  );
+  const [image, setImage] = useState(null);
+
   const days = [
     "Sunday",
     "Monday",
@@ -260,6 +258,20 @@ const DisplayBusinessDetails = ({ data, id, setMyFeedIndex }) => {
     } else setFavoriteBusiness(false);
   }, [user, data]);
 
+  /** to check for resized image */
+  useEffect(() => {
+    if (data.business.length > 0 && data.business[0].default_image_url) {
+      const findMime = checkMime(data.business[0].default_image_url);
+      const image = replaceBucket(
+        data.business[0].default_image_url,
+        findMime,
+        30,
+        30
+      );
+      setImage(image);
+    } else setImage(ProfileImg);
+  }, [data]);
+
   /** to add a business to user favorites */
   const addFavorite = async () => {
     const obj = {
@@ -277,6 +289,15 @@ const DisplayBusinessDetails = ({ data, id, setMyFeedIndex }) => {
     };
     await dispatch(RemoveBusinessFavorite(obj));
   };
+
+  /** to check image error */
+  const checkError = () => {
+    if(data.business.length > 0 && data.business[0].default_image_url) {
+      setImage(data.business[0].default_image_url)
+    } else {
+      setImage(ProfileImg)
+    }
+  }
 
   /** to display business details page */
   const displayBusinessDetail = () => {
@@ -296,7 +317,7 @@ const DisplayBusinessDetails = ({ data, id, setMyFeedIndex }) => {
                 <ProfileThumb>
                   <img
                     src={image}
-                    onError={() => setImage(ProfileImg)}
+                    onError={() => checkError()}
                     alt=""
                   />
                 </ProfileThumb>

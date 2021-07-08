@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import ProfileImg from "../../../../../../images/profile-img.png";
 import ReplyInput from "./ReplyInput";
@@ -7,6 +7,11 @@ import { Scrollbars } from "react-custom-scrollbars";
 import { useSelector } from "react-redux";
 import ValueLoader from "../../../../../../utils/loader";
 import ScrollToBottom1 from "./ScrollToBottom1";
+import {
+  checkMime,
+  replaceBucket,
+} from "../../../../../../utilities/checkResizedImage";
+import ReplyImage from "../../UserMessage/replyImage";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -113,10 +118,23 @@ const Comments = ({
   const [displayReply, setDisplayReply] = useState(false);
   const [displayReplyInput, setDisplayReplyInput] = useState(false);
   const [replyDescription, setReplyDescription] = useState("");
+  const [image, setImage] = useState(null);
   const ws = useSelector((state) => state.user.ws);
   const loadingReplies = useSelector(
     (state) => state.myFeed.loadingEventReplies
   );
+
+  /** to check resized image */
+  useEffect(() => {
+    if (i.userId.photo) {
+      const findMime = checkMime(i.userId.photo);
+      const image = replaceBucket(i.userId.photo, findMime, 30, 30);
+      setImage(image);
+    } else {
+      setImage(ProfileImg);
+    }
+  }, [i]);
+  
   /** to add reply function */
   const addReply = async (obj) => {
     ws.send(
@@ -159,11 +177,20 @@ const Comments = ({
       }
     } else return value;
   };
+
+  /** to check image error */
+  const checkError = () => {
+    if (i.userId.photo) {
+      setImage(i.userId.photo);
+    } else {
+      setImage(ProfileImg);
+    }
+  };
   return (
     <UserMessageContent className="UserReplyContent">
       <ProfileNameHeader>
         <ProfileThumb>
-          <img src={i.userId.photo ? i.userId.photo : ProfileImg} alt="" />
+          <img src={image} onError={() => checkError()} alt="" />
         </ProfileThumb>
         <ProfileNameWrap>
           <ProfileName
@@ -207,14 +234,10 @@ const Comments = ({
                 <div>
                   {i.replies.map((j, key) => (
                     <div key={key}>
-                      <UserMessageContent
-                        className="UserReplyContent">
+                      <UserMessageContent className="UserReplyContent">
                         <ProfileNameHeader>
                           <ProfileThumb>
-                            <img
-                              src={j.userId.photo ? j.userId.photo : ProfileImg}
-                              alt=""
-                            />
+                            <ReplyImage j={j} />
                           </ProfileThumb>
                           <ProfileNameWrap>
                             <ProfileName>

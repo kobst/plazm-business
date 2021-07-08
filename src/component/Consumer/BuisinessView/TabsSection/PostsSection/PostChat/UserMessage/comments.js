@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ProfileImg from "../../../../../../../images/profile-img.png";
 import ReplyInput from "./ReplyInput";
@@ -7,6 +7,11 @@ import { Scrollbars } from "react-custom-scrollbars";
 import { useSelector } from "react-redux";
 import ValueLoader from "../../../../../../../utils/loader";
 import ScrollToBottom1 from "./ScrollToBottom1";
+import ReplyImage from "../../../../../HomeSearch/BusinessListing/UserMessage/replyImage";
+import {
+  checkMime,
+  replaceBucket,
+} from "../../../../../../../utilities/checkResizedImage";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -115,10 +120,26 @@ const Comments = ({ i, postData, displayComments, setFlag, flag }) => {
   const [displayReply, setDisplayReply] = useState(false);
   const [displayReplyInput, setDisplayReplyInput] = useState(false);
   const [replyDescription, setReplyDescription] = useState("");
+  const [image, setImage] = useState(null);
   const ws = useSelector((state) => state.user.ws);
   const business = useSelector((state) => state.business.business);
   const loadingReplies = useSelector((state) => state.business.loadingReplies);
 
+  /** to check for resized image */
+  useEffect(() => {
+    if (i.userId.photo) {
+      const findMime = checkMime(i.userId.photo);
+      const image = replaceBucket(i.userId.photo, findMime, 30, 30);
+      setImage(image);
+    } else {
+      setImage(ProfileImg);
+    }
+  }, [i]);
+
+  const checkError = () => {
+    if (i.userId.photo) setImage(i.userId.photo);
+    else setImage(ProfileImg);
+  };
   /** to add reply function */
   const addReply = async (obj) => {
     setReplyDescription("");
@@ -160,11 +181,12 @@ const Comments = ({ i, postData, displayComments, setFlag, flag }) => {
       }
     } else return value;
   };
+
   return (
     <UserMessageContent className="UserReplyContent">
       <ProfileNameHeader>
         <ProfileThumb>
-          <img src={i.userId.photo ? i.userId.photo : ProfileImg} alt="" />
+          <img src={image} onError={() => checkError()} alt="" />
         </ProfileThumb>
         <ProfileNameWrap>
           <ProfileName
@@ -172,10 +194,7 @@ const Comments = ({ i, postData, displayComments, setFlag, flag }) => {
           >
             {i.userId.name}{" "}
           </ProfileName>
-          <ChatInput>
-            {" "}
-            {findDesc(i.body, i.taggedUsers)}
-          </ChatInput>
+          <ChatInput> {findDesc(i.body, i.taggedUsers)}</ChatInput>
           <LikesBar
             type="reply"
             date={new Date(i.createdAt)}
@@ -205,14 +224,10 @@ const Comments = ({ i, postData, displayComments, setFlag, flag }) => {
                 <div>
                   {i.replies.map((j, key) => (
                     <div key={key}>
-                      <UserMessageContent
-                        className="UserReplyContent">
+                      <UserMessageContent className="UserReplyContent">
                         <ProfileNameHeader>
                           <ProfileThumb>
-                            <img
-                              src={j.userId.photo ? j.userId.photo : ProfileImg}
-                              alt=""
-                            />
+                            <ReplyImage j={j} />
                           </ProfileThumb>
                           <ProfileNameWrap>
                             <ProfileName>

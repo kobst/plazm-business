@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ProfileImg from "../../../../../images/profile-img.png";
 import ReplyInput from "./ReplyInput";
@@ -7,6 +7,11 @@ import { Scrollbars } from "react-custom-scrollbars";
 import { useSelector } from "react-redux";
 import ValueLoader from "../../../../../utils/loader";
 import ScrollToBottom1 from "./ScrollToBottom1";
+import {
+  checkMime,
+  replaceBucket,
+} from "../../../../../utilities/checkResizedImage";
+import ReplyImage from "./replyImage";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -114,7 +119,27 @@ const Comments = ({
   const [displayReplyInput, setDisplayReplyInput] = useState(false);
   const [replyDescription, setReplyDescription] = useState("");
   const ws = useSelector((state) => state.user.ws);
+  const [image, setImage] = useState(null);
   const loadingReplies = useSelector((state) => state.myFeed.loadingReplies);
+
+  /** to find resized image */
+  useEffect(() => {
+    if (i.userId.length > 0) {
+      if (i.userId[0].photo !== "" && i.userId[0].photo) {
+        const findMime = checkMime(i.userId[0].photo);
+        const image = replaceBucket(i.userId[0].photo, findMime, 30, 30);
+        setImage(image);
+      } else if (i.userId.photo) {
+        const findMime = checkMime(i.userId.photo);
+        const image = replaceBucket(i.userId.photo, findMime, 30, 30);
+        setImage(image);
+      }
+    } else if (i.userId.photo) {
+      const findMime = checkMime(i.userId.photo);
+      const image = replaceBucket(i.userId.photo, findMime, 30, 30);
+      setImage(image);
+    } else setImage(ProfileImg);
+  }, [i]);
 
   /** to add reply function */
   const addReply = async (obj) => {
@@ -157,24 +182,25 @@ const Comments = ({
       }
     } else return value;
   };
+
+  /** to check image error */
+  const checkError = () => {
+    if (i.userId.length > 0) {
+      if (i.userId[0].photo !== "" && i.userId[0].photo) {
+        setImage(i.userId[0].photo);
+      } else if (i.userId.photo) {
+        setImage(i.userId.photo);
+      }
+    } else if (i.userId.photo) {
+      setImage(i.userId.photo);
+    } else setImage(ProfileImg);
+  };
+
   return (
     <UserMessageContent className="UserReplyContent">
       <ProfileNameHeader>
         <ProfileThumb>
-          <img
-            src={
-              i.userId.length > 0
-                ? i.userId[0].photo !== ""
-                  ? i.userId[0].photo
-                  : i.userId.photo
-                  ? i.userId.photo
-                  : ProfileImg
-                : i.userId.photo
-                ? i.userId.photo
-                : ProfileImg
-            }
-            alt=""
-          />
+          <img src={image} onError={() => checkError()} alt="" />
         </ProfileThumb>
         <ProfileNameWrap>
           <ProfileName
@@ -182,10 +208,7 @@ const Comments = ({
           >
             {i.userId.name ? i.userId.name : i.userId[0].name}{" "}
           </ProfileName>
-          <ChatInput>
-            {" "}
-            {findDesc(i.body, i.taggedUsers)}
-          </ChatInput>
+          <ChatInput> {findDesc(i.body, i.taggedUsers)}</ChatInput>
           <LikesBar
             type={listView ? "reply" : "disabled"}
             date={new Date(i.createdAt)}
@@ -216,14 +239,10 @@ const Comments = ({
                 <div>
                   {i.replies.map((j, key) => (
                     <div key={key}>
-                      <UserMessageContent
-                        className="UserReplyContent">
+                      <UserMessageContent className="UserReplyContent">
                         <ProfileNameHeader>
                           <ProfileThumb>
-                            <img
-                              src={j.userId.photo ? j.userId.photo : ProfileImg}
-                              alt=""
-                            />
+                            <ReplyImage j={j} />
                           </ProfileThumb>
                           <ProfileNameWrap>
                             <ProfileName>
