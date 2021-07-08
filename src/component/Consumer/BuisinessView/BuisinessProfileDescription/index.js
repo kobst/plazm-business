@@ -165,7 +165,7 @@ const BuisinessProfileDescription = ({setDisplayTab}) => {
           </PhoneNumberDiv>
         </CommonWrap>
         <CommonWrap>
-          <HeadingDesp>Timings</HeadingDesp>
+          <HeadingDesp>Hours</HeadingDesp>
 
           {businessProfile.hours_format.length > 0
             ? businessProfile.hours_format.map((i) => {

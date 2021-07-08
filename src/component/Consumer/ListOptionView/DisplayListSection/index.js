@@ -10,6 +10,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import CheckboxSquare from "../../UI/CheckboxSquare";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteUserCreatedList } from "../../../../reducers/listReducer";
+import { checkMime, replaceBucket } from "../../../../utilities/checkResizedImage";
 const ListSection = styled.div`
   width: 100%;
   position: relative;
@@ -80,7 +81,7 @@ const ListHeading = styled.div`
   -webkit-box-orient: vertical;
   overflow: hidden;
   @media (max-width: 767px) {
-    width: calc(100% - 30px)
+    width: calc(100% - 30px);
   }
 `;
 
@@ -95,7 +96,7 @@ const DotsDiv = styled.div`
   svg {
     font-size: 14px;
     color: #fff;
-  }  
+  }
 `;
 
 const FollowedSection = styled.div`
@@ -226,7 +227,7 @@ const SubscribedBtn = styled.button`
   :focus {
     outline: 0;
   }
-  @media (max-width:767px) {
+  @media (max-width: 767px) {
     margin: 0 10px 0 0;
   }
 `;
@@ -248,7 +249,7 @@ const MyListBtn = styled.button`
   :focus {
     outline: 0;
   }
-  @media (max-width:767px) {
+  @media (max-width: 767px) {
     margin: 0 10px 0 0;
   }
 `;
@@ -277,7 +278,7 @@ const DropdownContent = styled.div`
     display: flex;
     text-align: center;
     right: -96px;
-    transform: rotate(90deg);    
+    transform: rotate(90deg);
   }
   @media (max-width: 767px) {
     top: -29px;
@@ -302,13 +303,23 @@ const DropdownContent = styled.div`
     cursor: pointer;
   }
 `;
-
 const CustomCheckSquare = styled.div``;
 const DisplayListSection = ({ data, setSelectedListId }) => {
   const user = useSelector((state) => state.user.user);
   const [uploadMenu, setUploadMenu] = useState(false);
   const menuRef = useRef(null);
   const dispatch = useDispatch();
+  const [image, setImage] = useState(null);
+
+  /** to check if list view size image exists in bucket */
+  useEffect(() => {
+    if (data.media.length > 0) {
+      const findMime = checkMime(data.media[0].image)
+      const image = replaceBucket(data.media[0].image, findMime, 155, 135)
+      setImage(image);
+    } else setImage(UploadImg);
+  }, [data]);
+
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -334,16 +345,21 @@ const DisplayListSection = ({ data, setSelectedListId }) => {
       listId: data._id,
     };
     await dispatch(deleteUserCreatedList(obj));
-    setUploadMenu(false)
+    setUploadMenu(false);
   };
+
+  const errorFunction = () => {
+    if(data.media.length)
+    setImage(data.media[0].image)
+    else
+    setImage(UploadImg)
+  }
+
   return (
     <>
       <ListSection>
         <ListImageWrap>
-          <img
-            src={data.media.length > 0 ? data.media[0].image : UploadImg}
-            alt=""
-          />
+          <img src={image} alt="" onError={()=>errorFunction()} />
         </ListImageWrap>
         <ListDetailWrap>
           <ListHeadingWrap>
@@ -353,7 +369,7 @@ const DisplayListSection = ({ data, setSelectedListId }) => {
               {uploadMenu && (
                 <DropdownContent>
                   <ul>
-                    <li onClick={()=>setSelectedListId(data._id)}>View</li>
+                    <li onClick={() => setSelectedListId(data._id)}>View</li>
 
                     <li>Detailed View</li>
                     <li>Make Public</li>

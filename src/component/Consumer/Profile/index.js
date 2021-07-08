@@ -21,7 +21,7 @@ const LoaderWrap = styled.div`
   }
 `;
 
-const ProfileContent = ({ userId, setDisplayTab }) => {
+const ProfileContent = ({ userId, setDisplayTab, setProfileClosed }) => {
   const loading = useSelector((state) => state.user.loadingProfile);
   const dispatch = useDispatch();
   const userProfile = useSelector((state) => state.user.selectedUser);
@@ -35,7 +35,7 @@ const ProfileContent = ({ userId, setDisplayTab }) => {
     </LoaderWrap>
   ) : userProfile !== null ? (
     <div>
-      <ProfileDetail setDisplayTab={setDisplayTab} />
+      <ProfileDetail setDisplayTab={setDisplayTab} setProfileClosed={setProfileClosed}/>
       <ProfileTabs />
       <ProfileLock />
     </div>

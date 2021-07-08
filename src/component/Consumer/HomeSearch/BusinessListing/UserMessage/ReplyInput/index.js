@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FaRegSmile } from "react-icons/fa";
 import ProfileImg from "../../../../../../images/profile-img.png";
@@ -7,6 +7,7 @@ import { MentionsInput, Mention } from "react-mentions";
 import Picker from "emoji-picker-react";
 import { findSelectedUsers } from "../../../../../../reducers/consumerReducer";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { checkMime, replaceBucket } from "../../../../../../utilities/checkResizedImage";
 
 const ChatContent = styled.div`
   width: 100%;
@@ -174,11 +175,25 @@ const ReplyInput = ({
   const [mentionArrayUser, setMentionArrayUser] = useState([]);
   const [displayEmoji, setDisplayEmoji] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [image, setImage] = useState(null);
   const dispatch = useDispatch();
 
   const selectedPostId = useSelector(
     (state) => state.myFeed.selectedPostIdForComments
   );
+
+  useEffect(() => {
+    if (user.photo) {
+      const findMime = checkMime(user.photo);
+      const image = replaceBucket(user.photo, findMime, 30, 30);
+      setImage(image);
+    } else setImage(ProfileImg);
+  }, [user]);
+
+  const checkError = () => {
+    if (user.photo) setImage(user.photo);
+    else setImage(ProfileImg);
+  };
 
   /** on select of emoji */
   const onEmojiClick = (event, emojiObject) => {
@@ -278,7 +293,7 @@ const ReplyInput = ({
       <ChatContent className={type === "reply" ? "InnerReply" : ""}>
         <ProfileNameHeader>
           <ProfileThumb>
-            <img src={user.photo ? user.photo : ProfileImg} alt="" />
+            <img src={image} onError={() => checkError()} alt="" />
           </ProfileThumb>
           <ProfileNameWrap>
             <InputWrap>

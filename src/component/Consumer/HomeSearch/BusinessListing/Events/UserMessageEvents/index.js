@@ -11,6 +11,7 @@ import ValueLoader from "../../../../../../utils/loader";
 import ReplyInput from "./ReplyInput";
 import Comments from "./comments";
 import { useHistory } from "react-router";
+import { checkMime, replaceBucket } from "../../../../../../utilities/checkResizedImage";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -129,6 +130,7 @@ const UserMessageEvents = ({
   const [displayEventCommentInput, setDisplayEventCommentInput] =
     useState(false);
   const [description, setDescription] = useState("");
+  const [image, setImage] = useState(null);
   const loadingComments = useSelector(
     (state) => state.myFeed.loadingEventComments
   );
@@ -191,6 +193,56 @@ const UserMessageEvents = ({
     "Friday",
     "Saturday",
   ];
+
+  /** to find resized image */
+  useEffect(() => {
+    if (eventData.user !== null && eventData.user.photo) {
+      const findMime = checkMime(eventData.user.photo);
+      const image = replaceBucket(eventData.user.photo, findMime, 30, 30);
+      setImage(image);
+    } else if (eventData.user == null) {
+      if (businessInfo.default_image_url) {
+        const findMime = checkMime(businessInfo.default_image_url);
+        const image = replaceBucket(
+          businessInfo.default_image_url,
+          findMime,
+          30,
+          30
+        );
+        setImage(image);
+      } else {
+        setImage(ProfileImg);
+      }
+    } else if (businessInfo.default_image_url) {
+      const findMime = checkMime(businessInfo.default_image_url);
+      const image = replaceBucket(
+        businessInfo.default_image_url,
+        findMime,
+        30,
+        30
+      );
+      setImage(image);
+    } else {
+      setImage(ProfileImg);
+    }
+  }, [eventData, businessInfo.default_image_url]);
+
+  const checkError = () => {
+    if (eventData.user !== null && eventData.user.photo) {
+      setImage(eventData.user.photo);
+    } else if (eventData.user == null) {
+      if (businessInfo.default_image_url) {
+        setImage(businessInfo.default_image_url);
+      } else {
+        setImage(ProfileImg);
+      }
+    } else if (businessInfo.default_image_url) {
+      setImage(businessInfo.default_image_url);
+    } else {
+      setImage(ProfileImg);
+    }
+  };
+
   return (
     <>
       <UserMessageContent>
@@ -205,20 +257,7 @@ const UserMessageEvents = ({
           }
         >
           <ProfileThumb>
-            <img
-              src={
-                eventData.user !== null && eventData.user.photo
-                  ? eventData.user.photo
-                  : eventData.user == null
-                  ? businessInfo.default_image_url
-                    ? businessInfo.default_image_url
-                    : ProfileImg
-                  : businessInfo.default_image_url
-                  ? businessInfo.default_image_url
-                  : ProfileImg
-              }
-              alt=""
-            />
+            <img src={image} onError={() => checkError()} alt="" />
           </ProfileThumb>
           <ProfileNameWrap>
             <ProfileName onClick={() => displayBusinessDetail()}>

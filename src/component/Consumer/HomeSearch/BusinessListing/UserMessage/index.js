@@ -19,6 +19,10 @@ import {
   setPostId,
   setEventId,
 } from "../../../../../reducers/myFeedReducer";
+import { checkMime, replaceBucket } from "../../../../../utilities/checkResizedImage";
+import { useHistory } from "react-router-dom";
+
+const reactStringReplace = require("react-string-replace");
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -200,9 +204,11 @@ const UserMessage = ({
   const [description, setDescription] = useState("");
   const [displayCommentInput, setDisplayCommentInput] = useState(false);
   const [flag, setFlag] = useState(false);
+  const [image, setImage] = useState(null);
   const user = useSelector((state) => state.user.user);
   const ws = useSelector((state) => state.user.ws);
   const commentsRef = useRef();
+  const history = useHistory();
   const selectedPostId = useSelector(
     (state) => state.myFeed.selectedPostIdForComments
   );
@@ -263,6 +269,27 @@ const UserMessage = ({
     }
   };
 
+  /** to find resized image */
+  useEffect(() => {
+    if (postData.ownerId === null || postData.ownerId.length === 0) {
+      const findMime = checkMime(businessData.default_image_url);
+      const image = replaceBucket(
+        businessData.default_image_url,
+        findMime,
+        30,
+        30
+      );
+      setImage(image);
+    } else if (
+      postData.ownerId[0].photo !== "" &&
+      postData.ownerId[0].photo !== null
+    ) {
+      const findMime = checkMime(postData.ownerId[0].photo);
+      const image = replaceBucket(postData.ownerId[0].photo, findMime, 30, 30);
+      setImage(image);
+    } else setImage(ProfileImg);
+  }, [postData, businessData.default_image_url]);
+
   /** to add comment function */
   const addComment = async (obj) => {
     ws.send(
@@ -304,21 +331,29 @@ const UserMessage = ({
   const findDesc = (value, mentions, mentionsList) => {
     let divContent = value;
     if (mentions.length > 0 && mentionsList.length > 0) {
-      mentions.map((v) => {
-        let re = new RegExp("@" + v.name, "g");
-        divContent = divContent.replace(
-          re,
-          `<span className='mentionData' onClick={window.open("/u/${
-            v._id
-          }",'_self')}> ${"@" + v.name}  </span>`
-        );
-        return divContent;
-      });
+      for (let i = 0; i < mentions.length; i++) {
+        if (value.search(new RegExp("@" + mentions[i].name, "g") !== -1)) {
+          return (
+            <div>
+              {reactStringReplace(value, "@" + mentions[i].name, (match, j) => (
+                <span
+                  className="mentionData"
+                  onClick={() => history.push(`/u/${mentions[i]._id}`)}
+                >
+                  {match}
+                </span>
+              ))}
+            </div>
+          );
+        } else {
+          return <div>{value}</div>
+        }
+      }
       mentionsList.map((v) => {
         let re = new RegExp("@" + v.name, "g");
         divContent = divContent.replace(
           re,
-          `<span className='mentionData' onClick={window.open("/u/${
+          `<span className='mentionData'  onClick={history.push("/u/${
             v._id
           }",'_self')}> ${"@" + v.name}  </span>`
         );
@@ -334,33 +369,30 @@ const UserMessage = ({
         return value;
       }
     } else if (mentions.length > 0) {
-      mentions.map((v) => {
-        let re = new RegExp("@" + v.name, "g");
-        divContent = divContent.replace(
-          re,
-          `<span className='mentionData' onClick={window.open("/u/${
-            v._id
-          }",'_self')}> ${"@" + v.name}  </span>`
-        );
-        return divContent;
-      });
-      if (mentions.length !== 0) {
-        return (
-          <>
-            <div dangerouslySetInnerHTML={{ __html: divContent }}></div>
-          </>
-        );
-      } else {
-        return value;
+      for (let i = 0; i < mentions.length; i++) {
+        if (value.search(new RegExp("@" + mentions[i].name, "g") !== -1)) {
+          return (
+            <div>
+              {reactStringReplace(value, "@" + mentions[i].name, (match, j) => (
+                <span
+                  className="mentionData"
+                  onClick={() => history.push(`/u/${mentions[i]._id}`)}
+                >
+                  {match}
+                </span>
+              ))}
+            </div>
+          );
+        } else {
+          return <div>{value}</div>
+        }
       }
     } else if (mentionsList.length > 0) {
       mentionsList.map((v) => {
         let re = new RegExp("@" + v.name, "g");
         divContent = divContent.replace(
           re,
-          `<span className='mentionData' onClick={window.open("/u/${
-            v._id
-          }",'_self')}> ${"@" + v.name}  </span>`
+          `<span className='mentionData'> ${"@" + v.name}  </span>`
         );
         return divContent;
       });
@@ -377,23 +409,26 @@ const UserMessage = ({
       return value;
     }
   };
+
+  /** to check image error */
+  const checkError = () => {
+    if (postData.ownerId === null || postData.ownerId.length === 0) {
+      setImage(businessData.default_image_url);
+    } else if (
+      postData.ownerId[0].photo !== "" &&
+      postData.ownerId[0].photo !== null
+    ) {
+      setImage(postData.ownerId[0].photo);
+    } else setImage(ProfileImg);
+  };
+
   return (
     <>
       <UserMsgWrap>
         <UserMessageContent>
           <ProfileNameHeader>
             <ProfileThumb>
-              <img
-                src={
-                  postData.ownerId === null || postData.ownerId.length === 0
-                    ? businessData.default_image_url
-                    : postData.ownerId[0].photo !== "" &&
-                      postData.ownerId[0].photo !== null
-                    ? postData.ownerId[0].photo
-                    : ProfileImg
-                }
-                alt=""
-              />
+              <img src={image} onError={() => checkError()} alt="" />
             </ProfileThumb>
             <ProfileNameWrap>
               <ProfileName>
@@ -403,7 +438,7 @@ const UserMessage = ({
                   <span
                     className="ownerId-name"
                     onClick={() =>
-                      window.open(`/u/${postData.ownerId[0]._id}`, "_self")
+                      history.push(`/u/${postData.ownerId[0]._id}`)
                     }
                   >
                     {postData.ownerId[0].name}
