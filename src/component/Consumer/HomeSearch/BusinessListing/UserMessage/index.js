@@ -3,7 +3,7 @@ import styled from "styled-components";
 import ReactTooltip from "react-tooltip";
 import { useSelector, useDispatch } from "react-redux";
 import { Scrollbars } from "react-custom-scrollbars";
-import { RiArrowDropRightFill } from "react-icons/ri";
+import RiArrowDropRightFill from "react-icons/ri";
 import ValueLoader from "../../../../../utils/loader";
 import ReplyInput from "./ReplyInput";
 import Comments from "./Comments";

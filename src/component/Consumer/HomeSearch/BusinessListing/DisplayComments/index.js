@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import ReactTooltip from "react-tooltip";
-import { RiArrowDropRightFill } from "react-icons/ri";
+import RiArrowDropRightFill from "react-icons/ri";
 import Comments from "../UserMessage/Comments";
 import ProfileImg from "../../../../../images/profile-img.png";
 import LikesBar from "../LikesBar";
