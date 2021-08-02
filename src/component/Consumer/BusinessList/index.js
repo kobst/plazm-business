@@ -176,7 +176,7 @@ const DropdownContent = styled.div`
 /*
  * @desc: to display all business lists
  */
-const BusinessList = ({ setDisplayTab }) => {
+const BusinessList = ({ setDisplayTab, setFavoriteIndex }) => {
   const [search, setSearch] = useState("");
   const [uploadMenu, setUploadMenu] = useState(false);
   const [favoriteBusinessFiltered, setFavoriteBusinessFiltered] = useState([]);
@@ -261,13 +261,13 @@ const BusinessList = ({ setDisplayTab }) => {
   /** to set side filter by closest */
   const closestFilter = () => {
     dispatch(setSideFiltersByClosest());
-    setUploadMenu(false)
+    setUploadMenu(false);
   };
 
   /** to set side filter by recently updated */
   const recentlyUpdatedFilter = () => {
     dispatch(setSideFiltersByUpdatedAt());
-    setUploadMenu(false)
+    setUploadMenu(false);
   };
 
   return (
@@ -332,7 +332,11 @@ const BusinessList = ({ setDisplayTab }) => {
               <BusinessListWrap>
                 {userFavorites.length > 0 ? (
                   userFavorites.map((i, key) => (
-                    <DisplayFavoriteBusiness data={i} key={key} />
+                    <DisplayFavoriteBusiness
+                      data={i}
+                      key={key}
+                      setFavoriteIndex={setFavoriteIndex}
+                    />
                   ))
                 ) : (
                   <NoData>No Business To Display</NoData>

@@ -222,6 +222,8 @@ const BuisinessHeader = ({
   setMyFeedIndex,
   listIndex,
   setListIndex,
+  favoriteIndex,
+  setFavoriteIndex
 }) => {
   const history = useHistory();
   const [favoriteBusiness, setFavoriteBusiness] = useState(false);
@@ -283,6 +285,7 @@ const BuisinessHeader = ({
       setTabIndex(7);
       setListIndex(null);
     } else {
+      setFavoriteIndex(null)
       history.push("/");
     }
   };

@@ -187,6 +187,7 @@ const LikesBar = ({
         }
       } else if (type === "reply") {
         setFlag(true);
+        dispatch(setPostId(postId));
         if (displayComments === false)
           dispatch(
             fetchSearchCommentReplies({
@@ -255,6 +256,7 @@ const LikesBar = ({
   /** to display comments of the post on click of comment icon */
   const setReplyDisplay = () => {
     if (type === "reply") {
+      dispatch(setPostId(postId));
       setDisplayComments(!displayComments);
       setFlag(true);
       if (displayComments === false)

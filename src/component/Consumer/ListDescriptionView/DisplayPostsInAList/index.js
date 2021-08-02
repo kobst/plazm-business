@@ -12,6 +12,10 @@ import {
 } from "../../../../reducers/userReducer";
 import BusinessHashTags from "../../BusinessList/businessHashtags";
 import { useHistory } from "react-router";
+import {
+  checkMime,
+  replaceBucket,
+} from "../../../../utilities/checkResizedImage";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -199,6 +203,30 @@ const DisplayPostInAList = ({ data, id, setListIndex }) => {
       ? data.business[0].default_image_url
       : ProfileImg
   );
+
+  useEffect(() => {
+    if (data.business[0].default_image_url) {
+      const findMime = checkMime(data.business[0].default_image_url);
+      const image = replaceBucket(
+        data.business[0].default_image_url,
+        findMime,
+        30,
+        30
+      );
+      setImage(image);
+    } else {
+      setImage(ProfileImg);
+    }
+  }, [data]);
+
+  const checkError = () => {
+    if (data.business[0].default_image_url) {
+      setImage(data.business[0].default_image_url);
+    } else {
+      setImage(ProfileImg);
+    }
+  };
+
   const dispatch = useDispatch();
   const getUtcHour = new Date().getUTCHours();
   const getUtcMinutes = new Date().getUTCMinutes();
@@ -291,7 +319,7 @@ const DisplayPostInAList = ({ data, id, setListIndex }) => {
           <UserMessageContent>
             <ProfileNameHeader>
               <ProfileThumb>
-                <img src={image} onError={() => setImage(ProfileImg)} alt="" />
+                <img src={image} onError={() => checkError()} alt="" />
               </ProfileThumb>
               <ProfileNameWrap>
                 <ProfileName>

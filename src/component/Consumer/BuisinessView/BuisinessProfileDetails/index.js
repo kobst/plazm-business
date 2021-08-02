@@ -14,10 +14,10 @@ const BuisinessViewContent = styled.div`
 `;
 const BottomContent = styled.div`
   padding: 35px;
-  animation: fadein .5s;
-    -moz-animation: fadein .5s; /* Firefox */
-    -webkit-animation: fadein .5s; /* Safari and Chrome */
-    -o-animation: fadein .5s; /* Opera */
+  animation: fadein 0.5s;
+  -moz-animation: fadein 0.5s; /* Firefox */
+  -webkit-animation: fadein 0.5s; /* Safari and Chrome */
+  -o-animation: fadein 0.5s; /* Opera */
   @media (max-width: 767px) {
     padding: 15px;
   }
@@ -27,6 +27,15 @@ const BuisinessProfileDetails = ({
   setDisplayBusinessProfile,
   setDisplayTab,
   displayBusinessProfile,
+  searchIndex,
+  setTabIndex,
+  setSearchIndex,
+  myFeedIndex,
+  setMyFeedIndex,
+  listIndex,
+  setListIndex,
+  favoriteIndex,
+  setFavoriteIndex,
 }) => {
   const businessProfile = useSelector((state) => state.business.business)[0];
   return (
@@ -34,21 +43,41 @@ const BuisinessProfileDetails = ({
       <BuisinessViewContent>
         {businessProfile.userSub !== null ? (
           <BuisinessHeader
-            displayBusinessProfile = {displayBusinessProfile}
+            displayBusinessProfile={displayBusinessProfile}
             isProfile={true}
             setDisplayBusinessProfile={setDisplayBusinessProfile}
             setDisplayTab={setDisplayTab}
+            searchIndex={searchIndex}
+            setTabIndex={setTabIndex}
+            setSearchIndex={setSearchIndex}
+            myFeedIndex={myFeedIndex}
+            setMyFeedIndex={setMyFeedIndex}
+            favoriteIndex={favoriteIndex}
+            setFavoriteIndex={setFavoriteIndex}
+            listIndex={listIndex}
+            setListIndex={setListIndex}
           />
         ) : (
           <BuisinessHeaderNotClaimed
             isProfile={true}
             setDisplayBusinessProfile={setDisplayBusinessProfile}
             setDisplayTab={setDisplayTab}
+            searchIndex={searchIndex}
+            setTabIndex={setTabIndex}
+            setSearchIndex={setSearchIndex}
+            myFeedIndex={myFeedIndex}
+            setMyFeedIndex={setMyFeedIndex}
+            favoriteIndex={favoriteIndex}
+            setFavoriteIndex={setFavoriteIndex}
+            listIndex={listIndex}
+            setListIndex={setListIndex}
           />
         )}
         <BottomContent>
-          <BuisinessProfileSection setDisplayBusinessProfile={setDisplayBusinessProfile} />
-          <BuisinessProfileDescription  />
+          <BuisinessProfileSection
+            setDisplayBusinessProfile={setDisplayBusinessProfile}
+          />
+          <BuisinessProfileDescription />
         </BottomContent>
       </BuisinessViewContent>
     </>

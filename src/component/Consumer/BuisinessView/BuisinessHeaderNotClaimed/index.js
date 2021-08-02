@@ -203,6 +203,9 @@ const BuisinessHeaderNotClaimed = ({
   setSearchIndex,
   setMyFeedIndex,
   myFeedIndex,
+  setFavoriteIndex,
+  listIndex,
+  setListIndex
 }) => {
   const [favoriteBusiness, setFavoriteBusiness] = useState(false);
   const businessProfile = useSelector((state) => state.business.business);
@@ -259,7 +262,12 @@ const BuisinessHeaderNotClaimed = ({
       history.push("/");
       setTabIndex(4);
       setMyFeedIndex(null);
+    } else if (listIndex) {
+      history.push("/");
+      setTabIndex(7);
+      setListIndex(null);
     } else {
+      setFavoriteIndex(null)
       history.push("/");
     }
   };

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useHistory } from "react-router-dom";
 import ProfileImg from "../../../../../../images/profile-img.png";
 import ReplyInput from "./ReplyInput";
 import LikesBar from "../LikeBar";
@@ -7,6 +8,13 @@ import { Scrollbars } from "react-custom-scrollbars";
 import { useSelector } from "react-redux";
 import ValueLoader from "../../../../../../utils/loader";
 import ScrollToBottom1 from "./ScrollToBottom1";
+import {
+  checkMime,
+  replaceBucket,
+} from "../../../../../../utilities/checkResizedImage";
+import ReplyImage from "../../UserMessage/replyImage";
+
+const reactStringReplace = require("react-string-replace");
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -113,10 +121,25 @@ const Comments = ({
   const [displayReply, setDisplayReply] = useState(false);
   const [displayReplyInput, setDisplayReplyInput] = useState(false);
   const [replyDescription, setReplyDescription] = useState("");
+  const [image, setImage] = useState(null);
   const ws = useSelector((state) => state.user.ws);
   const loadingReplies = useSelector(
     (state) => state.myFeed.loadingEventReplies
   );
+
+  /** to check resized image */
+  useEffect(() => {
+    if (i.userId.photo) {
+      const findMime = checkMime(i.userId.photo);
+      const image = replaceBucket(i.userId.photo, findMime, 30, 30);
+      setImage(image);
+    } else {
+      setImage(ProfileImg);
+    }
+  }, [i]);
+  
+  const history = useHistory();
+
   /** to add reply function */
   const addReply = async (obj) => {
     ws.send(
@@ -136,39 +159,46 @@ const Comments = ({
 
   /** to highlight the user mentions mentioned in post description */
   const findDesc = (value, mentions) => {
-    let divContent = value;
     if (mentions.length > 0) {
-      mentions.map((v) => {
-        let re = new RegExp(v.name, "g");
-        divContent = divContent.replace(
-          re,
-          `<span className='mentionData' onClick={window.open("/u/${
-            v._id
-          }",'_self')}> ${"@" + v.name}  </span>`
-        );
-        return divContent;
-      });
-      if (mentions.length !== 0) {
-        return (
-          <>
-            <div dangerouslySetInnerHTML={{ __html: divContent }}></div>
-          </>
-        );
-      } else {
-        return value;
+      for (let i = 0; i < mentions.length; i++) {
+        if (value.search(new RegExp(mentions[i].name, "g") !== -1)) {
+          return (
+            <div>
+              {reactStringReplace(value, "@" + mentions[i].name, (match, j) => (
+                <span
+                  className="mentionData"
+                  onClick={() => history.push(`/u/${mentions[i]._id}`)}
+                >
+                  {match}
+                </span>
+              ))}
+            </div>
+          );
+        } else {
+          return <div>{value}</div>;
+        }
       }
-    } else return value;
+    } else {
+      return value;
+    }
+  };
+
+  /** to check image error */
+  const checkError = () => {
+    if (i.userId.photo) {
+      setImage(i.userId.photo);
+    } else {
+      setImage(ProfileImg);
+    }
   };
   return (
     <UserMessageContent className="UserReplyContent">
       <ProfileNameHeader>
         <ProfileThumb>
-          <img src={i.userId.photo ? i.userId.photo : ProfileImg} alt="" />
+          <img src={image} onError={() => checkError()} alt="" />
         </ProfileThumb>
         <ProfileNameWrap>
-          <ProfileName
-            onClick={() => window.open(`/u/${i.userId._id}`, "_self")}
-          >
+          <ProfileName onClick={() => history.push(`/u/${i.userId._id}`)}>
             {i.userId.name}{" "}
           </ProfileName>
           <ChatInput>
@@ -204,63 +234,62 @@ const Comments = ({
               {(displayReply || displayReplyInput) &&
               i.replies.length > 0 &&
               !loadingReplies ? (
-                i.replies.map((j, key) => (
-                  <>
-                    <UserMessageContent className="UserReplyContent" key={key}>
-                      <ProfileNameHeader>
-                        <ProfileThumb>
-                          <img
-                            src={j.userId.photo ? j.userId.photo : ProfileImg}
-                            alt=""
-                          />
-                        </ProfileThumb>
-                        <ProfileNameWrap>
-                          <ProfileName>
-                            <span style={{ cursor: "default" }}>by</span>
-                            <span
-                              onClick={() =>
-                                window.open(`/u/${j.userId._id}`, "_self")
-                              }
-                              style={{ color: "#ff2e9a" }}
-                            >
-                              {j.userId.name}
-                            </span>{" "}
-                          </ProfileName>
-                          <ChatInput>
-                            {" "}
-                            {findDesc(j.body, j.taggedUsers)}
-                          </ChatInput>
-                          <LikesBar
-                            date={new Date(j.created_on)}
-                            type="commentReply"
-                          />
-                        </ProfileNameWrap>
-                      </ProfileNameHeader>
-                    </UserMessageContent>
-                  </>
-                ))
+                <div>
+                  {i.replies.map((j, key) => (
+                    <div key={key}>
+                      <UserMessageContent className="UserReplyContent">
+                        <ProfileNameHeader>
+                          <ProfileThumb>
+                            <ReplyImage j={j} />
+                          </ProfileThumb>
+                          <ProfileNameWrap>
+                            <ProfileName>
+                              <span style={{ cursor: "default" }}>by</span>
+                              <span
+                                onClick={() =>
+                                  window.open(`/u/${j.userId._id}`, "_self")
+                                }
+                                style={{ color: "#ff2e9a" }}
+                              >
+                                {j.userId.name}
+                              </span>{" "}
+                            </ProfileName>
+                            <ChatInput>
+                              {" "}
+                              {findDesc(j.body, j.taggedUsers)}
+                            </ChatInput>
+                            <LikesBar
+                              date={new Date(j.created_on)}
+                              type="commentReply"
+                            />
+                          </ProfileNameWrap>
+                        </ProfileNameHeader>
+                      </UserMessageContent>
+                    </div>
+                  ))}
+                  <ScrollToBottom1 />
+                </div>
               ) : (displayReply || displayReplyInput) && loadingReplies ? (
                 <LoaderWrap>
                   <ValueLoader />
                 </LoaderWrap>
               ) : null}
-              {displayReply || displayReplyInput ? (
-                <>
-                  <ReplyInput
-                    type="reply"
-                    eventId={eventData._id}
-                    displayComments={displayComments}
-                    replyDescription={replyDescription}
-                    setReplyDescription={setReplyDescription}
-                    commentId={i._id}
-                    addReply={addReply}
-                    name={i.userId.name}
-                  />
-                  <ScrollToBottom1 />
-                </>
-              ) : null}
             </ReplyWrap>
           </Scrollbars>
+          {displayReply || displayReplyInput ? (
+            <>
+              <ReplyInput
+                type="reply"
+                eventId={eventData._id}
+                displayComments={displayComments}
+                replyDescription={replyDescription}
+                setReplyDescription={setReplyDescription}
+                commentId={i._id}
+                addReply={addReply}
+                name={i.userId.name}
+              />
+            </>
+          ) : null}
         </ProfileNameWrap>
       </ProfileNameHeader>
     </UserMessageContent>

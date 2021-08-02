@@ -234,6 +234,12 @@ const CalenderSection = ({ businessId }) => {
   const [addEventModal, setAddEventModal] = useState(false);
   const user = useSelector((state) => state.user.user);
 
+  useEffect(()=>{
+    if(moment(new Date()).isBetween(dateToDisplay.firstDay, dateToDisplay.lastDay)) {
+      setSelectedCapsule(days[currentDate.getDay()])
+    }
+  },[dateToDisplay])
+
   useEffect(() => {
     const fetchData = async () => {
       if (
@@ -358,6 +364,7 @@ const CalenderSection = ({ businessId }) => {
 
   /** today function */
   const todayFunction = () => {
+    setCount(0)
     dispatch(setWeekButtonClicked(false));
     setTodayClicked(true);
     dispatch(setCurrentDate());

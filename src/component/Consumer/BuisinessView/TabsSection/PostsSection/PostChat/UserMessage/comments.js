@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { useHistory } from "react-router-dom";
 import ProfileImg from "../../../../../../../images/profile-img.png";
 import ReplyInput from "./ReplyInput";
 import LikesBar from "../LikesBar";
@@ -7,6 +8,13 @@ import { Scrollbars } from "react-custom-scrollbars";
 import { useSelector } from "react-redux";
 import ValueLoader from "../../../../../../../utils/loader";
 import ScrollToBottom1 from "./ScrollToBottom1";
+import ReplyImage from "../../../../../HomeSearch/BusinessListing/UserMessage/replyImage";
+import {
+  checkMime,
+  replaceBucket,
+} from "../../../../../../../utilities/checkResizedImage";
+
+const reactStringReplace = require("react-string-replace");
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -115,10 +123,27 @@ const Comments = ({ i, postData, displayComments, setFlag, flag }) => {
   const [displayReply, setDisplayReply] = useState(false);
   const [displayReplyInput, setDisplayReplyInput] = useState(false);
   const [replyDescription, setReplyDescription] = useState("");
+  const [image, setImage] = useState(null);
   const ws = useSelector((state) => state.user.ws);
   const business = useSelector((state) => state.business.business);
   const loadingReplies = useSelector((state) => state.business.loadingReplies);
+  const history = useHistory();
 
+  /** to check for resized image */
+  useEffect(() => {
+    if (i.userId.photo) {
+      const findMime = checkMime(i.userId.photo);
+      const image = replaceBucket(i.userId.photo, findMime, 30, 30);
+      setImage(image);
+    } else {
+      setImage(ProfileImg);
+    }
+  }, [i]);
+
+  const checkError = () => {
+    if (i.userId.photo) setImage(i.userId.photo);
+    else setImage(ProfileImg);
+  };
   /** to add reply function */
   const addReply = async (obj) => {
     setReplyDescription("");
@@ -137,45 +162,41 @@ const Comments = ({ i, postData, displayComments, setFlag, flag }) => {
   };
   /** to highlight the user mentions mentioned in post description */
   const findDesc = (value, mentions) => {
-    let divContent = value;
     if (mentions.length > 0) {
-      mentions.map((v) => {
-        let re = new RegExp("@" + v.name, "g");
-        divContent = divContent.replace(
-          re,
-          `<span className='mentionData' onClick={window.open("/u/${
-            v._id
-          }",'_self')}> ${"@" + v.name}  </span>`
-        );
-        return divContent;
-      });
-      if (mentions.length !== 0) {
-        return (
-          <>
-            <div dangerouslySetInnerHTML={{ __html: divContent }}></div>
-          </>
-        );
-      } else {
-        return value;
+      for (let i = 0; i < mentions.length; i++) {
+        if (value.search(new RegExp(mentions[i].name, "g") !== -1)) {
+          return (
+            <div>
+              {reactStringReplace(value, "@" + mentions[i].name, (match, j) => (
+                <span
+                  className="mentionData"
+                  onClick={() => history.push(`/u/${mentions[i]._id}`)}
+                >
+                  {match}
+                </span>
+              ))}
+            </div>
+          );
+        } else {
+          return <div>{value}</div>;
+        }
       }
-    } else return value;
+    } else {
+      return value;
+    }
   };
+
   return (
     <UserMessageContent className="UserReplyContent">
       <ProfileNameHeader>
         <ProfileThumb>
-          <img src={i.userId.photo ? i.userId.photo : ProfileImg} alt="" />
+          <img src={image} onError={() => checkError()} alt="" />
         </ProfileThumb>
         <ProfileNameWrap>
-          <ProfileName
-            onClick={() => window.open(`/u/${i.userId._id}`, "_self")}
-          >
+          <ProfileName onClick={() => history.push(`/u/${i.userId._id}`)}>
             {i.userId.name}{" "}
           </ProfileName>
-          <ChatInput>
-            {" "}
-            <p>{findDesc(i.body, i.taggedUsers)}</p>
-          </ChatInput>
+          <ChatInput> {findDesc(i.body, i.taggedUsers)}</ChatInput>
           <LikesBar
             type="reply"
             date={new Date(i.createdAt)}
@@ -190,6 +211,7 @@ const Comments = ({ i, postData, displayComments, setFlag, flag }) => {
             displayReplyInput={displayReplyInput}
             flag={flag}
             setFlag={setFlag}
+            postId={postData.postId}
           />
           <Scrollbars
             autoHeight
@@ -203,24 +225,18 @@ const Comments = ({ i, postData, displayComments, setFlag, flag }) => {
               {displayReply && i.replies.length > 0 && !loadingReplies ? (
                 <div>
                   {i.replies.map((j, key) => (
-                    <>
-                      <UserMessageContent
-                        className="UserReplyContent"
-                        key={key}
-                      >
+                    <div key={key}>
+                      <UserMessageContent className="UserReplyContent">
                         <ProfileNameHeader>
                           <ProfileThumb>
-                            <img
-                              src={j.userId.photo ? j.userId.photo : ProfileImg}
-                              alt=""
-                            />
+                            <ReplyImage j={j} />
                           </ProfileThumb>
                           <ProfileNameWrap>
                             <ProfileName>
                               <span>by</span>
                               <span
                                 onClick={() =>
-                                  window.open(`/u/${j.userId._id}`, "_self")
+                                  history.push(`/u/${j.userId._id}`)
                                 }
                                 style={{ color: "#ff2e9a" }}
                               >
@@ -238,7 +254,7 @@ const Comments = ({ i, postData, displayComments, setFlag, flag }) => {
                           </ProfileNameWrap>
                         </ProfileNameHeader>
                       </UserMessageContent>
-                    </>
+                    </div>
                   ))}
                   <ScrollToBottom1 />
                 </div>

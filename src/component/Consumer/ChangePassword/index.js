@@ -118,6 +118,12 @@ const ChangePassword = ({ setDisplayChangePassword, setDisplayTab }) => {
         setFormError(err.message)
       });
   };
+
+  /**back to profile settings screen function */
+  const backFunction = (e) => {
+    e.preventDefault();
+    setDisplayChangePassword(false);
+  }
   return (
     <>
       <ChangePasswordContent>
@@ -150,7 +156,7 @@ const ChangePassword = ({ setDisplayChangePassword, setDisplayTab }) => {
 
                 {/* change password btn */}
                 <BottomBtns>
-                  <BackButton onClick={() => setDisplayChangePassword(false)} disabled={loader}>
+                  <BackButton onClick={(e) => backFunction(e)} disabled={loader}>
                     Back
                   </BackButton>
                   <SaveButton type="submit" disabled={loader}>

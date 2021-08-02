@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { IoMdClose } from "react-icons/io";
 import SaveButton from "../UI/SaveButton";
@@ -12,6 +12,7 @@ import FormBody from "./formBody";
 import { validate } from "./validate";
 import ValueLoader from "../../../utils/loader";
 import { updateProfileApi } from "../../../Api";
+import { checkMime, replaceBucket } from "../../../utilities/checkResizedImage";
 
 const bucket = process.env.REACT_APP_BUCKET;
 
@@ -167,13 +168,20 @@ const ProfileSettings = ({
   setFlag,
 }) => {
   const [loader, setLoader] = useState(false);
-  const [profileImage, setProfileImage] = useState(
-    profile.photo ? profile.photo : null
-  );
+  const [profileImage, setProfileImage] = useState(null);
   const [imageError, setImageError] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [error, setError] = useState("");
   const [response, setResponse] = useState("");
+
+  useEffect(() => {
+    if (profile.photo) {
+      const findMime = checkMime(profile.photo);
+      const image = replaceBucket(profile.photo, findMime, 121, 121);
+      setProfileImage(image);
+    } else setProfileImage(null);
+  }, [profile]);
+
   /*
   @desc: to check input file format and throw error if invalid image is input
   @params: input file
@@ -270,6 +278,12 @@ const ProfileSettings = ({
       setError("Could not update profile");
     }
   };
+
+  /**to toggle to change password screen */
+  const changePasswordFunc = (e) => {
+    e.preventDefault();
+    setDisplayChangePassword(true);
+  };
   return (
     <>
       <ChangePasswordContent>
@@ -282,7 +296,10 @@ const ProfileSettings = ({
         <UploadImageContainer>
           <UploadImage>
             {profileImage !== null ? (
-              <ProfileImage src={profileImage} />
+              <ProfileImage
+                src={profileImage}
+                onError={() => setProfileImage(profile.photo)}
+              />
             ) : (
               <>
                 <input
@@ -336,7 +353,7 @@ const ProfileSettings = ({
           >
             {(formik) => (
               <form onSubmit={formik.handleSubmit} method="POST">
-                <FormBody loader={loader} setResponse={setResponse}/>
+                <FormBody loader={loader} setResponse={setResponse} />
                 {error !== "" ? (
                   <ErrorDiv>{error}</ErrorDiv>
                 ) : response !== "" ? (
@@ -347,7 +364,7 @@ const ProfileSettings = ({
                 <BottomBtns>
                   <BackButton
                     disabled={loader}
-                    onClick={() => setDisplayChangePassword(true)}
+                    onClick={(e) => changePasswordFunc(e)}
                   >
                     Change Password
                   </BackButton>
