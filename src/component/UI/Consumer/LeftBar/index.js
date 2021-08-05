@@ -23,6 +23,7 @@ import {
   clearMyFeedData,
   HomeSearch,
   setSearchData,
+  fetchMyFeedData
 } from "../../../../reducers/myFeedReducer";
 import Profile from "../../../Consumer/Profile";
 import HomeSearchComponent from "../../../Consumer/HomeSearch";
@@ -91,8 +92,13 @@ const LeftBar = (
   const [listIndex, setListIndex] = useState(null);
   const [favoriteIndex, setFavoriteIndex] = useState(null);
   const [profileClosed, setProfileClosed] = useState(false);
+  const [userDataId, setUserDataId] = useState(userId)
   const dispatch = useDispatch();
   const history = useHistory();
+
+  useEffect(()=>{
+    setUserDataId(userId)
+  },[userId])
 
   useEffect(() => {
     if (profileClosed && tabIndex === 6) {
@@ -113,26 +119,34 @@ const LeftBar = (
       dispatch(clearMyFeedData());
       setSelectedListId(null);
       setListIndex(null);
+      setUserDataId(null)
+      history.push('/')
     }
   };
 
   /** to clear selected data on tab click */
-  // const myFeedFunction = () => {
-  //   if (tabIndex !== 4 && !loading) {
-  //     const obj = {
-  //       id: user._id,
-  //       value: 0,
-  //     };
-  //     dispatch(clearMyFeedData());
-  //     dispatch(fetchMyFeedData(obj));
-  //   }
-  // };
+  const myFeedFunction = () => {
+    if (tabIndex !== 4 && !loading) {
+      const obj = {
+        id: user._id,
+        value: 0,
+      };
+      setUserDataId(null)
+      setSelectedListId(null)
+      history.push('/')
+      dispatch(clearMyFeedData());
+      dispatch(fetchMyFeedData(obj));
+    }
+  };
   
   /** to clear selected data on tab click */
   const favoriteFunction = () => {
     dispatch(clearBusinessData());
     setFavoriteIndex(null)
     setSelectedListId(null)
+    setUserDataId(null)
+    setSelectedListId(null)
+    history.push('/')
   };
 
   /** to clear selected data on tab click */
@@ -149,6 +163,9 @@ const LeftBar = (
       dispatch(setSearchData(""));
       dispatch(clearMyFeedData());
       dispatch(HomeSearch(obj));
+      setUserDataId(null)
+      setSelectedListId(null)
+      history.push('/')
     }
   };
   return (
@@ -226,7 +243,7 @@ const LeftBar = (
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
-              // onClick={() => myFeedFunction()}
+              onClick={() => myFeedFunction()}
             >
               <img src={Mention} alt="" />
             </Tab>
@@ -335,7 +352,7 @@ const LeftBar = (
               {isUserOpen && !selectedListId? (
                 <Profile
                   setDisplayTab={() => setTabIndex(0)}
-                  userId={userId}
+                  userId={userDataId}
                   setProfileClosed={setProfileClosed}
                 />
               ) : selectedListId ? (
@@ -354,10 +371,10 @@ const LeftBar = (
                   setListClickedFromSearch={setListClickedFromSearch}
                   setSearchIndex={setSearchIndex}
                 />
-              ) : userId ? (
+              ) : userDataId ? (
                 <Profile
                   setDisplayTab={() => setTabIndex(0)}
-                  userId={userId}
+                  userId={userDataId}
                   setProfileClosed={setProfileClosed}
                 />
               ) : 
@@ -382,16 +399,16 @@ const LeftBar = (
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              {!myFeedIndex && !userId && !selectedListId ? (
+              {!myFeedIndex && !userDataId && !selectedListId ? (
                 <MyFeed
                   setDisplayTab={() => setTabIndex(0)}
                   setMyFeedIndex={setMyFeedIndex}
                   setSelectedListId={setSelectedListId}
                 />
-              ) : userId && !selectedListId ? (
+              ) : userDataId && !selectedListId ? (
                 <Profile
                   setDisplayTab={() => setTabIndex(0)}
-                  userId={userId}
+                  userId={userDataId}
                   setProfileClosed={setProfileClosed}
                 />
               ) : selectedListId ? (
@@ -430,7 +447,7 @@ const LeftBar = (
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              {(favoriteIndex || businessId) && !userId && !selectedListId? (
+              {(favoriteIndex || businessId) && !userDataId && !selectedListId? (
                 <BuisinessView
                   setDisplayTab={() => setTabIndex(0)}
                   profile={profile}
@@ -447,10 +464,10 @@ const LeftBar = (
                   setFavoriteIndex={setFavoriteIndex}
                   setSelectedListId={setSelectedListId}
                 />
-              ) : userId ? (
+              ) : userDataId ? (
                 <Profile
                   setDisplayTab={() => setTabIndex(0)}
-                  userId={userId}
+                  userId={userDataId}
                   setProfileClosed={setProfileClosed}
                 />
               ) :  selectedListId ? (
@@ -474,13 +491,13 @@ const LeftBar = (
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              {!selectedListId && !userId ? (
+              {!selectedListId && !userDataId ? (
                 <ListOptionView
                   setDisplayTab={() => setTabIndex(0)}
                   setSelectedListId={setSelectedListId}
                   selectedListId={selectedListId}
                 />
-              ) : !listIndex && !userId ? (
+              ) : !listIndex && !userDataId ? (
                 <ListDescriptionView
                   setDisplayTab={() => setTabIndex(0)}
                   setSelectedListId={setSelectedListId}
@@ -489,10 +506,10 @@ const LeftBar = (
                   setListClickedFromSearch={setListClickedFromSearch}
                   setListIndex={setListIndex}
                 />
-              ) : userId ? (
+              ) : userDataId ? (
                 <Profile
                   setDisplayTab={() => setTabIndex(0)}
-                  userId={userId}
+                  userId={userDataId}
                   setProfileClosed={setProfileClosed}
                 />
               ) : (
