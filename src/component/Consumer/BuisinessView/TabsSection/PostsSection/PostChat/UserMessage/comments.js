@@ -157,6 +157,7 @@ const Comments = ({ i, postData, displayComments, setFlag, flag }) => {
         businessId: business[0]._id,
         taggedUsers: obj.taggedUsers,
         type: "Post",
+        sendTaggedUsers: obj.sendTaggedUsers
       })
     );
   };
@@ -167,12 +168,12 @@ const Comments = ({ i, postData, displayComments, setFlag, flag }) => {
         if (value.search(new RegExp(mentions[i].name, "g") !== -1)) {
           return (
             <div>
-              {reactStringReplace(value, "@" + mentions[i].name, (match, j) => (
+              {reactStringReplace(value, mentions[i].name, (match, j) => (
                 <span
                   className="mentionData"
                   onClick={() => history.push(`/u/${mentions[i]._id}`)}
                 >
-                  {match}
+                  @{match}
                 </span>
               ))}
             </div>

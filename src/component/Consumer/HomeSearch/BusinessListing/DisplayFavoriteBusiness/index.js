@@ -379,7 +379,7 @@ const DisplayFavoriteBusiness = ({
           type="search"
         />
       ) : data.body !== null && data.type === "Post" ? (
-        <DisplayComment postData={data} businessData={businessInfo} />
+        <DisplayComment postData={data} businessData={businessInfo} setSelectedListId={setSelectedListId} />
       ) : data.body !== null && data.type === "Events" ? (
         <DisplayCommentForEvent postData={data} businessData={businessInfo} />
       ) : search && businessInfo.company_name !== null ? (

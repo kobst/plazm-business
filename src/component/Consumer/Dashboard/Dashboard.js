@@ -17,7 +17,7 @@ const Dashboard = ({
   businessExists,
   businessId,
   isUserOpen,
-  userId
+  userId,
 }) => {
   const [displayTab, setDisplayTab] = useState(false);
   return (

@@ -198,6 +198,7 @@ const ReplyInput = ({
 }) => {
   const user = useSelector((state) => state.user.user);
   const [mentionArrayUser, setMentionArrayUser] = useState([]);
+  const [mentionData, setMentionData] = useState([]);
   const [displayEmoji, setDisplayEmoji] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [image, setImage] = useState(null);
@@ -236,6 +237,9 @@ const ReplyInput = ({
       if (findUser) {
         /** if mention is of user add it into user's mention array */
         const valueArr = mentionArrayUser;
+        let data = [];
+        data.push({_id:mentions[0].id, name:mentions[0].display});
+        setMentionData(data)
         valueArr.push(mentions[0].id);
         setMentionArrayUser(valueArr);
       }
@@ -263,6 +267,7 @@ const ReplyInput = ({
         userId: user._id,
         body: desc,
         taggedUsers: mentionArrayUser,
+        sendTaggedUsers: mentionData
       };
       addReply(obj);
     }

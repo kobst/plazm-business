@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
+import { Scrollbars } from "react-custom-scrollbars";
 import BuisinessHeader from "../BuisinessHeader";
 import BuisinessProfileSection from "../BuisinessProfileSection";
 import BuisinessProfileDescription from "../BuisinessProfileDescription";
 import BuisinessHeaderNotClaimed from "../BuisinessHeaderNotClaimed";
-import { useSelector } from "react-redux";
 
 const BuisinessViewContent = styled.div`
   width: 100%;
@@ -73,12 +74,20 @@ const BuisinessProfileDetails = ({
             setListIndex={setListIndex}
           />
         )}
-        <BottomContent>
-          <BuisinessProfileSection
-            setDisplayBusinessProfile={setDisplayBusinessProfile}
-          />
-          <BuisinessProfileDescription />
-        </BottomContent>
+        <Scrollbars
+          autoHeight
+          autoHeightMin={0}
+          autoHeightMax={'calc(100vh - 300px)'}
+          thumbMinSize={30}
+          className="InnerScroll"
+        >
+          <BottomContent>
+            <BuisinessProfileSection
+              setDisplayBusinessProfile={setDisplayBusinessProfile}
+            />
+            <BuisinessProfileDescription />
+          </BottomContent>
+        </Scrollbars>
       </BuisinessViewContent>
     </>
   );

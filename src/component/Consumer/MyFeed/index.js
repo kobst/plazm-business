@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { IoMdClose } from "react-icons/io";
 import { FaSort } from "react-icons/fa";
 import ValueLoader from "../../../utils/loader";
-import { fetchMyFeedData } from "../../../reducers/myFeedReducer";
+import { clearMyFeedData, fetchMyFeedData } from "../../../reducers/myFeedReducer";
 import DisplayBusinessDetails from "./DisplayBusinessDetails";
 
 const LoaderWrap = styled.div`
@@ -114,7 +114,7 @@ const NoMorePost = styled.p`
   color: #fff;
 `;
 
-const MyFeed = ({ setDisplayTab, setMyFeedIndex }) => {
+const MyFeed = ({ setDisplayTab, setMyFeedIndex, setSelectedListId }) => {
   const user = useSelector((state) => state.user.user);
   const loading = useSelector((state) => state.myFeed.loading);
   const feedData = useSelector((state) => state.myFeed.myFeed);
@@ -122,6 +122,15 @@ const MyFeed = ({ setDisplayTab, setMyFeedIndex }) => {
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffSet] = useState(0);
   const dispatch = useDispatch();
+
+  useEffect(()=>{
+      const obj = {
+        id: user._id,
+        value: 0,
+      };
+      dispatch(clearMyFeedData());
+      dispatch(fetchMyFeedData(obj));
+  },[])
 
   const fetchMoreData = () => {
     if (offset + 20 < totalData) {
@@ -182,6 +191,7 @@ const MyFeed = ({ setDisplayTab, setMyFeedIndex }) => {
                       id={key}
                       key={key}
                       setMyFeedIndex={setMyFeedIndex}
+                      setSelectedListId={setSelectedListId}
                     />
                   ))
                 ) : !loading ? (

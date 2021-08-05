@@ -126,6 +126,7 @@ const GetMyFeedData = (obj) => {
                   name
                 }
                 taggedLists {
+                  _id
                   name
                 }
                 ownerId {

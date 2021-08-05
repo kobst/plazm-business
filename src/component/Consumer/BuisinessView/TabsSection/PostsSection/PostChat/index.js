@@ -39,7 +39,7 @@ const LoaderWrap = styled.div`
   }
 `;
 
-const PostChat = () => {
+const PostChat = ({setSelectedListId}) => {
   const posts = useSelector((state) => state.business.posts);
   const business = useSelector((state) => state.business.business);
   const user = useSelector((state) => state.user.user);
@@ -111,7 +111,7 @@ const PostChat = () => {
         >
           <ChatContent>
             {!loadingFilterData && posts.length > 0 ? (
-              posts.map((i,key) => <UserMessage postData={i} key={key} />)
+              posts.map((i,key) => <UserMessage postData={i} key={key} setSelectedListId={setSelectedListId}/>)
             ) : loadingFilterData ? (
               <LoaderWrap>
                 <ValueLoader />
