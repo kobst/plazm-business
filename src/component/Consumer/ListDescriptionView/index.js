@@ -251,6 +251,7 @@ const ListDescriptionView = ({
   setSelectedListId,
   selectedListId,
   setListIndex,
+  listOpenedFromBusiness
 }) => {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.myFeed.loadingSelectedList);
@@ -337,8 +338,10 @@ const ListDescriptionView = ({
   };
 
   const onCloseTab = () => {
+    if(!listOpenedFromBusiness)
     setDisplayTab(false);
     dispatch(clearMyFeedData());
+    setSelectedListId(null)
   };
   return (loading &&
     offset === 0 &&

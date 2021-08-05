@@ -194,7 +194,7 @@ const RightWrap = styled.div`
 `;
 
 /** display business details */
-const DisplayBusinessDetails = ({ data, id, setMyFeedIndex }) => {
+const DisplayBusinessDetails = ({ data, id, setMyFeedIndex, setSelectedListId }) => {
   const [favoriteBusiness, setFavoriteBusiness] = useState(false);
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
@@ -387,6 +387,7 @@ const DisplayBusinessDetails = ({ data, id, setMyFeedIndex }) => {
             postData={data}
             businessData={data.business[0]}
             listView={true}
+            setSelectedListId={setSelectedListId}
           />
         )}
       </div>

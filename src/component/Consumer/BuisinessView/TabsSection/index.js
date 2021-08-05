@@ -17,7 +17,7 @@ const TabsSectionContent = styled.div`
   height: 100%;
 `;
 
-const TabsSection = ({ profile, businessId }) => {
+const TabsSection = ({ profile, businessId, setSelectedListId }) => {
   const dispatch = useDispatch();
 
   /** to fetch current date events on tab change */
@@ -30,23 +30,15 @@ const TabsSection = ({ profile, businessId }) => {
         <Tabs>
           <TabList>
             <Tab>Posts</Tab>
-            {/* <Tab>Media</Tab> */}
             <Tab onClick={() => eventTabChange()}>Events</Tab>
-            {/* <Tab>Messages</Tab> */}
           </TabList>
 
           <TabPanel>
-            <PostsSection profile={profile} businessId={businessId} />
+            <PostsSection profile={profile} businessId={businessId} setSelectedListId={setSelectedListId}/>
           </TabPanel>
-          {/* <TabPanel>
-            <h2>Any content 2</h2>
-          </TabPanel> */}
           <TabPanel>
             <EventsSection businessId={businessId} />
           </TabPanel>
-          {/* <TabPanel>
-            <h2>Any content 4</h2>
-          </TabPanel> */}
         </Tabs>
       </TabsSectionContent>
     </>

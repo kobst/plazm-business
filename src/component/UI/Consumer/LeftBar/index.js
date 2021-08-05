@@ -21,7 +21,6 @@ import ListDescriptionView from "../../../Consumer/ListDescriptionView";
 import MyFeed from "../../../Consumer/MyFeed";
 import {
   clearMyFeedData,
-  fetchMyFeedData,
   HomeSearch,
   setSearchData,
 } from "../../../../reducers/myFeedReducer";
@@ -78,7 +77,6 @@ const LeftBar = (
     isUserOpen,
     userId,
   },
-  props
 ) => {
   const [displayChangePassword, setDisplayChangePassword] = useState(false);
   const [tabIndex, setTabIndex] = useState(
@@ -119,21 +117,22 @@ const LeftBar = (
   };
 
   /** to clear selected data on tab click */
-  const myFeedFunction = () => {
-    if (tabIndex !== 4 && !loading) {
-      const obj = {
-        id: user._id,
-        value: 0,
-      };
-      dispatch(clearMyFeedData());
-      dispatch(fetchMyFeedData(obj));
-    }
-  };
+  // const myFeedFunction = () => {
+  //   if (tabIndex !== 4 && !loading) {
+  //     const obj = {
+  //       id: user._id,
+  //       value: 0,
+  //     };
+  //     dispatch(clearMyFeedData());
+  //     dispatch(fetchMyFeedData(obj));
+  //   }
+  // };
   
   /** to clear selected data on tab click */
   const favoriteFunction = () => {
     dispatch(clearBusinessData());
     setFavoriteIndex(null)
+    setSelectedListId(null)
   };
 
   /** to clear selected data on tab click */
@@ -227,7 +226,7 @@ const LeftBar = (
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
-              onClick={() => myFeedFunction()}
+              // onClick={() => myFeedFunction()}
             >
               <img src={Mention} alt="" />
             </Tab>
@@ -333,7 +332,7 @@ const LeftBar = (
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              {isUserOpen ? (
+              {isUserOpen && !selectedListId? (
                 <Profile
                   setDisplayTab={() => setTabIndex(0)}
                   userId={userId}
@@ -361,7 +360,8 @@ const LeftBar = (
                   userId={userId}
                   setProfileClosed={setProfileClosed}
                 />
-              ) : (
+              ) : 
+              (
                 <BuisinessView
                   setDisplayTab={() => setTabIndex(0)}
                   profile={profile}
@@ -382,16 +382,27 @@ const LeftBar = (
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              {!myFeedIndex && !userId ? (
+              {!myFeedIndex && !userId && !selectedListId ? (
                 <MyFeed
                   setDisplayTab={() => setTabIndex(0)}
                   setMyFeedIndex={setMyFeedIndex}
+                  setSelectedListId={setSelectedListId}
                 />
-              ) : userId ? (
+              ) : userId && !selectedListId ? (
                 <Profile
                   setDisplayTab={() => setTabIndex(0)}
                   userId={userId}
                   setProfileClosed={setProfileClosed}
+                />
+              ) : selectedListId ? (
+                <ListDescriptionView
+                  listOpenedFromBusiness={true}
+                  setDisplayTab={() => setTabIndex(0)}
+                  setSelectedListId={setSelectedListId}
+                  selectedListId={selectedListId}
+                  listClickedFromSearch={listClickedFromSearch}
+                  setListClickedFromSearch={setListClickedFromSearch}
+                  setListIndex={setListIndex}
                 />
               ) : (
                 <BuisinessView
@@ -419,7 +430,7 @@ const LeftBar = (
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              {(favoriteIndex || businessId) && !userId ? (
+              {(favoriteIndex || businessId) && !userId && !selectedListId? (
                 <BuisinessView
                   setDisplayTab={() => setTabIndex(0)}
                   profile={profile}
@@ -434,6 +445,7 @@ const LeftBar = (
                   listIndex={listIndex}
                   favoriteIndex={favoriteIndex}
                   setFavoriteIndex={setFavoriteIndex}
+                  setSelectedListId={setSelectedListId}
                 />
               ) : userId ? (
                 <Profile
@@ -441,7 +453,18 @@ const LeftBar = (
                   userId={userId}
                   setProfileClosed={setProfileClosed}
                 />
-              ) : (
+              ) :  selectedListId ? (
+                <ListDescriptionView
+                  listOpenedFromBusiness={true}
+                  setDisplayTab={() => setTabIndex(0)}
+                  setSelectedListId={setSelectedListId}
+                  selectedListId={selectedListId}
+                  listClickedFromSearch={listClickedFromSearch}
+                  setListClickedFromSearch={setListClickedFromSearch}
+                  setListIndex={setListIndex}
+                />
+              )
+              : (
                 <BusinessList
                   setDisplayTab={() => setTabIndex(0)}
                   setFavoriteIndex={setFavoriteIndex}

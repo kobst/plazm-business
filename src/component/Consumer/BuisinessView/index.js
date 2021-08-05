@@ -44,6 +44,7 @@ const BuisinessView = ({
   setListIndex,
   favoriteIndex,
   setFavoriteIndex,
+  setSelectedListId
 }) => {
   const loading = useSelector((state) => state.business.loading);
   const businessProfile = useSelector((state) => state.business.business);
@@ -129,7 +130,7 @@ const BuisinessView = ({
             />
           )}
           {!displayBusinessProfile ? (
-            <TabsSection profile={profile} businessId={businessId} />
+            <TabsSection profile={profile} businessId={businessId} setSelectedListId={setSelectedListId} />
           ) : null}
         </BuisinessViewContent>
       )}

@@ -200,6 +200,7 @@ const homeSearch = (obj) => {
                     name
                   }
                   taggedLists {
+                    _id
                     name
                   }
                   ownerId {

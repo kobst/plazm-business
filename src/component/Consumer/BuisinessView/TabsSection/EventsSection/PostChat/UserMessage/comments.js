@@ -157,12 +157,12 @@ const Comments = ({ i, eventData, displayComments, setFlag, flag }) => {
         if (value.search(new RegExp(mentions[i].name, "g") !== -1)) {
           return (
             <div>
-              {reactStringReplace(value, "@" + mentions[i].name, (match, j) => (
+              {reactStringReplace(value, mentions[i].name, (match, j) => (
                 <span
                   className="mentionData"
                   onClick={() => history.push(`/u/${mentions[i]._id}`)}
                 >
-                  {match}
+                  @{match}
                 </span>
               ))}
             </div>

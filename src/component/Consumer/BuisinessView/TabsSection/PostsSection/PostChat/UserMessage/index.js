@@ -126,7 +126,9 @@ const ChatInput = styled.div`
     font-size: 13px;
     color: #ff2e9a;
     font-weight: 600;
-    cursor: pointer;
+    &.mentionData {
+      cursor: pointer;
+    }
   }
 `;
 
@@ -189,7 +191,7 @@ const DescriptionBox = styled.div`
   }
 `;
 
-const UserMessage = ({ postData }) => {
+const UserMessage = ({ postData, setSelectedListId }) => {
   const dispatch = useDispatch();
   const [displayComments, setDisplayComments] = useState(false);
   const loadingComments = useSelector(
@@ -324,43 +326,72 @@ const UserMessage = ({ postData }) => {
   const findDesc = (value, mentions, mentionsList) => {
     let divContent = value;
     if (mentions.length > 0 && mentionsList.length > 0) {
+      let arr = [],
+        data;
       for (let i = 0; i < mentions.length; i++) {
-        if (value.search(new RegExp("@" + mentions[i].name, "g") !== -1)) {
-          return (
-            <div>
-              {reactStringReplace(value, "@" + mentions[i].name, (match, j) => (
-                <span
-                  className="mentionData"
-                  onClick={() => history.push(`/u/${mentions[i]._id}`)}
-                >
-                  {match}
-                </span>
-              ))}
-            </div>
-          );
-        } else {
-          return <div>{value}</div>;
+        if (value.includes("@" + mentions[i].name)) {
+          arr.push({
+            name: "@" + mentions[i].name,
+            id: mentions[i]._id,
+            type: "name",
+          });
         }
       }
-      mentionsList.map((v) => {
-        let re = new RegExp("@" + v.name, "g");
-        divContent = divContent.replace(
-          re,
-          `<span className='mentionData'  onClick={history.push("/u/${
-            v._id
-          }",'_self')}> ${"@" + v.name}  </span>`
-        );
-        return divContent;
-      });
-      if (mentions.length !== 0) {
-        return (
-          <>
-            <div dangerouslySetInnerHTML={{ __html: divContent }}></div>
-          </>
-        );
-      } else {
-        return value;
+      for (let i = 0; i < mentionsList.length; i++) {
+        if (value.includes("@" + mentionsList[i].name)) {
+          arr.push({
+            name: "@" + mentionsList[i].name,
+            id: mentionsList[i]._id,
+            type: "list",
+          });
+        }
       }
+      for (let i = 0; i < arr.length; i++) {
+        if (i === 0) {
+          if (arr[i].type === "list")
+            data = reactStringReplace(value, arr[i].name, (match, j) => (
+              <span
+                key={j}
+                className="mentionData"
+                onClick={() => setSelectedListId(arr[i].id)}
+              >
+                {match}
+              </span>
+            ));
+          else
+            data = reactStringReplace(value, arr[i].name, (match, j) => (
+              <span
+                key={j}
+                className="mentionData"
+                onClick={() => history.push(`/u/${arr[i].id}`)}
+              >
+                {match}
+              </span>
+            ));
+        } else {
+          if (arr[i].type === "list")
+            data = reactStringReplace(data, arr[i].name, (match, j) => (
+              <span
+                key={j}
+                className="mentionData"
+                onClick={() => setSelectedListId(arr[i].id)}
+              >
+                {match}
+              </span>
+            ));
+          else
+            data = reactStringReplace(data, arr[i].name, (match, j) => (
+              <span
+                key={j}
+                className="mentionData"
+                onClick={() => history.push(`/u/${arr[i].id}`)}
+              >
+                {match}
+              </span>
+            ));
+        }
+      }
+      return data;
     } else if (mentions.length > 0) {
       for (let i = 0; i < mentions.length; i++) {
         if (value.search(new RegExp("@" + mentions[i].name, "g") !== -1)) {
@@ -382,14 +413,28 @@ const UserMessage = ({ postData }) => {
         }
       }
     } else if (mentionsList.length > 0) {
-      mentionsList.map((v) => {
-        let re = new RegExp("@" + v.name, "g");
-        divContent = divContent.replace(
-          re,
-          `<span className='mentionData'> ${"@" + v.name}  </span>`
-        );
-        return divContent;
-      });
+      for (let i = 0; i < mentionsList.length; i++) {
+        if (value.search(new RegExp("@" + mentionsList[i].name, "g") !== -1)) {
+          return (
+            <div>
+              {reactStringReplace(
+                value,
+                "@" + mentionsList[i].name,
+                (match, j) => (
+                  <span
+                    className="mentionData"
+                    onClick={() => setSelectedListId(mentionsList[i]._id)}
+                  >
+                    {match}
+                  </span>
+                )
+              )}
+            </div>
+          );
+        } else {
+          return <div>{value}</div>;
+        }
+      }
       if (mentionsList.length !== 0) {
         return (
           <>

@@ -4,7 +4,7 @@ import "./style.css";
 import { Auth } from "aws-amplify";
 import history from "../../../utils/history";
 import ValueLoader from "../../../utils/loader";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   checkBusiness,
   getBusinessImages,
@@ -17,6 +17,9 @@ const DashboardContainer = (props) => {
   const [flag, setFlag] = useState(false);
   const [businessExists, setBusinessExists] = useState();
   const [businessId, setBusinessId] = useState("");
+  const filters = useSelector(state => state.business.filters)
+  const user = useSelector(state => state.user.user)
+  const sideFilterForLikes = useSelector(state => state.business.filterByMostLiked)
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -61,11 +64,14 @@ const DashboardContainer = (props) => {
           checkBusiness({
             businessId: props.match.params.id,
             filters: {
-              Business: true,
-              PostsByMe: false,
-              MySubscriptions: false,
+              Business: filters.Business? filters.Business: !filters.Business && !filters.PostsByMe && !filters.MySubscriptions &&!filters.Others ? true: false,
+              PostsByMe: filters.PostsByMe? filters.PostsByMe: false,
+              MySubscriptions: filters.MySubscriptions? filters.MySubscriptions: false,
+              Others: filters.Others? filters.Others: false,
             },
             value: 0,
+            ownerId: user? user._id: null,
+            sideFilters: {likes: sideFilterForLikes}
           })
         );
         const data = await unwrapResult(response);
