@@ -211,7 +211,8 @@ export const slice = createSlice({
     images: [],
     loadingImages: false,
     selectedPostIdForComments: null,
-    selectedEventIdForComments: null
+    selectedEventIdForComments: null,
+    flag: true
   },
   reducers: {
     setFilters: (state, action) => {
@@ -236,6 +237,9 @@ export const slice = createSlice({
     setSideFiltersByMostRecent: (state, action) => {
       state.filterByMostLiked = false;
       state.filterByMostRecent = true;
+    },
+    setFlagReducer: (state) => {
+      state.flag = false;
     },
     setSideFilters: (state, action) => {
       state.filterByMostLiked = false;
@@ -659,6 +663,7 @@ export const {
   setSideFilters,
   clearBusinessData,
   setPostId,
-  setEventId
+  setEventId,
+  setFlagReducer
 } = slice.actions;
 export default slice.reducer;
