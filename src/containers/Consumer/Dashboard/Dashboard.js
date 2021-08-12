@@ -85,6 +85,7 @@ const DashboardContainer = (props) => {
       }
     };
     findBusiness(props.isBusinessOpen);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.isBusinessOpen, props.match.params.id, dispatch]);
   return profile ? (
     <Dashboard

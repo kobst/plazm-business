@@ -7,6 +7,7 @@ import { FaSort } from "react-icons/fa";
 import ValueLoader from "../../../utils/loader";
 import { clearMyFeedData, fetchMyFeedData } from "../../../reducers/myFeedReducer";
 import DisplayBusinessDetails from "./DisplayBusinessDetails";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const LoaderWrap = styled.div`
   width: 100%;
@@ -122,15 +123,22 @@ const MyFeed = ({ setDisplayTab, setMyFeedIndex, setSelectedListId }) => {
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffSet] = useState(0);
   const dispatch = useDispatch();
+  const [flag, setFlag] = useState(true)
 
   useEffect(()=>{
+    const fetchData = async () => {
       const obj = {
         id: user._id,
         value: 0,
       };
       dispatch(clearMyFeedData());
-      dispatch(fetchMyFeedData(obj));
-  },[])
+      const res = await dispatch(fetchMyFeedData(obj));
+      const data = await unwrapResult(res)
+      if(data)
+      setFlag(false)
+    }
+    fetchData()
+  },[dispatch, user._id])
 
   const fetchMoreData = () => {
     if (offset + 20 < totalData) {
@@ -141,7 +149,7 @@ const MyFeed = ({ setDisplayTab, setMyFeedIndex, setSelectedListId }) => {
 
   return (
     <>
-      {loading && offset === 0 ? (
+      {(loading && offset === 0 && flag) || (offset === 0 && flag) ? (
         <LoaderWrap>
           <ValueLoader />
         </LoaderWrap>

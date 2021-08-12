@@ -267,6 +267,7 @@ const ListDescriptionView = ({
   const user = useSelector((state) => state.user.user);
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffSet] = useState(0);
+  const [flag, setFlag] = useState(true)
   const history = useHistory();
 
   /** to clear all the data initially */
@@ -285,8 +286,14 @@ const ListDescriptionView = ({
 
   /** to fetch initial posts in a list */
   useEffect(() => {
-    if (offset === 0)
-      dispatch(fetchSelectedListDetails({ id: selectedListId, value: offset }));
+    const fetchListDetails = async () => {
+      const result = await dispatch(fetchSelectedListDetails({ id: selectedListId, value: offset }));
+      const data = await unwrapResult(result)
+      if(data) {
+        setFlag(false)
+      }
+    }
+    offset === 0 && fetchListDetails()
   }, [dispatch, selectedListId, offset]);
 
   const fetchMorePosts = () => {
@@ -343,12 +350,12 @@ const ListDescriptionView = ({
     dispatch(clearMyFeedData());
     setSelectedListId(null)
   };
-  return (loading &&
+  return ((loading &&
     offset === 0 &&
     !loadingUnSubScribe &&
     !loadingSelectedList) ||
     loadingUnSubScribe ||
-    loadingSelectedList ? (
+    loadingSelectedList) || flag? (
     <LoaderWrap>
       <ValueLoader />
     </LoaderWrap>

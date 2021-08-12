@@ -111,6 +111,7 @@ const LeftBar = (
       history.push("/");
       setProfileClosed(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profileClosed, tabIndex]);
 
   /** to clear selected data on tab click */

@@ -238,6 +238,7 @@ const CalenderSection = ({ businessId }) => {
     if(moment(new Date()).isBetween(dateToDisplay.firstDay, dateToDisplay.lastDay)) {
       setSelectedCapsule(days[currentDate.getDay()])
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[dateToDisplay])
 
   useEffect(() => {
@@ -272,6 +273,7 @@ const CalenderSection = ({ businessId }) => {
       }
     };
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventDate]);
 
   /** to set week starting and end date */

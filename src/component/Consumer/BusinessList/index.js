@@ -16,6 +16,7 @@ import {
   setSideFiltersByClosest,
   setSideFiltersByUpdatedAt,
 } from "../../../reducers/myFeedReducer";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const LoaderWrap = styled.div`
   width: 100%;
@@ -192,6 +193,7 @@ const BusinessList = ({ setDisplayTab, setFavoriteIndex }) => {
   const filterByUpdatedAt = useSelector(
     (state) => state.myFeed.filterByUpdatedAt
   );
+  const [flag, setFlag] = useState(true)
   const dispatch = useDispatch();
 
   const userFavorites =
@@ -214,9 +216,9 @@ const BusinessList = ({ setDisplayTab, setFavoriteIndex }) => {
   }, [search, favoriteBusiness]);
 
   useEffect(() => {
-    if (offset === 0) {
+    const fetchFavoriteBusiness = async () => {
       dispatch(clearUserFavorites());
-      dispatch(
+      const result = await dispatch(
         fetchUserFavoritesBusiness({
           id: user._id,
           value: offset,
@@ -225,7 +227,12 @@ const BusinessList = ({ setDisplayTab, setFavoriteIndex }) => {
           filters: { closest: filterByClosest, updated: filterByUpdatedAt },
         })
       );
+      const data = await unwrapResult(result)
+      if(data) {
+        setFlag(false)
+      }
     }
+    offset === 0 && fetchFavoriteBusiness()
   }, [user, dispatch, offset, filterByClosest, filterByUpdatedAt]);
 
   useEffect(() => {
@@ -272,7 +279,7 @@ const BusinessList = ({ setDisplayTab, setFavoriteIndex }) => {
 
   return (
     <>
-      {loadingFavoriteBusiness && offset === 0 ? (
+      {(loadingFavoriteBusiness && offset === 0) || flag? (
         <LoaderWrap>
           <ValueLoader />
         </LoaderWrap>

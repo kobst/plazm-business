@@ -44,7 +44,7 @@ const BuisinessView = ({
   setListIndex,
   favoriteIndex,
   setFavoriteIndex,
-  setSelectedListId
+  setSelectedListId,
 }) => {
   const loading = useSelector((state) => state.business.loading);
   const businessProfile = useSelector((state) => state.business.business);
@@ -57,8 +57,8 @@ const BuisinessView = ({
     <>
       {!loading &&
       !businessExists &&
-      businessProfile &&
-      businessProfile.length === 0 ? (
+      ((businessProfile &&
+      businessProfile.length === 0) || !businessProfile) ? (
         <h3>Business Does Not Exist</h3>
       ) : loading ? (
         <LoaderWrap>
@@ -129,8 +129,14 @@ const BuisinessView = ({
               setListIndex={setListIndex}
             />
           )}
-          {!displayBusinessProfile ? (
-            <TabsSection profile={profile} businessId={businessId} setSelectedListId={setSelectedListId} />
+          {!displayBusinessProfile && !loading && businessProfile &&
+          businessProfile.length > 0 &&
+          businessProfile[0].userSub !== null ? (
+            <TabsSection
+              profile={profile}
+              businessId={businessId}
+              setSelectedListId={setSelectedListId}
+            />
           ) : null}
         </BuisinessViewContent>
       )}
