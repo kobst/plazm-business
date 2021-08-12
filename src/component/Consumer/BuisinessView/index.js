@@ -58,8 +58,7 @@ const BuisinessView = ({
     <>
       {(!loading &&
       !businessExists &&
-      !flag &&
-      ((businessProfile &&
+      ((!flag && businessProfile &&
       businessProfile.length === 0) || (!businessProfile && !loading)))? (
         <h3>Business Does Not Exist</h3>
       ) : loading ? (
