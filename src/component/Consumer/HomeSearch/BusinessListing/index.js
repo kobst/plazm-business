@@ -171,7 +171,6 @@ const BusinessListing = ({
 
   /** useEffect called when any side filters are selected */
   useEffect(() => {
-    // if (filterSelected === true) {
     const obj = {
       search: search,
       value: 0,
@@ -181,7 +180,7 @@ const BusinessListing = ({
     };
     dispatch(HomeSearch(obj));
     setFilterSelected(false);
-    // }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, filterSelected, filterClosest, updatedAtFilter, offset]);
 
   /** to fetch more places matching the search */

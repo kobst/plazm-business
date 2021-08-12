@@ -1005,7 +1005,7 @@ const RightSide = (props) => {
     //  eslint-disable-next-line array-callback-return
     mentions.map((v) => {
       let re = new RegExp("@"+v.name, "g");
-      divContent = divContent.replace(re, "<h2>" +"@"+ v.name + "</h2>");
+      divContent = divContent.replace(re, "<h2>@"+ v.name + "</h2>");
     });
     if (mentions.length !== 0) {
       return (

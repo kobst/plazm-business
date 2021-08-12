@@ -386,6 +386,7 @@ const EditProfile = ({ value }) => {
         setImageUrl(value.default_image_url);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   const updateBusiness = async () => {

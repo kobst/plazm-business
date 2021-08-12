@@ -356,7 +356,7 @@ const UserMessage = ({
           if (arr[i].type === "list")
             data = reactStringReplace(value, arr[i].name, (match, j) => (
               <span
-                key={j}
+                key={'key1'+j}
                 className="mentionData"
                 onClick={() => setSelectedListId(arr[i].id)}
               >
@@ -366,7 +366,7 @@ const UserMessage = ({
           else
             data = reactStringReplace(value, arr[i].name, (match, j) => (
               <span
-                key={j}
+                key={'key2'+j}
                 className="mentionData"
                 onClick={() => history.push(`/u/${arr[i].id}`)}
               >
@@ -377,7 +377,7 @@ const UserMessage = ({
           if (arr[i].type === "list")
             data = reactStringReplace(data, arr[i].name, (match, j) => (
               <span
-                key={j}
+                key={'key3'+j}
                 className="mentionData"
                 onClick={() => setSelectedListId(arr[i].id)}
               >
@@ -406,6 +406,7 @@ const UserMessage = ({
                 <span
                   className="mentionData"
                   onClick={() => history.push(`/u/${mentions[i]._id}`)}
+                  key={"mentions"+j}
                 >
                   {match}
                 </span>
