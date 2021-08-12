@@ -48,6 +48,7 @@ const BuisinessView = ({
 }) => {
   const loading = useSelector((state) => state.business.loading);
   const businessProfile = useSelector((state) => state.business.business);
+  const flag = useSelector(state => state.business.flag)
   const [displayBusinessProfile, setDisplayBusinessProfile] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -55,10 +56,11 @@ const BuisinessView = ({
   }, [dispatch]);
   return (
     <>
-      {!loading &&
+      {(!loading &&
       !businessExists &&
+      !flag &&
       ((businessProfile &&
-      businessProfile.length === 0) || !businessProfile) ? (
+      businessProfile.length === 0) || (!businessProfile && !loading)))? (
         <h3>Business Does Not Exist</h3>
       ) : loading ? (
         <LoaderWrap>

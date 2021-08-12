@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   checkBusiness,
   getBusinessImages,
+  setFlagReducer,
 } from "../../../reducers/businessReducer";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { fetchUserDetails, setWs } from "../../../reducers/userReducer";
@@ -77,6 +78,7 @@ const DashboardContainer = (props) => {
         const data = await unwrapResult(response);
         if (data.success === true && data.place.length > 0) {
           /** fetch business images */
+          dispatch(setFlagReducer())
           await dispatch(getBusinessImages(props.match.params.id));
           setBusinessExists(true);
         } else {

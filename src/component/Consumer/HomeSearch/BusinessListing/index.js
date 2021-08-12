@@ -15,6 +15,7 @@ import {
 } from "../../../../reducers/myFeedReducer";
 import error from "../../../../constants";
 import Select from "../../../Consumer/UI/Select";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const BusinessListWrap = styled.div`
   width: 100%;
@@ -168,18 +169,26 @@ const BusinessListing = ({
   const menuRef = useRef(null);
   const [uploadMenu, setUploadMenu] = useState(false);
   const [filterSelected, setFilterSelected] = useState(false);
+  const [flag, setFlag] = useState(true);
 
   /** useEffect called when any side filters are selected */
   useEffect(() => {
-    const obj = {
-      search: search,
-      value: 0,
-      filters: { closest: filterClosest, updated: updatedAtFilter },
-      latitude: process.env.REACT_APP_LATITUDE,
-      longitude: process.env.REACT_APP_LONGITUDE,
+    const fetchSearchData = async () => {
+      const obj = {
+        search: search,
+        value: 0,
+        filters: { closest: filterClosest, updated: updatedAtFilter },
+        latitude: process.env.REACT_APP_LATITUDE,
+        longitude: process.env.REACT_APP_LONGITUDE,
+      };
+      const result = await dispatch(HomeSearch(obj));
+      const data = await unwrapResult(result);
+      if (data) {
+        setFlag(false);
+      }
+      setFilterSelected(false);
     };
-    dispatch(HomeSearch(obj));
-    setFilterSelected(false);
+    fetchSearchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, filterSelected, filterClosest, updatedAtFilter, offset]);
 
@@ -240,7 +249,7 @@ const BusinessListing = ({
           )}
         </CheckboxWrap>
       </SearchDropdownOption>
-      {loading && offset === 0 ? (
+      {(loading && offset === 0) || flag ? (
         <LoaderWrap>
           <ValueLoader />
         </LoaderWrap>
