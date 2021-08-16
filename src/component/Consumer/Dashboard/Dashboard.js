@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import LeftBar from "../../UI/Consumer/LeftBar";
 import RightBar from "../Dashboard/RightBar";
+import GridThreeJS from "../GridMap/grid-three";
+
 
 const DashboardContent = styled.div`
   width: 100%;
@@ -34,7 +36,8 @@ const Dashboard = ({
           businessId={businessId}
           userId={userId}
         />
-        <RightBar displayTab={displayTab} />
+        {/* <RightBar displayTab={displayTab} /> */}
+        <GridThreeJS/>
       </DashboardContent>
     </>
   );
