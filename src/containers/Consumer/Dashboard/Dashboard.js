@@ -16,7 +16,7 @@ import { fetchUserDetails, setWs } from "../../../reducers/userReducer";
 const DashboardContainer = (props) => {
   const [profile, setProfile] = useState();
   const [flag, setFlag] = useState(false);
-  const [businessExists, setBusinessExists] = useState();
+  const [businessExists, setBusinessExists] = useState(false);
   const [businessId, setBusinessId] = useState("");
   const filters = useSelector(state => state.business.filters)
   const user = useSelector(state => state.user.user)
@@ -82,6 +82,7 @@ const DashboardContainer = (props) => {
           await dispatch(getBusinessImages(props.match.params.id));
           setBusinessExists(true);
         } else {
+          dispatch(setFlagReducer())
           setBusinessExists(false);
         }
       }
