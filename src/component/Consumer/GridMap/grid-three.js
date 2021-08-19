@@ -166,10 +166,17 @@ const GridThreeJS = (props) => {
     const userLists = useSelector((state) => state.list.userLists);
     const feedData = useSelector((state) => state.myFeed.myFeed);
 
+    const [places, setPlaces] = useState([])
+   
+    const [draggedCenter, setDraggedCenter] = useState({
+        lat: JSON.stringify(process.env.REACT_APP_LATITUDE),
+        lng: JSON.stringify(process.env.REACT_APP_LONGITUDE)
+    })
+
+ 
     const camera = useRef()
     const hexGrp = useRef()
 
-    const places = []
 
     var raycaster_ = new THREE.Raycaster();
     const gridView = useStore((state) => state.gridView)
@@ -197,8 +204,7 @@ const GridThreeJS = (props) => {
 
     useEffect(()=>{
 
-     
-        console.log(feedData)
+       setPlaces(feedData)
 
       },[feedData])
 
@@ -216,10 +222,10 @@ const GridThreeJS = (props) => {
 
             <HexGroup
                 position={[0, 0, 0]}
-                places={props.places}
-                center={props.center}
-                selectPlace={props.selectPlace}
-                setHexRings={props.setHexRings}
+                places={places}
+                center={draggedCenter}
+                // selectPlace={props.selectPlace}
+                // setHexRings={props.setHexRings}
                 moveCamera={moveCameraToClicked}
                 hover={hoverPlace}
                 hovering={setPreview} />

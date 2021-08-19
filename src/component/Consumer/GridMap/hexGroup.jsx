@@ -8,7 +8,7 @@ import useStore from './useState'
 
 import { AssignMolecularDict, _createXYZ, AssignHex, OrderDistance } from './functions/gridFunctions'
 
-
+import Box from './placeBox'
 
 
 
@@ -125,11 +125,12 @@ const HexGroup = (props) => {
         } else {
             console.log("----no place")
 
-            // if (props.places.length > 0) {
-            //     console.log(props.places.length + " length ---")
-            //     _multiDict = AssignMolecularDict(props.places, props.center)
-            //     setMultiDict(_multiDict)
-            // }
+            if (props.places.length > 0) {
+                console.log(props.places.length + " length ---")
+                console.log(props.places)
+                // _multiDict = AssignMolecularDict(props.places, props.center)
+                // setMultiDict(_multiDict)
+            }
         }
     }
 
@@ -227,17 +228,17 @@ const HexGroup = (props) => {
     }
 
 
-    // const boxes = useMemo(() => props.places.map(({ ...otherProps }, index) => (
+    const boxes = useMemo(() => props.places.map(({ ...otherProps }, index) => (
 
-    //     // <Box2
-    //     //     key={otherProps._id} placeObject={otherProps}
-    //     //     hover={hoverPlace}
-    //     //     hovering={setPreview}
-    //     //     click={handleClick}
-    //     //     selectPlace={props.selectPlace}
-    //     // />
+        <Box
+            key={otherProps._id} placeObject={otherProps}
+            hover={hoverPlace}
+            hovering={setPreview}
+            click={handleClick}
+            selectPlace={props.selectPlace}
+        />
 
-    // )), [props.places])
+    )), [props.places])
 
 
 

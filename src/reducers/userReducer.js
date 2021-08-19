@@ -141,6 +141,7 @@ export const slice = createSlice({
         state.loading = false;
         if (action.payload) {
           state.user = action.payload.data.getUser.user;
+          console.log('fulfilled')
         }
       }
     },
@@ -148,6 +149,8 @@ export const slice = createSlice({
       if (state.loading) {
         state.loading = false;
         state.error = action.payload;
+        console.log('rejected')
+
       }
     },
     [AddBusinessFavorite.pending]: (state) => {

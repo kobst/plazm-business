@@ -386,6 +386,7 @@ const _orderDistance = (places, defaultCenter, selectedPlace) => {
   var closestDistance = 0
   var farthestDistance = 1000
   places.forEach((element, index) => {
+    console.log(element)
     let distA = distance(element.location.coordinates[1], element.location.coordinates[0], center.lat, center.lng)
     element.distance = distA
     if (index === 0) {

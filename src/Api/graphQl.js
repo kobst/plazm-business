@@ -1,7 +1,7 @@
 /* graphQL function*/
 export const graphQlEndPoint = async (graphQl) => {
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/graphql`,
+      `${process.env.REACT_APP_API_LOCAL}/graphql`,
       {
         method: "POST",
         headers: {

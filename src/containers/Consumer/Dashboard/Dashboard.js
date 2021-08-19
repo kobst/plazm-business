@@ -33,8 +33,13 @@ const DashboardContainer = (props) => {
           value.attributes["custom:type"] === "customer" ||
           value.attributes["custom:type"] === "consumer"
         ) {
-          const data = await dispatch(fetchUserDetails(value.attributes.sub));
+          console.log(value.attributes)
+          // const data = await dispatch(fetchUserDetails(value.attributes.sub));
+          const data = dispatch(fetchUserDetails(value.attributes.sub));
+          console.log('fetching data')
+          console.log(data)
           const res = await unwrapResult(data);
+          console.log(res)
           const ws = new WebSocket(
             `${process.env.REACT_APP_WEBSOCKET}/?userId=${res.data.getUser.user._id}`
           );
