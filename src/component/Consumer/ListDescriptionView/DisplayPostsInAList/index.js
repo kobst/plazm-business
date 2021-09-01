@@ -16,6 +16,9 @@ import {
   checkMime,
   replaceBucket,
 } from "../../../../utilities/checkResizedImage";
+import AddPostModal from "../../AddPostModal";
+import ModalComponent from "../../UI/Modal";
+import DeletePostModal from "../../AddPostModal/DeletePostModal";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -197,6 +200,8 @@ const DescriptionViewItem = styled.div`
 /** display business details */
 const DisplayPostInAList = ({ data, id, setListIndex }) => {
   const [favoriteBusiness, setFavoriteBusiness] = useState(false);
+  const [addPostModal, setAddPostModal] = useState(false);
+  const [deletePostModal, setDeletePostModal] = useState(false);
   const user = useSelector((state) => state.user.user);
   const [image, setImage] = useState(
     data.business[0].default_image_url
@@ -310,82 +315,116 @@ const DisplayPostInAList = ({ data, id, setListIndex }) => {
     history.push(`/b/${data.business[0]._id}`);
   };
 
+  /** to delete a post */
+  const deletePost = () => {
+    setDeletePostModal(true);
+  };
   return data ? (
-    <DescriptionViewItem>
-      <div
-        className={id % 2 === 0 ? "background-active" : "background-inactive"}
-      >
-        <UserMsgWrap>
-          <UserMessageContent>
-            <ProfileNameHeader>
-              <ProfileThumb>
-                <img src={image} onError={() => checkError()} alt="" />
-              </ProfileThumb>
-              <ProfileNameWrap>
-                <ProfileName>
-                  <div onClick={() => displayBusinessDetail()}>
-                    {data.business[0].company_name}
-                  </div>
-                  <RightWrap>
-                    {data.business[0].hours_format &&
-                    data.business[0].hours_format.length === 0 ? (
-                      <div className="CloseDiv">Close</div>
-                    ) : checkBusinessOpenClose() === true ? (
-                      <div className="OpenDiv">Open</div>
-                    ) : (
-                      <div className="CloseDiv">Close</div>
-                    )}
-
-                    {data.business[0].hours_format &&
-                    data.business[0].hours_format.length > 0 &&
-                    checkBusinessOpenClose() === true ? (
-                      favoriteBusiness ? (
-                        <img
-                          src={RedHeartIcon}
-                          onClick={() => removeFavorite()}
-                          className="favoriteBusiness"
-                          alt=""
-                        />
+    <>
+      <DescriptionViewItem>
+        <div
+          className={id % 2 === 0 ? "background-active" : "background-inactive"}
+        >
+          <UserMsgWrap>
+            <UserMessageContent>
+              <ProfileNameHeader>
+                <ProfileThumb>
+                  <img src={image} onError={() => checkError()} alt="" />
+                </ProfileThumb>
+                <ProfileNameWrap>
+                  <ProfileName>
+                    <div onClick={() => displayBusinessDetail()}>
+                      {data.business[0].company_name}
+                    </div>
+                    <RightWrap>
+                      {data.business[0].hours_format &&
+                      data.business[0].hours_format.length === 0 ? (
+                        <div className="CloseDiv">Close</div>
+                      ) : checkBusinessOpenClose() === true ? (
+                        <div className="OpenDiv">Open</div>
                       ) : (
-                        <img
-                          src={FavoritesIcon}
-                          onClick={() => addFavorite()}
-                          className="favoriteBusinessBorder"
-                          alt=""
-                        />
-                      )
-                    ) : null}
-                  </RightWrap>
-                </ProfileName>
-                <ChatInput>
-                  <p>
-                    <span>
-                      {data.business[0].favorites !== null
-                        ? data.business[0].favorites.length
-                        : 0}
-                    </span>{" "}
-                    Followers{" "}
-                    <span className="postSpan">
-                      {data.totalPosts.length > 0
-                        ? data.totalPosts[0].totalPosts
-                        : 0}
-                    </span>{" "}
-                    Posts
-                  </p>
-                </ChatInput>
-                <BusinessHashTags data={data.business[0].filter_tags} />
-              </ProfileNameWrap>
-            </ProfileNameHeader>
-          </UserMessageContent>
-        </UserMsgWrap>
+                        <div className="CloseDiv">Close</div>
+                      )}
 
-        <UserMessage
-          postData={data}
-          businessData={data.business[0]}
-          listView={true}
-        />
-      </div>
-    </DescriptionViewItem>
+                      {data.business[0].hours_format &&
+                      data.business[0].hours_format.length > 0 &&
+                      checkBusinessOpenClose() === true ? (
+                        favoriteBusiness ? (
+                          <img
+                            src={RedHeartIcon}
+                            onClick={() => removeFavorite()}
+                            className="favoriteBusiness"
+                            alt=""
+                          />
+                        ) : (
+                          <img
+                            src={FavoritesIcon}
+                            onClick={() => addFavorite()}
+                            className="favoriteBusinessBorder"
+                            alt=""
+                          />
+                        )
+                      ) : null}
+                    </RightWrap>
+                  </ProfileName>
+                  <ChatInput>
+                    <p>
+                      <span>
+                        {data.business[0].favorites !== null
+                          ? data.business[0].favorites.length
+                          : 0}
+                      </span>{" "}
+                      Followers{" "}
+                      <span className="postSpan">
+                        {data.totalPosts.length > 0
+                          ? data.totalPosts[0].totalPosts
+                          : 0}
+                      </span>{" "}
+                      Posts
+                    </p>
+                  </ChatInput>
+                  <BusinessHashTags data={data.business[0].filter_tags} />
+                </ProfileNameWrap>
+              </ProfileNameHeader>
+            </UserMessageContent>
+          </UserMsgWrap>
+
+          <UserMessage
+            postData={data}
+            businessData={data.business[0]}
+            listView={true}
+          />
+          {data.ownerId.length > 0 && data.ownerId[0]._id === user._id ? (
+            <>
+              <button onClick={() => setAddPostModal(true)}>Edit</button>
+              <button onClick={() => deletePost()}>Delete</button>
+            </>
+          ) : null}
+        </div>
+      </DescriptionViewItem>
+      {addPostModal && (
+        <ModalComponent
+          closeOnOutsideClick={true}
+          isOpen={addPostModal}
+          closeModal={() => setAddPostModal(false)}
+        >
+          <AddPostModal
+            businessId={data.business[0]._id}
+            closeModal={() => setAddPostModal(false)}
+            data={data}
+          />
+        </ModalComponent>
+      )}
+      {deletePostModal && (
+        <ModalComponent
+          closeOnOutsideClick={true}
+          isOpen={deletePostModal}
+          closeModal={() => setDeletePostModal(false)}
+        >
+          <DeletePostModal closeModal={() => setDeletePostModal(false)} id={data._id} />
+        </ModalComponent>
+      )}
+    </>
   ) : null;
 };
 

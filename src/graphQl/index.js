@@ -22,7 +22,7 @@ import {
   GetListDetails,
 } from "./query/list";
 
-import { createPost, addLikeToPost } from "./mutations/post";
+import { createPost, addLikeToPost, updatePost, deletePost } from "./mutations/post";
 
 import { fetchEvent, fetchEventForAWeek } from "./query/event";
 
@@ -82,4 +82,6 @@ export {
   CreateList,
   UnsubscribeToAList,
   SubscribeToAList,
+  updatePost,
+  deletePost
 };

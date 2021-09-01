@@ -29,6 +29,7 @@ import Profile from "../../../Consumer/Profile";
 import HomeSearchComponent from "../../../Consumer/HomeSearch";
 import { useHistory } from "react-router-dom";
 import { clearBusinessData } from "../../../../reducers/businessReducer";
+import { Auth } from "aws-amplify";
 
 const LeftBarContent = styled.div`
   width: 100px;
@@ -77,6 +78,8 @@ const LeftBar = (
     businessId,
     isUserOpen,
     userId,
+    loader,
+    setLoader
   },
 ) => {
   const [displayChangePassword, setDisplayChangePassword] = useState(false);
@@ -93,12 +96,22 @@ const LeftBar = (
   const [favoriteIndex, setFavoriteIndex] = useState(null);
   const [profileClosed, setProfileClosed] = useState(false);
   const [userDataId, setUserDataId] = useState(userId)
+  const [redirect, setRedirect] = useState(false)
   const dispatch = useDispatch();
   const history = useHistory();
 
   useEffect(()=>{
     setUserDataId(userId)
   },[userId])
+
+  /** for logout functionality redirection */
+  useEffect(()=>{
+    if(redirect){
+      setLoader(false) 
+      history.push('/consumer/login') 
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[redirect])
 
   useEffect(() => {
     if (profileClosed && tabIndex === 6) {
@@ -167,6 +180,21 @@ const LeftBar = (
       setUserDataId(null)
       setSelectedListId(null)
       history.push('/')
+    }
+  };
+
+  /** logout consumer */
+  const consumerLogout = async() => {
+    try {
+      setLoader(true) 
+      await Auth.signOut();        
+      setTimeout(
+        () => setRedirect(true),
+        3000
+      );
+    } catch (error) {
+      setLoader(false)
+      console.log("error signing out: ", error);
     }
   };
   return (
@@ -335,6 +363,8 @@ const LeftBar = (
             >
               &nbsp;
             </Tab>
+            <p onClick={()=>setTabIndex(8)}>Profile</p>
+            <button onClick={() => consumerLogout()} disabled={loader}>Logout</button>
           </TabList>
 
           <TabPanel></TabPanel>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import ValueLoader from "../../../utils/loader";
 import LeftBar from "../../UI/Consumer/LeftBar";
 import RightBar from "../Dashboard/RightBar";
 
@@ -20,6 +21,7 @@ const Dashboard = ({
   userId,
 }) => {
   const [displayTab, setDisplayTab] = useState(false);
+  const [loader, setLoader] = useState(false);
   return (
     <>
       <DashboardContent>
@@ -33,8 +35,16 @@ const Dashboard = ({
           businessExists={businessExists}
           businessId={businessId}
           userId={userId}
+          loader={loader}
+          setLoader={setLoader}
         />
-        <RightBar displayTab={displayTab} />
+        {!loader ? (
+          <RightBar displayTab={displayTab} />
+        ) : (
+          <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
+            <ValueLoader height="100" width="100" />
+          </div>
+        )}
       </DashboardContent>
     </>
   );
