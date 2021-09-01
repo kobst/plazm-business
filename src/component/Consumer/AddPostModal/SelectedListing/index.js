@@ -9,6 +9,8 @@ const AllListingsContent = styled.div`
   align-items: center;
   justify-content: space-between;
   margin: 0 0 15px;
+  padding: 13px;
+  border: 1px dashed #ffffff;
   p {
     font-size: 12px;
     font-weight: 600;
