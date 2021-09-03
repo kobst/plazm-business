@@ -2,17 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import "./styles.css";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import PlazmLogo from "../../../../images/plazm_logo.jpg";
-import LocalNav from "../../../../images/LocalNav.png";
-import ProfileImg from "../../../../images/profile-img.png";
-import Mention from "../../../../images/Mentions.png";
-import Notifications from "../../../../images/notifications.png";
-import Favorites from "../../../../images/Left-favourite.png";
-import GridIcon from "../../../../images/Grid_icon.png";
-import ProfileSettingImg from "../../../../images/Profile_Setting.png";
-import { BiSearchAlt2 } from "react-icons/bi";
-import ChangePassword from "../../../Consumer/ChangePassword";
-import ProfileSettings from "../../../Consumer/ProfileSettings";
+import Notifications from "../../../../images/notifications-new.png";
 import BuisinessView from "../../../Consumer/BuisinessView";
 import BusinessList from "../../../Consumer/BusinessList";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,13 +19,16 @@ import Profile from "../../../Consumer/Profile";
 import HomeSearchComponent from "../../../Consumer/HomeSearch";
 import { useHistory } from "react-router-dom";
 import { clearBusinessData } from "../../../../reducers/businessReducer";
+import { FiSearch, FiHome, FiHeart } from "react-icons/fi";
+import { BsListUl, BsThreeDots } from "react-icons/bs";
+import PolygonArrow from "../../../../images/Polygon.png";
 
 const LeftBarContent = styled.div`
   width: 100px;
   position: relative;
   display: flex;
-  /* background: #F3F3F3; */
   box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
+  flex-direction: column;
   @media (max-width: 767px) {
     width: 50px;
   }
@@ -61,9 +54,69 @@ const SearchIcon = styled.div`
   width: 36px;
   svg {
     color: #767676;
-    font-size: 38px;
+    font-size: 26px;
     @media (max-width: 767px) {
-      font-size: 30px;
+      font-size: 24px;
+    }
+  }
+`;
+
+const BottomSettingsWrap = styled.div`
+  height: 100px;
+  background: #f3f3f3;
+  position: absolute;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  bottom: 0;
+  border-top: 0.75px solid #C4C4C4;
+  color: #767676;
+  font-size: 18px;
+  cursor: pointer;
+  position: relative;
+  .BottomSettings {
+    visibility: hidden;
+    font-size: 0;
+  }
+  :hover {
+    background: #211D43;
+    color: #fff;
+    :before {
+      width: 15px;
+      height: 10px;
+      position: absolute;
+      top: -8px;
+      background: url(${PolygonArrow}) no-repeat top center;
+      content: "";
+    }
+    .BottomSettings {
+      visibility: visible;
+      position: absolute;
+      width: 100%;
+      bottom: 99px;
+      ul {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        li {
+          width: 100%;
+          list-style: none;
+          color: #767676;
+          font-size: 13px;
+          margin: 30px 0;
+          padding: 0;
+          cursor: pointer;
+          text-align: center;
+          text-transform: uppercase;
+          font-weight: 700;
+          :hover {
+            color: #EE3840;
+          }
+        }
+      }
     }
   }
 `;
@@ -95,6 +148,8 @@ const LeftBar = (
   const [userDataId, setUserDataId] = useState(userId)
   const dispatch = useDispatch();
   const history = useHistory();
+
+  console.log(tabIndex);
 
   useEffect(()=>{
     setUserDataId(userId)
@@ -186,9 +241,9 @@ const LeftBar = (
                   : "react-tabs__tab"
               }
             >
-              <img src={PlazmLogo} alt="" />
+              {/* <img src={PlazmLogo} alt="" /> */}
             </Tab>
-            <Tab
+            {/* <Tab
               disabled={loading || tabIndex === 1}
               className={
                 1 === tabIndex - 1
@@ -215,7 +270,7 @@ const LeftBar = (
               <UserImage>
                 <img src={user.photo ? user.photo : ProfileImg} alt="" />
               </UserImage>
-            </Tab>
+            </Tab> */}
             <Tab
               disabled={loading || tabIndex === 3}
               className={
@@ -230,7 +285,7 @@ const LeftBar = (
               onClick={() => homeSearchFunction()}
             >
               <SearchIcon>
-                <BiSearchAlt2 />
+                <FiSearch />
               </SearchIcon>
             </Tab>
             <Tab
@@ -246,7 +301,11 @@ const LeftBar = (
               }
               onClick={() => myFeedFunction()}
             >
-              <img src={Mention} alt="" />
+              {/* <img src={Mention} alt="" /> */}
+              <SearchIcon>
+                <FiHome />
+              </SearchIcon>
+              
             </Tab>
             <Tab
               disabled={loading || tabIndex === 5}
@@ -261,6 +320,7 @@ const LeftBar = (
               }
             >
               <img src={Notifications} alt="" />
+              
             </Tab>
             <Tab
               disabled={loading || tabIndex === 6}
@@ -275,7 +335,10 @@ const LeftBar = (
                   : "react-tabs__tab"
               }
             >
-              <img src={Favorites} alt="" />
+              {/* <img src={Favorites} alt="" /> */}
+              <SearchIcon>
+                <FiHeart />
+              </SearchIcon>
             </Tab>
             <Tab
               disabled={loading || tabIndex === 7}
@@ -290,7 +353,10 @@ const LeftBar = (
               }
               onClick={() => listView()}
             >
-              <img src={GridIcon} alt="" />
+              {/* <img src={GridIcon} alt="" /> */}
+              <SearchIcon>
+                <BsListUl />
+              </SearchIcon>
             </Tab>
             <Tab
               disabled={loading || tabIndex === 8}
@@ -304,7 +370,7 @@ const LeftBar = (
                   : "react-tabs__tab"
               }
             >
-              <img src={ProfileSettingImg} alt="" />
+              {/* <img src={ProfileSettingImg} alt="" /> */}
             </Tab>
 
             <Tab
@@ -338,7 +404,7 @@ const LeftBar = (
           </TabList>
 
           <TabPanel></TabPanel>
-          <TabPanel>
+          {/* <TabPanel>
             <div className="panel-content">
               <h2>Any content 2</h2>
             </div>
@@ -347,7 +413,7 @@ const LeftBar = (
             <div className="panel-content">
               <h2>Any content 3</h2>
             </div>
-          </TabPanel>
+          </TabPanel> */}
           <TabPanel>
             <div className="panel-content">
               {isUserOpen && !selectedListId? (
@@ -532,7 +598,7 @@ const LeftBar = (
               )}
             </div>
           </TabPanel>
-          <TabPanel>
+          {/* <TabPanel>
             <div className="panel-content">
               {displayChangePassword === true ? (
                 <ChangePassword
@@ -548,10 +614,20 @@ const LeftBar = (
                 />
               )}
             </div>
-          </TabPanel>
+          </TabPanel> */}
           <TabPanel></TabPanel>
           <TabPanel></TabPanel>
+            
         </Tabs>
+        <BottomSettingsWrap>
+          <BsThreeDots />
+          <div className="BottomSettings">
+            <ul>
+              <li>Logout</li>
+              <li>Profile</li>
+            </ul>
+          </div>
+        </BottomSettingsWrap>
       </LeftBarContent>
     </>
   );
