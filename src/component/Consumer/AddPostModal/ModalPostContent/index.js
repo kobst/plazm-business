@@ -355,6 +355,7 @@ const ModalPostContent = ({
             businessData.listId.length > 0 &&
             businessData.listId[0]._id === selectedListForPost
           ) {
+            //edit post in redux for the same list
             const updatedPost = {
               ...response.post,
               business: businessData.business,
@@ -366,7 +367,6 @@ const ModalPostContent = ({
               comments: businessData.comments,
             };
             dispatch(updatePostInMyFeed(updatedPost));
-            //edit post in redux for the same list
           } else {
             // if list is changed then need to remove from redux
             // const addToList = await dispatch(
