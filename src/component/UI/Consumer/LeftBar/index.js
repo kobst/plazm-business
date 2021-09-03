@@ -66,6 +66,7 @@ const BottomSettingsWrap = styled.div`
   .BottomSettings {
     visibility: hidden;
     font-size: 0;
+    display: none;
   }
   :hover {
     background: #211d43;
@@ -83,6 +84,7 @@ const BottomSettingsWrap = styled.div`
       position: absolute;
       width: 100%;
       bottom: 99px;
+      display: flex;
       ul {
         display: flex;
         flex-direction: column;
@@ -102,6 +104,19 @@ const BottomSettingsWrap = styled.div`
           font-weight: 700;
           :hover {
             color: #ee3840;
+          }
+          button{
+            color: #767676;
+            font-size: 13px;
+            padding: 0;
+            cursor: pointer;
+            text-align: center;
+            text-transform: uppercase;
+            font-weight: 700;
+            border: 0;
+            :hover {
+              color: #ee3840;
+            }
           }
         }
       }
