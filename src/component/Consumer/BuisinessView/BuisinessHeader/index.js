@@ -274,15 +274,15 @@ const BuisinessHeader = ({
     dispatch(clearBusinessData());
     if (searchIndex) {
       history.push("/");
-      setTabIndex(3);
+      setTabIndex(1);
       setSearchIndex(null);
     } else if (myFeedIndex) {
       history.push("/");
-      setTabIndex(4);
+      setTabIndex(2);
       setMyFeedIndex(null);
     } else if (listIndex) {
       history.push("/");
-      setTabIndex(7);
+      setTabIndex(5);
       setListIndex(null);
     } else {
       setFavoriteIndex(null)

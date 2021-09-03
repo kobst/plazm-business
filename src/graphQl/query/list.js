@@ -130,9 +130,11 @@ const GetListDetails = (obj) => {
                 }
                 likes
                 taggedUsers {
+                  _id
                   name
                 }
                 taggedLists {
+                  _id
                   name
                 }
                 ownerId {

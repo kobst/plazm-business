@@ -195,7 +195,7 @@ const DescriptionViewItem = styled.div`
 `;
 
 /** display business details */
-const DisplayPostInAList = ({ data, id, setListIndex }) => {
+const DisplayPostInAList = ({ data, id, setListIndex, setSelectedListId }) => {
   const [favoriteBusiness, setFavoriteBusiness] = useState(false);
   const user = useSelector((state) => state.user.user);
   const [image, setImage] = useState(
@@ -383,6 +383,7 @@ const DisplayPostInAList = ({ data, id, setListIndex }) => {
           postData={data}
           businessData={data.business[0]}
           listView={true}
+          setSelectedListId={setSelectedListId}
         />
       </div>
     </DescriptionViewItem>

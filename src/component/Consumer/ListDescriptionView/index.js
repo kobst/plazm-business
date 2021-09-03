@@ -463,6 +463,7 @@ const ListDescriptionView = ({
                       key={key}
                       id={key}
                       setListIndex={setListIndex}
+                      setSelectedListId={setSelectedListId}
                     />
                   ))
                 ) : (

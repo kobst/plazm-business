@@ -22,20 +22,20 @@ const Dashboard = ({
   const [displayTab, setDisplayTab] = useState(false);
   return (
     <>
-      <DashboardContent>
-        <LeftBar
-          isUserOpen={isUserOpen}
-          displayTab={displayTab}
-          setDisplayTab={setDisplayTab}
-          profile={profile}
-          setFlag={setFlag}
-          isBusinessOpen={isBusinessOpen}
-          businessExists={businessExists}
-          businessId={businessId}
-          userId={userId}
-        />
-        <RightBar displayTab={displayTab} />
-      </DashboardContent>
+        <DashboardContent>
+          <LeftBar
+            isUserOpen={isUserOpen}
+            displayTab={displayTab}
+            setDisplayTab={setDisplayTab}
+            profile={profile}
+            setFlag={setFlag}
+            isBusinessOpen={isBusinessOpen}
+            businessExists={businessExists}
+            businessId={businessId}
+            userId={userId}
+          />
+          <RightBar displayTab={displayTab} />
+        </DashboardContent>
     </>
   );
 };
