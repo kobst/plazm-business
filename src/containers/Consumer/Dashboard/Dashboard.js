@@ -22,7 +22,6 @@ const DashboardContainer = (props) => {
   const user = useSelector(state => state.user.user)
   const sideFilterForLikes = useSelector(state => state.business.filterByMostLiked)
   const globalLoader = useSelector(state => state.consumer.globalLoader)
-  console.log('&&&&&',globalLoader)
   const dispatch = useDispatch();
 
   useEffect(() => {
