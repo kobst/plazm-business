@@ -17,6 +17,8 @@ import {
   fetchSearchPostComments,
   setPostId,
 } from "../../../../../reducers/myFeedReducer";
+import SaveButton from "../../../UI/SaveButton"
+import { BsThreeDots } from "react-icons/bs";
 
 const BottomBarLikes = styled.div`
   display: flex;
@@ -106,6 +108,7 @@ const LikesBar = ({
   setFlag,
   business,
   commentsRef,
+  listDescriptionView,
 }) => {
   const [eventDate, setEventDate] = useState();
   const [userLikedPost, setUserLikedPost] = useState(false);
@@ -282,6 +285,7 @@ const LikesBar = ({
   return (
     <>
       <BottomBarLikes>
+      {!listDescriptionView?
         <LikesBtnWrap>
           {type !== "commentReply" ? (
             <UsersButton onClick={() => setReplyDisplay()}>
@@ -303,6 +307,7 @@ const LikesBar = ({
             {eventDate}
           </ChatDate>
         </LikesBtnWrap>
+        : null }
         {type !== "commentReply" ? (
           <LikesBtnWrap>
             <RightDiv>
@@ -321,8 +326,16 @@ const LikesBar = ({
               <MdChatBubbleOutline onClick={() => displayCommentsWithPosts()} />{" "}
               {totalComments}
             </RightDiv>
+            {listDescriptionView?
+              <RightDiv>
+                <BsThreeDots />
+              </RightDiv>
+            : null }
           </LikesBtnWrap>
         ) : null}
+        {listDescriptionView?
+          <SaveButton>VISIT</SaveButton>
+        : null }
       </BottomBarLikes>
     </>
   );
