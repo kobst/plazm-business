@@ -154,6 +154,8 @@ const BusinessListing = ({
   setSelectedListId,
   setListClickedFromSearch,
   setSearchIndex,
+  loader,
+  coords,
 }) => {
   const businessData = useSelector((state) => state.myFeed.myFeed);
   const loading = useSelector((state) => state.myFeed.loading);
@@ -178,8 +180,8 @@ const BusinessListing = ({
         search: search,
         value: 0,
         filters: { closest: filterClosest, updated: updatedAtFilter },
-        latitude: process.env.REACT_APP_LATITUDE,
-        longitude: process.env.REACT_APP_LONGITUDE,
+        latitude: coords ? coords.latitude : process.env.REACT_APP_LATITUDE,
+        longitude: coords ? coords.longitude : process.env.REACT_APP_LONGITUDE,
       };
       const result = await dispatch(HomeSearch(obj));
       const data = await unwrapResult(result);
@@ -188,9 +190,16 @@ const BusinessListing = ({
       }
       setFilterSelected(false);
     };
-    fetchSearchData();
+    if (loader === false) fetchSearchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, filterSelected, filterClosest, updatedAtFilter, offset]);
+  }, [
+    dispatch,
+    filterSelected,
+    filterClosest,
+    updatedAtFilter,
+    offset,
+    loader,
+  ]);
 
   /** to fetch more places matching the search */
   const fetchMorePlaces = () => {
@@ -249,7 +258,7 @@ const BusinessListing = ({
           )}
         </CheckboxWrap>
       </SearchDropdownOption>
-      {(loading && offset === 0) || flag ? (
+      {(loading && offset === 0) || flag || loader ? (
         <LoaderWrap>
           <ValueLoader />
         </LoaderWrap>

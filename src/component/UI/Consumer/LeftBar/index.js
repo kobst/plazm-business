@@ -11,7 +11,6 @@ import ListDescriptionView from "../../../Consumer/ListDescriptionView";
 import MyFeed from "../../../Consumer/MyFeed";
 import {
   clearMyFeedData,
-  HomeSearch,
   setSearchData,
   fetchMyFeedData,
 } from "../../../../reducers/myFeedReducer";
@@ -209,16 +208,8 @@ const LeftBar = ({
   const homeSearchFunction = () => {
     setFavoriteIndex(null);
     if (tabIndex !== 1 && !loading) {
-      const obj = {
-        search: "",
-        value: 0,
-        filters: { closest: false, updated: false },
-        latitude: process.env.REACT_APP_LATITUDE,
-        longitude: process.env.REACT_APP_LONGITUDE,
-      };
       dispatch(setSearchData(""));
       dispatch(clearMyFeedData());
-      dispatch(HomeSearch(obj));
       setUserDataId(null);
       setSelectedListId(null);
       history.push("/");
