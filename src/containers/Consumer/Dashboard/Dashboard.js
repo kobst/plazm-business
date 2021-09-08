@@ -21,6 +21,8 @@ const DashboardContainer = (props) => {
   const filters = useSelector(state => state.business.filters)
   const user = useSelector(state => state.user.user)
   const sideFilterForLikes = useSelector(state => state.business.filterByMostLiked)
+  const globalLoader = useSelector(state => state.consumer.globalLoader)
+  console.log('&&&&&',globalLoader)
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -90,7 +92,7 @@ const DashboardContainer = (props) => {
     findBusiness(props.isBusinessOpen);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.isBusinessOpen, props.match.params.id, dispatch]);
-  return profile ? (
+  return profile && !globalLoader ? (
     <Dashboard
       profile={profile}
       setFlag={setFlag}

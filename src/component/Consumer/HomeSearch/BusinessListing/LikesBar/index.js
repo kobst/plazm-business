@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import {
   MdFavoriteBorder,
@@ -6,6 +6,7 @@ import {
   MdFavorite,
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
+import { BsThreeDots } from "react-icons/bs";
 import {
   AddLikeToPost,
   addLikeToComment,
@@ -17,6 +18,7 @@ import {
   fetchSearchPostComments,
   setPostId,
 } from "../../../../../reducers/myFeedReducer";
+import SaveButton from "../../../UI/SaveButton";
 
 const BottomBarLikes = styled.div`
   display: flex;
@@ -90,6 +92,17 @@ const RightDiv = styled.div`
   svg: hover {
     cursor: pointer;
   }
+  button {
+    color: #767676;
+    font-size: 13px;
+    padding: 0;
+    cursor: pointer;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 700;
+    border: 0;
+    background-color: transparent;
+  }
 `;
 
 const LikesBar = ({
@@ -105,7 +118,10 @@ const LikesBar = ({
   commentLikes,
   setFlag,
   business,
-  commentsRef,
+  listDescriptionView,
+  uploadMenu,
+  setUploadMenu,
+  listData,
 }) => {
   const [eventDate, setEventDate] = useState();
   const [userLikedPost, setUserLikedPost] = useState(false);
@@ -115,6 +131,7 @@ const LikesBar = ({
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const ws = useSelector((state) => state.user.ws);
+  const menuRef = useRef(null);
 
   /** to convert date into display format */
   useEffect(() => {
@@ -279,30 +296,49 @@ const LikesBar = ({
       }
     }
   };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleClickOutside = (event) => {
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      setUploadMenu(false);
+    }
+  };
+
+  const toggleUploadMenu = () => {
+    setUploadMenu(!uploadMenu);
+  };
   return (
     <>
       <BottomBarLikes>
-        <LikesBtnWrap>
-          {type !== "commentReply" ? (
-            <UsersButton onClick={() => setReplyDisplay()}>
-              {type === "comment" ? "Comment" : "Reply"}
-            </UsersButton>
-          ) : null}
-          {type !== "commentReply" ? <CircleDot /> : null}
-          {type !== "commentReply" ? (
-            <UsersButton
-              onClick={() => addLike()}
-              disabled={userLikedPost || userLikedComment}
-            >
-              Like
-            </UsersButton>
-          ) : null}
+        {!listDescriptionView ? (
+          <LikesBtnWrap>
+            {type !== "commentReply" ? (
+              <UsersButton onClick={() => setReplyDisplay()}>
+                {type === "comment" ? "Comment" : "Reply"}
+              </UsersButton>
+            ) : null}
+            {type !== "commentReply" ? <CircleDot /> : null}
+            {type !== "commentReply" ? (
+              <UsersButton
+                onClick={() => addLike()}
+                disabled={userLikedPost || userLikedComment}
+              >
+                Like
+              </UsersButton>
+            ) : null}
 
-          <ChatDate>
-            <span>-</span>
-            {eventDate}
-          </ChatDate>
-        </LikesBtnWrap>
+            <ChatDate>
+              <span>-</span>
+              {eventDate}
+            </ChatDate>
+          </LikesBtnWrap>
+        ) : null}
         {type !== "commentReply" ? (
           <LikesBtnWrap>
             <RightDiv>
@@ -318,11 +354,24 @@ const LikesBar = ({
                 : likeCount}
             </RightDiv>
             <RightDiv>
-              <MdChatBubbleOutline onClick={() => displayCommentsWithPosts()} />{" "}
+              <button
+                disabled={listDescriptionView ? listDescriptionView : false}
+                onClick={() => displayCommentsWithPosts()}
+              >
+                <MdChatBubbleOutline />
+              </button>
               {totalComments}
             </RightDiv>
+            {listDescriptionView &&
+            listData.ownerId.length > 0 &&
+            listData.ownerId[0]._id === user._id ? (
+              <RightDiv>
+                <BsThreeDots onClick={toggleUploadMenu} />
+              </RightDiv>
+            ) : null}
           </LikesBtnWrap>
         ) : null}
+        {listDescriptionView ? <SaveButton>VISIT</SaveButton> : null}
       </BottomBarLikes>
     </>
   );

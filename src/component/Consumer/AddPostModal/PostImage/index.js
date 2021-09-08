@@ -6,7 +6,7 @@ import CrossIcon from "../../../../images/cross-icon.svg";
 const AllListingsContent = styled.div`
   width: 100%;
   position: relative;
-  margin: 0 0 15px;
+  margin: 0;
   display: flex;
 `;
 
@@ -56,6 +56,8 @@ const UploadImage = styled.div`
   cursor: pointer;
   img {
     max-width: 100%;
+    width: 100%;
+    height: 100%;
   }
   :hover {
     :after {

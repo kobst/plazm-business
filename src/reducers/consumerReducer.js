@@ -30,8 +30,13 @@ export const slice = createSlice({
   initialState: {
     loading: false,
     users: [],
+    globalLoader: false,
   },
-  reducers: {},
+  reducers: {
+    setGloablLoader: (state, action) => {
+      state.globalLoader = action.payload;
+    },
+  },
   extraReducers: {
     [findAllUsers.pending]: (state) => {
       if (!state.loading) {
@@ -55,4 +60,5 @@ export const slice = createSlice({
   },
 });
 
+export const { setGloablLoader } = slice.actions;
 export default slice.reducer;

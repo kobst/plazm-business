@@ -84,6 +84,7 @@ const ProfileLock = ({ setDisplayTab, setProfileClosed }) => {
    * @desc: close tab function to be called on cross icon click
    */
   const closeTab = () => {
+    console.log("clicked")
     // setDisplayTab();
     setProfileClosed(true)
     // history.push("/");

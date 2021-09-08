@@ -21,6 +21,7 @@ import {
 } from "../../../../../reducers/myFeedReducer";
 import { checkMime, replaceBucket } from "../../../../../utilities/checkResizedImage";
 import { useHistory } from "react-router-dom";
+import BigImage from "../../../ListDescriptionView/BigImageContainer";
 
 const reactStringReplace = require("react-string-replace");
 
@@ -67,6 +68,12 @@ const ProfileNameHeader = styled.div`
     height: 1px;
     top: 30px;
   }
+  &.UserMessageView {
+    padding-left: 15px;
+    &:before {
+      display: none;
+    }
+  }
 `;
 
 const ProfileThumb = styled.div`
@@ -91,6 +98,14 @@ const ProfileNameWrap = styled.div`
   width: 100%;
   @media (max-width: 1024px) {
     padding: 0 45px 0 0px;
+  }
+  &.UserMessageViewProfileName{
+    max-width: 100%;
+    padding: 0 15px 0 0px;
+    text-align: justify;
+    @media (max-width: 1024px) {
+      padding: 0 15px 0 0px;
+    }
   }
 `;
 
@@ -195,6 +210,9 @@ const UserMessage = ({
   setSelectedListId,
   setListClickedFromSearch,
   type,
+  listDescriptionView,
+  uploadMenu,
+  setUploadMenu
 }) => {
   const dispatch = useDispatch();
   const [displayComments, setDisplayComments] = useState(false);
@@ -456,11 +474,14 @@ const UserMessage = ({
     <>
       <UserMsgWrap>
         <UserMessageContent>
-          <ProfileNameHeader>
+          <ProfileNameHeader className={listDescriptionView? "UserMessageView" : "" }>
+          {!listDescriptionView?
             <ProfileThumb>
               <img src={image} onError={() => checkError()} alt="" />
             </ProfileThumb>
-            <ProfileNameWrap>
+            : null}
+            <ProfileNameWrap className="UserMessageViewProfileName">
+            {!listDescriptionView?
               <ProfileName>
                 {postData.ownerId === null || postData.ownerId.length === 0 ? (
                   businessData.company_name
@@ -498,6 +519,7 @@ const UserMessage = ({
                   </RightArrowSec>
                 ) : null}
               </ProfileName>
+              :null }
               <ChatInput>
                 {findDesc(
                   postData.data,
@@ -505,6 +527,9 @@ const UserMessage = ({
                   postData.taggedLists || []
                 )}
               </ChatInput>
+              {listDescriptionView?
+                <BigImage />
+                : null }
               <LikesBar
                 type="comment"
                 totalLikes={postData.likes ? postData.likes.length : 0}
@@ -524,6 +549,10 @@ const UserMessage = ({
                 flag={flag}
                 business={businessData}
                 commentsRef={commentsRef}
+                listDescriptionView={listDescriptionView}
+                uploadMenu={uploadMenu}
+                setUploadMenu={setUploadMenu}
+                listData={postData}
               />
             </ProfileNameWrap>
           </ProfileNameHeader>

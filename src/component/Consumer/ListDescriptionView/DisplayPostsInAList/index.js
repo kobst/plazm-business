@@ -1,16 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import moment from "moment";
 import styled from "styled-components";
 import ProfileImg from "../../../../images/profile-img.png";
-import FavoritesIcon from "../../../../images/favorites.png";
-import RedHeartIcon from "../../../../images/heart.png";
+import DropdwonArrowTop from "../../../../images/top_arrow.png";
 import UserMessage from "../../HomeSearch/BusinessListing/UserMessage";
-import {
-  AddBusinessFavorite,
-  RemoveBusinessFavorite,
-} from "../../../../reducers/userReducer";
-import BusinessHashTags from "../../BusinessList/businessHashtags";
 import { useHistory } from "react-router";
 import {
   checkMime,
@@ -51,6 +43,7 @@ const UserMsgWrap = styled.div`
     top: 50px;
     left: 26px;
     z-index: 1;
+    display: none;
   }
 `;
 
@@ -60,29 +53,28 @@ const ProfileNameHeader = styled.div`
   margin: 0;
 `;
 
-const ProfileThumb = styled.div`
-  width: 30px;
-  height: 30px;
-  margin: 0 10px 0 0;
-  border: 3px solid #ffffff;
-  border-radius: 50%;
+const ProfileThumbBanner = styled.div`
+  width: 100%;
+  height: 50px;
+  margin: 0;
   overflow: hidden;
+  position: relative;
   img {
-    width: 30px;
-    height: 30px;
+    width: 100%;
+    max-height: 50px;
   }
 `;
-const ProfileNameWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  max-width: calc(100% - 40px);
-  padding: 0 0 0 0px;
+
+const ProfileThumbOverlay = styled.div`
+  background: linear-gradient(
+    360deg,
+    rgba(0, 0, 0, 0.6) -30%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
   width: 100%;
-  @media (max-width: 1024px) {
-    padding: 0 0px 15px 0px;
-  }
+  position: absolute;
+  height: 100%;
+  top: 0;
 `;
 
 const ProfileName = styled.div`
@@ -91,18 +83,26 @@ const ProfileName = styled.div`
   line-height: normal;
   margin: 0;
   font-weight: 700;
-  color: #ff2e9a;
+  color: #fff;
+  position: absolute;
+  top: 15px;
+  left: 15px;
+
   svg {
     color: #ff0000;
     margin: 0;
   }
   div {
     cursor: pointer;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 100%;
+
   span {
     font-weight: 700;
     color: #fff;
@@ -123,70 +123,6 @@ const ProfileName = styled.div`
   }
 `;
 
-const ChatInput = styled.div`
-  font-weight: 400;
-  font-size: 12px;
-  line-height: normal;
-  margin: 0 0 5px;
-  color: #fff;
-  width: 100%;
-  span {
-    font-size: 12px;
-    color: #ff2e9a;
-    font-weight: 700;
-    cursor: pointer;
-    margin: 0 4px 0 0px;
-  }
-  .postSpan {
-    margin-left: 4%;
-  }
-  p {
-    display: flex;
-    font-size: 12px !important;
-    @media (max-width: 767px) {
-      margin: 5px 0 0 !important;
-    }
-  }
-`;
-
-const RightWrap = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  margin: 0px;
-  align-items: center;
-  flex-wrap: wrap;
-  .OpenDiv {
-    font-size: 10px;
-    line-height: normal;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    text-transform: uppercase;
-    color: #ffffff;
-    background: #3fce56;
-    border-radius: 50px;
-    padding: 3px 11px;
-  }
-  .CloseDiv {
-    font-size: 10px;
-    line-height: normal;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    text-transform: uppercase;
-    color: #ffffff;
-    background: #fe6f5b;
-    border-radius: 50px;
-    padding: 3px 11px;
-  }
-  .favoriteBusiness,
-  .favoriteBusinessBorder {
-    margin: 0 0 0 11px;
-  }
-`;
 
 const DescriptionViewItem = styled.div`
   .background-active {
@@ -197,12 +133,65 @@ const DescriptionViewItem = styled.div`
   }
 `;
 
+const DropdownContent = styled.div`
+  display: flex;
+  position: absolute;
+  min-width: 102px;
+  overflow: auto;
+  background: #fe02b9;
+  box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.3);
+  z-index: 1;
+  top: 25px;
+  width: 30px;
+  overflow: visible;
+  right: -5px;
+  padding: 5px;
+  :before {
+    background: url(${DropdwonArrowTop}) no-repeat top center;
+    width: 15px;
+    height: 15px;
+    content: " ";
+    top: -12px;
+    position: relative;
+    margin: 0 auto;
+    display: flex;
+    text-align: center;
+    left: 78px;
+    @media (max-width: 767px) {
+      left: 0;
+    }
+  }
+  @media (max-width: 767px) {
+    top: 31px;
+    right: 0;
+    left: -5px;
+  }
+  ul {
+    list-style: none;
+    margin: 0 0 0 -15px;
+    padding: 0;
+    width: 100%;
+    text-align: right;
+  }
+  li {
+    color: #fff;
+    padding: 0px 5px;
+    text-decoration: none;
+    font-size: 12px;
+  }
+  li:hover {
+    background-color: #fe02b9;
+    cursor: pointer;
+  }
+`;
+
 /** display business details */
-const DisplayPostInAList = ({ data, id, setListIndex }) => {
-  const [favoriteBusiness, setFavoriteBusiness] = useState(false);
+const DisplayPostInAList = ({ data, id, setListIndex, setSelectedListId }) => {
+  // const [favoriteBusiness, setFavoriteBusiness] = useState(false);
   const [addPostModal, setAddPostModal] = useState(false);
   const [deletePostModal, setDeletePostModal] = useState(false);
-  const user = useSelector((state) => state.user.user);
+  const [uploadMenu, setUploadMenu] = useState(false);
+  // const user = useSelector((state) => state.user.user);
   const [image, setImage] = useState(
     data.business[0].default_image_url
       ? data.business[0].default_image_url
@@ -232,82 +221,82 @@ const DisplayPostInAList = ({ data, id, setListIndex }) => {
     }
   };
 
-  const dispatch = useDispatch();
-  const getUtcHour = new Date().getUTCHours();
-  const getUtcMinutes = new Date().getUTCMinutes();
-  const currentUtcDay = new Date().getUTCDay();
+  // const dispatch = useDispatch();
+  // const getUtcHour = new Date().getUTCHours();
+  // const getUtcMinutes = new Date().getUTCMinutes();
+  // const currentUtcDay = new Date().getUTCDay();
   const history = useHistory();
-  const days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
+  // const days = [
+  //   "Sunday",
+  //   "Monday",
+  //   "Tuesday",
+  //   "Wednesday",
+  //   "Thursday",
+  //   "Friday",
+  //   "Saturday",
+  // ];
 
-  /** to check if business is open/close */
-  const checkBusinessOpenClose = () => {
-    if (
-      data.business[0].hours_format &&
-      data.business[0].hours_format.length > 0
-    ) {
-      for (let i = 0; i < data.business[0].hours_format.length; i++) {
-        const startDayIndex = days.indexOf(
-          data.business[0].hours_format[i].StartDay
-        );
-        const endDayIndex = days.indexOf(
-          data.business[0].hours_format[i].EndDay
-        );
-        if (currentUtcDay >= startDayIndex && currentUtcDay <= endDayIndex) {
-          const time = moment(getUtcHour + ":" + getUtcMinutes, "HH:mm");
-          const beforeTime = moment(
-            data.business[0].hours_format[i].Start,
-            "HH:mm"
-          );
-          const afterTime = moment(
-            data.business[0].hours_format[i].End,
-            "HH:mm"
-          );
-          if (time.isBetween(beforeTime, afterTime)) {
-            return true;
-          } else {
-            return false;
-          }
-        } else {
-          return false;
-        }
-      }
-    }
-    return false;
-  };
+  // /** to check if business is open/close */
+  // const checkBusinessOpenClose = () => {
+  //   if (
+  //     data.business[0].hours_format &&
+  //     data.business[0].hours_format.length > 0
+  //   ) {
+  //     for (let i = 0; i < data.business[0].hours_format.length; i++) {
+  //       const startDayIndex = days.indexOf(
+  //         data.business[0].hours_format[i].StartDay
+  //       );
+  //       const endDayIndex = days.indexOf(
+  //         data.business[0].hours_format[i].EndDay
+  //       );
+  //       if (currentUtcDay >= startDayIndex && currentUtcDay <= endDayIndex) {
+  //         const time = moment(getUtcHour + ":" + getUtcMinutes, "HH:mm");
+  //         const beforeTime = moment(
+  //           data.business[0].hours_format[i].Start,
+  //           "HH:mm"
+  //         );
+  //         const afterTime = moment(
+  //           data.business[0].hours_format[i].End,
+  //           "HH:mm"
+  //         );
+  //         if (time.isBetween(beforeTime, afterTime)) {
+  //           return true;
+  //         } else {
+  //           return false;
+  //         }
+  //       } else {
+  //         return false;
+  //       }
+  //     }
+  //   }
+  //   return false;
+  // };
 
-  /** to check if the business is liked */
-  useEffect(() => {
-    const find = user.favorites.find((i) => i === data.business[0]._id);
-    if (find) {
-      setFavoriteBusiness(true);
-    } else setFavoriteBusiness(false);
-  }, [user, data]);
+  // /** to check if the business is liked */
+  // useEffect(() => {
+  //   const find = user.favorites.find((i) => i === data.business[0]._id);
+  //   if (find) {
+  //     setFavoriteBusiness(true);
+  //   } else setFavoriteBusiness(false);
+  // }, [user, data]);
 
-  /** to add a business to user favorites */
-  const addFavorite = async () => {
-    const obj = {
-      businessId: data.business[0]._id,
-      userId: user._id,
-    };
-    await dispatch(AddBusinessFavorite(obj));
-  };
+  // /** to add a business to user favorites */
+  // const addFavorite = async () => {
+  //   const obj = {
+  //     businessId: data.business[0]._id,
+  //     userId: user._id,
+  //   };
+  //   await dispatch(AddBusinessFavorite(obj));
+  // };
 
-  /** to remove a business to user favorites */
-  const removeFavorite = async () => {
-    const obj = {
-      businessId: data.business[0]._id,
-      userId: user._id,
-    };
-    await dispatch(RemoveBusinessFavorite(obj));
-  };
+  // /** to remove a business to user favorites */
+  // const removeFavorite = async () => {
+  //   const obj = {
+  //     businessId: data.business[0]._id,
+  //     userId: user._id,
+  //   };
+  //   await dispatch(RemoveBusinessFavorite(obj));
+  // };
 
   /** to display business details page */
   const displayBusinessDetail = () => {
@@ -318,6 +307,13 @@ const DisplayPostInAList = ({ data, id, setListIndex }) => {
   /** to delete a post */
   const deletePost = () => {
     setDeletePostModal(true);
+    setUploadMenu(false);
+  };
+
+  /** to edit a post */
+  const editPost = () => {
+    setAddPostModal(true);
+    setUploadMenu(false);
   };
   return data ? (
     <>
@@ -328,78 +324,90 @@ const DisplayPostInAList = ({ data, id, setListIndex }) => {
           <UserMsgWrap>
             <UserMessageContent>
               <ProfileNameHeader>
-                <ProfileThumb>
+                <ProfileThumbBanner>
                   <img src={image} onError={() => checkError()} alt="" />
-                </ProfileThumb>
-                <ProfileNameWrap>
+                  <ProfileThumbOverlay />
                   <ProfileName>
                     <div onClick={() => displayBusinessDetail()}>
                       {data.business[0].company_name}
                     </div>
-                    <RightWrap>
-                      {data.business[0].hours_format &&
-                      data.business[0].hours_format.length === 0 ? (
-                        <div className="CloseDiv">Close</div>
-                      ) : checkBusinessOpenClose() === true ? (
-                        <div className="OpenDiv">Open</div>
-                      ) : (
-                        <div className="CloseDiv">Close</div>
-                      )}
-
-                      {data.business[0].hours_format &&
-                      data.business[0].hours_format.length > 0 &&
-                      checkBusinessOpenClose() === true ? (
-                        favoriteBusiness ? (
-                          <img
-                            src={RedHeartIcon}
-                            onClick={() => removeFavorite()}
-                            className="favoriteBusiness"
-                            alt=""
-                          />
-                        ) : (
-                          <img
-                            src={FavoritesIcon}
-                            onClick={() => addFavorite()}
-                            className="favoriteBusinessBorder"
-                            alt=""
-                          />
-                        )
-                      ) : null}
-                    </RightWrap>
                   </ProfileName>
-                  <ChatInput>
-                    <p>
-                      <span>
-                        {data.business[0].favorites !== null
-                          ? data.business[0].favorites.length
-                          : 0}
-                      </span>{" "}
-                      Followers{" "}
-                      <span className="postSpan">
-                        {data.totalPosts.length > 0
-                          ? data.totalPosts[0].totalPosts
-                          : 0}
-                      </span>{" "}
-                      Posts
-                    </p>
-                  </ChatInput>
-                  <BusinessHashTags data={data.business[0].filter_tags} />
-                </ProfileNameWrap>
+                </ProfileThumbBanner>
+                {/* <ProfileNameWrap>
+                <ProfileName>
+                  <div onClick={() => displayBusinessDetail()}>
+                    {data.business[0].company_name}
+                  </div>
+                  <RightWrap>
+                    {data.business[0].hours_format &&
+                    data.business[0].hours_format.length === 0 ? (
+                      <div className="CloseDiv">Close</div>
+                    ) : checkBusinessOpenClose() === true ? (
+                      <div className="OpenDiv">Open</div>
+                    ) : (
+                      <div className="CloseDiv">Close</div>
+                    )}
+
+                    {data.business[0].hours_format &&
+                    data.business[0].hours_format.length > 0 &&
+                    checkBusinessOpenClose() === true ? (
+                      favoriteBusiness ? (
+                        <img
+                          src={RedHeartIcon}
+                          onClick={() => removeFavorite()}
+                          className="favoriteBusiness"
+                          alt=""
+                        />
+                      ) : (
+                        <img
+                          src={FavoritesIcon}
+                          onClick={() => addFavorite()}
+                          className="favoriteBusinessBorder"
+                          alt=""
+                        />
+                      )
+                    ) : null}
+                  </RightWrap>
+                </ProfileName>
+                <ChatInput>
+                  <p>
+                    <span>
+                      {data.business[0].favorites !== null
+                        ? data.business[0].favorites.length
+                        : 0}
+                    </span>{" "}
+                    Followers{" "}
+                    <span className="postSpan">
+                      {data.totalPosts.length > 0
+                        ? data.totalPosts[0].totalPosts
+                        : 0}
+                    </span>{" "}
+                    Posts
+                  </p>
+                </ChatInput>
+                <BusinessHashTags data={data.business[0].filter_tags} />
+              </ProfileNameWrap> */}
               </ProfileNameHeader>
             </UserMessageContent>
           </UserMsgWrap>
 
           <UserMessage
+            uploadMenu={uploadMenu}
+            setUploadMenu={setUploadMenu}
             postData={data}
             businessData={data.business[0]}
             listView={true}
+            setSelectedListId={setSelectedListId}
+            listDescriptionView={true}
           />
-          {data.ownerId.length > 0 && data.ownerId[0]._id === user._id ? (
-            <>
-              <button onClick={() => setAddPostModal(true)}>Edit</button>
-              <button onClick={() => deletePost()}>Delete</button>
-            </>
-          ) : null}
+          {uploadMenu && (
+            <DropdownContent>
+              <ul>
+                <li onClick={() => editPost()}>Edit</li>
+                <li onClick={() => deletePost()}>Delete</li>
+              </ul>
+            </DropdownContent>
+          )}
         </div>
       </DescriptionViewItem>
       {addPostModal && (
@@ -421,7 +429,10 @@ const DisplayPostInAList = ({ data, id, setListIndex }) => {
           isOpen={deletePostModal}
           closeModal={() => setDeletePostModal(false)}
         >
-          <DeletePostModal closeModal={() => setDeletePostModal(false)} id={data._id} />
+          <DeletePostModal
+            closeModal={() => setDeletePostModal(false)}
+            id={data._id}
+          />
         </ModalComponent>
       )}
     </>

@@ -26,6 +26,7 @@ import {
   removeSubscribedList,
 } from "../../../reducers/userReducer";
 import { useHistory } from "react-router-dom";
+import ButtonOrange from "../UI/ButtonOrange";
 
 const ListOptionSection = styled.div`
   width: 100%;
@@ -51,16 +52,20 @@ const TopHeadingWrap = styled.div`
 `;
 
 const CloseDiv = styled.div`
-  width: 24px;
+  width: 40px;
   position: relative;
+  height: 40px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
+  align-items: center;
   position: absolute;
-  right: 17px;
+  right: -40px;
   cursor: pointer;
-  top: 17px;
+  top: 0px;
+  background: #FE02B9;
+  box-shadow: 4px 0px 14px -5px #fe02b9;
   svg {
-    font-size: 24px;
+    font-size: 32px;
     color: #fff;
   }
 `;
@@ -159,7 +164,7 @@ const ButtonWrapperDiv = styled.div`
 const ListBannerSection = styled.div`
   width: 100%;
   height: 210px;
-  padding: 0 25px 20px;
+  padding: 0 20px 20px;
   display: flex;
   justify-content: flex-end;
   flex-direction: column;
@@ -173,17 +178,21 @@ const ListBannerSection = styled.div`
     bottom: 0;
   }
   h1 {
-    font-size:20px;
-    font-weight: 900;
+    font-size:18px;
+    font-weight: 800;
     color:#fff;
     text-transform: uppercase;
     margin-bottom:7px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
   }
   h5 {
     font-size:12px;
-    font-weight:600;
+    font-weight:normal;
     color:#fff;
-    margin-bottom:18px;
+    margin-bottom:0px;
     span {
       color:#FF2E9A;
       border-right: 1px solid #fff;
@@ -191,16 +200,28 @@ const ListBannerSection = styled.div`
       cursor: pointer;
     }
     strong {
-      margin-left: 10px;
-      font-weight: 600;
+      margin-left: 0px;
+      font-weight: bold;
+      margin-right: 5px;
     }
   }
   p {
-    font-size:10px;
-    font-weight:normal;
+    font-size:13px;
+    font-weight:600;
     color:#fff;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
+    margin:0 0 7px;
+    padding: 0;
+    line-height: normal;
   }
-}
+  .BannerWrapBtn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 `;
 
 const ButtonOuterDiv = styled.div`
@@ -375,34 +396,41 @@ const ListDescriptionView = ({
                   alt=""
                 />
                 <h1>{selectedList.name}</h1>
+                <p>{selectedList.description}</p>
+                <div className="BannerWrapBtn">
                 <h5>
                   by{" "}
+                  <strong>
                   <span
                     onClick={() =>
                       history.push(`/u/${selectedList.ownerId._id}`)
                     }
                   >
                     {selectedList.ownerId.name}
-                  </span>{" "}
-                  <strong>
+                  </span>
+                  </strong>{" "}
+                  
                     Updated{" "}
                     {moment(selectedList.updatedAt).format(
                       "MMM DD,YYYY, hh:MM a"
                     )}{" "}
                     EST
-                  </strong>{" "}
+                  {" "}
                   <LockDiv>
                     <CgLock />
                   </LockDiv>
                 </h5>
-                <p>{selectedList.description}</p>
+                
+                <ButtonOrange>Unsubscribe</ButtonOrange>
+                </div>
+
               </ListBannerSection>
               <CloseDiv>
                 <IoMdClose onClick={() => onCloseTab()} />
               </CloseDiv>
             </TopHeadingWrap>
           </HeadingWrap>
-          <ButtonWrapperDiv>
+          {/* <ButtonWrapperDiv>
             <ArrowBack>
               <MdKeyboardArrowLeft onClick={() => backBusiness()} />
             </ArrowBack>
@@ -427,7 +455,7 @@ const ListDescriptionView = ({
                 Unsubscribe
               </button>
             )}
-          </ButtonWrapperDiv>
+          </ButtonWrapperDiv> */}
           <div
             id="scrollableDiv"
             style={{ height: "calc(100vh - 258px)", overflow: "auto" }}
@@ -463,6 +491,7 @@ const ListDescriptionView = ({
                       key={key}
                       id={key}
                       setListIndex={setListIndex}
+                      setSelectedListId={setSelectedListId}
                     />
                   ))
                 ) : (

@@ -2,17 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import "./styles.css";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import PlazmLogo from "../../../../images/plazm_logo.jpg";
-import LocalNav from "../../../../images/LocalNav.png";
-import ProfileImg from "../../../../images/profile-img.png";
-import Mention from "../../../../images/Mentions.png";
-import Notifications from "../../../../images/notifications.png";
-import Favorites from "../../../../images/Left-favourite.png";
-import GridIcon from "../../../../images/Grid_icon.png";
-import ProfileSettingImg from "../../../../images/Profile_Setting.png";
-import { BiSearchAlt2 } from "react-icons/bi";
-import ChangePassword from "../../../Consumer/ChangePassword";
-import ProfileSettings from "../../../Consumer/ProfileSettings";
+import Notifications from "../../../../images/notifications-new.png";
 import BuisinessView from "../../../Consumer/BuisinessView";
 import BusinessList from "../../../Consumer/BusinessList";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,38 +13,28 @@ import {
   clearMyFeedData,
   HomeSearch,
   setSearchData,
-  fetchMyFeedData
+  fetchMyFeedData,
 } from "../../../../reducers/myFeedReducer";
 import Profile from "../../../Consumer/Profile";
+import ChangePassword from "../../../Consumer/ChangePassword";
+import ProfileSettings from "../../../Consumer/ProfileSettings";
 import HomeSearchComponent from "../../../Consumer/HomeSearch";
 import { useHistory } from "react-router-dom";
 import { clearBusinessData } from "../../../../reducers/businessReducer";
+import { FiSearch, FiHome, FiHeart } from "react-icons/fi";
+import { BsListUl, BsThreeDots } from "react-icons/bs";
+import PolygonArrow from "../../../../images/Polygon.png";
 import { Auth } from "aws-amplify";
+import { setGloablLoader } from "../../../../reducers/consumerReducer";
 
 const LeftBarContent = styled.div`
   width: 100px;
   position: relative;
   display: flex;
-  /* background: #F3F3F3; */
   box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
+  flex-direction: column;
   @media (max-width: 767px) {
     width: 50px;
-  }
-`;
-
-const UserImage = styled.div`
-  width: 50px;
-  height: 50px;
-  border: 3px solid #ff2a88;
-  position: relative;
-  overflow: hidden;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  @media (max-width: 767px) {
-    width: 30px;
-    height: 30px;
   }
 `;
 
@@ -62,64 +42,127 @@ const SearchIcon = styled.div`
   width: 36px;
   svg {
     color: #767676;
-    font-size: 38px;
+    font-size: 26px;
     @media (max-width: 767px) {
-      font-size: 30px;
+      font-size: 24px;
     }
   }
 `;
 
-const LeftBar = (
-  {
-    profile,
-    setFlag,
-    isBusinessOpen,
-    businessExists,
-    businessId,
-    isUserOpen,
-    userId,
-    loader,
-    setLoader
-  },
-) => {
+const BottomSettingsWrap = styled.div`
+  height: 100px;
+  background: #f3f3f3;
+  position: absolute;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  bottom: 0;
+  border-top: 0.75px solid #c4c4c4;
+  color: #767676;
+  font-size: 18px;
+  cursor: pointer;
+  position: relative;
+  .BottomSettings {
+    visibility: hidden;
+    font-size: 0;
+    display: none;
+  }
+  :hover {
+    background: #211d43;
+    color: #fff;
+    :before {
+      width: 15px;
+      height: 10px;
+      position: absolute;
+      top: -8px;
+      background: url(${PolygonArrow}) no-repeat top center;
+      content: "";
+    }
+    .BottomSettings {
+      visibility: visible;
+      position: absolute;
+      width: 100%;
+      bottom: 99px;
+      display: flex;
+      ul {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        li {
+          width: 100%;
+          list-style: none;
+          color: #767676;
+          font-size: 13px;
+          margin: 30px 0;
+          padding: 0;
+          cursor: pointer;
+          text-align: center;
+          text-transform: uppercase;
+          font-weight: 700;
+          :hover {
+            color: #ee3840;
+          }
+          button{
+            color: #767676;
+            font-size: 13px;
+            padding: 0;
+            cursor: pointer;
+            text-align: center;
+            text-transform: uppercase;
+            font-weight: 700;
+            border: 0;
+            :hover {
+              color: #ee3840;
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const LeftBar = ({
+  profile,
+  setFlag,
+  isBusinessOpen,
+  businessExists,
+  businessId,
+  isUserOpen,
+  userId,
+}) => {
   const [displayChangePassword, setDisplayChangePassword] = useState(false);
   const [tabIndex, setTabIndex] = useState(
-    isBusinessOpen ? 6 : isUserOpen ? 3 : 0
+    isBusinessOpen ? 4 : isUserOpen ? 1 : 0
   );
   const user = useSelector((state) => state.user.user);
   const [selectedListId, setSelectedListId] = useState(null);
   const [listClickedFromSearch, setListClickedFromSearch] = useState(false);
   const loading = useSelector((state) => state.myFeed.loading);
+  const loader = useSelector((state) => state.consumer.globalLoader);
   const [searchIndex, setSearchIndex] = useState(null);
   const [myFeedIndex, setMyFeedIndex] = useState(null);
   const [listIndex, setListIndex] = useState(null);
   const [favoriteIndex, setFavoriteIndex] = useState(null);
   const [profileClosed, setProfileClosed] = useState(false);
-  const [userDataId, setUserDataId] = useState(userId)
-  const [redirect, setRedirect] = useState(false)
+  const [userDataId, setUserDataId] = useState(userId);
   const dispatch = useDispatch();
   const history = useHistory();
 
-  useEffect(()=>{
-    setUserDataId(userId)
-  },[userId])
+  useEffect(() => {
+    setUserDataId(userId);
+  }, [userId]);
 
-  /** for logout functionality redirection */
-  useEffect(()=>{
-    if(redirect){
-      setLoader(false) 
-      history.push('/consumer/login') 
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[redirect])
 
   useEffect(() => {
-    if (profileClosed && tabIndex === 6) {
+    if (profileClosed && tabIndex === 4) {
       history.push(`/b/${businessId}`);
       setProfileClosed(false);
     } else if (
       profileClosed &&
-      (tabIndex === 7 || tabIndex === 4 || tabIndex === 3)
+      (tabIndex === 5 || tabIndex === 2 || tabIndex === 1)
     ) {
       history.push("/");
       setProfileClosed(false);
@@ -129,44 +172,44 @@ const LeftBar = (
 
   /** to clear selected data on tab click */
   const listView = () => {
-    if (tabIndex !== 7 && !loading) {
+    if (tabIndex !== 5 && !loading) {
       dispatch(clearMyFeedData());
       setSelectedListId(null);
       setListIndex(null);
-      setUserDataId(null)
-      history.push('/')
+      setUserDataId(null);
+      history.push("/");
     }
   };
 
   /** to clear selected data on tab click */
   const myFeedFunction = () => {
-    if (tabIndex !== 4 && !loading) {
+    if (tabIndex !== 2 && !loading) {
       const obj = {
         id: user._id,
         value: 0,
       };
-      setUserDataId(null)
-      setSelectedListId(null)
-      history.push('/')
+      setUserDataId(null);
+      setSelectedListId(null);
+      history.push("/");
       dispatch(clearMyFeedData());
       dispatch(fetchMyFeedData(obj));
     }
   };
-  
+
   /** to clear selected data on tab click */
   const favoriteFunction = () => {
     dispatch(clearBusinessData());
-    setFavoriteIndex(null)
-    setSelectedListId(null)
-    setUserDataId(null)
-    setSelectedListId(null)
-    history.push('/')
+    setFavoriteIndex(null);
+    setSelectedListId(null);
+    setUserDataId(null);
+    setSelectedListId(null);
+    history.push("/");
   };
 
   /** to clear selected data on tab click */
   const homeSearchFunction = () => {
     setFavoriteIndex(null);
-    if (tabIndex !== 3 && !loading) {
+    if (tabIndex !== 1 && !loading) {
       const obj = {
         search: "",
         value: 0,
@@ -177,26 +220,34 @@ const LeftBar = (
       dispatch(setSearchData(""));
       dispatch(clearMyFeedData());
       dispatch(HomeSearch(obj));
-      setUserDataId(null)
-      setSelectedListId(null)
-      history.push('/')
+      setUserDataId(null);
+      setSelectedListId(null);
+      history.push("/");
     }
   };
 
+  /** to open user profile tab */
+  const showUserProfile = () => {
+    setTabIndex(6);
+  };
+
+  /** for logout functionality redirection */
+  const redirectUserToLoginScreen = () => {
+    dispatch(setGloablLoader(false));
+    history.push("/consumer/login");
+  };
   /** logout consumer */
-  const consumerLogout = async() => {
+  const consumerLogout = async () => {
     try {
-      setLoader(true) 
-      await Auth.signOut();        
-      setTimeout(
-        () => setRedirect(true),
-        3000
-      );
+      dispatch(setGloablLoader(true));
+      await Auth.signOut();
+      setTimeout(() => redirectUserToLoginScreen(), 3000);
     } catch (error) {
-      setLoader(false)
+      dispatch(setGloablLoader(false));
       console.log("error signing out: ", error);
     }
   };
+
   return (
     <>
       <LeftBarContent className="MainTabs">
@@ -213,20 +264,23 @@ const LeftBar = (
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
-            >
-              <img src={PlazmLogo} alt="" />
-            </Tab>
+            ></Tab>
             <Tab
               disabled={loading || tabIndex === 1}
               className={
                 1 === tabIndex - 1
                   ? "react-tabs__tab LIBefore"
+                  : tabIndex + 1 === 1
+                  ? "react-tabs__tab LIAFter"
                   : tabIndex === 1
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
+              onClick={() => homeSearchFunction()}
             >
-              <img src={LocalNav} alt="" />
+              <SearchIcon>
+                <FiSearch />
+              </SearchIcon>
             </Tab>
             <Tab
               disabled={loading || tabIndex === 2}
@@ -239,10 +293,11 @@ const LeftBar = (
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
+              onClick={() => myFeedFunction()}
             >
-              <UserImage>
-                <img src={user.photo ? user.photo : ProfileImg} alt="" />
-              </UserImage>
+              <SearchIcon>
+                <FiHome />
+              </SearchIcon>
             </Tab>
             <Tab
               disabled={loading || tabIndex === 3}
@@ -255,14 +310,12 @@ const LeftBar = (
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
-              onClick={() => homeSearchFunction()}
             >
-              <SearchIcon>
-                <BiSearchAlt2 />
-              </SearchIcon>
+              <img src={Notifications} alt="" />
             </Tab>
             <Tab
               disabled={loading || tabIndex === 4}
+              onClick={() => favoriteFunction()}
               className={
                 4 === tabIndex - 1
                   ? "react-tabs__tab LIBefore"
@@ -272,9 +325,10 @@ const LeftBar = (
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
-              onClick={() => myFeedFunction()}
             >
-              <img src={Mention} alt="" />
+              <SearchIcon>
+                <FiHeart />
+              </SearchIcon>
             </Tab>
             <Tab
               disabled={loading || tabIndex === 5}
@@ -287,26 +341,21 @@ const LeftBar = (
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
+              onClick={() => listView()}
             >
-              <img src={Notifications} alt="" />
+              <SearchIcon>
+                <BsListUl />
+              </SearchIcon>
             </Tab>
             <Tab
-              disabled={loading || tabIndex === 6}
-              onClick={() => favoriteFunction()}
-              className={
-                6 === tabIndex - 1
-                  ? "react-tabs__tab LIBefore"
-                  : tabIndex + 1 === 6
-                  ? "react-tabs__tab LIAFter"
-                  : tabIndex === 6
-                  ? "react-tabs__tab react-tabs__tab--selected"
-                  : "react-tabs__tab"
-              }
+              disabled={true}
+              className="react-tabs__tab--disabled"
+              style={{ backgroundColor: "#f3f3f3" }}
             >
-              <img src={Favorites} alt="" />
             </Tab>
+
             <Tab
-              disabled={loading || tabIndex === 7}
+              disabled={loading}
               className={
                 7 === tabIndex - 1
                   ? "react-tabs__tab LIBefore"
@@ -316,12 +365,11 @@ const LeftBar = (
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
               }
-              onClick={() => listView()}
             >
-              <img src={GridIcon} alt="" />
+              &nbsp;
             </Tab>
             <Tab
-              disabled={loading || tabIndex === 8}
+              disabled={loading}
               className={
                 8 === tabIndex - 1
                   ? "react-tabs__tab LIBefore"
@@ -332,55 +380,14 @@ const LeftBar = (
                   : "react-tabs__tab"
               }
             >
-              <img src={ProfileSettingImg} alt="" />
-            </Tab>
-
-            <Tab
-              disabled={loading}
-              className={
-                10 === tabIndex - 1
-                  ? "react-tabs__tab LIBefore"
-                  : tabIndex + 1 === 10
-                  ? "react-tabs__tab LIAFter"
-                  : tabIndex === 10
-                  ? "react-tabs__tab react-tabs__tab--selected"
-                  : "react-tabs__tab"
-              }
-            >
               &nbsp;
             </Tab>
-            <Tab
-              disabled={loading}
-              className={
-                11 === tabIndex - 1
-                  ? "react-tabs__tab LIBefore"
-                  : tabIndex + 1 === 11
-                  ? "react-tabs__tab LIAFter"
-                  : tabIndex === 11
-                  ? "react-tabs__tab react-tabs__tab--selected"
-                  : "react-tabs__tab"
-              }
-            >
-              &nbsp;
-            </Tab>
-            <p onClick={()=>setTabIndex(8)}>Profile</p>
-            <button onClick={() => consumerLogout()} disabled={loader}>Logout</button>
           </TabList>
 
           <TabPanel></TabPanel>
           <TabPanel>
             <div className="panel-content">
-              <h2>Any content 2</h2>
-            </div>
-          </TabPanel>
-          <TabPanel>
-            <div className="panel-content">
-              <h2>Any content 3</h2>
-            </div>
-          </TabPanel>
-          <TabPanel>
-            <div className="panel-content">
-              {isUserOpen && !selectedListId? (
+              {isUserOpen && !selectedListId ? (
                 <Profile
                   setDisplayTab={() => setTabIndex(0)}
                   userId={userDataId}
@@ -408,8 +415,7 @@ const LeftBar = (
                   userId={userDataId}
                   setProfileClosed={setProfileClosed}
                 />
-              ) : 
-              (
+              ) : (
                 <BuisinessView
                   setDisplayTab={() => setTabIndex(0)}
                   profile={profile}
@@ -478,7 +484,9 @@ const LeftBar = (
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              {(favoriteIndex || businessId) && !userDataId && !selectedListId? (
+              {(favoriteIndex || businessId) &&
+              !userDataId &&
+              !selectedListId ? (
                 <BuisinessView
                   setDisplayTab={() => setTabIndex(0)}
                   profile={profile}
@@ -501,7 +509,7 @@ const LeftBar = (
                   userId={userDataId}
                   setProfileClosed={setProfileClosed}
                 />
-              ) :  selectedListId ? (
+              ) : selectedListId ? (
                 <ListDescriptionView
                   listOpenedFromBusiness={true}
                   setDisplayTab={() => setTabIndex(0)}
@@ -511,8 +519,7 @@ const LeftBar = (
                   setListClickedFromSearch={setListClickedFromSearch}
                   setListIndex={setListIndex}
                 />
-              )
-              : (
+              ) : (
                 <BusinessList
                   setDisplayTab={() => setTabIndex(0)}
                   setFavoriteIndex={setFavoriteIndex}
@@ -562,6 +569,7 @@ const LeftBar = (
               )}
             </div>
           </TabPanel>
+
           <TabPanel>
             <div className="panel-content">
               {displayChangePassword === true ? (
@@ -579,9 +587,23 @@ const LeftBar = (
               )}
             </div>
           </TabPanel>
+
           <TabPanel></TabPanel>
           <TabPanel></TabPanel>
         </Tabs>
+        <BottomSettingsWrap>
+          <BsThreeDots />
+          <div className="BottomSettings">
+            <ul>
+              <li>
+                <button onClick={() => consumerLogout()} disabled={loader}>
+                  Logout
+                </button>
+              </li>
+              <li onClick={() => showUserProfile()}>Profile</li>
+            </ul>
+          </div>
+        </BottomSettingsWrap>
       </LeftBarContent>
     </>
   );
