@@ -21,7 +21,7 @@ const BusinessListWrap = styled.div`
   width: 100%;
   position: relative;
   display: flex;
-  padding: 12px 0;
+  padding: 0;
   flex-direction: column;
   overflow: hidden;
 `;
@@ -228,7 +228,7 @@ const BusinessListing = ({
   return (
     <>
       <SearchBar offset={offset} setOffset={setOffset} />
-      <SearchDropdownOption>
+      {/* <SearchDropdownOption>
         <SortingSelect>
           <Select>
             <option>All</option>
@@ -248,7 +248,7 @@ const BusinessListing = ({
             </DropdownContent>
           )}
         </CheckboxWrap>
-      </SearchDropdownOption>
+      </SearchDropdownOption> */}
       {(loading && offset === 0) || flag ? (
         <LoaderWrap>
           <ValueLoader />
@@ -256,7 +256,7 @@ const BusinessListing = ({
       ) : (
         <div
           id="scrollableDiv"
-          style={{ height: "calc(100vh - 116px)", overflow: "auto" }}
+          style={{ height: "calc(100vh - 44px)", overflow: "auto" }}
         >
           <InfiniteScroll
             dataLength={businessData ? businessData.length : 0}

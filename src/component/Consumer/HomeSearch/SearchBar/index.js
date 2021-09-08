@@ -10,26 +10,31 @@ import {
   setSideFiltersHomeSearch,
   setEnterClicked,
 } from "../../../../reducers/myFeedReducer";
+import { FaFilter } from "react-icons/fa";
+import { IoMdClose } from "react-icons/io";
 
 const SearchWrap = styled.div`
-  background: #fff;
-  height: 45px;
-  border-radius: 3px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 23px 20px 16px 20px;
-  box-sizing: border-box;
+  margin: 0;
+  background: #000000;
   input {
     border: 0;
     outline: 0;
     padding: 0 10px;
-    width: calc(100% - 115px);
-    height: 45px;
-    font-size: 18px;
+    width: 311px;
+    height: 40px;
+    font-size: 14px;
     font-weight: normal;
-    border-radius: 3px;
     box-shadow: none;
+    background: #fff;
+    color: #000;
+    font-family: 'Roboto', sans-serif;
+    ::placeholder {
+      color: #BDBDBD;
+    }
   }
 `;
 
@@ -57,6 +62,53 @@ const ErrorDiv = styled.div`
   margin: 0;
   margin-bottom: 10px;
   margin-left: 20px;
+`;
+
+const Heading = styled.h1`
+  color: #FF2E79;
+  font-weight: 700;
+  font-size: 18px;
+  margin: 0 0 0 20px;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  width: calc(100% - 350px);
+`;
+
+const FilterBox = styled.div`
+  margin: 0px;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  svg {
+    color: #fff;
+    font-size: 14px;
+  }
+`;
+
+const RightSearchWrap = styled.div`
+  display: flex;
+`;
+const CloseDiv = styled.div`
+  width: 40px;
+  position: relative;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: -40px;
+  cursor: pointer;
+  top: 0px;
+  background: #FE02B9;
+  box-shadow: 4px 0px 14px -5px #fe02b9;
+  svg {
+    font-size: 32px;
+    color: #fff;
+  }
 `;
 
 const SearchBar = ({ setOffset }) => {
@@ -106,13 +158,22 @@ const SearchBar = ({ setOffset }) => {
   return (
     <>
       <SearchWrap>
-        <Input
-          value={search}
-          onKeyPress={(event) => searchList(event)}
-          onChange={(e) => onChangeSearch(e)}
-          disabled={loader}
-        />
-        <SearchIconDiv>Press Enter To Search</SearchIconDiv>
+        <Heading>Favorites</Heading>
+        <RightSearchWrap>
+          <Input
+            value={search}
+            onKeyPress={(event) => searchList(event)}
+            onChange={(e) => onChangeSearch(e)}
+            disabled={loader}
+            placeholder="Search Favorites"
+          />
+          <FilterBox>
+            <FaFilter />
+          </FilterBox>
+        </RightSearchWrap>
+        <CloseDiv>
+          <IoMdClose />
+        </CloseDiv>
       </SearchWrap>
       {searchError !== "" ? <ErrorDiv>{searchError}</ErrorDiv> : null}
     </>

@@ -89,7 +89,7 @@ const RightDiv = styled.div`
   svg {
     margin: 0 7px 0 0;
   }
-  svg: hover {
+  svg:hover {
     cursor: pointer;
   }
 `;
