@@ -19,6 +19,10 @@ import {
   setPostId,
 } from "../../../../../reducers/myFeedReducer";
 import SaveButton from "../../../UI/SaveButton";
+import ModalComponent from "../../../UI/Modal";
+import DeletePostModal from "../../../AddPostModal/DeletePostModal";
+import AddPostModal from "../../../AddPostModal";
+import DropdwonArrowTop from "../../../../../images/top_arrow.png";
 
 const BottomBarLikes = styled.div`
   display: flex;
@@ -105,6 +109,58 @@ const RightDiv = styled.div`
   }
 `;
 
+const DropdownContent = styled.div`
+  display: flex;
+  position: absolute;
+  min-width: 102px;
+  overflow: auto;
+  background: #fe02b9;
+  box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.3);
+  z-index: 1;
+  top: 25px;
+  width: 30px;
+  overflow: visible;
+  right: -5px;
+  padding: 5px;
+  :before {
+    background: url(${DropdwonArrowTop}) no-repeat top center;
+    width: 15px;
+    height: 15px;
+    content: " ";
+    top: -12px;
+    position: relative;
+    margin: 0 auto;
+    display: flex;
+    text-align: center;
+    left: 78px;
+    @media (max-width: 767px) {
+      left: 0;
+    }
+  }
+  @media (max-width: 767px) {
+    top: 31px;
+    right: 0;
+    left: -5px;
+  }
+  ul {
+    list-style: none;
+    margin: 0 0 0 -15px;
+    padding: 0;
+    width: 100%;
+    text-align: right;
+  }
+  li {
+    color: #fff;
+    padding: 0px 5px;
+    text-decoration: none;
+    font-size: 12px;
+  }
+  li:hover {
+    background-color: #fe02b9;
+    cursor: pointer;
+  }
+`;
+
 const LikesBar = ({
   totalLikes,
   totalComments,
@@ -119,8 +175,6 @@ const LikesBar = ({
   setFlag,
   business,
   listDescriptionView,
-  uploadMenu,
-  setUploadMenu,
   listData,
 }) => {
   const [eventDate, setEventDate] = useState();
@@ -128,6 +182,9 @@ const LikesBar = ({
   const [userLikedComment, setUserLikedComment] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [likeCountForComment, setLikeCountForComment] = useState(0);
+  const [uploadMenu, setUploadMenu] = useState(false);
+  const [addPostModal, setAddPostModal] = useState(false);
+  const [deletePostModal, setDeletePostModal] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const ws = useSelector((state) => state.user.ws);
@@ -313,6 +370,18 @@ const LikesBar = ({
   const toggleUploadMenu = () => {
     setUploadMenu(!uploadMenu);
   };
+
+  /** to delete a post */
+  const deletePost = () => {
+    setDeletePostModal(true);
+    setUploadMenu(false);
+  };
+
+  /** to edit a post */
+  const editPost = () => {
+    setAddPostModal(true);
+    setUploadMenu(false);
+  };
   return (
     <>
       <BottomBarLikes>
@@ -367,12 +436,45 @@ const LikesBar = ({
             listData.ownerId[0]._id === user._id ? (
               <RightDiv>
                 <BsThreeDots onClick={toggleUploadMenu} />
+                {uploadMenu && (
+                  <DropdownContent>
+                    <ul>
+                      <li onClick={() => editPost()}>Edit</li>
+                      <li onClick={() => deletePost()}>Delete</li>
+                    </ul>
+                  </DropdownContent>
+                )}
               </RightDiv>
             ) : null}
           </LikesBtnWrap>
         ) : null}
         {listDescriptionView ? <SaveButton>VISIT</SaveButton> : null}
       </BottomBarLikes>
+      {addPostModal && (
+        <ModalComponent
+          closeOnOutsideClick={true}
+          isOpen={addPostModal}
+          closeModal={() => setAddPostModal(false)}
+        >
+          <AddPostModal
+            businessId={listData.business[0]._id}
+            closeModal={() => setAddPostModal(false)}
+            data={listData}
+          />
+        </ModalComponent>
+      )}
+      {deletePostModal && (
+        <ModalComponent
+          closeOnOutsideClick={true}
+          isOpen={deletePostModal}
+          closeModal={() => setDeletePostModal(false)}
+        >
+          <DeletePostModal
+            closeModal={() => setDeletePostModal(false)}
+            id={listData._id}
+          />
+        </ModalComponent>
+      )}
     </>
   );
 };
