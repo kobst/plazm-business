@@ -27,6 +27,15 @@ const ModalContent = styled.div`
     overflow-y: auto;
     overflow-x: hidden;
   }
+  &.DeleteModal {
+    flex-direction: column;
+    max-width: 400px;
+    min-width: 376px;
+    text-align: center;
+     p{
+      margin: 0 0 15px 0;
+     }
+  }
 `;
 
 const BottomButtonsBar = styled.div`
@@ -61,7 +70,7 @@ const DeletePostModal = ({ closeModal, id }) => {
   };
   return (
     <>
-      <ModalContent>
+      <ModalContent className="DeleteModal">
         <p>Are You Sure You Want To Delete The Post?</p>
         <BottomButtonsBar>
           <BackButton onClick={() => closeModal()} disabled={loadingDeletePost}>

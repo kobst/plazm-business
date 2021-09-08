@@ -87,6 +87,7 @@ const RightDiv = styled.div`
   align-items: center;
   display: flex;
   margin: 0 0 0 20px;
+  position: relative;
   @media (max-width: 767px) {
     margin: 8px 15px 0 0px;
   }
@@ -106,6 +107,7 @@ const RightDiv = styled.div`
     font-weight: 700;
     border: 0;
     background-color: transparent;
+    display: flex;
   }
 `;
 

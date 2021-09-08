@@ -37,6 +37,11 @@ const ListOptionSection = styled.div`
   @media (max-width: 767px) {
     margin: 0;
   }
+  .ScrollDivInner {
+    .infinite-scroll-component {
+      overflow: visible !important;
+    }
+  }
 `;
 
 const HeadingWrap = styled.div`
@@ -459,6 +464,7 @@ const ListDescriptionView = ({
           <div
             id="scrollableDiv"
             style={{ height: "calc(100vh - 258px)", overflow: "auto" }}
+            className="ScrollDivInner"
           >
             <InfiniteScroll
               dataLength={postsInList ? postsInList.length : 0}
