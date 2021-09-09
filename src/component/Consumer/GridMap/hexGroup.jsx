@@ -8,7 +8,7 @@ import useStore from './useState'
 
 import { AssignMolecularDict, _createXYZ, AssignHex, OrderDistance } from './functions/gridFunctions'
 
-import Box from './placeBox'
+import Box from './PlaceBox'
 
 
 
@@ -92,7 +92,7 @@ const HexGroup = (props) => {
         let _vect = [0, 0, 0]
         if (place) {
             console.log("----place---" + place.company_name)
-            props.selectPlace(place)
+            // props.selectPlace(place)
             const index = useStore.getState().multiDict
             const placeObj = index[place._id]
 
@@ -123,13 +123,13 @@ const HexGroup = (props) => {
             })
             setMultiDict(newMultiDict)
         } else {
-            console.log("----no place")
+            console.log("----no center place")
 
             if (props.places.length > 0) {
                 console.log(props.places.length + " length ---")
                 console.log(props.places)
-                // _multiDict = AssignMolecularDict(props.places, props.center)
-                // setMultiDict(_multiDict)
+                _multiDict = AssignMolecularDict(props.places, props.center)
+                setMultiDict(_multiDict)
             }
         }
     }
@@ -242,16 +242,13 @@ const HexGroup = (props) => {
 
 
 
-    const connectorLines = useMemo(() => {
-
-    })
 
 
     return (
         <mesh
             ref={hexGroup}
             position={[0, 0, 0]}>
-            {/* {boxes} */}
+            {boxes}
 
         </mesh>
     )

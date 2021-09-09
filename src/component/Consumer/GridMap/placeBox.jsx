@@ -286,7 +286,7 @@ const Box = ((props) => {
             {/* 
             <SpecialLabel /> */}
 
-            <text
+            {/* <text
                 ref={textRef}
                 position={[0, 0, 5]}
                 rotation={[0, 0, 0]}
@@ -299,7 +299,7 @@ const Box = ((props) => {
                 {opts.materialType === "MeshPhongMaterial" ? (
                     <meshPhongMaterial attach="material" color={opts.color} />
                 ) : null}
-            </text>
+            </text> */}
 
 
         </group>

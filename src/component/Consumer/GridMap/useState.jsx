@@ -18,6 +18,10 @@ const [useStore] = create(set => ({
     gridView: true,
     maxViewable: 10,
     maxViewableDepth: 3,
+    setPlaces: (places) => set((state) => ({
+        ...state,
+        places
+    })),
     setMaxViewableDepth: (maxViewableDepth) => set((state) => ({
         ...state,
         maxViewableDepth

@@ -33,11 +33,9 @@ const DashboardContainer = (props) => {
           value.attributes["custom:type"] === "customer" ||
           value.attributes["custom:type"] === "consumer"
         ) {
-          console.log(value.attributes)
-          // const data = await dispatch(fetchUserDetails(value.attributes.sub));
-          const data = dispatch(fetchUserDetails(value.attributes.sub));
-          console.log('fetching data')
-          console.log(data)
+          console.log(value.attributes.sub)
+          const data = await dispatch(fetchUserDetails(value.attributes.sub));
+          console.log('fetching data', data)
           const res = await unwrapResult(data);
           console.log(res)
           const ws = new WebSocket(
@@ -49,12 +47,12 @@ const DashboardContainer = (props) => {
           }
         } else {
           history.push("/business");
-          window.location.reload();
+          // window.location.reload();
         }
       } catch {
         /* if not authenticated then redirect to login consumer page */
         history.push("/consumer/login");
-        window.location.reload();
+        // window.location.reload();
       }
     };
     getProfile();
