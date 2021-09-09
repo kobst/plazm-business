@@ -68,6 +68,12 @@ const CloseDiv = styled.div`
     font-size: 32px;
     color: #fff;
   }
+  @media (max-width:767px){
+    left: 0;
+    right: inherit;
+    width: 30px;
+    height: 30px;
+  }
 `;
 
 const ListingOptionWrap = styled.div`
@@ -174,8 +180,12 @@ const ListBannerSection = styled.div`
     z-index: -1;
     left: 0;
     width: 100%;
-    height: auto;
+    height: 100%;
     bottom: 0;
+    top: 0;
+    @media (max-width: 767px) {
+      top: 0;
+    }
   }
   h1 {
     font-size:18px;
@@ -187,6 +197,9 @@ const ListBannerSection = styled.div`
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;  
     overflow: hidden;
+    @media (max-width: 767px) {
+      font-size:14px;
+    }
   }
   h5 {
     font-size:12px;
@@ -216,6 +229,9 @@ const ListBannerSection = styled.div`
     margin:0 0 7px;
     padding: 0;
     line-height: normal;
+    @media (max-width: 767px) {
+      font-size:12px;
+    }
   }
   .BannerWrapBtn {
     display: flex;

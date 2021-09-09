@@ -35,6 +35,14 @@ const SearchWrap = styled.div`
     ::placeholder {
       color: #BDBDBD;
     }
+    @media (max-width:767px){
+      width: 100%;
+    }
+  }
+  @media (max-width:767px){
+    flex-direction: column;
+    height: auto;
+    padding: 10px 0;
   }
 `;
 
@@ -72,6 +80,12 @@ const Heading = styled.h1`
   padding: 0;
   font-family: 'Roboto', sans-serif;
   width: calc(100% - 350px);
+  @media (max-width:767px){
+    margin: 0 auto 10px;
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+  }
 `;
 
 const FilterBox = styled.div`
@@ -91,6 +105,9 @@ const FilterBox = styled.div`
 
 const RightSearchWrap = styled.div`
   display: flex;
+  @media (max-width:767px){
+    width: 90%;
+  }
 `;
 const CloseDiv = styled.div`
   width: 40px;
@@ -108,6 +125,12 @@ const CloseDiv = styled.div`
   svg {
     font-size: 32px;
     color: #fff;
+  }
+  @media (max-width:479px){
+    left: 0;
+    right: inherit;
+    width: 30px;
+    height: 30px;
   }
 `;
 

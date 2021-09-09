@@ -59,6 +59,7 @@ const ChatContent = styled.div`
     } 
   }
 `;
+
 const ProfileNameHeader = styled.div`
   display: flex;
   // padding: 0px;

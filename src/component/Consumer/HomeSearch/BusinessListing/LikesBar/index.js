@@ -25,7 +25,6 @@ const BottomBarLikes = styled.div`
   justify-content: space-between;
   width: 100%;
   @media (max-width: 767px) {
-    flex-direction: column;
     align-items: flex-start;
   }
 `;

@@ -56,6 +56,7 @@ const ProfileNameHeader = styled.div`
   display: flex;
   padding: 0 0 5px 0;
   margin: 0;
+  width: 100%;
 `;
 
 const ProfileThumbBanner = styled.div`

@@ -70,6 +70,7 @@ const ProfileNameHeader = styled.div`
   }
   &.UserMessageView {
     padding-left: 15px;
+    width: 100%;
     &:before {
       display: none;
     }
