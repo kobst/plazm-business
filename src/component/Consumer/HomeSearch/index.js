@@ -15,6 +15,7 @@ const HomeSearch = ({
   setSelectedListId,
   setListClickedFromSearch,
   setSearchIndex,
+  setDisplayTab
 }) => {
   const dispatch = useDispatch();
   const [locationState, setLocationState] = useState(null);
@@ -43,6 +44,7 @@ const HomeSearch = ({
       navigator.permissions
         .query({ name: "geolocation" })
         .then(function (result) {
+          console.log('****', result.state)
           if (locationState !== "denied") setLocationState(result.state);
           if (result.state === "granted") {
             //If granted then you can directly call your function here
@@ -89,6 +91,7 @@ const HomeSearch = ({
             setSearchIndex={setSearchIndex}
             loader={loader}
             coords={coords}
+            setDisplayTab={setDisplayTab}
           />
         ) : null}
       </ContentWrap>

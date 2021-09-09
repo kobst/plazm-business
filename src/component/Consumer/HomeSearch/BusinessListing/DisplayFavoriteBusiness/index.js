@@ -37,7 +37,7 @@ const UserMessageContent = styled.div`
 const UserMsgWrap = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0 12px;
+  padding: 0;
   position: relative;
   &.search-active {
     &:after {
@@ -56,20 +56,36 @@ const UserMsgWrap = styled.div`
 const ProfileNameHeader = styled.div`
   display: flex;
   padding: 0;
-  margin: 15px 0 0;
+  margin: 0;
   width: 100%;
+  flex-direction: column;
 `;
 
-const ProfileThumb = styled.div`
-  width: 30px;
-  height: 30px;
-  margin: 0 10px 0 0;
-  border: 3px solid #ffffff;
-  border-radius: 50%;
+const ProfileThumbBanner = styled.div`
+  width: 100%;
+  height: 204px;
+  margin: 0;
   overflow: hidden;
+  position: relative;
   img {
-    width: 30px;
-    height: 30px;
+    width: 100%;
+    max-height: 204px;
+  }
+  .CloseDiv {
+    position: absolute;
+    width: 100%;
+    height: calc(100% - 50px);
+    top: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(25px);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 14px;
   }
 `;
 const ProfileNameWrap = styled.div`
@@ -77,12 +93,14 @@ const ProfileNameWrap = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  max-width: calc(100% - 40px);
-  padding: 0 0 5px 0px;
+  max-width: 100%;
+  padding: 0 0 0 15px;
   width: 100%;
-  @media (max-width: 1024px) {
-    padding: 0 0px 15px 0px;
-  }
+  position: absolute;
+  bottom: 0;
+  height: 50px;
+  background: rgba(0, 0, 0, 0.75);
+  flex-direction: column;
 `;
 
 const ProfileName = styled.div`
@@ -91,9 +109,13 @@ const ProfileName = styled.div`
   line-height: normal;
   margin: 7px 0 0px 0;
   font-weight: 700;
-  color: #ff2e9a;
+  color: #fff;
   .businessNameTitle {
-    width: calc(100% - 95px);
+    width: 100%;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   svg {
     color: #ff0000;
@@ -103,7 +125,7 @@ const ProfileName = styled.div`
     cursor: pointer;
   }
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   width: 100%;
   span {
@@ -298,13 +320,19 @@ const DisplayFavoriteBusiness = ({
         >
           <UserMessageContent>
             <ProfileNameHeader>
-              <ProfileThumb>
+              <ProfileThumbBanner>
                 <img
                   src={businessInfo.default_image_url ? image : ProfileImg}
                   onError={() => setImage(ProfileImg)}
                   alt=""
                 />
-              </ProfileThumb>
+                {businessInfo.hours_format &&
+                businessInfo.hours_format.length === 0 ? (
+                  <div className="CloseDiv">Closed</div>
+                ) : checkBusinessOpenClose() === true ? null : (
+                  <div className="CloseDiv">Closed</div>
+                )}
+              </ProfileThumbBanner>
               <ProfileNameWrap>
                 <ProfileName>
                   <div
@@ -313,50 +341,23 @@ const DisplayFavoriteBusiness = ({
                   >
                     {businessInfo.company_name}
                   </div>
-                  <RightWrap>
-                    {businessInfo.hours_format &&
-                    businessInfo.hours_format.length === 0 ? (
-                      <div className="CloseDiv">Close</div>
-                    ) : checkBusinessOpenClose() === true ? (
-                      <div className="OpenDiv">Open</div>
-                    ) : (
-                      <div className="CloseDiv">Close</div>
-                    )}
-
-                    {favoriteBusiness ? (
-                      <img
-                        src={RedHeartIcon}
-                        onClick={() => removeFavorite()}
-                        className="favoriteBusiness"
-                        alt=""
-                      />
-                    ) : (
-                      <img
-                        src={FavoritesIcon}
-                        onClick={() => addFavorite()}
-                        className="favoriteBusinessBorder"
-                        alt=""
-                      />
-                    )}
-                  </RightWrap>
+                  <ChatInput>
+                    <p>
+                      <span>
+                        {businessInfo.favorites !== null
+                          ? businessInfo.favorites.length
+                          : 0}
+                      </span>{" "}
+                      Followers{" "}
+                      <span className="postSpan">
+                        {data.totalPosts && data.totalPosts.length > 0
+                          ? data.totalPosts[0].totalPosts
+                          : 0}
+                      </span>{" "}
+                      Posts
+                    </p>
+                  </ChatInput>
                 </ProfileName>
-                <ChatInput>
-                  <p>
-                    <span>
-                      {businessInfo.favorites !== null
-                        ? businessInfo.favorites.length
-                        : 0}
-                    </span>{" "}
-                    Followers{" "}
-                    <span className="postSpan">
-                      {data.totalPosts && data.totalPosts.length > 0
-                        ? data.totalPosts[0].totalPosts
-                        : 0}
-                    </span>{" "}
-                    Posts
-                  </p>
-                </ChatInput>
-                <BusinessHashTags data={businessInfo.filter_tags} />
               </ProfileNameWrap>
             </ProfileNameHeader>
           </UserMessageContent>
@@ -379,7 +380,11 @@ const DisplayFavoriteBusiness = ({
           type="search"
         />
       ) : data.body !== null && data.type === "Post" ? (
-        <DisplayComment postData={data} businessData={businessInfo} setSelectedListId={setSelectedListId} />
+        <DisplayComment
+          postData={data}
+          businessData={businessInfo}
+          setSelectedListId={setSelectedListId}
+        />
       ) : data.body !== null && data.type === "Events" ? (
         <DisplayCommentForEvent postData={data} businessData={businessInfo} />
       ) : search && businessInfo.company_name !== null ? (
@@ -395,13 +400,13 @@ const DisplayFavoriteBusiness = ({
         >
           <UserMessageContent>
             <ProfileNameHeader>
-              <ProfileThumb>
+              <ProfileThumbBanner>
                 <img
                   src={businessInfo.default_image_url ? image : ProfileImg}
                   onError={() => setImage(ProfileImg)}
                   alt=""
                 />
-              </ProfileThumb>
+              </ProfileThumbBanner>
               <ProfileNameWrap>
                 <ProfileName>
                   <div onClick={() => displayBusinessDetail()}>
@@ -410,11 +415,9 @@ const DisplayFavoriteBusiness = ({
                   <RightWrap>
                     {businessInfo.hours_format &&
                     businessInfo.hours_format.length === 0 ? (
-                      <div className="CloseDiv">Close</div>
-                    ) : checkBusinessOpenClose() === true ? (
-                      <div className="OpenDiv">Open</div>
-                    ) : (
-                      <div className="CloseDiv">Close</div>
+                      <div className="CloseDiv">Closed</div>
+                    ) : checkBusinessOpenClose() === true ? null : (
+                      <div className="CloseDiv">Closed</div>
                     )}
 
                     {favoriteBusiness ? (

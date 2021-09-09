@@ -17,13 +17,14 @@ import {
   fetchSearchPostComments,
   setPostId,
 } from "../../../../../reducers/myFeedReducer";
+import SaveButton from "../../../UI/SaveButton"
+import { BsThreeDots } from "react-icons/bs";
 
 const BottomBarLikes = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
   @media (max-width: 767px) {
-    flex-direction: column;
     align-items: flex-start;
   }
 `;
@@ -87,7 +88,7 @@ const RightDiv = styled.div`
   svg {
     margin: 0 7px 0 0;
   }
-  svg: hover {
+  svg:hover {
     cursor: pointer;
   }
 `;
@@ -106,6 +107,7 @@ const LikesBar = ({
   setFlag,
   business,
   commentsRef,
+  listDescriptionView,
 }) => {
   const [eventDate, setEventDate] = useState();
   const [userLikedPost, setUserLikedPost] = useState(false);
@@ -282,6 +284,7 @@ const LikesBar = ({
   return (
     <>
       <BottomBarLikes>
+      {!listDescriptionView?
         <LikesBtnWrap>
           {type !== "commentReply" ? (
             <UsersButton onClick={() => setReplyDisplay()}>
@@ -303,6 +306,7 @@ const LikesBar = ({
             {eventDate}
           </ChatDate>
         </LikesBtnWrap>
+        : null }
         {type !== "commentReply" ? (
           <LikesBtnWrap>
             <RightDiv>
@@ -321,8 +325,16 @@ const LikesBar = ({
               <MdChatBubbleOutline onClick={() => displayCommentsWithPosts()} />{" "}
               {totalComments}
             </RightDiv>
+            {listDescriptionView?
+              <RightDiv>
+                <BsThreeDots />
+              </RightDiv>
+            : null }
           </LikesBtnWrap>
         ) : null}
+        {listDescriptionView?
+          <SaveButton>VISIT</SaveButton>
+        : null }
       </BottomBarLikes>
     </>
   );

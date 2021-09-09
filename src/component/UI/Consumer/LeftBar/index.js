@@ -101,6 +101,9 @@ const BottomSettingsWrap = styled.div`
           text-align: center;
           text-transform: uppercase;
           font-weight: 700;
+          @media (max-width:767px){
+            font-size: 9px;
+          }
           :hover {
             color: #ee3840;
           }
@@ -113,6 +116,9 @@ const BottomSettingsWrap = styled.div`
             text-transform: uppercase;
             font-weight: 700;
             border: 0;
+            @media (max-width:767px){
+              font-size: 9px;
+            }
             :hover {
               color: #ee3840;
             }

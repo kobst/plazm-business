@@ -48,6 +48,7 @@ const UserMsgWrap = styled.div`
     top: 50px;
     left: 26px;
     z-index: 1;
+    display: none;
   }
 `;
 
@@ -55,18 +56,18 @@ const ProfileNameHeader = styled.div`
   display: flex;
   padding: 0 0 5px 0;
   margin: 0;
+  width: 100%;
 `;
 
-const ProfileThumb = styled.div`
-  width: 30px;
-  height: 30px;
-  margin: 0 10px 0 0;
-  border: 3px solid #ffffff;
-  border-radius: 50%;
+const ProfileThumbBanner = styled.div`
+  width: 100%;
+  height: 50px;
+  margin: 0;
   overflow: hidden;
+  position: relative;
   img {
-    width: 30px;
-    height: 30px;
+    width: 100%;
+    max-height: 50px;
   }
 `;
 const ProfileNameWrap = styled.div`
@@ -82,24 +83,40 @@ const ProfileNameWrap = styled.div`
   }
 `;
 
+const ProfileThumbOverlay = styled.div`
+  background: linear-gradient(360deg, rgba(0, 0, 0, 0.6) -30%, rgba(0, 0, 0, 0.6) 100%);
+  width: 100%;
+  position: absolute;
+  height: 100%;
+  top: 0;
+`;
+
 const ProfileName = styled.div`
   font-style: normal;
   font-size: 13px;
   line-height: normal;
   margin: 0;
   font-weight: 700;
-  color: #ff2e9a;
+  color: #fff;
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  
   svg {
     color: #ff0000;
     margin: 0;
   }
   div {
     cursor: pointer;
+    display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
   }
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 100%;
+
   span {
     font-weight: 700;
     color: #fff;
@@ -318,10 +335,16 @@ const DisplayPostInAList = ({ data, id, setListIndex, setSelectedListId }) => {
         <UserMsgWrap>
           <UserMessageContent>
             <ProfileNameHeader>
-              <ProfileThumb>
+              <ProfileThumbBanner>
                 <img src={image} onError={() => checkError()} alt="" />
-              </ProfileThumb>
-              <ProfileNameWrap>
+                <ProfileThumbOverlay />
+                <ProfileName>
+                  <div onClick={() => displayBusinessDetail()}>
+                    {data.business[0].company_name}
+                  </div>
+                </ProfileName>
+              </ProfileThumbBanner>
+              {/* <ProfileNameWrap>
                 <ProfileName>
                   <div onClick={() => displayBusinessDetail()}>
                     {data.business[0].company_name}
@@ -374,7 +397,7 @@ const DisplayPostInAList = ({ data, id, setListIndex, setSelectedListId }) => {
                   </p>
                 </ChatInput>
                 <BusinessHashTags data={data.business[0].filter_tags} />
-              </ProfileNameWrap>
+              </ProfileNameWrap> */}
             </ProfileNameHeader>
           </UserMessageContent>
         </UserMsgWrap>
@@ -384,6 +407,7 @@ const DisplayPostInAList = ({ data, id, setListIndex, setSelectedListId }) => {
           businessData={data.business[0]}
           listView={true}
           setSelectedListId={setSelectedListId}
+          listDescriptionView={true}
         />
       </div>
     </DescriptionViewItem>

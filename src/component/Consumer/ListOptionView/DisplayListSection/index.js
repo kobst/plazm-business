@@ -28,7 +28,7 @@ const ListSection = styled.div`
     background: #24204a;
   }
   @media (max-width: 767px) {
-    flex-direction: column;
+    /* flex-direction: column; */
     padding: 10px;
   }
 `;
@@ -54,7 +54,6 @@ const ListDetailWrap = styled.div`
   flex-direction: column;
   padding: 14px 10px 14px 0;
   @media (max-width: 767px) {
-    width: 100%;
     margin: 8px;
   }
 `;
