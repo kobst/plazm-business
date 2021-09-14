@@ -59,21 +59,21 @@ const ProfileNameHeader = styled.div`
   padding: 0;
   margin: 15px 0;
   padding-left: 40px;
-  &:before {
-    content: "";
-    position: absolute;
-    left: 26px;
-    background: #878787;
-    width: 10px;
-    height: 1px;
-    top: 30px;
-  }
+  // &:before {
+  //   content: "";
+  //   position: absolute;
+  //   left: 26px;
+  //   background: #878787;
+  //   width: 10px;
+  //   height: 1px;
+  //   top: 30px;
+  // }
   &.UserMessageView {
     padding-left: 15px;
     width: 100%;
-    &:before {
-      display: none;
-    }
+    // &:before {
+    //   display: none;
+    // }
   }
 `;
 

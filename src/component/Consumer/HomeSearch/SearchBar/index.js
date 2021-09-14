@@ -49,23 +49,6 @@ const SearchWrap = styled.div`
   }
 `;
 
-const SearchIconDiv = styled.div`
-  width: 195px;
-  height: 45px;
-  font-size: 12px;
-  color: #5a5a5a;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  svg {
-    font-size: 30px;
-    color: #c4c4c4;
-    font-weight: bold;
-  }
-`;
-
 const ErrorDiv = styled.div`
   color: #ff0000;
   font-weight: 600;

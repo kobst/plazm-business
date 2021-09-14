@@ -1,18 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import moment from "moment";
 import styled from "styled-components";
 import ProfileImg from "../../../../../images/profile-img.png";
-import FavoritesIcon from "../../../../../images/favorites.png";
-import BusinessHashTags from "../BusinessHashTags";
 import UserMessage from "../UserMessage";
 import UserMessageEvents from "../Events/UserMessageEvents";
-import RedHeartIcon from "../../../../../images/heart.png";
 
-import {
-  AddBusinessFavorite,
-  RemoveBusinessFavorite,
-} from "../../../../../reducers/userReducer";
+// import {
+//   AddBusinessFavorite,
+//   RemoveBusinessFavorite,
+// } from "../../../../../reducers/userReducer";
 import DisplayComment from "../DisplayComments";
 import DisplayCommentForEvent from "../DisplayCommentForEvent";
 import { useHistory } from "react-router";
@@ -39,18 +36,18 @@ const UserMsgWrap = styled.div`
   flex-direction: column;
   padding: 0;
   position: relative;
-  &.search-active {
-    &:after {
-      content: "";
-      position: absolute;
-      width: 1px;
-      height: calc(100% - 20px);
-      background: #878787;
-      top: 50px;
-      left: 26px;
-      z-index: 1;
-    }
-  }
+  // &.search-active {
+  //   &:after {
+  //     content: "";
+  //     position: absolute;
+  //     width: 1px;
+  //     height: calc(100% - 20px);
+  //     background: #878787;
+  //     top: 50px;
+  //     left: 26px;
+  //     z-index: 1;
+  //   }
+  // }
 `;
 
 const ProfileNameHeader = styled.div`
@@ -174,44 +171,44 @@ const ChatInput = styled.div`
   }
 `;
 
-const RightWrap = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  margin: 0px;
-  align-items: center;
-  flex-wrap: wrap;
-  .OpenDiv {
-    font-size: 10px;
-    line-height: normal;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    text-transform: uppercase;
-    color: #ffffff;
-    background: #3fce56;
-    border-radius: 50px;
-    padding: 3px 11px;
-  }
-  .CloseDiv {
-    font-size: 10px;
-    line-height: normal;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    text-transform: uppercase;
-    color: #ffffff;
-    background: #fe6f5b;
-    border-radius: 50px;
-    padding: 3px 11px;
-  }
-  .favoriteBusiness,
-  .favoriteBusinessBorder {
-    margin: 0 0 0 11px;
-  }
-`;
+// const RightWrap = styled.div`
+//   display: flex;
+//   flex-direction: row;
+//   justify-content: flex-start;
+//   margin: 0px;
+//   align-items: center;
+//   flex-wrap: wrap;
+//   .OpenDiv {
+//     font-size: 10px;
+//     line-height: normal;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     text-align: center;
+//     text-transform: uppercase;
+//     color: #ffffff;
+//     background: #3fce56;
+//     border-radius: 50px;
+//     padding: 3px 11px;
+//   }
+//   .CloseDiv {
+//     font-size: 10px;
+//     line-height: normal;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     text-align: center;
+//     text-transform: uppercase;
+//     color: #ffffff;
+//     background: #fe6f5b;
+//     border-radius: 50px;
+//     padding: 3px 11px;
+//   }
+//   .favoriteBusiness,
+//   .favoriteBusinessBorder {
+//     margin: 0 0 0 11px;
+//   }
+// `;
 
 /** display favorite business */
 const DisplayFavoriteBusiness = ({
@@ -223,10 +220,10 @@ const DisplayFavoriteBusiness = ({
   const businessInfo =
     data.business && data.business.length > 0 ? data.business[0] : data;
 
-  const [favoriteBusiness, setFavoriteBusiness] = useState(false);
+  // const [favoriteBusiness, setFavoriteBusiness] = useState(false);
   const search = useSelector((state) => state.myFeed.enterClicked);
-  const user = useSelector((state) => state.user.user);
-  const dispatch = useDispatch();
+  // const user = useSelector((state) => state.user.user);
+  // const dispatch = useDispatch();
   const getUtcHour = new Date().getUTCHours();
   const getUtcMinutes = new Date().getUTCMinutes();
   const currentUtcDay = new Date().getUTCDay();
@@ -271,36 +268,35 @@ const DisplayFavoriteBusiness = ({
     }
   };
 
-  useEffect(() => {
-    const find = user.favorites.find((i) => i === businessInfo._id);
-    if (find) {
-      setFavoriteBusiness(true);
-    } else setFavoriteBusiness(false);
-  }, [user, businessInfo._id]);
+  // useEffect(() => {
+  //   const find = user.favorites.find((i) => i === businessInfo._id);
+  //   if (find) {
+  //     setFavoriteBusiness(true);
+  //   } else setFavoriteBusiness(false);
+  // }, [user, businessInfo._id]);
 
-  /** to add a business to user favorites */
-  const addFavorite = async () => {
-    const obj = {
-      businessId: businessInfo._id,
-      userId: user._id,
-    };
-    await dispatch(AddBusinessFavorite(obj));
-  };
+  // /** to add a business to user favorites */
+  // const addFavorite = async () => {
+  //   const obj = {
+  //     businessId: businessInfo._id,
+  //     userId: user._id,
+  //   };
+  //   await dispatch(AddBusinessFavorite(obj));
+  // };
 
-  /** to remove a business to user favorites */
-  const removeFavorite = async () => {
-    const obj = {
-      businessId: businessInfo._id,
-      userId: user._id,
-    };
-    await dispatch(RemoveBusinessFavorite(obj));
-  };
+  // /** to remove a business to user favorites */
+  // const removeFavorite = async () => {
+  //   const obj = {
+  //     businessId: businessInfo._id,
+  //     userId: user._id,
+  //   };
+  //   await dispatch(RemoveBusinessFavorite(obj));
+  // };
 
   /** to display business details page */
   const displayBusinessDetail = () => {
     setSearchIndex(businessInfo._id);
     history.push(`/b/${businessInfo._id}`);
-    // window.location.href = `/b/${businessInfo._id}`;
   };
 
   return data ? (
@@ -406,54 +402,38 @@ const DisplayFavoriteBusiness = ({
                   onError={() => setImage(ProfileImg)}
                   alt=""
                 />
+                {businessInfo.hours_format &&
+                businessInfo.hours_format.length === 0 ? (
+                  <div className="CloseDiv">Closed</div>
+                ) : checkBusinessOpenClose() === true ? null : (
+                  <div className="CloseDiv">Closed</div>
+                )}
               </ProfileThumbBanner>
               <ProfileNameWrap>
                 <ProfileName>
-                  <div onClick={() => displayBusinessDetail()}>
+                  <div
+                    className="businessNameTitle"
+                    onClick={() => displayBusinessDetail()}
+                  >
                     {businessInfo.company_name}
                   </div>
-                  <RightWrap>
-                    {businessInfo.hours_format &&
-                    businessInfo.hours_format.length === 0 ? (
-                      <div className="CloseDiv">Closed</div>
-                    ) : checkBusinessOpenClose() === true ? null : (
-                      <div className="CloseDiv">Closed</div>
-                    )}
-
-                    {favoriteBusiness ? (
-                      <img
-                        src={RedHeartIcon}
-                        onClick={() => removeFavorite()}
-                        className="favoriteBusiness"
-                        alt=""
-                      />
-                    ) : (
-                      <img
-                        src={FavoritesIcon}
-                        onClick={() => addFavorite()}
-                        className="favoriteBusinessBorder"
-                        alt=""
-                      />
-                    )}
-                  </RightWrap>
+                  <ChatInput>
+                    <p>
+                      <span>
+                        {businessInfo.favorites !== null
+                          ? businessInfo.favorites.length
+                          : 0}
+                      </span>{" "}
+                      Followers{" "}
+                      <span className="postSpan">
+                        {data.totalPosts && data.totalPosts.length > 0
+                          ? data.totalPosts[0].totalPosts
+                          : 0}
+                      </span>{" "}
+                      Posts
+                    </p>
+                  </ChatInput>
                 </ProfileName>
-                <ChatInput>
-                  <p>
-                    <span>
-                      {businessInfo.favorites !== null
-                        ? businessInfo.favorites.length
-                        : 0}
-                    </span>{" "}
-                    Followers{" "}
-                    <span className="postSpan">
-                      {data.totalPosts && data.totalPosts.length > 0
-                        ? data.totalPosts[0].totalPosts
-                        : 0}
-                    </span>{" "}
-                    Posts
-                  </p>
-                </ChatInput>
-                <BusinessHashTags data={businessInfo.filter_tags} />
               </ProfileNameWrap>
             </ProfileNameHeader>
           </UserMessageContent>

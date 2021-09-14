@@ -44,7 +44,6 @@ const HomeSearch = ({
       navigator.permissions
         .query({ name: "geolocation" })
         .then(function (result) {
-          console.log('****', result.state)
           if (locationState !== "denied") setLocationState(result.state);
           if (result.state === "granted") {
             //If granted then you can directly call your function here
