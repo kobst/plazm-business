@@ -243,7 +243,7 @@ const UserMessage = ({
     /** to add reply via socket */
     if (message.comment && message.commentId && message.type === "Post") {
       dispatch(addReplyToComment(message));
-    } else if (message.commentInfo && message.commentInfo.type === "Post") {
+    } else if (message.commentInfo && message.commentType === "Post") {
       /** to add comment via socket */
       setDescription("");
       dispatch(addCommentToPost(message));
@@ -264,7 +264,7 @@ const UserMessage = ({
       if (message.like._id !== user._id) {
         dispatch(addLikeViaSocket(message));
       }
-    } else if (message.commentInfo && message.commentInfo.type === "Events") {
+    } else if (message.commentInfo && message.commentType === "Events") {
       /** to add event comment via socket */
       dispatch(setEventId(message.commentInfo.itemId));
       dispatch(addCommentToPost(message));

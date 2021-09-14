@@ -8,9 +8,7 @@ const findBusinessPhotos = (id) => {
                 getPostImages(input: {id:$id}) {
                 message
                 success
-                post {
-                    image
-                }
+                post
               }
             }`,
       variables: {

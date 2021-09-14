@@ -39,7 +39,7 @@ const getPlace = (obj) => {
                 postDetails {
                     _id
                     data
-                    listId {
+                    list {
                       _id
                       name
                     }
@@ -72,10 +72,7 @@ const getPlace = (obj) => {
                       name
                       _id
                     }
-                    media {
-                        image
-                        thumbnail
-                    }
+                    media
                     location {
                         type
                         coordinates
@@ -180,9 +177,7 @@ const homeSearch = (obj) => {
                   title
                   description
                   type
-                  media {
-                    image
-                  }
+                  media
                   likes 
                   list {
                     _id
@@ -233,10 +228,7 @@ const homeSearch = (obj) => {
                       start_time
                       end_time
                     }
-                    media {
-                      image
-                      thumbnail
-                    }
+                    media
                     taggedUsers {
                       name
                       photo

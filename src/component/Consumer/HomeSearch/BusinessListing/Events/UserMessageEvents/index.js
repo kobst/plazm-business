@@ -298,7 +298,7 @@ const UserMessageEvents = ({
           </ProfileNameWrap>
         </ProfileNameHeader>
         <ImageComment
-          image={eventData.media.length > 0 ? eventData.media[0].image : ""}
+          image={eventData.media.length>0 ? eventData.media[0] : ""}
         />
       </UserMessageContent>
       <Scrollbars

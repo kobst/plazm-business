@@ -335,9 +335,9 @@ const ModalPostContent = ({
         media:
           imageFile !== null
             ? imageUrl !== null
-              ? [{ image: imageUrl, thumbnail: "" }]
-              : []
-            : [],
+              ? imageUrl
+              : null
+            : null,
       };
       /* create a post api */
       const addPost = await dispatch(addPostToBusiness(obj));

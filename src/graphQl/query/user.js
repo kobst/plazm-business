@@ -150,10 +150,7 @@ const GetMyFeedData = (obj) => {
                   photo
                 }
                 likes
-                media {
-                  image
-                  thumbnail
-                }
+                media
                 location {
                   type
                   coordinates

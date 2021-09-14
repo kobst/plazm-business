@@ -148,7 +148,7 @@ const UserMessage = ({ eventData }) => {
   ws.onmessage = (evt) => {
     const message = JSON.parse(evt.data);
 
-    if (message.commentInfo && message.commentInfo.type === "Events") {
+    if (message.commentInfo && message.commentType === "Events") {
       /** to add event comment via socket */
       setDescription("");
       if (message.businessId === business[0]._id) {
@@ -315,7 +315,7 @@ const UserMessage = ({ eventData }) => {
           </ProfileNameWrap>
         </ProfileNameHeader>
         <ImageComment
-          image={eventData.media.length > 0 ? eventData.media[0].image : ""}
+          image={eventData.media.length > 0 ? eventData.media[0] : ""}
         />
       </UserMessageContent>
       <Scrollbars

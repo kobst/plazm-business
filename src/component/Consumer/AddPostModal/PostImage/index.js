@@ -85,23 +85,20 @@ const PostImage = ({
   type,
   imageUrl,
   deleteImage,
-  clearImages
+  clearImages,
 }) => {
   return (
     <>
       <AllListingsContent>
         {type === "eventImages" ? (
           <WrapperDiv>
-            {imageUrl.map((v) => (
-              <UploadImage
-                disabled={loader}
-                id={v.id}
-                onClick={() => deleteImage(v)}
-                key={v.id}
-              >
-                <img src={v.value} alt="Upload" />
-              </UploadImage>
-            ))}
+            <UploadImage
+              disabled={loader}
+              onClick={() => deleteImage()}
+            >
+              <img src={imageUrl} alt="Upload" />
+            </UploadImage>
+
             <CloseList disabled={loader} onClick={() => clearImages()}>
               <IoMdCloseCircle />
             </CloseList>
