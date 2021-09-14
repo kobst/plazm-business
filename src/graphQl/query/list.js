@@ -149,6 +149,10 @@ const GetListDetails = (obj) => {
                 totalPosts {
                   totalPosts
                 }
+                media {
+                  image
+                  thumbnail
+                }
                 totalComments{
                   totalCount
                 }

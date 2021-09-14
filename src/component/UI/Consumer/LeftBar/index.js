@@ -161,6 +161,7 @@ const LeftBar = ({
     setUserDataId(userId);
   }, [userId]);
 
+
   useEffect(() => {
     if (profileClosed && tabIndex === 4) {
       history.push(`/b/${businessId}`);

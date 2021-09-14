@@ -19,7 +19,10 @@ import {
   setPostId,
   setEventId,
 } from "../../../../../reducers/myFeedReducer";
-import { checkMime, replaceBucket } from "../../../../../utilities/checkResizedImage";
+import {
+  checkMime,
+  replaceBucket,
+} from "../../../../../utilities/checkResizedImage";
 import { useHistory } from "react-router-dom";
 import BigImage from "../../../ListDescriptionView/BigImageContainer";
 
@@ -100,7 +103,7 @@ const ProfileNameWrap = styled.div`
   @media (max-width: 1024px) {
     padding: 0 45px 0 0px;
   }
-  &.UserMessageViewProfileName{
+  &.UserMessageViewProfileName {
     max-width: 100%;
     padding: 0 15px 0 0px;
     text-align: justify;
@@ -373,7 +376,7 @@ const UserMessage = ({
           if (arr[i].type === "list")
             data = reactStringReplace(value, arr[i].name, (match, j) => (
               <span
-                key={'key1'+j}
+                key={"key1" + j}
                 className="mentionData"
                 onClick={() => setSelectedListId(arr[i].id)}
               >
@@ -383,7 +386,7 @@ const UserMessage = ({
           else
             data = reactStringReplace(value, arr[i].name, (match, j) => (
               <span
-                key={'key2'+j}
+                key={"key2" + j}
                 className="mentionData"
                 onClick={() => history.push(`/u/${arr[i].id}`)}
               >
@@ -394,7 +397,7 @@ const UserMessage = ({
           if (arr[i].type === "list")
             data = reactStringReplace(data, arr[i].name, (match, j) => (
               <span
-                key={'key3'+j}
+                key={"key3" + j}
                 className="mentionData"
                 onClick={() => setSelectedListId(arr[i].id)}
               >
@@ -423,7 +426,7 @@ const UserMessage = ({
                 <span
                   className="mentionData"
                   onClick={() => history.push(`/u/${mentions[i]._id}`)}
-                  key={"mentions"+j}
+                  key={"mentions" + j}
                 >
                   {match}
                 </span>
@@ -431,7 +434,7 @@ const UserMessage = ({
             </div>
           );
         } else {
-          return <div>{value}</div>
+          return <div>{value}</div>;
         }
       }
     } else if (mentionsList.length > 0) {
@@ -473,52 +476,55 @@ const UserMessage = ({
     <>
       <UserMsgWrap>
         <UserMessageContent>
-          <ProfileNameHeader className={listDescriptionView? "UserMessageView" : "" }>
-          {!listDescriptionView?
-            <ProfileThumb>
-              <img src={image} onError={() => checkError()} alt="" />
-            </ProfileThumb>
-            : null}
+          <ProfileNameHeader
+            className={listDescriptionView ? "UserMessageView" : ""}
+          >
+            {!listDescriptionView ? (
+              <ProfileThumb>
+                <img src={image} onError={() => checkError()} alt="" />
+              </ProfileThumb>
+            ) : null}
             <ProfileNameWrap className="UserMessageViewProfileName">
-            {!listDescriptionView?
-              <ProfileName>
-                {postData.ownerId === null || postData.ownerId.length === 0 ? (
-                  businessData.company_name
-                ) : (
-                  <span
-                    className="ownerId-name"
-                    onClick={() =>
-                      history.push(`/u/${postData.ownerId[0]._id}`)
-                    }
-                  >
-                    {postData.ownerId[0].name}
-                  </span>
-                )}
-                {postData.listId !== null && postData.listId.length !== 0 ? (
-                  <RightArrowSec>
-                    <ArrowRight>
-                      <RiArrowDropRightFill />
-                    </ArrowRight>
-                    <DescriptionBox>
-                      <div
-                        data-for="custom-class"
-                        data-tip={postData.listId[0].name}
-                        onClick={() => listNavigate()}
-                      >
-                        <span>{postData.listId[0].name}</span>
-                      </div>
-                      <ReactTooltip
-                        id="custom-class"
-                        className="extraClass"
-                        effect="solid"
-                        backgroundColor="#ff2e9a"
-                        textColor="white"
-                      />
-                    </DescriptionBox>
-                  </RightArrowSec>
-                ) : null}
-              </ProfileName>
-              :null }
+              {!listDescriptionView ? (
+                <ProfileName>
+                  {postData.ownerId === null ||
+                  postData.ownerId.length === 0 ? (
+                    businessData.company_name
+                  ) : (
+                    <span
+                      className="ownerId-name"
+                      onClick={() =>
+                        history.push(`/u/${postData.ownerId[0]._id}`)
+                      }
+                    >
+                      {postData.ownerId[0].name}
+                    </span>
+                  )}
+                  {postData.listId !== null && postData.listId.length !== 0 ? (
+                    <RightArrowSec>
+                      <ArrowRight>
+                        <RiArrowDropRightFill />
+                      </ArrowRight>
+                      <DescriptionBox>
+                        <div
+                          data-for="custom-class"
+                          data-tip={postData.listId[0].name}
+                          onClick={() => listNavigate()}
+                        >
+                          <span>{postData.listId[0].name}</span>
+                        </div>
+                        <ReactTooltip
+                          id="custom-class"
+                          className="extraClass"
+                          effect="solid"
+                          backgroundColor="#ff2e9a"
+                          textColor="white"
+                        />
+                      </DescriptionBox>
+                    </RightArrowSec>
+                  ) : null}
+                </ProfileName>
+              ) : null}
               <ChatInput>
                 {findDesc(
                   postData.data,
@@ -526,9 +532,7 @@ const UserMessage = ({
                   postData.taggedLists || []
                 )}
               </ChatInput>
-              {listDescriptionView?
-                <BigImage />
-                : null }
+              {listDescriptionView ? <BigImage /> : null}
               <LikesBar
                 type="comment"
                 totalLikes={postData.likes ? postData.likes.length : 0}
@@ -549,6 +553,7 @@ const UserMessage = ({
                 business={businessData}
                 commentsRef={commentsRef}
                 listDescriptionView={listDescriptionView}
+                listData={postData}
               />
             </ProfileNameWrap>
           </ProfileNameHeader>
