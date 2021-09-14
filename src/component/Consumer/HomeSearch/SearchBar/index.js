@@ -12,7 +12,7 @@ import {
   setSideFiltersByClosest,
   setSideFiltersByUpdatedAt,
 } from "../../../../reducers/myFeedReducer";
-import DropdwonArrowTop from "../../../../images/top_arrow.png";
+import DropdwonArrowTop from "../../../../images/top_arrow_polygon.png";
 import { FaFilter } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 
@@ -83,6 +83,7 @@ const FilterBox = styled.div`
   align-items: center;
   justify-content: center;
   height: 40px;
+  cursor: pointer;
   svg {
     color: #fff;
     font-size: 14px;
@@ -128,21 +129,21 @@ const DropdownContent = styled.div`
   background: #fe02b9;
   box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.3);
   z-index: 1;
-  top: 22px;
+  top: 39px;
   overflow: visible;
-  right: -5px;
+  right: 20px;
   padding: 5px;
   :before {
     background: url(${DropdwonArrowTop}) no-repeat top center;
-    width: 10px;
-    height: 6px;
+    width: 13px;
+    height: 12px;
     content: " ";
-    top: -6px;
+    top: -11px;
     position: absolute;
     margin: 0 auto;
     display: flex;
     text-align: center;
-    right: 6px;
+    right: -1px;
     @media (max-width: 767px) {
       left: 0;
     }
@@ -164,6 +165,8 @@ const DropdownContent = styled.div`
     padding: 2px 5px;
     text-decoration: none;
     font-size: 12px;
+    font-family: Montserrat;
+    font-weight: 600;
   }
   li:hover {
     background-color: #fe02b9;
