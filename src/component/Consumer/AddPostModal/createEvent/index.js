@@ -169,6 +169,7 @@ const CreateEventModal = ({
   const [loader, setLoader] = useState(false);
   const [imageError, setImageError] = useState("");
   const [formError, setError] = useState("");
+  const [listError, setListError] = useState("");
   const [response, setResponse] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const user = useSelector((state) => state.user.user);
@@ -235,75 +236,88 @@ const CreateEventModal = ({
   const saveEvent = async (values) => {
     /** if event details are not added */
     if (eventDetails !== null) {
-      /*set loader value */
-      setLoader(true);
-      /* to upload file to s3 bucket */
-      let imageUrl = null;
-      if (imageFile !== null) {
-        const folder_name = folderName(user.name, user._id);
-        const file_name = fileName(imageFile.name);
-        const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${file_name}`;
-        const value = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/upload_photo`,
-          {
-            method: "POST",
+      if (!selectedListForPost) {
+        setListError(error.EVENT_LIST_ERROR);
+      } else {
+        setListError("");
+        /*set loader value */
+        setLoader(true);
+        /* to upload file to s3 bucket */
+        let imageUrl = null;
+        if (imageFile !== null) {
+          const folder_name = folderName(user.name, user._id);
+          const file_name = fileName(imageFile.name);
+          const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${file_name}`;
+          const value = await fetch(
+            `${process.env.REACT_APP_API_URL}/api/upload_photo`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                Key: file_name,
+                ContentType: imageFile.type,
+                folder_name: folder_name,
+              }),
+            }
+          );
+          const body = await value.text();
+          const Val = JSON.parse(body);
+
+          await fetch(Val, {
+            method: "PUT",
             headers: {
-              "Content-Type": "application/json",
+              "Content-Type": imageFile.type,
             },
-            body: JSON.stringify({
-              Key: file_name,
-              ContentType: imageFile.type,
-              folder_name: folder_name,
-            }),
-          }
-        );
-        const body = await value.text();
-        const Val = JSON.parse(body);
-
-        await fetch(Val, {
-          method: "PUT",
-          headers: {
-            "Content-Type": imageFile.type,
-          },
-          body: imageFile,
-        })
-          .then(() => {
-            imageUrl = baseUrl;
+            body: imageFile,
           })
-          .catch(
-            (error) => console.log(error) // Handle the error response object
-          );
-      }
-
-      const obj = {
-        user: user._id,
-        business: business[0]._id,
-        title: values.title,
-        description: values.description,
-        eventSchedule: {
-          start_time: eventDetails.start_time,
-          end_time: eventDetails.end_time,
-        },
-        recurring: eventDetails.eventRepeat,
-        listId: selectedListForPost ? selectedListForPost : null,
-        media:
-          imageFile !== null ? (imageUrl !== null ? imageUrl : null) : null,
-      };
-
-      /** add event */
-      const resultAction = await dispatch(addEvent({ obj: obj, user: user }));
-      const response = await unwrapResult(resultAction);
-      if (response.data.success === true) {
-        /** if any list is selected than add event to list */
-        if (selectedListForPost) {
-          const addToList = await dispatch(
-            AddEventToList({
-              eventId: response.data.event._id,
-              listId: selectedListForPost,
+            .then(() => {
+              imageUrl = baseUrl;
             })
-          );
-          const res = await unwrapResult(addToList);
-          if (res.data.addEventToList.success === true) {
+            .catch(
+              (error) => console.log(error) // Handle the error response object
+            );
+        }
+
+        const obj = {
+          user: user._id,
+          business: business[0]._id,
+          title: values.title,
+          description: values.description,
+          eventSchedule: {
+            start_time: eventDetails.start_time,
+            end_time: eventDetails.end_time,
+          },
+          recurring: eventDetails.eventRepeat,
+          listId: selectedListForPost ? selectedListForPost : null,
+          media:
+            imageFile !== null ? (imageUrl !== null ? imageUrl : null) : null,
+        };
+
+        /** add event */
+        const resultAction = await dispatch(addEvent({ obj: obj, user: user }));
+        const response = await unwrapResult(resultAction);
+        if (response.data.success === true) {
+          /** if any list is selected than add event to list */
+          if (selectedListForPost) {
+            const addToList = await dispatch(
+              AddEventToList({
+                eventId: response.data.event._id,
+                listId: selectedListForPost,
+              })
+            );
+            const res = await unwrapResult(addToList);
+            if (res.data.addEventToList.success === true) {
+              closeModal();
+              setLoader(false);
+              setEventDescription("");
+              setEventTitle("");
+              setImageUrl(null);
+              setImageCopy([]);
+              setImageUpload(null);
+            }
+          } else {
             closeModal();
             setLoader(false);
             setEventDescription("");
@@ -312,30 +326,27 @@ const CreateEventModal = ({
             setImageCopy([]);
             setImageUpload(null);
           }
-        } else {
-          closeModal();
-          setLoader(false);
-          setEventDescription("");
-          setEventTitle("");
-          setImageUrl(null);
-          setImageCopy([]);
-          setImageUpload(null);
+          ws.send(
+            JSON.stringify({
+              action: "event",
+              event: {
+                ...response.event,
+                type: "addEvent",
+                user: user,
+                totalComments: 0,
+                likes: [],
+                createdAt: new Date(Date.now()),
+              },
+            })
+          );
         }
-        ws.send(
-          JSON.stringify({
-            action: "event",
-            event: {
-              ...response.event,
-              type: "addEvent",
-              user: user,
-              totalComments: 0,
-              likes: [],
-              createdAt: new Date(Date.now()),
-            },
-          })
-        );
       }
     } else {
+      if (!selectedListForPost) {
+        setListError(error.EVENT_LIST_ERROR);
+      } else {
+        setListError("");
+      }
       setError(error.EVENT_DETAILS_REQUIRED);
     }
   };
@@ -443,6 +454,8 @@ const CreateEventModal = ({
               selectedListForPost={selectedListForPost}
               setSelectedListForPost={setSelectedListForPost}
             />
+            {/* to display list error */}
+            {listError !== "" ? <ErrorDiv>{listError}</ErrorDiv> : null}
             {/* for displaying image error if any */}
             {imageError !== "" ? <ErrorDiv>{imageError}</ErrorDiv> : null}
 
