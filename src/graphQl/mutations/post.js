@@ -55,7 +55,7 @@ const createPost = (values) => {
     variables: {
       business: values.business,
       data: values.data,
-      media: values.media && values.media !== ""?[values.media]:[],
+      media: values.media ? [].concat(values.media) : [],
       taggedUsers: values.taggedUsers,
       taggedLists: values.taggedLists,
       ownerId: values.ownerId,
@@ -122,7 +122,7 @@ const deletePost = (id) => {
 const updatePost = (values) => {
   const graphQl = {
     query: `
-          mutation UpdatePost($business: ID, $data:String, $media:[media], $taggedUsers:[ID], $taggedLists: [ID], $ownerId: ID, $listId: ID, $_id: ID){
+          mutation UpdatePost($business: ID, $data:String, $media:[String], $taggedUsers:[ID], $taggedLists: [ID], $ownerId: ID, $listId: ID, $_id: ID){
             updatePost(input: {business:$business, data:$data, media:$media, taggedUsers:$taggedUsers, taggedLists:$taggedLists, ownerId:$ownerId, listId:$listId, _id:$_id }) {
               message
               success
@@ -137,9 +137,7 @@ const updatePost = (values) => {
                   _id
                   name
                 }
-                media {
-                  image
-                }
+                media
                 createdAt
               }
             }
@@ -147,12 +145,12 @@ const updatePost = (values) => {
     variables: {
       business: values.business,
       data: values.data,
-      media: values.media,
+      media: values.media ? [].concat(values.media) : [],
       taggedUsers: values.taggedUsers,
       taggedLists: values.taggedLists,
       ownerId: values.ownerId,
       listId: values.listId,
-      _id: values._id
+      _id: values._id,
     },
   };
   return graphQl;

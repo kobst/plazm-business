@@ -65,6 +65,7 @@ const getUserCreatedAndFollowedLists = (obj) => {
               totalLists
               list {
                   _id
+                  isPublic
                   ownerId
                   followers {
                     name
@@ -101,6 +102,7 @@ const GetListDetails = (obj) => {
               totalLists 
               listDetails {
                 _id
+                isPublic
                 name
                 description
                 ownerId {
@@ -149,10 +151,7 @@ const GetListDetails = (obj) => {
                 totalPosts {
                   totalPosts
                 }
-                media {
-                  image
-                  thumbnail
-                }
+                media
                 totalComments{
                   totalCount
                 }

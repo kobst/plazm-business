@@ -4,15 +4,13 @@ import { IoMdClose } from "react-icons/io";
 import moment from "moment";
 import InfiniteScroll from "react-infinite-scroll-component";
 import BannerImg from "../../../images/sliderimg.png";
-import { MdKeyboardArrowLeft } from "react-icons/md";
 import styled from "styled-components";
 import { CgLock } from "react-icons/cg";
 
 import {
-  clearListData,
-  deleteUserCreatedList,
   UnSubscribeToAList,
   SubscribeToAListAction,
+  fetchUserLists,
 } from "../../../reducers/listReducer";
 import {
   fetchSelectedListDetails,
@@ -67,13 +65,13 @@ const CloseDiv = styled.div`
   right: -40px;
   cursor: pointer;
   top: 0px;
-  background: #FE02B9;
+  background: #fe02b9;
   box-shadow: 4px 0px 14px -5px #fe02b9;
   svg {
     font-size: 32px;
     color: #fff;
   }
-  @media (max-width:767px){
+  @media (max-width: 767px) {
     left: 0;
     right: inherit;
     width: 30px;
@@ -120,57 +118,57 @@ const NoData = styled.div`
   text-align: center;
 `;
 
-const ArrowBack = styled.div`
-  background: #ff2e9a;
-  border-radius: 3px;
-  width: 34px;
-  height: 34px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+// const ArrowBack = styled.div`
+//   background: #ff2e9a;
+//   border-radius: 3px;
+//   width: 34px;
+//   height: 34px;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
 
-  cursor: pointer;
+//   cursor: pointer;
 
-  z-index: 1;
-  svg {
-    font-size: 34px;
-    color: #fff;
-  }
-  @media (max-width: 767px) {
-    width: 24px;
-    height: 24px;
-  }
-`;
+//   z-index: 1;
+//   svg {
+//     font-size: 34px;
+//     color: #fff;
+//   }
+//   @media (max-width: 767px) {
+//     width: 24px;
+//     height: 24px;
+//   }
+// `;
 
-const ButtonWrapperDiv = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 7px 9px;
-  align-items: center;
+// const ButtonWrapperDiv = styled.div`
+//   display: flex;
+//   justify-content: space-between;
+//   padding: 7px 9px;
+//   align-items: center;
 
-  button.unsubscribe {
-    border: 0px;
-    margin-right: 8px;
-    font-size: 9px;
-    font-weight: bold;
-    color: #fff;
-    border-radius: 2px;
-    padding: 5px 10px;
-    cursor: pointer;
-    background-color: #ff6067;
-  }
-  button.subscribe {
-    border: 0px;
-    margin-right: 8px;
-    font-size: 9px;
-    font-weight: bold;
-    color: #fff;
-    border-radius: 2px;
-    padding: 5px 10px;
-    cursor: pointer;
-    background-color: #ff2e9a;
-  }
-`;
+//   button.unsubscribe {
+//     border: 0px;
+//     margin-right: 8px;
+//     font-size: 9px;
+//     font-weight: bold;
+//     color: #fff;
+//     border-radius: 2px;
+//     padding: 5px 10px;
+//     cursor: pointer;
+//     background-color: #ff6067;
+//   }
+//   button.subscribe {
+//     border: 0px;
+//     margin-right: 8px;
+//     font-size: 9px;
+//     font-weight: bold;
+//     color: #fff;
+//     border-radius: 2px;
+//     padding: 5px 10px;
+//     cursor: pointer;
+//     background-color: #ff2e9a;
+//   }
+// `;
 
 const ListBannerSection = styled.div`
   width: 100%;
@@ -193,26 +191,26 @@ const ListBannerSection = styled.div`
     }
   }
   h1 {
-    font-size:18px;
+    font-size: 18px;
     font-weight: 800;
-    color:#fff;
+    color: #fff;
     text-transform: uppercase;
-    margin-bottom:7px;
+    margin-bottom: 7px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;  
+    -webkit-box-orient: vertical;
     overflow: hidden;
     @media (max-width: 767px) {
-      font-size:14px;
+      font-size: 14px;
     }
   }
   h5 {
-    font-size:12px;
-    font-weight:normal;
-    color:#fff;
-    margin-bottom:0px;
+    font-size: 12px;
+    font-weight: normal;
+    color: #fff;
+    margin-bottom: 0px;
     span {
-      color:#FF2E9A;
+      color: #ff2e9a;
       border-right: 1px solid #fff;
       padding-right: 10px;
       cursor: pointer;
@@ -224,18 +222,18 @@ const ListBannerSection = styled.div`
     }
   }
   p {
-    font-size:13px;
-    font-weight:600;
-    color:#fff;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
     display: -webkit-box;
     -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;  
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    margin:0 0 7px;
+    margin: 0 0 7px;
     padding: 0;
     line-height: normal;
     @media (max-width: 767px) {
-      font-size:12px;
+      font-size: 12px;
     }
   }
   .BannerWrapBtn {
@@ -293,7 +291,8 @@ const ListDescriptionView = ({
   setSelectedListId,
   selectedListId,
   setListIndex,
-  listOpenedFromBusiness
+  listOpenedFromBusiness,
+  setFavoriteIndex,
 }) => {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.myFeed.loadingSelectedList);
@@ -306,11 +305,19 @@ const ListDescriptionView = ({
   const totalData = useSelector((state) => state.myFeed.totalData);
   const postsInList = useSelector((state) => state.myFeed.myFeed);
   const selectedList = useSelector((state) => state.myFeed.selectedListDetails);
+  const userLists = useSelector((state) => state.list.userLists);
   const user = useSelector((state) => state.user.user);
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffSet] = useState(0);
-  const [flag, setFlag] = useState(true)
+  const [flag, setFlag] = useState(true);
   const history = useHistory();
+
+  /** to fetch user lists */
+  useEffect(() => {
+    if (userLists.length === 0 && user && user._id)
+      dispatch(fetchUserLists(user._id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   /** to clear all the data initially */
   useEffect(() => {
@@ -319,23 +326,25 @@ const ListDescriptionView = ({
     setHasMore(true);
   }, [dispatch]);
 
-  /** to return to all business listing */
-  const backBusiness = () => {
-    dispatch(clearListData());
-    dispatch(clearMyFeedData());
-    setSelectedListId(null);
-  };
+  // /** to return to all business listing */
+  // const backBusiness = () => {
+  //   dispatch(clearListData());
+  //   dispatch(clearMyFeedData());
+  //   setSelectedListId(null);
+  // };
 
   /** to fetch initial posts in a list */
   useEffect(() => {
     const fetchListDetails = async () => {
-      const result = await dispatch(fetchSelectedListDetails({ id: selectedListId, value: offset }));
-      const data = await unwrapResult(result)
-      if(data) {
-        setFlag(false)
+      const result = await dispatch(
+        fetchSelectedListDetails({ id: selectedListId, value: offset })
+      );
+      const data = await unwrapResult(result);
+      if (data) {
+        setFlag(false);
       }
-    }
-    offset === 0 && fetchListDetails()
+    };
+    offset === 0 && fetchListDetails();
   }, [dispatch, selectedListId, offset]);
 
   const fetchMorePosts = () => {
@@ -373,31 +382,31 @@ const ListDescriptionView = ({
     }
   };
 
-  /** to delete a list */
-  const deleteList = async () => {
-    const obj = {
-      userId: user._id,
-      listId: selectedList._id,
-    };
-    const data = await dispatch(deleteUserCreatedList(obj));
-    const response = await unwrapResult(data);
-    if (response) {
-      setSelectedListId(null);
-    }
-  };
+  // /** to delete a list */
+  // const deleteList = async () => {
+  //   const obj = {
+  //     userId: user._id,
+  //     listId: selectedList._id,
+  //   };
+  //   const data = await dispatch(deleteUserCreatedList(obj));
+  //   const response = await unwrapResult(data);
+  //   if (response) {
+  //     setSelectedListId(null);
+  //   }
+  // };
 
   const onCloseTab = () => {
-    if(!listOpenedFromBusiness)
-    setDisplayTab(false);
+    if (!listOpenedFromBusiness) setDisplayTab(false);
     dispatch(clearMyFeedData());
-    setSelectedListId(null)
+    setSelectedListId(null);
   };
-  return ((loading &&
+  return (loading &&
     offset === 0 &&
     !loadingUnSubScribe &&
     !loadingSelectedList) ||
     loadingUnSubScribe ||
-    loadingSelectedList) || flag? (
+    loadingSelectedList ||
+    flag ? (
     <LoaderWrap>
       <ValueLoader />
     </LoaderWrap>
@@ -419,64 +428,66 @@ const ListDescriptionView = ({
                 <h1>{selectedList.name}</h1>
                 <p>{selectedList.description}</p>
                 <div className="BannerWrapBtn">
-                <h5>
-                  by{" "}
-                  <strong>
-                  <span
-                    onClick={() =>
-                      history.push(`/u/${selectedList.ownerId._id}`)
-                    }
-                  >
-                    {selectedList.ownerId.name}
-                  </span>
-                  </strong>{" "}
-                  
+                  <h5>
+                    by{" "}
+                    <strong>
+                      <span
+                        onClick={() =>
+                          history.push(`/u/${selectedList.ownerId._id}`)
+                        }
+                      >
+                        {selectedList.ownerId.name}
+                      </span>
+                    </strong>{" "}
                     Updated{" "}
                     {moment(selectedList.updatedAt).format(
                       "MMM DD,YYYY, hh:MM a"
                     )}{" "}
-                    EST
-                  {" "}
-                  <LockDiv>
-                    <CgLock />
-                  </LockDiv>
-                </h5>
-                
-                <ButtonOrange>Unsubscribe</ButtonOrange>
-                </div>
+                    EST{" "}
+                    {!selectedList.isPublic && (
+                      <LockDiv>
+                        <CgLock />
+                      </LockDiv>
+                    )}
+                  </h5>
 
+                  {selectedList &&
+                  selectedList.ownerId &&
+                  selectedList.ownerId._id === user._id ? (
+                    <>
+                      <ButtonOuterDiv>
+                        {/* <button className="PinkColor">Make Public</button>
+                        <button className="PinkColor">Invite</button>
+                        <button
+                          className="OrangeColor"
+                          onClick={() => deleteList()}
+                        >
+                          Delete
+                        </button> */}
+                      </ButtonOuterDiv>
+                    </>
+                  ) : !user.listFollowed.includes(selectedList._id) ? (
+                    <button
+                      className="subscribe"
+                      onClick={() => listSubscribe()}
+                    >
+                      Subscribe
+                    </button>
+                  ) : (
+                    <ButtonOrange
+                      className="unsubscribe"
+                      onClick={() => listUnSubscribe()}
+                    >
+                      Unsubscribe
+                    </ButtonOrange>
+                  )}
+                </div>
               </ListBannerSection>
               <CloseDiv>
                 <IoMdClose onClick={() => onCloseTab()} />
               </CloseDiv>
             </TopHeadingWrap>
           </HeadingWrap>
-          {/* <ButtonWrapperDiv>
-            <ArrowBack>
-              <MdKeyboardArrowLeft onClick={() => backBusiness()} />
-            </ArrowBack>
-            {selectedList &&
-            selectedList.ownerId &&
-            selectedList.ownerId._id === user._id ? (
-              <>
-                <ButtonOuterDiv>
-                  <button className="PinkColor">Make Public</button>
-                  <button className="PinkColor">Invite</button>
-                  <button className="OrangeColor" onClick={() => deleteList()}>
-                    Delete
-                  </button>
-                </ButtonOuterDiv>
-              </>
-            ) : !user.listFollowed.includes(selectedList._id) ? (
-              <button className="subscribe" onClick={() => listSubscribe()}>
-                Subscribe
-              </button>
-            ) : (
-              <button className="unsubscribe" onClick={() => listUnSubscribe()}>
-                Unsubscribe
-              </button>
-            )}
-          </ButtonWrapperDiv> */}
           <div
             id="scrollableDiv"
             style={{ height: "calc(100vh - 258px)", overflow: "auto" }}
@@ -514,6 +525,7 @@ const ListDescriptionView = ({
                       id={key}
                       setListIndex={setListIndex}
                       setSelectedListId={setSelectedListId}
+                      setFavoriteIndex={setFavoriteIndex}
                     />
                   ))
                 ) : (

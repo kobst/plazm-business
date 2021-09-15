@@ -9,7 +9,11 @@ import error from "../../../../constants";
 import { MentionsInput, Mention } from "react-mentions";
 import { useDispatch, useSelector } from "react-redux";
 import { findAllUsers } from "../../../../reducers/consumerReducer";
-import { AddPostToList, findAllLists } from "../../../../reducers/listReducer";
+import {
+  AddPostToList,
+  findAllLists,
+  RemovePostFromAList,
+} from "../../../../reducers/listReducer";
 import { addPostToBusiness } from "../../../../reducers/businessReducer";
 import { unwrapResult } from "@reduxjs/toolkit";
 import {
@@ -192,11 +196,12 @@ const ModalPostContent = ({
   imageUpload,
   setImageUpload,
   businessData,
+  imageFile,
+  setImageFile,
 }) => {
   const [loader, setLoader] = useState(false);
   const users = useSelector((state) => state.consumer.users);
   const lists = useSelector((state) => state.list.lists);
-  const [imageFile, setImageFile] = useState(null);
   const [imageError, setImageError] = useState("");
   const ws = useSelector((state) => state.user.ws);
   const user = useSelector((state) => state.user.user);
@@ -331,6 +336,7 @@ const ModalPostContent = ({
             (error) => console.log(error) // Handle the error response object
           );
       }
+
       let obj = {
         business: businessId,
         data: description,
@@ -338,13 +344,9 @@ const ModalPostContent = ({
         taggedLists: mentionArrayList,
         ownerId: user._id,
         listId: selectedListForPost ? selectedListForPost : null,
-        media:
-          imageFile !== null
-            ? imageUrl !== null
-              ? imageUrl
-              : null
-            : null,
+        media: imageFile !== null ? (imageUrl !== null ? imageUrl : []) : [],
       };
+
       if (businessData) {
         /** to update an existing post */
         obj = { ...obj, _id: businessData._id };
@@ -368,19 +370,29 @@ const ModalPostContent = ({
             };
             dispatch(updatePostInMyFeed(updatedPost));
           } else {
+            console.log("else")
             // if list is changed then need to remove from redux
-            // const addToList = await dispatch(
-            //   AddPostToList({
-            //     postId: response.post._id,
-            //     listId: selectedListForPost,
-            //   })
-            // );
-            // if(addToList) {
-            //   dispatch(deletePostInMyFeed(response.post._id));
-            //   closeModal();
-            //   setLoader(false);
-            //   setDescription("");
-            // }
+            const removeFromList = await dispatch(
+              RemovePostFromAList({
+                postId: response.post._id,
+                listId: selectedListForPost,
+              })
+            );
+            console.log(removeFromList)
+            if (removeFromList) {
+              const addToList = await dispatch(
+                AddPostToList({
+                  postId: response.post._id,
+                  listId: selectedListForPost,
+                })
+              );
+              if (addToList) {
+                dispatch(deletePostInMyFeed(response.post._id));
+                closeModal();
+                setLoader(false);
+                setDescription("");
+              }
+            }
           }
           closeModal();
           setLoader(false);
@@ -461,7 +473,11 @@ const ModalPostContent = ({
           ) : null}
         </InputContainer>
         {imageUpload !== null ? (
-          <PostImage image={imageUpload} setImageUpload={setImageUpload} />
+          <PostImage
+            image={imageUpload}
+            setImageUpload={setImageUpload}
+            setImageFile={setImageFile}
+          />
         ) : (
           <AddYourPostBar>
             <AddYourPostLabel>Add to your Post</AddYourPostLabel>
@@ -485,7 +501,7 @@ const ModalPostContent = ({
           setSelectedListForPost={setSelectedListForPost}
         />
         <BottomButtons
-          type={data ? "editPost" : "post"}
+          type={businessData ? "editPost" : "post"}
           setDisplayList={setDisplayList}
           loader={loader}
           description={description}

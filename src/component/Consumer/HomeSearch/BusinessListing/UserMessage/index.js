@@ -215,6 +215,7 @@ const UserMessage = ({
   setListClickedFromSearch,
   type,
   listDescriptionView,
+  setListIndex
 }) => {
   const dispatch = useDispatch();
   const [displayComments, setDisplayComments] = useState(false);
@@ -532,7 +533,7 @@ const UserMessage = ({
                   postData.taggedLists || []
                 )}
               </ChatInput>
-              {listDescriptionView ? <BigImage /> : null}
+              {listDescriptionView ? <BigImage image={postData.media} /> : null}
               <LikesBar
                 type="comment"
                 totalLikes={postData.likes ? postData.likes.length : 0}
@@ -554,6 +555,7 @@ const UserMessage = ({
                 commentsRef={commentsRef}
                 listDescriptionView={listDescriptionView}
                 listData={postData}
+                setListIndex={setListIndex}
               />
             </ProfileNameWrap>
           </ProfileNameHeader>

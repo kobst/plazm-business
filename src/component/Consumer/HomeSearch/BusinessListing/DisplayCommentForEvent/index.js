@@ -178,7 +178,7 @@ const DisplayCommentForEvent = ({ postData, businessData }) => {
                 {businessData.company_name}
               </ProfileName>
               <SubHeading>{postData.itemId.title}</SubHeading>
-              <ChatInput>{postData.itemId.description}</ChatInput>
+              <ChatInput>{postData.itemId.data}</ChatInput>
               <DateBar
                 startDay={
                   days[

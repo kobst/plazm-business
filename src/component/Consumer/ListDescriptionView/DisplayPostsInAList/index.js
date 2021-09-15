@@ -131,7 +131,7 @@ const DescriptionViewItem = styled.div`
 `;
 
 /** display business details */
-const DisplayPostInAList = ({ data, id, setListIndex, setSelectedListId }) => {
+const DisplayPostInAList = ({ data, id, setListIndex, setSelectedListId, setFavoriteIndex }) => {
   const [image, setImage] = useState(
     data.business[0].default_image_url
       ? data.business[0].default_image_url
@@ -326,6 +326,7 @@ const DisplayPostInAList = ({ data, id, setListIndex, setSelectedListId }) => {
             listView={true}
             setSelectedListId={setSelectedListId}
             listDescriptionView={true}
+            setListIndex={setListIndex}
           />
         </div>
       </DescriptionViewItem>

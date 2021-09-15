@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import BigImage2 from "../../../../images/sliderimg.png";
 
 const BigImageContainer = styled.div`
   height: 230px;
@@ -18,11 +17,14 @@ const BigImageContainer = styled.div`
   }
 `;
 
-const BigImage = () => {
+const BigImage = ({ image }) => {
   return (
-    <BigImageContainer>
-      <img src={BigImage2} alt="alt" />
-    </BigImageContainer>
+    image &&
+    image.length > 0 && (
+      <BigImageContainer>
+        <img src={image[0]} alt="alt" />
+      </BigImageContainer>
+    )
   );
 };
 

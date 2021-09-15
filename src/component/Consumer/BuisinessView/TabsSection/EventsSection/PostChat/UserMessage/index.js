@@ -287,7 +287,7 @@ const UserMessage = ({ eventData }) => {
           <ProfileNameWrap>
             <ProfileName>{businessInfo.company_name}</ProfileName>
             <SubHeading>{eventData.title}</SubHeading>
-            <ChatInput>{eventData.description}</ChatInput>
+            <ChatInput>{eventData.data}</ChatInput>
             <DateBar
               startDay={
                 days[new Date(eventData.eventSchedule.start_time).getDay()]

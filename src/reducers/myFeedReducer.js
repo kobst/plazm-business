@@ -248,7 +248,7 @@ export const slice = createSlice({
     },
     updatePostInMyFeed: (state, action) => {
       state.myFeed =  state.myFeed.map(x => {
-        return action.payload ? action.payload : x;
+        return action.payload._id === x._id ? action.payload : x;
       });
     },
     deletePostInMyFeed: (state, action) => {

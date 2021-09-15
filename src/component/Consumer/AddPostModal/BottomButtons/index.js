@@ -66,6 +66,7 @@ const BottomButtons = ({
       closeModal();
     }
   };
+  
   return (
     <>
       <BottomButtonsBar>

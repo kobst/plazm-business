@@ -23,6 +23,7 @@ import ModalComponent from "../../../UI/Modal";
 import DeletePostModal from "../../../AddPostModal/DeletePostModal";
 import AddPostModal from "../../../AddPostModal";
 import DropdwonArrowTop from "../../../../../images/top_arrow.png";
+import { useHistory } from "react-router";
 
 const BottomBarLikes = styled.div`
   display: flex;
@@ -177,6 +178,7 @@ const LikesBar = ({
   business,
   listDescriptionView,
   listData,
+  setListIndex,
 }) => {
   const [eventDate, setEventDate] = useState();
   const [userLikedPost, setUserLikedPost] = useState(false);
@@ -189,7 +191,11 @@ const LikesBar = ({
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const ws = useSelector((state) => state.user.ws);
+  const selectedListDetails = useSelector(
+    (state) => state.myFeed.selectedListDetails
+  );
   const menuRef = useRef(null);
+  const history = useHistory();
 
   /** to convert date into display format */
   useEffect(() => {
@@ -383,6 +389,12 @@ const LikesBar = ({
     setAddPostModal(true);
     setUploadMenu(false);
   };
+
+  /** to display business details page */
+  const displayBusinessDetail = () => {
+    setListIndex(listData.business[0]._id);
+    history.push(`/b/${listData.business[0]._id}`);
+  };
   return (
     <>
       <BottomBarLikes>
@@ -432,9 +444,8 @@ const LikesBar = ({
               </button>
               {totalComments}
             </RightDiv>
-            {listDescriptionView &&
-            listData.ownerId.length > 0 &&
-            listData.ownerId[0]._id === user._id ? (
+            {selectedListDetails &&
+            selectedListDetails.ownerId._id === user._id ? (
               <RightDiv>
                 <BsThreeDots onClick={toggleUploadMenu} />
                 {uploadMenu && (
@@ -449,7 +460,9 @@ const LikesBar = ({
             ) : null}
           </LikesBtnWrap>
         ) : null}
-        {listDescriptionView ? <SaveButton>VISIT</SaveButton> : null}
+        {listDescriptionView ? (
+          <SaveButton onClick={() => displayBusinessDetail()}>VISIT</SaveButton>
+        ) : null}
       </BottomBarLikes>
       {addPostModal && (
         <ModalComponent

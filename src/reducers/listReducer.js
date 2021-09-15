@@ -10,6 +10,7 @@ import {
   DeleteList,
   UnsubscribeToAList,
   SubscribeToAList,
+  DeletePostFromAList,
 } from "../graphQl";
 
 /*
@@ -53,6 +54,19 @@ export const AddPostToList = createAsyncThunk(
   "data/AddPostToList",
   async (obj) => {
     const graphQl = addPostToList(obj);
+    const response = await graphQlEndPoint(graphQl);
+    return response;
+  }
+);
+
+/*
+ * @desc:  to add post to list
+ * @params: listId, postId
+ */
+export const RemovePostFromAList = createAsyncThunk(
+  "data/RemovePostFromAList",
+  async (obj) => {
+    const graphQl = DeletePostFromAList(obj);
     const response = await graphQlEndPoint(graphQl);
     return response;
   }

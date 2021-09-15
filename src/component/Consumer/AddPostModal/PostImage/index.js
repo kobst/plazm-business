@@ -86,16 +86,18 @@ const PostImage = ({
   imageUrl,
   deleteImage,
   clearImages,
+  setImageFile,
 }) => {
+  const removeImages = () => {
+    setImageUpload(null);
+    setImageFile(null);
+  };
   return (
     <>
       <AllListingsContent>
         {type === "eventImages" ? (
           <WrapperDiv>
-            <UploadImage
-              disabled={loader}
-              onClick={() => deleteImage()}
-            >
+            <UploadImage disabled={loader} onClick={() => deleteImage()}>
               <img src={imageUrl} alt="Upload" />
             </UploadImage>
 
@@ -106,7 +108,7 @@ const PostImage = ({
         ) : (
           <PostImageDiv>
             <img src={image} alt="" />
-            <CloseList disabled={loader} onClick={() => setImageUpload(null)}>
+            <CloseList disabled={loader} onClick={() => removeImages()}>
               <IoMdCloseCircle />
             </CloseList>
           </PostImageDiv>

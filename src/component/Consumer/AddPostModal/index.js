@@ -39,10 +39,11 @@ const AddPostModal = ({ businessId, closeModal, data }) => {
   const [mentionArrayList, setMentionArrayList] = useState([]);
   const [mentionArrayUser, setMentionArrayUser] = useState([]);
   const [imageUpload, setImageUpload] = useState(
-    data.media.length > 0 ? data.media[0].image : null
+    data && data.media && data.media.length > 0 ? data.media[0] : null
   );
   const user = useSelector((state) => state.user.user);
   const userLists = useSelector((state) => state.list.userLists);
+  const [imageFile, setImageFile] = useState(data && data.media && data.media.length > 0 ? data.media[0] : null);
 
   useEffect(() => {
     if (data && data.taggedLists) {
@@ -99,6 +100,8 @@ const AddPostModal = ({ businessId, closeModal, data }) => {
             imageUpload={imageUpload}
             setImageUpload={setImageUpload}
             businessData={data}
+            imageFile={imageFile}
+            setImageFile={setImageFile}
           />
         ) : null}
       </ModalContent>
