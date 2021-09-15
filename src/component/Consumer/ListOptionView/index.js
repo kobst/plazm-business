@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import InfiniteScroll from "react-infinite-scroll-component";
 import { IoMdClose } from "react-icons/io";
 import Input from "../../UI/Input/Input";
 import Select from "../../Consumer/UI/Select";
@@ -10,6 +9,9 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchUserCreatedAndFollowedList,
   clearListData,
+  filterSubscribedLists,
+  filterUserCreatedLists,
+  filterByAll,
 } from "../../../reducers/listReducer";
 import ValueLoader from "../../../utils/loader";
 import DisplayListSection from "./DisplayListSection";
@@ -113,14 +115,6 @@ const LoaderWrap = styled.div`
   }
 `;
 
-const NoMorePost = styled.p`
-  font-style: normal;
-  font-size: 12px;
-  line-height: normal;
-  margin: 0 0 5px;
-  color: #fff;
-`;
-
 const NoData = styled.div`
   font-style: normal;
   font-size: 12px;
@@ -145,47 +139,68 @@ const ListOptionView = ({
   );
   const totalList = useSelector((state) => state.list.totalList);
   const listData = useSelector((state) => state.list.data);
-  const [hasMore, setHasMore] = useState(true);
-  const [offset, setOffSet] = useState(0);
+
+  const filteredListData = useSelector((state) => state.list.filteredList);
   const [search, setSearch] = useState("");
   const [filteredList, setFilteredList] = useState([]);
-  const list = filteredList.length > 0 ? filteredList : listData;
+  const [selectedFilter, setSelectedFilter] = useState("All");
+  const list =
+    filteredList.length > 0
+      ? filteredList
+      : filteredListData.length > 0 && search === ""
+      ? filteredListData
+      : search === ""
+      ? listData
+      : [];
+  const userLists = listData.filter((i) => i.ownerId === user._id);
 
+  /** to filter data based on top filters */
   useEffect(() => {
-    if (offset === 0) {
-      const obj = {
-        id: user._id,
-        value: offset,
-      };
-      dispatch(clearListData());
-      dispatch(fetchUserCreatedAndFollowedList(obj));
-    }
-  }, [dispatch, user._id, offset]);
+    if (selectedFilter === "subscribed") {
+      dispatch(filterSubscribedLists(user._id));
+    } else if (selectedFilter === "My Lists") {
+      dispatch(filterUserCreatedLists(user._id));
+    } else dispatch(filterByAll());
+  }, [selectedFilter, dispatch, user._id]);
 
-  /** lists search functionality implemented */
+  /** to fetch all the user created and subscribed lists */
   useEffect(() => {
-    setFilteredList(
-      listData.filter(
-        (entry) => entry.name.toLowerCase().indexOf(search.toLowerCase()) !== -1
-      )
-    );
-  }, [search, listData]);
+    const obj = {
+      id: user._id,
+      value: 0,
+    };
+    dispatch(clearListData());
+    dispatch(fetchUserCreatedAndFollowedList(obj));
+  }, [dispatch, user._id]);
 
+  /** lists search functionality implemented (to search based on title or description) */
   useEffect(() => {
-    setOffSet(0);
-    setHasMore(true);
-  }, []);
-
-  const fetchMoreList = () => {
-    if (offset + 20 < totalList) {
-      setOffSet(offset + 20);
-      dispatch(
-        fetchUserCreatedAndFollowedList({ id: user._id, value: offset + 20 })
+    if (selectedFilter === "subscribed" || selectedFilter === "My Lists") {
+      setFilteredList(
+        filteredListData.filter(
+          (entry) =>
+            entry.name.toLowerCase().indexOf(search.toLowerCase()) !== -1 ||
+            entry.description.toLowerCase().indexOf(search.toLowerCase()) !== -1
+        )
       );
-    } else setHasMore(false);
+    } else {
+      setFilteredList(
+        listData.filter(
+          (entry) =>
+            entry.name.toLowerCase().indexOf(search.toLowerCase()) !== -1 ||
+            entry.description.toLowerCase().indexOf(search.toLowerCase()) !== -1
+        )
+      );
+    }
+  }, [search, listData, filteredListData, selectedFilter]);
+
+  /** on top filter change */
+  const selectChange = (e) => {
+    setSelectedFilter(e.target.value);
+    setSearch("");
   };
 
-  return loading && offset === 0 ? (
+  return loading ? (
     <LoaderWrap>
       <ValueLoader />
     </LoaderWrap>
@@ -199,13 +214,18 @@ const ListOptionView = ({
             </CloseDiv>
 
             <SortingSelect>
-              <Select>
-                <option>All</option>
+              <Select value={selectedFilter} onChange={(e) => selectChange(e)}>
+                <option value="All">All ({totalList})</option>
+                <option value="My Lists">My Lists ({userLists.length})</option>
+                <option value="subscribed">
+                  Subscribed Lists ({totalList - userLists.length})
+                </option>
               </Select>
             </SortingSelect>
           </TopHeadingWrap>
           <SearchWrap>
             <Input
+              value={search}
               className="SearchSubscriptionsInput"
               placeholder="Search Subscriptions"
               onChange={(e) => setSearch(e.target.value)}
@@ -216,43 +236,19 @@ const ListOptionView = ({
           id="scrollableDiv"
           style={{ height: "calc(100vh - 175px)", overflow: "auto" }}
         >
-          <InfiniteScroll
-            dataLength={list ? list.length : 0}
-            next={fetchMoreList}
-            hasMore={hasMore}
-            loader={
-              offset < totalList && loading ? (
-                <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
-                  {" "}
-                  <ValueLoader height="40" width="40" />
-                </div>
-              ) : null
-            }
-            scrollableTarget="scrollableDiv"
-            endMessage={
-              list.length > 20 && !loading ? (
-                <center>
-                  <NoMorePost className="noMorePost">
-                    No more List to show
-                  </NoMorePost>
-                </center>
-              ) : null
-            }
-          >
-            <ListingOptionWrap>
-              {list.length > 0 ? (
-                list.map((i, key) => (
-                  <DisplayListSection
-                    data={i}
-                    key={key}
-                    setSelectedListId={setSelectedListId}
-                  />
-                ))
-              ) : (
-                <NoData>No Lists To Display</NoData>
-              )}
-            </ListingOptionWrap>
-          </InfiniteScroll>
+          <ListingOptionWrap>
+            {list.length > 0 ? (
+              list.map((i, key) => (
+                <DisplayListSection
+                  data={i}
+                  key={key}
+                  setSelectedListId={setSelectedListId}
+                />
+              ))
+            ) : (
+              <NoData>No Lists To Display</NoData>
+            )}
+          </ListingOptionWrap>
         </div>
       </ListOptionSection>
     </>

@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import { graphQlEndPoint } from "../Api/graphQl";
 import {
   addEventToList,
@@ -154,10 +154,25 @@ export const slice = createSlice({
     selectedListDetails: {},
     loadingUnSubscribe: false,
     loadingSubscribe: false,
+    filteredList: [],
   },
   reducers: {
     clearListData: (state, action) => {
       state.data = [];
+      state.filteredList = [];
+    },
+    filterUserCreatedLists: (state, action) => {
+      state.filteredList = current(state.data).filter(
+        (i) => i.ownerId === action.payload
+      );
+    },
+    filterSubscribedLists: (state, action) => {
+      state.filteredList = current(state.data).filter(
+        (i) => i.ownerId !== action.payload
+      );
+    },
+    filterByAll: (state) => {
+      state.filteredList = state.data
     },
   },
   extraReducers: {
@@ -273,5 +288,6 @@ export const slice = createSlice({
   },
 });
 
-export const { clearListData } = slice.actions;
+export const { clearListData, filterSubscribedLists, filterUserCreatedLists, filterByAll } =
+  slice.actions;
 export default slice.reducer;
