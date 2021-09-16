@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { IoMdClose } from "react-icons/io";
 import Input from "../../UI/Input/Input";
-// import Select from "../../Consumer/UI/Select";
+import Select from "react-select";
 import selectarrow from "../../../images/sortingselectarrow.png";
 import SearchIcon from "../../../images/subscriptionSearchIcon.svg";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,8 +15,6 @@ import {
 } from "../../../reducers/listReducer";
 import ValueLoader from "../../../utils/loader";
 import DisplayListSection from "./DisplayListSection";
-import Select from 'react-select';
-
 
 
 const ListOptionSection = styled.div`
@@ -135,11 +133,6 @@ const ListOptionView = ({
   setSelectedListId,
   selectedListId,
 }) => {
-  const options = [
-    { value: 'All', label: 'All' },
-    { value: 'My Lists', label: 'My Lists' },
-    { value: 'Subscribed Lists', label: 'subscribed' },
-  ];
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const loading = useSelector(
@@ -162,9 +155,48 @@ const ListOptionView = ({
       : [];
   const userLists = listData.filter((i) => i.ownerId === user._id);
 
+  const options = [
+    {
+      value: "All",
+      label: (
+        <>
+          All
+          <span
+            className="dropdown-count"
+            dangerouslySetInnerHTML={{ __html: totalList }}
+          />
+        </>
+      ),
+    },
+    {
+      value: "My Lists",
+      label: (
+        <>
+          My Lists
+          <span
+            className="dropdown-count"
+            dangerouslySetInnerHTML={{ __html: userLists.length }}
+          />
+        </>
+      ),
+    },
+    {
+      value: "Subscribed Lists",
+      label: (
+        <>
+          Subscribed Lists
+          <span
+            className="dropdown-count"
+            dangerouslySetInnerHTML={{ __html: totalList - userLists.length }}
+          />
+        </>
+      ),
+    },
+  ];
+
   /** to filter data based on top filters */
   useEffect(() => {
-    if (selectedFilter === "subscribed") {
+    if (selectedFilter === "Subscribed Lists") {
       dispatch(filterSubscribedLists(user._id));
     } else if (selectedFilter === "My Lists") {
       dispatch(filterUserCreatedLists(user._id));
@@ -183,7 +215,10 @@ const ListOptionView = ({
 
   /** lists search functionality implemented (to search based on title or description) */
   useEffect(() => {
-    if (selectedFilter === "subscribed" || selectedFilter === "My Lists") {
+    if (
+      selectedFilter === "Subscribed Lists" ||
+      selectedFilter === "My Lists"
+    ) {
       setFilteredList(
         filteredListData.filter(
           (entry) =>
@@ -203,8 +238,8 @@ const ListOptionView = ({
   }, [search, listData, filteredListData, selectedFilter]);
 
   /** on top filter change */
-  const selectChange = (e) => {
-    setSelectedFilter(e.target.value);
+  const selectChange = (obj) => {
+    setSelectedFilter(obj.value);
     setSearch("");
   };
 
@@ -221,25 +256,32 @@ const ListOptionView = ({
               <IoMdClose onClick={() => setDisplayTab(false)} />
             </CloseDiv>
 
+            {/* react-select implemented */}
             <SortingSelect>
-              {/* <Select value={selectedFilter} onChange={(e) => selectChange(e)}>
-                <option value="All">All ({totalList})</option>
-                <option value="My Lists">My Lists ({userLists.length})</option>
-                <option value="subscribed">
-                  Subscribed Lists ({totalList - userLists.length})
-                </option>
-              </Select> */}
               <Select
-                value={selectedFilter}
-                onChange={(e) => selectChange(e)}
-                options = {options}
-                >
-                  {/* <option value="All">All ({totalList})</option>
-                  <option value="My Lists">My Lists ({userLists.length})</option>
-                  <option value="subscribed">
-                    Subscribed Lists ({totalList - userLists.length})
-                  </option> */}
-              </Select>
+                value={{
+                  value: selectedFilter,
+                  label: (
+                    <>
+                      {selectedFilter}
+                      <span
+                        className="dropdown-count"
+                        dangerouslySetInnerHTML={{
+                          __html:
+                            selectedFilter === "All"
+                              ? totalList
+                              : selectedFilter === "My Lists"
+                              ? userLists.length
+                              : totalList - userLists.length,
+                        }}
+                      />
+                    </>
+                  ),
+                }}
+                isSearchable={false}
+                onChange={(val) => selectChange(val)}
+                options={options}
+              ></Select>
             </SortingSelect>
           </TopHeadingWrap>
           <SearchWrap>
