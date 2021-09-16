@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import {
   MdFavoriteBorder,
@@ -6,6 +6,7 @@ import {
   MdFavorite,
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
+import { BsThreeDots } from "react-icons/bs";
 import {
   AddLikeToPost,
   addLikeToComment,
@@ -17,13 +18,18 @@ import {
   fetchSearchPostComments,
   setPostId,
 } from "../../../../../reducers/myFeedReducer";
+import SaveButton from "../../../UI/SaveButton";
+import ModalComponent from "../../../UI/Modal";
+import DeletePostModal from "../../../AddPostModal/DeletePostModal";
+import AddPostModal from "../../../AddPostModal";
+import DropdwonArrowTop from "../../../../../images/top_arrow.png";
+import { useHistory } from "react-router";
 
 const BottomBarLikes = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
   @media (max-width: 767px) {
-    flex-direction: column;
     align-items: flex-start;
   }
 `;
@@ -81,13 +87,78 @@ const RightDiv = styled.div`
   align-items: center;
   display: flex;
   margin: 0 0 0 20px;
+  position: relative;
   @media (max-width: 767px) {
     margin: 8px 15px 0 0px;
   }
   svg {
     margin: 0 7px 0 0;
   }
-  svg: hover {
+  svg:hover {
+    cursor: pointer;
+  }
+  button {
+    color: #767676;
+    font-size: 13px;
+    padding: 0;
+    cursor: pointer;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 700;
+    border: 0;
+    background-color: transparent;
+    display: flex;
+  }
+`;
+
+const DropdownContent = styled.div`
+  display: flex;
+  position: absolute;
+  min-width: 102px;
+  overflow: auto;
+  background: #fe02b9;
+  box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.3);
+  z-index: 1;
+  top: 25px;
+  width: 30px;
+  overflow: visible;
+  right: -5px;
+  padding: 5px;
+  :before {
+    background: url(${DropdwonArrowTop}) no-repeat top center;
+    width: 15px;
+    height: 15px;
+    content: " ";
+    top: -12px;
+    position: relative;
+    margin: 0 auto;
+    display: flex;
+    text-align: center;
+    left: 78px;
+    @media (max-width: 767px) {
+      left: 0;
+    }
+  }
+  @media (max-width: 767px) {
+    top: 31px;
+    right: 0;
+    left: -5px;
+  }
+  ul {
+    list-style: none;
+    margin: 0 0 0 -15px;
+    padding: 0;
+    width: 100%;
+    text-align: right;
+  }
+  li {
+    color: #fff;
+    padding: 0px 5px;
+    text-decoration: none;
+    font-size: 12px;
+  }
+  li:hover {
+    background-color: #fe02b9;
     cursor: pointer;
   }
 `;
@@ -105,16 +176,26 @@ const LikesBar = ({
   commentLikes,
   setFlag,
   business,
-  commentsRef,
+  listDescriptionView,
+  listData,
+  setListIndex,
 }) => {
   const [eventDate, setEventDate] = useState();
   const [userLikedPost, setUserLikedPost] = useState(false);
   const [userLikedComment, setUserLikedComment] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [likeCountForComment, setLikeCountForComment] = useState(0);
+  const [uploadMenu, setUploadMenu] = useState(false);
+  const [addPostModal, setAddPostModal] = useState(false);
+  const [deletePostModal, setDeletePostModal] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const ws = useSelector((state) => state.user.ws);
+  const selectedListDetails = useSelector(
+    (state) => state.myFeed.selectedListDetails
+  );
+  const menuRef = useRef(null);
+  const history = useHistory();
 
   /** to convert date into display format */
   useEffect(() => {
@@ -279,30 +360,67 @@ const LikesBar = ({
       }
     }
   };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleClickOutside = (event) => {
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      setUploadMenu(false);
+    }
+  };
+
+  const toggleUploadMenu = () => {
+    setUploadMenu(!uploadMenu);
+  };
+
+  /** to delete a post */
+  const deletePost = () => {
+    setDeletePostModal(true);
+    setUploadMenu(false);
+  };
+
+  /** to edit a post */
+  const editPost = () => {
+    setAddPostModal(true);
+    setUploadMenu(false);
+  };
+
+  /** to display business details page */
+  const displayBusinessDetail = () => {
+    setListIndex(listData.business[0]._id);
+    history.push(`/b/${listData.business[0]._id}`);
+  };
   return (
     <>
       <BottomBarLikes>
-        <LikesBtnWrap>
-          {type !== "commentReply" ? (
-            <UsersButton onClick={() => setReplyDisplay()}>
-              {type === "comment" ? "Comment" : "Reply"}
-            </UsersButton>
-          ) : null}
-          {type !== "commentReply" ? <CircleDot /> : null}
-          {type !== "commentReply" ? (
-            <UsersButton
-              onClick={() => addLike()}
-              disabled={userLikedPost || userLikedComment}
-            >
-              Like
-            </UsersButton>
-          ) : null}
+        {!listDescriptionView ? (
+          <LikesBtnWrap>
+            {type !== "commentReply" ? (
+              <UsersButton onClick={() => setReplyDisplay()}>
+                {type === "comment" ? "Comment" : "Reply"}
+              </UsersButton>
+            ) : null}
+            {type !== "commentReply" ? <CircleDot /> : null}
+            {type !== "commentReply" ? (
+              <UsersButton
+                onClick={() => addLike()}
+                disabled={userLikedPost || userLikedComment}
+              >
+                Like
+              </UsersButton>
+            ) : null}
 
-          <ChatDate>
-            <span>-</span>
-            {eventDate}
-          </ChatDate>
-        </LikesBtnWrap>
+            <ChatDate>
+              <span>-</span>
+              {eventDate}
+            </ChatDate>
+          </LikesBtnWrap>
+        ) : null}
         {type !== "commentReply" ? (
           <LikesBtnWrap>
             <RightDiv>
@@ -318,12 +436,59 @@ const LikesBar = ({
                 : likeCount}
             </RightDiv>
             <RightDiv>
-              <MdChatBubbleOutline onClick={() => displayCommentsWithPosts()} />{" "}
+              <button
+                disabled={listDescriptionView ? listDescriptionView : false}
+                onClick={() => displayCommentsWithPosts()}
+              >
+                <MdChatBubbleOutline />
+              </button>
               {totalComments}
             </RightDiv>
+            {selectedListDetails &&
+            selectedListDetails.ownerId._id === user._id ? (
+              <RightDiv>
+                <BsThreeDots onClick={toggleUploadMenu} />
+                {uploadMenu && (
+                  <DropdownContent>
+                    <ul>
+                      <li onClick={() => editPost()}>Edit</li>
+                      <li onClick={() => deletePost()}>Delete</li>
+                    </ul>
+                  </DropdownContent>
+                )}
+              </RightDiv>
+            ) : null}
           </LikesBtnWrap>
         ) : null}
+        {listDescriptionView ? (
+          <SaveButton onClick={() => displayBusinessDetail()}>VISIT</SaveButton>
+        ) : null}
       </BottomBarLikes>
+      {addPostModal && (
+        <ModalComponent
+          closeOnOutsideClick={true}
+          isOpen={addPostModal}
+          closeModal={() => setAddPostModal(false)}
+        >
+          <AddPostModal
+            businessId={listData.business[0]._id}
+            closeModal={() => setAddPostModal(false)}
+            data={listData}
+          />
+        </ModalComponent>
+      )}
+      {deletePostModal && (
+        <ModalComponent
+          closeOnOutsideClick={true}
+          isOpen={deletePostModal}
+          closeModal={() => setDeletePostModal(false)}
+        >
+          <DeletePostModal
+            closeModal={() => setDeletePostModal(false)}
+            id={listData._id}
+          />
+        </ModalComponent>
+      )}
     </>
   );
 };

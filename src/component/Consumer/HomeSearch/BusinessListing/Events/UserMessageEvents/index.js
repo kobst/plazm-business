@@ -264,7 +264,7 @@ const UserMessageEvents = ({
               {businessInfo.company_name}
             </ProfileName>
             <SubHeading>{eventData.title}</SubHeading>
-            <ChatInput>{eventData.description}</ChatInput>
+            <ChatInput>{eventData.data}</ChatInput>
             <DateBar
               startDay={
                 days[new Date(eventData.eventSchedule.start_time).getDay()]
@@ -298,7 +298,7 @@ const UserMessageEvents = ({
           </ProfileNameWrap>
         </ProfileNameHeader>
         <ImageComment
-          image={eventData.media.length > 0 ? eventData.media[0].image : ""}
+          image={eventData.media.length>0 ? eventData.media[0] : ""}
         />
       </UserMessageContent>
       <Scrollbars

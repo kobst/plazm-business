@@ -162,17 +162,15 @@ const CreateEventModal = ({
   setEventDescription,
   imageUrl,
   setImageUrl,
-  imageCopy,
   setImageCopy,
-  imageUpload,
   setImageUpload,
-  imageUploadCopy,
-  setImageUploadCopy,
+  imageUpload,
 }) => {
   const [loader, setLoader] = useState(false);
   const [imageError, setImageError] = useState("");
   const [formError, setError] = useState("");
   const [response, setResponse] = useState("");
+  const [imageFile, setImageFile] = useState(null);
   const user = useSelector((state) => state.user.user);
   const business = useSelector((state) => state.business.business);
   const dispatch = useDispatch();
@@ -183,111 +181,18 @@ const CreateEventModal = ({
   @params: input file
   */
   const uploadImage = (e) => {
-    if (imageUrl.length < 5) {
-      if (e.target.files.length > 1 && e.target.files.length <= 5) {
-        let a1 = [],
-          a2 = [],
-          a3 = [],
-          a4 = [];
-        for (let i = 0; i < e.target.files.length; i++) {
-          const selectedFile = e.target.files[i];
-          if (selectedFile) {
-            const currentDate = Date.now();
-            const folder_name = folderName(user.name, user._id);
-            const file_name = fileName(selectedFile.name, currentDate);
-            const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${file_name}`;
-            const idxDot = selectedFile.name.lastIndexOf(".") + 1;
-            const extFile = selectedFile.name
-              .substr(idxDot, selectedFile.name.length)
-              .toLowerCase();
-            if (extFile === "jpeg" || extFile === "png" || extFile === "jpg") {
-              setImageError("");
-              const findImage = imageUrl.filter(
-                (i) => i.imageFile.name === e.target.files[i].name
-              );
-              if (findImage.length === 0) {
-                const obj = {
-                  id: i,
-                  value: URL.createObjectURL(e.target.files[i]),
-                  image: baseUrl,
-                  imageFile: e.target.files[i],
-                };
-                a1 = a1.concat(obj);
-                a2 = a2.concat({
-                  id: i,
-                  value: e.target.files[i],
-                  image: baseUrl,
-                  date: currentDate,
-                });
-
-                a3 = a3.concat({ image: baseUrl });
-                a4 = a4.concat({ image: baseUrl });
-              }
-            } else {
-              setImageError("Only jpg/jpeg and png,files are allowed!");
-              /** to set error empty after 3 sec */
-              setTimeout(() => {
-                setImageError("");
-              }, 3000);
-            }
-          }
-        }
-        setImageUrl(a1);
-        setImageUpload(a2);
-        setImageCopy(a3);
-        setImageUploadCopy(a4);
-      } else if (e.target.files.length > 5) {
-        setImageError("Maximum 5 images are allowed");
-        /** to set error empty after 3 sec */
-        setTimeout(() => {
-          setImageError("");
-        }, 3000);
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      const idxDot = selectedFile.name.lastIndexOf(".") + 1;
+      const extFile = selectedFile.name
+        .substr(idxDot, selectedFile.name.length)
+        .toLowerCase();
+      if (extFile === "jpeg" || extFile === "png" || extFile === "jpg") {
+        setImageError("");
+        setImageUpload(URL.createObjectURL(e.target.files[0]));
+        setImageFile(selectedFile);
       } else {
-        const selectedFile = e.target.files[0];
-        if (selectedFile) {
-          const currentDate = Date.now();
-          const folder_name = folderName(user.name, user._id);
-          const file_name = fileName(selectedFile.name, currentDate);
-          const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${file_name}`;
-          const idxDot = selectedFile.name.lastIndexOf(".") + 1;
-          const extFile = selectedFile.name
-            .substr(idxDot, selectedFile.name.length)
-            .toLowerCase();
-          if (extFile === "jpeg" || extFile === "png" || extFile === "jpg") {
-            setImageError("");
-            const findImage = imageUrl.filter(
-              (i) => i.imageFile.name === e.target.files[0].name
-            );
-            if (findImage.length === 0) {
-              setImageUrl([
-                ...imageUrl,
-                {
-                  id: imageUrl.length + 1,
-                  value: URL.createObjectURL(e.target.files[0]),
-                  image: baseUrl,
-                  imageFile: e.target.files[0],
-                },
-              ]);
-              setImageUpload([
-                ...imageUpload,
-                {
-                  id: imageUrl.length + 1,
-                  value: e.target.files[0],
-                  image: baseUrl,
-                  date: currentDate,
-                },
-              ]);
-              setImageCopy([...imageCopy, { image: baseUrl }]);
-              setImageUploadCopy([...imageUploadCopy, { image: baseUrl }]);
-            }
-          } else {
-            setImageError("Only jpg/jpeg and png,files are allowed!");
-            /** to set error empty after 3 sec */
-            setTimeout(() => {
-              setImageError("");
-            }, 3000);
-          }
-        }
+        setImageError("Only jpg/jpeg and png,files are allowed!");
       }
     }
   };
@@ -296,21 +201,11 @@ const CreateEventModal = ({
    * @params: image id
    */
   const deleteImage = (v) => {
-    const deleteImage = imageUrl.filter((item) => item.id !== v.id);
-    const deleteImageUpload = imageUploadCopy.filter(
-      (item) => item.image !== v.image
-    );
-    setImageUploadCopy([...deleteImageUpload]);
-    setImageUpload([...deleteImage]);
-    setImageCopy([...deleteImageUpload]);
-    setImageUrl([...deleteImage]);
+    setImageUpload(null);
   };
 
   const clearImages = () => {
-    setImageUploadCopy([]);
-    setImageUpload([]);
-    setImageCopy([]);
-    setImageUrl([]);
+    setImageUpload(null);
   };
 
   /*
@@ -343,41 +238,43 @@ const CreateEventModal = ({
       /*set loader value */
       setLoader(true);
       /* to upload file to s3 bucket */
-      if (imageUpload.length !== 0) {
-        imageUpload.map(async (i) => {
-          const file = i.value;
-          const folder_name = folderName(user.name, user._id);
-          const file_name = fileName(file.name, i.date);
-          const value = await fetch(
-            `${process.env.REACT_APP_API_URL}/api/upload_photo`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                Key: file_name,
-                ContentType: file.type,
-                folder_name: folder_name,
-              }),
-            }
-          );
-          const body = await value.text();
-          const Val = JSON.parse(body);
-
-          await fetch(Val, {
-            method: "PUT",
+      let imageUrl = null;
+      if (imageFile !== null) {
+        const folder_name = folderName(user.name, user._id);
+        const file_name = fileName(imageFile.name);
+        const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${file_name}`;
+        const value = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/upload_photo`,
+          {
+            method: "POST",
             headers: {
-              "Content-Type": file.type,
+              "Content-Type": "application/json",
             },
-            body: file,
+            body: JSON.stringify({
+              Key: file_name,
+              ContentType: imageFile.type,
+              folder_name: folder_name,
+            }),
+          }
+        );
+        const body = await value.text();
+        const Val = JSON.parse(body);
+
+        await fetch(Val, {
+          method: "PUT",
+          headers: {
+            "Content-Type": imageFile.type,
+          },
+          body: imageFile,
+        })
+          .then(() => {
+            imageUrl = baseUrl;
           })
-            .then((response) => {})
-            .catch(
-              (error) => console.log(error) // Handle the error response object
-            );
-        });
+          .catch(
+            (error) => console.log(error) // Handle the error response object
+          );
       }
+
       const obj = {
         user: user._id,
         business: business[0]._id,
@@ -389,7 +286,8 @@ const CreateEventModal = ({
         },
         recurring: eventDetails.eventRepeat,
         listId: selectedListForPost ? selectedListForPost : null,
-        media: imageCopy,
+        media:
+          imageFile !== null ? (imageUrl !== null ? imageUrl : null) : null,
       };
 
       /** add event */
@@ -410,18 +308,18 @@ const CreateEventModal = ({
             setLoader(false);
             setEventDescription("");
             setEventTitle("");
-            setImageUrl([]);
+            setImageUrl(null);
             setImageCopy([]);
-            setImageUpload([]);
+            setImageUpload(null);
           }
         } else {
           closeModal();
           setLoader(false);
           setEventDescription("");
           setEventTitle("");
-          setImageUrl([]);
+          setImageUrl(null);
           setImageCopy([]);
-          setImageUpload([]);
+          setImageUpload(null);
         }
         ws.send(
           JSON.stringify({
@@ -507,28 +405,34 @@ const CreateEventModal = ({
               </AddYourPostBar>
             )}
             {formError !== "" ? <ErrorDiv>{formError}</ErrorDiv> : null}
-            <AddYourPostBar>
-              <AddYourPostLabel>Add a Picture</AddYourPostLabel>
-              <AddImageDiv>
-                <input
-                  id="myInput"
-                  onChange={(e) => uploadImage(e)}
-                  multiple
-                  type="file"
-                  accept=".png, .jpg, .jpeg"
-                  ref={(ref) => (myInput = ref)}
-                  style={{ display: "none" }}
-                  disabled={loader}
-                />
-                <img src={AddImageImg} alt="" onClick={() => myInput.click()} />
-              </AddImageDiv>
-            </AddYourPostBar>
-            {imageUrl.length > 0 ? (
+            {!imageUpload && (
+              <AddYourPostBar>
+                <AddYourPostLabel>Add a Picture</AddYourPostLabel>
+                <AddImageDiv>
+                  <input
+                    id="myInput"
+                    onChange={(e) => uploadImage(e)}
+                    multiple
+                    type="file"
+                    accept=".png, .jpg, .jpeg"
+                    ref={(ref) => (myInput = ref)}
+                    style={{ display: "none" }}
+                    disabled={loader}
+                  />
+                  <img
+                    src={AddImageImg}
+                    alt=""
+                    onClick={() => myInput.click()}
+                  />
+                </AddImageDiv>
+              </AddYourPostBar>
+            )}
+            {imageUpload ? (
               <AddYourPostBar>
                 <PostImage
                   loader={loader}
                   type="eventImages"
-                  imageUrl={imageUrl}
+                  imageUrl={imageUpload}
                   deleteImage={deleteImage}
                   clearImages={clearImages}
                 />

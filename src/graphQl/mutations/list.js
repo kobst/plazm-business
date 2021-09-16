@@ -178,4 +178,46 @@ const UnsubscribeToAList = (values) => {
   };
   return graphQl;
 };
-export { CreateList, addPostToList, addEventToList, DeleteList, UnsubscribeToAList, SubscribeToAList };
+
+/*
+@desc: delete post to a list
+@params: postId, listId
+*/
+const DeletePostFromAList = (values) => {
+  const graphQl = {
+    query: `
+          mutation deletePostFromAList($listId: ID!, $postId:ID! ){
+            deletePostFromAList(input: {listId:$listId, postId:$postId}) {
+              message
+              success
+              list {
+                  _id
+                  name
+                  description
+                  ownerId
+                  posts
+                  likes
+                  followers
+                  media {
+                    image
+                    thumbnail
+                  }
+                }
+            }
+          }`,
+    variables: {
+      listId: values.listId,
+      postId: values.postId,
+    },
+  };
+  return graphQl;
+};
+export {
+  CreateList,
+  addPostToList,
+  addEventToList,
+  DeleteList,
+  UnsubscribeToAList,
+  SubscribeToAList,
+  DeletePostFromAList,
+};

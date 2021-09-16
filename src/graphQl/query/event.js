@@ -34,10 +34,7 @@ const fetchEvent = (values) => {
                 description
                 type
                 recurring
-                media {
-                    image
-                    thumbnail
-                }
+                media
                 createdAt
                 updatedAt
             }
@@ -84,10 +81,7 @@ const fetchEventForAWeek = (values) => {
               description
               type
               recurring
-              media {
-                  image
-                  thumbnail
-              }
+              media
               createdAt
               updatedAt
           }

@@ -39,7 +39,7 @@ const BottomButtons = ({
 }) => {
   /** left button functionality */
   const leftBtn = () => {
-    if (type === "post") setDisplayList(true);
+    if (type === "post" || type === "editPost") setDisplayList(true);
     else if (type === "list") {
       setDisplayList(false);
       setDisplayCreateList(true);
@@ -60,15 +60,18 @@ const BottomButtons = ({
       setDescription(description);
     } else if (type === "post") {
       savePost();
+    } else if (type === "editPost") {
+      savePost();
     } else {
       closeModal();
     }
   };
+  
   return (
     <>
       <BottomButtonsBar>
         <BackButton onClick={() => leftBtn()} disabled={loader}>
-          {type === "post"
+          {type === "post" || type === "editPost"
             ? "Add to List"
             : type === "list"
             ? "Create New List"
@@ -78,10 +81,7 @@ const BottomButtons = ({
         </BackButton>
         <SaveButton
           onClick={() => rightBtn()}
-          disabled={
-            type === "post" &&
-            (loader)
-          }
+          disabled={type === "post" && loader}
         >
           {type === "post" ? (
             loader ? (
@@ -93,6 +93,12 @@ const BottomButtons = ({
             "Select"
           ) : type === "schedule" ? (
             "Confirm"
+          ) : type === "editPost" ? (
+            loader ? (
+              <ValueLoader />
+            ) : (
+              "Edit"
+            )
           ) : (
             "Create"
           )}

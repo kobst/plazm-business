@@ -214,7 +214,7 @@ const UserMessage = ({ postData, setSelectedListId }) => {
       if (message.businessId === business._id) {
         dispatch(addReplyToComment(message));
       }
-    } else if (message.commentInfo && message.commentInfo.type === "Post") {
+    } else if (message.commentInfo && message.commentType === "Post") {
       /** to add comment via socket */
       setDescription("");
       if (message.businessId === business._id) {
@@ -226,12 +226,13 @@ const UserMessage = ({ postData, setSelectedListId }) => {
         if (message.userId === user._id) {
           if (
             filters.PostsByMe === true &&
-            message.post.postDetails.listId === null
+            (message.post.postDetails.list._id === null ||
+              message.post.postDetails.list._id !== null)
           ) {
             dispatch(addPostViaSocket(message));
           } else if (
             filters.MySubscriptions === true &&
-            message.post.postDetails.listId !== null
+            message.post.postDetails.list._id !== null
           ) {
             dispatch(addPostViaSocket(message));
           }
@@ -470,7 +471,7 @@ const UserMessage = ({ postData, setSelectedListId }) => {
                     {postData.postDetails.ownerId.name}
                   </span>
                 )}{" "}
-                {postData.postDetails.listId !== null ? (
+                {postData.postDetails.list._id !== null ? (
                   <RightArrowSec>
                     <ArrowRight>
                       <RiArrowDropRightFill />
@@ -478,9 +479,9 @@ const UserMessage = ({ postData, setSelectedListId }) => {
                     <DescriptionBox>
                       <div
                         data-for="custom-class"
-                        data-tip={postData.postDetails.listId.name}
+                        data-tip={postData.postDetails.list.name}
                       >
-                        <span>{postData.postDetails.listId.name}</span>
+                        <span>{postData.postDetails.list.name}</span>
                       </div>
                       <ReactTooltip
                         id="custom-class"

@@ -1,27 +1,21 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DisplayFavoriteBusiness from "./DisplayFavoriteBusiness";
 import styled from "styled-components";
 import ValueLoader from "../../../../utils/loader";
-import DropdwonArrowTop from "../../../../images/top_arrow.png";
-import selectarrow from "../../../../images/sortingselectarrow.png";
-import { FaSort } from "react-icons/fa";
 import SearchBar from "../SearchBar";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {
   HomeSearch,
-  setSideFiltersByClosest,
-  setSideFiltersByUpdatedAt,
 } from "../../../../reducers/myFeedReducer";
 import error from "../../../../constants";
-import Select from "../../../Consumer/UI/Select";
 import { unwrapResult } from "@reduxjs/toolkit";
 
 const BusinessListWrap = styled.div`
   width: 100%;
   position: relative;
   display: flex;
-  padding: 12px 0;
+  padding: 0;
   flex-direction: column;
   overflow: hidden;
 `;
@@ -48,112 +42,13 @@ const NoMorePost = styled.p`
   color: #fff;
 `;
 
-const CheckboxWrap = styled.div`
-  display: flex;
-  padding: 0;
-  flex-direction: row;
-  font-size: 13px;
-  font-weight: 500;
-  position: relative;
-  .container .checkmark:after {
-    left: 4px;
-    top: 1px;
-    width: 4px;
-    height: 8px;
-    border: solid white;
-    border-width: 0 1px 1px 0;
-  }
-  .container input:checked ~ .checkmark {
-    background-color: transparent;
-  }
-  @media (max-width: 767px) {
-    margin: 0 0 5px;
-  }
-  svg {
-    cursor: pointer;
-  }
-`;
-
-const DropdownContent = styled.div`
-  display: flex;
-  position: absolute;
-  min-width: 130px;
-  overflow: auto;
-  background: #fe02b9;
-  box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.3);
-  z-index: 1;
-  top: 22px;
-  overflow: visible;
-  right: -5px;
-  padding: 5px;
-  :before {
-    background: url(${DropdwonArrowTop}) no-repeat top center;
-    width: 10px;
-    height: 6px;
-    content: " ";
-    top: -6px;
-    position: absolute;
-    margin: 0 auto;
-    display: flex;
-    text-align: center;
-    right: 6px;
-    @media (max-width: 767px) {
-      left: 0;
-    }
-  }
-  @media (max-width: 767px) {
-    top: 31px;
-    right: 0;
-    left: -5px;
-  }
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    text-align: right;
-  }
-  li {
-    color: #fff;
-    padding: 2px 5px;
-    text-decoration: none;
-    font-size: 12px;
-  }
-  li:hover {
-    background-color: #fe02b9;
-    cursor: pointer;
-  }
-`;
-
-const SortingSelect = styled.div`
-  max-width: 200px;
-  width: 100%;
-  margin: 0;
-  select {
-    border: 0;
-    color: #fff;
-    font-weight: bold;
-    font-size: 20px;
-    padding-left: 0;
-    background: url(${selectarrow}) no-repeat right 10px center transparent;
-    margin: 0px;
-    @media (max-width: 767px) {
-      font-size: 14px;
-    }
-  }
-`;
-
-const SearchDropdownOption = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px;
-`;
-
 const BusinessListing = ({
   setSelectedListId,
   setListClickedFromSearch,
   setSearchIndex,
+  setDisplayTab,
+  loader,
+  coords,
 }) => {
   const businessData = useSelector((state) => state.myFeed.myFeed);
   const loading = useSelector((state) => state.myFeed.loading);
@@ -166,8 +61,6 @@ const BusinessListing = ({
   const updatedAtFilter = useSelector(
     (state) => state.myFeed.filterByUpdatedAt
   );
-  const menuRef = useRef(null);
-  const [uploadMenu, setUploadMenu] = useState(false);
   const [filterSelected, setFilterSelected] = useState(false);
   const [flag, setFlag] = useState(true);
 
@@ -178,8 +71,8 @@ const BusinessListing = ({
         search: search,
         value: 0,
         filters: { closest: filterClosest, updated: updatedAtFilter },
-        latitude: process.env.REACT_APP_LATITUDE,
-        longitude: process.env.REACT_APP_LONGITUDE,
+        latitude: coords ? coords.latitude : process.env.REACT_APP_LATITUDE,
+        longitude: coords ? coords.longitude : process.env.REACT_APP_LONGITUDE,
       };
       const result = await dispatch(HomeSearch(obj));
       const data = await unwrapResult(result);
@@ -188,9 +81,16 @@ const BusinessListing = ({
       }
       setFilterSelected(false);
     };
-    fetchSearchData();
+    if (loader === false) fetchSearchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, filterSelected, filterClosest, updatedAtFilter, offset]);
+  }, [
+    dispatch,
+    filterSelected,
+    filterClosest,
+    updatedAtFilter,
+    offset,
+    loader,
+  ]);
 
   /** to fetch more places matching the search */
   const fetchMorePlaces = () => {
@@ -207,48 +107,14 @@ const BusinessListing = ({
     } else setHasMore(false);
   };
 
-  /** to toggle side filter menu */
-  const toggleUploadMenu = () => {
-    setUploadMenu(!uploadMenu);
-  };
-
-  /** to set side filter by closest */
-  const closestFilter = () => {
-    dispatch(setSideFiltersByClosest());
-    setFilterSelected(true);
-    setUploadMenu(false);
-  };
-
-  /** to set side filter by recently updated */
-  const recentlyUpdatedFilter = () => {
-    dispatch(setSideFiltersByUpdatedAt());
-    setFilterSelected(true);
-    setUploadMenu(false);
-  };
   return (
     <>
-      <SearchBar offset={offset} setOffset={setOffset} />
-      <SearchDropdownOption>
-        <SortingSelect>
-          <Select>
-            <option>All</option>
-          </Select>
-        </SortingSelect>
-        <CheckboxWrap ref={menuRef}>
-          <FaSort onClick={toggleUploadMenu} />
-          {uploadMenu && (
-            <DropdownContent>
-              <ul>
-                <li onClick={() => closestFilter()}>Closest</li>
-
-                <li onClick={() => recentlyUpdatedFilter()}>
-                  Recently Updated
-                </li>
-              </ul>
-            </DropdownContent>
-          )}
-        </CheckboxWrap>
-      </SearchDropdownOption>
+      <SearchBar
+        offset={offset}
+        setOffset={setOffset}
+        setFilterSelected={setFilterSelected}
+        setDisplayTab={setDisplayTab}
+      />
       {(loading && offset === 0) || flag ? (
         <LoaderWrap>
           <ValueLoader />
@@ -256,7 +122,7 @@ const BusinessListing = ({
       ) : (
         <div
           id="scrollableDiv"
-          style={{ height: "calc(100vh - 116px)", overflow: "auto" }}
+          style={{ height: "calc(100vh - 44px)", overflow: "auto" }}
         >
           <InfiniteScroll
             dataLength={businessData ? businessData.length : 0}

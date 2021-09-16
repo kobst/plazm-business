@@ -19,8 +19,12 @@ import {
   setPostId,
   setEventId,
 } from "../../../../../reducers/myFeedReducer";
-import { checkMime, replaceBucket } from "../../../../../utilities/checkResizedImage";
+import {
+  checkMime,
+  replaceBucket,
+} from "../../../../../utilities/checkResizedImage";
 import { useHistory } from "react-router-dom";
+import BigImage from "../../../ListDescriptionView/BigImageContainer";
 
 const reactStringReplace = require("react-string-replace");
 
@@ -67,6 +71,13 @@ const ProfileNameHeader = styled.div`
     height: 1px;
     top: 30px;
   }
+  &.UserMessageView {
+    padding-left: 15px;
+    width: 100%;
+    &:before {
+      display: none;
+    }
+  }
 `;
 
 const ProfileThumb = styled.div`
@@ -91,6 +102,14 @@ const ProfileNameWrap = styled.div`
   width: 100%;
   @media (max-width: 1024px) {
     padding: 0 45px 0 0px;
+  }
+  &.UserMessageViewProfileName {
+    max-width: 100%;
+    padding: 0 15px 0 0px;
+    text-align: justify;
+    @media (max-width: 1024px) {
+      padding: 0 15px 0 0px;
+    }
   }
 `;
 
@@ -195,6 +214,8 @@ const UserMessage = ({
   setSelectedListId,
   setListClickedFromSearch,
   type,
+  listDescriptionView,
+  setListIndex
 }) => {
   const dispatch = useDispatch();
   const [displayComments, setDisplayComments] = useState(false);
@@ -226,7 +247,7 @@ const UserMessage = ({
     /** to add reply via socket */
     if (message.comment && message.commentId && message.type === "Post") {
       dispatch(addReplyToComment(message));
-    } else if (message.commentInfo && message.commentInfo.type === "Post") {
+    } else if (message.commentInfo && message.commentType === "Post") {
       /** to add comment via socket */
       setDescription("");
       dispatch(addCommentToPost(message));
@@ -247,7 +268,7 @@ const UserMessage = ({
       if (message.like._id !== user._id) {
         dispatch(addLikeViaSocket(message));
       }
-    } else if (message.commentInfo && message.commentInfo.type === "Events") {
+    } else if (message.commentInfo && message.commentType === "Events") {
       /** to add event comment via socket */
       dispatch(setEventId(message.commentInfo.itemId));
       dispatch(addCommentToPost(message));
@@ -356,7 +377,7 @@ const UserMessage = ({
           if (arr[i].type === "list")
             data = reactStringReplace(value, arr[i].name, (match, j) => (
               <span
-                key={'key1'+j}
+                key={"key1" + j}
                 className="mentionData"
                 onClick={() => setSelectedListId(arr[i].id)}
               >
@@ -366,7 +387,7 @@ const UserMessage = ({
           else
             data = reactStringReplace(value, arr[i].name, (match, j) => (
               <span
-                key={'key2'+j}
+                key={"key2" + j}
                 className="mentionData"
                 onClick={() => history.push(`/u/${arr[i].id}`)}
               >
@@ -377,7 +398,7 @@ const UserMessage = ({
           if (arr[i].type === "list")
             data = reactStringReplace(data, arr[i].name, (match, j) => (
               <span
-                key={'key3'+j}
+                key={"key3" + j}
                 className="mentionData"
                 onClick={() => setSelectedListId(arr[i].id)}
               >
@@ -406,7 +427,7 @@ const UserMessage = ({
                 <span
                   className="mentionData"
                   onClick={() => history.push(`/u/${mentions[i]._id}`)}
-                  key={"mentions"+j}
+                  key={"mentions" + j}
                 >
                   {match}
                 </span>
@@ -414,7 +435,7 @@ const UserMessage = ({
             </div>
           );
         } else {
-          return <div>{value}</div>
+          return <div>{value}</div>;
         }
       }
     } else if (mentionsList.length > 0) {
@@ -456,48 +477,55 @@ const UserMessage = ({
     <>
       <UserMsgWrap>
         <UserMessageContent>
-          <ProfileNameHeader>
-            <ProfileThumb>
-              <img src={image} onError={() => checkError()} alt="" />
-            </ProfileThumb>
-            <ProfileNameWrap>
-              <ProfileName>
-                {postData.ownerId === null || postData.ownerId.length === 0 ? (
-                  businessData.company_name
-                ) : (
-                  <span
-                    className="ownerId-name"
-                    onClick={() =>
-                      history.push(`/u/${postData.ownerId[0]._id}`)
-                    }
-                  >
-                    {postData.ownerId[0].name}
-                  </span>
-                )}
-                {postData.listId !== null && postData.listId.length !== 0 ? (
-                  <RightArrowSec>
-                    <ArrowRight>
-                      <RiArrowDropRightFill />
-                    </ArrowRight>
-                    <DescriptionBox>
-                      <div
-                        data-for="custom-class"
-                        data-tip={postData.listId[0].name}
-                        onClick={() => listNavigate()}
-                      >
-                        <span>{postData.listId[0].name}</span>
-                      </div>
-                      <ReactTooltip
-                        id="custom-class"
-                        className="extraClass"
-                        effect="solid"
-                        backgroundColor="#ff2e9a"
-                        textColor="white"
-                      />
-                    </DescriptionBox>
-                  </RightArrowSec>
-                ) : null}
-              </ProfileName>
+          <ProfileNameHeader
+            className={listDescriptionView ? "UserMessageView" : ""}
+          >
+            {!listDescriptionView ? (
+              <ProfileThumb>
+                <img src={image} onError={() => checkError()} alt="" />
+              </ProfileThumb>
+            ) : null}
+            <ProfileNameWrap className="UserMessageViewProfileName">
+              {!listDescriptionView ? (
+                <ProfileName>
+                  {postData.ownerId === null ||
+                  postData.ownerId.length === 0 ? (
+                    businessData.company_name
+                  ) : (
+                    <span
+                      className="ownerId-name"
+                      onClick={() =>
+                        history.push(`/u/${postData.ownerId[0]._id}`)
+                      }
+                    >
+                      {postData.ownerId[0].name}
+                    </span>
+                  )}
+                  {postData.listId !== null && postData.listId.length !== 0 ? (
+                    <RightArrowSec>
+                      <ArrowRight>
+                        <RiArrowDropRightFill />
+                      </ArrowRight>
+                      <DescriptionBox>
+                        <div
+                          data-for="custom-class"
+                          data-tip={postData.listId[0].name}
+                          onClick={() => listNavigate()}
+                        >
+                          <span>{postData.listId[0].name}</span>
+                        </div>
+                        <ReactTooltip
+                          id="custom-class"
+                          className="extraClass"
+                          effect="solid"
+                          backgroundColor="#ff2e9a"
+                          textColor="white"
+                        />
+                      </DescriptionBox>
+                    </RightArrowSec>
+                  ) : null}
+                </ProfileName>
+              ) : null}
               <ChatInput>
                 {findDesc(
                   postData.data,
@@ -505,6 +533,7 @@ const UserMessage = ({
                   postData.taggedLists || []
                 )}
               </ChatInput>
+              {listDescriptionView ? <BigImage image={postData.media} /> : null}
               <LikesBar
                 type="comment"
                 totalLikes={postData.likes ? postData.likes.length : 0}
@@ -524,6 +553,9 @@ const UserMessage = ({
                 flag={flag}
                 business={businessData}
                 commentsRef={commentsRef}
+                listDescriptionView={listDescriptionView}
+                listData={postData}
+                setListIndex={setListIndex}
               />
             </ProfileNameWrap>
           </ProfileNameHeader>

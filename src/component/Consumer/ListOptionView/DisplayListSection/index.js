@@ -4,13 +4,16 @@ import { MdNotificationsActive, MdMessage } from "react-icons/md";
 import UploadImg from "../../../../images/upload-img.jpg";
 import DropdwonArrowTop from "../../../../images/top_arrow.png";
 // import { FaSort } from "react-icons/fa";
-// import { CgLock } from "react-icons/cg";
+import { CgLock } from "react-icons/cg";
 import FollwersImg from "../../../../images/profile-img.png";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import CheckboxSquare from "../../UI/CheckboxSquare";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteUserCreatedList } from "../../../../reducers/listReducer";
-import { checkMime, replaceBucket } from "../../../../utilities/checkResizedImage";
+import {
+  checkMime,
+  replaceBucket,
+} from "../../../../utilities/checkResizedImage";
 const ListSection = styled.div`
   width: 100%;
   position: relative;
@@ -28,7 +31,7 @@ const ListSection = styled.div`
     background: #24204a;
   }
   @media (max-width: 767px) {
-    flex-direction: column;
+    /* flex-direction: column; */
     padding: 10px;
   }
 `;
@@ -54,7 +57,6 @@ const ListDetailWrap = styled.div`
   flex-direction: column;
   padding: 14px 10px 14px 0;
   @media (max-width: 767px) {
-    width: 100%;
     margin: 8px;
   }
 `;
@@ -194,21 +196,21 @@ const LastDiv = styled.div`
   margin: 0;
 `;
 
-// const LockDiv = styled.div`
-//   width: 18px;
-//   height: 18px;
-//   border-radius: 50%;
-//   border: 0;
-//   background: #fff;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   overflow: hidden;
-//   svg {
-//     font-size: 12px;
-//     color: #ff2e9a;
-//   }
-// `;
+const LockDiv = styled.div`
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 0;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  svg {
+    font-size: 12px;
+    color: #ff2e9a;
+  }
+`;
 
 const SubscribedBtn = styled.button`
   padding: 2px 15px;
@@ -314,8 +316,8 @@ const DisplayListSection = ({ data, setSelectedListId }) => {
   /** to check if list view size image exists in bucket */
   useEffect(() => {
     if (data.media.length > 0) {
-      const findMime = checkMime(data.media[0].image)
-      const image = replaceBucket(data.media[0].image, findMime, 155, 135)
+      const findMime = checkMime(data.media[0].image);
+      const image = replaceBucket(data.media[0].image, findMime, 155, 135);
       setImage(image);
     } else setImage(UploadImg);
   }, [data]);
@@ -349,17 +351,15 @@ const DisplayListSection = ({ data, setSelectedListId }) => {
   };
 
   const errorFunction = () => {
-    if(data.media.length)
-    setImage(data.media[0].image)
-    else
-    setImage(UploadImg)
-  }
+    if (data.media.length) setImage(data.media[0].image);
+    else setImage(UploadImg);
+  };
 
   return (
     <>
       <ListSection>
         <ListImageWrap>
-          <img src={image} alt="" onError={()=>errorFunction()} />
+          <img src={image} alt="" onError={() => errorFunction()} />
         </ListImageWrap>
         <ListDetailWrap>
           <ListHeadingWrap>
@@ -417,9 +417,11 @@ const DisplayListSection = ({ data, setSelectedListId }) => {
             </LeftDiv>
 
             <LastDiv>
-              {/* <LockDiv>
-                <CgLock />
-              </LockDiv> */}
+              {!data.isPublic && (
+                <LockDiv>
+                  <CgLock />
+                </LockDiv>
+              )}
 
               {data.ownerId === user._id ? (
                 <MyListBtn> My lists</MyListBtn>

@@ -9,9 +9,18 @@ import error from "../../../../constants";
 import { MentionsInput, Mention } from "react-mentions";
 import { useDispatch, useSelector } from "react-redux";
 import { findAllUsers } from "../../../../reducers/consumerReducer";
-import { AddPostToList, findAllLists } from "../../../../reducers/listReducer";
+import {
+  AddPostToList,
+  findAllLists,
+  RemovePostFromAList,
+} from "../../../../reducers/listReducer";
 import { addPostToBusiness } from "../../../../reducers/businessReducer";
 import { unwrapResult } from "@reduxjs/toolkit";
+import {
+  updatePostInMyFeed,
+  updatePostToBusiness,
+  deletePostInMyFeed,
+} from "../../../../reducers/myFeedReducer";
 
 const bucket = process.env.REACT_APP_BUCKET;
 
@@ -186,11 +195,13 @@ const ModalPostContent = ({
   setMentionArrayUser,
   imageUpload,
   setImageUpload,
+  businessData,
+  imageFile,
+  setImageFile,
 }) => {
   const [loader, setLoader] = useState(false);
   const users = useSelector((state) => state.consumer.users);
   const lists = useSelector((state) => state.list.lists);
-  const [imageFile, setImageFile] = useState(null);
   const [imageError, setImageError] = useState("");
   const ws = useSelector((state) => state.user.ws);
   const user = useSelector((state) => state.user.user);
@@ -325,59 +336,109 @@ const ModalPostContent = ({
             (error) => console.log(error) // Handle the error response object
           );
       }
-      const obj = {
+
+      let obj = {
         business: businessId,
         data: description,
         taggedUsers: mentionArrayUser,
         taggedLists: mentionArrayList,
         ownerId: user._id,
         listId: selectedListForPost ? selectedListForPost : null,
-        media:
-          imageFile !== null
-            ? imageUrl !== null
-              ? [{ image: imageUrl, thumbnail: "" }]
-              : []
-            : [],
+        media: imageFile !== null ? (imageUrl !== null ? imageUrl : []) : [],
       };
-      /* create a post api */
-      const addPost = await dispatch(addPostToBusiness(obj));
-      const response = await unwrapResult(addPost);
-      if (response.success === true) {
-        if (selectedListForPost) {
-          const addToList = await dispatch(
-            AddPostToList({
-              postId: response.post._id,
-              listId: selectedListForPost,
-            })
-          );
-          const res = await unwrapResult(addToList);
-          if (res.data.addPostToList.success === true) {
-            closeModal();
-            setLoader(false);
-            setDescription("");
+
+      if (businessData) {
+        /** to update an existing post */
+        obj = { ...obj, _id: businessData._id };
+        const updatePost = await dispatch(updatePostToBusiness(obj));
+        const response = await unwrapResult(updatePost);
+        if (response.success) {
+          if (
+            businessData.listId.length > 0 &&
+            businessData.listId[0]._id === selectedListForPost
+          ) {
+            //edit post in redux for the same list
+            const updatedPost = {
+              ...response.post,
+              business: businessData.business,
+              likes: businessData.likes,
+              ownerId: businessData.ownerId,
+              listId: businessData.listId,
+              totalPosts: businessData.totalPosts,
+              totalComments: businessData.totalComments,
+              comments: businessData.comments,
+            };
+            dispatch(updatePostInMyFeed(updatedPost));
+          } else {
+            console.log("else")
+            // if list is changed then need to remove from redux
+            const removeFromList = await dispatch(
+              RemovePostFromAList({
+                postId: response.post._id,
+                listId: selectedListForPost,
+              })
+            );
+            console.log(removeFromList)
+            if (removeFromList) {
+              const addToList = await dispatch(
+                AddPostToList({
+                  postId: response.post._id,
+                  listId: selectedListForPost,
+                })
+              );
+              if (addToList) {
+                dispatch(deletePostInMyFeed(response.post._id));
+                closeModal();
+                setLoader(false);
+                setDescription("");
+              }
+            }
           }
-        } else {
           closeModal();
           setLoader(false);
           setDescription("");
         }
-        ws.send(
-          JSON.stringify({
-            action: "post",
-            businessId: businessId,
-            post: {
-              postId: response.post._id,
-              postDetails: {
-                ...response.post,
-                businessDetails: business[0],
-                totalPosts: [{ totalPosts: response.totalPosts }],
+      } else {
+        /* create a post api */
+        const addPost = await dispatch(addPostToBusiness(obj));
+        const response = await unwrapResult(addPost);
+        if (response.success === true) {
+          if (selectedListForPost) {
+            const addToList = await dispatch(
+              AddPostToList({
+                postId: response.post._id,
+                listId: selectedListForPost,
+              })
+            );
+            const res = await unwrapResult(addToList);
+            if (res.data.addPostToList.success === true) {
+              closeModal();
+              setLoader(false);
+              setDescription("");
+            }
+          } else {
+            closeModal();
+            setLoader(false);
+            setDescription("");
+          }
+          ws.send(
+            JSON.stringify({
+              action: "post",
+              businessId: businessId,
+              post: {
+                postId: response.post._id,
+                postDetails: {
+                  ...response.post,
+                  businessDetails: business[0],
+                  totalPosts: [{ totalPosts: response.totalPosts }],
+                },
+                totalComments: 0,
+                totalLikes: 0,
+                comments: [],
               },
-              totalComments: 0,
-              totalLikes: 0,
-              comments: [],
-            },
-          })
-        );
+            })
+          );
+        }
       }
     }
   };
@@ -412,7 +473,11 @@ const ModalPostContent = ({
           ) : null}
         </InputContainer>
         {imageUpload !== null ? (
-          <PostImage image={imageUpload} setImageUpload={setImageUpload} />
+          <PostImage
+            image={imageUpload}
+            setImageUpload={setImageUpload}
+            setImageFile={setImageFile}
+          />
         ) : (
           <AddYourPostBar>
             <AddYourPostLabel>Add to your Post</AddYourPostLabel>
@@ -436,7 +501,7 @@ const ModalPostContent = ({
           setSelectedListForPost={setSelectedListForPost}
         />
         <BottomButtons
-          type="post"
+          type={businessData ? "editPost" : "post"}
           setDisplayList={setDisplayList}
           loader={loader}
           description={description}

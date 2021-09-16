@@ -35,7 +35,7 @@ const addLikeToEvents = (values) => {
 const createEvent = (values) => {
   const graphQl = {
     query: `
-        mutation AddEvent($title: String, $description:String, $user:ID, $business:ID,  $eventSchedule:eventScheduleInput, $recurring:String, $media:[media]){
+        mutation AddEvent($title: String, $description:String, $user:ID, $business:ID,  $eventSchedule:eventScheduleInput, $recurring:String, $media:[String]){
             addEvent(input: {title:$title, description:$description, user:$user, business:$business, eventSchedule:$eventSchedule, recurring: $recurring, media: $media}) {
             message
             success
@@ -57,10 +57,7 @@ const createEvent = (values) => {
                 end_time
               }
               recurring
-              media {
-                image
-                thumbnail
-              }
+              media
             }
           }
         }`,
@@ -71,7 +68,7 @@ const createEvent = (values) => {
       business: values.business,
       eventSchedule: values.eventSchedule,
       recurring: values.recurring,
-      media: values.media,
+      media: values.media && values.media !== "" ? [values.media] : [],
     },
   };
   return graphQl;

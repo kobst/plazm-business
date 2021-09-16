@@ -68,7 +68,7 @@ const SectionSlider = () => {
           autoPlaySpeed={2000}
         >
           {images.map((i,key)=><div key={key}>
-            <SliderItems image={i.image}/>
+            <SliderItems image={i}/>
           </div>)}
         </Carousel>
       </SectionSliderWrapper>

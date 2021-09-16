@@ -18,9 +18,12 @@ const DashboardContainer = (props) => {
   const [flag, setFlag] = useState(false);
   const [businessExists, setBusinessExists] = useState(false);
   const [businessId, setBusinessId] = useState("");
-  const filters = useSelector(state => state.business.filters)
-  const user = useSelector(state => state.user.user)
-  const sideFilterForLikes = useSelector(state => state.business.filterByMostLiked)
+  const filters = useSelector((state) => state.business.filters);
+  const user = useSelector((state) => state.user.user);
+  const sideFilterForLikes = useSelector(
+    (state) => state.business.filterByMostLiked
+  );
+  const globalLoader = useSelector((state) => state.consumer.globalLoader);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -65,24 +68,33 @@ const DashboardContainer = (props) => {
           checkBusiness({
             businessId: props.match.params.id,
             filters: {
-              Business: filters.Business? filters.Business: !filters.Business && !filters.PostsByMe && !filters.MySubscriptions &&!filters.Others ? true: false,
-              PostsByMe: filters.PostsByMe? filters.PostsByMe: false,
-              MySubscriptions: filters.MySubscriptions? filters.MySubscriptions: false,
-              Others: filters.Others? filters.Others: false,
+              Business: filters.Business
+                ? filters.Business
+                : !filters.Business &&
+                  !filters.PostsByMe &&
+                  !filters.MySubscriptions &&
+                  !filters.Others
+                ? true
+                : false,
+              PostsByMe: filters.PostsByMe ? filters.PostsByMe : false,
+              MySubscriptions: filters.MySubscriptions
+                ? filters.MySubscriptions
+                : false,
+              Others: filters.Others ? filters.Others : false,
             },
             value: 0,
-            ownerId: user? user._id: null,
-            sideFilters: {likes: sideFilterForLikes}
+            ownerId: user ? user._id : null,
+            sideFilters: { likes: sideFilterForLikes },
           })
         );
         const data = await unwrapResult(response);
         if (data.success === true && data.place.length > 0) {
           /** fetch business images */
-          dispatch(setFlagReducer())
+          dispatch(setFlagReducer());
           await dispatch(getBusinessImages(props.match.params.id));
           setBusinessExists(true);
         } else {
-          dispatch(setFlagReducer())
+          dispatch(setFlagReducer());
           setBusinessExists(false);
         }
       }
@@ -90,15 +102,16 @@ const DashboardContainer = (props) => {
     findBusiness(props.isBusinessOpen);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.isBusinessOpen, props.match.params.id, dispatch]);
-  return profile ? (
+
+  return profile && !globalLoader ? (
     <Dashboard
       profile={profile}
       setFlag={setFlag}
       isBusinessOpen={props.isBusinessOpen}
       isUserOpen={props.isUserOpen}
       businessExists={businessExists}
-      businessId={props.match.params.id? businessId: null}
-      userId={props.isUserOpen? props.match.params.id: null}
+      businessId={props.match.params.id ? businessId : null}
+      userId={props.isUserOpen ? props.match.params.id : null}
     />
   ) : (
     <div

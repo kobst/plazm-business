@@ -5,7 +5,7 @@
 const createPost = (values) => {
   const graphQl = {
     query: `
-          mutation CreatePost($business: ID, $data:String, $media:[media], $taggedUsers:[ID], $taggedLists: [ID], $ownerId: ID, $listId: ID){
+          mutation CreatePost($business: ID, $data:String, $media:[String], $taggedUsers:[ID], $taggedLists: [ID], $ownerId: ID, $listId: ID){
               createPost(input: {business:$business, data:$data, media:$media, taggedUsers:$taggedUsers, taggedLists:$taggedLists, ownerId:$ownerId, listId:$listId }) {
               message
               success
@@ -13,7 +13,7 @@ const createPost = (values) => {
               post {
                 _id
                 data
-                listId {
+                list {
                   _id
                   name
                 }
@@ -46,10 +46,7 @@ const createPost = (values) => {
                   photo
               }
               likes
-              media {
-                  image
-                  thumbnail
-              }
+              media
               createdAt
               updatedAt   
               }
@@ -58,7 +55,7 @@ const createPost = (values) => {
     variables: {
       business: values.business,
       data: values.data,
-      media: values.media,
+      media: values.media ? [].concat(values.media) : [],
       taggedUsers: values.taggedUsers,
       taggedLists: values.taggedLists,
       ownerId: values.ownerId,
@@ -98,4 +95,65 @@ const addLikeToPost = (values) => {
   return graphQl;
 };
 
-export { createPost, addLikeToPost };
+/*
+@desc: delete post graphQL mutation
+@params: id
+*/
+const deletePost = (id) => {
+  const graphQl = {
+    query: `
+          mutation DeletePost($id: ID!){
+            deletePost(input: {id:$id}) {
+              message
+              success
+            }
+          }`,
+    variables: {
+      id: id,
+    },
+  };
+  return graphQl;
+};
+
+/*
+@desc: update post graphQL mutation
+@params: business, data, media, taggedUsers, taggedLists, ownerId
+*/
+const updatePost = (values) => {
+  const graphQl = {
+    query: `
+          mutation UpdatePost($business: ID, $data:String, $media:[String], $taggedUsers:[ID], $taggedLists: [ID], $ownerId: ID, $listId: ID, $_id: ID){
+            updatePost(input: {business:$business, data:$data, media:$media, taggedUsers:$taggedUsers, taggedLists:$taggedLists, ownerId:$ownerId, listId:$listId, _id:$_id }) {
+              message
+              success
+              post {
+                _id
+                data
+                taggedUsers {
+                  _id
+                  name
+                }
+                taggedLists {
+                  _id
+                  name
+                }
+                media
+                createdAt
+              }
+            }
+          }`,
+    variables: {
+      business: values.business,
+      data: values.data,
+      media: values.media ? [].concat(values.media) : [],
+      taggedUsers: values.taggedUsers,
+      taggedLists: values.taggedLists,
+      ownerId: values.ownerId,
+      listId: values.listId,
+      _id: values._id,
+    },
+  };
+  return graphQl;
+};
+
+export { createPost, addLikeToPost, updatePost, deletePost };

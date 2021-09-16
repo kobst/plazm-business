@@ -6,6 +6,8 @@ import {
   findCommentReplies,
   homeSearch,
   GetListDetails,
+  deletePost,
+  updatePost
 } from "../graphQl";
 
 /*
@@ -154,6 +156,35 @@ export const HomeSearch = createAsyncThunk("data/HomeSearch", async (obj) => {
   const response = await graphQlEndPoint(graphQl);
   return response.data.homeSearch;
 });
+
+
+/*
+ * @desc:  to delete the post
+ * @params: id
+ */
+export const deleteUserPost = createAsyncThunk(
+  "data/deleteUserPost",
+  async (id) => {
+    const graphQl = deletePost(id);
+    const response = await graphQlEndPoint(graphQl);
+    return { res: response.data.deletePost, id: id };
+  }
+);
+
+
+/*
+ * @desc:  to update a post to a business
+ * @params: obj
+ */
+export const updatePostToBusiness = createAsyncThunk(
+  "data/updatePostToBusiness",
+  async (obj) => {
+    const graphQl = updatePost(obj);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.updatePost;
+  }
+);
+
 export const slice = createSlice({
   name: "myFeed",
   initialState: {
@@ -173,6 +204,7 @@ export const slice = createSlice({
     selectedPostIdForComments: null,
     selectedEventIdForComments: null,
     commentAdded: false,
+    loadingDeletePost: false,
   },
   reducers: {
     clearMyFeedData: (state) => {
@@ -213,6 +245,14 @@ export const slice = createSlice({
     },
     clearSearchedData: (state) => {
       state.myFeed = [];
+    },
+    updatePostInMyFeed: (state, action) => {
+      state.myFeed =  state.myFeed.map(x => {
+        return action.payload._id === x._id ? action.payload : x;
+      });
+    },
+    deletePostInMyFeed: (state, action) => {
+      state.myFeed =  state.myFeed.filter(i=>i._id !== action.payload)
     },
   },
   extraReducers: {
@@ -606,7 +646,7 @@ export const slice = createSlice({
           const data = action.payload.data.map((obj) => ({
             ...obj,
             comments: [],
-            likes: obj.likes!==null?obj.likes:[]
+            likes: obj.likes !== null ? obj.likes : [],
           }));
           state.myFeed = state.myFeed.concat(data);
           state.totalData = action.payload.totalPlaces;
@@ -644,6 +684,28 @@ export const slice = createSlice({
         state.error = action.payload;
       }
     },
+    [deleteUserPost.pending]: (state) => {
+      if (!state.loadingDeletePost) {
+        state.loadingDeletePost = true;
+      }
+    },
+    [deleteUserPost.fulfilled]: (state, action) => {
+      if (state.loadingDeletePost) {
+        state.loadingDeletePost = false;
+        if (action.payload && action.payload.res.success === true) {
+          state.totalData = state.totalData - 1;
+          state.myFeed = state.myFeed.filter(
+            (i) => i._id !== action.payload.id
+          );
+        }
+      }
+    },
+    [deleteUserPost.rejected]: (state, action) => {
+      if (state.loadingDeletePost) {
+        state.loadingDeletePost = false;
+        state.error = action.payload;
+      }
+    },
   },
 });
 
@@ -659,5 +721,7 @@ export const {
   setPostId,
   setEventId,
   setCommentAdded,
+  updatePostInMyFeed,
+  deletePostInMyFeed
 } = slice.actions;
 export default slice.reducer;
