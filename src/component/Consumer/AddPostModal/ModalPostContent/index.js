@@ -207,6 +207,7 @@ const ModalPostContent = ({
   const user = useSelector((state) => state.user.user);
   const business = useSelector((state) => state.business.business);
   const [descriptionError, setDescriptionError] = useState("");
+  const [listError, setListError] = useState("");
   let allData = [...users, ...lists];
   let data = allData.sort(function (a, b) {
     return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
@@ -293,12 +294,25 @@ const ModalPostContent = ({
   const savePost = async () => {
     if (description === "" || !description.trim() === true) {
       setDescriptionError(error.REQUIRED);
-    } else {
+      if (!selectedListForPost) {
+        setListError(error.POST_LIST_ERROR);
+      } else {
+        setListError("");
+      }
+    }
+    else if (!selectedListForPost) {
+      setListError(error.POST_LIST_ERROR);
+      if (description === "" || !description.trim() === true) {
+        setDescriptionError(error.REQUIRED);
+      } else {
+        setDescriptionError("");
+      }
+    }
+    else {
       /*set loader value */
       setLoader(true);
-
+      setListError("");
       setDescriptionError("");
-
       /* to upload file to s3 bucket on save of profile button */
       let imageUrl = null;
       if (imageFile !== null) {
@@ -370,7 +384,6 @@ const ModalPostContent = ({
             };
             dispatch(updatePostInMyFeed(updatedPost));
           } else {
-            console.log("else")
             // if list is changed then need to remove from redux
             const removeFromList = await dispatch(
               RemovePostFromAList({
@@ -378,7 +391,6 @@ const ModalPostContent = ({
                 listId: selectedListForPost,
               })
             );
-            console.log(removeFromList)
             if (removeFromList) {
               const addToList = await dispatch(
                 AddPostToList({
@@ -500,6 +512,7 @@ const ModalPostContent = ({
           selectedListForPost={selectedListForPost}
           setSelectedListForPost={setSelectedListForPost}
         />
+        {listError !== "" ? <ErrorDiv>{listError}</ErrorDiv> : null}
         <BottomButtons
           type={businessData ? "editPost" : "post"}
           setDisplayList={setDisplayList}
