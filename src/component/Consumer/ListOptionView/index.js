@@ -178,6 +178,7 @@ const DiscoverBtn = styled.button`
 const ListOptionView = ({
   setDisplayTab,
   setSelectedListId,
+  setDiscoverBtn,
   selectedListId,
 }) => {
   const dispatch = useDispatch();
@@ -442,7 +443,9 @@ const ListOptionView = ({
               }}
             ></Select>
           </SortingSelect>
-          <DiscoverBtn>Discover More</DiscoverBtn>
+          <DiscoverBtn onClick={() => setDiscoverBtn(true)}>
+            Discover More
+          </DiscoverBtn>
         </HeadingWrap>
         <div
           id="scrollableDiv"

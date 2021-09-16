@@ -26,6 +26,7 @@ import { BsListUl, BsThreeDots } from "react-icons/bs";
 import PolygonArrow from "../../../../images/Polygon.png";
 import { Auth } from "aws-amplify";
 import { setGloablLoader } from "../../../../reducers/consumerReducer";
+import DiscoverList from "../../../Consumer/DiscoverList";
 
 const LeftBarContent = styled.div`
   width: 100px;
@@ -102,13 +103,13 @@ const BottomSettingsWrap = styled.div`
           text-align: center;
           text-transform: uppercase;
           font-weight: 700;
-          @media (max-width:767px){
+          @media (max-width: 767px) {
             font-size: 9px;
           }
           :hover {
             color: #ee3840;
           }
-          button{
+          button {
             color: #767676;
             font-size: 13px;
             padding: 0;
@@ -117,7 +118,7 @@ const BottomSettingsWrap = styled.div`
             text-transform: uppercase;
             font-weight: 700;
             border: 0;
-            @media (max-width:767px){
+            @media (max-width: 767px) {
               font-size: 9px;
             }
             :hover {
@@ -154,13 +155,13 @@ const LeftBar = ({
   const [favoriteIndex, setFavoriteIndex] = useState(null);
   const [profileClosed, setProfileClosed] = useState(false);
   const [userDataId, setUserDataId] = useState(userId);
+  const [discoverBtn, setDiscoverBtn] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
 
   useEffect(() => {
     setUserDataId(userId);
   }, [userId]);
-
 
   useEffect(() => {
     if (profileClosed && tabIndex === 4) {
@@ -184,6 +185,7 @@ const LeftBar = ({
       setListIndex(null);
       setUserDataId(null);
       history.push("/");
+      setDiscoverBtn(false);
     }
   };
 
@@ -357,8 +359,7 @@ const LeftBar = ({
               disabled={true}
               className="react-tabs__tab--disabled"
               style={{ backgroundColor: "#f3f3f3" }}
-            >
-            </Tab>
+            ></Tab>
 
             <Tab
               disabled={loading}
@@ -533,15 +534,16 @@ const LeftBar = ({
               )}
             </div>
           </TabPanel>
-          <TabPanel>
+          <TabPanel className={discoverBtn ? "discoverBtn" : ""}>
             <div className="panel-content">
-              {!selectedListId && !userDataId ? (
+              {!selectedListId && !userDataId && !discoverBtn ? (
                 <ListOptionView
                   setDisplayTab={() => setTabIndex(0)}
                   setSelectedListId={setSelectedListId}
                   selectedListId={selectedListId}
+                  setDiscoverBtn={setDiscoverBtn}
                 />
-              ) : !listIndex && !userDataId ? (
+              ) : !listIndex && !userDataId && !discoverBtn ? (
                 <ListDescriptionView
                   setDisplayTab={() => setTabIndex(0)}
                   setSelectedListId={setSelectedListId}
@@ -550,12 +552,14 @@ const LeftBar = ({
                   setListClickedFromSearch={setListClickedFromSearch}
                   setListIndex={setListIndex}
                 />
-              ) : userDataId ? (
+              ) : userDataId && !discoverBtn ? (
                 <Profile
                   setDisplayTab={() => setTabIndex(0)}
                   userId={userDataId}
                   setProfileClosed={setProfileClosed}
                 />
+              ) : discoverBtn ? (
+                <DiscoverList setDiscoverBtn={setDiscoverBtn} />
               ) : (
                 <BuisinessView
                   setDisplayTab={() => setTabIndex(0)}
