@@ -37,29 +37,26 @@ const HeadingWrap = styled.div`
 `;
 
 const TopHeadingWrap = styled.div`
-  padding: 30px 30px 0;
+  padding: 0 20px;
   display: flex;
   flex-direction: column;
   border-bottom: 1px dashed #fff;
-  @media (max-width: 767px) {
-    padding: 15px 15px 0;
-  }
 `;
 
-const CloseDiv = styled.div`
-  width: 24px;
-  position: relative;
-  display: flex;
-  justify-content: flex-end;
-  position: absolute;
-  right: 17px;
-  cursor: pointer;
-  top: 17px;
-  svg {
-    font-size: 24px;
-    color: #fff;
-  }
-`;
+// const CloseDiv = styled.div`
+//   width: 24px;
+//   position: relative;
+//   display: flex;
+//   justify-content: flex-end;
+//   position: absolute;
+//   right: 17px;
+//   cursor: pointer;
+//   top: 17px;
+//   svg {
+//     font-size: 24px;
+//     color: #fff;
+//   }
+// `;
 
 const SortingSelect = styled.div`
   max-width: 200px;
@@ -78,11 +75,11 @@ const SortingSelect = styled.div`
 `;
 
 const SearchWrap = styled.div`
-  padding: 10px 30px 0;
+  padding: 0;
   display: flex;
-  @media (max-width: 767px) {
-    padding: 10px 15px 0;
-  }
+  background: #000;
+  align-items: center;
+  justify-content: space-between;
   .SearchSubscriptionsInput {
     background: url(${SearchIcon}) no-repeat right 10px center #fff;
     border: 1px solid #e4e4e4;
@@ -90,6 +87,7 @@ const SearchWrap = styled.div`
     border-radius: 0;
     font-size: 14px;
     padding-right: 35px;
+    margin: 0;
     ::placeholder {
       color: #c8c8c8;
     }
@@ -125,6 +123,52 @@ const NoData = styled.div`
   margin: 0 0 5px;
   color: #fff;
   text-align: center;
+`;
+
+const Heading = styled.h1`
+  color: #ff2e79;
+  font-weight: 700;
+  font-size: 18px;
+  margin: 0 0 0 20px;
+  padding: 0;
+  font-family: "Roboto", sans-serif;
+  width: calc(100% - 350px);
+  @media (max-width: 767px) {
+    margin: 0 auto 10px;
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+  }
+`;
+
+const RightSearchWrap = styled.div`
+  display: flex;
+  max-width: 311px;
+  width: 100%;
+`;
+const CloseDiv = styled.div`
+  width: 38px;
+  position: relative;
+  height: 38px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: -40px;
+  cursor: pointer;
+  top: 0px;
+  background: #fe02b9;
+  box-shadow: 4px 0px 14px -5px #fe02b9;
+  svg {
+    font-size: 32px;
+    color: #fff;
+  }
+  @media (max-width: 479px) {
+    left: 0;
+    right: inherit;
+    width: 30px;
+    height: 30px;
+  }
 `;
 
 /*
@@ -215,11 +259,25 @@ const ListOptionView = ({
   ) : (
     <>
       <ListOptionSection>
+      <SearchWrap>
+        <Heading>Lists</Heading>
+        <RightSearchWrap>
+        <Input
+              value={search}
+              className="SearchSubscriptionsInput"
+              placeholder="Search Lists"
+              onChange={(e) => setSearch(e.target.value)}
+            />
+        </RightSearchWrap>
+        <CloseDiv>
+          <IoMdClose onClick={() => setDisplayTab(false)} />
+        </CloseDiv>
+      </SearchWrap>
         <HeadingWrap>
           <TopHeadingWrap>
-            <CloseDiv>
+            {/* <CloseDiv>
               <IoMdClose onClick={() => setDisplayTab(false)} />
-            </CloseDiv>
+            </CloseDiv> */}
 
             <SortingSelect>
               {/* <Select value={selectedFilter} onChange={(e) => selectChange(e)}>
@@ -242,14 +300,14 @@ const ListOptionView = ({
               </Select>
             </SortingSelect>
           </TopHeadingWrap>
-          <SearchWrap>
+          {/* <SearchWrap>
             <Input
               value={search}
               className="SearchSubscriptionsInput"
               placeholder="Search Subscriptions"
               onChange={(e) => setSearch(e.target.value)}
             />
-          </SearchWrap>
+          </SearchWrap> */}
         </HeadingWrap>
         <div
           id="scrollableDiv"
