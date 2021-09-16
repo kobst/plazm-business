@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { IoMdClose } from "react-icons/io";
 import Input from "../../UI/Input/Input";
-import Select from "../../Consumer/UI/Select";
+// import Select from "../../Consumer/UI/Select";
 import selectarrow from "../../../images/sortingselectarrow.png";
 import SearchIcon from "../../../images/subscriptionSearchIcon.svg";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +15,9 @@ import {
 } from "../../../reducers/listReducer";
 import ValueLoader from "../../../utils/loader";
 import DisplayListSection from "./DisplayListSection";
+import Select from 'react-select';
+
+
 
 const ListOptionSection = styled.div`
   width: 100%;
@@ -132,6 +135,11 @@ const ListOptionView = ({
   setSelectedListId,
   selectedListId,
 }) => {
+  const options = [
+    { value: 'All', label: 'All' },
+    { value: 'My Lists', label: 'My Lists' },
+    { value: 'Subscribed Lists', label: 'subscribed' },
+  ];
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const loading = useSelector(
@@ -214,12 +222,23 @@ const ListOptionView = ({
             </CloseDiv>
 
             <SortingSelect>
-              <Select value={selectedFilter} onChange={(e) => selectChange(e)}>
+              {/* <Select value={selectedFilter} onChange={(e) => selectChange(e)}>
                 <option value="All">All ({totalList})</option>
                 <option value="My Lists">My Lists ({userLists.length})</option>
                 <option value="subscribed">
                   Subscribed Lists ({totalList - userLists.length})
                 </option>
+              </Select> */}
+              <Select
+                value={selectedFilter}
+                onChange={(e) => selectChange(e)}
+                options = {options}
+                >
+                  {/* <option value="All">All ({totalList})</option>
+                  <option value="My Lists">My Lists ({userLists.length})</option>
+                  <option value="subscribed">
+                    Subscribed Lists ({totalList - userLists.length})
+                  </option> */}
               </Select>
             </SortingSelect>
           </TopHeadingWrap>
