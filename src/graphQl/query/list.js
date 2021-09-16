@@ -155,6 +155,10 @@ const GetListDetails = (obj) => {
                 totalComments{
                   totalCount
                 }
+                likesData {
+                  _id
+                  name
+                }
                 createdAt
               }
               }

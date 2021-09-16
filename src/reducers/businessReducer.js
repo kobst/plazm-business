@@ -269,7 +269,6 @@ export const slice = createSlice({
       state.selectedPostIdForComments = null;
     },
     setTopPost: (state, action) => {
-      // state.topPost = action.payload;
       const obj = {
         postId: action.payload._id,
         totalComments:
@@ -287,7 +286,7 @@ export const slice = createSlice({
           taggedUsers: action.payload.taggedUsers,
           taggedLists: action.payload.taggedLists,
           ownerId: action.payload.ownerId[0],
-          likes: action.payload.likes,
+          likes: action.payload.likesData,
           media: action.payload.media,
           location: null,
           createdAt: action.payload.createdAt,
@@ -295,11 +294,11 @@ export const slice = createSlice({
         comments: [],
       };
       state.topPost = true;
-      state.posts = [].concat(obj).concat(state.posts);
+      state.posts = [].concat(obj).concat(state.posts.filter(i=>i.postId !== obj.postId));
       state.totalPosts = state.totalPosts + 1;
     },
     clearTopPost: (state) => {
-      state.topPost = null;
+      state.topPost = false;
     },
   },
   extraReducers: {
@@ -636,7 +635,8 @@ export const slice = createSlice({
             let data = null;
             if (state.posts.length > 0) data = state.posts[0];
             if (data) {
-              state.posts = [data].concat(action.payload.posts);
+              // state.posts = [].concat(obj).concat(state.posts.filter(i=>i.postId !== obj.postId));
+              state.posts = [data].concat(action.payload.posts.filter(i=>i.postId !== data.postId));
               state.totalPosts = 1+ action.payload.totalPosts;
             }
           } else {

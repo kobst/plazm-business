@@ -81,7 +81,7 @@ const BusinessListing = ({
       }
       setFilterSelected(false);
     };
-    if (loader === false) fetchSearchData();
+    if (loader === false && offset === 0) fetchSearchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     dispatch,

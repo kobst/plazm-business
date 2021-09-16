@@ -96,7 +96,7 @@ const PostChat = ({ setSelectedListId, filterArr, setFilterArr }) => {
         style={{ height: "calc(100vh - 490px)", overflow: "auto" }}
       >
         {/* to display Top Post If any */}
-        {topPost && <h5>Top Post</h5>}
+        {/* {topPost && <h5>Top Post</h5>} */}
         {topPost && (
           <UserMessage
             postData={posts[0]}
