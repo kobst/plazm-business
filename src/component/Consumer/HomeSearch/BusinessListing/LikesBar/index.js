@@ -10,6 +10,7 @@ import { BsThreeDots } from "react-icons/bs";
 import {
   AddLikeToPost,
   addLikeToComment,
+  setTopPost,
 } from "../../../../../reducers/businessReducer";
 import { unwrapResult } from "@reduxjs/toolkit";
 import {
@@ -394,6 +395,7 @@ const LikesBar = ({
   const displayBusinessDetail = () => {
     setListIndex(listData.business[0]._id);
     history.push(`/b/${listData.business[0]._id}`);
+    dispatch(setTopPost(listData));
   };
   return (
     <>

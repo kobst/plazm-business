@@ -39,26 +39,42 @@ const LoaderWrap = styled.div`
   }
 `;
 
-const PostChat = ({setSelectedListId}) => {
+const PostChat = ({ setSelectedListId, filterArr, setFilterArr }) => {
   const posts = useSelector((state) => state.business.posts);
   const business = useSelector((state) => state.business.business);
   const user = useSelector((state) => state.user.user);
   const filters = useSelector((state) => state.business.filters);
-  const sideFilterForLikes = useSelector(state => state.business.filterByMostLiked)
-  const sideFilterForRecent = useSelector(state => state.business.filterByMostRecent)
+  const sideFilterForLikes = useSelector(
+    (state) => state.business.filterByMostLiked
+  );
+  const sideFilterForRecent = useSelector(
+    (state) => state.business.filterByMostRecent
+  );
   const loadingFilterData = useSelector(
     (state) => state.business.loadingFilterData
   );
   const totalPosts = useSelector((state) => state.business.totalPosts);
+  const topPost = useSelector((state) => state.business.topPost);
   const [offset, setOffSet] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const dispatch = useDispatch();
-
   useEffect(() => {
     setOffSet(0);
     setHasMore(true);
   }, [filters, sideFilterForRecent, sideFilterForLikes]);
-  
+
+  /** to remove first object from array */
+  useEffect(() => {
+    if (topPost) {
+      let arr = [];
+      for (let i = 1; i < posts.length; i++) {
+        arr.push(posts[i]);
+      }
+      setFilterArr(arr);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [topPost]);
+
   const fetchMorePosts = () => {
     if (offset + 20 < totalPosts) {
       setOffSet(offset + 20);
@@ -68,23 +84,28 @@ const PostChat = ({setSelectedListId}) => {
           filters: filters,
           value: offset + 20,
           ownerId: user._id,
-          sideFilters: {likes: sideFilterForLikes}
+          sideFilters: { likes: sideFilterForLikes },
         })
       );
     } else setHasMore(false);
   };
   return (
     <>
-      <div id="scrollableDiv" style={{ height: 'calc(100vh - 490px)', overflow: "auto" }}>
-        {/* <Scrollbars
-        autoHeight
-        autoHeightMin={0}
-        autoHeightMax={450}
-        thumbMinSize={30}
-      > */}
-
+      <div
+        id="scrollableDiv"
+        style={{ height: "calc(100vh - 490px)", overflow: "auto" }}
+      >
+        {/* to display Top Post If any */}
+        {topPost && <h5>Top Post</h5>}
+        {topPost && (
+          <UserMessage
+            postData={posts[0]}
+            setSelectedListId={setSelectedListId}
+          />
+        )}
+        <hr />
         <InfiniteScroll
-          dataLength={posts? posts.length: 0}
+          dataLength={posts ? posts.length : 0}
           next={fetchMorePosts}
           hasMore={hasMore}
           loader={
@@ -111,11 +132,40 @@ const PostChat = ({setSelectedListId}) => {
         >
           <ChatContent>
             {!loadingFilterData && posts.length > 0 ? (
-              posts.map((i,key) => <UserMessage postData={i} key={key} setSelectedListId={setSelectedListId}/>)
+              topPost && filterArr.length > 0 ? (
+                filterArr.map((i, key) => (
+                  <UserMessage
+                    postData={i}
+                    key={key}
+                    setSelectedListId={setSelectedListId}
+                  />
+                ))
+              ) : posts.length > 0 && !topPost ? (
+                posts.map((i, key) => (
+                  <UserMessage
+                    postData={i}
+                    key={key}
+                    setSelectedListId={setSelectedListId}
+                  />
+                ))
+              ) : (
+                posts.length > 0 &&
+                topPost &&
+                posts.map(
+                  (i, key) =>
+                    key !== 0 && (
+                      <UserMessage
+                        postData={i}
+                        key={key}
+                        setSelectedListId={setSelectedListId}
+                      />
+                    )
+                )
+              )
             ) : loadingFilterData ? (
               <LoaderWrap>
                 <ValueLoader />
-              </LoaderWrap> 
+              </LoaderWrap>
             ) : (
               <center>
                 <NoMorePost>No posts to display</NoMorePost>
@@ -123,7 +173,6 @@ const PostChat = ({setSelectedListId}) => {
             )}
           </ChatContent>
         </InfiniteScroll>
-        {/* </Scrollbars> */}
       </div>
     </>
   );

@@ -459,7 +459,8 @@ const UserMessage = ({ postData, setSelectedListId }) => {
             </ProfileThumb>
             <ProfileNameWrap>
               <ProfileName>
-                {postData.postDetails.ownerId === null ? (
+                {postData && postData.postDetails &&
+                postData.postDetails.ownerId === null ? (
                   business.company_name
                 ) : (
                   <span

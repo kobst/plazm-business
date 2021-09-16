@@ -105,7 +105,7 @@ const DropdownContent = styled.div`
   }
 `;
 
-const PostFilter = () => {
+const PostFilter = ({setFilterArr}) => {
   const [uploadMenu, setUploadMenu] = useState(false);
   const menuRef = useRef(null);
   const dispatch = useDispatch();
@@ -178,18 +178,19 @@ const PostFilter = () => {
       })
     );
     setFlag(!flag);
+    setFilterArr([]);
   };
 
   const setMostLiked = () => {
     setSideFilterFlag(!sideFilterFlag);
     dispatch(setSideFiltersByMostLiked());
-    setUploadMenu(false)
+    setUploadMenu(false);
   };
 
   const setMostRecent = () => {
     setSideFilterFlag(!sideFilterFlag);
     dispatch(setSideFiltersByMostRecent());
-    setUploadMenu(false)
+    setUploadMenu(false);
   };
   return (
     <>
