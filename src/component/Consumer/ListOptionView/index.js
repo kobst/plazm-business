@@ -15,7 +15,6 @@ import {
 import ValueLoader from "../../../utils/loader";
 import DisplayListSection from "./DisplayListSection";
 
-
 const ListOptionSection = styled.div`
   width: 100%;
   position: relative;
@@ -39,13 +38,12 @@ const HeadingWrap = styled.div`
   }
 `;
 
-
 const SortingSelect = styled.div`
   max-width: 200px;
   margin: 15px 0;
   span.dropdown-count {
     margin: 0 0 0 8px;
-  } 
+  }
 `;
 
 const SearchWrap = styled.div`
@@ -163,16 +161,15 @@ const DiscoverBtn = styled.button`
   font-size: 12px;
   color: #ffffff;
   cursor: pointer;
-  background: #18A7FC;
+  background: #18a7fc;
   border-radius: 2px;
   font-family: Montserrat;
   :hover,
   :focus {
-    opacity:0.6;
-    outline:none;
+    opacity: 0.6;
+    outline: none;
     transition: 0.3s;
   }
-
 `;
 
 /*
@@ -195,6 +192,7 @@ const ListOptionView = ({
   const [search, setSearch] = useState("");
   const [filteredList, setFilteredList] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState("All");
+  const [selectedList, setSelectedList] = useState(null);
   const list =
     filteredList.length > 0
       ? filteredList
@@ -300,140 +298,152 @@ const ListOptionView = ({
   ) : (
     <>
       <ListOptionSection>
-      <SearchWrap>
-        <Heading>Lists</Heading>
-        <RightSearchWrap>
-        <Input
+        <SearchWrap>
+          <Heading>Lists</Heading>
+          <RightSearchWrap>
+            <Input
               value={search}
               className="SearchSubscriptionsInput"
               placeholder="Search Lists"
               onChange={(e) => setSearch(e.target.value)}
             />
-        </RightSearchWrap>
-        <CloseDiv>
-          <IoMdClose onClick={() => setDisplayTab(false)} />
-        </CloseDiv>
-      </SearchWrap>
+          </RightSearchWrap>
+          <CloseDiv>
+            <IoMdClose onClick={() => setDisplayTab(false)} />
+          </CloseDiv>
+        </SearchWrap>
         <HeadingWrap>
           <SortingSelect>
-              <Select
-                value={{
-                  value: selectedFilter,
-                  label: (
-                    <>
-                      {selectedFilter}
-                      <span
-                        className="dropdown-count"
-                        dangerouslySetInnerHTML={{
-                          __html:
-                            selectedFilter === "All"
-                              ? totalList
-                              : selectedFilter === "My Lists"
-                              ? userLists.length
-                              : totalList - userLists.length,
-                        }}
-                      />
-                    </>
-                  ),
-                }}
-                isSearchable={false}
-                onChange={(val) => selectChange(val)}
-                options={options}
-                styles={{
-                  control: (provided) => ({
-                    ...provided,
-                    flexGrow: 1,
-                    paddingLeft: '0',
-                    height: '100%',
-                    boxShadow: 'none',
-                    border: '1px solid #221E45',
-                    backgroundColor: '#221E45',
-                    color: '#fff',
-                    width: '230px',
-                    fontSize: '20px',
-                    fontWeight: '500',
-                    fontFamily: 'Roboto',
-                    ':hover': {
-                      border: '1px solid #221E45',
+            <Select
+              value={{
+                value: selectedFilter,
+                label: (
+                  <>
+                    {selectedFilter}
+                    <span
+                      className="dropdown-count"
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          selectedFilter === "All"
+                            ? "(" + totalList + ")"
+                            : selectedFilter === "My Lists"
+                            ? "(" + userLists.length + ")"
+                            : "(" +
+                              parseInt(totalList - userLists.length) +
+                              ")",
+                      }}
+                    />
+                  </>
+                ),
+              }}
+              isSearchable={false}
+              onChange={(val) => selectChange(val)}
+              options={options}
+              styles={{
+                control: (provided) => ({
+                  ...provided,
+                  flexGrow: 1,
+                  paddingLeft: "0",
+                  height: "100%",
+                  boxShadow: "none",
+                  border: "1px solid #221E45",
+                  backgroundColor: "#221E45",
+                  color: "#fff",
+                  width: "230px",
+                  fontSize: "20px",
+                  fontWeight: "500",
+                  fontFamily: "Roboto",
+                  ":hover": {
+                    border: "1px solid #221E45",
+                  },
+                  "@media only screen and (min-width: 320px) and (max-width: 768px)":
+                    {
+                      fontSize: "12px",
                     },
-                    '@media only screen and (min-width: 320px) and (max-width: 768px)': {
-                      fontSize: '12px',
+                }),
+                container: (provided) => ({
+                  ...provided,
+                  height: "40px",
+                }),
+                indicatorsContainer: () => ({
+                  color: "#fff",
+                  "@media only screen and (min-width: 1025px) and (max-width: 1399px)":
+                    {
+                      padding: "0 5px",
                     },
-                  }),
-                  container: (provided) => ({
-                    ...provided,
-                    height: '40px',
-                  }),
-                  indicatorsContainer: () => ({
-                    color: '#fff',
-                    '@media only screen and (min-width: 1025px) and (max-width: 1399px)': {
-                      padding: '0 5px',
-                    },
-                    'svg': {
-                      color: '#fff',
-                    },
-                    'div': {
-                      '@media only screen and (min-width: 1025px) and (max-width: 1399px)': {
-                        padding: '8px 0',
+                  svg: {
+                    color: "#fff",
+                  },
+                  div: {
+                    "@media only screen and (min-width: 1025px) and (max-width: 1399px)":
+                      {
+                        padding: "8px 0",
                       },
-                    }
-                  }),
-                  placeholder: () => ({
-                    color: '#1D264F',
-                    fontSize: '20px',
-                    fontWeight: '500',
-                    fontFamily: 'Roboto',
-                    '@media only screen and (min-width: 320px) and (max-width: 768px)': {
-                      fontSize: '12px',
+                  },
+                }),
+                placeholder: () => ({
+                  color: "#1D264F",
+                  fontSize: "20px",
+                  fontWeight: "500",
+                  fontFamily: "Roboto",
+                  "@media only screen and (min-width: 320px) and (max-width: 768px)":
+                    {
+                      fontSize: "12px",
                     },
-                  }),
-                  singleValue: () => ({
-                    fontSize: '20px',
-                    fontWeight: '500',
-                    fontFamily: 'Roboto',
-                    '@media only screen and (min-width: 320px) and (max-width: 768px)': {
-                      fontSize: '12px',
+                }),
+                singleValue: () => ({
+                  fontSize: "20px",
+                  fontWeight: "500",
+                  fontFamily: "Roboto",
+                  "@media only screen and (min-width: 320px) and (max-width: 768px)":
+                    {
+                      fontSize: "12px",
                     },
-                  }),
-                  valueContainer: () => ({
-                    display: 'flex',
-                    alignItems: 'center',
-                    fontFamily: 'Roboto',
-                    '@media only screen and (min-width: 1025px) and (max-width: 1399px)': {
-                      padding: '2px 3px',
+                }),
+                valueContainer: () => ({
+                  display: "flex",
+                  alignItems: "center",
+                  fontFamily: "Roboto",
+                  "@media only screen and (min-width: 1025px) and (max-width: 1399px)":
+                    {
+                      padding: "2px 3px",
                     },
-                  }),
-                  IndicatorContainer: () => ({
-                    '@media only screen and (min-width: 1025px) and (max-width: 1399px)': {
-                      padding: '8px 0',
+                }),
+                IndicatorContainer: () => ({
+                  "@media only screen and (min-width: 1025px) and (max-width: 1399px)":
+                    {
+                      padding: "8px 0",
                     },
-                  }),
-                  menu: (styles) => ({
-                    ...styles,
-                    backgroundColor: '#221E45',
-                    border: '1px solid #221E45',
-                    cursor: 'pointer',
-                    fontSize: '13px',
-                    
-                  }),
-                  option: (styles, { isFocused, isSelected }) => ({
-                    ...styles,
-                    padding: '5px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    width: '100%',
-                    backgroundColor: isSelected ? '#FF2E9A' : isFocused ? '#FF2E9A' : '#221E45',
-                    ':active': {
-                      ...styles[':active'],
-                      backgroundColor: isSelected ? '#FF2E9A' : '#221E45',
-                    },
-                  }),
-                }}
-              ></Select>
-            </SortingSelect>
-            <DiscoverBtn>Discover More</DiscoverBtn>
-         </HeadingWrap>
+                }),
+                menu: (styles) => ({
+                  ...styles,
+                  backgroundColor: "#221E45",
+                  border: "1px solid #221E45",
+                  cursor: "pointer",
+                  fontSize: "13px",
+                }),
+                option: (styles, { isFocused, isSelected }) => ({
+                  ...styles,
+                  padding: "5px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  width: "100%",
+                  backgroundColor: isSelected
+                    ? "#FF2E9A"
+                    : isFocused
+                    ? "#FF2E9A"
+                    : "#221E45",
+                  ":active": {
+                    ...styles[":active"],
+                    backgroundColor: isSelected ? "#FF2E9A" : "#221E45",
+                  },
+                }),
+              }}
+            ></Select>
+          </SortingSelect>
+          <DiscoverBtn>Discover More</DiscoverBtn>
+        </HeadingWrap>
         <div
           id="scrollableDiv"
           style={{ height: "calc(100vh - 115px)", overflow: "auto" }}
@@ -445,6 +455,8 @@ const ListOptionView = ({
                   data={i}
                   key={key}
                   setSelectedListId={setSelectedListId}
+                  selectedList={selectedList}
+                  setSelectedList={setSelectedList}
                 />
               ))
             ) : (

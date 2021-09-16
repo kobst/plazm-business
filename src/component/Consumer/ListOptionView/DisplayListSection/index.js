@@ -36,7 +36,7 @@ const ListSection = styled.div`
     padding: 10px;
   }
   &.SelectedListItem {
-    border: 1px solid #FF2E9A;
+    border: 1px solid #ff2e9a;
     box-shadow: 0px 0px 8px 1px rgba(255, 46, 154, 0.75);
   }
 `;
@@ -323,13 +323,17 @@ const DropdownContent = styled.div`
   }
 `;
 const CustomCheckSquare = styled.div``;
-const DisplayListSection = ({ data, setSelectedListId }) => {
+const DisplayListSection = ({
+  data,
+  setSelectedListId,
+  selectedList,
+  setSelectedList,
+}) => {
   const user = useSelector((state) => state.user.user);
   const [uploadMenu, setUploadMenu] = useState(false);
   const menuRef = useRef(null);
   const dispatch = useDispatch();
   const [image, setImage] = useState(null);
-  const [selectedList, setSelectedList] = useState(null);
 
   /** to check if list view size image exists in bucket */
   useEffect(() => {
@@ -375,7 +379,10 @@ const DisplayListSection = ({ data, setSelectedListId }) => {
 
   return (
     <>
-      <ListSection onClick={()=>setSelectedList(data._id)} className={selectedList === data._id ? "SelectedListItem" : ""}>
+      <ListSection
+        onClick={() => setSelectedList(data._id)}
+        className={selectedList === data._id ? "SelectedListItem" : ""}
+      >
         <ListImageWrap>
           <img src={image} alt="" onError={() => errorFunction()} />
         </ListImageWrap>
