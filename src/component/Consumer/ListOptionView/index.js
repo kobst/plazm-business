@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { IoMdClose } from "react-icons/io";
 import Input from "../../UI/Input/Input";
 import Select from "react-select";
-import selectarrow from "../../../images/sortingselectarrow.png";
 import SearchIcon from "../../../images/subscriptionSearchIcon.svg";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -29,47 +28,24 @@ const ListOptionSection = styled.div`
 `;
 
 const HeadingWrap = styled.div`
-  padding: 0px;
+  padding: 0px 20px;
   display: flex;
-  flex-direction: column;
-`;
-
-const TopHeadingWrap = styled.div`
-  padding: 0 20px;
-  display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   border-bottom: 1px dashed #fff;
+  @media (max-width: 767px) {
+    flex-direction: column;
+    padding: 0 15px 15px;
+  }
 `;
 
-// const CloseDiv = styled.div`
-//   width: 24px;
-//   position: relative;
-//   display: flex;
-//   justify-content: flex-end;
-//   position: absolute;
-//   right: 17px;
-//   cursor: pointer;
-//   top: 17px;
-//   svg {
-//     font-size: 24px;
-//     color: #fff;
-//   }
-// `;
 
 const SortingSelect = styled.div`
   max-width: 200px;
   margin: 15px 0;
-  select {
-    border: 0;
-    color: #fff;
-    font-weight: bold;
-    font-size: 20px;
-    padding-left: 0;
-    background: url(${selectarrow}) no-repeat right 10px center transparent;
-    @media (max-width: 767px) {
-      font-size: 14px;
-    }
-  }
+  span.dropdown-count {
+    margin: 0 0 0 8px;
+  } 
 `;
 
 const SearchWrap = styled.div`
@@ -78,6 +54,7 @@ const SearchWrap = styled.div`
   background: #000;
   align-items: center;
   justify-content: space-between;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.5);
   .SearchSubscriptionsInput {
     background: url(${SearchIcon}) no-repeat right 10px center #fff;
     border: 1px solid #e4e4e4;
@@ -89,6 +66,11 @@ const SearchWrap = styled.div`
     ::placeholder {
       color: #c8c8c8;
     }
+  }
+  @media (max-width: 767px) {
+    flex-direction: column;
+    height: auto;
+    padding: 10px 0;
   }
 `;
 
@@ -135,7 +117,6 @@ const Heading = styled.h1`
     margin: 0 auto 10px;
     width: 100%;
     text-align: center;
-    font-size: 16px;
   }
 `;
 
@@ -143,6 +124,9 @@ const RightSearchWrap = styled.div`
   display: flex;
   max-width: 311px;
   width: 100%;
+  @media (max-width: 767px) {
+    max-width: 200px;
+  }
 `;
 const CloseDiv = styled.div`
   width: 38px;
@@ -161,12 +145,34 @@ const CloseDiv = styled.div`
     font-size: 32px;
     color: #fff;
   }
-  @media (max-width: 479px) {
+  @media (max-width: 767px) {
     left: 0;
     right: inherit;
     width: 30px;
     height: 30px;
   }
+`;
+
+const DiscoverBtn = styled.button`
+  padding: 9px 15px;
+  border: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 12px;
+  color: #ffffff;
+  cursor: pointer;
+  background: #18A7FC;
+  border-radius: 2px;
+  font-family: Montserrat;
+  :hover,
+  :focus {
+    opacity:0.6;
+    outline:none;
+    transition: 0.3s;
+  }
+
 `;
 
 /*
@@ -309,13 +315,7 @@ const ListOptionView = ({
         </CloseDiv>
       </SearchWrap>
         <HeadingWrap>
-          <TopHeadingWrap>
-            {/* <CloseDiv>
-              <IoMdClose onClick={() => setDisplayTab(false)} />
-            </CloseDiv> */}
-
-            {/* react-select implemented */}
-            <SortingSelect>
+          <SortingSelect>
               <Select
                 value={{
                   value: selectedFilter,
@@ -339,21 +339,104 @@ const ListOptionView = ({
                 isSearchable={false}
                 onChange={(val) => selectChange(val)}
                 options={options}
+                styles={{
+                  control: (provided) => ({
+                    ...provided,
+                    flexGrow: 1,
+                    paddingLeft: '0',
+                    height: '100%',
+                    boxShadow: 'none',
+                    border: '1px solid #221E45',
+                    backgroundColor: '#221E45',
+                    color: '#fff',
+                    width: '230px',
+                    fontSize: '20px',
+                    fontWeight: '500',
+                    fontFamily: 'Roboto',
+                    ':hover': {
+                      border: '1px solid #221E45',
+                    },
+                    '@media only screen and (min-width: 320px) and (max-width: 768px)': {
+                      fontSize: '12px',
+                    },
+                  }),
+                  container: (provided) => ({
+                    ...provided,
+                    height: '40px',
+                  }),
+                  indicatorsContainer: () => ({
+                    color: '#fff',
+                    '@media only screen and (min-width: 1025px) and (max-width: 1399px)': {
+                      padding: '0 5px',
+                    },
+                    'svg': {
+                      color: '#fff',
+                    },
+                    'div': {
+                      '@media only screen and (min-width: 1025px) and (max-width: 1399px)': {
+                        padding: '8px 0',
+                      },
+                    }
+                  }),
+                  placeholder: () => ({
+                    color: '#1D264F',
+                    fontSize: '20px',
+                    fontWeight: '500',
+                    fontFamily: 'Roboto',
+                    '@media only screen and (min-width: 320px) and (max-width: 768px)': {
+                      fontSize: '12px',
+                    },
+                  }),
+                  singleValue: () => ({
+                    fontSize: '20px',
+                    fontWeight: '500',
+                    fontFamily: 'Roboto',
+                    '@media only screen and (min-width: 320px) and (max-width: 768px)': {
+                      fontSize: '12px',
+                    },
+                  }),
+                  valueContainer: () => ({
+                    display: 'flex',
+                    alignItems: 'center',
+                    fontFamily: 'Roboto',
+                    '@media only screen and (min-width: 1025px) and (max-width: 1399px)': {
+                      padding: '2px 3px',
+                    },
+                  }),
+                  IndicatorContainer: () => ({
+                    '@media only screen and (min-width: 1025px) and (max-width: 1399px)': {
+                      padding: '8px 0',
+                    },
+                  }),
+                  menu: (styles) => ({
+                    ...styles,
+                    backgroundColor: '#221E45',
+                    border: '1px solid #221E45',
+                    cursor: 'pointer',
+                    fontSize: '13px',
+                    
+                  }),
+                  option: (styles, { isFocused, isSelected }) => ({
+                    ...styles,
+                    padding: '5px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                    backgroundColor: isSelected ? '#FF2E9A' : isFocused ? '#FF2E9A' : '#221E45',
+                    ':active': {
+                      ...styles[':active'],
+                      backgroundColor: isSelected ? '#FF2E9A' : '#221E45',
+                    },
+                  }),
+                }}
               ></Select>
             </SortingSelect>
-          </TopHeadingWrap>
-          {/* <SearchWrap>
-            <Input
-              value={search}
-              className="SearchSubscriptionsInput"
-              placeholder="Search Subscriptions"
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </SearchWrap> */}
-        </HeadingWrap>
+            <DiscoverBtn>Discover More</DiscoverBtn>
+         </HeadingWrap>
         <div
           id="scrollableDiv"
-          style={{ height: "calc(100vh - 175px)", overflow: "auto" }}
+          style={{ height: "calc(100vh - 115px)", overflow: "auto" }}
         >
           <ListingOptionWrap>
             {list.length > 0 ? (
