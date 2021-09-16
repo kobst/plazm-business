@@ -5,9 +5,7 @@ import styled from "styled-components";
 import ValueLoader from "../../../../utils/loader";
 import SearchBar from "../SearchBar";
 import InfiniteScroll from "react-infinite-scroll-component";
-import {
-  HomeSearch,
-} from "../../../../reducers/myFeedReducer";
+import { HomeSearch } from "../../../../reducers/myFeedReducer";
 import error from "../../../../constants";
 import { unwrapResult } from "@reduxjs/toolkit";
 
@@ -81,7 +79,7 @@ const BusinessListing = ({
       }
       setFilterSelected(false);
     };
-    if (loader === false) fetchSearchData();
+    if (loader === false && offset === 0) fetchSearchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     dispatch,

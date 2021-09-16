@@ -51,6 +51,10 @@
       outline: 0;
   }
   
+  .MainTabs .react-tabs__tab--selected svg {
+    color: #fff;
+  }
+
   .MainTabs .react-tabs__tab-panel {
     display: none;
     width: 544px;

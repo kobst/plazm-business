@@ -149,9 +149,8 @@ const DropdownContent = styled.div`
     }
   }
   @media (max-width: 767px) {
-    top: 31px;
-    right: 0;
-    left: -5px;
+    top: 81px;
+    right: -10px;
   }
   ul {
     list-style: none;

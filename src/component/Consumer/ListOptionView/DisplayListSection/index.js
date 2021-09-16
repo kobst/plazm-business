@@ -21,6 +21,7 @@ const ListSection = styled.div`
   flex-direction: row;
   margin: 0px;
   background: #1d193b;
+  border: 1px solid #1d193b;
   :nth-child(even) {
     background-color: #282352;
   }
@@ -33,6 +34,10 @@ const ListSection = styled.div`
   @media (max-width: 767px) {
     /* flex-direction: column; */
     padding: 10px;
+  }
+  &.SelectedListItem {
+    border: 1px solid #ff2e9a;
+    box-shadow: 0px 0px 8px 1px rgba(255, 46, 154, 0.75);
   }
 `;
 
@@ -49,6 +54,10 @@ const ListImageWrap = styled.div`
     height: 100%;
     object-fit: cover;
   }
+  @media (max-width: 767px) {
+    width: 100px;
+    height: 100px;
+  }
 `;
 
 const ListDetailWrap = styled.div`
@@ -57,7 +66,9 @@ const ListDetailWrap = styled.div`
   flex-direction: column;
   padding: 14px 10px 14px 0;
   @media (max-width: 767px) {
-    margin: 8px;
+    margin: 0;
+    padding: 0;
+    width: calc(100% - 100px);
   }
 `;
 
@@ -83,7 +94,7 @@ const ListHeading = styled.div`
   -webkit-box-orient: vertical;
   overflow: hidden;
   @media (max-width: 767px) {
-    width: calc(100% - 30px);
+    width: 100%;
   }
 `;
 
@@ -94,6 +105,7 @@ const DotsDiv = styled.div`
   cursor: pointer;
   @media (max-width: 767px) {
     position: relative;
+    justify-content: flex-end;
   }
   svg {
     font-size: 14px;
@@ -157,7 +169,7 @@ const BottomMoreSections = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  @media (max-width: 479px) {
+  @media (max-width: 767px) {
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
@@ -168,7 +180,7 @@ const LeftDiv = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  @media (max-width: 479px) {
+  @media (max-width: 767px) {
     margin: 0 0 10px;
   }
 `;
@@ -194,6 +206,11 @@ const LastDiv = styled.div`
   font-size: 12px;
   color: #fff;
   margin: 0;
+  @media (max-width: 767px) {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
 `;
 
 const LockDiv = styled.div`
@@ -230,7 +247,7 @@ const SubscribedBtn = styled.button`
     outline: 0;
   }
   @media (max-width: 767px) {
-    margin: 0 10px 0 0;
+    margin: 0 0px 10px 0;
   }
 `;
 
@@ -252,7 +269,7 @@ const MyListBtn = styled.button`
     outline: 0;
   }
   @media (max-width: 767px) {
-    margin: 0 10px 0 0;
+    margin: 0 0px 10px 0;
   }
 `;
 
@@ -306,7 +323,12 @@ const DropdownContent = styled.div`
   }
 `;
 const CustomCheckSquare = styled.div``;
-const DisplayListSection = ({ data, setSelectedListId }) => {
+const DisplayListSection = ({
+  data,
+  setSelectedListId,
+  selectedList,
+  setSelectedList,
+}) => {
   const user = useSelector((state) => state.user.user);
   const [uploadMenu, setUploadMenu] = useState(false);
   const menuRef = useRef(null);
@@ -357,7 +379,10 @@ const DisplayListSection = ({ data, setSelectedListId }) => {
 
   return (
     <>
-      <ListSection>
+      <ListSection
+        onClick={() => setSelectedList(data._id)}
+        className={selectedList === data._id ? "SelectedListItem" : ""}
+      >
         <ListImageWrap>
           <img src={image} alt="" onError={() => errorFunction()} />
         </ListImageWrap>
