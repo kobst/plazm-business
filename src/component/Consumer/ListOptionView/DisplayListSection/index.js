@@ -417,7 +417,14 @@ const DisplayListSection = ({
                   ? data.followers.slice(0, 8).map((i, key) => {
                       return (
                         <FollowersList key={key}>
-                          <img src={i.photo ? i.photo : FollwersImg} alt="" />
+                          <img
+                            src={
+                              i.userId && i.userId.photo
+                                ? i.userId.photo
+                                : FollwersImg
+                            }
+                            alt=""
+                          />
                         </FollowersList>
                       );
                     })
