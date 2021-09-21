@@ -6,6 +6,12 @@ export const TopSectionWrap = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 15px 30px;
+  @media (max-width:767px){ 
+    padding: 15px;
+  }
+  @media (max-width:479px){ 
+    flex-direction: column;
+  }
   .BackButtonArrow {
     background: #FF2E9A;
     border-radius: 3px;
@@ -30,6 +36,9 @@ export const TopSectionWrap = styled.div`
 export const LeftWrap = styled.div`
   display: flex;
   align-items: center;
+  @media (max-width:479px){ 
+    margin-bottom: 10px;
+  }
 `
 
 export const TotalNum = styled.div`
@@ -67,3 +76,278 @@ export const RightSearchWrap = styled.div`
   }
 `
 
+export const FeatureWrapper = styled.div`
+  position: relative;
+  margin: 0;
+  width: 100%;
+`
+
+export const FeatureContainer = styled.div`
+  width: 100%;
+  position: relative;
+  padding: 0;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+`
+
+export const MainHeading = styled.h1`
+  padding: 0 0 10px 30px;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  text-align: left;
+  color: #fff;
+  position: relative;
+`
+export const NewInBuzzSliderWrapper = styled.div`
+  position: relative;
+  margin: 0;
+  padding: 0 0 10px;
+  width: 100%;
+  display: flex;
+  overflow-x: scroll;
+  /* width */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 5px;
+    cursor: pointer;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #fff; 
+    border-radius: 10px;
+    cursor: pointer;
+    width: 8px;
+    height: 5px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #fff; 
+  }
+
+`;
+
+export const ItemsWrapper = styled.div`
+  position: relative;
+  margin: 0 6px;
+  padding: 0;
+  text-align: center;
+  min-height: 100%;
+  width: 250px;
+`;
+export const CoverImg = styled.div`
+  margin: 0px;
+  height: 200px;
+  display: flex;
+  align-items: flex-start;
+  /* overflow: hidden; */
+  width: 100%;
+  padding: 0;
+  justify-content: center;
+  width: 250px;
+  &:hover {
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+  }
+`;
+
+export const ItemsDescription = styled.div`
+  padding: 15px;
+  position: absolute;
+  bottom: 0;
+  background: linear-gradient(360deg, #000000 0%, rgba(7, 3, 46, 0) 91.23%);
+  :hover {
+    .InnerModal {
+      visibility: visible;
+    }
+  }
+`;
+
+export const CollectionPara = styled.p`
+  padding: 0;
+  margin: 0;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: normal;
+  text-align: left;
+  color: #fff;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  cursor: pointer;
+`;
+
+export const Lock = styled.div`
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+`;
+
+export const DisplayItemContent = styled.div`
+  position: fixed;
+  left: ${(props) => props.offsetLeft || 0}px;
+  top: ${(props) => props.offsetTop || 0}px;
+  background: #000000;
+  border: 1px solid #FF2E9A;
+  box-sizing: border-box;
+  border-radius: 2px;
+  padding: 15px 15px 20px;
+  width: 320px;
+  z-index: 1000;
+  &.InnerModal {
+    visibility: hidden;
+  }
+`;
+
+export const InnerCoverImg = styled.div`
+  margin: 0px;
+  height: 220px;
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  padding: 0;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+  &:hover {
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    max-height: 220px;
+    object-fit: cover;
+    z-index: -1;
+  }
+`;
+
+export const InnerItemsDescription = styled.div`
+  padding: 15px;
+  position: absolute;
+  bottom: 0;
+  background: linear-gradient(360deg, #000000 0%, rgba(7, 3, 46, 0) 91.23%);
+  :hover {
+    .InnerModal {
+      visibility: visible;
+    }
+  }
+`;
+
+export const InnerCollectionPara = styled.p`
+  padding: 0;
+  margin: 0;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: normal;
+  text-align: left;
+  color: #fff;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  cursor: pointer;
+`;
+
+export const AuthorInfo = styled.div`
+  font-weight: 500;
+  font-size: 11px;
+  color: #FFFFFF;
+  text-align: left;
+  padding: 0 15px 5px;
+  strong {
+    font-weight: 700;
+    color: #FF2E9A;
+  }
+`;
+
+export const FollowedBy = styled.div`
+  display: flex;
+  padding: 0 15px 15px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  h2 {
+    font-weight: 500;
+    font-size: 10px;
+    color: #fff;
+    text-align: left;
+    padding: 0 0 5px 0;
+    margin: 0;
+  }
+`;
+
+export const FollowedByListUl = styled.ul`
+  display: flex;
+  padding: 0;
+  list-style: none;
+  flex-direction: row;
+  align-items: center;
+  li {
+    list-style: none;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    border: 0.5px solid #FFFFFF;
+    filter: drop-shadow(1px 0px 2px rgba(0, 0, 0, 0.25));
+    overflow: hidden;
+    margin: 0 -5px 0 0;
+    padding: 0;
+    img {
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+    }
+  }
+  .MorePlus {
+    font-weight: 500;
+    font-size: 10px;
+    color: #FFFFFF;
+    margin: 0 0 0 15px;
+  }
+`;
+
+export const InnerDescriptionPara = styled.p`
+  padding: 0 15px 15px;
+  margin: 0;
+  font-weight: 500;
+  font-size: 11px;
+  line-height: normal;
+  color: #fff;
+  text-align: justify;
+  strong {
+    font-weight: 700;
+    color: #FF2E9A;
+    font-style: italic;
+    cursor: pointer;
+  }
+`;
+
+export const SubscribeBtn = styled.button`
+  background: #FF2E9A;
+  border-radius: 2px;
+  height:25px;
+  font-size: 9px;
+  line-height: 11px;
+  cursor:pointer;
+  border:none;
+  color:#fff;
+  font-weight:700;
+  width:90%;
+  font-family: 'Roboto', sans-serif;
+  :hover,:focus{
+    opacity: 0.8;
+  }
+`

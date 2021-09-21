@@ -97,6 +97,24 @@
       -o-animation: fadein .5s; /* Opera */
     }
 
+    @media (max-width:1599px){ 
+      .MainTabs .DiscoverWrapper{ 
+        width: 90vw;
+      }     
+    }
+    @media (max-width:1024px){ 
+      .MainTabs .DiscoverWrapper{ 
+        width: 85vw;
+      }     
+    }
+    
+    @media (min-width:480px) and (max-width:767px) and (orientation: landscape) { 
+      .MainTabs .DiscoverWrapper{ 
+        width: 80vw !important;
+      } 
+    }
+    
+
 @keyframes fadein {
     from {
         opacity:0;
