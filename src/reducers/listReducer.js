@@ -11,6 +11,8 @@ import {
   UnsubscribeToAList,
   SubscribeToAList,
   DeletePostFromAList,
+  getMostTrendingLists,
+  getMostPopularLists,
 } from "../graphQl";
 
 /*
@@ -137,6 +139,32 @@ export const SubscribeToAListAction = createAsyncThunk(
   }
 );
 
+/*
+ * @desc:  to fetch trending lists
+ * @params: value
+ */
+export const FetchTrendingLists = createAsyncThunk(
+  "data/FetchTrendingLists",
+  async (value) => {
+    const graphQl = getMostTrendingLists(value);
+    const response = await graphQlEndPoint(graphQl);
+    return response;
+  }
+);
+
+/*
+ * @desc:  to fetch most popular lists
+ * @params: value
+ */
+export const FetchMostPopularLists = createAsyncThunk(
+  "data/FetchMostPopularLists",
+  async (value) => {
+    const graphQl = getMostPopularLists(value);
+    const response = await graphQlEndPoint(graphQl);
+    return response;
+  }
+);
+
 export const slice = createSlice({
   name: "list",
   initialState: {
@@ -155,6 +183,12 @@ export const slice = createSlice({
     loadingUnSubscribe: false,
     loadingSubscribe: false,
     filteredList: [],
+    loadingTrendingLists: false,
+    trendingLists: [],
+    totalTrendingList: 0,
+    loadingPopularLists: false,
+    popularLists: [],
+    totalPopularLists: 0,
   },
   reducers: {
     clearListData: (state, action) => {
@@ -172,7 +206,7 @@ export const slice = createSlice({
       );
     },
     filterByAll: (state) => {
-      state.filteredList = state.data
+      state.filteredList = state.data;
     },
   },
   extraReducers: {
@@ -285,9 +319,53 @@ export const slice = createSlice({
         state.error = action.payload;
       }
     },
+    [FetchTrendingLists.pending]: (state) => {
+      if (!state.loadingTrendingLists) {
+        state.loadingTrendingLists = true;
+      }
+    },
+    [FetchTrendingLists.fulfilled]: (state, action) => {
+      if (state.loadingTrendingLists) {
+        state.loadingTrendingLists = false;
+        if (action.payload) {
+          state.trendingLists = state.trendingLists.concat(action.payload.list);
+          state.totalTrendingList = action.payload.totalLists;
+        }
+      }
+    },
+    [FetchTrendingLists.rejected]: (state, action) => {
+      if (state.loadingTrendingLists) {
+        state.loadingTrendingLists = false;
+        state.error = action.payload;
+      }
+    },
+    [FetchMostPopularLists.pending]: (state) => {
+      if (!state.loadingPopularLists) {
+        state.loadingPopularLists = true;
+      }
+    },
+    [FetchMostPopularLists.fulfilled]: (state, action) => {
+      if (state.loadingPopularLists) {
+        state.loadingPopularLists = false;
+        if (action.payload) {
+          state.popularLists = state.popularLists.concat(action.payload.list);
+          state.totalPopularLists = action.payload.totalLists;
+        }
+      }
+    },
+    [FetchMostPopularLists.rejected]: (state, action) => {
+      if (state.loadingPopularLists) {
+        state.loadingPopularLists = false;
+        state.error = action.payload;
+      }
+    },
   },
 });
 
-export const { clearListData, filterSubscribedLists, filterUserCreatedLists, filterByAll } =
-  slice.actions;
+export const {
+  clearListData,
+  filterSubscribedLists,
+  filterUserCreatedLists,
+  filterByAll,
+} = slice.actions;
 export default slice.reducer;

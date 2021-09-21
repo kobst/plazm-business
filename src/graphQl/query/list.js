@@ -169,4 +169,81 @@ const GetListDetails = (obj) => {
   return graphQl;
 };
 
-export { getAllLists, getUserLists, getUserCreatedAndFollowedLists, GetListDetails };
+/*
+@desc: getMostTrendingLists query
+*/
+const getMostTrendingLists = (value) => {
+  const graphQl = {
+    query: `
+          query FetchMostTrendingLists($value: Int){
+            fetchMostTrendingLists(input: {value: $value}) {
+              message
+              success
+              totalLists
+              list {
+                _id
+                name
+                description
+                isPublic
+                ownerId {
+                  _id
+                  name
+                }
+                followers {
+                _id
+                name
+                photo
+                }
+                updatedAt
+                }
+              }
+          }`,
+    variables: {
+      value: value,
+    },
+  };
+  return graphQl;
+};
+
+/*
+@desc: getMostPopularLists query
+*/
+const getMostPopularLists = (value) => {
+  const graphQl = {
+    query: `
+          query FetchMostPopularLists($value: Int){
+            fetchMostPopularLists(input: {value: $value}) {
+              message
+              success
+              totalLists
+              list {
+                _id
+                name
+                description
+                followers {
+                  userId {
+                  _id
+                  name
+                  photo
+                  }
+                  created_on
+                }
+                updatedAt
+              }
+            }
+          }`,
+    variables: {
+      value: value,
+    },
+  };
+  return graphQl;
+};
+
+export {
+  getAllLists,
+  getUserLists,
+  getUserCreatedAndFollowedLists,
+  GetListDetails,
+  getMostTrendingLists,
+  getMostPopularLists
+};
