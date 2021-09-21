@@ -140,8 +140,26 @@ export const ItemsWrapper = styled.div`
   margin: 0 6px;
   padding: 0;
   text-align: center;
-  min-height: 100%;
   width: 250px;
+  &.SearchItemsWrapper {
+    margin: 0 5px 10px;
+    width: 16%;
+    @media (max-width: 1599px) {
+      width: 19%;
+    }
+    @media (max-width: 1024px) {
+      width: 22%;
+    }
+    @media (max-width: 991px) {
+      width: 30%;
+    }
+    @media (max-width: 767px) {
+      width: 43%;
+    }
+    @media (max-width: 479px) {
+      width: 100%;
+    }
+  }
 `;
 export const CoverImg = styled.div`
   margin: 0px;
@@ -160,6 +178,9 @@ export const CoverImg = styled.div`
     height: 100%;
     object-fit: cover;
     z-index: -1;
+  }
+  &.SearchCoverImg {
+    width: 100%;
   }
 `;
 
@@ -351,3 +372,56 @@ export const SubscribeBtn = styled.button`
     opacity: 0.8;
   }
 `
+
+export const ListResultHeading = styled.h1`
+  padding: 15px 0 10px 30px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  text-align: left;
+  color: #fff;
+  position: relative;
+  span {
+    color: #FF2E9A;
+  }
+  @media (max-width: 767px){ 
+    font-size: 18px;
+  }
+`
+
+export const SearchItemsContainer = styled.div`
+  position: relative;
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  height: calc(100vh - 140px);
+  overflow-y: auto;
+  padding: 10px 25px;
+  /* width */
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    cursor: pointer;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #fff; 
+    border-radius: 10px;
+    cursor: pointer;
+    width: 5px;
+    height: 5px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #fff; 
+  }
+
+`;

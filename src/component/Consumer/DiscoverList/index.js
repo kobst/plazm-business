@@ -1,6 +1,7 @@
 import React from "react";
 import { MdChevronLeft } from "react-icons/md";
 import Input from "../../UI/Input/Input";
+import SearchSection from "./SearchSection";
 import SliderSection from "./SliderSection";
 import {TopSectionWrap, LeftWrap, TotalNum, RightSearchWrap} from './styled.js'
 
@@ -24,7 +25,8 @@ const DiscoverList = ({ setDiscoverBtn }) => {
             />
           </RightSearchWrap>  
       </TopSectionWrap>
-      <SliderSection />
+      {/* <SliderSection /> */}
+      <SearchSection />
     </>
   );
 };
