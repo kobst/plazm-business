@@ -1,7 +1,7 @@
-import React, {useState} from 'react'
-import styled from 'styled-components'
-import PropTypes from 'prop-types'
-import NewInBuzzItems from './SliderItems'
+import React from "react";
+import styled from "styled-components";
+import PropTypes from "prop-types";
+import NewInBuzzItems from "./SliderItems";
 
 const NewInBuzzSliderWrapper = styled.div`
   position: relative;
@@ -11,132 +11,122 @@ const NewInBuzzSliderWrapper = styled.div`
   display: flex;
   overflow-x: scroll;
   .wdfdg {
-
   }
-`
+`;
 
-const NewCollectionSectionSlider = ({  }) => {
-  
-
-
+const NewCollectionSectionSlider = () => {
   return (
     <>
       <NewInBuzzSliderWrapper>
-        
-       
-            
-   
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-                <NewInBuzzItems />
-
-  
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
+        <NewInBuzzItems />
       </NewInBuzzSliderWrapper>
     </>
-  )
-}
+  );
+};
 
 NewCollectionSectionSlider.propTypes = {
   buzzArticles: PropTypes.array,
-}
+};
 
-export default NewCollectionSectionSlider
+export default NewCollectionSectionSlider;
