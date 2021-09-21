@@ -534,7 +534,7 @@ const LeftBar = ({
               )}
             </div>
           </TabPanel>
-          <TabPanel>
+          <TabPanel className={discoverBtn ? "DiscoverWrapper" : ""}>
             <div className="panel-content">
               {!selectedListId && !userDataId && !discoverBtn ? (
                 <ListOptionView
