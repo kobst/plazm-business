@@ -19,7 +19,10 @@ import ChangePassword from "../../../Consumer/ChangePassword";
 import ProfileSettings from "../../../Consumer/ProfileSettings";
 import HomeSearchComponent from "../../../Consumer/HomeSearch";
 import { useHistory } from "react-router-dom";
-import { clearBusinessData } from "../../../../reducers/businessReducer";
+import {
+  clearBusinessData,
+  clearTopPost,
+} from "../../../../reducers/businessReducer";
 import { FiSearch, FiHome, FiHeart } from "react-icons/fi";
 import { BsListUl, BsThreeDots } from "react-icons/bs";
 import PolygonArrow from "../../../../images/Polygon.png";
@@ -181,6 +184,8 @@ const LeftBar = ({
   const listView = () => {
     if (tabIndex !== 5 && !loading) {
       dispatch(clearMyFeedData());
+      dispatch(clearBusinessData());
+      dispatch(clearTopPost());
       setSelectedListId(null);
       setListIndex(null);
       setUserDataId(null);
@@ -201,12 +206,15 @@ const LeftBar = ({
       history.push("/");
       dispatch(clearMyFeedData());
       dispatch(fetchMyFeedData(obj));
+      dispatch(clearBusinessData());
+      dispatch(clearTopPost());
     }
   };
 
   /** to clear selected data on tab click */
   const favoriteFunction = () => {
     dispatch(clearBusinessData());
+    dispatch(clearTopPost());
     setFavoriteIndex(null);
     setSelectedListId(null);
     setUserDataId(null);
@@ -230,6 +238,8 @@ const LeftBar = ({
       // dispatch(HomeSearch(obj));
       setUserDataId(null);
       setSelectedListId(null);
+      dispatch(clearBusinessData());
+      dispatch(clearTopPost());
       setSearchIndex(null)
       history.push("/");
     }

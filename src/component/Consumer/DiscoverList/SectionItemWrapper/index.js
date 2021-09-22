@@ -19,8 +19,9 @@ const SectionItemWrapper = ({
   const loading = useSelector((state) => state.list.loadingSearchList);
   const [hasMore, setHasMore] = useState(true);
   const dispatch = useDispatch();
+
+  /** to fetch more lists */
   const fetchMoreList = () => {
-    console.log("func called");
     if (offset + 30 < totalList) {
       setOffSet(offset + 30);
       dispatch(SearchListApi({ value: offset + 30, search: listSearch }));
@@ -44,15 +45,15 @@ const SectionItemWrapper = ({
             ) : null
           }
           scrollableTarget="scrollableDiv"
-          endMessage={
-            searchList.length > 30 && !loading ? (
-              <center>
-                <NoMorePost className="noMorePost">
-                  No more List to show
-                </NoMorePost>
-              </center>
-            ) : null
-          }
+          // endMessage={
+          //   searchList.length > 30 && !loading ? (
+          //     <center>
+          //       <NoMorePost className="noMorePost">
+          //         No more List to show
+          //       </NoMorePost>
+          //     </center>
+          //   ) : null
+          // }
         >
           {searchList &&
             searchList.length > 0 &&
@@ -68,6 +69,9 @@ const SectionItemWrapper = ({
               );
             })}
         </InfiniteScroll>
+        {!hasMore && searchList.length > 30 && !loading ? (
+          <NoMorePost className="noMorePost">No more List to show</NoMorePost>
+        ) : null}
       </SearchItemsContainer>
     </>
   );

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MdChevronLeft } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
+import { unwrapResult } from "@reduxjs/toolkit";
 import {
   clearListSearchData,
   FetchMostPopularLists,
@@ -43,26 +44,38 @@ const DiscoverList = ({ setDiscoverBtn, setSelectedListId, setReadMore }) => {
   const listSearch = useSelector((state) => state.list.listSearch);
   const [searchError, setSearchError] = useState("");
   const [search, setSearch] = useState("");
+  const [offset, setOffSet] = useState(0);
+  const [offsetPopular, setOffSetPopular] = useState(0);
+  const [loader, setLoader] = useState(false);
+  const [flag, setFlag] = useState(true);
+  const [displayTrendingModel, setDisplayTrendingModel] = useState(false)
+  const [selectedId, setSelectedId] = useState(null)
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     /** to fetch most trending list data */
-  //     dispatch(FetchTrendingLists(0));
-  //     /** to fetch most popular list data */
-  //     dispatch(FetchMostPopularLists(0));
-  //   };
-  //   fetchData();
-  // }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      /** to fetch most trending list data */
+      const trending = await dispatch(FetchTrendingLists(0));
+      const resTrending = await unwrapResult(trending);
+      /** to fetch most popular list data */
+      const popular = await dispatch(FetchMostPopularLists(0));
+      const resPopular = await unwrapResult(popular);
+      if (resTrending && resPopular) {
+        setFlag(false);
+      }
+    };
+    (offset === 0 || offsetPopular === 0) && fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /** search data */
   const searchListsData = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      if (search !== "" && search.length >= 1 && !search.trim() === false) {
+      if (search !== "" && search.length >= 4 && !search.trim() === false) {
         dispatch(clearListSearchData());
         dispatch(setListSearch(event.target.value));
         setSearchError("");
-      } else if (search.length >= 0 && search.length < 1) {
+      } else if (search.length >= 0 && search.length < 4) {
         setSearchError(error.SEARCH_ERROR);
       }
     }
@@ -82,7 +95,7 @@ const DiscoverList = ({ setDiscoverBtn, setSelectedListId, setReadMore }) => {
       setSearch("");
     }
   };
-  return (
+  return (!loadindTrending && !flag) || (!loadingPopular && !flag) ? (
     <>
       <TopSectionWrap>
         <LeftWrap>
@@ -121,6 +134,14 @@ const DiscoverList = ({ setDiscoverBtn, setSelectedListId, setReadMore }) => {
             setSelectedListId={setSelectedListId}
             setDiscoverBtn={setDiscoverBtn}
             setReadMore={setReadMore}
+            offset={offset}
+            setOffSet={setOffSet}
+            loader={loader}
+            setLoader={setLoader}
+            modal={displayTrendingModel}
+            setModal={setDisplayTrendingModel}
+            setSelectedId={setSelectedId}
+            selectedId={selectedId}
           />
           <SliderSection
             heading="Most Popular"
@@ -129,16 +150,23 @@ const DiscoverList = ({ setDiscoverBtn, setSelectedListId, setReadMore }) => {
             setSelectedListId={setSelectedListId}
             setDiscoverBtn={setDiscoverBtn}
             setReadMore={setReadMore}
+            offset={offsetPopular}
+            setOffSet={setOffSetPopular}
+            loader={loader}
+            setLoader={setLoader}
+            modal={displayTrendingModel}
+            setModal={setDisplayTrendingModel}
+            setSelectedId={setSelectedId}
+            selectedId={selectedId}
           />
         </>
       )}
     </>
+  ) : (
+    <LoaderWrap>
+      <ValueLoader />
+    </LoaderWrap>
   );
-  // ) : (
-  //   <LoaderWrap>
-  //     <ValueLoader />
-  //   </LoaderWrap>
-  // );
 };
 
 export default DiscoverList;

@@ -1,14 +1,12 @@
-import React, { useRef, useState, useEffect, useCallback } from "react";
-import PropTypes from "prop-types";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import NewInBuzzItems from "./SliderItems";
 import { LoaderWrap, NewInBuzzSliderWrapper, NoMorePost } from "../styled";
-import { useDispatch, useSelector } from "react-redux";
 import {
   FetchMostPopularLists,
   FetchTrendingLists,
 } from "../../../../reducers/listReducer";
 import ValueLoader from "../../../../utils/loader";
-import useFetch from "../../../../utilities/infinite-scroll";
 
 const NewCollectionSectionSlider = ({
   data,
@@ -16,76 +14,47 @@ const NewCollectionSectionSlider = ({
   heading,
   setSelectedListId,
   setDiscoverBtn,
-  setReadMore
+  setReadMore,
+  offset,
+  setOffSet,
+  loader,
+  setLoader,
+  modal,
+  setModal,
+  selectedId,
+  setSelectedId
 }) => {
   const [displayModal, setDisplayModal] = useState(null);
-  const [offset, setOffSet] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
   const dispatch = useDispatch();
-  const loadindTrending = useSelector(
-    (state) => state.list.loadingTrendingLists
-  );
-  const loadingPopular = useSelector((state) => state.list.loadingPopularLists);
-  const loader = useRef(null);
+  const trendingLists = useSelector((state) => state.list.trendingLists);
+  const popularLists = useSelector((state) => state.list.popularLists);
 
-  const { loading, error } = useFetch(offset, heading);
-  console.log(loading, error, offset);
-
-  const handleObserver = useCallback((entries) => {
-    console.log("**1")
-    const target = entries[0];
-    if (target.isIntersecting) {
-      setOffSet((prev) => prev + 12);
+  /** fetch more data when scrollbar reaches end */
+  const fetchMoreLists = (event) => {
+    if (
+      event.target.scrollLeft + event.target.offsetWidth ===
+        event.target.scrollWidth &&
+      offset <= totalList
+    ) {
+      if (heading === "Trending" && trendingLists.length === offset + 12) {
+        setLoader(true);
+        setOffSet(offset + 12);
+        dispatch(FetchTrendingLists(offset + 12));
+      } else if (
+        heading !== "Trending" &&
+        popularLists.length === offset + 12
+      ) {
+        setLoader(true);
+        setOffSet(offset + 12);
+        dispatch(FetchMostPopularLists(offset + 12));
+      }
+    } else {
+      setLoader(false);
     }
-  }, []);
-
-  useEffect(() => {
-    console.log("**2")
-    const option = {
-      root: document.getElementById("divRoot"+heading),
-      rootMargin: "0px",
-      threshold: 0.25
-    };
-    const observer = new IntersectionObserver(handleObserver, option);
-    if (loader.current) observer.observe(loader.current);
-  }, [handleObserver]);
-
-  // const fetchMoreLists = () => {
-  //   console.log(heading, "fetch more called");
-  //   if (offset + 12 < totalList) {
-  //     setOffSet(offset + 12);
-  //     if (heading === "Trending") {
-  //       dispatch(FetchTrendingLists(offset));
-  //     } else {
-  //       dispatch(FetchMostPopularLists(offset));
-  //     }
-  //   } else setHasMore(false);
-  // };
+  };
   return (
     <div>
-      <NewInBuzzSliderWrapper id={"divRoot"+heading}>
-        {/* {((!loadindTrending && heading === "Trending") ||
-          (!loadingPopular && heading !== "Trending")) &&
-        data.length > 0 ? (
-          data.map((i, key) => (
-            <NewInBuzzItems
-              data={i}
-              key={key}
-              heading={heading}
-              setSelectedListId={setSelectedListId}
-              setDiscoverBtn={setDiscoverBtn}
-            />
-          ))
-        ) : (loadindTrending && heading === "Trending") ||
-          (loadingPopular && heading !== "Trending") ? (
-          <LoaderWrap>
-            <ValueLoader />
-          </LoaderWrap>
-        ) : (
-          <center>
-            <NoMorePost>No Lists to display</NoMorePost>
-          </center>
-        )} */}
+      <NewInBuzzSliderWrapper onScroll={(e) => fetchMoreLists(e)}>
         {data.map((i, key) => (
           <NewInBuzzItems
             data={i}
@@ -96,18 +65,20 @@ const NewCollectionSectionSlider = ({
             displayModal={displayModal}
             setDisplayModal={setDisplayModal}
             setReadMore={setReadMore}
+            modal={modal}
+            setModal={setModal}
+            setSelectedId={setSelectedId}
+            selectedId={selectedId}
           />
         ))}
-        {loading && <p>Loading...</p>}
-        {error && <p>Error!</p>}
-        <div ref={loader} />
+        {loader && (
+          <LoaderWrap>
+            <ValueLoader />
+          </LoaderWrap>
+        )}
+        {!loader && <NoMorePost>No More Lists To Display</NoMorePost>}
       </NewInBuzzSliderWrapper>
     </div>
   );
 };
-
-NewCollectionSectionSlider.propTypes = {
-  buzzArticles: PropTypes.array,
-};
-
 export default NewCollectionSectionSlider;

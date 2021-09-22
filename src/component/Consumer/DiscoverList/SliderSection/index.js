@@ -8,7 +8,15 @@ const SliderSection = ({
   totalList,
   setSelectedListId,
   setDiscoverBtn,
-  setReadMore
+  setReadMore,
+  offset,
+  setOffSet,
+  loader,
+  setLoader,
+  modal,
+  setModal,
+  selectedId,
+  setSelectedId
 }) => {
   return (
     <>
@@ -22,6 +30,14 @@ const SliderSection = ({
             setSelectedListId={setSelectedListId}
             setDiscoverBtn={setDiscoverBtn}
             setReadMore={setReadMore}
+            offset={offset}
+            setOffSet={setOffSet}
+            loader={loader}
+            setLoader={setLoader}
+            modal={modal}
+            setModal={setModal}
+            setSelectedId={setSelectedId}
+            selectedId={selectedId}
           />
         </FeatureContainer>
       </FeatureWrapper>

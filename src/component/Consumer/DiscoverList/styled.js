@@ -233,6 +233,7 @@ export const CoverImg = styled.div`
 `;
 
 export const ItemsDescription = styled.div`
+  width: 100%;
   padding: 15px;
   position: absolute;
   bottom: 0;
@@ -266,6 +267,7 @@ export const InnerCoverImg = styled.div`
 `;
 
 export const InnerItemsDescription = styled.div`
+  width: 100%;
   padding: 15px;
   position: absolute;
   bottom: 0;
@@ -437,13 +439,12 @@ export const SearchItemsContainer = styled.div`
 
   .infinite-scroll-component__outerdiv {
     width: 100%;
-    .infinite-scroll-component  {
+    .infinite-scroll-component {
       width: 100%;
       display: flex;
       flex-flow: row wrap;
     }
   }
-  
 `;
 
 export const NoMorePost = styled.p`
@@ -452,6 +453,10 @@ export const NoMorePost = styled.p`
   line-height: normal;
   margin: 0 0 5px;
   color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 `;
 
 export const ErrorDiv = styled.div`

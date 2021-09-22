@@ -648,6 +648,8 @@ export const slice = createSlice({
             comments: [],
             likes: obj.likes !== null ? obj.likes : [],
           }));
+          if(state.filterByClosest || state.filterByUpdatedAt) 
+          state.myFeed = []
           state.myFeed = state.myFeed.concat(data);
           state.totalData = action.payload.totalPlaces;
         }
