@@ -13,7 +13,6 @@ import {
   clearMyFeedData,
   setSearchData,
   fetchMyFeedData,
-  HomeSearch,
 } from "../../../../reducers/myFeedReducer";
 import Profile from "../../../Consumer/Profile";
 import ChangePassword from "../../../Consumer/ChangePassword";
@@ -156,6 +155,7 @@ const LeftBar = ({
   const [profileClosed, setProfileClosed] = useState(false);
   const [userDataId, setUserDataId] = useState(userId);
   const [discoverBtn, setDiscoverBtn] = useState(false);
+  const [readMore, setReadMore] = useState(false)
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -218,18 +218,19 @@ const LeftBar = ({
   const homeSearchFunction = () => {
     setFavoriteIndex(null);
     if (tabIndex !== 1 && !loading) {
-      const obj = {
-        search: "",
-        value: 0,
-        filters: { closest: false, updated: false },
-        latitude: process.env.REACT_APP_LATITUDE,
-        longitude: process.env.REACT_APP_LONGITUDE,
-      };
+      // const obj = {
+      //   search: "",
+      //   value: 0,
+      //   filters: { closest: false, updated: false },
+      //   latitude: process.env.REACT_APP_LATITUDE,
+      //   longitude: process.env.REACT_APP_LONGITUDE,
+      // };
       dispatch(setSearchData(""));
       dispatch(clearMyFeedData());
-      dispatch(HomeSearch(obj));
+      // dispatch(HomeSearch(obj));
       setUserDataId(null);
       setSelectedListId(null);
+      setSearchIndex(null)
       history.push("/");
     }
   };
@@ -545,12 +546,15 @@ const LeftBar = ({
                 />
               ) : !listIndex && !userDataId && !discoverBtn ? (
                 <ListDescriptionView
+                  listOpenedFromBusiness={true}
                   setDisplayTab={() => setTabIndex(0)}
                   setSelectedListId={setSelectedListId}
                   selectedListId={selectedListId}
                   listClickedFromSearch={listClickedFromSearch}
                   setListClickedFromSearch={setListClickedFromSearch}
                   setListIndex={setListIndex}
+                  readMore={readMore}
+                  setDiscoverBtn={setDiscoverBtn}
                 />
               ) : userDataId && !discoverBtn ? (
                 <Profile
@@ -558,8 +562,12 @@ const LeftBar = ({
                   userId={userDataId}
                   setProfileClosed={setProfileClosed}
                 />
-              ) : discoverBtn ? (
-                <DiscoverList setDiscoverBtn={setDiscoverBtn} />
+              ) : discoverBtn && !selectedListId ? (
+                <DiscoverList
+                  setDiscoverBtn={setDiscoverBtn}
+                  setSelectedListId={setSelectedListId}
+                  setReadMore={setReadMore}
+                />
               ) : (
                 <BuisinessView
                   setDisplayTab={() => setTabIndex(0)}

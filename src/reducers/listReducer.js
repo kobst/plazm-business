@@ -148,7 +148,7 @@ export const FetchTrendingLists = createAsyncThunk(
   async (value) => {
     const graphQl = getMostTrendingLists(value);
     const response = await graphQlEndPoint(graphQl);
-    return response;
+    return response.data.fetchMostTrendingLists;
   }
 );
 
@@ -161,7 +161,7 @@ export const FetchMostPopularLists = createAsyncThunk(
   async (value) => {
     const graphQl = getMostPopularLists(value);
     const response = await graphQlEndPoint(graphQl);
-    return response;
+    return response.data.fetchMostPopularLists;
   }
 );
 
@@ -194,6 +194,12 @@ export const slice = createSlice({
     clearListData: (state, action) => {
       state.data = [];
       state.filteredList = [];
+      state.popularLists = [];
+      state.trendingLists = [];
+    },
+    clearDiscoverPageData: (state, action) => {
+      state.popularLists = [];
+      state.trendingLists = [];
     },
     filterUserCreatedLists: (state, action) => {
       state.filteredList = current(state.data).filter(
@@ -207,6 +213,52 @@ export const slice = createSlice({
     },
     filterByAll: (state) => {
       state.filteredList = state.data;
+    },
+    userSubscribeToAList: (state, action) => {
+      if (action.payload.type === "Trending") {
+        const findList = state.trendingLists.find(
+          (i) => i._id === action.payload.listId
+        );
+        if (findList) {
+          findList.followers = findList.followers.concat({
+            _id: action.payload.user._id,
+            name: action.payload.user.name,
+            image: action.payload.user.photo,
+          });
+        }
+      } else {
+        const findList = state.popularLists.find(
+          (i) => i._id === action.payload.listId
+        );
+        if (findList) {
+          findList.followers = findList.followers.concat({
+            _id: action.payload.user._id,
+            name: action.payload.user.name,
+            image: action.payload.user.photo,
+          });
+        }
+      }
+    },
+    userUnSubscribeToAList: (state, action) => {
+      if (action.payload.type === "Trending") {
+        const findList = state.trendingLists.find(
+          (i) => i._id === action.payload.listId
+        );
+        if (findList) {
+          findList.followers = findList.followers.filter(
+            (i) => i._id !== action.payload.user._id
+          );
+        }
+      } else {
+        const findList = state.popularLists.find(
+          (i) => i._id === action.payload.listId
+        );
+        if (findList) {
+          findList.followers = findList.followers.filter(
+            (i) => i._id !== action.payload.user._id
+          );
+        }
+      }
     },
   },
   extraReducers: {
@@ -367,5 +419,8 @@ export const {
   filterSubscribedLists,
   filterUserCreatedLists,
   filterByAll,
+  clearDiscoverPageData,
+  userSubscribeToAList,
+  userUnSubscribeToAList
 } = slice.actions;
 export default slice.reducer;

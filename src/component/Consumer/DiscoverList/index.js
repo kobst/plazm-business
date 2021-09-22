@@ -5,6 +5,7 @@ import {
   FetchMostPopularLists,
   FetchTrendingLists,
 } from "../../../reducers/listReducer";
+import ValueLoader from "../../../utils/loader";
 import Input from "../../UI/Input/Input";
 import SliderSection from "./SliderSection";
 import {
@@ -12,23 +13,36 @@ import {
   LeftWrap,
   TotalNum,
   RightSearchWrap,
+  LoaderWrap,
 } from "./styled.js";
 
-const DiscoverList = ({ setDiscoverBtn }) => {
+const DiscoverList = ({ setDiscoverBtn, setSelectedListId, setReadMore }) => {
   const dispatch = useDispatch();
   const loadindTrending = useSelector(
     (state) => state.list.loadingTrendingLists
   );
   const loadingPopular = useSelector((state) => state.list.loadingPopularLists);
-  useEffect(() => {
-    const fetchData = async () => {
-      /** to fetch most trending list data */
-      dispatch(FetchTrendingLists(0));
-      /** to fetch most popular list data */
-      dispatch(FetchMostPopularLists(0));
-    };
-    fetchData();
-  }, []);
+  const trendingLists = useSelector((state) => state.list.trendingLists);
+  const totalTrendingList = useSelector(
+    (state) => state.list.totalTrendingList
+  );
+  const popularLists = useSelector((state) => state.list.popularLists);
+  const totalPopularLists = useSelector(
+    (state) => state.list.totalPopularLists
+  );
+  const user = useSelector((state) => state.user.user);
+  const totalList = useSelector((state) => state.list.totalList);
+  const listData = useSelector((state) => state.list.data);
+  const userLists = listData.filter((i) => i.ownerId === user._id);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     /** to fetch most trending list data */
+  //     dispatch(FetchTrendingLists(0));
+  //     /** to fetch most popular list data */
+  //     dispatch(FetchMostPopularLists(0));
+  //   };
+  //   fetchData();
+  // }, []);
   return (
     <>
       <TopSectionWrap>
@@ -40,7 +54,8 @@ const DiscoverList = ({ setDiscoverBtn }) => {
             <MdChevronLeft />
           </button>
           <TotalNum>
-            Total No. of Subscribed Lists : <span>12</span>
+            Total No. of Subscribed Lists :{" "}
+            <span>{parseInt(totalList - userLists.length)}</span>
           </TotalNum>
         </LeftWrap>
         <RightSearchWrap>
@@ -50,10 +65,29 @@ const DiscoverList = ({ setDiscoverBtn }) => {
           />
         </RightSearchWrap>
       </TopSectionWrap>
-      <SliderSection heading="Trending" />
-      <SliderSection heading="Most Popular" />
+      <SliderSection
+        heading="Trending"
+        data={trendingLists}
+        totalList={totalTrendingList}
+        setSelectedListId={setSelectedListId}
+        setDiscoverBtn={setDiscoverBtn}
+        setReadMore={setReadMore}
+      />
+      <SliderSection
+        heading="Most Popular"
+        data={popularLists}
+        totalList={totalPopularLists}
+        setSelectedListId={setSelectedListId}
+        setDiscoverBtn={setDiscoverBtn}
+        setReadMore={setReadMore}
+      />
     </>
   );
+  // ) : (
+  //   <LoaderWrap>
+  //     <ValueLoader />
+  //   </LoaderWrap>
+  // );
 };
 
 export default DiscoverList;

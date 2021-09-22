@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import BusinessListing from "./BusinessListing";
 import {
   clearMyFeedData,
+  setSideFiltersByClosest,
   setSideFiltersHomeSearch,
 } from "../../../reducers/myFeedReducer";
 
@@ -15,7 +16,7 @@ const HomeSearch = ({
   setSelectedListId,
   setListClickedFromSearch,
   setSearchIndex,
-  setDisplayTab
+  setDisplayTab,
 }) => {
   const dispatch = useDispatch();
   const [locationState, setLocationState] = useState(null);
@@ -44,6 +45,8 @@ const HomeSearch = ({
       navigator.permissions
         .query({ name: "geolocation" })
         .then(function (result) {
+          /** if location is provided then we need data by closest latitude/longitude */
+          dispatch(setSideFiltersByClosest());
           if (locationState !== "denied") setLocationState(result.state);
           if (result.state === "granted") {
             //If granted then you can directly call your function here

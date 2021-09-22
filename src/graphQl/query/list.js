@@ -185,6 +185,9 @@ const getMostTrendingLists = (value) => {
                 name
                 description
                 isPublic
+                media {
+                  image
+                }
                 ownerId {
                   _id
                   name
@@ -220,13 +223,17 @@ const getMostPopularLists = (value) => {
                 _id
                 name
                 description
+                media {
+                  image
+                }
+                ownerId {
+                  _id
+                  name
+                }
                 followers {
-                  userId {
                   _id
                   name
                   photo
-                  }
-                  created_on
                 }
                 updatedAt
               }
