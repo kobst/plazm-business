@@ -169,4 +169,128 @@ const GetListDetails = (obj) => {
   return graphQl;
 };
 
-export { getAllLists, getUserLists, getUserCreatedAndFollowedLists, GetListDetails };
+/*
+@desc: getMostTrendingLists query
+*/
+const getMostTrendingLists = (value) => {
+  const graphQl = {
+    query: `
+          query FetchMostTrendingLists($value: Int){
+            fetchMostTrendingLists(input: {value: $value}) {
+              message
+              success
+              totalLists
+              list {
+                _id
+                name
+                description
+                isPublic
+                media {
+                  image
+                }
+                ownerId {
+                  _id
+                  name
+                }
+                followers {
+                _id
+                name
+                photo
+                }
+                updatedAt
+                }
+              }
+          }`,
+    variables: {
+      value: value,
+    },
+  };
+  return graphQl;
+};
+
+/*
+@desc: getMostPopularLists query
+*/
+const getMostPopularLists = (value) => {
+  const graphQl = {
+    query: `
+          query FetchMostPopularLists($value: Int){
+            fetchMostPopularLists(input: {value: $value}) {
+              message
+              success
+              totalLists
+              list {
+                _id
+                name
+                description
+                media {
+                  image
+                }
+                ownerId {
+                  _id
+                  name
+                }
+                followers {
+                  _id
+                  name
+                  photo
+                }
+                updatedAt
+              }
+            }
+          }`,
+    variables: {
+      value: value,
+    },
+  };
+  return graphQl;
+};
+
+/*
+@desc: SearchLists query
+*/
+const SearchLists = (obj) => {
+  const graphQl = {
+    query: `
+          query ListSearch($value: Int, $search: String){
+            listSearch(input: {value: $value, search: $search}) {
+              message
+              success
+              totalLists
+              list {
+                _id
+                name
+                description
+                media {
+                  image
+                }
+                ownerId
+                followers {
+                  userId {
+                    _id
+                    name
+                    photo
+                  }
+                  created_on
+                }
+                updatedAt
+              }
+            }
+          }`,
+    variables: {
+      value: obj.value,
+      search: obj.search,
+    },
+  };
+  return graphQl;
+};
+
+export {
+  getAllLists,
+  getUserLists,
+  getUserCreatedAndFollowedLists,
+  GetListDetails,
+  getMostTrendingLists,
+  getMostPopularLists,
+  SearchLists,
+};

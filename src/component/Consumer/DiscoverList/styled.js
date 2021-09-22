@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 import SearchIcon from "../../../images/zoom-out.png";
 
 export const TopSectionWrap = styled.div`
@@ -6,14 +6,14 @@ export const TopSectionWrap = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 15px 30px;
-  @media (max-width:767px){ 
+  @media (max-width: 767px) {
     padding: 15px;
   }
-  @media (max-width:479px){ 
+  @media (max-width: 479px) {
     flex-direction: column;
   }
   .BackButtonArrow {
-    background: #FF2E9A;
+    background: #ff2e9a;
     border-radius: 3px;
     border: 0;
     width: 34px;
@@ -24,35 +24,35 @@ export const TopSectionWrap = styled.div`
     cursor: pointer;
     margin: 0 15px 0 0;
     svg {
-        font-size: 28px;
-        color: #fff;
+      font-size: 28px;
+      color: #fff;
     }
     :hover {
-        opacity: 0.8;
+      opacity: 0.8;
     }
   }
-`
+`;
 
 export const LeftWrap = styled.div`
   display: flex;
   align-items: center;
-  @media (max-width:479px){ 
+  @media (max-width: 479px) {
     margin-bottom: 10px;
   }
-`
+`;
 
 export const TotalNum = styled.div`
-  color: #FFFFFF;
+  color: #ffffff;
   font-weight: 500;
   font-size: 11px;
   display: flex;
   align-items: center;
   span {
     font-weight: 700;
-    color: #FF2E9A;
+    color: #ff2e9a;
     margin: 0 0 0 8px;
   }
-`
+`;
 
 export const RightSearchWrap = styled.div`
   display: flex;
@@ -74,13 +74,13 @@ export const RightSearchWrap = styled.div`
       color: #c8c8c8;
     }
   }
-`
+`;
 
 export const FeatureWrapper = styled.div`
   position: relative;
   margin: 0;
   width: 100%;
-`
+`;
 
 export const FeatureContainer = styled.div`
   width: 100%;
@@ -89,7 +89,7 @@ export const FeatureContainer = styled.div`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-`
+`;
 
 export const MainHeading = styled.h1`
   padding: 0 0 10px 30px;
@@ -99,7 +99,7 @@ export const MainHeading = styled.h1`
   text-align: left;
   color: #fff;
   position: relative;
-`
+`;
 export const NewInBuzzSliderWrapper = styled.div`
   position: relative;
   margin: 0;
@@ -118,10 +118,10 @@ export const NewInBuzzSliderWrapper = styled.div`
   ::-webkit-scrollbar-track {
     border-radius: 10px;
   }
-  
+
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: #fff; 
+    background: #fff;
     border-radius: 10px;
     cursor: pointer;
     width: 8px;
@@ -130,9 +130,57 @@ export const NewInBuzzSliderWrapper = styled.div`
 
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: #fff; 
+    background: #fff;
   }
+`;
 
+export const CollectionPara = styled.p`
+  padding: 0;
+  margin: 0;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: normal;
+  text-align: left;
+  color: #fff;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  cursor: pointer;
+`;
+
+export const Lock = styled.div`
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+`;
+
+export const DisplayItemContent = styled.div`
+  position: fixed;
+  left: ${(props) => props.offsetLeft || 0}px;
+  top: ${(props) => props.offsetTop || 0}px;
+  background: #000000;
+  border: 1px solid #ff2e9a;
+  box-sizing: border-box;
+  border-radius: 2px;
+  padding: 15px 15px 20px;
+  width: 320px;
+  z-index: 1000;
+  &.InnerModal {
+    visibility: hidden;
+  }
+`;
+
+export const LoaderWrap = styled.div`
+  width: 100%;
+  position: relative;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 30px 0 10px;
 `;
 
 export const ItemsWrapper = styled.div`
@@ -196,44 +244,6 @@ export const ItemsDescription = styled.div`
   }
 `;
 
-export const CollectionPara = styled.p`
-  padding: 0;
-  margin: 0;
-  font-weight: 500;
-  font-size: 12px;
-  line-height: normal;
-  text-align: left;
-  color: #fff;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  cursor: pointer;
-`;
-
-export const Lock = styled.div`
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  cursor: pointer;
-`;
-
-export const DisplayItemContent = styled.div`
-  position: fixed;
-  left: ${(props) => props.offsetLeft || 0}px;
-  top: ${(props) => props.offsetTop || 0}px;
-  background: #000000;
-  border: 1px solid #FF2E9A;
-  box-sizing: border-box;
-  border-radius: 2px;
-  padding: 15px 15px 20px;
-  width: 320px;
-  z-index: 1000;
-  &.InnerModal {
-    visibility: hidden;
-  }
-`;
-
 export const InnerCoverImg = styled.div`
   margin: 0px;
   height: 220px;
@@ -285,12 +295,12 @@ export const InnerCollectionPara = styled.p`
 export const AuthorInfo = styled.div`
   font-weight: 500;
   font-size: 11px;
-  color: #FFFFFF;
+  color: #ffffff;
   text-align: left;
   padding: 0 15px 5px;
   strong {
     font-weight: 700;
-    color: #FF2E9A;
+    color: #ff2e9a;
   }
 `;
 
@@ -321,7 +331,7 @@ export const FollowedByListUl = styled.ul`
     width: 17px;
     height: 17px;
     border-radius: 50%;
-    border: 0.5px solid #FFFFFF;
+    border: 0.5px solid #ffffff;
     filter: drop-shadow(1px 0px 2px rgba(0, 0, 0, 0.25));
     overflow: hidden;
     margin: 0 -5px 0 0;
@@ -335,7 +345,7 @@ export const FollowedByListUl = styled.ul`
   .MorePlus {
     font-weight: 500;
     font-size: 10px;
-    color: #FFFFFF;
+    color: #ffffff;
     margin: 0 0 0 15px;
   }
 `;
@@ -350,28 +360,29 @@ export const InnerDescriptionPara = styled.p`
   text-align: justify;
   strong {
     font-weight: 700;
-    color: #FF2E9A;
+    color: #ff2e9a;
     font-style: italic;
     cursor: pointer;
   }
 `;
 
 export const SubscribeBtn = styled.button`
-  background: #FF2E9A;
+  background: #ff2e9a;
   border-radius: 2px;
-  height:25px;
+  height: 25px;
   font-size: 9px;
   line-height: 11px;
-  cursor:pointer;
-  border:none;
-  color:#fff;
-  font-weight:700;
-  width:90%;
-  font-family: 'Roboto', sans-serif;
-  :hover,:focus{
+  cursor: pointer;
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  width: 90%;
+  font-family: "Roboto", sans-serif;
+  :hover,
+  :focus {
     opacity: 0.8;
   }
-`
+`;
 
 export const ListResultHeading = styled.h1`
   padding: 15px 0 10px 30px;
@@ -382,12 +393,12 @@ export const ListResultHeading = styled.h1`
   color: #fff;
   position: relative;
   span {
-    color: #FF2E9A;
+    color: #ff2e9a;
   }
-  @media (max-width: 767px){ 
+  @media (max-width: 767px) {
     font-size: 18px;
   }
-`
+`;
 
 export const SearchItemsContainer = styled.div`
   position: relative;
@@ -409,10 +420,10 @@ export const SearchItemsContainer = styled.div`
   ::-webkit-scrollbar-track {
     border-radius: 10px;
   }
-  
+
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: #fff; 
+    background: #fff;
     border-radius: 10px;
     cursor: pointer;
     width: 5px;
@@ -421,7 +432,35 @@ export const SearchItemsContainer = styled.div`
 
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: #fff; 
+    background: #fff;
   }
 
+  .infinite-scroll-component__outerdiv {
+    width: 100%;
+    .infinite-scroll-component  {
+      width: 100%;
+      display: flex;
+      flex-flow: row wrap;
+    }
+  }
+  
+`;
+
+export const NoMorePost = styled.p`
+  font-style: normal;
+  font-size: 12px;
+  line-height: normal;
+  margin: 0 0 5px;
+  color: #fff;
+`;
+
+export const ErrorDiv = styled.div`
+  color: #ff0000;
+  font-weight: 600;
+  font-size: 12px;
+  margin: 0;
+  margin-bottom: 10px;
+  margin-left: 20px;
+  float: right;
+  margin-right: 30px;
 `;

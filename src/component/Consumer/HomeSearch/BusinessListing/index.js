@@ -136,7 +136,7 @@ const BusinessListing = ({
             }
             scrollableTarget="scrollableDiv"
             endMessage={
-              businessData.length > 20 && !loading ? (
+              businessData.length > 20 && !loading && !flag ? (
                 <center>
                   <NoMorePost className="noMorePost">
                     {error.NO_MORE_BUSINESS_TO_DISPLAY}

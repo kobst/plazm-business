@@ -11,6 +11,9 @@ import {
   UnsubscribeToAList,
   SubscribeToAList,
   DeletePostFromAList,
+  getMostTrendingLists,
+  getMostPopularLists,
+  SearchLists,
 } from "../graphQl";
 
 /*
@@ -137,6 +140,45 @@ export const SubscribeToAListAction = createAsyncThunk(
   }
 );
 
+/*
+ * @desc:  to fetch trending lists
+ * @params: value
+ */
+export const FetchTrendingLists = createAsyncThunk(
+  "data/FetchTrendingLists",
+  async (value) => {
+    const graphQl = getMostTrendingLists(value);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.fetchMostTrendingLists;
+  }
+);
+
+/*
+ * @desc:  to fetch most popular lists
+ * @params: value
+ */
+export const FetchMostPopularLists = createAsyncThunk(
+  "data/FetchMostPopularLists",
+  async (value) => {
+    const graphQl = getMostPopularLists(value);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.fetchMostPopularLists;
+  }
+);
+
+/*
+ * @desc:  to search lists
+ * @params: value
+ */
+export const SearchListApi = createAsyncThunk(
+  "data/SearchListApi",
+  async (value) => {
+    const graphQl = SearchLists(value);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.listSearch;
+  }
+);
+
 export const slice = createSlice({
   name: "list",
   initialState: {
@@ -155,11 +197,34 @@ export const slice = createSlice({
     loadingUnSubscribe: false,
     loadingSubscribe: false,
     filteredList: [],
+    loadingTrendingLists: false,
+    trendingLists: [],
+    totalTrendingList: 0,
+    loadingPopularLists: false,
+    popularLists: [],
+    totalPopularLists: 0,
+    listSearch: "",
+    loadingSearchList: false,
+    searchList: [],
+    totalSearchList: 0,
   },
   reducers: {
-    clearListData: (state, action) => {
+    clearListData: (state) => {
       state.data = [];
       state.filteredList = [];
+      state.popularLists = [];
+      state.trendingLists = [];
+    },
+    setListSearch: (state, action) => {
+      state.listSearch = action.payload;
+    },
+    clearListSearchData: (state) => {
+      state.searchList = [];
+      state.totalSearchList = 0;
+    },
+    clearDiscoverPageData: (state) => {
+      state.popularLists = [];
+      state.trendingLists = [];
     },
     filterUserCreatedLists: (state, action) => {
       state.filteredList = current(state.data).filter(
@@ -172,7 +237,53 @@ export const slice = createSlice({
       );
     },
     filterByAll: (state) => {
-      state.filteredList = state.data
+      state.filteredList = state.data;
+    },
+    userSubscribeToAList: (state, action) => {
+      if (action.payload.type === "Trending") {
+        const findList = state.trendingLists.find(
+          (i) => i._id === action.payload.listId
+        );
+        if (findList) {
+          findList.followers = findList.followers.concat({
+            _id: action.payload.user._id,
+            name: action.payload.user.name,
+            image: action.payload.user.photo,
+          });
+        }
+      } else {
+        const findList = state.popularLists.find(
+          (i) => i._id === action.payload.listId
+        );
+        if (findList) {
+          findList.followers = findList.followers.concat({
+            _id: action.payload.user._id,
+            name: action.payload.user.name,
+            image: action.payload.user.photo,
+          });
+        }
+      }
+    },
+    userUnSubscribeToAList: (state, action) => {
+      if (action.payload.type === "Trending") {
+        const findList = state.trendingLists.find(
+          (i) => i._id === action.payload.listId
+        );
+        if (findList) {
+          findList.followers = findList.followers.filter(
+            (i) => i._id !== action.payload.user._id
+          );
+        }
+      } else {
+        const findList = state.popularLists.find(
+          (i) => i._id === action.payload.listId
+        );
+        if (findList) {
+          findList.followers = findList.followers.filter(
+            (i) => i._id !== action.payload.user._id
+          );
+        }
+      }
     },
   },
   extraReducers: {
@@ -285,9 +396,82 @@ export const slice = createSlice({
         state.error = action.payload;
       }
     },
+    [FetchTrendingLists.pending]: (state) => {
+      if (!state.loadingTrendingLists) {
+        state.loadingTrendingLists = true;
+      }
+    },
+    [FetchTrendingLists.fulfilled]: (state, action) => {
+      if (state.loadingTrendingLists) {
+        state.loadingTrendingLists = false;
+        if (action.payload) {
+          state.trendingLists = state.trendingLists.concat(action.payload.list);
+          state.totalTrendingList = action.payload.totalLists;
+        }
+      }
+    },
+    [FetchTrendingLists.rejected]: (state, action) => {
+      if (state.loadingTrendingLists) {
+        state.loadingTrendingLists = false;
+        state.error = action.payload;
+      }
+    },
+    [FetchMostPopularLists.pending]: (state) => {
+      if (!state.loadingPopularLists) {
+        state.loadingPopularLists = true;
+      }
+    },
+    [FetchMostPopularLists.fulfilled]: (state, action) => {
+      if (state.loadingPopularLists) {
+        state.loadingPopularLists = false;
+        if (action.payload) {
+          state.popularLists = state.popularLists.concat(action.payload.list);
+          state.totalPopularLists = action.payload.totalLists;
+        }
+      }
+    },
+    [FetchMostPopularLists.rejected]: (state, action) => {
+      if (state.loadingPopularLists) {
+        state.loadingPopularLists = false;
+        state.error = action.payload;
+      }
+    },
+    [SearchListApi.pending]: (state) => {
+      if (!state.loadingSearchList) {
+        state.loadingSearchList = true;
+        if (state.listSearch === "") {
+          state.searchList = [];
+          state.totalList = 0;
+        }
+      }
+    },
+    [SearchListApi.fulfilled]: (state, action) => {
+      if (state.loadingSearchList) {
+        state.loadingSearchList = false;
+        if (action.payload) {
+          state.searchList = state.searchList.concat(action.payload.list);
+          state.totalSearchList = action.payload.totalLists;
+        }
+      }
+    },
+    [SearchListApi.rejected]: (state, action) => {
+      if (state.loadingSearchList) {
+        state.loadingSearchList = false;
+        state.error = action.payload;
+      }
+    },
   },
 });
 
-export const { clearListData, filterSubscribedLists, filterUserCreatedLists, filterByAll } =
-  slice.actions;
+export const {
+  clearListData,
+  filterSubscribedLists,
+  filterUserCreatedLists,
+  filterByAll,
+  clearDiscoverPageData,
+  userSubscribeToAList,
+  userUnSubscribeToAList,
+  setListSearch,
+  clearListSearchData,
+} = slice.actions;
 export default slice.reducer;

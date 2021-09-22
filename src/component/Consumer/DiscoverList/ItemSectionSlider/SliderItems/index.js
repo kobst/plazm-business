@@ -1,14 +1,52 @@
 import React, { useRef, useState } from "react";
-import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
+import { unwrapResult } from "@reduxjs/toolkit";
+import moment from "moment";
 import EventImg from "../../../../../images/eventimg.png";
 import LockImage from "../../../../../images/lock.png";
-import {ItemsWrapper, CoverImg, ItemsDescription, CollectionPara, Lock, DisplayItemContent, InnerCoverImg, InnerItemsDescription, InnerCollectionPara, AuthorInfo, FollowedBy, FollowedByListUl, InnerDescriptionPara, SubscribeBtn} from '../../styled'
+import FollwersImg from "../../../../../images/profile-img.png";
+import {
+  ItemsWrapper,
+  CoverImg,
+  ItemsDescription,
+  CollectionPara,
+  Lock,
+  DisplayItemContent,
+  InnerCoverImg,
+  InnerItemsDescription,
+  InnerCollectionPara,
+  AuthorInfo,
+  FollowedBy,
+  FollowedByListUl,
+  InnerDescriptionPara,
+  SubscribeBtn,
+} from "../../styled";
+import {
+  SubscribeToAListAction,
+  UnSubscribeToAList,
+  userSubscribeToAList,
+  userUnSubscribeToAList,
+} from "../../../../../reducers/listReducer";
+import {
+  removeSubscribedList,
+  addSubscribedList,
+} from "../../../../../reducers/userReducer";
 
-
-const NewInBuzzItems = () => {
+const NewInBuzzItems = ({
+  data,
+  setSelectedListId,
+  setDiscoverBtn,
+  setReadMore,
+  heading,
+}) => {
+  const user = useSelector((state) => state.user.user);
   const [offsetLeft, setOffsetLeft] = useState(0);
   const [offsetTop, setOffsetTop] = useState(0);
+  const [image, setImage] = useState(
+    data.media.length > 0 ? data.media[0].image : EventImg
+  );
   const divRef = useRef();
+  const dispatch = useDispatch();
 
   /** to set position on hover of text */
   const displayData = () => {
@@ -17,73 +55,123 @@ const NewInBuzzItems = () => {
     setOffsetTop(top - 30);
   };
 
+  /** to open list description view */
+  const ReadMore = () => {
+    setDiscoverBtn(false);
+    setSelectedListId(data._id);
+    setReadMore(true);
+  };
+
+  /** to unsubscribe from a list */
+  const listUnSubscribe = async () => {
+    const obj = {
+      userId: user._id,
+      listId: data._id,
+    };
+    const list = await dispatch(UnSubscribeToAList(obj));
+    const response = await unwrapResult(list);
+    if (response) {
+      dispatch(removeSubscribedList(response.listId));
+      dispatch(
+        userUnSubscribeToAList({ type: heading, listId: response.listId, user:user })
+      );
+    }
+  };
+
+  /** to subscribe from a list */
+  const listSubscribe = async () => {
+    const obj = {
+      userId: user._id,
+      listId: data._id,
+    };
+    const list = await dispatch(SubscribeToAListAction(obj));
+    const response = await unwrapResult(list);
+    if (response) {
+      dispatch(addSubscribedList(response.listId));
+      dispatch(
+        userSubscribeToAList({ type: heading, listId: response.listId, user:user })
+      );
+    }
+  };
+
   return (
     <>
       <ItemsWrapper ref={divRef}>
         <CoverImg>
-          <img src={EventImg} alt="" />
-          <Lock>
-            <img src={LockImage} alt="" />
-          </Lock>
+          <img src={image} alt="" onError={() => setImage(EventImg)} />
+          {!data.isPublic && (
+            <Lock>
+              <img src={LockImage} alt="" />
+            </Lock>
+          )}
           <ItemsDescription onMouseOver={() => displayData()}>
-            <CollectionPara>
-              The 38 Essential Restaurants in New York City he 38 Essential
-              Restaurants in New York City The 38 Essential Restaurants in New
-              York City he 38 Essential Restaurants in New York CityThe 38
-              Essential Restaurants in New York City he 38 Essential Restaurants
-              in New York City
-            </CollectionPara>
+            <CollectionPara>{data.name}</CollectionPara>
 
             <DisplayItemContent
               className="InnerModal"
               offsetLeft={offsetLeft}
               offsetTop={offsetTop}
             >
-
               <InnerCoverImg>
-                <img src={EventImg} alt="" />
+                <img src={image} alt="" onError={() => setImage(EventImg)} />
                 <InnerItemsDescription>
-                  <InnerCollectionPara>
-                    The 38 Essential Restaurants in New York City he 38 Essential
-                    Restaurants in New York City The 38 Essential Restaurants in New
-                    York City he 38 Essential Restaurants in New York CityThe 38
-                    Essential Restaurants in New York City he 38 Essential Restaurants
-                    in New York City
-                  </InnerCollectionPara>
+                  <InnerCollectionPara>{data.name}</InnerCollectionPara>
                 </InnerItemsDescription>
               </InnerCoverImg>
               <AuthorInfo>
-                  by <strong>Edward Han</strong>
-                  <br />
-                  Last Updated Jan 7, 2020, 9:27am EST
+                by{" "}
+                <strong>
+                  {data.ownerId && data.ownerId.length > 0
+                    ? data.ownerId[0].name
+                    : data.ownerId && data.ownerId.name}
+                </strong>
+                <br />
+                Last Updated{" "}
+                {moment(data.updatedAt).format("MMM DD,YYYY, hh:MM a")} EST{" "}
               </AuthorInfo>
               <FollowedBy>
-                <h2>Followed by</h2>
+                {data.followers.length > 0 && <h2>Followed by</h2>}
                 <FollowedByListUl>
-                  <li><img src={EventImg} alt="" /></li>
-                  <li><img src={EventImg} alt="" /></li>
-                  <li><img src={EventImg} alt="" /></li>
-                  <li><img src={EventImg} alt="" /></li>
-                  <li><img src={EventImg} alt="" /></li>
-                  <li><img src={EventImg} alt="" /></li>
-                  <li><img src={EventImg} alt="" /></li>
-                  <div className="MorePlus">+10 more</div>
+                  {data.followers.length > 0 &&
+                    data.followers.slice(0, 8).map((i, key) => {
+                      return (
+                        <li key={key}>
+                          <img
+                            src={
+                              i.photo && i.photo !== "" ? i.photo : FollwersImg
+                            }
+                            alt=""
+                          />
+                        </li>
+                      );
+                    })}
+                  {data.followers.length > 7 ? (
+                    <div className="MorePlus">
+                      +{data.followers.length - 7} more
+                    </div>
+                  ) : null}
                 </FollowedByListUl>
               </FollowedBy>
               <InnerDescriptionPara>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras nulla fusce nec, ut pellentesque. Sollicitudin vitae cum eget non est sed tellus. Cras nulla fusce nec, ut pellentesque. Sollicitudin vitae cum... <strong>Read More</strong>
+                {data.description}....
+                <strong onClick={() => ReadMore()}>Read More</strong>
               </InnerDescriptionPara>
-              <SubscribeBtn>Subscribe</SubscribeBtn>
+              {data.followers.length === 0 ||
+              !data.followers.find((i) => i._id === user._id) ? (
+                <SubscribeBtn onClick={() => listSubscribe()}>
+                  Subscribe
+                </SubscribeBtn>
+              ) : (
+                <SubscribeBtn onClick={() => listUnSubscribe()}>
+                  UnSubscribe
+                </SubscribeBtn>
+              )}
             </DisplayItemContent>
           </ItemsDescription>
         </CoverImg>
       </ItemsWrapper>
     </>
   );
-};
-
-NewInBuzzItems.propTypes = {
-  article: PropTypes.object,
 };
 
 export default NewInBuzzItems;

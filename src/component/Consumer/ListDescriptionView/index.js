@@ -293,6 +293,8 @@ const ListDescriptionView = ({
   setListIndex,
   listOpenedFromBusiness,
   setFavoriteIndex,
+  readMore,
+  setDiscoverBtn,
 }) => {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.myFeed.loadingSelectedList);
@@ -310,6 +312,11 @@ const ListDescriptionView = ({
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffSet] = useState(0);
   const [flag, setFlag] = useState(true);
+  const [image, setImage] = useState(
+    selectedList && selectedList.media.length > 0
+      ? selectedList.media[0].image
+      : BannerImg
+  );
   const history = useHistory();
 
   /** to fetch user lists */
@@ -397,6 +404,7 @@ const ListDescriptionView = ({
 
   const onCloseTab = () => {
     if (!listOpenedFromBusiness) setDisplayTab(false);
+    else if (readMore) setDiscoverBtn(true);
     dispatch(clearMyFeedData());
     setSelectedListId(null);
   };
@@ -417,14 +425,7 @@ const ListDescriptionView = ({
           <HeadingWrap>
             <TopHeadingWrap>
               <ListBannerSection>
-                <img
-                  src={
-                    selectedList.media.length > 0
-                      ? selectedList.media[0].image
-                      : BannerImg
-                  }
-                  alt=""
-                />
+                <img src={image} alt="" onError={() => setImage(BannerImg)} />
                 <h1>{selectedList.name}</h1>
                 <p>{selectedList.description}</p>
                 <div className="BannerWrapBtn">

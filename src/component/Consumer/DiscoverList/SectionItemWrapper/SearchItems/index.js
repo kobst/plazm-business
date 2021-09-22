@@ -1,40 +1,47 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import EventImg from "../../../../../images/eventimg.png";
 import LockImage from "../../../../../images/lock.png";
-import {ItemsWrapper, CoverImg, ItemsDescription, CollectionPara, Lock,} from '../../styled'
+import {
+  ItemsWrapper,
+  CoverImg,
+  ItemsDescription,
+  CollectionPara,
+  Lock,
+} from "../../styled";
 
+const SearchItems = ({
+  data,
+  setSelectedListId,
+  setDiscoverBtn,
+  setReadMore,
+}) => {
+  const [image, setImage] = useState(
+    data.media && data.media.length > 0 ? data.media[0].image : EventImg
+  );
 
-const SearchItems = () => {
-  // const [offsetLeft, setOffsetLeft] = useState(0);
-  // const [offsetTop, setOffsetTop] = useState(0);
-  // const divRef = useRef();
-
-  /** to set position on hover of text */
-  // const displayData = () => {
-  //   const { top, right } = divRef.current.getBoundingClientRect();
-  //   setOffsetLeft(right - 300);
-  //   setOffsetTop(top - 30);
-  // };
-
+  /** to display list details page */
+  const displayListDetails = () => {
+    console.log("yahhhh");
+    setDiscoverBtn(false);
+    setSelectedListId(data._id);
+    setReadMore(true);
+  };
   return (
     <>
       <ItemsWrapper className="SearchItemsWrapper">
-        <CoverImg className="SearchCoverImg">
-          <img src={EventImg} alt="" />
-          <Lock>
-            <img src={LockImage} alt="" />
-          </Lock>
+        <CoverImg
+          className="SearchCoverImg"
+          onClick={() => displayListDetails()}
+        >
+          <img src={image} onError={() => setImage(EventImg)} alt="" />
+          {!data.isPublic && (
+            <Lock>
+              <img src={LockImage} alt="" />
+            </Lock>
+          )}
           <ItemsDescription>
-            <CollectionPara>
-              The 38 Essential Restaurants in New York City he 38 Essential
-              Restaurants in New York City The 38 Essential Restaurants in New
-              York City he 38 Essential Restaurants in New York CityThe 38
-              Essential Restaurants in New York City he 38 Essential Restaurants
-              in New York City
-            </CollectionPara>
-
-            
+            <CollectionPara>{data.name}</CollectionPara>
           </ItemsDescription>
         </CoverImg>
       </ItemsWrapper>
