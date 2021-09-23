@@ -29,6 +29,7 @@ import PolygonArrow from "../../../../images/Polygon.png";
 import { Auth } from "aws-amplify";
 import { setGloablLoader } from "../../../../reducers/consumerReducer";
 import DiscoverList from "../../../Consumer/DiscoverList";
+import FeedDataContent from "../../../Consumer/FeedContent";
 
 const LeftBarContent = styled.div`
   width: 100px;
@@ -158,7 +159,7 @@ const LeftBar = ({
   const [profileClosed, setProfileClosed] = useState(false);
   const [userDataId, setUserDataId] = useState(userId);
   const [discoverBtn, setDiscoverBtn] = useState(false);
-  const [readMore, setReadMore] = useState(false)
+  const [readMore, setReadMore] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -240,7 +241,7 @@ const LeftBar = ({
       setSelectedListId(null);
       dispatch(clearBusinessData());
       dispatch(clearTopPost());
-      setSearchIndex(null)
+      setSearchIndex(null);
       history.push("/");
     }
   };
@@ -497,7 +498,8 @@ const LeftBar = ({
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              <h2>Any content 6</h2>
+              {/* <h2>Any content 6</h2> */}
+              <FeedDataContent />
             </div>
           </TabPanel>
           <TabPanel>
