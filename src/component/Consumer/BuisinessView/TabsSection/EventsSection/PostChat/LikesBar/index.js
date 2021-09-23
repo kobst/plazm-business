@@ -18,16 +18,31 @@ import {
   setEventId,
 } from "../../../../../../../reducers/businessReducer";
 
-const BottomBarLikes = styled.div`
+export const BottomBarLikes = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
   @media (max-width: 767px) {
-    flex-direction: column;
     align-items: flex-start;
   }
+  &.replyBar {
+    background: rgba(177, 171, 234, 0.1);
+    border: 0.75px solid #3f3777;
+    box-sizing: border-box;
+    border-radius: 5px;
+    padding: 8px 15px;
+  }
+  &.replyBarComment {
+    background: rgba(177, 171, 234, 0.1);
+    border: 0.75px solid #3f3777;
+    box-sizing: border-box;
+    border-radius: 5px;
+    padding: 8px 15px;
+    margin: 10px 0;
+  }
 `;
-const LikesBtnWrap = styled.div`
+
+export const LikesBtnWrap = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -36,59 +51,36 @@ const LikesBtnWrap = styled.div`
   flex-wrap: wrap;
 `;
 
-const UsersButton = styled.button`
-  font-weight: 600;
-  font-size: 13px;
-  line-height: normal;
-  text-align: center;
-  color: #ff2e9a;
-  background: transparent;
-  width: auto;
-  border: 0;
-  padding: 0px 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  margin-right: 0;
-  :hover,
-  :focus {
-    outline: 0;
-    border: 0;
-    background: transparent;
-  }
-`;
-
-const CircleDot = styled.div`
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  margin: 0 5px;
-  background: #ff2e9a;
-`;
-const ChatDate = styled.div`
-  color: #fff;
-  font-weight: 600;
-  font-size: 13px;
-  span {
-    margin: 0 10px;
-  }
-`;
-
-const RightDiv = styled.div`
+export const RightDiv = styled.div`
   color: #fff;
   font-weight: 600;
   font-size: 13px;
   align-items: center;
   display: flex;
-  margin: 0 0 0 20px;
+  margin: 0 15px 0 0;
+  position: relative;
   @media (max-width: 767px) {
     margin: 8px 15px 0 0px;
   }
   svg {
     margin: 0 7px 0 0;
   }
+  svg:hover {
+    cursor: pointer;
+  }
+  button {
+    color: #767676;
+    font-size: 13px;
+    padding: 0;
+    cursor: pointer;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 700;
+    border: 0;
+    background-color: transparent;
+    display: flex;
+  }
 `;
-
 const LikesBar = ({
   date,
   displayEventComments,
@@ -105,7 +97,6 @@ const LikesBar = ({
   flag,
   setFlag,
 }) => {
-  const [eventDate, setEventDate] = useState();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const business = useSelector((state) => state.business.business);
@@ -120,29 +111,6 @@ const LikesBar = ({
     setLikeCountForComment(0);
     setUserLikedComment(false);
     setUserLikedEvent(false);
-    let monthNames = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-
-    let day = date.getDate();
-
-    let monthIndex = date.getMonth();
-    let monthName = monthNames[monthIndex];
-
-    let year = date.getFullYear();
-
-    setEventDate(`${day} ${monthName} ${year}`);
 
     if (type === "comment") {
       if (postLikes.length > 0) {
@@ -221,23 +189,48 @@ const LikesBar = ({
       }
     }
   };
-
-  /** to display comments of a particular event */
-  const displayComments = () => {
-    dispatch(setEventId(eventId));
-    if (type === "comment") {
-      setDisplayEventComments(!displayEventComments);
-      setFlag(false);
-      if (displayEventComments === false) dispatch(fetchEventComments(eventId));
-    } else if (type === "reply") {
-      setFlag(true);
-      setDisplayReply(!displayReply);
-      if (displayReply === false) dispatch(fetchCommentReplies(commentId));
-    }
-  };
   return (
     <>
-      <BottomBarLikes>
+      <BottomBarLikes
+        className={
+          type === "reply"
+            ? "replyBar"
+            : type !== "commentReply"
+            ? "replyBarComment"
+            : ""
+        }
+      >
+        <LikesBtnWrap>
+          {type !== "commentReply" && (
+            <RightDiv>
+              {userLikedEvent || userLikedComment ? (
+                <MdFavorite style={{ color: "red" }} />
+              ) : (
+                <MdFavoriteBorder
+                  onClick={() => addLike()}
+                  disabled={userLikedEvent || userLikedComment}
+                />
+              )}{" "}
+              {likeCount === 0
+                ? likeCountForComment === 0
+                  ? totalLikes
+                  : likeCountForComment
+                : likeCount}
+            </RightDiv>
+          )}
+          {type !== "commentReply" && (
+            <RightDiv>
+              <button>
+                <MdChatBubbleOutline
+                  onClick={() => displayCommentsWithEvents()}
+                />
+              </button>
+              {totalComments}
+            </RightDiv>
+          )}
+        </LikesBtnWrap>
+      </BottomBarLikes>
+      {/* <BottomBarLikes>
         <LikesBtnWrap>
           {type !== "commentReply" ? (
             <UsersButton onClick={() => displayComments()}>
@@ -253,10 +246,6 @@ const LikesBar = ({
               Like
             </UsersButton>
           ) : null}
-          <ChatDate>
-            <span>-</span>
-            {eventDate}
-          </ChatDate>
         </LikesBtnWrap>
         {type !== "commentReply" ? (
           <LikesBtnWrap>
@@ -280,7 +269,7 @@ const LikesBar = ({
             </RightDiv>
           </LikesBtnWrap>
         ) : null}
-      </BottomBarLikes>
+      </BottomBarLikes> */}
     </>
   );
 };

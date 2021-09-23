@@ -1,9 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import {
-    MdChatBubbleOutline,
-    MdFavoriteBorder,
-  } from "react-icons/md";
+import { MdChatBubbleOutline, MdFavoriteBorder } from "react-icons/md";
 import SaveButton from "../../UI/SaveButton";
 
 export const BottomBarLikes = styled.div`
@@ -22,7 +19,7 @@ export const LikesBtnWrap = styled.div`
   margin: 0px;
   align-items: center;
   flex-wrap: wrap;
-`
+`;
 
 export const RightDiv = styled.div`
   color: #fff;
@@ -30,7 +27,7 @@ export const RightDiv = styled.div`
   font-size: 13px;
   align-items: center;
   display: flex;
-  margin:0 15px 0 0;
+  margin: 0 15px 0 0;
   position: relative;
   @media (max-width: 767px) {
     margin: 8px 15px 0 0px;
@@ -55,31 +52,26 @@ export const RightDiv = styled.div`
   }
 `;
 
-const BottomBarLikesContent = ({ }) => {
-
- return (
+const BottomBarLikesContent = () => {
+  return (
     <>
       <BottomBarLikes>
-                      <LikesBtnWrap>
-                          <RightDiv>
-                              <MdFavoriteBorder />
-                              5
-                          </RightDiv>
-                          <RightDiv>
-                              <button>
-                                  <MdChatBubbleOutline />
-                              </button>
-                              5
-                          </RightDiv>
-                          
-                        
-                      </LikesBtnWrap>
+        <LikesBtnWrap>
+          <RightDiv>
+            <MdFavoriteBorder />5
+          </RightDiv>
+          <RightDiv>
+            <button>
+              <MdChatBubbleOutline />
+            </button>
+            5
+          </RightDiv>
+        </LikesBtnWrap>
 
-                    <SaveButton>VISIT</SaveButton>
-                      
-                    </BottomBarLikes>
+        <SaveButton>VISIT</SaveButton>
+      </BottomBarLikes>
     </>
   );
-}
+};
 
 export default BottomBarLikesContent;

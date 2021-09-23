@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
 import {
   MdFavoriteBorder,
   MdChatBubbleOutline,
@@ -15,17 +14,25 @@ import {
   setPostId,
 } from "../../../../../../../reducers/businessReducer";
 import { unwrapResult } from "@reduxjs/toolkit";
+import styled from "styled-components";
 
-const BottomBarLikes = styled.div`
+export const BottomBarLikes = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
   @media (max-width: 767px) {
-    flex-direction: column;
     align-items: flex-start;
   }
+  &.replyBar {
+    background: rgba(177, 171, 234, 0.1);
+    border: 0.75px solid #3f3777;
+    box-sizing: border-box;
+    border-radius: 5px;
+    padding: 8px 15px;
+  }
 `;
-const LikesBtnWrap = styled.div`
+
+export const LikesBtnWrap = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -34,59 +41,34 @@ const LikesBtnWrap = styled.div`
   flex-wrap: wrap;
 `;
 
-const UsersButton = styled.button`
-  font-weight: 600;
-  font-size: 13px;
-  line-height: normal;
-  text-align: center;
-  color: #ff2e9a;
-  background: transparent;
-  width: auto;
-  border: 0;
-  padding: 0px 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  margin-right: 0;
-  :hover,
-  :focus {
-    outline: 0;
-    border: 0;
-    background: transparent;
-  }
-`;
-
-const CircleDot = styled.div`
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  margin: 0 5px;
-  background: #ff2e9a;
-`;
-const ChatDate = styled.div`
-  color: #fff;
-  font-weight: 600;
-  font-size: 13px;
-  span {
-    margin: 0 10px;
-  }
-`;
-
-const RightDiv = styled.div`
+export const RightDiv = styled.div`
   color: #fff;
   font-weight: 600;
   font-size: 13px;
   align-items: center;
   display: flex;
-  margin: 0 0 0 20px;
+  margin: 0 15px 0 0;
+  position: relative;
   @media (max-width: 767px) {
     margin: 8px 15px 0 0px;
   }
   svg {
     margin: 0 7px 0 0;
   }
-  svg: hover {
+  svg:hover {
     cursor: pointer;
+  }
+  button {
+    color: #767676;
+    font-size: 13px;
+    padding: 0;
+    cursor: pointer;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 700;
+    border: 0;
+    background-color: transparent;
+    display: flex;
   }
 `;
 
@@ -101,9 +83,8 @@ const LikesBar = ({
   postLikes,
   commentId,
   commentLikes,
-  setFlag
+  setFlag,
 }) => {
-  const [eventDate, setEventDate] = useState();
   const [userLikedPost, setUserLikedPost] = useState(false);
   const [userLikedComment, setUserLikedComment] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
@@ -119,29 +100,7 @@ const LikesBar = ({
     setUserLikedPost(false);
     setLikeCount(0);
     setLikeCountForComment(0);
-    let monthNames = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
 
-    let day = date.getDate();
-
-    let monthIndex = date.getMonth();
-    let monthName = monthNames[monthIndex];
-
-    let year = date.getFullYear();
-
-    setEventDate(`${day} ${monthName} ${year}`);
     if (type === "comment" && totalLikes > 0) {
       if (postLikes.length > 0) {
         const findUser = postLikes.find((i) => i._id === user._id);
@@ -168,12 +127,12 @@ const LikesBar = ({
   /** to display comments or replies of the post */
   const displayCommentsWithPosts = () => {
     setDisplayComments(!displayComments);
-    dispatch(setPostId(postId))
+    dispatch(setPostId(postId));
     if (type === "comment") {
-      setFlag(false)
+      setFlag(false);
       if (displayComments === false) dispatch(fetchPostComments(postId));
     } else if (type === "reply") {
-      setFlag(true)
+      setFlag(true);
       if (displayComments === false) dispatch(fetchCommentReplies(commentId));
     }
   };
@@ -228,50 +187,19 @@ const LikesBar = ({
     }
   };
 
-  /** to display comments of the post on click of comment icon */
-  const setReplyDisplay = () => {
-    dispatch(setPostId(postId))
-    if (type === "reply") {
-      setDisplayComments(!displayComments);
-      setFlag(true)
-      if (displayComments === false) dispatch(fetchCommentReplies(commentId));
-    } else if (type === "comment") {
-      setFlag(false)
-      setDisplayComments(!displayComments);
-      if (displayComments === false) dispatch(fetchPostComments(postId));
-    }
-  };
   return (
     <>
-      <BottomBarLikes>
+      <BottomBarLikes className={type === "reply" ? "replyBar" : ""}>
         <LikesBtnWrap>
-          {type !== "commentReply" ? (
-            <UsersButton onClick={() => setReplyDisplay()}>
-              {type === "comment" ? "Comment" : "Reply"}
-            </UsersButton>
-          ) : null}
-          {type !== "commentReply" ? <CircleDot /> : null}
-          {type !== "commentReply" ? (
-            <UsersButton
-              onClick={() => addLike()}
-              disabled={userLikedPost || userLikedComment}
-            >
-              Like
-            </UsersButton>
-          ) : null}
-
-          <ChatDate>
-            <span>-</span>
-            {eventDate}
-          </ChatDate>
-        </LikesBtnWrap>
-        {type !== "commentReply" ? (
-          <LikesBtnWrap>
+          {type !== "commentReply" && (
             <RightDiv>
               {userLikedPost || userLikedComment ? (
                 <MdFavorite style={{ color: "red" }} />
               ) : (
-                <MdFavoriteBorder />
+                <MdFavoriteBorder
+                  onClick={() => addLike()}
+                  disabled={userLikedPost || userLikedComment}
+                />
               )}{" "}
               {likeCount === 0
                 ? likeCountForComment === 0
@@ -279,12 +207,18 @@ const LikesBar = ({
                   : likeCountForComment
                 : likeCount}
             </RightDiv>
+          )}
+          {type !== "commentReply" && (
             <RightDiv>
-              <MdChatBubbleOutline onClick={() => displayCommentsWithPosts()} />{" "}
+              <button>
+                <MdChatBubbleOutline
+                  onClick={() => displayCommentsWithPosts()}
+                />
+              </button>
               {totalComments}
             </RightDiv>
-          </LikesBtnWrap>
-        ) : null}
+          )}
+        </LikesBtnWrap>
       </BottomBarLikes>
     </>
   );

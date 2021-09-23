@@ -20,7 +20,7 @@ export const UserMessageContent = styled.div`
 export const UserMsgWrap = styled.div`
   display: flex;
   flex-direction: column;
-  padding:0;
+  padding: 0;
   position: relative;
 `;
 
@@ -75,7 +75,7 @@ export const ProfileName = styled.div`
     color: #fff;
     display: -webkit-box;
     -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;  
+    -webkit-box-orient: vertical;
     overflow: hidden;
   }
   @media (max-width: 1024px) {
@@ -92,7 +92,6 @@ export const ProfileName = styled.div`
     }
   }
 `;
-
 
 export const DescriptionViewItem = styled.div`
   .background-active {
@@ -117,7 +116,7 @@ export const RightIcons = styled.div`
   justify-content: space-between;
   margin: 0 15px 0 0;
   img {
-      margin: 0 0 0 8px;
+    margin: 0 0 0 8px;
   }
 `;
 export const InnerListBanner = styled.div`
@@ -133,7 +132,7 @@ export const InnerListBanner = styled.div`
 `;
 
 export const InnerOverlay = styled.div`
-  background: linear-gradient(0deg, #000000 0%, rgba(0, 0, 0, 0) 153.38%);;
+  background: linear-gradient(0deg, #000000 0%, rgba(0, 0, 0, 0) 153.38%);
   width: 100%;
   position: absolute;
   height: 100%;
@@ -168,9 +167,9 @@ export const ListName = styled.div`
   font-weight: 700;
   color: #fff;
   display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;  
-    overflow: hidden;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 `;
 
 export const ListInfo = styled.div`
@@ -179,18 +178,18 @@ export const ListInfo = styled.div`
   align-items: center;
   color: #fff;
   svg {
-      margin: 0 10px 0 0;
-      @media (max-width: 767px) {
-        margin: 0 2px 0 0;
-      }
+    margin: 0 10px 0 0;
+    @media (max-width: 767px) {
+      margin: 0 2px 0 0;
+    }
   }
   span {
-      margin: 0 5px;
-      font-weight: 500;
-      font-size: 12px;
-      @media (max-width: 767px) {
-        margin: 0 2px;
-      }
+    margin: 0 5px;
+    font-weight: 500;
+    font-size: 12px;
+    @media (max-width: 767px) {
+      margin: 0 2px;
+    }
   }
 `;
 
@@ -200,7 +199,7 @@ export const ListAuthorName = styled.div`
   line-height: normal;
   margin: 0;
   font-weight: 700;
-  color: #FF2E9A;
+  color: #ff2e9a;
 `;
 
 export const FeedDescription = styled.p`
@@ -222,7 +221,14 @@ export const FeedBigImage = styled.p`
   justify-content: center;
   margin: 0 0 15px;
   img {
-      max-height: 230px;
+    max-height: 230px;
   }
 `;
 
+export const EventBigImage = styled.p`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0 15px;
+`;

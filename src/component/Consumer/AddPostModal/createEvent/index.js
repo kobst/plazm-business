@@ -160,18 +160,18 @@ const CreateEventModal = ({
   setEventTitle,
   eventDescription,
   setEventDescription,
-  imageUrl,
-  setImageUrl,
-  setImageCopy,
   setImageUpload,
   imageUpload,
+  setImageUrl,
+  setImageCopy,
+  imageFile,
+  setImageFile,
 }) => {
   const [loader, setLoader] = useState(false);
   const [imageError, setImageError] = useState("");
   const [formError, setError] = useState("");
   const [listError, setListError] = useState("");
   const [response, setResponse] = useState("");
-  const [imageFile, setImageFile] = useState(null);
   const user = useSelector((state) => state.user.user);
   const business = useSelector((state) => state.business.business);
   const dispatch = useDispatch();
@@ -188,6 +188,7 @@ const CreateEventModal = ({
       const extFile = selectedFile.name
         .substr(idxDot, selectedFile.name.length)
         .toLowerCase();
+      console.log(selectedFile, extFile);
       if (extFile === "jpeg" || extFile === "png" || extFile === "jpg") {
         setImageError("");
         setImageUpload(URL.createObjectURL(e.target.files[0]));
@@ -242,6 +243,7 @@ const CreateEventModal = ({
         setListError("");
         /*set loader value */
         setLoader(true);
+        console.log("*****", imageFile);
         /* to upload file to s3 bucket */
         let imageUrl = null;
         if (imageFile !== null) {

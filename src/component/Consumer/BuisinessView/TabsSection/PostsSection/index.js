@@ -17,7 +17,7 @@ const PostsSection = ({ profile, businessId, setSelectedListId }) => {
     <>
       <PostsSectionContent>
         <AddPostSection profile={profile} businessId={businessId} />
-        <PostFilter setFilterArr={setFilterArr}/>
+        <PostFilter setFilterArr={setFilterArr} />
         <PostChat
           setSelectedListId={setSelectedListId}
           filterArr={filterArr}

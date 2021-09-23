@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
-import ProfileImg from "../../../../../../../images/profile-img.png";
+import { FaCaretRight } from "react-icons/fa";
+import moment from "moment";
+import BannerImg from "../../../../../../../images/sliderimg.png";
 import ReplyInput from "./ReplyInput";
 import LikesBar from "../LikesBar";
 import { useSelector, useDispatch } from "react-redux";
@@ -17,12 +19,16 @@ import {
 import Comment from "./comments";
 import ScrollToBottom from "./ScrollToBottom";
 import { setWs } from "../../../../../../../reducers/userReducer";
-import { RiArrowDropRightFill } from "react-icons/ri";
-import ReactTooltip from "react-tooltip";
 import {
-  checkMime,
-  replaceBucket,
-} from "../../../../../../../utilities/checkResizedImage";
+  FeedBigImage,
+  FeedDescription,
+  InnerListBanner,
+  InnerOverlay,
+  ListAuthorName,
+  ListInfo,
+  ListName,
+  ListNameWrap,
+} from "../../../../../FeedContent/styled";
 
 const reactStringReplace = require("react-string-replace");
 
@@ -37,7 +43,7 @@ const UserMessageContent = styled.div`
     align-items: flex-start;
   }
   &.UserReplyContent {
-    padding: 10px 0 0 40px;
+    padding: 10px 0 0 0px;
     @media (max-width: 767px) {
       padding: 10px 0 0 0px;
     }
@@ -67,68 +73,20 @@ const ProfileNameHeader = styled.div`
   }
 `;
 
-const ProfileThumb = styled.div`
-  width: 30px;
-  height: 30px;
-  margin: 0 10px 0 0;
-  border: 3px solid #ffffff;
-  border-radius: 50%;
-  overflow: hidden;
-  img {
-    width: 30px;
-    height: 30px;
-  }
-`;
 const ProfileNameWrap = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  max-width: calc(100% - 40px);
-  border-bottom: 0.25px solid #878787;
-  padding: 0 25px 15px 0px;
+  max-width: 100%;
+  // border-bottom: 0.25px solid #878787;
+  padding: 0 0px 15px 0px;
   width: 100%;
   @media (max-width: 1024px) {
-    padding: 0 45px 15px 0px;
+    padding: 0 0px 15px 0px;
   }
   @media (max-width: 767px) {
     padding: 0 0px 15px 0px;
-  }
-`;
-
-const ProfileName = styled.div`
-  font-style: normal;
-  font-size: 13px;
-  line-height: normal;
-  margin: 7px 0 0px 0;
-  font-weight: 700;
-  color: #ff2e9a;
-  display: flex;
-  flex-direction: row;
-
-  span {
-    font-weight: 700;
-    color: #fff;
-    margin: 0 3px;
-  }
-  @media (max-width: 1024px) {
-    flex-direction: column;
-  }
-`;
-
-const ChatInput = styled.div`
-  font-style: normal;
-  font-size: 12px;
-  line-height: normal;
-  margin: 0 0 5px;
-  color: #fff;
-  span {
-    font-size: 13px;
-    color: #ff2e9a;
-    font-weight: 600;
-    &.mentionData {
-      cursor: pointer;
-    }
   }
 `;
 
@@ -145,52 +103,6 @@ const LoaderWrap = styled.div`
   margin: 30px 0 20px;
 `;
 
-const RightArrowSec = styled.div`
-  display: flex;
-  align-items: flex-start;
-  @media (max-width: 767px) {
-    margin: 5px 0 0 0;
-  }
-`;
-
-const ArrowRight = styled.div`
-  margin: -3px 10px 0;
-  @media (max-width: 1024px) {
-    margin: -3px 0 0 -7px;
-  }
-  svg {
-    color: #fff;
-    font-size: 24px;
-  }
-`;
-
-const DescriptionBox = styled.div`
-  font-weight: bold;
-  font-size: 10px;
-  display: flex;
-  align-items: center;
-  text-align: center;
-  color: #ffffff;
-  background: #ff2e9a;
-  border-radius: 12px;
-  padding: 2px 10px;
-  max-width: 190px;
-  cursor: pointer;
-  a {
-    text-decoration: none;
-  }
-  span {
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    margin: 0;
-    font-weight: bold;
-    font-size: 10px;
-    max-width: 20ch;
-  }
-`;
-
 const UserMessage = ({ postData, setSelectedListId }) => {
   const dispatch = useDispatch();
   const [displayComments, setDisplayComments] = useState(false);
@@ -199,13 +111,17 @@ const UserMessage = ({ postData, setSelectedListId }) => {
   );
   const business = useSelector((state) => state.business.business)[0];
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState(null);
   const [displayCommentInput, setDisplayCommentInput] = useState(false);
   const [flag, setFlag] = useState(false);
   const filters = useSelector((state) => state.business.filters);
   const user = useSelector((state) => state.user.user);
   const ws = useSelector((state) => state.user.ws);
   const history = useHistory();
+  const [listImage, setListImage] = useState(
+    postData.postDetails.list.image
+      ? postData.postDetails.list.image
+      : BannerImg
+  );
 
   ws.onmessage = (evt) => {
     const message = JSON.parse(evt.data);
@@ -272,42 +188,6 @@ const UserMessage = ({ postData, setSelectedListId }) => {
     }
   };
 
-  /** to check for resized image */
-  useEffect(() => {
-    if (postData.postDetails.ownerId === null) {
-      const findMime = checkMime(business.default_image_url);
-      const image = replaceBucket(business.default_image_url, findMime, 30, 30);
-      setImage(image);
-    } else if (
-      postData.postDetails.ownerId.photo !== "" &&
-      postData.postDetails.ownerId.photo !== null
-    ) {
-      const findMime = checkMime(postData.postDetails.ownerId.photo);
-      const image = replaceBucket(
-        postData.postDetails.ownerId.photo,
-        findMime,
-        30,
-        30
-      );
-      setImage(image);
-    } else {
-      setImage(ProfileImg);
-    }
-  }, [postData, business.default_image_url]);
-
-  /** to check image error */
-  const checkError = () => {
-    if (postData.postDetails.ownerId === null) {
-      setImage(business.default_image_url);
-    } else if (
-      postData.postDetails.ownerId.photo !== "" &&
-      postData.postDetails.ownerId.photo !== null
-    ) {
-      setImage(postData.postDetails.ownerId.photo);
-    } else {
-      setImage(ProfileImg);
-    }
-  };
   /** to add comment function */
   const addComment = async (obj) => {
     ws.send(
@@ -454,54 +334,47 @@ const UserMessage = ({ postData, setSelectedListId }) => {
       <UserMsgWrap>
         <UserMessageContent>
           <ProfileNameHeader>
-            <ProfileThumb>
-              <img src={image} onError={() => checkError()} alt="" />
-            </ProfileThumb>
             <ProfileNameWrap>
-              <ProfileName>
-                {postData && postData.postDetails &&
-                postData.postDetails.ownerId === null ? (
-                  business.company_name
-                ) : (
-                  <span
-                    onClick={() =>
-                      history.push(`/u/${postData.postDetails.ownerId._id}`)
-                    }
-                    style={{ cursor: "pointer" }}
-                  >
-                    {postData.postDetails.ownerId.name}
-                  </span>
-                )}{" "}
-                {postData.postDetails.list._id !== null ? (
-                  <RightArrowSec>
-                    <ArrowRight>
-                      <RiArrowDropRightFill />
-                    </ArrowRight>
-                    <DescriptionBox>
-                      <div
-                        data-for="custom-class"
-                        data-tip={postData.postDetails.list.name}
-                      >
-                        <span>{postData.postDetails.list.name}</span>
-                      </div>
-                      <ReactTooltip
-                        id="custom-class"
-                        className="extraClass"
-                        effect="solid"
-                        backgroundColor="#ff2e9a"
-                        textColor="white"
-                      />
-                    </DescriptionBox>
-                  </RightArrowSec>
-                ) : null}
-              </ProfileName>
-              <ChatInput>
+              {postData.postDetails.list._id !== null ? (
+                <InnerListBanner>
+                  <img
+                    src={listImage}
+                    alt=""
+                    onError={() => setListImage(BannerImg)}
+                  />
+                  <InnerOverlay />
+                  <ListNameWrap>
+                    <ListName>{postData.postDetails.list.name}</ListName>
+                    <ListInfo>
+                      <FaCaretRight />
+                      <ListAuthorName>
+                        {" "}
+                        {postData.postDetails.ownerId.name}
+                      </ListAuthorName>
+                      <span>|</span>
+                      <ListAuthorName>
+                        Added on{" "}
+                        {moment(postData.postDetails.createdAt).format(
+                          "MMM DD,YYYY, hh:MM a"
+                        )}{" "}
+                        EDT{" "}
+                      </ListAuthorName>
+                    </ListInfo>
+                  </ListNameWrap>
+                </InnerListBanner>
+              ) : null}
+              <FeedDescription>
                 {findDesc(
                   postData.postDetails.data,
                   postData.postDetails.taggedUsers,
                   postData.postDetails.taggedLists
                 )}
-              </ChatInput>
+              </FeedDescription>
+              {postData.postDetails.media.length > 0 && (
+                <FeedBigImage>
+                  <img src={postData.postDetails.media[0]} alt="" />
+                </FeedBigImage>
+              )}
               <LikesBar
                 type="comment"
                 totalLikes={postData.totalLikes}
