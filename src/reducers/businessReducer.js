@@ -303,6 +303,7 @@ export const slice = createSlice({
     },
     clearTopPost: (state) => {
       state.topPost = false;
+      state.topPostId = null
     },
   },
   extraReducers: {
@@ -383,6 +384,15 @@ export const slice = createSlice({
             state.posts = state.posts.sort((a, b) => {
               return new Date(b.totalLikes) - new Date(a.totalLikes);
             });
+          }
+          if (state.topPost) {
+            state.topPostId = {
+              postId: action.payload.postId,
+              postDetails: { ...findPost1[0].postDetails, likes: likes },
+              comments: findPost1[0].comments,
+              totalComments: findPost1[0].totalComments,
+              totalLikes: findPost1[0].totalLikes + 1,
+            };
           }
         }
       }

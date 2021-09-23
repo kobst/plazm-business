@@ -31,6 +31,7 @@ import {
   removeSubscribedList,
   addSubscribedList,
 } from "../../../../../reducers/userReducer";
+import ValueLoader from "../../../../../utils/loader";
 
 const NewInBuzzItems = ({
   data,
@@ -46,6 +47,7 @@ const NewInBuzzItems = ({
   const user = useSelector((state) => state.user.user);
   const [offsetLeft, setOffsetLeft] = useState(0);
   const [offsetTop, setOffsetTop] = useState(0);
+  const [loader, setLoader] = useState(false);
   const [image, setImage] = useState(
     data.media.length > 0 ? data.media[0].image : EventImg
   );
@@ -72,6 +74,7 @@ const NewInBuzzItems = ({
 
   /** to unsubscribe from a list */
   const listUnSubscribe = async () => {
+    setLoader(true);
     const obj = {
       userId: user._id,
       listId: data._id,
@@ -79,6 +82,7 @@ const NewInBuzzItems = ({
     const list = await dispatch(UnSubscribeToAList(obj));
     const response = await unwrapResult(list);
     if (response) {
+      setLoader(false);
       dispatch(removeSubscribedList(response.listId));
       dispatch(
         userUnSubscribeToAList({
@@ -92,6 +96,7 @@ const NewInBuzzItems = ({
 
   /** to subscribe from a list */
   const listSubscribe = async () => {
+    setLoader(true);
     const obj = {
       userId: user._id,
       listId: data._id,
@@ -99,6 +104,7 @@ const NewInBuzzItems = ({
     const list = await dispatch(SubscribeToAListAction(obj));
     const response = await unwrapResult(list);
     if (response) {
+      setLoader(false);
       dispatch(addSubscribedList(response.listId));
       dispatch(
         userSubscribeToAList({
@@ -133,77 +139,82 @@ const NewInBuzzItems = ({
               selectedId &&
               selectedId.id === data._id &&
               selectedId.heading === heading &&
-              offsetLeft !== 0 &&(
-                  <DisplayItemContent
-                    className="InnerModal"
-                    offsetLeft={offsetLeft}
-                    offsetTop={offsetTop}
-                  >
-                    <InnerCoverImg>
-                      <img
-                        src={image}
-                        alt=""
-                        onError={() => setImage(EventImg)}
-                      />
-                      <InnerItemsDescription>
-                        <InnerCollectionPara>{data.name}</InnerCollectionPara>
-                      </InnerItemsDescription>
-                    </InnerCoverImg>
-                    <AuthorInfo>
-                      by{" "}
-                      <strong>
-                        {data.ownerId && data.ownerId.length > 0
-                          ? data.ownerId[0].name
-                          : data.ownerId && data.ownerId.name}
-                      </strong>
-                      <br />
-                      Last Updated{" "}
-                      {moment(data.updatedAt).format(
-                        "MMM DD,YYYY, hh:MM a"
-                      )}{" "}
-                      EST{" "}
-                    </AuthorInfo>
-                    <FollowedBy>
-                      {data.followers.length > 0 && <h2>Followed by</h2>}
-                      <FollowedByListUl>
-                        {data.followers.length > 0 &&
-                          data.followers.slice(0, 8).map((i, key) => {
-                            return (
-                              <li key={key}>
-                                <img
-                                  src={
-                                    i.photo && i.photo !== ""
-                                      ? i.photo
-                                      : FollwersImg
-                                  }
-                                  alt=""
-                                />
-                              </li>
-                            );
-                          })}
-                        {data.followers.length > 7 ? (
-                          <div className="MorePlus">
-                            +{data.followers.length - 7} more
-                          </div>
-                        ) : null}
-                      </FollowedByListUl>
-                    </FollowedBy>
-                    <InnerDescriptionPara>
-                      {data.description}....
-                      <strong onClick={() => ReadMore()}>Read More</strong>
-                    </InnerDescriptionPara>
-                    {data.followers.length === 0 ||
-                    !data.followers.find((i) => i._id === user._id) ? (
-                      <SubscribeBtn onClick={() => listSubscribe()}>
-                        Subscribe
-                      </SubscribeBtn>
-                    ) : (
-                      <SubscribeBtn onClick={() => listUnSubscribe()}>
-                        UnSubscribe
-                      </SubscribeBtn>
-                    )}
-                  </DisplayItemContent>
-                )}
+              offsetLeft !== 0 && (
+                <DisplayItemContent
+                  className="InnerModal"
+                  offsetLeft={offsetLeft}
+                  offsetTop={offsetTop}
+                >
+                  <InnerCoverImg>
+                    <img
+                      src={image}
+                      alt=""
+                      onError={() => setImage(EventImg)}
+                    />
+                    <InnerItemsDescription>
+                      <InnerCollectionPara>{data.name}</InnerCollectionPara>
+                    </InnerItemsDescription>
+                  </InnerCoverImg>
+                  <AuthorInfo>
+                    by{" "}
+                    <strong>
+                      {data.ownerId && data.ownerId.length > 0
+                        ? data.ownerId[0].name
+                        : data.ownerId && data.ownerId.name}
+                    </strong>
+                    <br />
+                    Last Updated{" "}
+                    {moment(data.updatedAt).format(
+                      "MMM DD,YYYY, hh:MM a"
+                    )} EST{" "}
+                  </AuthorInfo>
+                  <FollowedBy>
+                    {data.followers.length > 0 && <h2>Followed by</h2>}
+                    <FollowedByListUl>
+                      {data.followers.length > 0 &&
+                        data.followers.slice(0, 8).map((i, key) => {
+                          return (
+                            <li key={key}>
+                              <img
+                                src={
+                                  i.photo && i.photo !== ""
+                                    ? i.photo
+                                    : FollwersImg
+                                }
+                                alt=""
+                              />
+                            </li>
+                          );
+                        })}
+                      {data.followers.length > 7 ? (
+                        <div className="MorePlus">
+                          +{data.followers.length - 7} more
+                        </div>
+                      ) : null}
+                    </FollowedByListUl>
+                  </FollowedBy>
+                  <InnerDescriptionPara>
+                    {data.description}....
+                    <strong onClick={() => ReadMore()}>Read More</strong>
+                  </InnerDescriptionPara>
+                  {data.followers.length === 0 ||
+                  !data.followers.find((i) => i._id === user._id) ? (
+                    <SubscribeBtn
+                      onClick={() => listSubscribe()}
+                      disabled={loader}
+                    >
+                      {loader ? <ValueLoader /> : "Subscribe"}
+                    </SubscribeBtn>
+                  ) : (
+                    <SubscribeBtn
+                      onClick={() => listUnSubscribe()}
+                      disabled={loader}
+                    >
+                      {loader ? <ValueLoader /> : "UnSubscribe"}
+                    </SubscribeBtn>
+                  )}
+                </DisplayItemContent>
+              )}
           </ItemsDescription>
         </CoverImg>
       </ItemsWrapper>
