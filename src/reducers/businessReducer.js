@@ -303,7 +303,7 @@ export const slice = createSlice({
     },
     clearTopPost: (state) => {
       state.topPost = false;
-      state.topPostId = null
+      state.topPostId = null;
     },
   },
   extraReducers: {
@@ -385,7 +385,10 @@ export const slice = createSlice({
               return new Date(b.totalLikes) - new Date(a.totalLikes);
             });
           }
-          if (state.topPost) {
+          if (
+            state.topPost &&
+            state.topPostId.postId === action.payload.postId
+          ) {
             state.topPostId = {
               postId: action.payload.postId,
               postDetails: { ...findPost1[0].postDetails, likes: likes },
@@ -471,7 +474,10 @@ export const slice = createSlice({
               new Date(a.postDetails.createdAt)
             );
           });
-          if (state.topPost) {
+          if (
+            state.topPost &&
+            state.topPostId.postId === action.payload.commentInfo.itemId
+          ) {
             state.topPostId = {
               postId: action.payload.commentInfo.itemId,
               postDetails: posts1[0].postDetails,
@@ -530,7 +536,10 @@ export const slice = createSlice({
               new Date(a.postDetails.createdAt)
             );
           });
-          if (state.topPost) {
+          if (
+            state.topPost &&
+            state.topPostId.postId === action.payload.postId
+          ) {
             state.topPostId = {
               postId: action.payload.postId,
               postDetails: posts1[0].postDetails,
@@ -584,7 +593,10 @@ export const slice = createSlice({
                 new Date(a.postDetails.createdAt)
               );
             });
-            if (state.topPost) {
+            if (
+              state.topPost &&
+              state.topPostId.postId === action.payload.post[0].comment.itemId
+            ) {
               state.topPostId = {
                 postId: action.payload.post[0].comment.itemId,
                 postDetails: posts1.postDetails,
@@ -649,7 +661,10 @@ export const slice = createSlice({
                 new Date(a.postDetails.createdAt)
               );
             });
-            if (state.topPost) {
+            if (
+              state.topPost &&
+              state.topPostId.postId === action.payload.postId
+            ) {
               state.topPostId = {
                 postId: action.payload.postId,
                 postDetails: posts1.postDetails,
@@ -742,6 +757,44 @@ export const slice = createSlice({
               new Date(a.postDetails.createdAt)
             );
           });
+        }
+      }
+    },
+    [addLikeToComment.fulfilled]: (state, action) => {
+      if (action.payload) {
+        let findPost1 = current(state.posts).filter(
+          (i) => i.postId === action.payload.postId
+        );
+        if (findPost1 && findPost1.length > 0) {
+          if (findPost1[0].comments.length > 0) {
+            let findComment = findPost1[0].comments.filter(
+              (i) => i._id === action.payload.commentId
+            );
+            let findComment1 = findPost1[0].comments.filter(
+              (i) => i._id !== action.payload.commentId
+            );
+
+            if (findComment && findComment.length > 0) {
+              let likes = findComment[0].likes.concat(action.payload.like);
+              let commentsSort = findComment1
+                .concat({ ...findComment[0], likes: likes })
+                .sort((a, b) => {
+                  return new Date(a.createdAt) - new Date(b.createdAt);
+                });
+              if (
+                state.topPost &&
+                state.topPostId.postId === action.payload.postId
+              ) {
+                state.topPostId = {
+                  postId: action.payload.postId,
+                  postDetails: findPost1[0].postDetails,
+                  comments: commentsSort,
+                  totalComments: findPost1[0].totalComments,
+                  totalLikes: findPost1[0].totalLikes,
+                };
+              }
+            }
+          }
         }
       }
     },

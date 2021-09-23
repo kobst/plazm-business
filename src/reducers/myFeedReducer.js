@@ -7,7 +7,7 @@ import {
   homeSearch,
   GetListDetails,
   deletePost,
-  updatePost
+  updatePost,
 } from "../graphQl";
 
 /*
@@ -157,7 +157,6 @@ export const HomeSearch = createAsyncThunk("data/HomeSearch", async (obj) => {
   return response.data.homeSearch;
 });
 
-
 /*
  * @desc:  to delete the post
  * @params: id
@@ -170,7 +169,6 @@ export const deleteUserPost = createAsyncThunk(
     return { res: response.data.deletePost, id: id };
   }
 );
-
 
 /*
  * @desc:  to update a post to a business
@@ -247,12 +245,12 @@ export const slice = createSlice({
       state.myFeed = [];
     },
     updatePostInMyFeed: (state, action) => {
-      state.myFeed =  state.myFeed.map(x => {
+      state.myFeed = state.myFeed.map((x) => {
         return action.payload._id === x._id ? action.payload : x;
       });
     },
     deletePostInMyFeed: (state, action) => {
-      state.myFeed =  state.myFeed.filter(i=>i._id !== action.payload)
+      state.myFeed = state.myFeed.filter((i) => i._id !== action.payload);
     },
   },
   extraReducers: {
@@ -648,8 +646,8 @@ export const slice = createSlice({
             comments: [],
             likes: obj.likes !== null ? obj.likes : [],
           }));
-          if(state.filterByClosest || state.filterByUpdatedAt) 
-          state.myFeed = []
+          // if (state.filterByClosest || state.filterByUpdatedAt)
+          //   state.myFeed = [];
           state.myFeed = state.myFeed.concat(data);
           state.totalData = action.payload.totalPlaces;
         }
@@ -724,6 +722,6 @@ export const {
   setEventId,
   setCommentAdded,
   updatePostInMyFeed,
-  deletePostInMyFeed
+  deletePostInMyFeed,
 } = slice.actions;
 export default slice.reducer;
