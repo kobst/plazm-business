@@ -468,12 +468,12 @@ const ListDescriptionView = ({
                       </ButtonOuterDiv>
                     </>
                   ) : !user.listFollowed.includes(selectedList._id) ? (
-                    <button
+                    <ButtonOrange
                       className="subscribe"
                       onClick={() => listSubscribe()}
                     >
                       Subscribe
-                    </button>
+                    </ButtonOrange>
                   ) : (
                     <ButtonOrange
                       className="unsubscribe"
