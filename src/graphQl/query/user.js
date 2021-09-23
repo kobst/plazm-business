@@ -55,7 +55,7 @@ const getAllUsers = () => {
 /*
 @desc: getUserFavoritesBusiness query
 */
-const getUserFavorites = ({id,value,filters,longitude,latitude}) => {
+const getUserFavorites = ({ id, value, filters, longitude, latitude }) => {
   const graphQl = {
     query: `
           query GetUserFavoritesBusiness($id: ID!, $value: Int, $filters:homeSearchFilterInput!,$latitude: Float!,$longitude: Float!){
@@ -85,10 +85,10 @@ const getUserFavorites = ({id,value,filters,longitude,latitude}) => {
           }`,
     variables: {
       id: id,
-      value:value,
+      value: value,
       filters: filters,
       longitude: parseFloat(longitude),
-      latitude: parseFloat(latitude)
+      latitude: parseFloat(latitude),
     },
   };
   return graphQl;
@@ -100,8 +100,8 @@ const getUserFavorites = ({id,value,filters,longitude,latitude}) => {
 const GetMyFeedData = (obj) => {
   const graphQl = {
     query: `
-          query GetMyFeedData($id: ID!, $value: Int){
-            getMyFeedData (input: {id: $id, value:$value}){
+          query GetMyFeedData($id: ID!, $value: Int, $filters: homeSearchFilterInput!,  $longitude: Float!, $latitude: Float!){
+            getMyFeedData (input: {id: $id, value:$value, filters:$filters,longitude:$longitude, latitude:$latitude}){
               message
               success
               totalPlaces 
@@ -137,6 +137,9 @@ const GetMyFeedData = (obj) => {
                 listId {
                   _id
                   name
+                  media {
+                    image
+                  }
                 }
                 title
                 description
@@ -168,6 +171,9 @@ const GetMyFeedData = (obj) => {
     variables: {
       id: obj.id,
       value: obj.value,
+      filters: { closest: false, updated: true },
+      latitude: 55.151134,
+      longitude: 25.087626,
     },
   };
   return graphQl;
@@ -198,4 +204,10 @@ const GetUserProfileData = (id) => {
   };
   return graphQl;
 };
-export { getUser,getAllUsers,getUserFavorites, GetMyFeedData, GetUserProfileData };
+export {
+  getUser,
+  getAllUsers,
+  getUserFavorites,
+  GetMyFeedData,
+  GetUserProfileData,
+};

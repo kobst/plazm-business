@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { IoMdClose } from "react-icons/io";
-import { FaSort } from "react-icons/fa";
 import ValueLoader from "../../../utils/loader";
-import { clearMyFeedData, fetchMyFeedData } from "../../../reducers/myFeedReducer";
+import {
+  clearMyFeedData,
+  fetchMyFeedData,
+} from "../../../reducers/myFeedReducer";
 import DisplayBusinessDetails from "./DisplayBusinessDetails";
 import { unwrapResult } from "@reduxjs/toolkit";
+import SearchBar from "./SearchBar";
 
 const LoaderWrap = styled.div`
   width: 100%;
@@ -70,10 +72,6 @@ const BuisinessViewContent = styled.div`
   }
 `;
 
-const HeadingWrap = styled.div`
-  padding: 47px 22px 0;
-`;
-
 const BusinessListWrap = styled.div`
   width: 100%;
   position: relative;
@@ -81,21 +79,6 @@ const BusinessListWrap = styled.div`
   padding: 10px 0;
   flex-direction: column;
   overflow: hidden;
-`;
-
-const CloseDiv = styled.div`
-  width: 24px;
-  position: relative;
-  display: flex;
-  justify-content: flex-end;
-  position: absolute;
-  right: 17px;
-  cursor: pointer;
-  top: 12px;
-  svg {
-    font-size: 24px;
-    color: #fff;
-  }
 `;
 
 const NoData = styled.div`
@@ -123,9 +106,9 @@ const MyFeed = ({ setDisplayTab, setMyFeedIndex, setSelectedListId }) => {
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffSet] = useState(0);
   const dispatch = useDispatch();
-  const [flag, setFlag] = useState(true)
+  const [flag, setFlag] = useState(true);
 
-  useEffect(()=>{
+  useEffect(() => {
     const fetchData = async () => {
       const obj = {
         id: user._id,
@@ -133,12 +116,11 @@ const MyFeed = ({ setDisplayTab, setMyFeedIndex, setSelectedListId }) => {
       };
       dispatch(clearMyFeedData());
       const res = await dispatch(fetchMyFeedData(obj));
-      const data = await unwrapResult(res)
-      if(data)
-      setFlag(false)
-    }
-    fetchData()
-  },[dispatch, user._id])
+      const data = await unwrapResult(res);
+      if (data) setFlag(false);
+    };
+    fetchData();
+  }, [dispatch, user._id]);
 
   const fetchMoreData = () => {
     if (offset + 20 < totalData) {
@@ -155,15 +137,7 @@ const MyFeed = ({ setDisplayTab, setMyFeedIndex, setSelectedListId }) => {
         </LoaderWrap>
       ) : (
         <BuisinessViewContent>
-          <HeadingWrap>
-            <CloseDiv>
-              <IoMdClose onClick={() => setDisplayTab(false)} />
-            </CloseDiv>
-            <h3>
-              My Feed <FaSort />
-            </h3>
-          </HeadingWrap>
-          <div className="dashed" />
+          <SearchBar setOffset={setOffSet} setDisplayTab={setDisplayTab} />
           <div
             id="scrollableDiv"
             style={{ height: "calc(100vh - 116px)", overflow: "auto" }}

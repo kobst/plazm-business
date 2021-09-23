@@ -230,46 +230,6 @@ const LikesBar = ({
           )}
         </LikesBtnWrap>
       </BottomBarLikes>
-      {/* <BottomBarLikes>
-        <LikesBtnWrap>
-          {type !== "commentReply" ? (
-            <UsersButton onClick={() => displayComments()}>
-              {type === "comment" ? "Reply" : "Reply"}
-            </UsersButton>
-          ) : null}
-          {type !== "commentReply" ? <CircleDot /> : null}
-          {type !== "commentReply" ? (
-            <UsersButton
-              onClick={() => addLike()}
-              disabled={userLikedEvent || userLikedComment}
-            >
-              Like
-            </UsersButton>
-          ) : null}
-        </LikesBtnWrap>
-        {type !== "commentReply" ? (
-          <LikesBtnWrap>
-            <RightDiv>
-              {userLikedEvent || userLikedComment ? (
-                <MdFavorite style={{ color: "red" }} />
-              ) : (
-                <MdFavoriteBorder />
-              )}{" "}
-              {likeCount === 0
-                ? likeCountForComment === 0
-                  ? totalLikes
-                  : likeCountForComment
-                : likeCount}
-            </RightDiv>
-            <RightDiv>
-              <MdChatBubbleOutline
-                onClick={() => displayCommentsWithEvents()}
-              />{" "}
-              {totalComments}
-            </RightDiv>
-          </LikesBtnWrap>
-        ) : null}
-      </BottomBarLikes> */}
     </>
   );
 };
