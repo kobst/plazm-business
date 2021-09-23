@@ -353,7 +353,7 @@ const DisplayBusinessDetails = ({ data, id, setMyFeedIndex, setSelectedListId })
                       )}
                     </RightWrap>
                   </ProfileName>
-                  <ChatInput>
+                  {/* <ChatInput>
                     <span>
                       {data.business[0].favorites !== null
                         ? data.business[0].favorites.length
@@ -366,7 +366,7 @@ const DisplayBusinessDetails = ({ data, id, setMyFeedIndex, setSelectedListId })
                         : 0}
                     </span>{" "}
                     Posts
-                  </ChatInput>
+                  </ChatInput> */}
                   <BusinessHashTags data={data.business[0].filter_tags} />
                 </ProfileNameWrap>
               </ProfileNameHeader>
