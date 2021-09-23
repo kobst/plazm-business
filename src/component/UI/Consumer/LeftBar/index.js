@@ -27,6 +27,7 @@ import PolygonArrow from "../../../../images/Polygon.png";
 import { Auth } from "aws-amplify";
 import { setGloablLoader } from "../../../../reducers/consumerReducer";
 import DiscoverList from "../../../Consumer/DiscoverList";
+import FeedDataContent from "../../../Consumer/DiscoverList/FeedContent";
 
 const LeftBarContent = styled.div`
   width: 100px;
@@ -486,7 +487,10 @@ const LeftBar = ({
           </TabPanel>
           <TabPanel>
             <div className="panel-content">
-              <h2>Any content 6</h2>
+
+                <FeedDataContent />
+              
+
             </div>
           </TabPanel>
           <TabPanel>

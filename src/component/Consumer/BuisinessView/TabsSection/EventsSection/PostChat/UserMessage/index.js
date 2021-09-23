@@ -281,7 +281,7 @@ const UserMessage = ({ eventData }) => {
     <>
       <UserMessageContent>
         <ProfileNameHeader>
-          <ProfileThumb>
+          <ProfileThumb className="testtt">
             <img src={image} onError={() => checkError()} alt="" />
           </ProfileThumb>
           <ProfileNameWrap>
