@@ -54,7 +54,7 @@ const NewCollectionSectionSlider = ({
   };
   return (
     <div>
-      <NewInBuzzSliderWrapper onScroll={(e) => fetchMoreLists(e)}>
+      <NewInBuzzSliderWrapper >
         {data.map((i, key) => (
           <NewInBuzzItems
             data={i}
@@ -71,11 +71,11 @@ const NewCollectionSectionSlider = ({
             selectedId={selectedId}
           />
         ))}
-        {loader && (
+         {loader && ( 
           <LoaderWrap>
             <ValueLoader />
           </LoaderWrap>
-        )}
+         )}
         {!loader && <NoMorePost>No More Lists To Display</NoMorePost>}
       </NewInBuzzSliderWrapper>
     </div>

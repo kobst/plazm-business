@@ -163,7 +163,7 @@ const DiscoverList = ({ setDiscoverBtn, setSelectedListId, setReadMore }) => {
       )}
     </>
   ) : (
-    <LoaderWrap>
+    <LoaderWrap className="DiscoverLoaderWrap">
       <ValueLoader />
     </LoaderWrap>
   );
