@@ -176,8 +176,12 @@ const DropdownContent = styled.div`
       margin: 0;
       cursor: pointer;
       background: transparent;
+<<<<<<< HEAD
       :hover,
       :focus {
+=======
+      :hover, :focus {
+>>>>>>> master
         color: #fff;
       }
     }
@@ -283,7 +287,7 @@ const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
                       onClick={() => closestFilter()}
                       disabled={filterClosest}
                     >
-                      Closest
+                      Closest 
                     </button>
                   </li>
 
