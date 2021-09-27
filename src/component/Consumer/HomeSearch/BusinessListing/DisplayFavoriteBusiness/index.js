@@ -171,45 +171,6 @@ const ChatInput = styled.div`
   }
 `;
 
-// const RightWrap = styled.div`
-//   display: flex;
-//   flex-direction: row;
-//   justify-content: flex-start;
-//   margin: 0px;
-//   align-items: center;
-//   flex-wrap: wrap;
-//   .OpenDiv {
-//     font-size: 10px;
-//     line-height: normal;
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-//     text-align: center;
-//     text-transform: uppercase;
-//     color: #ffffff;
-//     background: #3fce56;
-//     border-radius: 50px;
-//     padding: 3px 11px;
-//   }
-//   .CloseDiv {
-//     font-size: 10px;
-//     line-height: normal;
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-//     text-align: center;
-//     text-transform: uppercase;
-//     color: #ffffff;
-//     background: #fe6f5b;
-//     border-radius: 50px;
-//     padding: 3px 11px;
-//   }
-//   .favoriteBusiness,
-//   .favoriteBusinessBorder {
-//     margin: 0 0 0 11px;
-//   }
-// `;
-
 /** display favorite business */
 const DisplayFavoriteBusiness = ({
   data,
@@ -220,10 +181,7 @@ const DisplayFavoriteBusiness = ({
   const businessInfo =
     data.business && data.business.length > 0 ? data.business[0] : data;
 
-  // const [favoriteBusiness, setFavoriteBusiness] = useState(false);
   const search = useSelector((state) => state.myFeed.enterClicked);
-  // const user = useSelector((state) => state.user.user);
-  // const dispatch = useDispatch();
   const getUtcHour = new Date().getUTCHours();
   const getUtcMinutes = new Date().getUTCMinutes();
   const currentUtcDay = new Date().getUTCDay();
@@ -267,31 +225,6 @@ const DisplayFavoriteBusiness = ({
       return false;
     }
   };
-
-  // useEffect(() => {
-  //   const find = user.favorites.find((i) => i === businessInfo._id);
-  //   if (find) {
-  //     setFavoriteBusiness(true);
-  //   } else setFavoriteBusiness(false);
-  // }, [user, businessInfo._id]);
-
-  // /** to add a business to user favorites */
-  // const addFavorite = async () => {
-  //   const obj = {
-  //     businessId: businessInfo._id,
-  //     userId: user._id,
-  //   };
-  //   await dispatch(AddBusinessFavorite(obj));
-  // };
-
-  // /** to remove a business to user favorites */
-  // const removeFavorite = async () => {
-  //   const obj = {
-  //     businessId: businessInfo._id,
-  //     userId: user._id,
-  //   };
-  //   await dispatch(RemoveBusinessFavorite(obj));
-  // };
 
   /** to display business details page */
   const displayBusinessDetail = () => {
