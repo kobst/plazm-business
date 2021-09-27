@@ -120,7 +120,6 @@ const ProfileName = styled.div`
   }
 `;
 
-
 const DescriptionViewItem = styled.div`
   .background-active {
     background-color: #221e45;
@@ -131,7 +130,12 @@ const DescriptionViewItem = styled.div`
 `;
 
 /** display business details */
-const DisplayPostInAList = ({ data, id, setListIndex, setSelectedListId, setFavoriteIndex }) => {
+const DisplayPostInAList = ({
+  data,
+  id,
+  setListIndex,
+  setSelectedListId,
+}) => {
   const [image, setImage] = useState(
     data.business[0].default_image_url
       ? data.business[0].default_image_url
@@ -161,82 +165,7 @@ const DisplayPostInAList = ({ data, id, setListIndex, setSelectedListId, setFavo
     }
   };
 
-  // const dispatch = useDispatch();
-  // const getUtcHour = new Date().getUTCHours();
-  // const getUtcMinutes = new Date().getUTCMinutes();
-  // const currentUtcDay = new Date().getUTCDay();
   const history = useHistory();
-  // const days = [
-  //   "Sunday",
-  //   "Monday",
-  //   "Tuesday",
-  //   "Wednesday",
-  //   "Thursday",
-  //   "Friday",
-  //   "Saturday",
-  // ];
-
-  // /** to check if business is open/close */
-  // const checkBusinessOpenClose = () => {
-  //   if (
-  //     data.business[0].hours_format &&
-  //     data.business[0].hours_format.length > 0
-  //   ) {
-  //     for (let i = 0; i < data.business[0].hours_format.length; i++) {
-  //       const startDayIndex = days.indexOf(
-  //         data.business[0].hours_format[i].StartDay
-  //       );
-  //       const endDayIndex = days.indexOf(
-  //         data.business[0].hours_format[i].EndDay
-  //       );
-  //       if (currentUtcDay >= startDayIndex && currentUtcDay <= endDayIndex) {
-  //         const time = moment(getUtcHour + ":" + getUtcMinutes, "HH:mm");
-  //         const beforeTime = moment(
-  //           data.business[0].hours_format[i].Start,
-  //           "HH:mm"
-  //         );
-  //         const afterTime = moment(
-  //           data.business[0].hours_format[i].End,
-  //           "HH:mm"
-  //         );
-  //         if (time.isBetween(beforeTime, afterTime)) {
-  //           return true;
-  //         } else {
-  //           return false;
-  //         }
-  //       } else {
-  //         return false;
-  //       }
-  //     }
-  //   }
-  //   return false;
-  // };
-
-  // /** to check if the business is liked */
-  // useEffect(() => {
-  //   const find = user.favorites.find((i) => i === data.business[0]._id);
-  //   if (find) {
-  //     setFavoriteBusiness(true);
-  //   } else setFavoriteBusiness(false);
-  // }, [user, data]);
-
-  // /** to add a business to user favorites */
-  // const addFavorite = async () => {
-  //   const obj = {
-  //     businessId: data.business[0]._id,
-  //     userId: user._id,
-  //   };
-  //   await dispatch(AddBusinessFavorite(obj));
-  // };
-
-  // /** to remove a business to user favorites */
-  // const removeFavorite = async () => {
-  //   const obj = {
-  //     businessId: data.business[0]._id,
-  //     userId: user._id,
-  //   };
-  //   await dispatch(RemoveBusinessFavorite(obj));
-  // };
 
   /** to display business details page */
   const displayBusinessDetail = () => {
@@ -262,60 +191,6 @@ const DisplayPostInAList = ({ data, id, setListIndex, setSelectedListId, setFavo
                     </div>
                   </ProfileName>
                 </ProfileThumbBanner>
-                {/* <ProfileNameWrap>
-                <ProfileName>
-                  <div onClick={() => displayBusinessDetail()}>
-                    {data.business[0].company_name}
-                  </div>
-                  <RightWrap>
-                    {data.business[0].hours_format &&
-                    data.business[0].hours_format.length === 0 ? (
-                      <div className="CloseDiv">Close</div>
-                    ) : checkBusinessOpenClose() === true ? (
-                      <div className="OpenDiv">Open</div>
-                    ) : (
-                      <div className="CloseDiv">Close</div>
-                    )}
-
-                    {data.business[0].hours_format &&
-                    data.business[0].hours_format.length > 0 &&
-                    checkBusinessOpenClose() === true ? (
-                      favoriteBusiness ? (
-                        <img
-                          src={RedHeartIcon}
-                          onClick={() => removeFavorite()}
-                          className="favoriteBusiness"
-                          alt=""
-                        />
-                      ) : (
-                        <img
-                          src={FavoritesIcon}
-                          onClick={() => addFavorite()}
-                          className="favoriteBusinessBorder"
-                          alt=""
-                        />
-                      )
-                    ) : null}
-                  </RightWrap>
-                </ProfileName>
-                <ChatInput>
-                  <p>
-                    <span>
-                      {data.business[0].favorites !== null
-                        ? data.business[0].favorites.length
-                        : 0}
-                    </span>{" "}
-                    Followers{" "}
-                    <span className="postSpan">
-                      {data.totalPosts.length > 0
-                        ? data.totalPosts[0].totalPosts
-                        : 0}
-                    </span>{" "}
-                    Posts
-                  </p>
-                </ChatInput>
-                <BusinessHashTags data={data.business[0].filter_tags} />
-              </ProfileNameWrap> */}
               </ProfileNameHeader>
             </UserMessageContent>
           </UserMsgWrap>

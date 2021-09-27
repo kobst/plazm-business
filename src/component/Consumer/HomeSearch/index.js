@@ -65,7 +65,6 @@ const HomeSearch = ({
         .query({ name: "geolocation" })
         .then(function (result) {
           /** if location is provided then we need data by closest latitude/longitude */
-          // dispatch(setSideFiltersByClosest());
           setClosestFilter(true);
           if (locationState !== "denied") setLocationState(result.state);
           if (result.state === "granted") {
