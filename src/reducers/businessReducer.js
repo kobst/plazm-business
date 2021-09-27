@@ -7,7 +7,6 @@ import {
   addLikeToPost,
   AddLikeToComment,
   findCommentReplies,
-  findBusinessPhotos,
 } from "../graphQl";
 
 /*
@@ -20,19 +19,6 @@ export const checkBusiness = createAsyncThunk(
     const graphQl = getPlace(obj);
     const response = await graphQlEndPoint(graphQl);
     return response.data.searchPlacesByUserId;
-  }
-);
-
-/*
- * @desc:  to get images
- * @params: businessId
- */
-export const getBusinessImages = createAsyncThunk(
-  "data/getBusinessImages",
-  async (id) => {
-    const graphQl = findBusinessPhotos(id);
-    const response = await graphQlEndPoint(graphQl);
-    return response.data.getPostImages;
   }
 );
 
@@ -194,8 +180,8 @@ export const slice = createSlice({
     loadingAddComment: false,
     loadingPostComments: false,
     filters: {
-      Business: true,
-      PostsByMe: false,
+      Business: false,
+      PostsByMe: true,
       MySubscriptions: false,
       Others: false,
     },
@@ -226,8 +212,8 @@ export const slice = createSlice({
         action.payload["Others"] === false
       )
         state.filters = {
-          Business: true,
-          PostsByMe: false,
+          Business: false,
+          PostsByMe: true,
           MySubscriptions: false,
           Others: false,
         };
@@ -255,8 +241,8 @@ export const slice = createSlice({
       state.posts = [];
       state.images = [];
       state.filters = {
-        Business: true,
-        PostsByMe: false,
+        Business: false,
+        PostsByMe: true,
         MySubscriptions: false,
         Others: false,
       };
@@ -328,25 +314,6 @@ export const slice = createSlice({
     [checkBusiness.rejected]: (state, action) => {
       if (state.loading) {
         state.loading = false;
-        state.error = action.payload;
-      }
-    },
-    [getBusinessImages.pending]: (state) => {
-      if (!state.loadingImages) {
-        state.loadingImages = true;
-      }
-    },
-    [getBusinessImages.fulfilled]: (state, action) => {
-      if (state.loadingImages) {
-        state.loadingImages = false;
-        if (action.payload) {
-          state.images = action.payload.post;
-        }
-      }
-    },
-    [getBusinessImages.rejected]: (state, action) => {
-      if (state.loadingImages) {
-        state.loadingImages = false;
         state.error = action.payload;
       }
     },

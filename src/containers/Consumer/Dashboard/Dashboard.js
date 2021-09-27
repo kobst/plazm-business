@@ -7,7 +7,6 @@ import ValueLoader from "../../../utils/loader";
 import { useDispatch, useSelector } from "react-redux";
 import {
   checkBusiness,
-  getBusinessImages,
   setFlagReducer,
 } from "../../../reducers/businessReducer";
 import { unwrapResult } from "@reduxjs/toolkit";
@@ -68,15 +67,15 @@ const DashboardContainer = (props) => {
           checkBusiness({
             businessId: props.match.params.id,
             filters: {
-              Business: filters.Business
-                ? filters.Business
+              PostsByMe: filters.PostsByMe
+                ? filters.PostsByMe
                 : !filters.Business &&
                   !filters.PostsByMe &&
                   !filters.MySubscriptions &&
                   !filters.Others
                 ? true
                 : false,
-              PostsByMe: filters.PostsByMe ? filters.PostsByMe : false,
+              Business: false,
               MySubscriptions: filters.MySubscriptions
                 ? filters.MySubscriptions
                 : false,
@@ -91,7 +90,6 @@ const DashboardContainer = (props) => {
         if (data.success === true && data.place.length > 0) {
           /** fetch business images */
           dispatch(setFlagReducer());
-          await dispatch(getBusinessImages(props.match.params.id));
           setBusinessExists(true);
         } else {
           dispatch(setFlagReducer());
@@ -99,9 +97,10 @@ const DashboardContainer = (props) => {
         }
       }
     };
-    findBusiness(props.isBusinessOpen);
+
+    if (user._id) findBusiness(props.isBusinessOpen);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.isBusinessOpen, props.match.params.id, dispatch]);
+  }, [props.isBusinessOpen, props.match.params.id, dispatch, user]);
 
   return profile && !globalLoader ? (
     <Dashboard
