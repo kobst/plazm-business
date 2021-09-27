@@ -22,7 +22,6 @@ const SearchItems = ({
 
   /** to display list details page */
   const displayListDetails = () => {
-    console.log("yahhhh");
     setDiscoverBtn(false);
     setSelectedListId(data._id);
     setReadMore(true);

@@ -645,6 +645,11 @@ export const slice = createSlice({
             ...obj,
             comments: [],
             likes: obj.likes !== null ? obj.likes : [],
+            listId: [].concat({
+              ...obj.list,
+              media:
+                obj.list && obj.list.image ? [].concat(obj.list.image) : [],
+            }),
           }));
           // if (state.filterByClosest || state.filterByUpdatedAt)
           //   state.myFeed = [];
@@ -667,7 +672,7 @@ export const slice = createSlice({
     [fetchSelectedListDetails.fulfilled]: (state, action) => {
       if (state.loadingSelectedList) {
         state.loadingSelectedList = false;
-        if (action.payload) {
+        if (action.payload.data) {
           const data = action.payload.data.map((obj) => ({
             ...obj,
             comments: [],

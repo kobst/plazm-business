@@ -45,6 +45,7 @@ const AddEventModal = ({ closeModal }) => {
   const [imageCopy, setImageCopy] = useState([]);
   const [imageUpload, setImageUpload] = useState(null);
   const [imageUploadCopy, setImageUploadCopy] = useState([]);
+  const [imageFile, setImageFile] = useState(null);
   return (
     <>
       <ModalContent>
@@ -68,7 +69,11 @@ const AddEventModal = ({ closeModal }) => {
             setDisplayCreateList={setDisplayCreateList}
           />
         ) : displayCalendar ? (
-          <ScheduleAnEvent setDisplayCalendar={setDisplayCalendar} setEventDetails={setEventDetails} setDisplayList={setDisplayList}/>
+          <ScheduleAnEvent
+            setDisplayCalendar={setDisplayCalendar}
+            setEventDetails={setEventDetails}
+            setDisplayList={setDisplayList}
+          />
         ) : (
           <CreateEventModal
             closeModal={closeModal}
@@ -90,6 +95,8 @@ const AddEventModal = ({ closeModal }) => {
             setImageUpload={setImageUpload}
             imageUploadCopy={imageUploadCopy}
             setImageUploadCopy={setImageUploadCopy}
+            imageFile={imageFile}
+            setImageFile={setImageFile}
           />
         )}
       </ModalContent>

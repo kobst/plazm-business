@@ -16,6 +16,7 @@ const createPost = (values) => {
                 list {
                   _id
                   name
+                  image
                 }
                 business {
                   _id

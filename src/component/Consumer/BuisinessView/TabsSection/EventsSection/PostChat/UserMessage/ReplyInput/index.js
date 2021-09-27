@@ -115,8 +115,8 @@ const InputWrap = styled.div`
   line-height: normal;
   margin: 0 0 5px 0;
   font-weight: 500;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.05);
+  color: #9a9a9a;
+  background: white;
   height: 37px;
   border-bottom: 0.5px solid #afafaf;
   padding: 0 12px;
@@ -157,6 +157,9 @@ const InputWrap = styled.div`
     font-size: 13px;
     width: 110px;
   }
+  &.InnerReplySection { 
+    width: 96%;
+  }
 `;
 const EmojiWrap = styled.div`
   width: 15px;
@@ -164,7 +167,7 @@ const EmojiWrap = styled.div`
   position: relative;
   cursor: pointer;
   svg {
-    color: #fff;
+    color: #9a9a9a;
     font-size: 15px;
   }
 `;
@@ -323,7 +326,7 @@ const ReplyInput = ({
             <img src={image} onError={() => checkError()} alt="" />
           </ProfileThumb>
           <ProfileNameWrap>
-            <InputWrap>
+            <InputWrap className={type === "reply" ? "InnerReplySection" : ""}>
               {type === "reply" ? (
                 <div className="taggedUserInput">{"@" + name}</div>
               ) : null}

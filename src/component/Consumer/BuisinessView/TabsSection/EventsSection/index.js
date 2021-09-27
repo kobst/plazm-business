@@ -1,24 +1,24 @@
 import React from "react";
-import styled from "styled-components"
-import CalenderSection from './CalenderSection'
-import PostChat from './PostChat'
+import styled from "styled-components";
+import CalenderSection from "./CalenderSection";
+import PostChat from "./PostChat";
 
 const PostsSectionContent = styled.div`
-    width:100%;
-    position: relative;
-    display:flex;
-    flex-direction: column;
-`
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+`;
 
-const PostsSection = ({businessId}) => {
-    return (
+const PostsSection = ({ businessId }) => {
+  return (
     <>
-    <PostsSectionContent>
-        <CalenderSection businessId={businessId}/>
+      <PostsSectionContent>
+        <CalenderSection businessId={businessId} />
         <PostChat />
-    </PostsSectionContent>
+      </PostsSectionContent>
     </>
-    )
-}
-  
-  export default PostsSection
+  );
+};
+
+export default PostsSection;

@@ -27,7 +27,7 @@ const UserMessageContent = styled.div`
     align-items: flex-start;
   }
   &.UserReplyContent {
-    padding: 10px 0 0 40px;
+    padding: 10px 0 0 0px;
     @media (max-width: 767px) {
       padding: 10px 0 0 20px;
     }
@@ -63,7 +63,7 @@ const ProfileNameWrap = styled.div`
   align-items: flex-start;
   justify-content: center;
   max-width: calc(100% - 40px);
-  border-bottom: 0.25px solid #878787;
+  // border-bottom: 0.25px solid #878787;
   padding: 0 25px 15px 0px;
   width: 100%;
   @media (max-width: 1024px) {
@@ -152,7 +152,7 @@ const Comments = ({ i, eventData, displayComments, setFlag, flag }) => {
 
   /** to highlight the user mentions mentioned in post description */
   const findDesc = (value, mentions) => {
-    if (mentions.length > 0) {
+    if (mentions && mentions.length > 0) {
       for (let i = 0; i < mentions.length; i++) {
         if (value.search(new RegExp(mentions[i].name, "g") !== -1)) {
           return (

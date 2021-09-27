@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
-import ProfileImg from "../../../../../../images/profile-img.png";
+import { FaCaretRight } from "react-icons/fa";
+import moment from "moment";
+import BannerImg from "../../../../../../images/sliderimg.png";
 import LikeBar from "../LikeBar";
 import DateBar from "../DateBar";
 import TimeBar from "../TimeBar";
@@ -10,8 +12,15 @@ import { Scrollbars } from "react-custom-scrollbars";
 import ValueLoader from "../../../../../../utils/loader";
 import ReplyInput from "./ReplyInput";
 import Comments from "./comments";
-import { useHistory } from "react-router";
-import { checkMime, replaceBucket } from "../../../../../../utilities/checkResizedImage";
+import {
+  EventBigImage,
+  InnerListBanner,
+  InnerOverlay,
+  ListAuthorName,
+  ListInfo,
+  ListName,
+  ListNameWrap,
+} from "../../../../FeedContent/styled";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -47,43 +56,16 @@ const ProfileNameHeader = styled.div`
   }
 `;
 
-const ProfileThumb = styled.div`
-  width: 30px;
-  height: 30px;
-  margin: 0 10px 0 0;
-  border: 3px solid #ffffff;
-  border-radius: 50%;
-  overflow: hidden;
-  img {
-    width: 30px;
-    height: 30px;
-  }
-`;
 const ProfileNameWrap = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  max-width: calc(100% - 40px);
-  padding: 0 25px 15px 0px;
+  // max-width: calc(100% - 40px);
+  padding: 0 12px 15px 0px;
   width: 100%;
   @media (max-width: 1024px) {
-    padding: 0 45px 15px 0px;
-  }
-`;
-
-const ProfileName = styled.div`
-  font-style: normal;
-  font-size: 13px;
-  line-height: normal;
-  margin: 7px 0 5px 0;
-  font-weight: 700;
-  color: #ff2e9a;
-  cursor: pointer;
-  span {
-    font-weight: 700;
-    color: #fff;
-    margin: 0 3px;
+    padding: 0 12px 15px 0px;
   }
 `;
 
@@ -124,13 +106,18 @@ const UserMessageEvents = ({
   businessInfo,
   type,
   setSearchIndex,
+  myFeedView,
 }) => {
   const [displayEventComments, setDisplayEventComments] = useState(false);
   const [flag, setFlag] = useState(false);
   const [displayEventCommentInput, setDisplayEventCommentInput] =
     useState(false);
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState(null);
+  const [listImage, setListImage] = useState(
+    eventData.listId.length > 0 && eventData.listId[0].media.length > 0
+      ? eventData.listId[0].media[0].image
+      : BannerImg
+  );
   const loadingComments = useSelector(
     (state) => state.myFeed.loadingEventComments
   );
@@ -141,7 +128,6 @@ const UserMessageEvents = ({
     (state) => state.myFeed.selectedEventIdForComments
   );
   const commentAdded = useSelector((state) => state.myFeed.commentAdded);
-  const history = useHistory();
 
   /** to scroll to bottom of comments */
   useEffect(() => {
@@ -179,11 +165,6 @@ const UserMessageEvents = ({
     setDescription("");
   };
 
-  /** to display business details page */
-  const displayBusinessDetail = () => {
-    setSearchIndex(businessInfo._id);
-    history.push(`/b/${businessInfo._id}`);
-  };
   const days = [
     "Sunday",
     "Monday",
@@ -193,55 +174,6 @@ const UserMessageEvents = ({
     "Friday",
     "Saturday",
   ];
-
-  /** to find resized image */
-  useEffect(() => {
-    if (eventData.user !== null && eventData.user.photo) {
-      const findMime = checkMime(eventData.user.photo);
-      const image = replaceBucket(eventData.user.photo, findMime, 30, 30);
-      setImage(image);
-    } else if (eventData.user == null) {
-      if (businessInfo.default_image_url) {
-        const findMime = checkMime(businessInfo.default_image_url);
-        const image = replaceBucket(
-          businessInfo.default_image_url,
-          findMime,
-          30,
-          30
-        );
-        setImage(image);
-      } else {
-        setImage(ProfileImg);
-      }
-    } else if (businessInfo.default_image_url) {
-      const findMime = checkMime(businessInfo.default_image_url);
-      const image = replaceBucket(
-        businessInfo.default_image_url,
-        findMime,
-        30,
-        30
-      );
-      setImage(image);
-    } else {
-      setImage(ProfileImg);
-    }
-  }, [eventData, businessInfo.default_image_url]);
-
-  const checkError = () => {
-    if (eventData.user !== null && eventData.user.photo) {
-      setImage(eventData.user.photo);
-    } else if (eventData.user == null) {
-      if (businessInfo.default_image_url) {
-        setImage(businessInfo.default_image_url);
-      } else {
-        setImage(ProfileImg);
-      }
-    } else if (businessInfo.default_image_url) {
-      setImage(businessInfo.default_image_url);
-    } else {
-      setImage(ProfileImg);
-    }
-  };
 
   return (
     <>
@@ -256,13 +188,30 @@ const UserMessageEvents = ({
               : "line-inactive"
           }
         >
-          <ProfileThumb>
-            <img src={image} onError={() => checkError()} alt="" />
-          </ProfileThumb>
           <ProfileNameWrap>
-            <ProfileName onClick={() => displayBusinessDetail()}>
-              {businessInfo.company_name}
-            </ProfileName>
+            <InnerListBanner>
+              <img
+                src={listImage}
+                onError={() => setListImage(BannerImg)}
+                alt=""
+              />
+              <InnerOverlay />
+              <ListNameWrap>
+                <ListName>{eventData.listId[0].name}</ListName>
+                <ListInfo>
+                  <FaCaretRight />
+                  {eventData.ownerId && (
+                    <ListAuthorName>{eventData.ownerId[0].name}</ListAuthorName>
+                  )}
+                  <span>|</span>
+                  <ListAuthorName>
+                    Added on{" "}
+                    {moment(eventData.createdAt).format("MMM DD,YYYY, hh:MM a")}{" "}
+                    EDT{" "}
+                  </ListAuthorName>
+                </ListInfo>
+              </ListNameWrap>
+            </InnerListBanner>
             <SubHeading>{eventData.title}</SubHeading>
             <ChatInput>{eventData.data}</ChatInput>
             <DateBar
@@ -275,6 +224,11 @@ const UserMessageEvents = ({
               startTime={new Date(eventData.eventSchedule.start_time)}
               endTime={new Date(eventData.eventSchedule.end_time)}
             />
+            <EventBigImage>
+              <ImageComment
+                image={eventData.media.length > 0 ? eventData.media[0] : ""}
+              />
+            </EventBigImage>
             <LikeBar
               type="comment"
               eventId={eventData._id}
@@ -294,12 +248,12 @@ const UserMessageEvents = ({
               setFlag={setFlag}
               business={businessInfo}
               commentsRef={commentsRef}
+              setSearchIndex={setSearchIndex}
+              myFeedView={myFeedView}
+              eventData={eventData}
             />
           </ProfileNameWrap>
         </ProfileNameHeader>
-        <ImageComment
-          image={eventData.media.length>0 ? eventData.media[0] : ""}
-        />
       </UserMessageContent>
       <Scrollbars
         autoHeight

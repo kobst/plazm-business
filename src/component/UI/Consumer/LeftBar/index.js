@@ -13,6 +13,7 @@ import {
   clearMyFeedData,
   setSearchData,
   fetchMyFeedData,
+  setSideFiltersHomeSearch,
 } from "../../../../reducers/myFeedReducer";
 import Profile from "../../../Consumer/Profile";
 import ChangePassword from "../../../Consumer/ChangePassword";
@@ -147,6 +148,7 @@ const LeftBar = ({
     isBusinessOpen ? 4 : isUserOpen ? 1 : 0
   );
   const user = useSelector((state) => state.user.user);
+  const userLocation = useSelector((state) => state.business.userLocation);
   const [selectedListId, setSelectedListId] = useState(null);
   const [listClickedFromSearch, setListClickedFromSearch] = useState(false);
   const loading = useSelector((state) => state.myFeed.loading);
@@ -158,7 +160,7 @@ const LeftBar = ({
   const [profileClosed, setProfileClosed] = useState(false);
   const [userDataId, setUserDataId] = useState(userId);
   const [discoverBtn, setDiscoverBtn] = useState(false);
-  const [readMore, setReadMore] = useState(false)
+  const [readMore, setReadMore] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -200,10 +202,20 @@ const LeftBar = ({
       const obj = {
         id: user._id,
         value: 0,
+        filters: { closest: false, updated: false },
+        latitude: userLocation
+          ? userLocation.latitude
+          : process.env.REACT_APP_LATITUDE,
+        longitude: userLocation
+          ? userLocation.longitude
+          : process.env.REACT_APP_LONGITUDE,
+        search: "",
       };
+      dispatch(setSearchData(""));
       setUserDataId(null);
       setSelectedListId(null);
       history.push("/");
+      dispatch(setSideFiltersHomeSearch());
       dispatch(clearMyFeedData());
       dispatch(fetchMyFeedData(obj));
       dispatch(clearBusinessData());
@@ -213,6 +225,7 @@ const LeftBar = ({
 
   /** to clear selected data on tab click */
   const favoriteFunction = () => {
+    dispatch(setSideFiltersHomeSearch());
     dispatch(clearBusinessData());
     dispatch(clearTopPost());
     setFavoriteIndex(null);
@@ -235,12 +248,13 @@ const LeftBar = ({
       // };
       dispatch(setSearchData(""));
       dispatch(clearMyFeedData());
+      dispatch(setSideFiltersHomeSearch());
       // dispatch(HomeSearch(obj));
       setUserDataId(null);
       setSelectedListId(null);
       dispatch(clearBusinessData());
       dispatch(clearTopPost());
-      setSearchIndex(null)
+      setSearchIndex(null);
       history.push("/");
     }
   };
@@ -498,6 +512,7 @@ const LeftBar = ({
           <TabPanel>
             <div className="panel-content">
               <h2>Any content 6</h2>
+              {/* <FeedDataContent /> */}
             </div>
           </TabPanel>
           <TabPanel>

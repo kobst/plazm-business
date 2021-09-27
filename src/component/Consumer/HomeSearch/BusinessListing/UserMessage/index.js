@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import ReactTooltip from "react-tooltip";
+import moment from "moment";
+import { FaCaretRight } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { Scrollbars } from "react-custom-scrollbars";
-import { RiArrowDropRightFill } from "react-icons/ri";
 import ValueLoader from "../../../../../utils/loader";
 import ReplyInput from "./ReplyInput";
 import Comments from "./Comments";
-import ProfileImg from "../../../../../images/profile-img.png";
+import BannerImg from "../../../../../images/sliderimg.png";
 import LikesBar from "../LikesBar";
 import {
   addLikeViaSocket,
@@ -19,12 +19,16 @@ import {
   setPostId,
   setEventId,
 } from "../../../../../reducers/myFeedReducer";
-import {
-  checkMime,
-  replaceBucket,
-} from "../../../../../utilities/checkResizedImage";
 import { useHistory } from "react-router-dom";
 import BigImage from "../../../ListDescriptionView/BigImageContainer";
+import {
+  InnerListBanner,
+  InnerOverlay,
+  ListAuthorName,
+  ListInfo,
+  ListName,
+  ListNameWrap,
+} from "../../../FeedContent/styled";
 
 const reactStringReplace = require("react-string-replace");
 
@@ -62,36 +66,12 @@ const ProfileNameHeader = styled.div`
   padding: 0;
   margin: 15px 0;
   padding-left: 40px;
-  &:before {
-    content: "";
-    position: absolute;
-    left: 26px;
-    background: #878787;
-    width: 10px;
-    height: 1px;
-    top: 30px;
-  }
   &.UserMessageView {
     padding-left: 15px;
     width: 100%;
-    &:before {
-      display: none;
-    }
   }
 `;
 
-const ProfileThumb = styled.div`
-  width: 30px;
-  height: 30px;
-  margin: 0 10px 0 0;
-  border: 3px solid #ffffff;
-  border-radius: 50%;
-  overflow: hidden;
-  img {
-    width: 30px;
-    height: 30px;
-  }
-`;
 const ProfileNameWrap = styled.div`
   display: flex;
   flex-direction: column;
@@ -110,31 +90,6 @@ const ProfileNameWrap = styled.div`
     @media (max-width: 1024px) {
       padding: 0 15px 0 0px;
     }
-  }
-`;
-
-const ProfileName = styled.div`
-  font-style: normal;
-  font-size: 13px;
-  line-height: normal;
-  margin: 0;
-  font-weight: 700;
-  color: #ff2e9a;
-  display: flex;
-  flex-direction: row;
-  span {
-    font-weight: 700;
-    color: #fff;
-    margin: 0 3px;
-  }
-  .ownerId-name {
-    margin: 0px;
-    color: #ff2e9a;
-    font-weight: 700;
-    cursor: pointer;
-  }
-  @media (max-width: 1024px) {
-    flex-direction: column;
   }
 `;
 
@@ -165,48 +120,6 @@ const LoaderWrap = styled.div`
   margin: 30px 0 10px;
 `;
 
-const RightArrowSec = styled.div`
-  display: flex;
-  align-items: flex-start;
-  @media (max-width: 767px) {
-    margin: 5px 0 0 0;
-  }
-`;
-
-const ArrowRight = styled.div`
-  margin: -3px 10px 0;
-  @media (max-width: 1024px) {
-    margin: -3px 0 0 -7px;
-  }
-  svg {
-    color: #fff;
-    font-size: 24px;
-  }
-`;
-
-const DescriptionBox = styled.div`
-  font-weight: bold;
-  font-size: 10px;
-  display: flex;
-  align-items: center;
-  text-align: center;
-  color: #ffffff;
-  background: #ff2e9a;
-  border-radius: 12px;
-  padding: 2px 10px;
-  max-width: 190px;
-  cursor: pointer;
-  span {
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    margin: 0;
-    font-weight: bold;
-    font-size: 10px;
-  }
-`;
-
 const UserMessage = ({
   postData,
   businessData,
@@ -215,7 +128,9 @@ const UserMessage = ({
   setListClickedFromSearch,
   type,
   listDescriptionView,
-  setListIndex
+  setListIndex,
+  myFeedView,
+  setMyFeedIndex
 }) => {
   const dispatch = useDispatch();
   const [displayComments, setDisplayComments] = useState(false);
@@ -225,7 +140,6 @@ const UserMessage = ({
   const [description, setDescription] = useState("");
   const [displayCommentInput, setDisplayCommentInput] = useState(false);
   const [flag, setFlag] = useState(false);
-  const [image, setImage] = useState(null);
   const user = useSelector((state) => state.user.user);
   const ws = useSelector((state) => state.user.ws);
   const commentsRef = useRef();
@@ -234,6 +148,14 @@ const UserMessage = ({
     (state) => state.myFeed.selectedPostIdForComments
   );
   const commentAdded = useSelector((state) => state.myFeed.commentAdded);
+  const [listImage, setListImage] = useState(
+    myFeedView &&
+      postData.listId &&
+      postData.listId.length > 0 &&
+      postData.listId[0].media.length > 0
+      ? postData.listId[0].media[0].image
+      : BannerImg
+  );
 
   const listNavigate = () => {
     if (type === "search") {
@@ -281,35 +203,11 @@ const UserMessage = ({
       dispatch(addReplyToComment(message));
     } else if (message.post) {
       /** to add post via socket */
-      if (
-        user.favorites.indexOf(message.businessId) !== -1 ||
-        user.listFollowed.indexOf(message.post.postDetails.listId._id)
-      ) {
+      if (user.listFollowed.indexOf(message.post.postDetails.listId._id)) {
         dispatch(addPostViaSocket(message));
       }
     }
   };
-
-  /** to find resized image */
-  useEffect(() => {
-    if (postData.ownerId === null || postData.ownerId.length === 0) {
-      const findMime = checkMime(businessData.default_image_url);
-      const image = replaceBucket(
-        businessData.default_image_url,
-        findMime,
-        30,
-        30
-      );
-      setImage(image);
-    } else if (
-      postData.ownerId[0].photo !== "" &&
-      postData.ownerId[0].photo !== null
-    ) {
-      const findMime = checkMime(postData.ownerId[0].photo);
-      const image = replaceBucket(postData.ownerId[0].photo, findMime, 30, 30);
-      setImage(image);
-    } else setImage(ProfileImg);
-  }, [postData, businessData.default_image_url]);
 
   /** to add comment function */
   const addComment = async (obj) => {
@@ -461,71 +359,42 @@ const UserMessage = ({
     }
   };
 
-  /** to check image error */
-  const checkError = () => {
-    if (postData.ownerId === null || postData.ownerId.length === 0) {
-      setImage(businessData.default_image_url);
-    } else if (
-      postData.ownerId[0].photo !== "" &&
-      postData.ownerId[0].photo !== null
-    ) {
-      setImage(postData.ownerId[0].photo);
-    } else setImage(ProfileImg);
-  };
-
   return (
     <>
       <UserMsgWrap>
         <UserMessageContent>
           <ProfileNameHeader
-            className={listDescriptionView ? "UserMessageView" : ""}
+            className={
+              listDescriptionView || myFeedView ? "UserMessageView" : ""
+            }
           >
-            {!listDescriptionView ? (
-              <ProfileThumb>
-                <img src={image} onError={() => checkError()} alt="" />
-              </ProfileThumb>
-            ) : null}
             <ProfileNameWrap className="UserMessageViewProfileName">
-              {!listDescriptionView ? (
-                <ProfileName>
-                  {postData.ownerId === null ||
-                  postData.ownerId.length === 0 ? (
-                    businessData.company_name
-                  ) : (
-                    <span
-                      className="ownerId-name"
-                      onClick={() =>
-                        history.push(`/u/${postData.ownerId[0]._id}`)
-                      }
-                    >
-                      {postData.ownerId[0].name}
-                    </span>
-                  )}
-                  {postData.listId !== null && postData.listId.length !== 0 ? (
-                    <RightArrowSec>
-                      <ArrowRight>
-                        <RiArrowDropRightFill />
-                      </ArrowRight>
-                      <DescriptionBox>
-                        <div
-                          data-for="custom-class"
-                          data-tip={postData.listId[0].name}
-                          onClick={() => listNavigate()}
-                        >
-                          <span>{postData.listId[0].name}</span>
-                        </div>
-                        <ReactTooltip
-                          id="custom-class"
-                          className="extraClass"
-                          effect="solid"
-                          backgroundColor="#ff2e9a"
-                          textColor="white"
-                        />
-                      </DescriptionBox>
-                    </RightArrowSec>
-                  ) : null}
-                </ProfileName>
-              ) : null}
+              {myFeedView && (
+                <InnerListBanner onClick={() => listNavigate()}>
+                  <img
+                    src={listImage}
+                    alt=""
+                    onError={() => setListImage(BannerImg)}
+                  />
+                  <InnerOverlay />
+                  <ListNameWrap>
+                    <ListName>{postData.listId[0].name}</ListName>
+                    <ListInfo>
+                      <FaCaretRight />
+                      <ListAuthorName>
+                        {postData.ownerId[0].name}
+                      </ListAuthorName>
+                      <span>|</span>
+                      <ListAuthorName>
+                        {moment(postData.createdAt).format(
+                          "MMM DD,YYYY, hh:MM a"
+                        )}{" "}
+                        EDT{" "}
+                      </ListAuthorName>
+                    </ListInfo>
+                  </ListNameWrap>
+                </InnerListBanner>
+              )}
               <ChatInput>
                 {findDesc(
                   postData.data,
@@ -533,7 +402,9 @@ const UserMessage = ({
                   postData.taggedLists || []
                 )}
               </ChatInput>
-              {listDescriptionView ? <BigImage image={postData.media} /> : null}
+              {listDescriptionView || myFeedView ? (
+                <BigImage image={postData.media} />
+              ) : null}
               <LikesBar
                 type="comment"
                 totalLikes={postData.likes ? postData.likes.length : 0}
@@ -556,6 +427,8 @@ const UserMessage = ({
                 listDescriptionView={listDescriptionView}
                 listData={postData}
                 setListIndex={setListIndex}
+                myFeedView={myFeedView}
+                setMyFeedIndex={setMyFeedIndex}
               />
             </ProfileNameWrap>
           </ProfileNameHeader>

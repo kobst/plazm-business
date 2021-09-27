@@ -42,6 +42,7 @@ const getPlace = (obj) => {
                     list {
                       _id
                       name
+                      image
                     }
                     taggedUsers {
                         list_ids

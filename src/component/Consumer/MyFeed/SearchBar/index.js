@@ -4,11 +4,7 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import error from "../../../../constants";
 import {
-  HomeSearch,
-  clearSearchedData,
   setSearchData,
-  setSideFiltersHomeSearch,
-  setEnterClicked,
   setSideFiltersByClosest,
   setSideFiltersByUpdatedAt,
 } from "../../../../reducers/myFeedReducer";
@@ -176,12 +172,8 @@ const DropdownContent = styled.div`
       margin: 0;
       cursor: pointer;
       background: transparent;
-<<<<<<< HEAD
       :hover,
       :focus {
-=======
-      :hover, :focus {
->>>>>>> master
         color: #fff;
       }
     }
@@ -192,18 +184,17 @@ const DropdownContent = styled.div`
   }
 `;
 
-const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
+const SearchBar = ({ setOffset, setDisplayTab, setFlag }) => {
   const menuRef = useRef(null);
   const [search, setSearch] = useState("");
   const loader = useSelector((state) => state.myFeed.loading);
   const [searchError, setSearchError] = useState("");
   const [uploadMenu, setUploadMenu] = useState(false);
-  const userLocation = useSelector((state) => state.business.userLocation);
-  const filterClosest = useSelector((state) => state.myFeed.filterByClosest);
-  const updatedAtFilter = useSelector(
+  const searchData = useSelector((state) => state.myFeed.searchData);
+  const filterByClosest = useSelector((state) => state.myFeed.filterByClosest);
+  const filterByUpdatedAt = useSelector(
     (state) => state.myFeed.filterByUpdatedAt
   );
-  const searchData = useSelector((state) => state.myFeed.searchData);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -218,16 +209,16 @@ const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
   /** to set side filter by closest */
   const closestFilter = () => {
     setOffset(0);
+    setFlag(true);
     dispatch(setSideFiltersByClosest());
-    setFilterSelected(true);
     setUploadMenu(false);
   };
 
   /** to set side filter by recently updated */
   const recentlyUpdatedFilter = () => {
     setOffset(0);
+    setFlag(true);
     dispatch(setSideFiltersByUpdatedAt());
-    setFilterSelected(true);
     setUploadMenu(false);
   };
 
@@ -237,22 +228,8 @@ const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
       event.preventDefault();
       if (search !== "" && search.length >= 4 && !search.trim() === false) {
         setOffset(0);
-        dispatch(clearSearchedData());
-        dispatch(setSideFiltersHomeSearch());
-        const obj = {
-          search: search,
-          value: 0,
-          filters: { closest: filterClosest, updated: updatedAtFilter },
-          latitude: userLocation
-            ? userLocation.latitude
-            : process.env.REACT_APP_LATITUDE,
-          longitude: userLocation
-            ? userLocation.longitude
-            : process.env.REACT_APP_LONGITUDE,
-        };
-        dispatch(setEnterClicked(true));
-        dispatch(HomeSearch(obj));
         setSearchError("");
+        dispatch(setSearchData(search));
       } else if (search.length >= 0 && search.length < 4) {
         setSearchError(error.SEARCH_ERROR);
       }
@@ -262,19 +239,18 @@ const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
   /** on change handler for search */
   const onChangeSearch = (e) => {
     setSearch(e.target.value);
-    dispatch(setSearchData(e.target.value));
   };
   return (
     <>
       <SearchWrap>
-        <Heading>Favorites</Heading>
+        <Heading>My Feed</Heading>
         <RightSearchWrap>
           <Input
             value={search}
             onKeyPress={(event) => searchList(event)}
             onChange={(e) => onChangeSearch(e)}
             disabled={loader}
-            placeholder="Search Favorites"
+            placeholder="Search Feed"
           />
           <FilterBox ref={menuRef}>
             <FaFilter onClick={toggleUploadMenu} />
@@ -285,16 +261,16 @@ const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
                     {" "}
                     <button
                       onClick={() => closestFilter()}
-                      disabled={filterClosest}
+                      disabled={filterByClosest}
                     >
-                      Closest 
+                      Closest
                     </button>
                   </li>
 
                   <li>
                     <button
                       onClick={() => recentlyUpdatedFilter()}
-                      disabled={updatedAtFilter}
+                      disabled={filterByUpdatedAt}
                     >
                       {" "}
                       Recently Updated

@@ -96,7 +96,7 @@ const RightDiv = styled.div`
     margin: 0 7px 0 0;
   }
   svg:hover {
-    cursor: pointer;
+    cursor: default;
   }
   button {
     color: #767676;
@@ -109,6 +109,9 @@ const RightDiv = styled.div`
     border: 0;
     background-color: transparent;
     display: flex;
+    &.btnDisable {
+      cursor: default;
+    }
   }
 `;
 
@@ -180,6 +183,8 @@ const LikesBar = ({
   listDescriptionView,
   listData,
   setListIndex,
+  myFeedView,
+  setMyFeedIndex,
 }) => {
   const [eventDate, setEventDate] = useState();
   const [userLikedPost, setUserLikedPost] = useState(false);
@@ -393,14 +398,20 @@ const LikesBar = ({
 
   /** to display business details page */
   const displayBusinessDetail = () => {
-    setListIndex(listData.business[0]._id);
-    history.push(`/b/${listData.business[0]._id}`);
-    dispatch(setTopPost(listData));
+    if (listDescriptionView) {
+      setListIndex(listData.business[0]._id);
+      history.push(`/b/${listData.business[0]._id}`);
+      dispatch(setTopPost(listData));
+    } else if (myFeedView) {
+      setMyFeedIndex(listData.business[0]._id);
+      history.push(`/b/${listData.business[0]._id}`);
+      dispatch(setTopPost(listData));
+    }
   };
   return (
     <>
       <BottomBarLikes>
-        {!listDescriptionView ? (
+        {!listDescriptionView && !myFeedView ? (
           <LikesBtnWrap>
             {type !== "commentReply" ? (
               <UsersButton onClick={() => setReplyDisplay()}>
@@ -439,15 +450,25 @@ const LikesBar = ({
             </RightDiv>
             <RightDiv>
               <button
-                disabled={listDescriptionView ? listDescriptionView : false}
+                disabled={
+                  listDescriptionView
+                    ? listDescriptionView
+                    : myFeedView
+                    ? myFeedView
+                    : false
+                }
                 onClick={() => displayCommentsWithPosts()}
+                className={
+                  listDescriptionView || myFeedView ? "btnDisable" : ""
+                }
               >
                 <MdChatBubbleOutline />
               </button>
               {totalComments}
             </RightDiv>
             {selectedListDetails &&
-            selectedListDetails.ownerId._id === user._id ? (
+            selectedListDetails.ownerId._id === user._id &&
+            !myFeedView ? (
               <RightDiv>
                 <BsThreeDots onClick={toggleUploadMenu} />
                 {uploadMenu && (
@@ -462,7 +483,7 @@ const LikesBar = ({
             ) : null}
           </LikesBtnWrap>
         ) : null}
-        {listDescriptionView ? (
+        {listDescriptionView || myFeedView ? (
           <SaveButton onClick={() => displayBusinessDetail()}>VISIT</SaveButton>
         ) : null}
       </BottomBarLikes>

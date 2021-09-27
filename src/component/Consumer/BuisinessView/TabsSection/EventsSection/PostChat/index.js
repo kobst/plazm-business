@@ -26,7 +26,11 @@ const PostChat = () => {
   const events = useSelector((state) => state.event.events);
   const loading = useSelector((state) => state.event.loading);
   const loadingForAWeek = useSelector((state) => state.event.loadingForAWeek);
-  const loadingForInitialWeek = useSelector((state) => state.event.loadingForInitialWeek);
+  const loadingForInitialWeek = useSelector(
+    (state) => state.event.loadingForInitialWeek
+  );
+  const topEvent = useSelector((state) => state.event.topEvent);
+  const topEventId = useSelector((state) => state.event.topEventId);
   return (
     <>
       <Scrollbars
@@ -36,8 +40,16 @@ const PostChat = () => {
         thumbMinSize={30}
       >
         <ChatContent>
-          {events && events.length > 0 &&  !loadingForInitialWeek &&!loadingForAWeek? (
-            events.map((i,key) => <UserMessage eventData={i} key={key} />)
+          {/* to display top event */}
+          {topEvent && <UserMessage eventData={topEventId} />}
+          {topEvent && <hr />}
+
+          {/* to display rest of the events */}
+          {events &&
+          events.length > 0 &&
+          !loadingForInitialWeek &&
+          !loadingForAWeek ? (
+            events.map((i, key) => <UserMessage eventData={i} key={key} />)
           ) : !loading && !loadingForAWeek && !loadingForInitialWeek ? (
             <center>
               <NoMorePost>No events to display</NoMorePost>

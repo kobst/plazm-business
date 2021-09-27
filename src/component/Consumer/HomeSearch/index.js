@@ -7,6 +7,7 @@ import {
   setSideFiltersHomeSearch,
 } from "../../../reducers/myFeedReducer";
 import ValueLoader from "../../../utils/loader";
+import { setUserlocation } from "../../../reducers/businessReducer";
 
 const ContentWrap = styled.div`
   padding: 0px;
@@ -52,6 +53,9 @@ const HomeSearch = ({
   const success = (pos) => {
     const crd = pos.coords;
     setCoords({ latitude: crd.latitude, longitude: crd.longitude });
+    dispatch(
+      setUserlocation({ latitude: crd.latitude, longitude: crd.longitude })
+    );
   };
 
   /** to ask user for permissions to fetch current geoLocation */

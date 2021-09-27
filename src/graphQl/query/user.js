@@ -55,53 +55,11 @@ const getAllUsers = () => {
 /*
 @desc: getUserFavoritesBusiness query
 */
-const getUserFavorites = ({id,value,filters,longitude,latitude}) => {
+const getUserFavorites = ({ id, value, filters, longitude, latitude }) => {
   const graphQl = {
     query: `
-          query GetUserFavoritesBusiness($id: ID!, $value: Int, $filters:homeSearchFilterInput!,$latitude: Float!,$longitude: Float!){
-            getUserFavoritesBusiness(input: {id:$id, value:$value, filters:$filters, latitude:$latitude, longitude:$longitude}) {
-              message
-              success
-              data {
-                favorites {
-                _id
-                filter_tags
-                company_name
-                default_image_url
-                hours_format {
-                  StartDay
-                  EndDay
-                  Start
-                  End
-              }
-                status
-                updatedAt
-                }
-                totalPosts
-                totalFollowers
-              }
-              totalFavorites
-            }
-          }`,
-    variables: {
-      id: id,
-      value:value,
-      filters: filters,
-      longitude: parseFloat(longitude),
-      latitude: parseFloat(latitude)
-    },
-  };
-  return graphQl;
-};
-
-/*
-@desc: GetMyFeedData query
-*/
-const GetMyFeedData = (obj) => {
-  const graphQl = {
-    query: `
-          query GetMyFeedData($id: ID!, $value: Int, $filters: homeSearchFilterInput!,  $longitude: Float!, $latitude: Float!){
-            getMyFeedData (input: {id: $id, value:$value, filters:$filters,longitude:$longitude, latitude:$latitude}){
+          query GetFavorites($id: ID!, $value: Int, $filters:homeSearchFilterInput!,$latitude: Float!,$longitude: Float!){
+            getFavorites(input: {id:$id, value:$value, filters:$filters, latitude:$latitude, longitude:$longitude}) {
               message
               success
               totalPlaces 
@@ -137,6 +95,98 @@ const GetMyFeedData = (obj) => {
                 listId {
                   _id
                   name
+                  media {
+                    image
+                  }
+                }
+                title
+                description
+                type
+                eventSchedule {
+                  start_time
+                  end_time
+                }
+                user {
+                  name
+                  photo
+                }
+                likes
+                media
+                location {
+                  type
+                  coordinates
+                }
+                totalPosts {
+                  totalPosts
+                }
+                totalComments{
+                  totalCount
+                }
+                createdAt
+              }
+              }
+          }`,
+    variables: {
+      id: id,
+      value: value,
+      filters: filters,
+      longitude: parseFloat(longitude),
+      latitude: parseFloat(latitude),
+    },
+  };
+  return graphQl;
+};
+
+/*
+@desc: GetMyFeedData query
+*/
+const GetMyFeedData = (obj) => {
+  const graphQl = {
+    query: `
+          query GetMyFeedData($id: ID!, $value: Int, $filters: homeSearchFilterInput!,  $longitude: Float!, $latitude: Float!, $search: String){
+            getMyFeedData (input: {id: $id, value:$value, filters:$filters,longitude:$longitude, latitude:$latitude, search: $search}){
+              message
+              success
+              totalPlaces 
+              data {
+                _id
+                data
+                business {
+                  _id
+                  company_name
+                  favorites
+                  filter_tags
+                  hours_format {
+                    Start
+                    End
+                    StartDay
+                    EndDay
+                  }
+                  default_image_url
+                }
+                likesData {
+                  _id
+                  name
+                }
+                taggedUsers {
+                  _id
+                  name
+                }
+                taggedLists {
+                  _id
+                  name
+                }
+                ownerId {
+                  _id
+                  name
+                  photo
+                }
+                listId {
+                  _id
+                  name
+                  media {
+                    image
+                  }
                 }
                 title
                 description
@@ -168,9 +218,10 @@ const GetMyFeedData = (obj) => {
     variables: {
       id: obj.id,
       value: obj.value,
-      filters: {closest: false, updated: true},
-      latitude: 55.151134,
-      longitude: 25.087626
+      search: obj.search,
+      filters: obj.filters,
+      latitude: parseFloat(obj.latitude),
+      longitude: parseFloat(obj.longitude),
     },
   };
   return graphQl;
@@ -201,4 +252,10 @@ const GetUserProfileData = (id) => {
   };
   return graphQl;
 };
-export { getUser,getAllUsers,getUserFavorites, GetMyFeedData, GetUserProfileData };
+export {
+  getUser,
+  getAllUsers,
+  getUserFavorites,
+  GetMyFeedData,
+  GetUserProfileData,
+};

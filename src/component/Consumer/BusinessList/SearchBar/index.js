@@ -2,13 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Input from "../../UI/Input/Input";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import error from "../../../../constants";
 import {
-  HomeSearch,
-  clearSearchedData,
-  setSearchData,
-  setSideFiltersHomeSearch,
-  setEnterClicked,
   setSideFiltersByClosest,
   setSideFiltersByUpdatedAt,
 } from "../../../../reducers/myFeedReducer";
@@ -47,15 +41,6 @@ const SearchWrap = styled.div`
     height: auto;
     padding: 10px 0;
   }
-`;
-
-const ErrorDiv = styled.div`
-  color: #ff0000;
-  font-weight: 600;
-  font-size: 12px;
-  margin: 0;
-  margin-bottom: 10px;
-  margin-left: 20px;
 `;
 
 const Heading = styled.h1`
@@ -176,12 +161,8 @@ const DropdownContent = styled.div`
       margin: 0;
       cursor: pointer;
       background: transparent;
-<<<<<<< HEAD
       :hover,
       :focus {
-=======
-      :hover, :focus {
->>>>>>> master
         color: #fff;
       }
     }
@@ -192,22 +173,20 @@ const DropdownContent = styled.div`
   }
 `;
 
-const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
+const SearchBar = ({ setOffset, setDisplayTab, search, setSearch }) => {
   const menuRef = useRef(null);
-  const [search, setSearch] = useState("");
   const loader = useSelector((state) => state.myFeed.loading);
-  const [searchError, setSearchError] = useState("");
   const [uploadMenu, setUploadMenu] = useState(false);
-  const userLocation = useSelector((state) => state.business.userLocation);
-  const filterClosest = useSelector((state) => state.myFeed.filterByClosest);
-  const updatedAtFilter = useSelector(
+  const searchData = useSelector((state) => state.myFeed.searchData);
+  const filterByClosest = useSelector((state) => state.myFeed.filterByClosest);
+  const filterByUpdatedAt = useSelector(
     (state) => state.myFeed.filterByUpdatedAt
   );
-  const searchData = useSelector((state) => state.myFeed.searchData);
   const dispatch = useDispatch();
 
   useEffect(() => {
     setSearch(searchData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchData]);
 
   /** to toggle side filter menu */
@@ -219,7 +198,6 @@ const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
   const closestFilter = () => {
     setOffset(0);
     dispatch(setSideFiltersByClosest());
-    setFilterSelected(true);
     setUploadMenu(false);
   };
 
@@ -227,54 +205,23 @@ const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
   const recentlyUpdatedFilter = () => {
     setOffset(0);
     dispatch(setSideFiltersByUpdatedAt());
-    setFilterSelected(true);
     setUploadMenu(false);
-  };
-
-  /** on key press handler for search */
-  const searchList = (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      if (search !== "" && search.length >= 4 && !search.trim() === false) {
-        setOffset(0);
-        dispatch(clearSearchedData());
-        dispatch(setSideFiltersHomeSearch());
-        const obj = {
-          search: search,
-          value: 0,
-          filters: { closest: filterClosest, updated: updatedAtFilter },
-          latitude: userLocation
-            ? userLocation.latitude
-            : process.env.REACT_APP_LATITUDE,
-          longitude: userLocation
-            ? userLocation.longitude
-            : process.env.REACT_APP_LONGITUDE,
-        };
-        dispatch(setEnterClicked(true));
-        dispatch(HomeSearch(obj));
-        setSearchError("");
-      } else if (search.length >= 0 && search.length < 4) {
-        setSearchError(error.SEARCH_ERROR);
-      }
-    }
   };
 
   /** on change handler for search */
   const onChangeSearch = (e) => {
     setSearch(e.target.value);
-    dispatch(setSearchData(e.target.value));
   };
   return (
     <>
       <SearchWrap>
-        <Heading>Favorites</Heading>
+        <Heading>Favourites</Heading>
         <RightSearchWrap>
           <Input
+            placeholder="Search Favourite"
             value={search}
-            onKeyPress={(event) => searchList(event)}
             onChange={(e) => onChangeSearch(e)}
             disabled={loader}
-            placeholder="Search Favorites"
           />
           <FilterBox ref={menuRef}>
             <FaFilter onClick={toggleUploadMenu} />
@@ -285,16 +232,16 @@ const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
                     {" "}
                     <button
                       onClick={() => closestFilter()}
-                      disabled={filterClosest}
+                      disabled={filterByClosest}
                     >
-                      Closest 
+                      Closest
                     </button>
                   </li>
 
                   <li>
                     <button
                       onClick={() => recentlyUpdatedFilter()}
-                      disabled={updatedAtFilter}
+                      disabled={filterByUpdatedAt}
                     >
                       {" "}
                       Recently Updated
@@ -309,7 +256,6 @@ const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
           <IoMdClose onClick={() => setDisplayTab()} />
         </CloseDiv>
       </SearchWrap>
-      {searchError !== "" ? <ErrorDiv>{searchError}</ErrorDiv> : null}
     </>
   );
 };

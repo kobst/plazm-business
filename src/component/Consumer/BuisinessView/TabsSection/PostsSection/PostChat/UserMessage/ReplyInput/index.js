@@ -100,13 +100,13 @@ const ProfileNameWrap = styled.div`
   padding: 0 25px 0px 0px;
   width: 100%;
   @media (max-width: 1024px) {
-    padding: 0 45px 0px 0px;
+    padding: 0 0px 0px 0px;
   }
   @media (max-width: 767px) {
-    padding: 0 20px 0px 0px;
+    padding: 0 0px 0px 0px;
   }
   @media (max-width: 359px) {
-    padding: 0 10px 0px 0px;
+    padding: 0 0px 0px 0px;
   }
 `;
 
@@ -116,8 +116,8 @@ const InputWrap = styled.div`
   line-height: normal;
   margin: 0 0 5px 0;
   font-weight: 500;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.05);
+  color: #9a9a9a;
+  background: white;
   height: 37px;
   border-bottom: 0.5px solid #afafaf;
   padding: 0 12px;
@@ -157,6 +157,9 @@ const InputWrap = styled.div`
     font-size: 13px;
     width: 200px;
   }
+  &.InnerReplySection {
+    width: 96%;
+  }
 `;
 const EmojiWrap = styled.div`
   width: 15px;
@@ -164,7 +167,7 @@ const EmojiWrap = styled.div`
   position: relative;
   cursor: pointer;
   svg {
-    color: #fff;
+    color: #9a9a9a;
     font-size: 15px;
   }
 `;

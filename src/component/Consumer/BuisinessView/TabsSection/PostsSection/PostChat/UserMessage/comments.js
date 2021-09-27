@@ -27,7 +27,7 @@ const UserMessageContent = styled.div`
     align-items: flex-start;
   }
   &.UserReplyContent {
-    padding: 10px 0 0 40px;
+    padding: 10px 0 0 0px;
     @media (max-width: 767px) {
       padding: 10px 0 0 0px;
     }
@@ -68,11 +68,11 @@ const ProfileNameWrap = styled.div`
   align-items: flex-start;
   justify-content: center;
   max-width: calc(100% - 40px);
-  border-bottom: 0.25px solid #878787;
+  // border-bottom: 0.25px solid #878787;
   padding: 0 25px 15px 0px;
   width: 100%;
   @media (max-width: 1024px) {
-    padding: 0 45px 15px 0px;
+    padding: 0 0px 15px 0px;
   }
   @media (max-width: 767px) {
     padding: 0 0px 15px 0px;

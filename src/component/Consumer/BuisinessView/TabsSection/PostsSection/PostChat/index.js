@@ -104,7 +104,7 @@ const PostChat = ({ setSelectedListId, filterArr, setFilterArr }) => {
             setSelectedListId={setSelectedListId}
           />
         )}
-        <hr />
+        {topPost && <hr />}
         <InfiniteScroll
           dataLength={posts ? posts.length : 0}
           next={fetchMorePosts}

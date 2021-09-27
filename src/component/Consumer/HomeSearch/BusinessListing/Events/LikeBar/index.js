@@ -6,26 +6,35 @@ import {
   MdFavorite,
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { AddLikeToEvent } from "../../../../../../reducers/eventReducer";
-import { unwrapResult } from "@reduxjs/toolkit";
-import { addLikeToComment } from "../../../../../../reducers/businessReducer";
-import {
-  fetchEventCommentReplies,
-  fetchEventComments,
-  addLikeViaSocket,
-  setEventId,
-} from "../../../../../../reducers/myFeedReducer";
+import SaveButton from "../../../../UI/SaveButton";
+import { useHistory } from "react-router";
+import { setTopEvent } from "../../../../../../reducers/eventReducer";
 
-const BottomBarLikes = styled.div`
+export const BottomBarLikes = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
   @media (max-width: 767px) {
-    flex-direction: column;
     align-items: flex-start;
   }
+  &.replyBar {
+    background: rgba(177, 171, 234, 0.1);
+    border: 0.75px solid #3f3777;
+    box-sizing: border-box;
+    border-radius: 5px;
+    padding: 8px 15px;
+  }
+  &.replyBarComment {
+    background: rgba(177, 171, 234, 0.1);
+    border: 0.75px solid #3f3777;
+    box-sizing: border-box;
+    border-radius: 5px;
+    padding: 8px 15px;
+    margin: 10px 0;
+  }
 `;
-const LikesBtnWrap = styled.div`
+
+export const LikesBtnWrap = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -34,85 +43,54 @@ const LikesBtnWrap = styled.div`
   flex-wrap: wrap;
 `;
 
-const UsersButton = styled.button`
-  font-weight: 600;
-  font-size: 13px;
-  line-height: normal;
-  text-align: center;
-  color: #ff2e9a;
-  background: transparent;
-  width: auto;
-  border: 0;
-  padding: 0px 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  margin-right: 0;
-  :hover,
-  :focus {
-    outline: 0;
-    border: 0;
-    background: transparent;
-  }
-`;
-
-const CircleDot = styled.div`
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  margin: 0 5px;
-  background: #ff2e9a;
-`;
-const ChatDate = styled.div`
-  color: #fff;
-  font-weight: 600;
-  font-size: 13px;
-  span {
-    margin: 0 10px;
-  }
-`;
-
-const RightDiv = styled.div`
+export const RightDiv = styled.div`
   color: #fff;
   font-weight: 600;
   font-size: 13px;
   align-items: center;
   display: flex;
-  margin: 0 0 0 20px;
+  margin: 0 15px 0 0;
+  position: relative;
   @media (max-width: 767px) {
     margin: 8px 15px 0 0px;
   }
   svg {
     margin: 0 7px 0 0;
   }
+  svg:hover {
+    cursor: default;
+  }
+  button {
+    color: #767676;
+    font-size: 13px;
+    padding: 0;
+    cursor: pointer;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 700;
+    border: 0;
+    background-color: transparent;
+    display: flex;
+  }
 `;
-
 const LikesBar = ({
   date,
   type,
   totalLikes,
   totalComments,
-  displayEventComments,
-  setDisplayEventComments,
-  eventId,
-  setDisplayReply,
-  displayReply,
   postLikes,
-  commentId,
   commentLikes,
-  flag,
-  setFlag,
-  business,
-  commentsRef,
+  setSearchIndex,
+  myFeedView,
+  eventData,
 }) => {
-  const [eventDate, setEventDate] = useState();
-  const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
-  const ws = useSelector((state) => state.user.ws);
   const [userLikedEvent, setUserLikedEvent] = useState(false);
   const [userLikedComment, setUserLikedComment] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [likeCountForComment, setLikeCountForComment] = useState(0);
+  const history = useHistory();
+  const dispatch = useDispatch();
 
   /** to convert date into display format */
   useEffect(() => {
@@ -120,29 +98,6 @@ const LikesBar = ({
     setLikeCountForComment(0);
     setUserLikedComment(false);
     setUserLikedEvent(false);
-    let monthNames = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-
-    let day = date.getDate();
-
-    let monthIndex = date.getMonth();
-    let monthName = monthNames[monthIndex];
-
-    let year = date.getFullYear();
-
-    setEventDate(`${day} ${monthName} ${year}`);
 
     if (type === "comment") {
       if (postLikes.length > 0) {
@@ -161,136 +116,28 @@ const LikesBar = ({
     }
   }, [date, commentLikes, postLikes, type, user._id]);
 
-  /** to display comments on a particular event */
-  const displayCommentsWithEvents = () => {
-    if (type === "comment") {
-      setDisplayEventComments(!displayEventComments);
-      setFlag(false);
-      if (displayEventComments === false) {
-        dispatch(setEventId(eventId));
-        dispatch(
-          fetchEventComments({ eventId: eventId, businessId: business._id })
-        );
-      } else {
-        dispatch(setEventId(null));
-      }
-    } else if (type === "reply") {
-      dispatch(setEventId(eventId));
-      setDisplayReply(!displayReply);
-      setFlag(true);
-      if (displayReply === false)
-        dispatch(
-          fetchEventCommentReplies({
-            commentId: commentId,
-            businessId: business._id,
-          })
-        );
-    }
-  };
-
-  /** to add like to post or comment */
-  const addLike = async () => {
-    if (type === "comment") {
-      const obj = {
-        eventId: eventId,
-        userId: user._id,
-      };
-      dispatch(
-        addLikeViaSocket({
-          postId: eventId,
-          like: { ...obj, _id: user._id },
-          businessId: business._id,
-        })
-      );
-      const data = await dispatch(AddLikeToEvent(obj));
-      const response = await unwrapResult(data);
-      if (response.success === true) {
-        ws.send(
-          JSON.stringify({
-            action: "like",
-            postId: eventId,
-            like: response.like,
-            businessId: business._id,
-            type: "Event",
-          })
-        );
-      }
-    } else if (type === "reply") {
-      setUserLikedComment(true);
-      setLikeCountForComment(totalLikes + 1);
-      const obj = {
-        id: commentId,
-        userId: user._id,
-      };
-      const data = await dispatch(addLikeToComment(obj));
-      const response = await unwrapResult(data);
-      if (response.success === true) {
-        ws.send(
-          JSON.stringify({
-            action: "like",
-            postId: response.postId,
-            like: response.like,
-            commentId: response.commentId,
-            businessId: business._id,
-            type: "Event",
-          })
-        );
-      }
-    }
-  };
-
-  /** to display comments of a particular event */
-  const displayComments = () => {
-    if (type === "comment") {
-      setDisplayEventComments(!displayEventComments);
-      setFlag(false);
-      if (displayEventComments === false) {
-        dispatch(setEventId(eventId));
-        dispatch(
-          fetchEventComments({ eventId: eventId, businessId: business._id })
-        );
-      } else {
-        dispatch(setEventId(null));
-      }
-    } else if (type === "reply") {
-      dispatch(setEventId(eventId));
-      setFlag(true);
-      setDisplayReply(!displayReply);
-      if (displayReply === false)
-        dispatch(
-          fetchEventCommentReplies({
-            commentId: commentId,
-            businessId: business._id,
-          })
-        );
+  /** to display business details page */
+  const displayBusinessDetail = () => {
+    if (myFeedView) {
+      setSearchIndex(eventData._id);
+      history.push(`/b/${eventData.business[0]._id}`);
+      dispatch(setTopEvent(eventData));
     }
   };
 
   return (
     <>
-      <BottomBarLikes>
+      <BottomBarLikes
+        className={
+          type === "reply"
+            ? "replyBar"
+            : type !== "commentReply"
+            ? "replyBarComment"
+            : ""
+        }
+      >
         <LikesBtnWrap>
-          {type !== "commentReply" ? (
-            <UsersButton onClick={() => displayComments()}>
-              {type === "comment" ? "Reply" : "Reply"}
-            </UsersButton>
-          ) : null}
-          {type !== "commentReply" ? <CircleDot /> : null}
-          {type !== "commentReply" ? (
-            <UsersButton
-              onClick={() => addLike()}
-              disabled={userLikedEvent || userLikedComment}
-            >
-              Like
-            </UsersButton>
-          ) : null}
-          <ChatDate>
-            <span>-</span>
-            {eventDate}
-          </ChatDate>
-        </LikesBtnWrap>
-        {type !== "commentReply" ? (
-          <LikesBtnWrap>
+          {type !== "commentReply" && (
             <RightDiv>
               {userLikedEvent || userLikedComment ? (
                 <MdFavorite style={{ color: "red" }} />
@@ -303,14 +150,17 @@ const LikesBar = ({
                   : likeCountForComment
                 : likeCount}
             </RightDiv>
+          )}
+          {type !== "commentReply" && (
             <RightDiv>
-              <MdChatBubbleOutline
-                onClick={() => displayCommentsWithEvents()}
-              />{" "}
+              <button>
+                <MdChatBubbleOutline />
+              </button>
               {totalComments}
             </RightDiv>
-          </LikesBtnWrap>
-        ) : null}
+          )}
+        </LikesBtnWrap>
+        <SaveButton onClick={() => displayBusinessDetail()}>VISIT</SaveButton>
       </BottomBarLikes>
     </>
   );
