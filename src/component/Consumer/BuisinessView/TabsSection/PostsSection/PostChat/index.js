@@ -39,7 +39,7 @@ const LoaderWrap = styled.div`
   }
 `;
 
-const PostChat = ({ setSelectedListId, filterArr, setFilterArr }) => {
+const PostChat = ({ setSelectedListId }) => {
   const posts = useSelector((state) => state.business.posts);
   const business = useSelector((state) => state.business.business);
   const user = useSelector((state) => state.user.user);
@@ -59,23 +59,13 @@ const PostChat = ({ setSelectedListId, filterArr, setFilterArr }) => {
   const [offset, setOffSet] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const dispatch = useDispatch();
+  
   useEffect(() => {
     setOffSet(0);
     setHasMore(true);
   }, [filters, sideFilterForRecent, sideFilterForLikes]);
 
-  // /** to remove first object from array */
-  // useEffect(() => {
-  //   if (topPost) {
-  //     let arr = [];
-  //     for (let i = 1; i < posts.length; i++) {
-  //       arr.push(posts[i]);
-  //     }
-  //     setFilterArr(arr);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [topPost]);
-
+  /** to fetch more posts */
   const fetchMorePosts = () => {
     if (offset + 20 < totalPosts) {
       setOffSet(offset + 20);
@@ -94,10 +84,9 @@ const PostChat = ({ setSelectedListId, filterArr, setFilterArr }) => {
     <>
       <div
         id="scrollableDiv"
-        style={{ height: "calc(100vh - 490px)", overflow: "auto" }}
+        style={{ height: "calc(100vh - 398px)", overflow: "auto" }}
       >
         {/* to display Top Post If any */}
-        {/* {topPost && <h5>Top Post</h5>} */}
         {topPost && (
           <UserMessage
             postData={topPostId}

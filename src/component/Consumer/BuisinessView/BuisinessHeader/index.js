@@ -5,7 +5,6 @@ import {
   MdKeyboardArrowDown,
   MdKeyboardArrowUp,
 } from "react-icons/md";
-import SectionSlider from "./SectionSlider";
 import ProfileImg from "../../../../images/profile-img.png";
 import FacebookImg from "../../../../images/Facebook-new.svg";
 import TwitterImg from "../../../../images/Twitter-new.svg";
