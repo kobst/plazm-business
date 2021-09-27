@@ -11,6 +11,7 @@ import {
   UnSubscribeToAList,
   SubscribeToAListAction,
   fetchUserLists,
+  clearListSearchData,
 } from "../../../reducers/listReducer";
 import {
   fetchSelectedListDetails,
@@ -267,6 +268,11 @@ const ListDescriptionView = ({
   );
   const history = useHistory();
 
+  useEffect(() => {
+    if (selectedList && selectedList.media.length > 0)
+      setImage(selectedList.media[0].image);
+  }, [selectedList]);
+
   /** to fetch user lists */
   useEffect(() => {
     if (userLists.length === 0 && user && user._id)
@@ -347,6 +353,7 @@ const ListDescriptionView = ({
     if (!listOpenedFromBusiness) setDisplayTab(false);
     else if (readMore) setDiscoverBtn(true);
     dispatch(clearMyFeedData());
+    dispatch(clearListSearchData());
     setSelectedListId(null);
   };
   return (loading &&
