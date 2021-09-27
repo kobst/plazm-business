@@ -118,58 +118,6 @@ const NoData = styled.div`
   text-align: center;
 `;
 
-// const ArrowBack = styled.div`
-//   background: #ff2e9a;
-//   border-radius: 3px;
-//   width: 34px;
-//   height: 34px;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-
-//   cursor: pointer;
-
-//   z-index: 1;
-//   svg {
-//     font-size: 34px;
-//     color: #fff;
-//   }
-//   @media (max-width: 767px) {
-//     width: 24px;
-//     height: 24px;
-//   }
-// `;
-
-// const ButtonWrapperDiv = styled.div`
-//   display: flex;
-//   justify-content: space-between;
-//   padding: 7px 9px;
-//   align-items: center;
-
-//   button.unsubscribe {
-//     border: 0px;
-//     margin-right: 8px;
-//     font-size: 9px;
-//     font-weight: bold;
-//     color: #fff;
-//     border-radius: 2px;
-//     padding: 5px 10px;
-//     cursor: pointer;
-//     background-color: #ff6067;
-//   }
-//   button.subscribe {
-//     border: 0px;
-//     margin-right: 8px;
-//     font-size: 9px;
-//     font-weight: bold;
-//     color: #fff;
-//     border-radius: 2px;
-//     padding: 5px 10px;
-//     cursor: pointer;
-//     background-color: #ff2e9a;
-//   }
-// `;
-
 const ListBannerSection = styled.div`
   width: 100%;
   height: 210px;
@@ -333,13 +281,6 @@ const ListDescriptionView = ({
     setHasMore(true);
   }, [dispatch]);
 
-  // /** to return to all business listing */
-  // const backBusiness = () => {
-  //   dispatch(clearListData());
-  //   dispatch(clearMyFeedData());
-  //   setSelectedListId(null);
-  // };
-
   /** to fetch initial posts in a list */
   useEffect(() => {
     const fetchListDetails = async () => {
@@ -468,12 +409,12 @@ const ListDescriptionView = ({
                       </ButtonOuterDiv>
                     </>
                   ) : !user.listFollowed.includes(selectedList._id) ? (
-                    <button
+                    <ButtonOrange
                       className="subscribe"
                       onClick={() => listSubscribe()}
                     >
                       Subscribe
-                    </button>
+                    </ButtonOrange>
                   ) : (
                     <ButtonOrange
                       className="unsubscribe"
@@ -491,7 +432,7 @@ const ListDescriptionView = ({
           </HeadingWrap>
           <div
             id="scrollableDiv"
-            style={{ height: "calc(100vh - 258px)", overflow: "auto" }}
+            style={{ height: "calc(100vh - 211px)", overflow: "auto" }}
             className="ScrollDivInner"
           >
             <InfiniteScroll

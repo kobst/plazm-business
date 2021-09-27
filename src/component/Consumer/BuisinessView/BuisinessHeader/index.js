@@ -20,7 +20,11 @@ import {
   AddBusinessFavorite,
   RemoveBusinessFavorite,
 } from "../../../../reducers/userReducer";
-import { clearBusinessData } from "../../../../reducers/businessReducer";
+import {
+  clearBusinessData,
+  clearTopPost,
+} from "../../../../reducers/businessReducer";
+import { clearTopEvent } from "../../../../reducers/eventReducer";
 
 const BuisinessHeaderContent = styled.div`
   width: 100%;
@@ -223,7 +227,7 @@ const BuisinessHeader = ({
   listIndex,
   setListIndex,
   favoriteIndex,
-  setFavoriteIndex
+  setFavoriteIndex,
 }) => {
   const history = useHistory();
   const [favoriteBusiness, setFavoriteBusiness] = useState(false);
@@ -272,6 +276,8 @@ const BuisinessHeader = ({
   /** to return to all business listing */
   const backBusiness = () => {
     dispatch(clearBusinessData());
+    dispatch(clearTopEvent());
+    dispatch(clearTopPost());
     if (searchIndex) {
       history.push("/");
       setTabIndex(1);
@@ -285,7 +291,7 @@ const BuisinessHeader = ({
       setTabIndex(5);
       setListIndex(null);
     } else {
-      setFavoriteIndex(null)
+      setFavoriteIndex(null);
       history.push("/");
     }
   };

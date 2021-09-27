@@ -198,6 +198,8 @@ export const slice = createSlice({
     initialWeekEvents: [],
     loadingForInitialWeek: false,
     weekBtnClicked: false,
+    topEvent: false,
+    topEventId: null,
   },
   reducers: {
     nextWeekDate: (state) => {
@@ -248,6 +250,27 @@ export const slice = createSlice({
     },
     setWeekButtonClicked: (state, action) => {
       state.weekBtnClicked = action.payload;
+    },
+    clearTopEvent: (state) => {
+      state.topEvent = false;
+      state.topEventId = null;
+    },
+    setTopEvent: (state, action) => {
+      state.topEvent = true;
+      const obj = {
+        ...action.payload,
+        list:
+          action.payload.listId.length > 0 ? action.payload.listId[0] : null,
+        likes:
+          action.payload.likesData && action.payload.likesData.length > 0
+            ? action.payload.likesData
+            : action.payload.likes,
+        comments: [],
+        totalComments: action.payload.totalComments[0]
+          ? action.payload.totalComments[0].totalCount
+          : 0,
+      };
+      state.topEventId = obj;
     },
   },
   extraReducers: {
@@ -389,6 +412,22 @@ export const slice = createSlice({
               );
             });
           }
+
+          /** to add comments for top event */
+          if (
+            state.topEvent &&
+            state.topEventId._id === action.payload.eventId
+          ) {
+            let arr = action.payload.data.post.map((obj) => ({
+              ...obj.comment,
+              totalReplies: obj.totalReplies,
+              replies: [],
+            }));
+            state.topEventId = {
+              ...state.topEventId,
+              comments: arr,
+            };
+          }
         }
       }
     },
@@ -452,6 +491,32 @@ export const slice = createSlice({
               });
             }
           }
+          /** to add replies to comments for top event */
+          if (
+            state.topEvent &&
+            state.topEventId._id === action.payload.postId
+          ) {
+            let findComment = state.topEventId.comments.filter(
+              (i) => i._id === action.payload.commentId
+            );
+            let findComment1 = state.topEventId.comments.filter(
+              (i) => i._id !== action.payload.commentId
+            );
+            let newArr = [];
+            newArr = newArr.concat({
+              ...findComment[0],
+              replies: action.payload.replies,
+            });
+            newArr = newArr.concat(findComment1);
+            newArr = newArr.sort((a, b) => {
+              return new Date(a.createdAt) - new Date(b.createdAt);
+            });
+            state.topEventId = {
+              ...state.topEventId,
+              comments: newArr,
+              totalComments: state.topEventId.totalComments,
+            };
+          }
         }
       }
     },
@@ -503,6 +568,22 @@ export const slice = createSlice({
               );
             });
           }
+        }
+        /** to add a comment via socket for top event */
+        if (
+          state.topEvent &&
+          state.topEventId._id === action.payload.commentInfo.itemId
+        ) {
+          state.topEventId = {
+            ...state.topEventId,
+            comments: state.topEventId.comments.concat({
+              ...action.payload.commentInfo,
+              ownerId: action.payload.userInfo,
+              userId: action.payload.userDetails,
+              totalReplies: 0,
+              likes: [],
+            }),
+          };
         }
       }
     },
@@ -560,6 +641,36 @@ export const slice = createSlice({
             });
           }
         }
+        /** to add a like to reply via socket for top event */
+        if (state.topEvent && state.topEventId._id === action.payload.postId) {
+          let findComment = state.topEventId.comments.filter(
+            (i) => i._id === action.payload.commentId
+          )[0];
+          let findComment1 = state.topEventId.comments.filter(
+            (i) => i._id !== action.payload.commentId
+          );
+          let replies = findComment.replies.concat({
+            ...action.payload.reply,
+            userId: {
+              _id: action.payload.userId,
+              name: action.payload.userName,
+              photo: action.payload.photo,
+            },
+          });
+          let commentsSort = findComment1
+            .concat({
+              ...findComment,
+              replies: replies,
+              totalReplies: findComment.totalReplies + 1,
+            })
+            .sort((a, b) => {
+              return new Date(a.createdAt) - new Date(b.createdAt);
+            });
+          state.topEventId = {
+            ...state.topEventId,
+            comments: commentsSort,
+          };
+        }
       }
     },
     [addLikeViaSocket.fulfilled]: (state, action) => {
@@ -593,6 +704,13 @@ export const slice = createSlice({
               );
             });
           }
+        }
+        /** to add like to post comments for top event */
+        if (state.topEvent && state.topEventId._id === action.payload.eventId) {
+          state.topEventId = {
+            ...state.topEventId,
+            likes: state.topEventId.likes.concat(action.payload.like),
+          };
         }
       }
     },
@@ -641,6 +759,30 @@ export const slice = createSlice({
                   );
                 });
               }
+            }
+          }
+        }
+        /** to add comments for top event */
+        if (state.topEvent && state.topEventId._id === action.payload.postId) {
+          if (state.topEventId.comments.length > 0) {
+            let findComment = state.topEventId.comments.filter(
+              (i) => i._id === action.payload.commentId
+            );
+            let findComment1 = state.topEventId.comments.filter(
+              (i) => i._id !== action.payload.commentId
+            );
+
+            if (findComment && findComment.length > 0) {
+              let likes = findComment[0].likes.concat(action.payload.like);
+              let commentsSort = findComment1
+                .concat({ ...findComment[0], likes: likes })
+                .sort((a, b) => {
+                  return new Date(a.createdAt) - new Date(b.createdAt);
+                });
+              state.topEventId = {
+                ...state.topEventId,
+                comments: commentsSort,
+              };
             }
           }
         }
@@ -763,5 +905,7 @@ export const {
   setCurrentDate,
   setSelectedDate,
   setWeekButtonClicked,
+  setTopEvent,
+  clearTopEvent,
 } = slice.actions;
 export default slice.reducer;

@@ -299,16 +299,14 @@ const ModalPostContent = ({
       } else {
         setListError("");
       }
-    }
-    else if (!selectedListForPost) {
+    } else if (!selectedListForPost) {
       setListError(error.POST_LIST_ERROR);
       if (description === "" || !description.trim() === true) {
         setDescriptionError(error.REQUIRED);
       } else {
         setDescriptionError("");
       }
-    }
-    else {
+    } else {
       /*set loader value */
       setLoader(true);
       setListError("");
@@ -441,6 +439,13 @@ const ModalPostContent = ({
                 postId: response.post._id,
                 postDetails: {
                   ...response.post,
+                  listId: {
+                    ...response.post.list,
+                    media: response.post.list.image
+                      ? [].concat({ image: response.post.list.image })
+                      : [],
+                  },
+
                   businessDetails: business[0],
                   totalPosts: [{ totalPosts: response.totalPosts }],
                 },

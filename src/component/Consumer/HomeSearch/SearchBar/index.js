@@ -166,6 +166,21 @@ const DropdownContent = styled.div`
     font-size: 12px;
     font-family: Montserrat;
     font-weight: 600;
+    button {
+      font-size: 12px;
+      color: #fff;
+      font-family: Montserrat;
+      font-weight: 600;
+      border: 0;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+      background: transparent;
+      :hover,
+      :focus {
+        color: #fff;
+      }
+    }
   }
   li:hover {
     background-color: #fe02b9;
@@ -179,6 +194,7 @@ const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
   const loader = useSelector((state) => state.myFeed.loading);
   const [searchError, setSearchError] = useState("");
   const [uploadMenu, setUploadMenu] = useState(false);
+  const userLocation = useSelector((state) => state.business.userLocation);
   const filterClosest = useSelector((state) => state.myFeed.filterByClosest);
   const updatedAtFilter = useSelector(
     (state) => state.myFeed.filterByUpdatedAt
@@ -223,8 +239,12 @@ const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
           search: search,
           value: 0,
           filters: { closest: filterClosest, updated: updatedAtFilter },
-          latitude: process.env.REACT_APP_LATITUDE,
-          longitude: process.env.REACT_APP_LONGITUDE,
+          latitude: userLocation
+            ? userLocation.latitude
+            : process.env.REACT_APP_LATITUDE,
+          longitude: userLocation
+            ? userLocation.longitude
+            : process.env.REACT_APP_LONGITUDE,
         };
         dispatch(setEnterClicked(true));
         dispatch(HomeSearch(obj));

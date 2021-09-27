@@ -215,6 +215,7 @@ export const slice = createSlice({
     flag: true,
     topPost: null,
     topPostId: null,
+    userLocation: null,
   },
   reducers: {
     setFilters: (state, action) => {
@@ -276,7 +277,7 @@ export const slice = createSlice({
           action.payload.totalComments.length > 0
             ? action.payload.totalComments[0].totalCount
             : 0,
-        totalLikes: action.payload.likes.length || 0,
+        totalLikes: action.payload.likes ? action.payload.likes.length : 0,
         postDetails: {
           _id: action.payload._id,
           data: action.payload.data,
@@ -287,23 +288,24 @@ export const slice = createSlice({
           taggedUsers: action.payload.taggedUsers,
           taggedLists: action.payload.taggedLists,
           ownerId: action.payload.ownerId[0],
-          likes: action.payload.likesData,
+          likes: action.payload.likesData
+            ? action.payload.likesData
+            : action.payload.likes,
           media: action.payload.media,
           location: null,
           createdAt: action.payload.createdAt,
         },
         comments: [],
       };
-      state.topPost = false; //for now only
+      state.topPost = true; //for now only
       state.topPostId = obj;
-      // state.posts = []
-      //   .concat(obj)
-      //   .concat(state.posts.filter((i) => i.postId !== obj.postId));
-      // state.totalPosts = state.totalPosts + 1;
     },
     clearTopPost: (state) => {
       state.topPost = false;
       state.topPostId = null;
+    },
+    setUserlocation: (state, action) => {
+      state.userLocation = action.payload;
     },
   },
   extraReducers: {
@@ -385,18 +387,20 @@ export const slice = createSlice({
               return new Date(b.totalLikes) - new Date(a.totalLikes);
             });
           }
-          if (
-            state.topPost &&
-            state.topPostId.postId === action.payload.postId
-          ) {
-            state.topPostId = {
-              postId: action.payload.postId,
-              postDetails: { ...findPost1[0].postDetails, likes: likes },
-              comments: findPost1[0].comments,
-              totalComments: findPost1[0].totalComments,
-              totalLikes: findPost1[0].totalLikes + 1,
-            };
-          }
+        }
+        if (state.topPost && state.topPostId.postId === action.payload.postId) {
+          state.topPostId = {
+            postId: action.payload.postId,
+            postDetails: {
+              ...state.topPostId.postDetails,
+              likes: state.topPostId.postDetails.likes.concat(
+                action.payload.like
+              ),
+            },
+            comments: state.topPostId.comments,
+            totalComments: state.topPostId.totalComments,
+            totalLikes: state.topPostId.totalLikes + 1,
+          };
         }
       }
     },
@@ -474,18 +478,23 @@ export const slice = createSlice({
               new Date(a.postDetails.createdAt)
             );
           });
-          if (
-            state.topPost &&
-            state.topPostId.postId === action.payload.commentInfo.itemId
-          ) {
-            state.topPostId = {
-              postId: action.payload.commentInfo.itemId,
-              postDetails: posts1[0].postDetails,
-              comments: comments,
-              totalComments: posts1[0].totalComments + 1,
-              totalLikes: posts1[0].totalLikes,
-            };
-          }
+        }
+        if (
+          state.topPost &&
+          state.topPostId.postId === action.payload.commentInfo.itemId
+        ) {
+          state.topPostId = {
+            postId: action.payload.commentInfo.itemId,
+            postDetails: state.topPostId.postDetails,
+            comments: state.topPostId.comments.concat({
+              ...action.payload.commentInfo,
+              totalReplies: 0,
+              userId: action.payload.userDetails,
+              likes: [],
+            }),
+            totalComments: state.topPostId.totalComments + 1,
+            totalLikes: state.topPostId.totalLikes,
+          };
         }
       }
     },
@@ -536,18 +545,38 @@ export const slice = createSlice({
               new Date(a.postDetails.createdAt)
             );
           });
-          if (
-            state.topPost &&
-            state.topPostId.postId === action.payload.postId
-          ) {
-            state.topPostId = {
-              postId: action.payload.postId,
-              postDetails: posts1[0].postDetails,
-              comments: commentsSort,
-              totalComments: posts1[0].totalComments + 1,
-              totalLikes: posts1[0].totalLikes,
-            };
-          }
+        }
+        if (state.topPost && state.topPostId.postId === action.payload.postId) {
+          let findComment = state.topPostId.comments.filter(
+            (i) => i._id === action.payload.commentId
+          )[0];
+          let findComment1 = state.topPostId.comments.filter(
+            (i) => i._id !== action.payload.commentId
+          );
+          let replies = findComment.replies.concat({
+            ...action.payload.reply,
+            userId: {
+              _id: action.payload.userId,
+              name: action.payload.userName,
+              photo: action.payload.photo,
+            },
+          });
+          let commentsSort = findComment1
+            .concat({
+              ...findComment,
+              replies: replies,
+              totalReplies: findComment.totalReplies + 1,
+            })
+            .sort((a, b) => {
+              return new Date(a.createdAt) - new Date(b.createdAt);
+            });
+          state.topPostId = {
+            postId: action.payload.postId,
+            postDetails: state.topPostId.postDetails,
+            comments: commentsSort,
+            totalComments: state.topPostId.totalComments + 1,
+            totalLikes: state.topPostId.totalLikes,
+          };
         }
       }
     },
@@ -573,36 +602,39 @@ export const slice = createSlice({
             let posts1 = current(state.posts).filter(
               (i) => i.postId === action.payload.post[0].comment.itemId
             )[0];
+
             let dummy1 = [];
             let arr = action.payload.post.map((obj) => ({
               ...obj.comment,
               totalReplies: obj.totalReplies,
               replies: [],
             }));
-            dummy1.push({
-              postId: action.payload.post[0].comment.itemId,
-              postDetails: posts1.postDetails,
-              comments: arr,
-              totalComments: action.payload.post.length,
-              totalLikes: posts1.totalLikes,
-            });
-            dummy1 = dummy1.concat(posts);
-            state.posts = dummy1.sort((a, b) => {
-              return (
-                new Date(b.postDetails.createdAt) -
-                new Date(a.postDetails.createdAt)
-              );
-            });
+            if (posts1) {
+              dummy1.push({
+                postId: action.payload.post[0].comment.itemId,
+                postDetails: posts1.postDetails,
+                comments: arr,
+                totalComments: action.payload.post.length,
+                totalLikes: posts1.totalLikes,
+              });
+              dummy1 = dummy1.concat(posts);
+              state.posts = dummy1.sort((a, b) => {
+                return (
+                  new Date(b.postDetails.createdAt) -
+                  new Date(a.postDetails.createdAt)
+                );
+              });
+            }
             if (
               state.topPost &&
               state.topPostId.postId === action.payload.post[0].comment.itemId
             ) {
               state.topPostId = {
                 postId: action.payload.post[0].comment.itemId,
-                postDetails: posts1.postDetails,
+                postDetails: state.topPostId.postDetails,
                 comments: arr,
                 totalComments: action.payload.post.length,
-                totalLikes: posts1.totalLikes,
+                totalLikes: state.topPostId.totalLikes,
               };
             }
           }
@@ -631,7 +663,7 @@ export const slice = createSlice({
             (i) => i.postId === action.payload.postId
           )[0];
           let dummy1 = [];
-          if (posts1.comments.length > 0) {
+          if (posts1 && posts1.comments.length > 0) {
             let findComment = posts1.comments.filter(
               (i) => i._id === action.payload.commentId
             );
@@ -661,18 +693,33 @@ export const slice = createSlice({
                 new Date(a.postDetails.createdAt)
               );
             });
-            if (
-              state.topPost &&
-              state.topPostId.postId === action.payload.postId
-            ) {
-              state.topPostId = {
-                postId: action.payload.postId,
-                postDetails: posts1.postDetails,
-                comments: newArr,
-                totalComments: posts1.totalComments,
-                totalLikes: posts1.totalLikes,
-              };
-            }
+          }
+          if (
+            state.topPost &&
+            state.topPostId.postId === action.payload.postId
+          ) {
+            let findComment = state.topPostId.comments.filter(
+              (i) => i._id === action.payload.commentId
+            );
+            let findComment1 = state.topPostId.comments.filter(
+              (i) => i._id !== action.payload.commentId
+            );
+            let newArr = [];
+            newArr = newArr.concat({
+              ...findComment[0],
+              replies: action.payload.replies,
+            });
+            newArr = newArr.concat(findComment1);
+            newArr = newArr.sort((a, b) => {
+              return new Date(a.createdAt) - new Date(b.createdAt);
+            });
+            state.topPostId = {
+              postId: action.payload.postId,
+              postDetails: state.topPostId.postDetails,
+              comments: newArr,
+              totalComments: state.topPostId.totalComments,
+              totalLikes: state.topPostId.totalLikes,
+            };
           }
         }
       }
@@ -787,13 +834,37 @@ export const slice = createSlice({
               ) {
                 state.topPostId = {
                   postId: action.payload.postId,
-                  postDetails: findPost1[0].postDetails,
+                  postDetails: state.topPostId.postDetails,
                   comments: commentsSort,
-                  totalComments: findPost1[0].totalComments,
-                  totalLikes: findPost1[0].totalLikes,
+                  totalComments: state.topPostId.totalComments,
+                  totalLikes: state.topPostId.totalLikes,
                 };
               }
             }
+          }
+        }
+        if (state.topPost && state.topPostId.postId === action.payload.postId) {
+          let findComment = state.topPostId.comments.filter(
+            (i) => i._id === action.payload.commentId
+          );
+          let findComment1 = state.topPostId.comments.filter(
+            (i) => i._id !== action.payload.commentId
+          );
+
+          if (findComment && findComment.length > 0) {
+            let likes = findComment[0].likes.concat(action.payload.like);
+            let commentsSort = findComment1
+              .concat({ ...findComment[0], likes: likes })
+              .sort((a, b) => {
+                return new Date(a.createdAt) - new Date(b.createdAt);
+              });
+            state.topPostId = {
+              postId: action.payload.postId,
+              postDetails: state.topPostId.postDetails,
+              comments: commentsSort,
+              totalComments: state.topPostId.totalComments,
+              totalLikes: state.topPostId.totalLikes,
+            };
           }
         }
       }
@@ -812,5 +883,6 @@ export const {
   setFlagReducer,
   setTopPost,
   clearTopPost,
+  setUserlocation,
 } = slice.actions;
 export default slice.reducer;

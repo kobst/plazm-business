@@ -22,7 +22,7 @@ const NewCollectionSectionSlider = ({
   modal,
   setModal,
   selectedId,
-  setSelectedId
+  setSelectedId,
 }) => {
   const [displayModal, setDisplayModal] = useState(null);
   const dispatch = useDispatch();

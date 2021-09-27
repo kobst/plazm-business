@@ -373,7 +373,8 @@ const DisplayListSection = ({
   };
 
   const errorFunction = () => {
-    if (data.media.length) setImage(data.media[0].image);
+    if (data.media.length && image !== data.media[0].image)
+      setImage(data.media[0].image);
     else setImage(UploadImg);
   };
 

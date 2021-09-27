@@ -103,16 +103,31 @@ const MyFeed = ({ setDisplayTab, setMyFeedIndex, setSelectedListId }) => {
   const loading = useSelector((state) => state.myFeed.loading);
   const feedData = useSelector((state) => state.myFeed.myFeed);
   const totalData = useSelector((state) => state.myFeed.totalData);
+  const searchData = useSelector((state) => state.myFeed.searchData);
+  const userLocation = useSelector((state) => state.business.userLocation);
+  const filterByClosest = useSelector((state) => state.myFeed.filterByClosest);
+  const filterByUpdatedAt = useSelector(
+    (state) => state.myFeed.filterByUpdatedAt
+  );
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffSet] = useState(0);
   const dispatch = useDispatch();
   const [flag, setFlag] = useState(true);
 
+  /** to fetch data initially */
   useEffect(() => {
     const fetchData = async () => {
       const obj = {
         id: user._id,
         value: 0,
+        search: searchData,
+        filters: { closest: filterByClosest, updated: filterByUpdatedAt },
+        latitude: userLocation
+          ? userLocation.latitude
+          : process.env.REACT_APP_LATITUDE,
+        longitude: userLocation
+          ? userLocation.longitude
+          : process.env.REACT_APP_LONGITUDE,
       };
       dispatch(clearMyFeedData());
       const res = await dispatch(fetchMyFeedData(obj));
@@ -120,12 +135,33 @@ const MyFeed = ({ setDisplayTab, setMyFeedIndex, setSelectedListId }) => {
       if (data) setFlag(false);
     };
     fetchData();
-  }, [dispatch, user._id]);
+  }, [
+    dispatch,
+    user._id,
+    filterByClosest,
+    filterByUpdatedAt,
+    userLocation,
+    searchData,
+  ]);
 
+  /** to fetch more data by infinite scroll */
   const fetchMoreData = () => {
     if (offset + 20 < totalData) {
       setOffSet(offset + 20);
-      dispatch(fetchMyFeedData({ id: user._id, value: offset + 20 }));
+      dispatch(
+        fetchMyFeedData({
+          id: user._id,
+          value: offset + 20,
+          search: searchData,
+          filters: { closest: filterByClosest, updated: filterByUpdatedAt },
+          latitude: userLocation
+            ? userLocation.latitude
+            : process.env.REACT_APP_LATITUDE,
+          longitude: userLocation
+            ? userLocation.longitude
+            : process.env.REACT_APP_LONGITUDE,
+        })
+      );
     } else setHasMore(false);
   };
 
@@ -137,17 +173,21 @@ const MyFeed = ({ setDisplayTab, setMyFeedIndex, setSelectedListId }) => {
         </LoaderWrap>
       ) : (
         <BuisinessViewContent>
-          <SearchBar setOffset={setOffSet} setDisplayTab={setDisplayTab} />
+          <SearchBar
+            setOffset={setOffSet}
+            setDisplayTab={setDisplayTab}
+            setFlag={setFlag}
+          />
           <div
             id="scrollableDiv"
-            style={{ height: "calc(100vh - 116px)", overflow: "auto" }}
+            style={{ height: "calc(100vh - 44px)", overflow: "auto" }}
           >
             <InfiniteScroll
               dataLength={feedData ? feedData.length : 0}
               next={fetchMoreData}
               hasMore={hasMore}
               loader={
-                offset + 20 < totalData && loading ? (
+                offset < totalData && loading ? (
                   <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
                     {" "}
                     <ValueLoader height="40" width="40" />

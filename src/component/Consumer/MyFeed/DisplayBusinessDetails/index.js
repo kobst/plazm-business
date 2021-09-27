@@ -76,6 +76,7 @@ const DisplayBusinessDetails = ({
             businessData={data.business[0]}
             listView={true}
             setSelectedListId={setSelectedListId}
+            setMyFeedIndex={setMyFeedIndex}
             myFeedView={true}
           />
         )}

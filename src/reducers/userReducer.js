@@ -76,8 +76,8 @@ export const fetchUserFavoritesBusiness = createAsyncThunk(
     });
     const response = await graphQlEndPoint(graphQl);
     return {
-      data: response.data.getUserFavoritesBusiness.data,
-      totalFavorites: response.data.getUserFavoritesBusiness.totalFavorites,
+      data: response.data.getFavorites.data,
+      totalFavorites: response.data.getFavorites.totalPlaces,
     };
   }
 );
@@ -224,10 +224,13 @@ export const slice = createSlice({
         state.favoriteBusiness = state.favoriteBusiness.filter(
           (i) => i.favorites._id !== action.payload.businessId
         );
-        state.user = {...state.user, favorites:state.user.favorites.filter(
-          (i) => i !== action.payload.businessId
-        )
-      }}
+        state.user = {
+          ...state.user,
+          favorites: state.user.favorites.filter(
+            (i) => i !== action.payload.businessId
+          ),
+        };
+      }
     },
     [fetchUserProfileData.pending]: (state) => {
       if (!state.loadingProfile) {

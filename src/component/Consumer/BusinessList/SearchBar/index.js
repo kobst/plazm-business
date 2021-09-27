@@ -2,9 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Input from "../../UI/Input/Input";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import error from "../../../../constants";
 import {
-  setSearchData,
   setSideFiltersByClosest,
   setSideFiltersByUpdatedAt,
 } from "../../../../reducers/myFeedReducer";
@@ -43,15 +41,6 @@ const SearchWrap = styled.div`
     height: auto;
     padding: 10px 0;
   }
-`;
-
-const ErrorDiv = styled.div`
-  color: #ff0000;
-  font-weight: 600;
-  font-size: 12px;
-  margin: 0;
-  margin-bottom: 10px;
-  margin-left: 20px;
 `;
 
 const Heading = styled.h1`
@@ -184,11 +173,9 @@ const DropdownContent = styled.div`
   }
 `;
 
-const SearchBar = ({ setOffset, setDisplayTab, setFlag }) => {
+const SearchBar = ({ setOffset, setDisplayTab, search, setSearch }) => {
   const menuRef = useRef(null);
-  const [search, setSearch] = useState("");
   const loader = useSelector((state) => state.myFeed.loading);
-  const [searchError, setSearchError] = useState("");
   const [uploadMenu, setUploadMenu] = useState(false);
   const searchData = useSelector((state) => state.myFeed.searchData);
   const filterByClosest = useSelector((state) => state.myFeed.filterByClosest);
@@ -199,6 +186,7 @@ const SearchBar = ({ setOffset, setDisplayTab, setFlag }) => {
 
   useEffect(() => {
     setSearch(searchData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchData]);
 
   /** to toggle side filter menu */
@@ -209,7 +197,6 @@ const SearchBar = ({ setOffset, setDisplayTab, setFlag }) => {
   /** to set side filter by closest */
   const closestFilter = () => {
     setOffset(0);
-    setFlag(true);
     dispatch(setSideFiltersByClosest());
     setUploadMenu(false);
   };
@@ -217,23 +204,8 @@ const SearchBar = ({ setOffset, setDisplayTab, setFlag }) => {
   /** to set side filter by recently updated */
   const recentlyUpdatedFilter = () => {
     setOffset(0);
-    setFlag(true);
     dispatch(setSideFiltersByUpdatedAt());
     setUploadMenu(false);
-  };
-
-  /** on key press handler for search */
-  const searchList = (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      if (search !== "" && search.length >= 4 && !search.trim() === false) {
-        setOffset(0);
-        setSearchError("");
-        dispatch(setSearchData(search));
-      } else if (search.length >= 0 && search.length < 4) {
-        setSearchError(error.SEARCH_ERROR);
-      }
-    }
   };
 
   /** on change handler for search */
@@ -243,14 +215,13 @@ const SearchBar = ({ setOffset, setDisplayTab, setFlag }) => {
   return (
     <>
       <SearchWrap>
-        <Heading>My Feed</Heading>
+        <Heading>Favourites</Heading>
         <RightSearchWrap>
           <Input
+            placeholder="Search Favourite"
             value={search}
-            onKeyPress={(event) => searchList(event)}
             onChange={(e) => onChangeSearch(e)}
             disabled={loader}
-            placeholder="Search Feed"
           />
           <FilterBox ref={menuRef}>
             <FaFilter onClick={toggleUploadMenu} />
@@ -285,7 +256,6 @@ const SearchBar = ({ setOffset, setDisplayTab, setFlag }) => {
           <IoMdClose onClick={() => setDisplayTab()} />
         </CloseDiv>
       </SearchWrap>
-      {searchError !== "" ? <ErrorDiv>{searchError}</ErrorDiv> : null}
     </>
   );
 };

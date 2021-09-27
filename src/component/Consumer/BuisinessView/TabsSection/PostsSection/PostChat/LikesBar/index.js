@@ -104,7 +104,8 @@ const LikesBar = ({
     if (type === "comment" && totalLikes > 0) {
       if (postLikes.length > 0) {
         const findUser = postLikes.find((i) => i._id === user._id);
-        if (findUser) {
+        const findUserInId = postLikes.find((i) => i === user._id);
+        if (findUser || findUserInId) {
           setUserLikedPost(true);
           setUserLikedComment(false);
         } else {

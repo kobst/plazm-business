@@ -5,8 +5,10 @@ import {
   MdChatBubbleOutline,
   MdFavorite,
 } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SaveButton from "../../../../UI/SaveButton";
+import { useHistory } from "react-router";
+import { setTopEvent } from "../../../../../../reducers/eventReducer";
 
 export const BottomBarLikes = styled.div`
   display: flex;
@@ -78,12 +80,17 @@ const LikesBar = ({
   totalComments,
   postLikes,
   commentLikes,
+  setSearchIndex,
+  myFeedView,
+  eventData,
 }) => {
   const user = useSelector((state) => state.user.user);
   const [userLikedEvent, setUserLikedEvent] = useState(false);
   const [userLikedComment, setUserLikedComment] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [likeCountForComment, setLikeCountForComment] = useState(0);
+  const history = useHistory();
+  const dispatch = useDispatch();
 
   /** to convert date into display format */
   useEffect(() => {
@@ -108,6 +115,15 @@ const LikesBar = ({
       }
     }
   }, [date, commentLikes, postLikes, type, user._id]);
+
+  /** to display business details page */
+  const displayBusinessDetail = () => {
+    if (myFeedView) {
+      setSearchIndex(eventData._id);
+      history.push(`/b/${eventData.business[0]._id}`);
+      dispatch(setTopEvent(eventData));
+    }
+  };
 
   return (
     <>
@@ -144,7 +160,7 @@ const LikesBar = ({
             </RightDiv>
           )}
         </LikesBtnWrap>
-        <SaveButton>VISIT</SaveButton>
+        <SaveButton onClick={() => displayBusinessDetail()}>VISIT</SaveButton>
       </BottomBarLikes>
     </>
   );

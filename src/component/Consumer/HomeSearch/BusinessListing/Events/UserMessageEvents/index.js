@@ -106,6 +106,7 @@ const UserMessageEvents = ({
   businessInfo,
   type,
   setSearchIndex,
+  myFeedView,
 }) => {
   const [displayEventComments, setDisplayEventComments] = useState(false);
   const [flag, setFlag] = useState(false);
@@ -199,7 +200,9 @@ const UserMessageEvents = ({
                 <ListName>{eventData.listId[0].name}</ListName>
                 <ListInfo>
                   <FaCaretRight />
-                  <ListAuthorName>{eventData.ownerId[0].name}</ListAuthorName>
+                  {eventData.ownerId && (
+                    <ListAuthorName>{eventData.ownerId[0].name}</ListAuthorName>
+                  )}
                   <span>|</span>
                   <ListAuthorName>
                     Added on{" "}
@@ -245,6 +248,9 @@ const UserMessageEvents = ({
               setFlag={setFlag}
               business={businessInfo}
               commentsRef={commentsRef}
+              setSearchIndex={setSearchIndex}
+              myFeedView={myFeedView}
+              eventData={eventData}
             />
           </ProfileNameWrap>
         </ProfileNameHeader>

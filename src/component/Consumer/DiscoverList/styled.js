@@ -102,7 +102,7 @@ export const MainHeading = styled.h1`
 `;
 export const NewInBuzzSliderWrapper = styled.div`
   position: relative;
-  margin: 0;
+  margin: 0 0 35px;
   padding: 0 0 10px;
   width: 100%;
   display: flex;
@@ -176,11 +176,14 @@ export const LoaderWrap = styled.div`
   width: 100%;
   position: relative;
   display: flex;
-  height: 100%;
+  height: 150px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin: 30px 0 10px;
+  &.DiscoverLoaderWrap{
+    height: calc(100vh - 100px);
+  }
 `;
 
 export const ItemsWrapper = styled.div`

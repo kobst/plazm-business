@@ -184,6 +184,7 @@ const LikesBar = ({
   listData,
   setListIndex,
   myFeedView,
+  setMyFeedIndex,
 }) => {
   const [eventDate, setEventDate] = useState();
   const [userLikedPost, setUserLikedPost] = useState(false);
@@ -399,6 +400,10 @@ const LikesBar = ({
   const displayBusinessDetail = () => {
     if (listDescriptionView) {
       setListIndex(listData.business[0]._id);
+      history.push(`/b/${listData.business[0]._id}`);
+      dispatch(setTopPost(listData));
+    } else if (myFeedView) {
+      setMyFeedIndex(listData.business[0]._id);
       history.push(`/b/${listData.business[0]._id}`);
       dispatch(setTopPost(listData));
     }

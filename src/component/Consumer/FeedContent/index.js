@@ -21,15 +21,12 @@ import {
   ListAuthorName,
   FeedDescription,
   FeedBigImage,
-  LikesBtnWrap,
-  RightDiv,
-  BottomBarLikes,
 } from "./styled";
 // import SaveButton from "../../UI/SaveButton";
 import PostReplyContent from "./PostReply";
 import BottomBarLikesContent from "./BottomBarLikes";
 
-const FeedDataContent = ({}) => {
+const FeedDataContent = () => {
   return (
     <>
       <DescriptionViewItem>
@@ -71,7 +68,7 @@ const FeedDataContent = ({}) => {
               with ample WiFi access. The coffee comes from Stumptown, and the
               food goes beyond the typical pastry selection here, with quiches
               and frittatas for a legitimate working breakfast or lunch. It’s
-              open from 7:30 a.m. to 4 p.m. daily.😎😎😎 <br />
+              open from 7:30 a.m. to 4 p.m. daily <br />
               <br />
               NYC mainstay Partners offers a full range of speciality coffee
               drinks, baked goods, and heftier meal options for breakfast and

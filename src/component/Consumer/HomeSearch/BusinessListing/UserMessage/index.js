@@ -130,6 +130,7 @@ const UserMessage = ({
   listDescriptionView,
   setListIndex,
   myFeedView,
+  setMyFeedIndex
 }) => {
   const dispatch = useDispatch();
   const [displayComments, setDisplayComments] = useState(false);
@@ -202,10 +203,7 @@ const UserMessage = ({
       dispatch(addReplyToComment(message));
     } else if (message.post) {
       /** to add post via socket */
-      if (
-        user.favorites.indexOf(message.businessId) !== -1 ||
-        user.listFollowed.indexOf(message.post.postDetails.listId._id)
-      ) {
+      if (user.listFollowed.indexOf(message.post.postDetails.listId._id)) {
         dispatch(addPostViaSocket(message));
       }
     }
@@ -430,6 +428,7 @@ const UserMessage = ({
                 listData={postData}
                 setListIndex={setListIndex}
                 myFeedView={myFeedView}
+                setMyFeedIndex={setMyFeedIndex}
               />
             </ProfileNameWrap>
           </ProfileNameHeader>
