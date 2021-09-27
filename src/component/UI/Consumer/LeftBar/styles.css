@@ -67,8 +67,54 @@
     -moz-animation: fadein .5s; /* Firefox */
     -webkit-animation: fadein .5s; /* Safari and Chrome */
     -o-animation: fadein .5s; /* Opera */
+    }
+
+    .MainTabs [role=tabpanel] {
+      display: none;
+      width: 544px;
+      position: absolute;
+      left: 100px;
+      background: #221E45;
+      height: 111%;
+      z-index: 1;
+      animation: fadein .5s;
+      -moz-animation: fadein .5s; /* Firefox */
+      -webkit-animation: fadein .5s; /* Safari and Chrome */
+      -o-animation: fadein .5s; /* Opera */
+    }
+
+    .MainTabs .DiscoverWrapper{
+      display: none;
+      width: 94vw;
+      position: absolute;
+      left: 100px;
+      background: #221E45;
+      height: 111%;
+      z-index: 1;
+      animation: fadein .5s;
+      -moz-animation: fadein .5s; /* Firefox */
+      -webkit-animation: fadein .5s; /* Safari and Chrome */
+      -o-animation: fadein .5s; /* Opera */
+    }
+
+    @media (max-width:1599px){ 
+      .MainTabs .DiscoverWrapper{ 
+        width: 90vw;
+      }     
+    }
+    @media (max-width:1024px){ 
+      .MainTabs .DiscoverWrapper{ 
+        width: 85vw;
+      }     
+    }
     
-  }
+    @media (min-width:480px) and (max-width:767px) and (orientation: landscape) { 
+      .MainTabs .DiscoverWrapper{ 
+        width: 80vw !important;
+      } 
+    }
+    
+
 @keyframes fadein {
     from {
         opacity:0;
@@ -150,7 +196,7 @@
   }
 
   @media (max-width:767px){
-    .MainTabs .react-tabs__tab-panel{
+    .MainTabs .react-tabs__tab-panel, .MainTabs [role=tabpanel]{
       left: 50px;
       width: 300px;
       height: 100%;

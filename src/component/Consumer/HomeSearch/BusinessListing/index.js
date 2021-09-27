@@ -47,6 +47,7 @@ const BusinessListing = ({
   setDisplayTab,
   loader,
   coords,
+  closestFilter,
 }) => {
   const businessData = useSelector((state) => state.myFeed.myFeed);
   const loading = useSelector((state) => state.myFeed.loading);
@@ -68,7 +69,11 @@ const BusinessListing = ({
       const obj = {
         search: search,
         value: 0,
-        filters: { closest: filterClosest, updated: updatedAtFilter },
+        filters: {
+          closest:
+            closestFilter && !updatedAtFilter ? closestFilter : filterClosest,
+          updated: updatedAtFilter,
+        },
         latitude: coords ? coords.latitude : process.env.REACT_APP_LATITUDE,
         longitude: coords ? coords.longitude : process.env.REACT_APP_LONGITUDE,
       };
@@ -77,7 +82,7 @@ const BusinessListing = ({
       if (data) {
         setFlag(false);
       }
-      setFilterSelected(false);
+      // setFilterSelected(false);
     };
     if (loader === false && offset === 0) fetchSearchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -136,7 +141,7 @@ const BusinessListing = ({
             }
             scrollableTarget="scrollableDiv"
             endMessage={
-              businessData.length > 20 && !loading ? (
+              businessData.length > 20 && !loading && !flag ? (
                 <center>
                   <NoMorePost className="noMorePost">
                     {error.NO_MORE_BUSINESS_TO_DISPLAY}
@@ -156,7 +161,7 @@ const BusinessListing = ({
                     setSearchIndex={setSearchIndex}
                   />
                 ))
-              ) : !loading ? (
+              ) : !loading && !hasMore? (
                 <center>
                   <NoMorePost className="noMorePost">
                     {error.NO_BUSINESS_FOUND}

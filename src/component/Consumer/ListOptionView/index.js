@@ -11,9 +11,11 @@ import {
   filterSubscribedLists,
   filterUserCreatedLists,
   filterByAll,
+  clearDiscoverPageData,
 } from "../../../reducers/listReducer";
 import ValueLoader from "../../../utils/loader";
 import DisplayListSection from "./DisplayListSection";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const ListOptionSection = styled.div`
   width: 100%;
@@ -178,6 +180,7 @@ const DiscoverBtn = styled.button`
 const ListOptionView = ({
   setDisplayTab,
   setSelectedListId,
+  setDiscoverBtn,
   selectedListId,
 }) => {
   const dispatch = useDispatch();
@@ -193,6 +196,7 @@ const ListOptionView = ({
   const [filteredList, setFilteredList] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState("All");
   const [selectedList, setSelectedList] = useState(null);
+  const [flag, setFlag] = useState(true);
   const list =
     filteredList.length > 0
       ? filteredList
@@ -253,12 +257,19 @@ const ListOptionView = ({
 
   /** to fetch all the user created and subscribed lists */
   useEffect(() => {
-    const obj = {
-      id: user._id,
-      value: 0,
+    const fetchListData = async () => {
+      const obj = {
+        id: user._id,
+        value: 0,
+      };
+      dispatch(clearListData());
+      const data = await dispatch(fetchUserCreatedAndFollowedList(obj));
+      const res = await unwrapResult(data);
+      if (res) {
+        setFlag(false);
+      }
     };
-    dispatch(clearListData());
-    dispatch(fetchUserCreatedAndFollowedList(obj));
+    fetchListData();
   }, [dispatch, user._id]);
 
   /** lists search functionality implemented (to search based on title or description) */
@@ -291,7 +302,12 @@ const ListOptionView = ({
     setSearch("");
   };
 
-  return loading ? (
+  /** to display discover page */
+  const displayDicoverPage = () => {
+    setDiscoverBtn(true);
+    dispatch(clearDiscoverPageData());
+  };
+  return loading || flag ? (
     <LoaderWrap>
       <ValueLoader />
     </LoaderWrap>
@@ -442,7 +458,9 @@ const ListOptionView = ({
               }}
             ></Select>
           </SortingSelect>
-          <DiscoverBtn>Discover More</DiscoverBtn>
+          <DiscoverBtn onClick={() => displayDicoverPage()}>
+            Discover More
+          </DiscoverBtn>
         </HeadingWrap>
         <div
           id="scrollableDiv"

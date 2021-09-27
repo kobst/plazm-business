@@ -166,6 +166,20 @@ const DropdownContent = styled.div`
     font-size: 12px;
     font-family: Montserrat;
     font-weight: 600;
+    button {
+      font-size: 12px;
+      color: #fff;
+      font-family: Montserrat;
+      font-weight: 600;
+      border: 0;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+      background: transparent;
+      :hover, :focus {
+        color: #fff;
+      }
+    }
   }
   li:hover {
     background-color: #fe02b9;
@@ -197,6 +211,7 @@ const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
 
   /** to set side filter by closest */
   const closestFilter = () => {
+    setOffset(0);
     dispatch(setSideFiltersByClosest());
     setFilterSelected(true);
     setUploadMenu(false);
@@ -204,6 +219,7 @@ const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
 
   /** to set side filter by recently updated */
   const recentlyUpdatedFilter = () => {
+    setOffset(0);
     dispatch(setSideFiltersByUpdatedAt());
     setFilterSelected(true);
     setUploadMenu(false);
@@ -255,10 +271,24 @@ const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
             {uploadMenu && (
               <DropdownContent>
                 <ul>
-                  <li onClick={() => closestFilter()}>Closest</li>
+                  <li>
+                    {" "}
+                    <button
+                      onClick={() => closestFilter()}
+                      disabled={filterClosest}
+                    >
+                      Closest 
+                    </button>
+                  </li>
 
-                  <li onClick={() => recentlyUpdatedFilter()}>
-                    Recently Updated
+                  <li>
+                    <button
+                      onClick={() => recentlyUpdatedFilter()}
+                      disabled={updatedAtFilter}
+                    >
+                      {" "}
+                      Recently Updated
+                    </button>
                   </li>
                 </ul>
               </DropdownContent>
@@ -266,7 +296,7 @@ const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
           </FilterBox>
         </RightSearchWrap>
         <CloseDiv>
-          <IoMdClose onClick={()=>setDisplayTab()}/>
+          <IoMdClose onClick={() => setDisplayTab()} />
         </CloseDiv>
       </SearchWrap>
       {searchError !== "" ? <ErrorDiv>{searchError}</ErrorDiv> : null}

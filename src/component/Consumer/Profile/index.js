@@ -37,6 +37,7 @@ const ProfileContent = ({ userId, setDisplayTab, setProfileClosed }) => {
         setFlag(false)
       }
     };
+    if(userId)
     fetchUserProfile()
   }, [dispatch, userId]);
   return loading || flag ? (

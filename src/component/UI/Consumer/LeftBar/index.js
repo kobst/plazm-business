@@ -13,19 +13,22 @@ import {
   clearMyFeedData,
   setSearchData,
   fetchMyFeedData,
-  HomeSearch,
 } from "../../../../reducers/myFeedReducer";
 import Profile from "../../../Consumer/Profile";
 import ChangePassword from "../../../Consumer/ChangePassword";
 import ProfileSettings from "../../../Consumer/ProfileSettings";
 import HomeSearchComponent from "../../../Consumer/HomeSearch";
 import { useHistory } from "react-router-dom";
-import { clearBusinessData } from "../../../../reducers/businessReducer";
+import {
+  clearBusinessData,
+  clearTopPost,
+} from "../../../../reducers/businessReducer";
 import { FiSearch, FiHome, FiHeart } from "react-icons/fi";
 import { BsListUl, BsThreeDots } from "react-icons/bs";
 import PolygonArrow from "../../../../images/Polygon.png";
 import { Auth } from "aws-amplify";
 import { setGloablLoader } from "../../../../reducers/consumerReducer";
+import DiscoverList from "../../../Consumer/DiscoverList";
 
 const LeftBarContent = styled.div`
   width: 100px;
@@ -102,13 +105,13 @@ const BottomSettingsWrap = styled.div`
           text-align: center;
           text-transform: uppercase;
           font-weight: 700;
-          @media (max-width:767px){
+          @media (max-width: 767px) {
             font-size: 9px;
           }
           :hover {
             color: #ee3840;
           }
-          button{
+          button {
             color: #767676;
             font-size: 13px;
             padding: 0;
@@ -117,7 +120,7 @@ const BottomSettingsWrap = styled.div`
             text-transform: uppercase;
             font-weight: 700;
             border: 0;
-            @media (max-width:767px){
+            @media (max-width: 767px) {
               font-size: 9px;
             }
             :hover {
@@ -154,13 +157,14 @@ const LeftBar = ({
   const [favoriteIndex, setFavoriteIndex] = useState(null);
   const [profileClosed, setProfileClosed] = useState(false);
   const [userDataId, setUserDataId] = useState(userId);
+  const [discoverBtn, setDiscoverBtn] = useState(false);
+  const [readMore, setReadMore] = useState(false)
   const dispatch = useDispatch();
   const history = useHistory();
 
   useEffect(() => {
     setUserDataId(userId);
   }, [userId]);
-
 
   useEffect(() => {
     if (profileClosed && tabIndex === 4) {
@@ -180,10 +184,13 @@ const LeftBar = ({
   const listView = () => {
     if (tabIndex !== 5 && !loading) {
       dispatch(clearMyFeedData());
+      dispatch(clearBusinessData());
+      dispatch(clearTopPost());
       setSelectedListId(null);
       setListIndex(null);
       setUserDataId(null);
       history.push("/");
+      setDiscoverBtn(false);
     }
   };
 
@@ -199,12 +206,15 @@ const LeftBar = ({
       history.push("/");
       dispatch(clearMyFeedData());
       dispatch(fetchMyFeedData(obj));
+      dispatch(clearBusinessData());
+      dispatch(clearTopPost());
     }
   };
 
   /** to clear selected data on tab click */
   const favoriteFunction = () => {
     dispatch(clearBusinessData());
+    dispatch(clearTopPost());
     setFavoriteIndex(null);
     setSelectedListId(null);
     setUserDataId(null);
@@ -216,18 +226,21 @@ const LeftBar = ({
   const homeSearchFunction = () => {
     setFavoriteIndex(null);
     if (tabIndex !== 1 && !loading) {
-      const obj = {
-        search: "",
-        value: 0,
-        filters: { closest: false, updated: false },
-        latitude: process.env.REACT_APP_LATITUDE,
-        longitude: process.env.REACT_APP_LONGITUDE,
-      };
+      // const obj = {
+      //   search: "",
+      //   value: 0,
+      //   filters: { closest: false, updated: false },
+      //   latitude: process.env.REACT_APP_LATITUDE,
+      //   longitude: process.env.REACT_APP_LONGITUDE,
+      // };
       dispatch(setSearchData(""));
       dispatch(clearMyFeedData());
-      dispatch(HomeSearch(obj));
+      // dispatch(HomeSearch(obj));
       setUserDataId(null);
       setSelectedListId(null);
+      dispatch(clearBusinessData());
+      dispatch(clearTopPost());
+      setSearchIndex(null)
       history.push("/");
     }
   };
@@ -357,8 +370,7 @@ const LeftBar = ({
               disabled={true}
               className="react-tabs__tab--disabled"
               style={{ backgroundColor: "#f3f3f3" }}
-            >
-            </Tab>
+            ></Tab>
 
             <Tab
               disabled={loading}
@@ -533,28 +545,38 @@ const LeftBar = ({
               )}
             </div>
           </TabPanel>
-          <TabPanel>
+          <TabPanel className={discoverBtn ? "DiscoverWrapper" : ""}>
             <div className="panel-content">
-              {!selectedListId && !userDataId ? (
+              {!selectedListId && !userDataId && !discoverBtn ? (
                 <ListOptionView
                   setDisplayTab={() => setTabIndex(0)}
                   setSelectedListId={setSelectedListId}
                   selectedListId={selectedListId}
+                  setDiscoverBtn={setDiscoverBtn}
                 />
-              ) : !listIndex && !userDataId ? (
+              ) : !listIndex && !userDataId && !discoverBtn ? (
                 <ListDescriptionView
+                  listOpenedFromBusiness={true}
                   setDisplayTab={() => setTabIndex(0)}
                   setSelectedListId={setSelectedListId}
                   selectedListId={selectedListId}
                   listClickedFromSearch={listClickedFromSearch}
                   setListClickedFromSearch={setListClickedFromSearch}
                   setListIndex={setListIndex}
+                  readMore={readMore}
+                  setDiscoverBtn={setDiscoverBtn}
                 />
-              ) : userDataId ? (
+              ) : userDataId && !discoverBtn ? (
                 <Profile
                   setDisplayTab={() => setTabIndex(0)}
                   userId={userDataId}
                   setProfileClosed={setProfileClosed}
+                />
+              ) : discoverBtn && !selectedListId ? (
+                <DiscoverList
+                  setDiscoverBtn={setDiscoverBtn}
+                  setSelectedListId={setSelectedListId}
+                  setReadMore={setReadMore}
                 />
               ) : (
                 <BuisinessView

@@ -225,8 +225,8 @@ const CreateEventModal = ({
   /*
    * @desc: to change file_name
    */
-  const fileName = (name, date) => {
-    return `${date}-${name}`;
+  const fileName = (name) => {
+    return `${Date.now()}-${name}`;
   };
 
   /*

@@ -6,21 +6,37 @@ import {
   clearMyFeedData,
   setSideFiltersHomeSearch,
 } from "../../../reducers/myFeedReducer";
+import ValueLoader from "../../../utils/loader";
 
 const ContentWrap = styled.div`
   padding: 0px;
+`;
+
+const LoaderWrap = styled.div`
+  width: 100%;
+  position: relative;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 100px 0 0 0;
+  @media (max-width: 767px) {
+    margin: 30px 0 0 0;
+  }
 `;
 
 const HomeSearch = ({
   setSelectedListId,
   setListClickedFromSearch,
   setSearchIndex,
-  setDisplayTab
+  setDisplayTab,
 }) => {
   const dispatch = useDispatch();
   const [locationState, setLocationState] = useState(null);
   const [loader, setLoader] = useState(null);
   const [coords, setCoords] = useState(null);
+  const [closestFilter, setClosestFilter] = useState(false);
 
   const options = {
     enableHighAccuracy: true,
@@ -44,6 +60,9 @@ const HomeSearch = ({
       navigator.permissions
         .query({ name: "geolocation" })
         .then(function (result) {
+          /** if location is provided then we need data by closest latitude/longitude */
+          // dispatch(setSideFiltersByClosest());
+          setClosestFilter(true);
           if (locationState !== "denied") setLocationState(result.state);
           if (result.state === "granted") {
             //If granted then you can directly call your function here
@@ -91,8 +110,13 @@ const HomeSearch = ({
             loader={loader}
             coords={coords}
             setDisplayTab={setDisplayTab}
+            closestFilter={closestFilter}
           />
-        ) : null}
+        ) : (
+          <LoaderWrap>
+            <ValueLoader />
+          </LoaderWrap>
+        )}
       </ContentWrap>
     </>
   );

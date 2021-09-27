@@ -100,8 +100,8 @@ const getUserFavorites = ({id,value,filters,longitude,latitude}) => {
 const GetMyFeedData = (obj) => {
   const graphQl = {
     query: `
-          query GetMyFeedData($id: ID!, $value: Int){
-            getMyFeedData (input: {id: $id, value:$value}){
+          query GetMyFeedData($id: ID!, $value: Int, $filters: homeSearchFilterInput!,  $longitude: Float!, $latitude: Float!){
+            getMyFeedData (input: {id: $id, value:$value, filters:$filters,longitude:$longitude, latitude:$latitude}){
               message
               success
               totalPlaces 
@@ -168,6 +168,9 @@ const GetMyFeedData = (obj) => {
     variables: {
       id: obj.id,
       value: obj.value,
+      filters: {closest: false, updated: true},
+      latitude: 55.151134,
+      longitude: 25.087626
     },
   };
   return graphQl;

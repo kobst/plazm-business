@@ -77,6 +77,11 @@ const fetchEventForAWeek = (values) => {
               user {
                 _id
               }
+              list {
+                _id
+                name
+                image
+              }
               title
               description
               type

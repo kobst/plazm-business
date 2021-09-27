@@ -20,6 +20,9 @@ import {
   getUserLists,
   getUserCreatedAndFollowedLists,
   GetListDetails,
+  getMostTrendingLists,
+  getMostPopularLists,
+  SearchLists,
 } from "./query/list";
 
 import {
@@ -91,4 +94,7 @@ export {
   SubscribeToAList,
   updatePost,
   deletePost,
+  getMostTrendingLists,
+  getMostPopularLists,
+  SearchLists,
 };
