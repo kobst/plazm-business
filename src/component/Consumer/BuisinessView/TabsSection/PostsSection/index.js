@@ -3,6 +3,7 @@ import styled from "styled-components";
 import AddPostSection from "./AddPostSection";
 import PostFilter from "./PostFilter";
 import PostChat from "./PostChat";
+import PostFilterButton from "./PostFilterButtons";
 
 const PostsSectionContent = styled.div`
   width: 100%;
@@ -17,7 +18,8 @@ const PostsSection = ({ profile, businessId, setSelectedListId }) => {
     <>
       <PostsSectionContent>
         <AddPostSection profile={profile} businessId={businessId} />
-        <PostFilter setFilterArr={setFilterArr} />
+        {/* <PostFilter setFilterArr={setFilterArr} /> */}
+        <PostFilterButton />
         <PostChat
           setSelectedListId={setSelectedListId}
           filterArr={filterArr}

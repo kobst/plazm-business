@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { IoMdClose } from "react-icons/io";
 import {
-  MdKeyboardArrowLeft,
   MdKeyboardArrowDown,
   MdKeyboardArrowUp,
 } from "react-icons/md";
@@ -30,7 +29,7 @@ const BuisinessHeaderContent = styled.div`
   width: 100%;
   position: relative;
   display: flex;
-  height: 294px;
+  height: 215px;
   @media (max-width: 767px) {
     flex-direction: column;
     height: 200px;
@@ -56,41 +55,62 @@ const BuisinessHeaderContent = styled.div`
     right: calc(4% + -4px);
   }
 `;
-const CloseDiv = styled.div`
-  width: 24px;
-  position: relative;
-  display: flex;
-  justify-content: flex-end;
+
+const BusinessHeaderOverlay = styled.div`
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 27.08%, #000000 100%);
+  width: 100%;
   position: absolute;
-  right: 17px;
-  cursor: pointer;
-  top: 17px;
+  height: 100%;
+  top: 0;
   z-index: 1;
-  svg {
-    font-size: 24px;
-    color: #fff;
-  }
 `;
-const ArrowBack = styled.div`
-  background: #ff2e9a;
-  border-radius: 3px;
-  width: 34px;
-  height: 34px;
+
+const CloseDiv = styled.div`
+  width: 40px;
+  position: relative;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
   position: absolute;
-  left: 15px;
+  right: -40px;
   cursor: pointer;
-  top: 15px;
+  top: 0px;
+  background: #fe02b9;
+  box-shadow: 4px 0px 14px -5px #fe02b9;
   z-index: 1;
   svg {
-    font-size: 34px;
+    font-size: 32px;
     color: #fff;
   }
   @media (max-width: 767px) {
-    width: 24px;
-    height: 24px;
+    left: 0;
+    right: inherit;
+    width: 30px;
+    height: 30px;
+  }
+`;
+const ArrowBack = styled.div`
+  background: #000;
+  border-radius: 0px;
+  padding: 0 18px;
+  color: #fff;
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: 800;
+  font-size: 12px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 0px;
+  cursor: pointer;
+  top: 0px;
+  z-index: 2;
+  @media (max-width: 767px) {
+    /* width: 24px;
+    height: 24px; */
   }
 `;
 const BottomBar = styled.div`
@@ -111,31 +131,29 @@ const BottomBar = styled.div`
     color: #ee3840;
     cursor: pointer;
   }
-  @media (max-width: 767px) {
+  /* @media (max-width: 767px) {
     padding: 10px;
     position: relative;
-  }
+  } */
   &.ProfileHeaderNam {
     justify-content: flex-end;
   }
 `;
 const BusinessIcon = styled.div`
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: 6px solid #fff;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 215px;
+  flex-direction: column;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 27.08%, #000000 100%), url(image.png), #C4C4C4;
   img {
     width: 100%;
     height: 100%;
-    border-radius: 50%;
-  }
-  @media (max-width: 767px) {
-    width: 38px;
-    height: 38px;
-    border: 3px solid #fff;
+    max-height: 215px;
   }
 `;
 const ArrowDown = styled.div`
@@ -300,16 +318,15 @@ const BuisinessHeader = ({
       <BuisinessHeaderContent
         className={displayBusinessProfile ? "HeaderSpacing" : ""}
       >
-        <ArrowBack>
-          <MdKeyboardArrowLeft onClick={() => backBusiness()} />
+        <ArrowBack onClick={() => backBusiness()}>
+            BACK
         </ArrowBack>
         <CloseDiv>
           <IoMdClose onClick={() => closeTab()} />
         </CloseDiv>
-        <SectionSlider images={businessProfile.additional_media} />
-        <BottomBar className={isProfile ? "ProfileHeaderNam" : ""}>
-          <LeftHeader>
-            {!isProfile ? (
+        {/* <SectionSlider images={businessProfile.additional_media} /> */}
+        <BusinessHeaderOverlay />
+        
               <BusinessIcon>
                 <img
                   src={image ? image : ProfileImg}
@@ -317,7 +334,11 @@ const BuisinessHeader = ({
                   onError={() => setImage(ProfileImg)}
                 />
               </BusinessIcon>
-            ) : null}
+           
+
+        <BottomBar className={isProfile ? "ProfileHeaderNam" : ""}>
+          <LeftHeader>
+            
             {!isProfile ? (
               <BusinessNameWrap>
                 <BusinessName>

@@ -77,6 +77,7 @@ export const ProfileName = styled.div`
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    cursor: pointer;
   }
   @media (max-width: 1024px) {
     flex-direction: column;
@@ -178,7 +179,7 @@ export const ListInfo = styled.div`
   align-items: center;
   color: #fff;
   svg {
-    margin: 0 10px 0 0;
+    margin: 0 2px 0 0;
     @media (max-width: 767px) {
       margin: 0 2px 0 0;
     }
