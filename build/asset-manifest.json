@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/static/css/main.b7f6cf1a.chunk.css",
-    "main.js": "/static/js/main.0c9d143f.chunk.js",
-    "main.js.map": "/static/js/main.0c9d143f.chunk.js.map",
+    "main.css": "/static/css/main.4d88ec3f.chunk.css",
+    "main.js": "/static/js/main.3638d1e2.chunk.js",
+    "main.js.map": "/static/js/main.3638d1e2.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.cd248c00.js",
     "runtime-main.js.map": "/static/js/runtime-main.cd248c00.js.map",
     "static/css/2.d463e2e1.chunk.css": "/static/css/2.d463e2e1.chunk.css",
-    "static/js/2.91a1d7c0.chunk.js": "/static/js/2.91a1d7c0.chunk.js",
-    "static/js/2.91a1d7c0.chunk.js.map": "/static/js/2.91a1d7c0.chunk.js.map",
+    "static/js/2.32187f70.chunk.js": "/static/js/2.32187f70.chunk.js",
+    "static/js/2.32187f70.chunk.js.map": "/static/js/2.32187f70.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.13307feb802c97155e648178f55d117d.js": "/precache-manifest.13307feb802c97155e648178f55d117d.js",
+    "precache-manifest.680b1294877ae8b9324b9bb26505be46.js": "/precache-manifest.680b1294877ae8b9324b9bb26505be46.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.d463e2e1.chunk.css.map": "/static/css/2.d463e2e1.chunk.css.map",
-    "static/css/main.b7f6cf1a.chunk.css.map": "/static/css/main.b7f6cf1a.chunk.css.map",
-    "static/js/2.91a1d7c0.chunk.js.LICENSE.txt": "/static/js/2.91a1d7c0.chunk.js.LICENSE.txt",
+    "static/css/main.4d88ec3f.chunk.css.map": "/static/css/main.4d88ec3f.chunk.css.map",
+    "static/js/2.32187f70.chunk.js.LICENSE.txt": "/static/js/2.32187f70.chunk.js.LICENSE.txt",
     "static/media/CommentStaticImg.png": "/static/media/CommentStaticImg.0746bab7.png",
     "static/media/Facebook-new.svg": "/static/media/Facebook-new.5aa6306b.svg",
     "static/media/Gridview.png": "/static/media/Gridview.e66f2dec.png",
@@ -30,6 +30,7 @@
     "static/media/cross-black.svg": "/static/media/cross-black.bac9fe78.svg",
     "static/media/cross-modal.svg": "/static/media/cross-modal.19e77601.svg",
     "static/media/cross-pink.svg": "/static/media/cross-pink.cabe27cf.svg",
+    "static/media/eventimg.png": "/static/media/eventimg.72a5ec4f.png",
     "static/media/facebook.svg": "/static/media/facebook.63bc58cd.svg",
     "static/media/gallery-img.png": "/static/media/gallery-img.02be2424.png",
     "static/media/gallery-img1.png": "/static/media/gallery-img1.88e4c0a7.png",
@@ -55,8 +56,8 @@
   "entrypoints": [
     "static/js/runtime-main.cd248c00.js",
     "static/css/2.d463e2e1.chunk.css",
-    "static/js/2.91a1d7c0.chunk.js",
-    "static/css/main.b7f6cf1a.chunk.css",
-    "static/js/main.0c9d143f.chunk.js"
+    "static/js/2.32187f70.chunk.js",
+    "static/css/main.4d88ec3f.chunk.css",
+    "static/js/main.3638d1e2.chunk.js"
   ]
 }
