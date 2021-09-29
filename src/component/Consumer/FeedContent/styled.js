@@ -43,6 +43,18 @@ export const ProfileThumbBanner = styled.div`
   }
 `;
 
+export const ProfileThumbBannerFeed = styled.div`
+  width: 100%;
+  height: 50px;
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+  img {
+    width: 100%;
+    max-height: 50px;
+  }
+`;
+
 export const ProfileThumbOverlay = styled.div`
   background: linear-gradient(
     360deg,
@@ -56,6 +68,45 @@ export const ProfileThumbOverlay = styled.div`
 `;
 
 export const ProfileName = styled.div`
+  font-style: normal;
+  font-size: 13px;
+  line-height: normal;
+  margin: 0;
+  font-weight: 700;
+  color: #fff;
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 93%;
+  span {
+    font-weight: 700;
+    color: #fff;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  @media (max-width: 1024px) {
+    flex-direction: column;
+  }
+  div {
+    cursor: pointer;
+  }
+  .ListName {
+    max-width: calc(100% - 95px);
+    @media (max-width: 767px) {
+      max-width: 100%;
+      margin: 0 0 5px;
+    }
+  }
+`;
+
+export const ProfileNameFeed = styled.div`
   font-style: normal;
   font-size: 13px;
   line-height: normal;

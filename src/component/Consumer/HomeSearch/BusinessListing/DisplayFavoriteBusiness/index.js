@@ -13,6 +13,11 @@ import UserMessageEvents from "../Events/UserMessageEvents";
 import DisplayComment from "../DisplayComments";
 import DisplayCommentForEvent from "../DisplayCommentForEvent";
 import { useHistory } from "react-router";
+import {
+  ProfileNameFeed,
+  ProfileThumbBannerFeed,
+  ProfileThumbOverlay,
+} from "../../../FeedContent/styled";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -160,7 +165,7 @@ const ChatInput = styled.div`
     margin: 0 4px 0 0px;
   }
   .postSpan {
-    margin-left: 4%;
+    // margin-left: 4%;
   }
   p {
     display: flex;
@@ -182,6 +187,7 @@ const DisplayFavoriteBusiness = ({
     data.business && data.business.length > 0 ? data.business[0] : data;
 
   const search = useSelector((state) => state.myFeed.enterClicked);
+  const searchdata = useSelector((state) => state.myFeed.searchData);
   const getUtcHour = new Date().getUTCHours();
   const getUtcMinutes = new Date().getUTCMinutes();
   const currentUtcDay = new Date().getUTCDay();
@@ -234,9 +240,7 @@ const DisplayFavoriteBusiness = ({
 
   return data ? (
     <>
-      {(data.body !== null && data.type === "Post") ||
-      data.data !== null ||
-      (!search && businessInfo.company_name !== null) ? (
+      {!search && businessInfo.company_name !== null ? (
         <UserMsgWrap
           className={
             data.eventSchedule !== null ||
@@ -272,12 +276,6 @@ const DisplayFavoriteBusiness = ({
                   </div>
                   <ChatInput>
                     <p>
-                      <span>
-                        {businessInfo.favorites !== null
-                          ? businessInfo.favorites.length
-                          : 0}
-                      </span>{" "}
-                      Followers{" "}
                       <span className="postSpan">
                         {data.totalPosts && data.totalPosts.length > 0
                           ? data.totalPosts[0].totalPosts
@@ -291,6 +289,19 @@ const DisplayFavoriteBusiness = ({
             </ProfileNameHeader>
           </UserMessageContent>
         </UserMsgWrap>
+      ) : (data.body !== null && data.type === "Post" && searchdata !== "") ||
+        (data.data !== null && searchdata !== "") ? (
+        <ProfileThumbBannerFeed>
+          <img
+            src={businessInfo.default_image_url ? image : ProfileImg}
+            onError={() => setImage(ProfileImg)}
+            alt=""
+          />
+          <ProfileThumbOverlay />
+          <ProfileNameFeed>
+            <span>{businessInfo.company_name}</span>
+          </ProfileNameFeed>
+        </ProfileThumbBannerFeed>
       ) : null}
 
       {data.eventSchedule !== null ? (
@@ -298,6 +309,8 @@ const DisplayFavoriteBusiness = ({
           eventData={data}
           businessInfo={businessInfo}
           setSearchIndex={setSearchIndex}
+          myFeedView={true}
+          setMyFeedIndex={setSearchIndex}
         />
       ) : data.data !== null ? (
         <UserMessage
@@ -307,6 +320,8 @@ const DisplayFavoriteBusiness = ({
           setSelectedListId={setSelectedListId}
           setListClickedFromSearch={setListClickedFromSearch}
           type="search"
+          myFeedView={true}
+          setMyFeedIndex={setSearchIndex}
         />
       ) : data.body !== null && data.type === "Post" ? (
         <DisplayComment
@@ -352,12 +367,6 @@ const DisplayFavoriteBusiness = ({
                   </div>
                   <ChatInput>
                     <p>
-                      <span>
-                        {businessInfo.favorites !== null
-                          ? businessInfo.favorites.length
-                          : 0}
-                      </span>{" "}
-                      Followers{" "}
                       <span className="postSpan">
                         {data.totalPosts && data.totalPosts.length > 0
                           ? data.totalPosts[0].totalPosts

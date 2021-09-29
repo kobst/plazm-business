@@ -1,18 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import ProfileImg from "../../../../images/profile-img.png";
 import FacebookImg from "../../../../images/Facebook-new.svg";
 import TwitterImg from "../../../../images/Twitter-new.svg";
 import LinkedInImg from "../../../../images/Linkedin-new.svg";
 import InstagramImg from "../../../../images/Instagram-new.svg";
-import FavoritesIcon from "../../../../images/favorites.png";
-import FavoritesIconFilled from "../../../../images/favorites-filled.png";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { MdKeyboardArrowUp } from "react-icons/md";
-import {
-  AddBusinessFavorite,
-  RemoveBusinessFavorite,
-} from "../../../../reducers/userReducer";
 
 const ArrowDown = styled.div`
   background: #ff2e9a;
@@ -133,34 +127,6 @@ const SocialIcon = styled.div`
 
 const BuisinessProfileSection = ({ setDisplayBusinessProfile }) => {
   const businessProfile = useSelector((state) => state.business.business)[0];
-  const [favoriteBusiness, setFavoriteBusiness] = useState(false);
-  const user = useSelector((state) => state.user.user);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const find = user.favorites.find((i) => i === businessProfile._id);
-    if (find) {
-      setFavoriteBusiness(true);
-    } else setFavoriteBusiness(false);
-  }, [user, businessProfile._id]);
-
-  /** to add a business to user favorites */
-  const addFavorite = async () => {
-    const obj = {
-      businessId: businessProfile._id,
-      userId: user._id,
-    };
-    await dispatch(AddBusinessFavorite(obj));
-  };
-
-  /** to remove a business to user favorites */
-  const removeFavorite = async () => {
-    const obj = {
-      businessId: businessProfile._id,
-      userId: user._id,
-    };
-    await dispatch(RemoveBusinessFavorite(obj));
-  };
 
   return (
     <>
@@ -180,22 +146,6 @@ const BuisinessProfileSection = ({ setDisplayBusinessProfile }) => {
             <BusinessNameWrap>
               <BusinessName>
                 <span>{businessProfile.company_name}</span>
-                {/* business favorite toggle */}
-                {favoriteBusiness ? (
-                  <img
-                    src={FavoritesIconFilled}
-                    onClick={() => removeFavorite()}
-                    className="favoriteBusiness"
-                    alt=""
-                  />
-                ) : (
-                  <img
-                    src={FavoritesIcon}
-                    onClick={() => addFavorite()}
-                    className="favoriteBusinessBorder"
-                    alt=""
-                  />
-                )}
               </BusinessName>
               <SocialIconsWrap>
                 {businessProfile.handles.instagram ? (

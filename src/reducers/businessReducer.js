@@ -217,15 +217,29 @@ export const slice = createSlice({
           MySubscriptions: false,
           Others: false,
         };
-      else state.filters = action.payload;
+      else {
+        state.filters = action.payload;
+        if (state.topPost) {
+          state.topPost = false;
+          state.topPostId = null;
+        }
+      }
     },
-    setSideFiltersByMostLiked: (state, action) => {
+    setSideFiltersByMostLiked: (state) => {
       state.filterByMostLiked = true;
       state.filterByMostRecent = false;
+      if (state.topPost) {
+        state.topPost = false;
+        state.topPostId = null;
+      }
     },
-    setSideFiltersByMostRecent: (state, action) => {
+    setSideFiltersByMostRecent: (state) => {
       state.filterByMostLiked = false;
       state.filterByMostRecent = true;
+      if (state.topPost) {
+        state.topPost = false;
+        state.topPostId = null;
+      }
     },
     setFlagReducer: (state) => {
       state.flag = false;
