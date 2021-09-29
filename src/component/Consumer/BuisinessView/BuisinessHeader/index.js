@@ -1,23 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { IoMdClose } from "react-icons/io";
-import {
-  MdKeyboardArrowDown,
-  MdKeyboardArrowUp,
-} from "react-icons/md";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import ProfileImg from "../../../../images/profile-img.png";
 import FacebookImg from "../../../../images/Facebook-new.svg";
 import TwitterImg from "../../../../images/Twitter-new.svg";
 import LinkedInImg from "../../../../images/Linkedin-new.svg";
 import InstagramImg from "../../../../images/Instagram-new.svg";
-import FavoritesIcon from "../../../../images/favorites.png";
-import FavoritesIconFilled from "../../../../images/favorites-filled.png";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  AddBusinessFavorite,
-  RemoveBusinessFavorite,
-} from "../../../../reducers/userReducer";
 import {
   clearBusinessData,
   clearTopPost,
@@ -148,7 +139,8 @@ const BusinessIcon = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 27.08%, #000000 100%), url(image.png), #C4C4C4;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 27.08%, #000000 100%),
+    url(image.png), #c4c4c4;
   img {
     width: 100%;
     height: 100%;
@@ -247,22 +239,13 @@ const BuisinessHeader = ({
   setFavoriteIndex,
 }) => {
   const history = useHistory();
-  const [favoriteBusiness, setFavoriteBusiness] = useState(false);
   const businessProfile = useSelector((state) => state.business.business)[0];
   const [image, setImage] = useState(
     businessProfile.default_image_url
       ? businessProfile.default_image_url
       : ProfileImg
   );
-  const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    const find = user.favorites.find((i) => i === businessProfile._id);
-    if (find) {
-      setFavoriteBusiness(true);
-    } else setFavoriteBusiness(false);
-  }, [user, businessProfile._id]);
 
   /*
    * @desc: close tab function to be called on cross icon click
@@ -270,24 +253,6 @@ const BuisinessHeader = ({
   const closeTab = () => {
     setDisplayTab(false);
     history.push("/");
-  };
-
-  /** to add a business to user favorites */
-  const addFavorite = async () => {
-    const obj = {
-      businessId: businessProfile._id,
-      userId: user._id,
-    };
-    await dispatch(AddBusinessFavorite(obj));
-  };
-
-  /** to remove a business to user favorites */
-  const removeFavorite = async () => {
-    const obj = {
-      businessId: businessProfile._id,
-      userId: user._id,
-    };
-    await dispatch(RemoveBusinessFavorite(obj));
   };
 
   /** to return to all business listing */
@@ -317,47 +282,26 @@ const BuisinessHeader = ({
       <BuisinessHeaderContent
         className={displayBusinessProfile ? "HeaderSpacing" : ""}
       >
-        <ArrowBack onClick={() => backBusiness()}>
-            BACK
-        </ArrowBack>
+        <ArrowBack onClick={() => backBusiness()}>BACK</ArrowBack>
         <CloseDiv>
           <IoMdClose onClick={() => closeTab()} />
         </CloseDiv>
-        {/* <SectionSlider images={businessProfile.additional_media} /> */}
         <BusinessHeaderOverlay />
-        
-              <BusinessIcon>
-                <img
-                  src={image ? image : ProfileImg}
-                  alt=""
-                  onError={() => setImage(ProfileImg)}
-                />
-              </BusinessIcon>
-           
+
+        <BusinessIcon>
+          <img
+            src={image ? image : ProfileImg}
+            alt=""
+            onError={() => setImage(ProfileImg)}
+          />
+        </BusinessIcon>
 
         <BottomBar className={isProfile ? "ProfileHeaderNam" : ""}>
           <LeftHeader>
-            
             {!isProfile ? (
               <BusinessNameWrap>
                 <BusinessName>
                   <span>{businessProfile.company_name}</span>{" "}
-                  {/* business favorite toggle */}
-                  {favoriteBusiness ? (
-                    <img
-                      src={FavoritesIconFilled}
-                      onClick={() => removeFavorite()}
-                      className="favoriteBusiness"
-                      alt=""
-                    />
-                  ) : (
-                    <img
-                      src={FavoritesIcon}
-                      onClick={() => addFavorite()}
-                      className="favoriteBusinessBorder"
-                      alt=""
-                    />
-                  )}
                 </BusinessName>
                 <SocialIconsWrap>
                   {businessProfile.handles.instagram ? (

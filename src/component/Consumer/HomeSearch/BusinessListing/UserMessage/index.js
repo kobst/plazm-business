@@ -130,7 +130,7 @@ const UserMessage = ({
   listDescriptionView,
   setListIndex,
   myFeedView,
-  setMyFeedIndex
+  setMyFeedIndex,
 }) => {
   const dispatch = useDispatch();
   const [displayComments, setDisplayComments] = useState(false);

@@ -228,6 +228,7 @@ const LeftBar = ({
     dispatch(setSideFiltersHomeSearch());
     dispatch(clearBusinessData());
     dispatch(clearTopPost());
+    dispatch(setSearchData(""));
     setFavoriteIndex(null);
     setSelectedListId(null);
     setUserDataId(null);
