@@ -361,7 +361,18 @@ const ModalPostContent = ({
 
       if (businessData) {
         /** to update an existing post */
-        obj = { ...obj, _id: businessData._id };
+        obj = {
+          ...obj,
+          _id: businessData._id,
+          media:
+            imageFile !== null
+              ? imageUrl !== null
+                ? imageUrl
+                : []
+              : imageUpload
+              ? imageUpload
+              : [],
+        };
         const updatePost = await dispatch(updatePostToBusiness(obj));
         const response = await unwrapResult(updatePost);
         if (response.success) {

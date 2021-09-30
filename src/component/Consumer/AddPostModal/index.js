@@ -43,7 +43,7 @@ const AddPostModal = ({ businessId, closeModal, data }) => {
   );
   const user = useSelector((state) => state.user.user);
   const userLists = useSelector((state) => state.list.userLists);
-  const [imageFile, setImageFile] = useState(data && data.media && data.media.length > 0 ? data.media[0] : null);
+  const [imageFile, setImageFile] = useState(null);
 
   useEffect(() => {
     if (data && data.taggedLists) {
