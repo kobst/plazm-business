@@ -326,7 +326,7 @@ const UserMessage = ({ postData, setSelectedListId }) => {
         return value;
       }
     } else {
-      return value;
+      return <div className="postData">{value}</div>;
     }
   };
   return (

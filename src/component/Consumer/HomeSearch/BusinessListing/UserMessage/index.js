@@ -99,6 +99,7 @@ const ChatInput = styled.div`
   line-height: normal;
   margin: 0 0 5px;
   color: #fff;
+  white-space: pre-wrap;
   span {
     font-size: 13px;
     color: #ff2e9a;

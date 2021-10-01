@@ -43,6 +43,8 @@ const NewInBuzzItems = ({
   setModal,
   selectedId,
   setSelectedId,
+  setTotalLists,
+  totalLists,
 }) => {
   const user = useSelector((state) => state.user.user);
   const [offsetLeft, setOffsetLeft] = useState(0);
@@ -91,6 +93,8 @@ const NewInBuzzItems = ({
           user: user,
         })
       );
+      /** to update subscribe count */
+      setTotalLists(totalLists - 1);
     }
   };
 
@@ -113,6 +117,8 @@ const NewInBuzzItems = ({
           user: user,
         })
       );
+      /** to update subscribe count */
+      setTotalLists(totalLists + 1);
     }
   };
 
@@ -120,12 +126,13 @@ const NewInBuzzItems = ({
     setModal(false);
     setSelectedId(null);
   };
+
   return (
     <>
       <ItemsWrapper ref={divRef}>
         <CoverImg>
           <img src={image} alt="" onError={() => setImage(EventImg)} />
-          {!data.isPublic && (
+          {!data.isPublic && data.isPublic !== null && (
             <Lock>
               <img src={LockImage} alt="" />
             </Lock>

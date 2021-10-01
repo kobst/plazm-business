@@ -223,6 +223,7 @@ const getMostPopularLists = (value) => {
                 _id
                 name
                 description
+                isPublic
                 media {
                   image
                 }

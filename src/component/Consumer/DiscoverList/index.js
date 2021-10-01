@@ -48,8 +48,11 @@ const DiscoverList = ({ setDiscoverBtn, setSelectedListId, setReadMore }) => {
   const [offsetPopular, setOffSetPopular] = useState(0);
   const [loader, setLoader] = useState(false);
   const [flag, setFlag] = useState(true);
-  const [displayTrendingModel, setDisplayTrendingModel] = useState(false)
-  const [selectedId, setSelectedId] = useState(null)
+  const [displayTrendingModel, setDisplayTrendingModel] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+  const [totalLists, setTotalLists] = useState(
+    parseInt(totalList - userLists.length)
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -103,8 +106,7 @@ const DiscoverList = ({ setDiscoverBtn, setSelectedListId, setReadMore }) => {
             <MdChevronLeft />
           </button>
           <TotalNum>
-            Total No. of Subscribed Lists :{" "}
-            <span>{parseInt(totalList - userLists.length)}</span>
+            Total No. of Subscribed Lists : <span>{totalLists}</span>
           </TotalNum>
         </LeftWrap>
         <RightSearchWrap>
@@ -142,6 +144,8 @@ const DiscoverList = ({ setDiscoverBtn, setSelectedListId, setReadMore }) => {
             setModal={setDisplayTrendingModel}
             setSelectedId={setSelectedId}
             selectedId={selectedId}
+            setTotalLists={setTotalLists}
+            totalLists={totalLists}
           />
           <SliderSection
             heading="Most Popular"
@@ -158,6 +162,8 @@ const DiscoverList = ({ setDiscoverBtn, setSelectedListId, setReadMore }) => {
             setModal={setDisplayTrendingModel}
             setSelectedId={setSelectedId}
             selectedId={selectedId}
+            setTotalLists={setTotalLists}
+            totalLists={totalLists}
           />
         </>
       )}

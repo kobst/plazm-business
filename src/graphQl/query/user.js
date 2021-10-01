@@ -164,10 +164,6 @@ const GetMyFeedData = (obj) => {
                   }
                   default_image_url
                 }
-                likesData {
-                  _id
-                  name
-                }
                 taggedUsers {
                   _id
                   name

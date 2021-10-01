@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { MdClose } from "react-icons/md";
-import BottomButtons from "../BottomButtons";
-import AddImageImg from "../../../../images/addImage.svg";
-import SelectedListing from "../SelectedListing";
-import PostImage from "../PostImage";
-import error from "../../../../constants";
 import { MentionsInput, Mention } from "react-mentions";
 import { useDispatch, useSelector } from "react-redux";
+import { unwrapResult } from "@reduxjs/toolkit";
 import { findAllUsers } from "../../../../reducers/consumerReducer";
 import {
   AddPostToList,
@@ -15,12 +11,16 @@ import {
   RemovePostFromAList,
 } from "../../../../reducers/listReducer";
 import { addPostToBusiness } from "../../../../reducers/businessReducer";
-import { unwrapResult } from "@reduxjs/toolkit";
 import {
   updatePostInMyFeed,
   updatePostToBusiness,
   deletePostInMyFeed,
 } from "../../../../reducers/myFeedReducer";
+import BottomButtons from "../BottomButtons";
+import AddImageImg from "../../../../images/addImage.svg";
+import SelectedListing from "../SelectedListing";
+import PostImage from "../PostImage";
+import error from "../../../../constants";
 
 const bucket = process.env.REACT_APP_BUCKET;
 

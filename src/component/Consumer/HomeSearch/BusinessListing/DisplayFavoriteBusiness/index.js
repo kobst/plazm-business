@@ -311,6 +311,7 @@ const DisplayFavoriteBusiness = ({
           setSearchIndex={setSearchIndex}
           myFeedView={true}
           setMyFeedIndex={setSearchIndex}
+          setSelectedListId={setSelectedListId}
         />
       ) : data.data !== null ? (
         <UserMessage

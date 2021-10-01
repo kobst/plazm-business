@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import AddImageImg from "../../../../images/addImage.svg";
-import CalenderImg from "../../../../images/calender_img.png";
+import { unwrapResult } from "@reduxjs/toolkit";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import AddImageImg from "../../../../images/addImage.svg";
+import CalenderImg from "../../../../images/calender_img.png";
+import BackButton from "../../UI/BackButton";
+import SaveButton from "../../UI/SaveButton";
 import FormBody from "./formBody";
 import { validate } from "./validate";
 import ValueLoader from "../../../../utils/loader";
-import { useDispatch, useSelector } from "react-redux";
-import BackButton from "../../UI/BackButton";
-import SaveButton from "../../UI/SaveButton";
 import { AddEventToList } from "../../../../reducers/listReducer";
 import PostImage from "../PostImage";
-import { unwrapResult } from "@reduxjs/toolkit";
 import ButtonGrey from "../../UI/ButtonGrey";
 import SelectedListing from "../SelectedListing";
 import PostEvent from "../PostEvent";
@@ -166,6 +166,10 @@ const CreateEventModal = ({
   setImageCopy,
   imageFile,
   setImageFile,
+  mentionArrayList,
+  setMentionArrayList,
+  mentionArrayUser,
+  setMentionArrayUser,
 }) => {
   const [loader, setLoader] = useState(false);
   const [imageError, setImageError] = useState("");
@@ -174,8 +178,8 @@ const CreateEventModal = ({
   const [response, setResponse] = useState("");
   const user = useSelector((state) => state.user.user);
   const business = useSelector((state) => state.business.business);
-  const dispatch = useDispatch();
   const ws = useSelector((state) => state.user.ws);
+  const dispatch = useDispatch();
 
   /*
   @desc: to check input file format and throw error if invalid image is input
@@ -243,7 +247,6 @@ const CreateEventModal = ({
         setListError("");
         /*set loader value */
         setLoader(true);
-        console.log("*****", imageFile);
         /* to upload file to s3 bucket */
         let imageUrl = null;
         if (imageFile !== null) {
@@ -287,6 +290,8 @@ const CreateEventModal = ({
           business: business[0]._id,
           title: values.title,
           description: values.description,
+          taggedUsers: mentionArrayUser,
+          taggedLists: mentionArrayList,
           eventSchedule: {
             start_time: eventDetails.start_time,
             end_time: eventDetails.end_time,
@@ -398,6 +403,10 @@ const CreateEventModal = ({
               setResponse={setResponse}
               setEventTitle={setEventTitle}
               setEventDescription={setEventDescription}
+              mentionArrayList={mentionArrayList}
+              setMentionArrayList={setMentionArrayList}
+              mentionArrayUser={mentionArrayUser}
+              setMentionArrayUser={setMentionArrayUser}
             />
             {eventDetails !== null ? (
               <AddYourPostBar>
