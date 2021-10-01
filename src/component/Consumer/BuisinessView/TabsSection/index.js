@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import { useDispatch, useSelector } from "react-redux";
 import "react-tabs/style/react-tabs.css";
 import "./styles.css";
 import PostsSection from "./PostsSection";
 import EventsSection from "./EventsSection";
 import { setCurrentDate } from "../../../../reducers/eventReducer";
-import { useDispatch, useSelector } from "react-redux";
 
 const TabsSectionContent = styled.div`
   width: 100%;
@@ -44,7 +44,10 @@ const TabsSection = ({ profile, businessId, setSelectedListId }) => {
             />
           </TabPanel>
           <TabPanel>
-            <EventsSection businessId={businessId} />
+            <EventsSection
+              businessId={businessId}
+              setSelectedListId={setSelectedListId}
+            />
           </TabPanel>
         </Tabs>
       </TabsSectionContent>

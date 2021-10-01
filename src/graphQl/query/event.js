@@ -2,8 +2,8 @@
 @desc: fetch events for a particular graphQL query
 */
 const fetchEvent = (values) => {
-    const graphQl = {
-      query: `
+  const graphQl = {
+    query: `
         query GetEventsForTheDay($id: ID, $day: String, $date:Date){
             getEventsForTheDay(input: {id:$id, day:$day, date:$date}) {
             message
@@ -12,6 +12,14 @@ const fetchEvent = (values) => {
                 _id
                 totalComments
                 likes {
+                  _id
+                  name
+                }
+                taggedUsers {
+                  _id
+                  name
+                }
+                taggedLists {
                   _id
                   name
                 }
@@ -40,14 +48,14 @@ const fetchEvent = (values) => {
             }
           }
         }`,
-      variables: {
-        id:values.id,
-        day: values.day,
-        date: values.date
-      },
-    };
-    return graphQl;
+    variables: {
+      id: values.id,
+      day: values.day,
+      date: values.date,
+    },
   };
+  return graphQl;
+};
 
 /*
 @desc: fetch events for a week graphQL query
@@ -63,6 +71,14 @@ const fetchEventForAWeek = (values) => {
               _id
               totalComments
               likes {
+                _id
+                name
+              }
+              taggedUsers {
+                _id
+                name
+              }
+              taggedLists {
                 _id
                 name
               }
@@ -93,11 +109,11 @@ const fetchEventForAWeek = (values) => {
         }
       }`,
     variables: {
-      id:values.id,
+      id: values.id,
       date: values.date,
-      userId: values.userId
+      userId: values.userId,
     },
   };
   return graphQl;
 };
-  export  {fetchEvent,fetchEventForAWeek};
+export { fetchEvent, fetchEventForAWeek };

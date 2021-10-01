@@ -46,6 +46,7 @@ const AddEventModal = ({ closeModal }) => {
   const [imageUpload, setImageUpload] = useState(null);
   const [imageUploadCopy, setImageUploadCopy] = useState([]);
   const [imageFile, setImageFile] = useState(null);
+
   return (
     <>
       <ModalContent>
@@ -97,6 +98,10 @@ const AddEventModal = ({ closeModal }) => {
             setImageUploadCopy={setImageUploadCopy}
             imageFile={imageFile}
             setImageFile={setImageFile}
+            mentionArrayList={mentionArrayList}
+            setMentionArrayList={setMentionArrayList}
+            mentionArrayUser={mentionArrayUser}
+            setMentionArrayUser={setMentionArrayUser}
           />
         )}
       </ModalContent>

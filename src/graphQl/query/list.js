@@ -223,6 +223,7 @@ const getMostPopularLists = (value) => {
                 _id
                 name
                 description
+                isPublic
                 media {
                   image
                 }
@@ -261,6 +262,7 @@ const SearchLists = (obj) => {
                 _id
                 name
                 description
+                isPublic
                 media {
                   image
                 }
