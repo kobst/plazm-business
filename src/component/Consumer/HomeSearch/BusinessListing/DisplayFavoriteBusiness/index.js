@@ -1,18 +1,14 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import moment from "moment";
 import styled from "styled-components";
 import ProfileImg from "../../../../../images/profile-img.png";
 import UserMessage from "../UserMessage";
 import UserMessageEvents from "../Events/UserMessageEvents";
-
-// import {
-//   AddBusinessFavorite,
-//   RemoveBusinessFavorite,
-// } from "../../../../../reducers/userReducer";
 import DisplayComment from "../DisplayComments";
 import DisplayCommentForEvent from "../DisplayCommentForEvent";
-import { useHistory } from "react-router";
+
 import {
   ProfileNameFeed,
   ProfileThumbBannerFeed,
@@ -187,7 +183,6 @@ const DisplayFavoriteBusiness = ({
     data.business && data.business.length > 0 ? data.business[0] : data;
 
   const search = useSelector((state) => state.myFeed.enterClicked);
-  const searchdata = useSelector((state) => state.myFeed.searchData);
   const getUtcHour = new Date().getUTCHours();
   const getUtcMinutes = new Date().getUTCMinutes();
   const currentUtcDay = new Date().getUTCDay();
@@ -289,8 +284,8 @@ const DisplayFavoriteBusiness = ({
             </ProfileNameHeader>
           </UserMessageContent>
         </UserMsgWrap>
-      ) : (data.body !== null && data.type === "Post" && searchdata !== "") ||
-        (data.data !== null && searchdata !== "") ? (
+      ) : (data.body !== null && data.type === "Post" && search) ||
+        (data.data !== null && search) ? (
         <ProfileThumbBannerFeed>
           <img
             src={businessInfo.default_image_url ? image : ProfileImg}
