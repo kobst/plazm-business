@@ -262,6 +262,7 @@ const SearchLists = (obj) => {
                 _id
                 name
                 description
+                isPublic
                 media {
                   image
                 }
