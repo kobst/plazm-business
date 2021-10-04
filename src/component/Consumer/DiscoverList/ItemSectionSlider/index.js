@@ -23,6 +23,8 @@ const NewCollectionSectionSlider = ({
   setModal,
   selectedId,
   setSelectedId,
+  setTotalLists,
+  totalLists,
 }) => {
   const [displayModal, setDisplayModal] = useState(null);
   const dispatch = useDispatch();
@@ -69,6 +71,8 @@ const NewCollectionSectionSlider = ({
             setModal={setModal}
             setSelectedId={setSelectedId}
             selectedId={selectedId}
+            setTotalLists={setTotalLists}
+            totalLists={totalLists}
           />
         ))}
         {loader && (

@@ -234,12 +234,17 @@ const CalenderSection = ({ businessId }) => {
   const [addEventModal, setAddEventModal] = useState(false);
   const user = useSelector((state) => state.user.user);
 
-  useEffect(()=>{
-    if(moment(new Date()).isBetween(dateToDisplay.firstDay, dateToDisplay.lastDay)) {
-      setSelectedCapsule(days[currentDate.getDay()])
+  useEffect(() => {
+    if (
+      moment(new Date()).isBetween(
+        dateToDisplay.firstDay,
+        dateToDisplay.lastDay
+      )
+    ) {
+      setSelectedCapsule(days[currentDate.getDay()]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[dateToDisplay])
+  }, [dateToDisplay]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -263,6 +268,7 @@ const CalenderSection = ({ businessId }) => {
             userId: user._id,
           })
         );
+        dispatch(setSelectedDate(days[currentDate.getDay()]));
         dispatch(
           fetchEventsForTheDay({
             date: new Date(),
@@ -366,7 +372,7 @@ const CalenderSection = ({ businessId }) => {
 
   /** today function */
   const todayFunction = () => {
-    setCount(0)
+    setCount(0);
     dispatch(setWeekButtonClicked(false));
     setTodayClicked(true);
     dispatch(setCurrentDate());

@@ -221,7 +221,7 @@ export const slice = createSlice({
     },
     setSearchData: (state, action) => {
       state.searchData = action.payload;
-      state.enterClicked = false;
+      // state.enterClicked = false;
     },
     setEnterClicked: (state, action) => {
       state.enterClicked = action.payload;

@@ -263,6 +263,13 @@ export const FeedDescription = styled.p`
   color: #fff;
   padding: 0%;
   text-align: justify;
+  white-space: pre-wrap;
+  .mentionData {
+    font-size: 13px;
+    color: #ff2e9a;
+    font-weight: 600;
+    cursor: pointer;
+  }
 `;
 
 export const FeedBigImage = styled.p`

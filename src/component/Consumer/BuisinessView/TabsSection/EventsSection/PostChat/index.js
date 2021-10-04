@@ -22,7 +22,7 @@ const NoMorePost = styled.p`
   color: #fff;
 `;
 
-const PostChat = () => {
+const PostChat = ({ setSelectedListId }) => {
   const events = useSelector((state) => state.event.events);
   const loading = useSelector((state) => state.event.loading);
   const loadingForAWeek = useSelector((state) => state.event.loadingForAWeek);
@@ -49,7 +49,13 @@ const PostChat = () => {
           events.length > 0 &&
           !loadingForInitialWeek &&
           !loadingForAWeek ? (
-            events.map((i, key) => <UserMessage eventData={i} key={key} />)
+            events.map((i, key) => (
+              <UserMessage
+                eventData={i}
+                key={key}
+                setSelectedListId={setSelectedListId}
+              />
+            ))
           ) : !loading && !loadingForAWeek && !loadingForInitialWeek ? (
             <center>
               <NoMorePost>No events to display</NoMorePost>
