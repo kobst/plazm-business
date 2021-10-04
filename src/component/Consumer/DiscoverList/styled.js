@@ -147,6 +147,7 @@ export const CollectionPara = styled.p`
   -webkit-box-orient: vertical;
   overflow: hidden;
   cursor: pointer;
+  text-transform: capitalize;
 `;
 
 export const Lock = styled.div`
@@ -295,6 +296,7 @@ export const InnerCollectionPara = styled.p`
   -webkit-box-orient: vertical;
   overflow: hidden;
   cursor: pointer;
+  text-transform: capitalize;
 `;
 
 export const AuthorInfo = styled.div`
