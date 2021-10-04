@@ -54,7 +54,7 @@ const NewCollectionSectionSlider = ({
   };
   return (
     <div>
-      <NewInBuzzSliderWrapper onScroll={(e) => fetchMoreLists(e)}>
+      <NewInBuzzSliderWrapper onScroll={(e) => fetchMoreLists(e)} onWheel={(e) => fetchMoreLists(e)}>
         {data.map((i, key) => (
           <NewInBuzzItems
             data={i}
