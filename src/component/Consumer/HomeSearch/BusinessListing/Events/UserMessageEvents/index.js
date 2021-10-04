@@ -310,6 +310,10 @@ const UserMessageEvents = ({
     }
   };
 
+  /** to display user details */
+  const displayUserDetails = () => {
+    if (eventData.ownerId) history.push(`/u/${eventData.ownerId[0]._id}`);
+  };
   return (
     <>
       <UserMessageContent>
@@ -336,7 +340,9 @@ const UserMessageEvents = ({
                 <ListInfo>
                   <FaCaretRight />
                   {eventData.ownerId && (
-                    <ListAuthorName>{eventData.ownerId[0].name}</ListAuthorName>
+                    <ListAuthorName onClick={() => displayUserDetails()}>
+                      {eventData.ownerId[0].name}
+                    </ListAuthorName>
                   )}
                   <span>|</span>
                   <ListAuthorName>

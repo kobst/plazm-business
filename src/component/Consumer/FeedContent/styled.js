@@ -252,6 +252,7 @@ export const ListAuthorName = styled.div`
   margin: 0;
   font-weight: 700;
   color: #ff2e9a;
+  cursor: pointer;
 `;
 
 export const FeedDescription = styled.p`

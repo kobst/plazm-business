@@ -344,6 +344,11 @@ const UserMessage = ({ eventData, setSelectedListId }) => {
     "Saturday",
   ];
 
+  /** to display user details */
+  const displayUserDetails = () => {
+    history.push(`/u/${user._id}`);
+  };
+
   return (
     <>
       <UserMessageContent>
@@ -354,7 +359,9 @@ const UserMessage = ({ eventData, setSelectedListId }) => {
             <ListName>{eventData.list.name}</ListName>
             <ListInfo>
               <FaCaretRight />
-              <ListAuthorName>{user.name}</ListAuthorName>
+              <ListAuthorName onClick={() => displayUserDetails()}>
+                {user.name}
+              </ListAuthorName>
               <span>|</span>
               <ListAuthorName>
                 Added on{" "}
