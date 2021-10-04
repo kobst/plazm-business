@@ -161,7 +161,7 @@ const BusinessListing = ({
                     setSearchIndex={setSearchIndex}
                   />
                 ))
-              ) : !loading && !hasMore? (
+              ) : !loading && businessData.length === 0 ? (
                 <center>
                   <NoMorePost className="noMorePost">
                     {error.NO_BUSINESS_FOUND}

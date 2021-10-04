@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { FaCaretRight } from "react-icons/fa";
+import { Scrollbars } from "react-custom-scrollbars";
+import { useHistory } from "react-router";
 import moment from "moment";
 import BannerImg from "../../../../../../../images/sliderimg.png";
 import ReplyInput from "./ReplyInput";
@@ -8,9 +11,7 @@ import LikesBar from "../LikesBar";
 import DateBar from "../DateBar";
 import TimeBar from "../TimeBar";
 import ImageComment from "../ImageComment";
-import { useSelector, useDispatch } from "react-redux";
 import ValueLoader from "../../../../../../../utils/loader";
-import { Scrollbars } from "react-custom-scrollbars";
 import {
   addCommentViaSocket,
   addLikeViaSocket,
@@ -31,6 +32,8 @@ import {
   ListName,
   ListNameWrap,
 } from "../../../../../FeedContent/styled";
+
+const reactStringReplace = require("react-string-replace");
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -84,6 +87,13 @@ const ChatInput = styled.div`
   line-height: normal;
   margin: 0 0 5px;
   color: #fff;
+  white-space: pre-wrap;
+  .mentionData {
+    font-size: 13px;
+    color: #ff2e9a;
+    font-weight: 600;
+    cursor: pointer;
+  }
 `;
 
 const SubHeading = styled.div`
@@ -108,7 +118,7 @@ const LoaderWrap = styled.div`
   margin: 30px 0 20px;
 `;
 
-const UserMessage = ({ eventData }) => {
+const UserMessage = ({ eventData, setSelectedListId }) => {
   const [listImage, setListImage] = useState(
     eventData.list.image ? eventData.list.image : BannerImg
   );
@@ -125,6 +135,7 @@ const UserMessage = ({ eventData }) => {
   const user = useSelector((state) => state.user.user);
   const selectedDate = useSelector((state) => state.event.selectedDate);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   ws.onmessage = (evt) => {
     const message = JSON.parse(evt.data);
@@ -185,6 +196,129 @@ const UserMessage = ({ eventData }) => {
     }
   };
 
+  /** to highlight the user mentions mentioned in post description */
+  const findDesc = (value, mentions, mentionsList) => {
+    let divContent = value;
+    if (mentions.length > 0 && mentionsList.length > 0) {
+      let arr = [],
+        data;
+      for (let i = 0; i < mentions.length; i++) {
+        if (value.includes(mentions[i].name)) {
+          arr.push({
+            name: mentions[i].name,
+            id: mentions[i]._id,
+            type: "name",
+          });
+        }
+      }
+      for (let i = 0; i < mentionsList.length; i++) {
+        if (value.includes(mentionsList[i].name)) {
+          arr.push({
+            name: mentionsList[i].name,
+            id: mentionsList[i]._id,
+            type: "list",
+          });
+        }
+      }
+      for (let i = 0; i < arr.length; i++) {
+        if (i === 0) {
+          if (arr[i].type === "list")
+            data = reactStringReplace(value, arr[i].name, (match, j) => (
+              <span
+                key={j}
+                className="mentionData"
+                onClick={() => setSelectedListId(arr[i].id)}
+              >
+                {match}
+              </span>
+            ));
+          else
+            data = reactStringReplace(value, arr[i].name, (match, j) => (
+              <span
+                key={j}
+                className="mentionData"
+                onClick={() => history.push(`/u/${arr[i].id}`)}
+              >
+                {match}
+              </span>
+            ));
+        } else {
+          if (arr[i].type === "list")
+            data = reactStringReplace(data, arr[i].name, (match, j) => (
+              <span
+                key={j}
+                className="mentionData"
+                onClick={() => setSelectedListId(arr[i].id)}
+              >
+                {match}
+              </span>
+            ));
+          else
+            data = reactStringReplace(data, arr[i].name, (match, j) => (
+              <span
+                key={j}
+                className="mentionData"
+                onClick={() => history.push(`/u/${arr[i].id}`)}
+              >
+                {match}
+              </span>
+            ));
+        }
+      }
+      return data;
+    } else if (mentions.length > 0) {
+      for (let i = 0; i < mentions.length; i++) {
+        if (value.search(new RegExp(mentions[i].name, "g") !== -1)) {
+          return (
+            <div>
+              {reactStringReplace(value, mentions[i].name, (match, j) => (
+                <span
+                  key={j}
+                  className="mentionData"
+                  onClick={() => history.push(`/u/${mentions[i]._id}`)}
+                >
+                  {match}
+                </span>
+              ))}
+            </div>
+          );
+        } else {
+          return <div>{value}</div>;
+        }
+      }
+    } else if (mentionsList.length > 0) {
+      for (let i = 0; i < mentionsList.length; i++) {
+        if (value.search(new RegExp(mentionsList[i].name, "g") !== -1)) {
+          return (
+            <div>
+              {reactStringReplace(value, mentionsList[i].name, (match, j) => (
+                <span
+                  className="mentionData"
+                  onClick={() => setSelectedListId(mentionsList[i]._id)}
+                >
+                  {match}
+                </span>
+              ))}
+            </div>
+          );
+        } else {
+          return <div>{value}</div>;
+        }
+      }
+      if (mentionsList.length !== 0) {
+        return (
+          <>
+            <div dangerouslySetInnerHTML={{ __html: divContent }}></div>
+          </>
+        );
+      } else {
+        return value;
+      }
+    } else {
+      return <div className="postData">{value}</div>;
+    }
+  };
+
   /** to add comment on event function */
   const addComment = async (obj) => {
     ws.send(
@@ -232,7 +366,13 @@ const UserMessage = ({ eventData }) => {
         <ProfileNameHeader>
           <ProfileNameWrap>
             <SubHeading>{eventData.title}</SubHeading>
-            <ChatInput>{eventData.description}</ChatInput>
+            <ChatInput>
+              {findDesc(
+                eventData.description,
+                eventData.taggedUsers,
+                eventData.taggedLists
+              )}
+            </ChatInput>
             <DateBar
               startDay={
                 days[new Date(eventData.eventSchedule.start_time).getDay()]

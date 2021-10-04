@@ -45,15 +45,6 @@ const SectionItemWrapper = ({
             ) : null
           }
           scrollableTarget="scrollableDiv"
-          // endMessage={
-          //   searchList.length > 30 && !loading ? (
-          //     <center>
-          //       <NoMorePost className="noMorePost">
-          //         No more List to show
-          //       </NoMorePost>
-          //     </center>
-          //   ) : null
-          // }
         >
           {searchList &&
             searchList.length > 0 &&

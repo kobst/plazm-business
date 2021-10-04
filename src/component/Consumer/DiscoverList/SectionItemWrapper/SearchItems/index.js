@@ -34,7 +34,7 @@ const SearchItems = ({
           onClick={() => displayListDetails()}
         >
           <img src={image} onError={() => setImage(EventImg)} alt="" />
-          {!data.isPublic && (
+          {!data.isPublic && data.isPublic !== null && (
             <Lock>
               <img src={LockImage} alt="" />
             </Lock>

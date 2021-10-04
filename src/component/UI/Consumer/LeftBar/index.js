@@ -169,8 +169,11 @@ const LeftBar = ({
   }, [userId]);
 
   useEffect(() => {
-    if (profileClosed && tabIndex === 4) {
+    if (profileClosed && tabIndex === 4 && businessId) {
       history.push(`/b/${businessId}`);
+      setProfileClosed(false);
+    } else if (profileClosed && tabIndex === 4) {
+      history.push("/");
       setProfileClosed(false);
     } else if (
       profileClosed &&
@@ -537,7 +540,7 @@ const LeftBar = ({
                   setFavoriteIndex={setFavoriteIndex}
                   setSelectedListId={setSelectedListId}
                 />
-              ) : userDataId ? (
+              ) : userDataId && !profileClosed ? (
                 <Profile
                   setDisplayTab={() => setTabIndex(0)}
                   userId={userDataId}

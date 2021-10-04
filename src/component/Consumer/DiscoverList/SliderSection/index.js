@@ -16,7 +16,9 @@ const SliderSection = ({
   modal,
   setModal,
   selectedId,
-  setSelectedId
+  setSelectedId,
+  setTotalLists,
+  totalLists,
 }) => {
   return (
     <>
@@ -38,6 +40,8 @@ const SliderSection = ({
             setModal={setModal}
             setSelectedId={setSelectedId}
             selectedId={selectedId}
+            setTotalLists={setTotalLists}
+            totalLists={totalLists}
           />
         </FeatureContainer>
       </FeatureWrapper>
