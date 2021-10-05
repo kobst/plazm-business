@@ -6,14 +6,20 @@ import ValueLoader from "../../../../utils/loader";
 import SectionItemWrapper from "../SectionItemWrapper";
 import { FeatureWrapper, FeatureContainer, ListResultHeading } from "../styled";
 
-const SearchSection = ({ setSelectedListId, setDiscoverBtn, setReadMore }) => {
+const SearchSection = ({
+  setSelectedListId,
+  setDiscoverBtn,
+  setReadMore,
+  offset,
+  setOffSet,
+}) => {
   const listSearch = useSelector((state) => state.list.listSearch);
   const loading = useSelector((state) => state.list.loadingSearchList);
   const totalList = useSelector((state) => state.list.totalSearchList);
   const [flag, setFlag] = useState(true);
-  const [offset, setOffSet] = useState(0);
   const dispatch = useDispatch();
 
+  /** to search data based on input */
   useEffect(() => {
     const searchData = async () => {
       const data = await dispatch(

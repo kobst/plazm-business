@@ -40,19 +40,19 @@ const NewCollectionSectionSlider = ({
       offset <= totalList
     ) {
       if (heading === "Trending" && trendingLists.length === offset + 12) {
-        setLoader(true);
+        setLoader({ value: true, heading });
         setOffSet(offset + 12);
         dispatch(FetchTrendingLists(offset + 12));
       } else if (
         heading !== "Trending" &&
         popularLists.length === offset + 12
       ) {
-        setLoader(true);
+        setLoader({ value: true, heading });
         setOffSet(offset + 12);
         dispatch(FetchMostPopularLists(offset + 12));
       }
     } else {
-      setLoader(false);
+      setLoader({ value: false, heading });
     }
   };
 
@@ -87,12 +87,14 @@ const NewCollectionSectionSlider = ({
             totalLists={totalLists}
           />
         ))}
-        {loader && (
+        {loader && loader.heading === heading && loader.value && (
           <LoaderWrap>
             <ValueLoader />
           </LoaderWrap>
         )}
-        {!loader && <NoMorePost>No More Lists To Display</NoMorePost>}
+        {loader && !loader.value && loader.heading === heading && (
+          <NoMorePost>No More Lists To Display</NoMorePost>
+        )}
       </NewInBuzzSliderWrapper>
     </div>
   );
