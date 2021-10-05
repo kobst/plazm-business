@@ -259,6 +259,7 @@ export const slice = createSlice({
       state.topEvent = true;
       const obj = {
         ...action.payload,
+        description: action.payload.data,
         list:
           action.payload.listId.length > 0 ? action.payload.listId[0] : null,
         likes:
