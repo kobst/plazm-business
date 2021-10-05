@@ -182,7 +182,7 @@ export const LoaderWrap = styled.div`
   justify-content: center;
   align-items: center;
   margin: 30px 0 10px;
-  &.DiscoverLoaderWrap{
+  &.DiscoverLoaderWrap {
     height: calc(100vh - 100px);
   }
 `;
@@ -247,7 +247,6 @@ export const ItemsDescription = styled.div`
   position: absolute;
   bottom: 0;
   background: linear-gradient(360deg, #000000 0%, rgba(7, 3, 46, 0) 91.23%);
-  
 `;
 
 export const InnerCoverImg = styled.div`
@@ -415,6 +414,9 @@ export const SearchItemsContainer = styled.div`
   display: flex;
   flex-flow: row wrap;
   height: calc(100vh - 140px);
+  // &.test {
+  //   height: calc(100vh - 140px);
+  // }
   overflow-y: auto;
   padding: 10px 25px;
   /* width */
