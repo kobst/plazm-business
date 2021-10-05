@@ -238,6 +238,13 @@ export const CoverImg = styled.div`
     height: 100%;
     object-fit: cover;
     z-index: -1;
+    @media only screen and (min-width: 992px) {
+      @media not all and (min-resolution: 0.001dpcm) {
+        @media {
+          z-index: 0;
+        }
+      }
+    }
   }
   &.SearchCoverImg {
     width: 100%;

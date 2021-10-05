@@ -266,7 +266,7 @@ const UserMessage = ({ eventData, setSelectedListId }) => {
         }
       }
       return data;
-    } else if (mentions.length > 0) {
+    } else if (mentions.length > 0 && value) {
       let arr = [],
         data;
       for (let i = 0; i < mentions.length; i++) {
