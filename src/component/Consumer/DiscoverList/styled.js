@@ -211,6 +211,14 @@ export const ItemsWrapper = styled.div`
     @media (max-width: 479px) {
       width: 100%;
     }
+    @media only screen and (min-width: 992px) {
+      @media not all and (min-resolution: 0.001dpcm) {
+        @media {
+          height: 200px;
+          overflow: hidden;
+        }
+      }
+    }
   }
 `;
 export const CoverImg = styled.div`
