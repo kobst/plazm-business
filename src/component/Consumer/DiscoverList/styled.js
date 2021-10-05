@@ -234,6 +234,11 @@ export const CoverImg = styled.div`
   &.SearchCoverImg {
     width: 100%;
   }
+  :hover {
+    .InnerModal {
+      visibility: visible;
+    }
+  }
 `;
 
 export const ItemsDescription = styled.div`
@@ -242,11 +247,7 @@ export const ItemsDescription = styled.div`
   position: absolute;
   bottom: 0;
   background: linear-gradient(360deg, #000000 0%, rgba(7, 3, 46, 0) 91.23%);
-  :hover {
-    .InnerModal {
-      visibility: visible;
-    }
-  }
+  
 `;
 
 export const InnerCoverImg = styled.div`
