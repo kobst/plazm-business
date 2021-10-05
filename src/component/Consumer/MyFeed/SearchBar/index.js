@@ -52,6 +52,10 @@ const ErrorDiv = styled.div`
   margin: 0;
   margin-bottom: 10px;
   margin-left: 20px;
+  padding: 10px 0 0 172px;
+  @media (max-width: 767px) {
+    padding: 10px 0 0 0px;
+  }
 `;
 
 const Heading = styled.h1`

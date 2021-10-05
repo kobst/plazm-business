@@ -258,25 +258,44 @@ const UserMessageEvents = ({
       }
       return data;
     } else if (mentions.length > 0) {
+      let arr = [],
+        data;
       for (let i = 0; i < mentions.length; i++) {
-        if (value.search(new RegExp(mentions[i].name, "g") !== -1)) {
-          return (
-            <div>
-              {reactStringReplace(value, mentions[i].name, (match, j) => (
-                <span
-                  key={j}
-                  className="mentionData"
-                  onClick={() => history.push(`/u/${mentions[i]._id}`)}
-                >
-                  {match}
-                </span>
-              ))}
-            </div>
-          );
-        } else {
-          return <div>{value}</div>;
+        if (value.includes(mentions[i].name)) {
+          arr.push({
+            name: mentions[i].name,
+            id: mentions[i]._id,
+            type: "name",
+          });
         }
       }
+
+      for (let i = 0; i < arr.length; i++) {
+        if (i === 0) {
+          if (arr[i].type !== "list")
+            data = reactStringReplace(value, arr[i].name, (match, j) => (
+              <span
+                key={j}
+                className="mentionData"
+                onClick={() => history.push(`/u/${arr[i].id}`)}
+              >
+                {match}
+              </span>
+            ));
+        } else {
+          if (arr[i].type !== "list")
+            data = reactStringReplace(data, arr[i].name, (match, j) => (
+              <span
+                key={j}
+                className="mentionData"
+                onClick={() => history.push(`/u/${arr[i].id}`)}
+              >
+                {match}
+              </span>
+            ));
+        }
+      }
+      return data;
     } else if (mentionsList.length > 0) {
       for (let i = 0; i < mentionsList.length; i++) {
         if (value.search(new RegExp(mentionsList[i].name, "g") !== -1)) {
@@ -310,6 +329,10 @@ const UserMessageEvents = ({
     }
   };
 
+  /** to display user details */
+  const displayUserDetails = () => {
+    if (eventData.ownerId) history.push(`/u/${eventData.ownerId[0]._id}`);
+  };
   return (
     <>
       <UserMessageContent>
@@ -336,7 +359,9 @@ const UserMessageEvents = ({
                 <ListInfo>
                   <FaCaretRight />
                   {eventData.ownerId && (
-                    <ListAuthorName>{eventData.ownerId[0].name}</ListAuthorName>
+                    <ListAuthorName onClick={() => displayUserDetails()}>
+                      {eventData.ownerId[0].name}
+                    </ListAuthorName>
                   )}
                   <span>|</span>
                   <ListAuthorName>

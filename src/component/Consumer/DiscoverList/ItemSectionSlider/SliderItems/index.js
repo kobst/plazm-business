@@ -130,17 +130,17 @@ const NewInBuzzItems = ({
   return (
     <>
       <ItemsWrapper ref={divRef}>
-        <CoverImg>
+        <CoverImg 
+            onMouseOver={() => displayData()}
+            onMouseLeave={() => hideData()}
+            >
           <img src={image} alt="" onError={() => setImage(EventImg)} />
           {!data.isPublic && data.isPublic !== null && (
             <Lock>
               <img src={LockImage} alt="" />
             </Lock>
           )}
-          <ItemsDescription
-            onMouseOver={() => displayData()}
-            onMouseLeave={() => hideData()}
-          >
+          <ItemsDescription>
             <CollectionPara>{data.name}</CollectionPara>
             {modal &&
               selectedId &&

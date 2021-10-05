@@ -360,6 +360,11 @@ const UserMessage = ({
     }
   };
 
+  /** to display user details */
+  const displayUserDetails = () => {
+    history.push(`/u/${postData.ownerId[0]._id}`);
+  };
+
   return (
     <>
       <UserMsgWrap>
@@ -382,7 +387,7 @@ const UserMessage = ({
                     <ListName>{postData.listId[0].name}</ListName>
                     <ListInfo>
                       <FaCaretRight />
-                      <ListAuthorName>
+                      <ListAuthorName onClick={() => displayUserDetails()}>
                         {postData.ownerId[0].name}
                       </ListAuthorName>
                       <span>|</span>

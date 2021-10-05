@@ -329,6 +329,11 @@ const UserMessage = ({ postData, setSelectedListId }) => {
       return <div className="postData">{value}</div>;
     }
   };
+
+  /** to display user details */
+  const displayUserDetails = () => {
+    history.push(`/u/${postData.postDetails.ownerId._id}`);
+  };
   return (
     <>
       <UserMsgWrap>
@@ -347,7 +352,7 @@ const UserMessage = ({ postData, setSelectedListId }) => {
                     <ListName>{postData.postDetails.list.name}</ListName>
                     <ListInfo>
                       <FaCaretRight />
-                      <ListAuthorName>
+                      <ListAuthorName onClick={() => displayUserDetails()}>
                         {" "}
                         {postData.postDetails.ownerId.name}
                       </ListAuthorName>

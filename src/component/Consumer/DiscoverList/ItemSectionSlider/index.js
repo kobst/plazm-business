@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import NewInBuzzItems from "./SliderItems";
 import { LoaderWrap, NewInBuzzSliderWrapper, NoMorePost } from "../styled";
@@ -30,6 +30,7 @@ const NewCollectionSectionSlider = ({
   const dispatch = useDispatch();
   const trendingLists = useSelector((state) => state.list.trendingLists);
   const popularLists = useSelector((state) => state.list.popularLists);
+  const divRef = useRef(null);
 
   /** fetch more data when scrollbar reaches end */
   const fetchMoreLists = (event) => {
@@ -39,24 +40,35 @@ const NewCollectionSectionSlider = ({
       offset <= totalList
     ) {
       if (heading === "Trending" && trendingLists.length === offset + 12) {
-        setLoader(true);
+        setLoader({ value: true, heading });
         setOffSet(offset + 12);
         dispatch(FetchTrendingLists(offset + 12));
       } else if (
         heading !== "Trending" &&
         popularLists.length === offset + 12
       ) {
-        setLoader(true);
+        setLoader({ value: true, heading });
         setOffSet(offset + 12);
         dispatch(FetchMostPopularLists(offset + 12));
       }
     } else {
-      setLoader(false);
+      setLoader({ value: false, heading });
     }
+  };
+
+  /** on mouse wheel event */
+  const onWheel = (evt) => {
+    evt.preventDefault();
+    divRef.current.scrollLeft += evt.deltaY;
   };
   return (
     <div>
-      <NewInBuzzSliderWrapper onScroll={(e) => fetchMoreLists(e)}>
+      <NewInBuzzSliderWrapper
+        onScroll={(e) => fetchMoreLists(e)}
+        onWheel={(e) => onWheel(e)}
+        id={heading}
+        ref={divRef}
+      >
         {data.map((i, key) => (
           <NewInBuzzItems
             data={i}
@@ -75,12 +87,14 @@ const NewCollectionSectionSlider = ({
             totalLists={totalLists}
           />
         ))}
-        {loader && (
+        {loader && loader.heading === heading && loader.value && (
           <LoaderWrap>
             <ValueLoader />
           </LoaderWrap>
         )}
-        {!loader && <NoMorePost>No More Lists To Display</NoMorePost>}
+        {loader && !loader.value && loader.heading === heading && (
+          <NoMorePost>No More Lists To Display</NoMorePost>
+        )}
       </NewInBuzzSliderWrapper>
     </div>
   );

@@ -46,6 +46,7 @@ const DiscoverList = ({ setDiscoverBtn, setSelectedListId, setReadMore }) => {
   const [search, setSearch] = useState("");
   const [offset, setOffSet] = useState(0);
   const [offsetPopular, setOffSetPopular] = useState(0);
+  const [offsetSearch, setOffSetSearch] = useState(0);
   const [loader, setLoader] = useState(false);
   const [flag, setFlag] = useState(true);
   const [displayTrendingModel, setDisplayTrendingModel] = useState(false);
@@ -78,6 +79,7 @@ const DiscoverList = ({ setDiscoverBtn, setSelectedListId, setReadMore }) => {
         dispatch(clearListSearchData());
         dispatch(setListSearch(event.target.value));
         setSearchError("");
+        setOffSetSearch(0);
       } else if (search.length >= 0 && search.length < 4) {
         setSearchError(error.SEARCH_ERROR);
       }
@@ -126,6 +128,8 @@ const DiscoverList = ({ setDiscoverBtn, setSelectedListId, setReadMore }) => {
           setSelectedListId={setSelectedListId}
           setDiscoverBtn={setDiscoverBtn}
           setReadMore={setReadMore}
+          offset={offsetSearch}
+          setOffSet={setOffSetSearch}
         />
       ) : (
         <>

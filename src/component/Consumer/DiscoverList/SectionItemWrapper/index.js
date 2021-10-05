@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import InfiniteScroll from "react-infinite-scroll-component";
+import { useDispatch, useSelector } from "react-redux";
 import SearchItems from "./SearchItems";
 import { SearchItemsContainer, NoMorePost } from "../styled";
-import { useDispatch, useSelector } from "react-redux";
 import ValueLoader from "../../../../utils/loader";
 import { SearchListApi } from "../../../../reducers/listReducer";
 
@@ -21,45 +20,44 @@ const SectionItemWrapper = ({
   const dispatch = useDispatch();
 
   /** to fetch more lists */
-  const fetchMoreList = () => {
-    if (offset + 30 < totalList) {
-      setOffSet(offset + 30);
-      dispatch(SearchListApi({ value: offset + 30, search: listSearch }));
-    } else {
-      setHasMore(false);
+  const handleScroll = ({ currentTarget }) => {
+    if (
+      currentTarget.scrollTop + currentTarget.clientHeight >=
+      currentTarget.scrollHeight
+    ) {
+      if (offset + 30 < totalList) {
+        setOffSet(offset + 30);
+        dispatch(SearchListApi({ value: offset + 30, search: listSearch }));
+      } else {
+        setHasMore(false);
+      }
     }
   };
   return (
     <>
-      <SearchItemsContainer id="scrollableDiv">
-        <InfiniteScroll
-          dataLength={searchList ? searchList.length : 0}
-          next={fetchMoreList}
-          hasMore={hasMore}
-          loader={
-            offset < totalList && loading ? (
-              <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
-                {" "}
-                <ValueLoader height="40" width="40" />
-              </div>
-            ) : null
-          }
-          scrollableTarget="scrollableDiv"
-        >
-          {searchList &&
-            searchList.length > 0 &&
-            searchList.map((i, key) => {
-              return (
-                <SearchItems
-                  data={i}
-                  key={key}
-                  setSelectedListId={setSelectedListId}
-                  setDiscoverBtn={setDiscoverBtn}
-                  setReadMore={setReadMore}
-                />
-              );
-            })}
-        </InfiniteScroll>
+      <SearchItemsContainer
+        id="scrollableDiv"
+        onScroll={(e) => handleScroll(e)}
+      >
+        {searchList &&
+          searchList.length > 0 &&
+          searchList.map((i, key) => {
+            return (
+              <SearchItems
+                data={i}
+                key={key}
+                setSelectedListId={setSelectedListId}
+                setDiscoverBtn={setDiscoverBtn}
+                setReadMore={setReadMore}
+              />
+            );
+          })}
+        {offset < totalList && loading && (
+          <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
+            {" "}
+            <ValueLoader height="40" width="40" />
+          </div>
+        )}
         {!hasMore && searchList.length > 30 && !loading ? (
           <NoMorePost className="noMorePost">No more List to show</NoMorePost>
         ) : null}

@@ -20,6 +20,11 @@ export const BottomBarLikes = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
+  background: rgba(177, 171, 234, 0.1);
+    border: 0.75px solid #3f3777;
+    box-sizing: border-box;
+    border-radius: 5px;
+    padding: 8px 15px;
   @media (max-width: 767px) {
     align-items: flex-start;
   }
