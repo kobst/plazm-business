@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DisplayFavoriteBusiness from "./DisplayFavoriteBusiness";
 import styled from "styled-components";
+import { unwrapResult } from "@reduxjs/toolkit";
+import InfiniteScroll from "react-infinite-scroll-component";
 import ValueLoader from "../../../../utils/loader";
 import SearchBar from "../SearchBar";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { HomeSearch } from "../../../../reducers/myFeedReducer";
+import {
+  HomeSearch,
+  HomeSearchInitial,
+} from "../../../../reducers/myFeedReducer";
 import error from "../../../../constants";
-import { unwrapResult } from "@reduxjs/toolkit";
 
 const BusinessListWrap = styled.div`
   width: 100%;
@@ -77,7 +80,7 @@ const BusinessListing = ({
         latitude: coords ? coords.latitude : process.env.REACT_APP_LATITUDE,
         longitude: coords ? coords.longitude : process.env.REACT_APP_LONGITUDE,
       };
-      const result = await dispatch(HomeSearch(obj));
+      const result = await dispatch(HomeSearchInitial(obj));
       const data = await unwrapResult(result);
       if (data) {
         setFlag(false);
@@ -161,7 +164,7 @@ const BusinessListing = ({
                     setSearchIndex={setSearchIndex}
                   />
                 ))
-              ) : !loading && businessData.length === 0 ? (
+              ) : !loading && !flag && businessData.length === 0 ? (
                 <center>
                   <NoMorePost className="noMorePost">
                     {error.NO_BUSINESS_FOUND}
