@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import { geolocated } from "react-geolocated";
 import BusinessListing from "./BusinessListing";
 import {
   clearMyFeedData,
@@ -36,7 +35,7 @@ const HomeSearch = ({
   ...props
 }) => {
   const dispatch = useDispatch();
-  const [locationState, setLocationState] = useState(null);
+  const [locationState, setLocationState] = useState("prompt");
   const [loader, setLoader] = useState(null);
   const [coords, setCoords] = useState(null);
   const [closestFilter, setClosestFilter] = useState(false);
@@ -46,25 +45,25 @@ const HomeSearch = ({
     dispatch(clearMyFeedData());
   }, [dispatch]);
 
-  /** to set coordinates when location is enabled */
+  // /** to set coordinates when location is enabled */
   useEffect(() => {
-    if (props.coords) {
-      setClosestFilter(true);
-      setLocationState("granted");
-      setCoords({
-        latitude: props.coords.latitude,
-        longitude: props.coords.longitude,
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        setClosestFilter(true);
+        setLocationState("granted");
+        setCoords({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+        dispatch(
+          setUserlocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          })
+        );
       });
-      dispatch(
-        setUserlocation({
-          latitude: props.coords.latitude,
-          longitude: props.coords.longitude,
-        })
-      );
-    } else {
-      setLocationState("prompt");
     }
-  }, [props.coords, dispatch]);
+  }, [dispatch]);
 
   /** to wait for 3 sec for user reply to allow/deny geoLocation */
   useEffect(() => {
@@ -104,9 +103,4 @@ const HomeSearch = ({
   );
 };
 
-export default geolocated({
-  positionOptions: {
-    enableHighAccuracy: true,
-  },
-  userDecisionTimeout: 100,
-})(HomeSearch);
+export default HomeSearch;
