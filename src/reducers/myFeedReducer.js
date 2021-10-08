@@ -158,6 +158,19 @@ export const HomeSearch = createAsyncThunk("data/HomeSearch", async (obj) => {
 });
 
 /*
+ * @desc:  home search
+ * @params: search data
+ */
+export const HomeSearchInitial = createAsyncThunk(
+  "data/HomeSearchInitial",
+  async (obj) => {
+    const graphQl = homeSearch(obj);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.homeSearch;
+  }
+);
+
+/*
  * @desc:  to delete the post
  * @params: id
  */
@@ -659,6 +672,37 @@ export const slice = createSlice({
       }
     },
     [HomeSearch.rejected]: (state, action) => {
+      if (state.loading) {
+        state.loading = false;
+        state.error = action.payload;
+      }
+    },
+    [HomeSearchInitial.pending]: (state) => {
+      if (!state.loading) {
+        state.loading = true;
+        state.myFeed = [];
+      }
+    },
+    [HomeSearchInitial.fulfilled]: (state, action) => {
+      if (state.loading) {
+        state.loading = false;
+        if (action.payload) {
+          const data = action.payload.data.map((obj) => ({
+            ...obj,
+            comments: [],
+            likes: obj.likes !== null ? obj.likes : [],
+            listId: [].concat({
+              ...obj.list,
+              media:
+                obj.list && obj.list.image ? [].concat(obj.list.image) : [],
+            }),
+          }));
+          state.myFeed = state.myFeed.concat(data);
+          state.totalData = action.payload.totalPlaces;
+        }
+      }
+    },
+    [HomeSearchInitial.rejected]: (state, action) => {
       if (state.loading) {
         state.loading = false;
         state.error = action.payload;

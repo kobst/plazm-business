@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
+import { geolocated } from "react-geolocated";
 import BusinessListing from "./BusinessListing";
 import {
   clearMyFeedData,
@@ -32,6 +33,7 @@ const HomeSearch = ({
   setListClickedFromSearch,
   setSearchIndex,
   setDisplayTab,
+  ...props
 }) => {
   const dispatch = useDispatch();
   const [locationState, setLocationState] = useState(null);
@@ -39,57 +41,33 @@ const HomeSearch = ({
   const [coords, setCoords] = useState(null);
   const [closestFilter, setClosestFilter] = useState(false);
 
-  const options = {
-    enableHighAccuracy: true,
-    maximumAge: 0,
-  };
-
   useEffect(() => {
     dispatch(setSideFiltersHomeSearch());
     dispatch(clearMyFeedData());
   }, [dispatch]);
 
-  /** to set the coordinates if the user allows geoLocation */
-  const success = (pos) => {
-    const crd = pos.coords;
-    setCoords({ latitude: crd.latitude, longitude: crd.longitude });
-    dispatch(
-      setUserlocation({ latitude: crd.latitude, longitude: crd.longitude })
-    );
-  };
-
-  /** to ask user for permissions to fetch current geoLocation */
-  const fetchGeoLocation = () => {
-    if (navigator.geolocation) {
-      navigator.permissions
-        .query({ name: "geolocation" })
-        .then(function (result) {
-          /** if location is provided then we need data by closest latitude/longitude */
-          setClosestFilter(true);
-          if (locationState !== "denied") setLocationState(result.state);
-          if (result.state === "granted") {
-            //If granted then you can directly call your function here
-            navigator.geolocation.getCurrentPosition(success);
-          } else if (result.state === "prompt") {
-            navigator.geolocation.getCurrentPosition(
-              success,
-              () => {},
-              options
-            );
-          }
-
-          result.onchange = function () {
-            setLocationState(result.state);
-          };
-        });
+  /** to set coordinates when location is enabled */
+  useEffect(() => {
+    if (props.coords) {
+      setClosestFilter(true);
+      setLocationState("granted");
+      setCoords({
+        latitude: props.coords.latitude,
+        longitude: props.coords.longitude,
+      });
+      dispatch(
+        setUserlocation({
+          latitude: props.coords.latitude,
+          longitude: props.coords.longitude,
+        })
+      );
     } else {
-      console.log("Location Not available!");
+      setLocationState("prompt");
     }
-  };
+  }, [props.coords, dispatch]);
 
   /** to wait for 3 sec for user reply to allow/deny geoLocation */
   useEffect(() => {
-    fetchGeoLocation();
     if (locationState) {
       setLoader(true);
       if (locationState === "prompt") {
@@ -99,7 +77,8 @@ const HomeSearch = ({
       } else setLoader(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationState]);
+  }, [locationState, props.coords]);
+
   return (
     <>
       <ContentWrap>
@@ -125,4 +104,9 @@ const HomeSearch = ({
   );
 };
 
-export default HomeSearch;
+export default geolocated({
+  positionOptions: {
+    enableHighAccuracy: true,
+  },
+  userDecisionTimeout: 100,
+})(HomeSearch);
