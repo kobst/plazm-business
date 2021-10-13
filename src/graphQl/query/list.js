@@ -67,7 +67,7 @@ const getUserCreatedAndFollowedLists = (obj) => {
                   _id
                   isPublic
                   ownerId
-                  followers {
+                  subscribers {
                     userId {
                       name
                       photo
@@ -192,7 +192,7 @@ const getMostTrendingLists = (value) => {
                   _id
                   name
                 }
-                followers {
+                subscribers {
                 _id
                 name
                 photo
@@ -231,7 +231,7 @@ const getMostPopularLists = (value) => {
                   _id
                   name
                 }
-                followers {
+                subscribers {
                   _id
                   name
                   photo
@@ -267,7 +267,7 @@ const SearchLists = (obj) => {
                   image
                 }
                 ownerId
-                followers {
+                subscribers {
                   userId {
                     _id
                     name

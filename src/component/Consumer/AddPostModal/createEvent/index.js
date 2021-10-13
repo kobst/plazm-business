@@ -11,7 +11,6 @@ import SaveButton from "../../UI/SaveButton";
 import FormBody from "./formBody";
 import { validate } from "./validate";
 import ValueLoader from "../../../../utils/loader";
-import { AddEventToList } from "../../../../reducers/listReducer";
 import PostImage from "../PostImage";
 import ButtonGrey from "../../UI/ButtonGrey";
 import SelectedListing from "../SelectedListing";
@@ -308,23 +307,6 @@ const CreateEventModal = ({
         if (response.data.success === true) {
           /** if any list is selected than add event to list */
           if (selectedListForPost) {
-            const addToList = await dispatch(
-              AddEventToList({
-                eventId: response.data.event._id,
-                listId: selectedListForPost,
-              })
-            );
-            const res = await unwrapResult(addToList);
-            if (res.data.addEventToList.success === true) {
-              closeModal();
-              setLoader(false);
-              setEventDescription("");
-              setEventTitle("");
-              setImageUrl(null);
-              setImageCopy([]);
-              setImageUpload(null);
-            }
-          } else {
             closeModal();
             setLoader(false);
             setEventDescription("");

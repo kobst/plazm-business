@@ -140,10 +140,14 @@ const UserMessage = ({ postData, setSelectedListId }) => {
       /** to add post via socket */
       if (message.businessId === business._id) {
         if (message.userId === user._id) {
+          /** in posts by me the posts added in subscribed lists by the user to be displayed*/
           if (
             filters.PostsByMe === true &&
             (message.post.postDetails.list._id === null ||
-              message.post.postDetails.list._id !== null)
+              message.post.postDetails.list._id !== null) &&
+            user.listFollowed.find(
+              (i) => i === message.post.postDetails.list._id
+            )
           ) {
             dispatch(addPostViaSocket(message));
           } else if (
@@ -153,6 +157,16 @@ const UserMessage = ({ postData, setSelectedListId }) => {
             dispatch(addPostViaSocket(message));
           }
         } else {
+          if (
+            filters.PostsByMe === true &&
+            (message.post.postDetails.list._id === null ||
+              message.post.postDetails.list._id !== null) &&
+            user.listFollowed.find(
+              (i) => i === message.post.postDetails.list._id
+            )
+          ) {
+            dispatch(addPostViaSocket(message));
+          }
           if (filters.Others === true) {
             dispatch(addPostViaSocket(message));
           } else if (

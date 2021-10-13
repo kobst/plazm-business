@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { findAllUsers } from "../../../../reducers/consumerReducer";
 import {
-  AddPostToList,
   findAllLists,
   RemovePostFromAList,
 } from "../../../../reducers/listReducer";
@@ -401,18 +400,10 @@ const ModalPostContent = ({
               })
             );
             if (removeFromList) {
-              const addToList = await dispatch(
-                AddPostToList({
-                  postId: response.post._id,
-                  listId: selectedListForPost,
-                })
-              );
-              if (addToList) {
-                dispatch(deletePostInMyFeed(response.post._id));
-                closeModal();
-                setLoader(false);
-                setDescription("");
-              }
+              dispatch(deletePostInMyFeed(response.post._id));
+              closeModal();
+              setLoader(false);
+              setDescription("");
             }
           }
           closeModal();
@@ -425,19 +416,6 @@ const ModalPostContent = ({
         const response = await unwrapResult(addPost);
         if (response.success === true) {
           if (selectedListForPost) {
-            const addToList = await dispatch(
-              AddPostToList({
-                postId: response.post._id,
-                listId: selectedListForPost,
-              })
-            );
-            const res = await unwrapResult(addToList);
-            if (res.data.addPostToList.success === true) {
-              closeModal();
-              setLoader(false);
-              setDescription("");
-            }
-          } else {
             closeModal();
             setLoader(false);
             setDescription("");

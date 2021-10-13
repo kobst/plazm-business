@@ -245,7 +245,7 @@ export const slice = createSlice({
           (i) => i._id === action.payload.listId
         );
         if (findList) {
-          findList.followers = findList.followers.concat({
+          findList.subscribers = findList.subscribers.concat({
             _id: action.payload.user._id,
             name: action.payload.user.name,
             image: action.payload.user.photo,
@@ -256,7 +256,7 @@ export const slice = createSlice({
           (i) => i._id === action.payload.listId
         );
         if (findList) {
-          findList.followers = findList.followers.concat({
+          findList.subscribers = findList.subscribers.concat({
             _id: action.payload.user._id,
             name: action.payload.user.name,
             image: action.payload.user.photo,
@@ -270,7 +270,7 @@ export const slice = createSlice({
           (i) => i._id === action.payload.listId
         );
         if (findList) {
-          findList.followers = findList.followers.filter(
+          findList.subscribers = findList.subscribers.filter(
             (i) => i._id !== action.payload.user._id
           );
         }
@@ -279,7 +279,7 @@ export const slice = createSlice({
           (i) => i._id === action.payload.listId
         );
         if (findList) {
-          findList.followers = findList.followers.filter(
+          findList.subscribers = findList.subscribers.filter(
             (i) => i._id !== action.payload.user._id
           );
         }
