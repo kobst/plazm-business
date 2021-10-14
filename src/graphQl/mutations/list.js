@@ -16,7 +16,7 @@ const CreateList = (values) => {
                     ownerId
                     posts
                     likes
-                    followers
+                    subscribers
                     media {
                       image
                       thumbnail
@@ -52,7 +52,7 @@ const addPostToList = (values) => {
                   ownerId
                   posts
                   likes
-                  followers
+                  subscribers
                   media {
                     image
                     thumbnail
@@ -86,7 +86,7 @@ const addEventToList = (values) => {
                   ownerId
                   posts
                   likes
-                  followers
+                  subscribers
                   media {
                     image
                     thumbnail
@@ -121,7 +121,7 @@ const DeleteList = (values) => {
                       name
                     }
                     posts
-                    followers
+                    subscribers
                     media {
                       image
                       thumbnail
@@ -197,7 +197,7 @@ const DeletePostFromAList = (values) => {
                   ownerId
                   posts
                   likes
-                  followers
+                  subscribers
                   media {
                     image
                     thumbnail

@@ -51,7 +51,7 @@ const NewInBuzzItems = ({
   const [offsetTop, setOffsetTop] = useState(0);
   const [loader, setLoader] = useState(false);
   const [image, setImage] = useState(
-    data.media.length > 0 ? data.media[0].image : EventImg
+    data && data.media && data.media.length > 0 ? data.media[0].image : EventImg
   );
   const divRef = useRef();
   const dispatch = useDispatch();
@@ -130,10 +130,10 @@ const NewInBuzzItems = ({
   return (
     <>
       <ItemsWrapper ref={divRef}>
-        <CoverImg 
-            onMouseOver={() => displayData()}
-            onMouseLeave={() => hideData()}
-            >
+        <CoverImg
+          onMouseOver={() => displayData()}
+          onMouseLeave={() => hideData()}
+        >
           <img src={image} alt="" onError={() => setImage(EventImg)} />
           {!data.isPublic && data.isPublic !== null && (
             <Lock>
@@ -176,10 +176,10 @@ const NewInBuzzItems = ({
                     )} EST{" "}
                   </AuthorInfo>
                   <FollowedBy>
-                    {data.followers.length > 0 && <h2>Followed by</h2>}
+                    {data.subscribers.length > 0 && <h2>Followed by</h2>}
                     <FollowedByListUl>
-                      {data.followers.length > 0 &&
-                        data.followers.slice(0, 8).map((i, key) => {
+                      {data.subscribers.length > 0 &&
+                        data.subscribers.slice(0, 8).map((i, key) => {
                           return (
                             <li key={key}>
                               <img
@@ -193,9 +193,9 @@ const NewInBuzzItems = ({
                             </li>
                           );
                         })}
-                      {data.followers.length > 7 ? (
+                      {data.subscribers.length > 7 ? (
                         <div className="MorePlus">
-                          +{data.followers.length - 7} more
+                          +{data.subscribers.length - 7} more
                         </div>
                       ) : null}
                     </FollowedByListUl>
@@ -204,8 +204,8 @@ const NewInBuzzItems = ({
                     {data.description}....
                     <strong onClick={() => ReadMore()}>Read More</strong>
                   </InnerDescriptionPara>
-                  {data.followers.length === 0 ||
-                  !data.followers.find((i) => i._id === user._id) ? (
+                  {data.subscribers.length === 0 ||
+                  !data.subscribers.find((i) => i._id === user._id) ? (
                     <SubscribeBtn
                       onClick={() => listSubscribe()}
                       disabled={loader}

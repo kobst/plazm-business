@@ -409,13 +409,13 @@ const DisplayListSection = ({
           </ListHeadingWrap>
 
           <FollowedSection>
-            {data.followers.length > 0 ? (
+            {data.subscribers.length > 0 ? (
               <FollowedHeading>Followed by</FollowedHeading>
             ) : null}
             <FollowedListingWrap>
               <FollowersListing>
-                {data.followers.length > 0
-                  ? data.followers.slice(0, 8).map((i, key) => {
+                {data.subscribers.length > 0
+                  ? data.subscribers.slice(0, 8).map((i, key) => {
                       return (
                         <FollowersList key={key}>
                           <img
@@ -431,8 +431,8 @@ const DisplayListSection = ({
                     })
                   : null}
               </FollowersListing>
-              {data.followers.length > 7 ? (
-                <MoreSection>+{data.followers.length - 7} more</MoreSection>
+              {data.subscribers.length > 7 ? (
+                <MoreSection>+{data.subscribers.length - 7} more</MoreSection>
               ) : null}
             </FollowedListingWrap>
           </FollowedSection>

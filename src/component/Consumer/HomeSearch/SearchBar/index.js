@@ -267,14 +267,14 @@ const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
   return (
     <>
       <SearchWrap>
-        <Heading>Favorites</Heading>
+        <Heading>Search</Heading>
         <RightSearchWrap>
           <Input
             value={search}
             onKeyPress={(event) => searchList(event)}
             onChange={(e) => onChangeSearch(e)}
             disabled={loader}
-            placeholder="Search Favorites"
+            placeholder="Search"
           />
           <FilterBox ref={menuRef}>
             <FaFilter onClick={toggleUploadMenu} />

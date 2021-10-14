@@ -253,6 +253,9 @@ const BuisinessHeader = ({
   const closeTab = () => {
     setDisplayTab(false);
     history.push("/");
+    if (myFeedIndex) {
+      setMyFeedIndex(null);
+    }
   };
 
   /** to return to all business listing */

@@ -11,13 +11,13 @@ import SaveButton from "../../UI/SaveButton";
 import FormBody from "./formBody";
 import { validate } from "./validate";
 import ValueLoader from "../../../../utils/loader";
-import { AddEventToList } from "../../../../reducers/listReducer";
 import PostImage from "../PostImage";
 import ButtonGrey from "../../UI/ButtonGrey";
 import SelectedListing from "../SelectedListing";
 import PostEvent from "../PostEvent";
 import { addEvent } from "../../../../reducers/eventReducer";
 import error from "../../../../constants";
+import { AddPostToList } from "../../../../reducers/listReducer";
 
 const bucket = process.env.REACT_APP_BUCKET;
 
@@ -309,13 +309,13 @@ const CreateEventModal = ({
           /** if any list is selected than add event to list */
           if (selectedListForPost) {
             const addToList = await dispatch(
-              AddEventToList({
-                eventId: response.data.event._id,
+              AddPostToList({
+                postId: response.data.event._id,
                 listId: selectedListForPost,
               })
             );
             const res = await unwrapResult(addToList);
-            if (res.data.addEventToList.success === true) {
+            if (res.data.addPostToList.success === true) {
               closeModal();
               setLoader(false);
               setEventDescription("");
