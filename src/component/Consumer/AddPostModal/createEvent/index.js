@@ -17,6 +17,7 @@ import SelectedListing from "../SelectedListing";
 import PostEvent from "../PostEvent";
 import { addEvent } from "../../../../reducers/eventReducer";
 import error from "../../../../constants";
+import { AddPostToList } from "../../../../reducers/listReducer";
 
 const bucket = process.env.REACT_APP_BUCKET;
 
@@ -307,6 +308,23 @@ const CreateEventModal = ({
         if (response.data.success === true) {
           /** if any list is selected than add event to list */
           if (selectedListForPost) {
+            const addToList = await dispatch(
+              AddPostToList({
+                postId: response.data.event._id,
+                listId: selectedListForPost,
+              })
+            );
+            const res = await unwrapResult(addToList);
+            if (res.data.addPostToList.success === true) {
+              closeModal();
+              setLoader(false);
+              setEventDescription("");
+              setEventTitle("");
+              setImageUrl(null);
+              setImageCopy([]);
+              setImageUpload(null);
+            }
+          } else {
             closeModal();
             setLoader(false);
             setEventDescription("");
