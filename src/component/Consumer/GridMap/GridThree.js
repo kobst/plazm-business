@@ -8,7 +8,7 @@ import {OrthographicCamera } from '@react-three/drei';
 import { useSelector } from "react-redux";
 
 import useStore from './useState'
-import HexGroup from './HexGroup'
+import HexGroup from './hexGroup'
 
 
 

@@ -8,7 +8,7 @@ import useStore from './useState'
 
 import { AssignMolecularDict, _createXYZ, AssignHex, OrderDistance } from './functions/gridFunctions'
 
-import Box from './PlaceBox'
+import Box from './placeBox'
 
 
 
