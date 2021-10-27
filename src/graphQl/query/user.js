@@ -66,6 +66,10 @@ const getUserFavorites = ({ id, value, filters, longitude, latitude }) => {
               data {
                 _id
                 data
+                businessLocation {
+                  type
+                  coordinates
+                }
                 business {
                   _id
                   company_name
@@ -151,6 +155,10 @@ const GetMyFeedData = (obj) => {
               data {
                 _id
                 data
+                businessLocation {
+                  type
+                  coordinates
+                }
                 business {
                   _id
                   company_name

@@ -39,6 +39,10 @@ const getPlace = (obj) => {
                 postDetails {
                     _id
                     data
+                    businessLocation {
+                      type
+                      coordinates
+                    }
                     list {
                       _id
                       name
@@ -151,6 +155,11 @@ const homeSearch = (obj) => {
                     end_time
                   }
                   location {
+                    type
+                    coordinates
+                  }
+                  businessLocation {
+                    type
                     coordinates
                   }
                   business {

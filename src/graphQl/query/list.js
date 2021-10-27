@@ -125,12 +125,20 @@ const GetListDetails = (obj) => {
                   favorites
                   filter_tags
                   default_image_url
+                  location {
+                    type
+                    coordinates
+                  }
                   hours_format {
                     StartDay
                     EndDay
                     Start
                     End 
                   }
+                }
+                businessLocation {
+                  type
+                  coordinates
                 }
                 likes
                 taggedUsers {
