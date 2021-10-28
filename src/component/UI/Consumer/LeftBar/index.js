@@ -308,7 +308,7 @@ const LeftBar = ({
                 1 === tabIndex - 1
                   ? "react-tabs__tab LIBefore"
                   : tabIndex + 1 === 1
-                  ? "react-tabs__tab LIAFter"
+                  ? "react-tabs__tab"
                   : tabIndex === 1
                   ? "react-tabs__tab react-tabs__tab--selected"
                   : "react-tabs__tab"
@@ -371,7 +371,7 @@ const LeftBar = ({
               disabled={loading || tabIndex === 5}
               className={
                 5 === tabIndex - 1
-                  ? "react-tabs__tab LIBefore"
+                  ? "react-tabs__tab"
                   : tabIndex + 1 === 5
                   ? "react-tabs__tab LIAFter"
                   : tabIndex === 5
@@ -386,21 +386,20 @@ const LeftBar = ({
             </Tab>
             <Tab
               disabled={true}
-              className="react-tabs__tab--disabled"
+              className={
+                tabIndex === 5
+                  ? "react-tabs__tab LIAFter"
+                  : tabIndex !== 6
+                  ? "react-tabs__tab--disabled"
+                  : "react-tabs__tab LiDisable"
+              }
               style={{ backgroundColor: "#f3f3f3" }}
             ></Tab>
 
             <Tab
               disabled={loading}
-              className={
-                7 === tabIndex - 1
-                  ? "react-tabs__tab LIBefore"
-                  : tabIndex + 1 === 7
-                  ? "react-tabs__tab LIAFter"
-                  : tabIndex === 7
-                  ? "react-tabs__tab react-tabs__tab--selected"
-                  : "react-tabs__tab"
-              }
+              className={tabIndex === 6 ? "test" : "test1"}
+              style={{ backgroundColor: "#f3f3f3" }}
             >
               &nbsp;
             </Tab>
