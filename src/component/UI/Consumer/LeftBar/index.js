@@ -294,7 +294,9 @@ const LeftBar = ({
               disabled={loading || tabIndex === 0}
               className={
                 0 === tabIndex - 1
-                  ? "react-tabs__tab LIBefore"
+                  ? tabIndex === 1
+                  ? "react-tabs__tab LIBefore removeBorder"
+                  : "react-tabs__tab LIBefore"
                   : tabIndex + 1 === 0
                   ? "react-tabs__tab LIAFter"
                   : tabIndex === 0
@@ -306,11 +308,13 @@ const LeftBar = ({
               disabled={loading || tabIndex === 1}
               className={
                 1 === tabIndex - 1
-                  ? "react-tabs__tab LIBefore"
+                  ? tabIndex === 2
+                    ? "react-tabs__tab LIBefore removeBorder"
+                    : "react-tabs__tab LIBefore"
                   : tabIndex + 1 === 1
                   ? "react-tabs__tab"
                   : tabIndex === 1
-                  ? "react-tabs__tab react-tabs__tab--selected"
+                  ? "react-tabs__tab react-tabs__tab--selected removeBorder"
                   : "react-tabs__tab"
               }
               onClick={() => homeSearchFunction()}
@@ -396,13 +400,13 @@ const LeftBar = ({
               style={{ backgroundColor: "#f3f3f3" }}
             ></Tab>
 
-            <Tab
+            {/* <Tab
               disabled={loading}
               className={tabIndex === 6 ? "test" : "test1"}
               style={{ backgroundColor: "#f3f3f3" }}
             >
               &nbsp;
-            </Tab>
+            </Tab> */}
             <Tab
               disabled={loading}
               className={

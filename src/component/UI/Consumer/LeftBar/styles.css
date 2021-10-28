@@ -15,7 +15,7 @@
   margin: 0;
   padding: 0;
   color: white;
-  background: #221e45;
+  /* background: #221e45; */
   box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
   margin-top: -1px;
   border: 0;
@@ -176,10 +176,14 @@
   border-radius: 0;
 }
 
-.MainTabs .react-tabs__tab.react-tabs__tab--selected:nth-child(1),
+/* .MainTabs .react-tabs__tab.react-tabs__tab--selected:nth-child(1),
 .MainTabs .react-tabs__tab.react-tabs__tab--selected:nth-child(2) {
   border-bottom: 0 !important;
-}
+} */
+
+.MainTabs .react-tabs__tab.react-tabs__tab--selected:nth-child(2) {
+  border: 0 !important;
+} 
 
 .MainTabs .react-tabs__tab:nth-child(1),
 .MainTabs .react-tabs__tab:nth-child(2) {
@@ -187,14 +191,24 @@
 }
 
 .MainTabs .react-tabs__tab.LIBefore {
-  border-radius: 0 0 15px;
+  /* border-radius: 0 0 15px; */
+  background: url(../../../../images/top-curve.jpg) no-repeat bottom -1px center !important;
 }
 .MainTabs .react-tabs__tab.LIAFter {
-  border-radius: 0 15px 0px 0;
+  /* border-radius: 0 15px 0px 0; */
+  background: url(../../../../images/bottom-curve.jpg) no-repeat top -1px center !important;
 }
 .MainTabs .react-tabs__tab.LiDisable {
   border-radius: 0;
 }
+
+.MainTabs .react-tabs__tab.LIBefore.removeBorder, .MainTabs .react-tabs__tab.react-tabs__tab--selected.removeBorder{
+  border: 0 !important;
+}
+
+/* .MainTabs .react-tabs__tab.LIBefore:nth-child(1){
+  border: 0 !important;
+} */
 
 .MainTabs #react-tabs-0 {
   /* background: transparent; */
