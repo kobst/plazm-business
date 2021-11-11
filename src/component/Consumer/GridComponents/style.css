@@ -43,3 +43,15 @@
   /* border-radius: 50%;
     box-shadow: 0 0 100px 100px purple; */
 }
+
+.radar-container {
+  position: absolute;
+  top: 10%;
+  right: 0%;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 0 10px 10px #4c146c;
+  z-index: 10;
+}

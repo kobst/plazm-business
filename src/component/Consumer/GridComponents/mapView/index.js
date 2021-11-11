@@ -43,157 +43,21 @@ function orderPlaces(places, selectedPlace, defaultCenter) {
 
     let center = {}
     if (selectedPlace) {
-        center.lat = selectedPlace.location.coordinates[1]
-        center.lng = selectedPlace.location.coordinates[0]
+        center.lat = selectedPlace.businessLocation.coordinates[1]
+        center.lng = selectedPlace.businessLocation.coordinates[0]
     } else {
         center = defaultCenter
     }
 
     places.sort(function (a, b) {
-        let distA = distance(a.location.coordinates[1], a.location.coordinates[0], center.lat, center.lng)
-        let distB = distance(b.location.coordinates[1], b.location.coordinates[0], center.lat, center.lng)
+        let distA = distance(a.businessLocation.coordinates[1], a.businessLocation.coordinates[0], center.lat, center.lng)
+        let distB = distance(b.businessLocation.coordinates[1], b.businessLocation.coordinates[0], center.lat, center.lng)
         return distA - distB
     })
 
     return places
 
 }
-
-
-const _setBBox = (places) => {
-    let coordinatesArray = []
-    let featureArray = []
-    places.forEach((_place, index) => {
-        const geoJsonObj = _place.location
-        const coordinates = _place.location.coordinates
-
-        // const feature = {
-        //     type: 'Feature',
-        //     geometry: geoJsonObj,
-        //     properties: {
-        //         name: _place.company_name,
-        //         address: _place.address,
-        //         type: _place.genType
-        //     }
-        // }
-        // featureArray.push(feature)
-        if (index < 10) {
-            coordinatesArray.push(coordinates)
-        }
-
-        // bounds.extend(coordinates)
-    })
-
-    //why did I have to change this to features from data to get turfbox to work?
-    const geoJsonFeatures = {
-        type: 'FeatureCollection',
-        features: [{
-            type: 'Feature',
-            properties: {},
-            geometry: {
-                type: "Polygon",
-                coordinates: [coordinatesArray]
-            }
-        }]
-    }
-
-    const geoJsonObject = {
-        type: 'geojson',
-        data: featureArray
-    }
-
-    let lngLatBox = turf.bbox(geoJsonFeatures);
-    // console.log('lngLatBox', lngLatBox)
-    let sw = [lngLatBox[0], lngLatBox[1]]
-    let ne = [lngLatBox[2], lngLatBox[3]]
-    let fitboundsObj = [sw, ne]
-    // console.log('fitbounds', fitboundsObj)
-    // return { box: bounds, featureSet: geoJsonObject }
-
-    // return { box: fitboundsObj, featureSet: geoJsonObject }
-    return fitboundsObj
-
-
-}
-
-
-const setBBox = (places, selectedPlace, defaultCenter) => {
-    let coordinatesArray = []
-    let featureArray = []
-    // var bounds = new mapboxgl.LngLatBounds()
-
-    // let center = {}
-    // if (selectedPlace) {
-    //     center.lat = selectedPlace.location.coordinates[1]
-    //     center.lng = selectedPlace.location.coordinates[0]
-    // } else {
-    //     center = defaultCenter
-    // }
-
-    // places.sort(function (a, b) {
-    //     let distA = distance(a.location.coordinates[1], a.location.coordinates[0], center.lat, center.lng)
-    //     let distB = distance(b.location.coordinates[1], b.location.coordinates[0], center.lat, center.lng)
-    //     return distA - distB
-    // })
-
-    let _places = orderPlaces(places, selectedPlace, defaultCenter)
-
-
-    // places.forEach(element => { coordinatesArray.push(element.location.coordinates) })
-    _places.forEach((_place, index) => {
-        const geoJsonObj = _place.location
-        const coordinates = _place.location.coordinates
-
-        const feature = {
-            type: 'Feature',
-            geometry: geoJsonObj,
-            properties: {
-                name: _place.company_name,
-                address: _place.address,
-                type: _place.genType
-            }
-        }
-        featureArray.push(feature)
-
-
-        if (index < 10) {
-            coordinatesArray.push(coordinates)
-        }
-
-        // bounds.extend(coordinates)
-    })
-
-    //why did I have to change this to features from data to get turfbox to work?
-    const geoJsonFeatures = {
-        type: 'FeatureCollection',
-        features: [{
-            type: 'Feature',
-            properties: {},
-            geometry: {
-                type: "Polygon",
-                coordinates: [coordinatesArray]
-            }
-        }]
-    }
-
-    const geoJsonObject = {
-        type: 'geojson',
-        data: featureArray
-    }
-
-    let lngLatBox = turf.bbox(geoJsonFeatures);
-    // console.log('lngLatBox', lngLatBox)
-    let sw = [lngLatBox[0], lngLatBox[1]]
-    let ne = [lngLatBox[2], lngLatBox[3]]
-    let fitboundsObj = [sw, ne]
-    // console.log('fitbounds', fitboundsObj)
-    // return { box: bounds, featureSet: geoJsonObject }
-
-    return { box: fitboundsObj, featureSet: geoJsonObject }
-
-
-}
-
 
 
 const Map = ReactMapboxGl({
@@ -241,7 +105,7 @@ const MapView = (props) => {
         let mounted = true;
         if (orderedPlaces.length > 1 && mounted) {
             let coordArray = []
-            let limit = 10
+            var limit = 10
             if (orderedPlaces.length < limit) {
                 limit = orderedPlaces.length - 1
             }
@@ -254,7 +118,7 @@ const MapView = (props) => {
                 console.log(i)
                 console.log(orderedPlaces[i])
                 if (orderedPlaces[i]) {
-                    let coords = orderedPlaces[i].location.coordinates
+                    let coords = orderedPlaces[i].businessLocation.coordinates
                     coordArray.push(coords)
                 }
 
@@ -368,8 +232,8 @@ const MapView = (props) => {
                         const newPosDict = {}
 
                         places.forEach((place) => {
-                            // console.log(place.location.coordinates + "inside map")
-                            let pix = map.project(place.location.coordinates)
+                            // console.log(place.businessLocation.coordinates + "inside map")
+                            let pix = map.project(place.businessLocation.coordinates)
                             // console.log(pix)
                             // console.log("-----------")
                             let obj = { pos: pix, name: place.company_name }
@@ -408,7 +272,7 @@ const MapView = (props) => {
                             "circle-color": "yellow"
                         }}>
                             {places_0.map(({ ...otherProps }) => {
-                                return <Feature key={otherProps._id} coordinates={otherProps.location.coordinates} />
+                                return <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />
                             })}
                         </Layer>
                         <Layer type="circle" id="layer_id_1" paint={{
@@ -416,9 +280,8 @@ const MapView = (props) => {
                             "circle-color": "magenta"
                         }}>
                             {places_1.map(({ ...otherProps }) => {
-                                let coords = otherProps.location.coordinates
 
-                                return <Feature key={otherProps._id} coordinates={otherProps.location.coordinates} />
+                                return <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />
                             })}
                         </Layer>
                         <Layer type="circle" id="layer_id_2" paint={{
@@ -428,7 +291,7 @@ const MapView = (props) => {
                             {places_2.map(({ ...otherProps }) => {
 
 
-                                return <Feature key={otherProps._id} coordinates={otherProps.location.coordinates} />
+                                return <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />
                             })}
                         </Layer>
                         <Layer type="circle" id="layer_id_3" paint={{
@@ -437,7 +300,7 @@ const MapView = (props) => {
                         }}>
                             {places_center.map(({ ...otherProps }) => {
 
-                                return <Feature key={otherProps._id} coordinates={otherProps.location.coordinates} />
+                                return <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />
                             })}
                         </Layer>
                     </>
@@ -452,7 +315,7 @@ const MapView = (props) => {
                     "circle-color": "green"
                 }}>
                     {places_1.map(({ ...otherProps }) => {
-                        return <Feature key={otherProps._id} coordinates={otherProps.location.coordinates} />
+                        return <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />
                     })}
                 </Layer> */}
 
@@ -464,7 +327,7 @@ const MapView = (props) => {
                     "circle-stroke-width": 1,
                     "circle-stroke-color": "#ff0000"
                 }}>
-                    <Feature coordinates={selectedPlace.location.coordinates} />
+                    <Feature coordinates={selectedPlace.businessLocation.coordinates} />
                 </Layer>
                 }
 
