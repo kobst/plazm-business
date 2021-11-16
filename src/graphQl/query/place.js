@@ -22,6 +22,10 @@ const getPlace = (obj) => {
                 additional_media
                 filter_tags
                 company_name
+                location {
+                  type
+                  coordinates
+                }
                 address
                 telephone
                 handles {

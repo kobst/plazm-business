@@ -85,9 +85,9 @@ const MapView = (props) => {
     const gridContainerStyle = {
         // height: '100vh',
         // width: '100%'
-        height: '400px',
-        width: '400px',
-        borderRadius: '50%'
+        height: '66vh',
+        width: '33vw',
+        borderRadius: '10%'
     }
 
     const mapContainerStyle = {
@@ -172,8 +172,8 @@ const MapView = (props) => {
 
     const clickHandler = (event) => {
         console.log("map clicked")
-        let coordinates = event.lnglat.wrap()
-        console.log(coordinates)
+        // let coordinates = event.lnglat.wrap()
+        console.log(event)
         // props.toggle(event)
     }
 

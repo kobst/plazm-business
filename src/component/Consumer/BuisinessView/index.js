@@ -50,6 +50,12 @@ const BuisinessView = ({
   const businessProfile = useSelector((state) => state.business.business);
   const flag = useSelector(state => state.business.flag)
   const [displayBusinessProfile, setDisplayBusinessProfile] = useState(false);
+  
+  useEffect(()=>{
+    console.log("XXXX   business view shown XXXXX")
+    console.log(businessProfile)
+  }, [businessProfile])
+  
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(setSideFilters());
