@@ -130,9 +130,9 @@ const BuisinessView = ({
               setListIndex={setListIndex}
             />
           )}
+           {/* && businessProfile[0].userSub !== null */}
           {!displayBusinessProfile && !loading && businessProfile &&
-          businessProfile.length > 0 &&
-          businessProfile[0].userSub !== null ? (
+          businessProfile.length > 0 ? (
             <TabsSection
               profile={profile}
               businessId={businessId}

@@ -115,8 +115,8 @@ const MapView = (props) => {
             console.log("ordered places " + orderedPlaces.length)
 
             for (let i = 0; i < limit; i++) {
-                console.log(i)
-                console.log(orderedPlaces[i])
+                // console.log(i)
+                // console.log(orderedPlaces[i])
                 if (orderedPlaces[i]) {
                     let coords = orderedPlaces[i].businessLocation.coordinates
                     coordArray.push(coords)
@@ -231,7 +231,7 @@ const MapView = (props) => {
                         // console.log("map" + map)
                         const newPosDict = {}
 
-                        places.forEach((place) => {
+                        orderedPlaces.forEach((place) => {
                             // console.log(place.businessLocation.coordinates + "inside map")
                             let pix = map.project(place.businessLocation.coordinates)
                             // console.log(pix)

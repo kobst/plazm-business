@@ -13,6 +13,7 @@ import { AssignMolecularDict, AssignHexDict,  _createXYZ } from './functions/ind
 
 import MapView from './mapView/index';
 import RadarView from './radarView/radarView'
+import GridView from './gridView/gridView'
 import useStore from './useState/index'
 
 import './style.css';
@@ -64,7 +65,9 @@ const GridContainer = () => {
         console.log("getting feed data")
         feedData.forEach(element => {
             let deepClone = JSON.parse(JSON.stringify(element));
-    
+            if (!deepClone.businessLocation && deepClone.location) {
+                deepClone.businessLocation = deepClone.location
+            }
             console.log(deepClone)
             _places.push(deepClone)
         });
@@ -73,10 +76,29 @@ const GridContainer = () => {
 
     }, [feedData])
 
+
+    // call Recenter 
+
+    //on setting places
     useEffect(() => {
         console.log("initial props places")
         ReCenter(null)
     }, [places])
+
+    // on shifting centerPlace..
+    useEffect(() => {
+        if (centerPlace) {
+            console.log("new center " + centerPlace.company_name)
+            // adjustZ(centerPlace)
+        }
+        let timer1 = setTimeout(() => ReCenter(centerPlace), 2000);
+        // this will clear Timeout when component unmount like in willComponentUnmount
+        return () => {
+            clearTimeout(timer1);
+        };
+    }, [centerPlace]);
+
+
 
 
     const resetCenter = (newCenter) => {
@@ -91,11 +113,6 @@ const GridContainer = () => {
     const setSelectPlace = (place) => {
         console.log('select Place' + place)
     }
-
-    useEffect(() => {
-        console.log(multiDict)
-        
-    }, [multiDict])
 
 
     const ReCenter = (place) => {
@@ -137,7 +154,7 @@ const GridContainer = () => {
                 if (_orderedPlacesResponse.length < limit) {
                     limit = _orderedPlacesResponse.length
                 }
-                limitedOrderedPlaces = _orderedPlacesResponse.slice(0, limit - 1)
+                limitedOrderedPlaces = _orderedPlacesResponse.slice(0, limit)
                 setOrderedPlaces(limitedOrderedPlaces)
                 setMultiDict(_multiDictResponse)
                 setPlaceCoordDict(_slotDictResponse)
@@ -158,15 +175,15 @@ const GridContainer = () => {
 
     return (
         <div>
-             {/* <container className="grid-container">
-                {placesLoading ? <h2>LOADING PLACES</h2> : <GridView center={draggedCenter} places={places} selectPlace={setSelectPlace} hovering={showPreview} />}
-            </container> */}
+              <container className="grid-container-small">
+                 <GridView center={draggedCenter} places={places} selectPlace={setSelectPlace} hovering={showPreview} />
+            </container>
 
             <div className="radar-container">
-                <RadarView places={places} />
+                <RadarView />
             </div> 
 
-            {gridView ? <div className="map-overlay"></div> : <div className="map-overlay-large"></div>}
+            {/* {gridView ? <div className="map-overlay"></div> : <div className="map-overlay-large"></div>} */}
             <div className="map-container">
                 <MapView gridMode={gridView} />
             </div> 

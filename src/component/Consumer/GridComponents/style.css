@@ -1,3 +1,28 @@
+.grid-container {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  display: block;
+  z-index: 11;
+  /* right: -10%;
+  bottom: -15% */
+  /* right: 0%;
+  bottom: 0% */
+}
+
+.grid-container-small {
+  position: absolute;
+  top: 10%;
+  right: 18%;
+  width: 200px;
+  height: 200px;
+  border-radius: 20%;
+  overflow: hidden;
+  box-shadow: 0 0 10px 10px #4c146c;
+  z-index: 10;
+}
+
+
 .map-overlay {
   position: absolute;
   /* right: -10%;
