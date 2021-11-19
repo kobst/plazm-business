@@ -252,7 +252,7 @@ export const slice = createSlice({
     setSideFiltersHomeSearch: (state) => {
       state.myFeed = [];
       state.filterByUpdatedAt = false;
-      state.filterByClosest = false;
+      state.filterByClosest = true;
     },
     clearSearchedData: (state) => {
       state.myFeed = [];
