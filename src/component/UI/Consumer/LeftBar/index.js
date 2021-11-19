@@ -400,13 +400,13 @@ const LeftBar = ({
               style={{ backgroundColor: "#f3f3f3" }}
             ></Tab>
 
-            {/* <Tab
+            <Tab
               disabled={loading}
               className={tabIndex === 6 ? "test" : "test1"}
               style={{ backgroundColor: "#f3f3f3" }}
             >
               &nbsp;
-            </Tab> */}
+            </Tab>
             <Tab
               disabled={loading}
               className={

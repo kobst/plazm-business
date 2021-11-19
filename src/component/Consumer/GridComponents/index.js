@@ -51,8 +51,7 @@ const GridContainer = () => {
     const placeCoordDict = useStore((state) => state.placeCoordDict)
     const setPlaceCoordDict = useStore((state) => state.setPlaceCoordDict)
    
-    const selectedPlace = useStore((state) => state.selectPlace)
-    const setSelectedPlace = useStore((state) => state.setSelectedPlace)
+
 
     const displacedCenterHexPosition = useStore((state) => state.displacedCenterHexPosition)
     const setDisplacedCenterHexPosition = useStore((state) => state.setDisplacedCenterHexPosition)

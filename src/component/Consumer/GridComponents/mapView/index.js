@@ -168,6 +168,15 @@ const MapView = (props) => {
     }, [gridView])
 
 
+    useEffect(()=>{
+        console.log("reading selected place from mapview")
+
+        if (selectedPlace) {
+            console.log(selectedPlace)
+        }
+    }, [selectedPlace])
+
+
 
 
     const clickHandler = (event) => {
@@ -253,7 +262,7 @@ const MapView = (props) => {
 
                 </MapContext.Consumer>
 
-
+{/* 
 
                 {selectedPlace && <Layer type="circle" id="location_id" paint={{
                     "circle-radius": 20,
@@ -261,7 +270,7 @@ const MapView = (props) => {
                 }}>
                     <Feature coordinates={[props.center.lat, props.center.lng]} />
                 </Layer>
-                }
+                } */}
 
 
 
@@ -321,15 +330,15 @@ const MapView = (props) => {
 
 
 
-                {selectedPlace && <Layer type="circle" id="selectedPlace_id" paint={{
+                {selectedPlace && selectedPlace.businessLocation && <Layer type="circle" id="selectedPlace_id" paint={{
                     "circle-radius": 20,
                     "circle-opacity": 0,
                     "circle-stroke-width": 1,
                     "circle-stroke-color": "#ff0000"
                 }}>
                     <Feature coordinates={selectedPlace.businessLocation.coordinates} />
-                </Layer>
-                }
+                </Layer>}
+                
 
             </Map>
         </div>

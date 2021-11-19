@@ -17,6 +17,7 @@ const [useStore] = create(set => ({
     hexDict: {},
     multiDict: {},
     mapPosDict: {},
+    selectedPlace: {},
     hovering: false,
     orderedPlacesDict: {},
     gridView: true,
@@ -97,6 +98,10 @@ const [useStore] = create(set => ({
     setOrderedPlacesDict: (orderedPlacesDict) => set((state) => ({
         ...state,
         orderedPlacesDict
+    })),
+    setSelectedPlace: (selectedPlace) => set((state) => ({
+        ...state,
+        selectedPlace
     })),
     removeAllCoor: () => set({ places: { 0: [0, 0, 0] } })
 }))

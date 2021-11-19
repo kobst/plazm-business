@@ -495,7 +495,7 @@ const PlaceMesh = ((props) => {
 
 
             <HexTile
-                ref={hexBackground}
+                innerRef={hexBackground}
                 color={tileColor}
                 position={[0, 0, 0]}
                 // listImage={props.placeObject.listImage}

@@ -8,6 +8,9 @@ import BuisinessProfileDetails from "./BuisinessProfileDetails";
 import ValueLoader from "../../../utils/loader";
 import { setSideFilters } from "../../../reducers/businessReducer";
 
+
+import useStore from '../GridComponents/useState/index'
+
 const BuisinessViewContent = styled.div`
   width: 100%;
   position: relative;
@@ -50,10 +53,22 @@ const BuisinessView = ({
   const businessProfile = useSelector((state) => state.business.business);
   const flag = useSelector(state => state.business.flag)
   const [displayBusinessProfile, setDisplayBusinessProfile] = useState(false);
+  const setSelectedBusiness = useStore((state) => state.setSelectedPlace)
+
   
+
   useEffect(()=>{
-    console.log("XXXX   business view shown XXXXX")
-    console.log(businessProfile)
+ 
+    if (businessProfile[0]){
+
+      let deepClone = JSON.parse(JSON.stringify(businessProfile[0]));
+      deepClone.businessLocation = deepClone.location
+
+      console.log("XXXX   business view coordinates XXXXX")
+      console.log(deepClone)
+
+      setSelectedBusiness(deepClone)
+    }
   }, [businessProfile])
   
   const dispatch = useDispatch();
