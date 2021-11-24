@@ -81,6 +81,9 @@ const MapView = (props) => {
     const maxViewable = useStore(state => state.maxViewable)
     const setPosDict = useStore(state => state.setMapPosDict)
     const gridView = useStore(state => state.gridView)
+    const setGridView = useStore(state => state.setGridView)
+
+    const setDraggedCenter = useStore(state => state.setDraggedCenter)
 
     const gridContainerStyle = {
         // height: '100vh',
@@ -93,17 +96,17 @@ const MapView = (props) => {
     const mapContainerStyle = {
         // height: '100vh',
         // width: '100%',
-        height: '800px',
-        width: '1200px',
+        height: '80vh',
+        width: '40vw',
         borderRadius: '10%'
     }
 
     const [dimensions, setDimensions] = useState(gridContainerStyle)
 
 
-    useEffect(() => {
-        let mounted = true;
-        if (orderedPlaces.length > 1 && mounted) {
+
+    const setBBox = () => {
+       
             let coordArray = []
             var limit = 10
             if (orderedPlaces.length < limit) {
@@ -144,7 +147,13 @@ const MapView = (props) => {
             let ne = [lngLatBox[2], lngLatBox[3]]
             let fitboundsObj = [sw, ne]
             setBox(fitboundsObj)
+    
+    }
 
+    useEffect(() => {
+        let mounted = true;
+        if (orderedPlaces.length > 1 && mounted) {
+            setBBox()
         }
         return () => mounted = false;
     }, [orderedPlaces, maxViewable]);
@@ -153,13 +162,15 @@ const MapView = (props) => {
 
     // only use if not using second map
     useMemo(() => {
-        console.log(props.gridMode + 'map view toggle')
+        console.log('map view toggle')
         if (gridView) {
+            console.log("gridView true")
             setDimensions(gridContainerStyle)
             // Map.resize()
             // ReCenter()
 
         } else {
+            console.log("gridView false")
             setDimensions(mapContainerStyle)
             // Map.resize()
             // ReCenter()
@@ -173,6 +184,8 @@ const MapView = (props) => {
 
         if (selectedPlace) {
             console.log(selectedPlace)
+            setGridView(false)
+
         }
     }, [selectedPlace])
 
@@ -184,6 +197,19 @@ const MapView = (props) => {
         // let coordinates = event.lnglat.wrap()
         console.log(event)
         // props.toggle(event)
+    }
+
+    const dragHandler = (map, event) => {
+        if (event.fitboundUpdate) {
+            console.log('Map bounds have been programmatically changed')
+            console.log(map.getCenter())
+          } else {
+            console.log('Map bounds have been changed by user interaction')
+            let cntr = map.getCenter()
+            console.log(cntr)
+            setDraggedCenter(cntr)      
+          }
+
     }
 
 
@@ -230,7 +256,7 @@ const MapView = (props) => {
                 // style='mapbox://styles/mapbox/streets-v9'
                 pitch={[60]}
                 fitBounds={boundBox}
-
+                onDragEnd={dragHandler}
                 onClick={clickHandler}
                 containerStyle={dimensions}>
 
@@ -251,9 +277,7 @@ const MapView = (props) => {
                             newPosDict[place._id] = obj
 
                         })
-                        // console.log("map positions")
-                        // console.log(newPosDict)
-
+                
                         map.on('idle', function () {
                             map.resize()
                             map.zoom = 15
@@ -262,15 +286,6 @@ const MapView = (props) => {
 
                 </MapContext.Consumer>
 
-{/* 
-
-                {selectedPlace && <Layer type="circle" id="location_id" paint={{
-                    "circle-radius": 20,
-                    "circle-color": "#ff0000"
-                }}>
-                    <Feature coordinates={[props.center.lat, props.center.lng]} />
-                </Layer>
-                } */}
 
 
 
@@ -298,8 +313,6 @@ const MapView = (props) => {
                             "circle-color": "blue"
                         }}>
                             {places_2.map(({ ...otherProps }) => {
-
-
                                 return <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />
                             })}
                         </Layer>

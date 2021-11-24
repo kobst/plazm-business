@@ -346,12 +346,12 @@ const DisplayFavoriteBusiness = ({
                   onError={() => setImage(ProfileImg)}
                   alt=""
                 />
-                {businessInfo.hours_format &&
+                {/* {businessInfo.hours_format &&
                 businessInfo.hours_format.length === 0 ? (
                   <div className="CloseDiv">Closed</div>
                 ) : checkBusinessOpenClose() === true ? null : (
                   <div className="CloseDiv">Closed</div>
-                )}
+                )} */}
               </ProfileThumbBanner>
               <ProfileNameWrap>
                 <ProfileName>

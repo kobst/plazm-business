@@ -34,6 +34,8 @@ const GridContainer = () => {
 
 
     const gridView = useStore((state) => state.gridView)
+    const setGridView = useStore((state) => state.setGridView)
+
 
     const places = useStore((state) => state.places)
     const setPlaces = useStore((state) => state.setPlaces)
@@ -61,7 +63,7 @@ const GridContainer = () => {
 
     useEffect(() => {
         let _places = []
-        console.log("getting feed data")
+        console.log("getting feed data " + feedData.length)
         feedData.forEach(element => {
             let deepClone = JSON.parse(JSON.stringify(element));
             if (!deepClone.businessLocation && deepClone.location) {
@@ -72,6 +74,7 @@ const GridContainer = () => {
         });
         setPlacesLoading(false)
         setPlaces(_places)
+        setGridView(true)
 
     }, [feedData])
 
@@ -163,7 +166,12 @@ const GridContainer = () => {
                 
 
             } else {
-                console.log(" nooooo place")
+                console.log(" nooooo places")
+                setOrderedPlaces([])
+                setMultiDict({})
+                setPlaceCoordDict({})
+                setDisplacedCenterHexPosition([0, 0, 0])
+                setCamPos([0, 0, 5])
             }
         }
     }
@@ -184,7 +192,7 @@ const GridContainer = () => {
 
             {/* {gridView ? <div className="map-overlay"></div> : <div className="map-overlay-large"></div>} */}
             <div className="map-container">
-                <MapView gridMode={gridView} />
+                <MapView />
             </div> 
         </div >
     )

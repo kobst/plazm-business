@@ -285,10 +285,18 @@ const LeftBar = ({
     }
   };
 
+  const setTab = (index) => {
+    console.log("setting index " + index)
+    setTabIndex(index)
+
+    // <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
+
+  }
+
   return (
     <>
       <LeftBarContent className="MainTabs">
-        <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
+        <Tabs selectedIndex={tabIndex} onSelect={setTab}>
           <TabList>
             <Tab
               disabled={loading || tabIndex === 0}

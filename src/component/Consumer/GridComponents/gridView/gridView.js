@@ -248,8 +248,6 @@ const GridView = (props) => {
     const boxesLimited = useMemo(() => {
         console.log(orderedPlaces)
 
-
-
         let postBusinessAdjustedPlaces = []
         orderedPlaces.forEach(element => {
             if (element.business) {
