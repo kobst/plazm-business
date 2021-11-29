@@ -84,6 +84,7 @@ const MapView = (props) => {
     const setGridView = useStore(state => state.setGridView)
 
     const setDraggedCenter = useStore(state => state.setDraggedCenter)
+    const draggedCenter = useStore(state => state.draggedCenter)
 
     const gridContainerStyle = {
         // height: '100vh',
@@ -350,6 +351,16 @@ const MapView = (props) => {
                     "circle-stroke-color": "#ff0000"
                 }}>
                     <Feature coordinates={selectedPlace.businessLocation.coordinates} />
+                </Layer>}
+
+
+                {draggedCenter && <Layer type="circle" id="draggedLocation" paint={{
+                    "circle-radius": 10,
+                    "circle-opacity": 1,
+                    "circle-stroke-width": 2,
+                    "circle-stroke-color": "#ff0000"
+                }}>
+                    <Feature coordinates={[draggedCenter.lng, draggedCenter.lat]} />
                 </Layer>}
                 
 

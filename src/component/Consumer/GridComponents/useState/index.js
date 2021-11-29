@@ -8,6 +8,7 @@ const [useStore] = create(set => ({
     coordPlaceDict: {},
     centerId: null,
     centerPlace: null,
+    draggedCenter: {lat: JSON.stringify(process.env.REACT_APP_LATITUDE), lng: JSON.stringify(process.env.REACT_APP_LONGITUDE)},
     Depth1Places: [],
     positionCenter: [0, 0, 0],
     centerHexPosition: [0, 0, 0],
@@ -50,6 +51,10 @@ const [useStore] = create(set => ({
     setCenterPlace: (centerPlace) => set((state) => ({
         ...state,
         centerPlace
+    })),
+    setDraggedCenter: (draggedCenter) => set((state) => ({
+        ...state,
+        draggedCenter
     })),
     setDepth1Places: (depth1Places) => set((state) => ({
         ...state,

@@ -25,10 +25,10 @@ const GridContainer = () => {
 
     const feedData = useSelector((state) => state.myFeed.myFeed);
 
-    const [draggedCenter, setDraggedCenter] = useState({
-        lat: JSON.stringify(process.env.REACT_APP_LATITUDE),
-        lng: JSON.stringify(process.env.REACT_APP_LONGITUDE)
-    })
+    // const [draggedCenter, setDraggedCenter] = useState({
+    //     lat: JSON.stringify(process.env.REACT_APP_LATITUDE),
+    //     lng: JSON.stringify(process.env.REACT_APP_LONGITUDE)
+    // })
  
     const [placesLoading, setPlacesLoading] = useState(true)
 
@@ -52,6 +52,9 @@ const GridContainer = () => {
     const setOrderedPlaces = useStore((state) => state.setOrderedPlaces)
     const placeCoordDict = useStore((state) => state.placeCoordDict)
     const setPlaceCoordDict = useStore((state) => state.setPlaceCoordDict)
+
+    const draggedCenter = useStore((state) => state.draggedCenter)
+    const setDraggedCenter = useStore((state) => state.setDraggedCenter)
    
 
 
@@ -85,7 +88,7 @@ const GridContainer = () => {
     useEffect(() => {
         console.log("initial props places")
         ReCenter(null)
-    }, [places])
+    }, [places, draggedCenter])
 
     // on shifting centerPlace..
     useEffect(() => {
@@ -99,6 +102,18 @@ const GridContainer = () => {
             clearTimeout(timer1);
         };
     }, [centerPlace]);
+
+    // useEffect(() => {
+    //     if (centerPlace) {
+    //         console.log("new center " + centerPlace.company_name)
+    //         // adjustZ(centerPlace)
+    //     }
+    //     let timer1 = setTimeout(() => ReCenter(centerPlace), 2000);
+    //     // this will clear Timeout when component unmount like in willComponentUnmount
+    //     return () => {
+    //         clearTimeout(timer1);
+    //     };
+    // }, [draggedCenter]);
 
 
 
@@ -129,7 +144,6 @@ const GridContainer = () => {
         if (place) {
             console.log("----place---" + place.company_name)
             // props.selectPlace(place)
-
             // all in one
             // const { _orderedPlacesResponse, _slotDictResponse, _multiDictResponse } = AssignMolecularDict(places, props.center, place)
             const { _orderedPlacesResponse, _slotDictResponse, _multiDictResponse } = AssignHexDict(places, draggedCenter, place)
