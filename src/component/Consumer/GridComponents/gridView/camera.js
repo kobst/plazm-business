@@ -17,7 +17,7 @@ extend({ MapControls })
 
 function CameraMain(props) {
     const cam = useRef()
-    const posCoords = useRef([0, 0, 5])
+    const posCoords = useRef([0, 0, 20])
     const sampleBox = useRef()
     // const [y] = Scroll([-100, 100], { domTarget: window });
     const setCamPos = useStore((state) => state.setCamPosition)
@@ -46,33 +46,33 @@ function CameraMain(props) {
 
     useFrame(() => {
         if (cam.current) {
-            cam.current.position.lerp(vec.set(posCoords.current[0], posCoords.current[1], 5), 0.05)
+            cam.current.position.lerp(vec.set(posCoords.current[0], posCoords.current[1], 20), 0.05)
 
-            let zoomLevel = cam.current.zoom
+            // let zoomLevel = cam.current.zoom
 
-            if (zoomLevel > 50) {
-                setGridView(false)
-            } else if (zoomLevel > 40) {
-                setGridView(true)
-                setMaxViewable(6)
-                setMaxViewableDepth(2)
-            } else if (zoomLevel > 30) {
-                setGridView(true)
-                setMaxViewable(9)
-                setMaxViewableDepth(3)
-            } else if (zoomLevel > 20) {
-                setGridView(true)
-                setMaxViewable(12)
-                setMaxViewableDepth(3)
-            } else if (zoomLevel > 10) {
-                setGridView(true)
-                setMaxViewable(15)
-                setMaxViewableDepth(4)
-            } else {
-                setMaxViewable(18)
-                setMaxViewableDepth(4)
-                setGridView(true)
-            }
+            // if (zoomLevel > 50) {
+            //     setGridView(false)
+            // } else if (zoomLevel > 40) {
+            //     setGridView(true)
+            //     setMaxViewable(6)
+            //     setMaxViewableDepth(2)
+            // } else if (zoomLevel > 30) {
+            //     setGridView(true)
+            //     setMaxViewable(9)
+            //     setMaxViewableDepth(3)
+            // } else if (zoomLevel > 20) {
+            //     setGridView(true)
+            //     setMaxViewable(12)
+            //     setMaxViewableDepth(3)
+            // } else if (zoomLevel > 10) {
+            //     setGridView(true)
+            //     setMaxViewable(15)
+            //     setMaxViewableDepth(4)
+            // } else {
+            //     setMaxViewable(18)
+            //     setMaxViewableDepth(4)
+            //     setGridView(true)
+            // }
 
         }
     })
@@ -83,7 +83,7 @@ function CameraMain(props) {
         <group>
             {/* <a.perspectiveCamera ref={cam} {...props} position-y={y.to((y) => (y / 500))} /> */}
             {/* <perspectiveCamera ref={cam} zoom={20} {...props} /> */}
-            <OrthographicCamera ref={cam} zoom={20} {...props} />
+            <OrthographicCamera ref={cam} zoom={10} {...props} />
 
         </group>
 

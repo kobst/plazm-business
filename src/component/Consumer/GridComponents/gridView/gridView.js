@@ -224,6 +224,21 @@ const GridView = (props) => {
         // setDeltaY(e.deltaY)
     }
 
+    const handleScroll = (e) => {
+        console.log(e.deltaX + " e.delta " + e.deltaY)
+
+        // if (!shifting) {
+        // setDeltaX(deltaX + e.deltaX)
+        // setDeltaY(deltaY + e.deltaY)
+        // }
+        // setDeltaX(deltaX + e.deltaX)
+        // setDeltaY(deltaY + e.deltaY)
+        // setDeltaX(e.deltaX)
+        // setDeltaY(e.deltaY)
+    }
+
+
+
     useEffect(() => {
 
         if ((Math.abs(deltaX) + Math.abs(deltaY)) > 500) {
@@ -276,16 +291,15 @@ const GridView = (props) => {
 
     return (
         <>
-
-            <Canvas
-                onWheel={handleWheel}>
+        <div onWheel={handleScroll}>
+            <Canvas>
                 
                 {/* camera={{ position: [0, 0, 20], near: 10, far: 60 }}>  */}
 
                 <CameraMain
                     raycaster={raycaster}
                     ref={camera}
-                    position={[0, 0, 10]} />
+                    position={[0, 0, 20]} />
 
                 {/* <NewControls /> */}
 
@@ -294,10 +308,32 @@ const GridView = (props) => {
                 {/* <SingleDetailView /> */}
 
 
+{/*           
+            <mesh
+                position={[0, 0, 2]}
+                onWheel={(e)=> console.log("wheeling")}
+               >
+                <boxBufferGeometry args={[5, 5, 5]} />
+
+                <meshBasicMaterial attachArray="material" color={"white"} />
+                <meshBasicMaterial attachArray="material" color={"white"} />
+                <meshBasicMaterial attachArray="material" color={"white"} />
+                <meshBasicMaterial attachArray="material" color={"white"} />
+                <meshBasicMaterial attachArray="material" color={"white"} />
+                <meshBasicMaterial attachArray="material" color={"white"} />
+            </mesh> */}
+
+
+
                 <ambientLight intensity={2.0} />
+
+
+
+
 
             </Canvas >
 
+            </div>
         </>
 
     )

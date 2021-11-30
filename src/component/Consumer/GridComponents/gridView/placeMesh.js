@@ -151,7 +151,7 @@ const HexTile = (props) => {
         // reset: true,
         // reverse: true,
         // 'material-opacity': hovered ? 0.6 : 0.25,
-        scale: active ? [2.5, 2.5, 2.5] : [1.5, 1.5, 1.5],
+        scale: active ? [1.5, 1.5, 1.5] : [0.5, 0.5, 0.5],
         onRest: () => console.log("rest"),
         config: { mass: 10, tension: 500, friction: 200, precision: 0.00001 }
     })
@@ -338,7 +338,7 @@ const PlaceMesh = ((props) => {
 
         if (meshGroup.current) {
             if (coords.current) {
-                meshGroup.current.position.lerp(vec.set(coords.current[0], coords.current[1], coords.current[2]), 0.05)
+                meshGroup.current.position.lerp(vec.set(coords.current[0]/2, coords.current[1]/2, coords.current[2]/2), 0.05)
                 // meshGroup.current.lookAt([0.1, 0, 1])
                 // meshGroup.current.rotateX(THREE.Math.degToRad(30))
                 // meshGroup.current.rotation.x = THREE.Math.degToRad(rotation.current[0])
@@ -445,7 +445,7 @@ const PlaceMesh = ((props) => {
     const handleLeave = (left_hover) => {
         // props.hovering(left_hover)
         if (meshGroup.current) {
-            meshGroup.current.scale.set(1, 1, 1)
+            meshGroup.current.scale.set(0.5, 0.5, 0.5)
         }
         // props.hover(null)
         setHover(false)
@@ -466,6 +466,7 @@ const PlaceMesh = ((props) => {
             userData={props.placeObject}
             ref={meshGroup}
             position={[0,0,0]}
+            scale={(0.5, 0.5, 0.5)}
             onClick={() => handleClick(props.placeObject)}
             onPointerOver={() => handleHover(props.placeObject)}
             onPointerOut={() => handleLeave(false)}>

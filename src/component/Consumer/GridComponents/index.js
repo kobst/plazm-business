@@ -191,13 +191,25 @@ const GridContainer = () => {
     }
 
 
+    const onScroll = (e) => {
+        console.log(e.deltaX + " e.delta " + e.deltaY)
 
+        // if (!shifting) {
+        // setDeltaX(deltaX + e.deltaX)
+        // setDeltaY(deltaY + e.deltaY)
+        // }
+        // setDeltaX(deltaX + e.deltaX)
+        // setDeltaY(deltaY + e.deltaY)
+        // setDeltaX(e.deltaX)
+        // setDeltaY(e.deltaY)
+    }
 
 
     return (
         <div>
               <container className="grid-container-small">
                  <GridView center={draggedCenter} places={places} selectPlace={setSelectPlace} hovering={showPreview} />
+
             </container>
 
             <div className="radar-container">
