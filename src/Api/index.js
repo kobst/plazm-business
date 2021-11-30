@@ -1,5 +1,5 @@
 import { AddUser, getUser, updateUserProfile } from "../graphQl";
-import {graphQlEndPoint} from './graphQl';
+import { graphQlEndPoint } from "./graphQl";
 
 export const callPlace = async (userSub) => {
   const response = await fetch(
@@ -59,15 +59,12 @@ export const fetchEvents = async (id) => {
   return val;
 };
 export const fetchUsers = async (id) => {
-  const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/api/user`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/api/user`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
   const body = await response.text();
   const val = JSON.parse(body);
   return val;
@@ -157,20 +154,20 @@ export const addUserProfile = async (values) => {
     userSub: values.userSub,
   };
   const graphQl = AddUser(obj);
-  const response =  graphQlEndPoint(graphQl);
+  const response = graphQlEndPoint(graphQl);
   return response;
 };
 
 /* get User Profile of the signIn consumer */
 export const getUserProfile = async (userSub) => {
   const graphQl = getUser(userSub);
-  const response =  graphQlEndPoint(graphQl);
+  const response = graphQlEndPoint(graphQl);
   return response;
 };
 
 /* update User Profile */
 export const updateProfileApi = async (obj) => {
   const graphQl = updateUserProfile(obj);
-  const response =  graphQlEndPoint(graphQl);
+  const response = graphQlEndPoint(graphQl);
   return response;
 };

@@ -1,12 +1,8 @@
-import React from 'react'
-import Loader from 'react-loader-spinner'
+import React from "react";
+import loaderSrc from "../images/plazm_loader.gif";
 
-const ValueLoader = ({height=25,width=35}) => {
- 
-     return(
-        <Loader type="Oval" color="#00BFFF" height={height} width={width} />
-     );
-  
- }
+const ValueLoader = ({ height = 28, width = 80 }) => {
+  return <img src={loaderSrc} alt="loading..." height={height} width={width} />;
+};
 
- export default ValueLoader
+export default ValueLoader;
