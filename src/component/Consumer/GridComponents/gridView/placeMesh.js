@@ -33,36 +33,26 @@ const PreviewCard = (props) => {
     const multiDictSub = useStore(state => state.multiDict)
     const centerPlace = useStore(state => state.centerPlace)
     //use spring
-    const [active, setActive] = useState(true);
+    const [active, setActive] = useState(false);
 
-    const { color, pos, rotation, scale, ...propsSpring } = useSpring({
-        color: active ? 'hotpink' : 'white',
+    const { _color, pos, rotation, scale, ...propsSpring } = useSpring({
+        _color: active ? 'pink' : 'purple',
         pos: active ? [0, 0, 2] : [0, 0, 0],
-        // rotation: active ? [0, 0, 0] : [0, THREE.Math.degToRad(180), 0],
-        // loop: { reverse: true },
-        // loop: true,
-        // reset: true,
-        // reverse: true,
-        // 'material-opacity': hovered ? 0.6 : 0.25,
-        scale: active ? [2.5, 2.5, 2.5] : [1, 1, 1],
-        onRest: () => console.log("rest"),
-        config: { mass: 10, tension: 500, friction: 200, precision: 0.00001 }
+        scale: active ? [3.5, 3.5, 3.5] : [0, 0, 0],
+        config: { mass: 10, tension: 500, friction: 200, duration: 2000 }
     })
 
 
-
-    useEffect(() => {
-        if (centerPlace) {
-            if (centerPlace._id === props.placeObject._id) {
-
-                // set preview
-
-            } else {
-
-                // de-select preview
-            }
+    useEffect(()=>{
+        if (props.previewActive){
+            setActive(true)
+        } else {
+            setActive(false)
         }
-    }, [centerPlace])
+
+    }, [props.previewActive])
+
+
 
 
     // {props.placeObject.itemObjects[0].content}
@@ -74,12 +64,26 @@ const PreviewCard = (props) => {
             scale={scale}
             ref={hexRef}>
 
-            <mesh
+            {/* <mesh
                 position={[0, 0, 2]}>
 
                 <sphereBufferGeometry args={[0.75, 32, 32]} attach="geometry" />
                 {/* <meshBasicMaterial color={0xfff1ef} attach="material" /> */}
-                <meshBasicMaterial attach="material" color={'red'} />
+                {/* <meshBasicMaterial attach="material" color={'red'} />
+            </mesh> */} 
+
+
+                       
+            <mesh
+                position={[0, 0, 0]}>
+                <boxBufferGeometry args={[2, 2, 2]} />
+
+                <meshBasicMaterial attachArray="material" color={_color} />
+                <meshBasicMaterial attachArray="material" color={_color} />
+                <meshBasicMaterial attachArray="material" color={_color} />
+                <meshBasicMaterial attachArray="material" color={_color} />
+                <meshBasicMaterial attachArray="material" color={_color} />
+                <meshBasicMaterial attachArray="material" color={_color} />
             </mesh>
 
 
@@ -290,7 +294,7 @@ const PlaceMesh = ((props) => {
     const [outerDepth, setOuterDepth] = useState(true)
 
     const [hovered, setHover] = useState(false)
-    const [active, setActive] = useState(false)
+    const [previewActive, setPreviewActive] = useState(false)
     const [startPos, setStartPos] = useState([-50, 50, 0])
     const [tileColor, setTileColor] = useState("red")
     // const [vecCenter] = useState(() => new THREE.Vector3())
@@ -338,7 +342,7 @@ const PlaceMesh = ((props) => {
 
         if (meshGroup.current) {
             if (coords.current) {
-                meshGroup.current.position.lerp(vec.set(coords.current[0]/2, coords.current[1]/2, coords.current[2]/2), 0.05)
+                meshGroup.current.position.lerp(vec.set(coords.current[0], coords.current[1], coords.current[2]), 0.05)
                 // meshGroup.current.lookAt([0.1, 0, 1])
                 // meshGroup.current.rotateX(THREE.Math.degToRad(30))
                 // meshGroup.current.rotation.x = THREE.Math.degToRad(rotation.current[0])
@@ -373,7 +377,7 @@ const PlaceMesh = ((props) => {
             let depth = Math.max(Math.abs(cubes.current[0]), Math.abs(cubes.current[1]), Math.abs(cubes.current[2]))
 
             if (depth === 1) {
-                console.log(props.placeObject.company_name)
+                // console.log(props.placeObject.company_name)
                 setPreview(false)
                 setDepth1(true)
                 setOuterDepth(false)
@@ -398,16 +402,20 @@ const PlaceMesh = ((props) => {
 
 
     useEffect(() => {
+
+        console.log("new center place " + centerPlace)
+        
         if (centerPlace) {
             if (centerPlace._id === props._id) {
-                console.log("center place " + props.placeObject.company_name)
-                setPreview(true)
+
+                console.log("set preview " + props.placeObject.company_name)
+                setPreviewActive(true)
                 setOuterDepth(false)
                 setDepth1(false)
 
             } else {
 
-                setPreview(false)
+                setPreviewActive(false)
             }
         }
     }, [centerPlace])
@@ -434,21 +442,21 @@ const PlaceMesh = ((props) => {
 
     const handleHover = (place) => {
         // props.hovering(true)
-        if (meshGroup.current) {
-            meshGroup.current.scale.set(1.25, 1.25, 1.25)
-        }
+        // if (meshGroup.current) {
+        //     meshGroup.current.scale.set(1.25, 1.25, 1.25)
+        // }
         // props.hover(place)
-        setHover(true)
+        // setHover(true)
     }
 
 
     const handleLeave = (left_hover) => {
         // props.hovering(left_hover)
-        if (meshGroup.current) {
-            meshGroup.current.scale.set(0.5, 0.5, 0.5)
-        }
-        // props.hover(null)
-        setHover(false)
+        // if (meshGroup.current) {
+        //     meshGroup.current.scale.set(1, 1, 1)
+        // }
+        // // props.hover(null)
+        // setHover(false)
 
         // setHover(left_hover)
     }
@@ -466,7 +474,7 @@ const PlaceMesh = ((props) => {
             userData={props.placeObject}
             ref={meshGroup}
             position={[0,0,0]}
-            scale={(0.5, 0.5, 0.5)}
+            scale={(1, 1, 1)}
             onClick={() => handleClick(props.placeObject)}
             onPointerOver={() => handleHover(props.placeObject)}
             onPointerOut={() => handleLeave(false)}>
@@ -494,6 +502,7 @@ const PlaceMesh = ((props) => {
                 ) : null}
             </a.text>} */}
 
+             <PreviewCard position={[0, 0, 10]} previewActive={previewActive}/>
 
             <HexTile
                 innerRef={hexBackground}

@@ -286,7 +286,6 @@ const AssignHexDict = (_places, defaultCenter, selectedPlace) => {
   const zeroObject = [0, 0, 0]
   // console.log(JSON.stringify(newCenter.company_name))
 
-
   var closestDistance = 0
   var farthestDistance = 1000
 

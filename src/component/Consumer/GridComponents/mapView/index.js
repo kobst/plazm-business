@@ -89,7 +89,7 @@ const MapView = (props) => {
     const gridContainerStyle = {
         // height: '100vh',
         // width: '100%'
-        height: '66vh',
+        height: '50vh',
         width: '33vw',
         borderRadius: '10%'
     }

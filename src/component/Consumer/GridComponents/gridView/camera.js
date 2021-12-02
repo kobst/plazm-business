@@ -17,11 +17,14 @@ extend({ MapControls })
 
 function CameraMain(props) {
     const cam = useRef()
-    const posCoords = useRef([0, 0, 20])
-    const sampleBox = useRef()
+    // const posCoords = useRef([0, 0, 20])
+    const camCoords = useRef()
+ 
     // const [y] = Scroll([-100, 100], { domTarget: window });
     const setCamPos = useStore((state) => state.setCamPosition)
     const camPos = useStore(state => state.camPosition)
+
+
     const setGridView = useStore((state) => state.setGridView)
     const centerPlace = useStore((state) => state.centerPlace)
     const gridView = useStore((state) => state.gridView)
@@ -38,15 +41,20 @@ function CameraMain(props) {
     useEffect(() => void set({ camera: cam.current }), []);
 
 
+    // useEffect(() => {
+    //     console.log(" read cam pos in camera " + camPos)
+    //     posCoords.current = camPos
+    // }, [camPos])
+
     useEffect(() => {
-        console.log(" read cam pos in camera " + camPos)
-        posCoords.current = camPos
+        camCoords.current = [camPos[0], camPos[1], 20]
+
     }, [camPos])
 
 
     useFrame(() => {
-        if (cam.current) {
-            cam.current.position.lerp(vec.set(posCoords.current[0], posCoords.current[1], 20), 0.05)
+        if (cam.current && camCoords.current) {
+            cam.current.position.lerp(vec.set(camCoords.current[0], camCoords.current[1], 20), 0.05)
 
             // let zoomLevel = cam.current.zoom
 
@@ -90,4 +98,6 @@ function CameraMain(props) {
     )
 }
 
-export default CameraMain
+
+//not in use
+// export default CameraMain

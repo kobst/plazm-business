@@ -23,7 +23,7 @@ const _hexArray = hexSlotFunction()
 
 function CameraMain(props) {
     const cam = useRef()
-    const posCoords = useRef([0, 0, 5])
+    const posCoords = useRef()
     const sampleBox = useRef()
     // const [y] = Scroll([-100, 100], { domTarget: window });
     const setCamPos = useStore((state) => state.setCamPosition)
@@ -52,7 +52,7 @@ function CameraMain(props) {
 
     useFrame(() => {
         if (cam.current) {
-            cam.current.position.lerp(vec.set(posCoords.current[0], posCoords.current[1], 5), 1)
+            cam.current.position.lerp(vec.set(posCoords.current[0], posCoords.current[1], 5), 0.05)
 
             let zoomLevel = cam.current.zoom
 
@@ -160,12 +160,13 @@ const GridView = (props) => {
                 setCenterPlace(placeShiftedTowards)
                 setDisplacedCenterHexPosition([newCoordinateX, newCoordinateY, newCoordinateZ])
                 console.log([cameraPos[0] + obj.posVector[0], cameraPos[1] + obj.posVector[1], 5])
+                console.log("position exists " + newCoordinateKey + " name " + placeShiftedTowards.company_name)
+
 
             } else {
                 console.log("shift camera place not in multDct")
             }
 
-            console.log("position exists " + newCoordinateKey + " name " + placeShiftedTowards.company_name)
         } else {
             console.log("place in position does not exist")
             if (tempCenter) {
@@ -211,8 +212,10 @@ const GridView = (props) => {
 
     }
 
-    const handleWheel = (e) => {
-        // console.log(e.deltaX + " e.delta " + e.deltaY)
+
+
+    const handleScroll = (e) => {
+        console.log(e.deltaX + " e.delta " + e.deltaY)
 
         // if (!shifting) {
         // setDeltaX(deltaX + e.deltaX)
@@ -224,24 +227,13 @@ const GridView = (props) => {
         // setDeltaY(e.deltaY)
     }
 
-    const handleScroll = (e) => {
-        console.log(e.deltaX + " e.delta " + e.deltaY)
-
-        // if (!shifting) {
-        // setDeltaX(deltaX + e.deltaX)
-        // setDeltaY(deltaY + e.deltaY)
-        // }
-        // setDeltaX(deltaX + e.deltaX)
-        // setDeltaY(deltaY + e.deltaY)
-        // setDeltaX(e.deltaX)
-        // setDeltaY(e.deltaY)
-    }
-
 
 
     useEffect(() => {
+            // set preview
 
-        if ((Math.abs(deltaX) + Math.abs(deltaY)) > 500) {
+        let threshold = 150
+        if ((Math.abs(deltaX) + Math.abs(deltaY)) > threshold) {
             shiftDelta()
         }
 
@@ -282,7 +274,7 @@ const GridView = (props) => {
                     // hover={hoverPlace}
                     // hovering={setPreview}
                     // click={handleClick}
-                    selectPlace={props.selectPlace}
+                    // selectPlace={props.selectPlace}
                 />))
         )
     }, [orderedPlaces])
@@ -291,13 +283,10 @@ const GridView = (props) => {
 
     return (
         <>
-        <div onWheel={handleScroll}>
+        <div style={{width:'100%', height:'100%'}}onWheel={handleScroll}>
             <Canvas>
-                
                 {/* camera={{ position: [0, 0, 20], near: 10, far: 60 }}>  */}
-
                 <CameraMain
-                    raycaster={raycaster}
                     ref={camera}
                     position={[0, 0, 20]} />
 
@@ -307,33 +296,10 @@ const GridView = (props) => {
 
                 {/* <SingleDetailView /> */}
 
-
-{/*           
-            <mesh
-                position={[0, 0, 2]}
-                onWheel={(e)=> console.log("wheeling")}
-               >
-                <boxBufferGeometry args={[5, 5, 5]} />
-
-                <meshBasicMaterial attachArray="material" color={"white"} />
-                <meshBasicMaterial attachArray="material" color={"white"} />
-                <meshBasicMaterial attachArray="material" color={"white"} />
-                <meshBasicMaterial attachArray="material" color={"white"} />
-                <meshBasicMaterial attachArray="material" color={"white"} />
-                <meshBasicMaterial attachArray="material" color={"white"} />
-            </mesh> */}
-
-
-
                 <ambientLight intensity={2.0} />
 
-
-
-
-
             </Canvas >
-
-            </div>
+        </div>
         </>
 
     )
