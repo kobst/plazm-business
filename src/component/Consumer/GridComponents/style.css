@@ -1,0 +1,83 @@
+.grid-container {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  display: block;
+  z-index: 11;
+  /* right: -10%;
+  bottom: -15% */
+  /* right: 0%;
+  bottom: 0% */
+}
+
+.grid-container-small {
+  position: fixed;
+  top: 0%;
+  right: 0%;
+  width: 400px;
+  height: 50vh;
+  border-radius: 20%;
+  display: block;
+  overflow: hidden;
+  box-shadow: 0 0 10px 10px #4c146c;
+  z-index: 9;
+}
+
+
+.map-overlay {
+  position: absolute;
+  /* right: -10%;
+    bottom: -15% */
+  right: 0%;
+  bottom: 0%;
+  width: 400px;
+  height: 400px;
+  z-index: 10;
+  /* opacity: 90%; */
+  /* color: purple;
+    background-color: purple; */
+  background-image: radial-gradient(transparent 0%, #4c146c 75%);
+  border-radius: 50%;
+  box-shadow: 0 0 50px 50px #4c146c;
+}
+
+.map-overlay-large {
+  position: absolute;
+  /* right: -10%;
+    bottom: -15% */
+  right: 0%;
+  bottom: 0%;
+  width: 1000px;
+  height: 600px;
+  z-index: 10;
+  /* opacity: 90%; */
+  /* color: purple;
+    background-color: purple; */
+  background-image: radial-gradient(transparent 0%, #4c146c 75%);
+  border-radius: 20%;
+  box-shadow: 0 0 20px 20px #4c146c;
+}
+
+.map-container {
+  position: absolute;
+  /* right: -10%;
+    bottom: -15% */
+  right: 0%;
+  bottom: 0%;
+  z-index: 5;
+  /* box-shadow: 0 0 100px 100px purple; */
+  /* border-radius: 50%;
+    box-shadow: 0 0 100px 100px purple; */
+}
+
+.radar-container {
+  position: absolute;
+  top: 0%;
+  right: 0%;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 0 10px 10px #4c146c;
+  z-index: 10;
+}
