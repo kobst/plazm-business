@@ -69,22 +69,6 @@ const ProfileThumbBanner = styled.div`
     width: 100%;
     max-height: 204px;
   }
-  .CloseDiv {
-    position: absolute;
-    width: 100%;
-    height: calc(100% - 50px);
-    top: 0;
-    background: rgba(0, 0, 0, 0.55);
-    backdrop-filter: blur(25px);
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    text-transform: uppercase;
-    font-weight: 700;
-    letter-spacing: 14px;
-  }
 `;
 const ProfileNameWrap = styled.div`
   display: flex;
@@ -254,12 +238,6 @@ const DisplayFavoriteBusiness = ({
                   onError={() => setImage(ProfileImg)}
                   alt=""
                 />
-                {businessInfo.hours_format &&
-                businessInfo.hours_format.length === 0 ? (
-                  <div className="CloseDiv">Closed</div>
-                ) : checkBusinessOpenClose() === true ? null : (
-                  <div className="CloseDiv">Closed</div>
-                )}
               </ProfileThumbBanner>
               <ProfileNameWrap>
                 <ProfileName>
