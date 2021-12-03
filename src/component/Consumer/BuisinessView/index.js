@@ -48,7 +48,7 @@ const BuisinessView = ({
 }) => {
   const loading = useSelector((state) => state.business.loading);
   const businessProfile = useSelector((state) => state.business.business);
-  const flag = useSelector(state => state.business.flag)
+  const flag = useSelector((state) => state.business.flag);
   const [displayBusinessProfile, setDisplayBusinessProfile] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -56,10 +56,10 @@ const BuisinessView = ({
   }, [dispatch]);
   return (
     <>
-      {(!loading &&
+      {!loading &&
       !businessExists &&
-      ((!flag && businessProfile &&
-      businessProfile.length === 0) || (!businessProfile && !loading)))? (
+      ((!flag && businessProfile && businessProfile.length === 0) ||
+        (!businessProfile && !loading)) ? (
         <h3>Business Does Not Exist</h3>
       ) : loading ? (
         <LoaderWrap>
@@ -68,9 +68,8 @@ const BuisinessView = ({
       ) : (
         <BuisinessViewContent>
           {businessProfile &&
-          businessProfile.length > 0 &&
-          businessProfile[0].userSub !== null ? (
-            displayBusinessProfile ? (
+            businessProfile.length > 0 &&
+            (displayBusinessProfile ? (
               <BuisinessProfileDetails
                 displayBusinessProfile={displayBusinessProfile}
                 setDisplayBusinessProfile={setDisplayBusinessProfile}
@@ -99,46 +98,17 @@ const BuisinessView = ({
                 favoriteIndex={favoriteIndex}
                 setFavoriteIndex={setFavoriteIndex}
               />
-            )
-          ) : displayBusinessProfile ? (
-            <BuisinessProfileDetails
-              displayBusinessProfile={displayBusinessProfile}
-              setDisplayBusinessProfile={setDisplayBusinessProfile}
-              setDisplayTab={setDisplayTab}
-              searchIndex={searchIndex}
-              setTabIndex={setTabIndex}
-              setSearchIndex={setSearchIndex}
-              myFeedIndex={myFeedIndex}
-              setMyFeedIndex={setMyFeedIndex}
-              favoriteIndex={favoriteIndex}
-              setFavoriteIndex={setFavoriteIndex}
-              listIndex={listIndex}
-              setListIndex={setListIndex}
-            />
-          ) : (
-            <BuisinessHeaderNotClaimed
-              setDisplayTab={setDisplayTab}
-              setDisplayBusinessProfile={setDisplayBusinessProfile}
-              searchIndex={searchIndex}
-              setTabIndex={setTabIndex}
-              setSearchIndex={setSearchIndex}
-              myFeedIndex={myFeedIndex}
-              setMyFeedIndex={setMyFeedIndex}
-              favoriteIndex={favoriteIndex}
-              setFavoriteIndex={setFavoriteIndex}
-              listIndex={listIndex}
-              setListIndex={setListIndex}
-            />
-          )}
-          {!displayBusinessProfile && !loading && businessProfile &&
-          businessProfile.length > 0 &&
-          businessProfile[0].userSub !== null ? (
-            <TabsSection
-              profile={profile}
-              businessId={businessId}
-              setSelectedListId={setSelectedListId}
-            />
-          ) : null}
+            ))}
+          {!displayBusinessProfile &&
+            !loading &&
+            businessProfile &&
+            businessProfile.length > 0 && (
+              <TabsSection
+                profile={profile}
+                businessId={businessId}
+                setSelectedListId={setSelectedListId}
+              />
+            )}
         </BuisinessViewContent>
       )}
     </>
