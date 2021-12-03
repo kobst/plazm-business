@@ -285,10 +285,18 @@ const LeftBar = ({
     }
   };
 
+  const setTab = (index) => {
+    console.log("setting index " + index)
+    setTabIndex(index)
+
+    // <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
+
+  }
+
   return (
     <>
       <LeftBarContent className="MainTabs">
-        <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
+        <Tabs selectedIndex={tabIndex} onSelect={setTab}>
           <TabList>
             <Tab
               disabled={loading || tabIndex === 0}
@@ -400,13 +408,13 @@ const LeftBar = ({
               style={{ backgroundColor: "#f3f3f3" }}
             ></Tab>
 
-            {/* <Tab
+            <Tab
               disabled={loading}
               className={tabIndex === 6 ? "test" : "test1"}
               style={{ backgroundColor: "#f3f3f3" }}
             >
               &nbsp;
-            </Tab> */}
+            </Tab>
             <Tab
               disabled={loading}
               className={

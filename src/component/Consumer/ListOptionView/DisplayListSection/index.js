@@ -381,7 +381,7 @@ const DisplayListSection = ({
   return (
     <>
       <ListSection
-        onClick={() => setSelectedList(data._id)}
+        onClick={() => setSelectedListId(data._id)}
         className={selectedList === data._id ? "SelectedListItem" : ""}
       >
         <ListImageWrap>

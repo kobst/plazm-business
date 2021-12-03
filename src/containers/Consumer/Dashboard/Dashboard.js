@@ -35,23 +35,26 @@ const DashboardContainer = (props) => {
           value.attributes["custom:type"] === "customer" ||
           value.attributes["custom:type"] === "consumer"
         ) {
+          console.log("fetching user details")
+          console.log(value.attributes)
           const data = await dispatch(fetchUserDetails(value.attributes.sub));
           const res = await unwrapResult(data);
           const ws = new WebSocket(
             `${process.env.REACT_APP_WEBSOCKET}/?userId=${res.data.getUser.user._id}`
           );
           if (res.data.getUser.success === true) {
+            console.log("setting user")
             dispatch(setWs(ws));
             setProfile(res.data.getUser.user);
           }
         } else {
-          history.push("/business");
-          window.location.reload();
+          // history.push("/business");
+          // window.location.reload();
         }
       } catch {
         /* if not authenticated then redirect to login consumer page */
-        history.push("/consumer/login");
-        window.location.reload();
+        // history.push("/consumer/login");
+        // window.location.reload();
       }
     };
     getProfile();

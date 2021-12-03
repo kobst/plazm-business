@@ -235,6 +235,32 @@ const LockDiv = styled.div`
 /*
  * @desc: to display list description
  */
+
+const ArrowBack = styled.div`
+  background: #000;
+  border-radius: 0px;
+  padding: 0 18px;
+  color: #fff;
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: 800;
+  font-size: 12px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 0px;
+  cursor: pointer;
+  top: 0px;
+  z-index: 2;
+  @media (max-width: 767px) {
+    /* width: 24px;
+    height: 24px; */
+  }
+`;
+
+
 const ListDescriptionView = ({
   setDisplayTab,
   setSelectedListId,
@@ -372,6 +398,8 @@ const ListDescriptionView = ({
         <ListOptionSection>
           <HeadingWrap>
             <TopHeadingWrap>
+            <ArrowBack onClick={() => console.log("back")}>BACK</ArrowBack>
+
               <ListBannerSection>
                 <img src={image} alt="" onError={() => setImage(BannerImg)} />
                 <h1>{selectedList.name}</h1>
