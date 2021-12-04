@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import LeftBar from "../../UI/Consumer/LeftBar";
+import SideBar from "../../UI/Consumer/SideBar/SideBar";
 import RightBar from "../Dashboard/RightBar";
 import GridContainer from "../GridComponents/index"
 
@@ -24,7 +25,7 @@ const Dashboard = ({
   return (
     <>
         <DashboardContent>
-          <LeftBar
+          {/* <LeftBar
             isUserOpen={isUserOpen}
             displayTab={displayTab}
             setDisplayTab={setDisplayTab}
@@ -34,7 +35,11 @@ const Dashboard = ({
             businessExists={businessExists}
             businessId={businessId}
             userId={userId}
-          />
+          /> */}
+
+          <SideBar>
+
+          </SideBar>
 
           <GridContainer/>
           {/* <RightBar displayTab={displayTab} /> */}
