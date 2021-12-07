@@ -43,9 +43,71 @@ const TabIcon = styled.div`
 `;
 
 
-const SideBar = () => {
+const SideBar = ({
+  profile,
+  setFlag,
+  isBusinessOpen,
+  businessExists,
+  businessId,
+  isUserOpen,
+  userId,
+}) => {
+  const [displayChangePassword, setDisplayChangePassword] = useState(false);
+  const [tabIndex, setTabIndex] = useState(
+    isBusinessOpen ? 4 : isUserOpen ? 1 : 0
+  );
+  const user = useSelector((state) => state.user.user);
+  const userLocation = useSelector((state) => state.business.userLocation);
+  const [selectedListId, setSelectedListId] = useState(null);
+  const [listClickedFromSearch, setListClickedFromSearch] = useState(false);
+  const loading = useSelector((state) => state.myFeed.loading);
+  const loader = useSelector((state) => state.consumer.globalLoader);
+  const [searchIndex, setSearchIndex] = useState(null);
+  const [myFeedIndex, setMyFeedIndex] = useState(null);
+  const [listIndex, setListIndex] = useState(null);
+  const [favoriteIndex, setFavoriteIndex] = useState(null);
+  const [profileClosed, setProfileClosed] = useState(false);
+  const [userDataId, setUserDataId] = useState(userId);
+  const [discoverBtn, setDiscoverBtn] = useState(false);
+  const [readMore, setReadMore] = useState(false);
+
+  const [tabSelectedTest, setTabSelectedTest] = useState(false)
 
   const [expanded, setExpanded] = useState(false)
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  useEffect(() => {
+    setUserDataId(userId);
+  }, [userId]);
+
+    /** to clear selected data on tab click */
+    const homeSearchFunction = () => {
+
+      setTabSelectedTest(true)
+
+      console.log("home search")
+      setFavoriteIndex(null);
+      // if (tabIndex !== 1 && !loading) {
+        // const obj = {
+        //   search: "",
+        //   value: 0,
+        //   filters: { closest: false, updated: false },
+        //   latitude: process.env.REACT_APP_LATITUDE,
+        //   longitude: process.env.REACT_APP_LONGITUDE,
+        // };
+        dispatch(setSearchData(""));
+        dispatch(clearMyFeedData());
+        dispatch(setSideFiltersHomeSearch());
+        // dispatch(HomeSearch(obj));
+        setUserDataId(null);
+        setSelectedListId(null);
+        dispatch(clearBusinessData());
+        dispatch(clearTopPost());
+        setSearchIndex(null);
+        history.push("/");
+      // }
+    };
 
   const handleHover = () => {
     console.log("set expanded true")
@@ -58,8 +120,13 @@ const SideBar = () => {
 
   }
 
+  const handleScroll = () => {
+    console.log("scrolling")
+  }
+
   return (
-    <div className={expanded ? "Sidebar" : "Sidebar collapsed"} onMouseEnter={handleHover} onMouseLeave={handleLeave}>
+    <div>
+    <div className={expanded ? "Sidebar expanded" : "Sidebar"} onMouseEnter={handleHover} onMouseLeave={handleLeave}>
       <div className="sidebar-header">
           <h1 className="sidebar-logo">PLAZM</h1>
       </div>
@@ -68,7 +135,7 @@ const SideBar = () => {
             <FiGlobe className="sidebar-icon"/>
           <span className="sidebar-text">Explore</span>
         </div>
-        <div className="item">
+        <div className="item"  onClick={() => homeSearchFunction()}>
             <FiHome className="sidebar-icon" />
           <span className="sidebar-text">Home</span>
         </div>
@@ -85,9 +152,83 @@ const SideBar = () => {
           <span className="sidebar-text">Lists</span>
         </div>
       </div>
+      
+      <div className="list-scroll" onScroll={handleScroll}>
+        <div className="sidebar-list"> 
+          <FiHome/>
+        </div>
+        <div className="sidebar-list"> 
+          <FiHome/>
+        </div>
+        <div className="sidebar-list"> 
+          <FiHome/>
+        </div>
+        <div className="sidebar-list"> 
+          <FiHome/>
+        </div>
+        <div className="sidebar-list"> 
+          <FiHome/>
+        </div>
+        <div className="sidebar-list"> 
+          <FiHome/>
+        </div>
+        <div className="sidebar-list"> 
+          <FiHome/>
+        </div>
+        <div className="sidebar-list"> 
+          <FiHome/>
+        </div>
+        <div className="sidebar-list"> 
+          <FiHome/>
+        </div>
+        <div className="sidebar-list"> 
+          <FiHome/>
+        </div>
+        <div className="sidebar-list"> 
+          <FiHome/>
+        </div>
+        <div className="sidebar-list"> 
+          <FiHome/>
+        </div>
+        <div className="sidebar-list"> 
+          <FiHome/>
+        </div>
+        <div className="sidebar-list"> 
+          <FiHome/>
+        </div>
 
+      </div>
+
+      {/* <BottomSettingsWrap>
+          <BsThreeDots />
+          <div className="BottomSettings">
+            <ul>
+              <li>
+                <button onClick={() => consumerLogout()} disabled={loader}>
+                  Logout
+                </button>
+              </li>
+              <li onClick={() => showUserProfile()}>Profile</li>
+            </ul>
+          </div>
+        </BottomSettingsWrap> */}
 
     </div>
+
+
+<div className="panel-content">
+{tabSelectedTest ? 
+  <HomeSearchComponent
+    setDisplayTab={() => setTabIndex(0)}
+    setSelectedListId={setSelectedListId}
+    setListClickedFromSearch={setListClickedFromSearch}
+    setSearchIndex={setSearchIndex}
+  /> : <div></div>
+
+}
+</div>
+
+</div>
   )
 
 }

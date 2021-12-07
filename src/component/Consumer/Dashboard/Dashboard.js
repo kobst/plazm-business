@@ -37,9 +37,17 @@ const Dashboard = ({
             userId={userId}
           /> */}
 
-          <SideBar>
-
-          </SideBar>
+            <SideBar
+            isUserOpen={isUserOpen}
+            displayTab={displayTab}
+            setDisplayTab={setDisplayTab}
+            profile={profile}
+            setFlag={setFlag}
+            isBusinessOpen={isBusinessOpen}
+            businessExists={businessExists}
+            businessId={businessId}
+            userId={userId}
+          /> 
 
           <GridContainer/>
           {/* <RightBar displayTab={displayTab} /> */}
