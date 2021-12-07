@@ -206,9 +206,10 @@ const RadarView = () => {
 
 
     return (
-        <Canvas>
+        <Canvas >
             {/* camera={{ position: [0, 0, 20], zoom: 50 }}> */}
-
+            {/* <color attach="background" args={"black"} /> */}
+            <color attach="background" args={["blue"]} />
             <Camera position={[0, 0, 20]} />
 
             {/* <BackgroundRadar> */}
