@@ -66,10 +66,17 @@ const ProfileThumbBanner = styled.div`
   overflow: hidden;
   position: relative;
   img {
-    width: 100%;
-    max-height: 204px;
+    object-fit: cover;
+    height: 204px;
+    width: auto;
   }
 `;
+//   object-fit: cover;
+//height: 204px;
+
+//    width: 100%;   
+    // max-height: 204px;
+
 const ProfileNameWrap = styled.div`
   display: flex;
   flex-direction: column;

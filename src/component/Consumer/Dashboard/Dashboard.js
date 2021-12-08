@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import LeftBar from "../../UI/Consumer/LeftBar";
 import SideBar from "../../UI/Consumer/SideBar/SideBar";
+import SideBarTabs from "../../UI/Consumer/SideBarTabs/SideBarTabs";
 import RightBar from "../Dashboard/RightBar";
 import GridContainer from "../GridComponents/index"
 

@@ -109,6 +109,10 @@ const SideBar = ({
       // }
     };
 
+    const exitFunction = () => {
+      setTabSelectedTest(false)
+    }
+
   const handleHover = () => {
     console.log("set expanded true")
     setExpanded(true)
@@ -139,7 +143,7 @@ const SideBar = ({
             <FiHome className="sidebar-icon" />
           <span className="sidebar-text">Home</span>
         </div>
-        <div className="item">
+        <div className="item" onClick={() => exitFunction()}>
             <FiBell className="sidebar-icon" />
           <span className="sidebar-text">Notifications</span>
         </div>
