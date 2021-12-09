@@ -37,33 +37,41 @@
 .Sidebar .item {
   display: flex;
   align-items: center;
-  padding: 16px 8px;
+  padding: 10px 2px;
   transition: background-color 0.2s;
   cursor: pointer;
 }
 
-.Sidebar .item:hover {
+/* .Sidebar .item:hover {
   background-color: indigo;
-}
+} */
 
-Sidebar.expanded .sidebar-icon {
+.Sidebar.expanded .sidebar-icon {
   margin-right: 16;
-  padding-right: 10px;
+  padding-right: 14px;
 }
-
-
 
 .sidebar-icon {
+  width: 36px;
+  color: #767676;
+  font-size: 26px;
+
+  @media (max-width: 767px) {
+    font-size: 26px;
+  }
+}
+
+/* .sidebar-icon {
   margin-right: 16px;
   cursor: pointer;
-  /* width: 1.25em;
-    height: 1.25em; */
+   width: 1.25em;
+    height: 1.25em; 
   width: 30px;
   height: 30px;
   user-select: none;
   color: #767676;
   font-size: 26px;
-}
+} */
 
 .sidebar-text {
   color: hotpink;
@@ -80,7 +88,6 @@ Sidebar.expanded .sidebar-icon {
 }
 
 /* somehow padding-right affects size of icon */
-
 
 
 .list-scroll {

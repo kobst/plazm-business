@@ -216,7 +216,6 @@ const SideBarTabs = ({
                         ? "react-tabs__tab react-tabs__tab--selected removeBorder"
                         : "react-tabs__tab"
                     }
-                    onClick={console.log("tab 3 ")}
                 >
                     <div className="item">
                         <FiBell className="sidebar-icon" />
@@ -236,7 +235,6 @@ const SideBarTabs = ({
                         ? "react-tabs__tab react-tabs__tab--selected removeBorder"
                         : "react-tabs__tab"
                     }
-                    onClick={console.log("tab 4 ")}
                 >
                     <div className="item">
                         <FiHeart className="sidebar-icon"/>
@@ -256,7 +254,6 @@ const SideBarTabs = ({
                         ? "react-tabs__tab react-tabs__tab--selected removeBorder"
                         : "react-tabs__tab"
                     }
-                    onClick={console.log("tab 5 ")}
                 >
                     <div className="item">
                         <FiList className="sidebar-icon"/>
@@ -266,51 +263,50 @@ const SideBarTabs = ({
       </TabList>
 </Tabs>
 
-<div className="list-scroll" onScroll={handleScroll}>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-
-</div>
+  <div className="list-scroll" onScroll={handleScroll}>
+      <div className="sidebar-list"> 
+        <FiHome/>
+      </div>
+      <div className="sidebar-list"> 
+        <FiHome/>
+      </div>
+      <div className="sidebar-list"> 
+        <FiHome/>
+      </div>
+      <div className="sidebar-list"> 
+        <FiHome/>
+      </div>
+      <div className="sidebar-list"> 
+        <FiHome/>
+      </div>
+      <div className="sidebar-list"> 
+        <FiHome/>
+      </div>
+      <div className="sidebar-list"> 
+        <FiHome/>
+      </div>
+      <div className="sidebar-list"> 
+        <FiHome/>
+      </div>
+      <div className="sidebar-list"> 
+        <FiHome/>
+      </div>
+      <div className="sidebar-list"> 
+        <FiHome/>
+      </div>
+      <div className="sidebar-list"> 
+        <FiHome/>
+      </div>
+      <div className="sidebar-list"> 
+        <FiHome/>
+      </div>
+      <div className="sidebar-list"> 
+        <FiHome/>
+      </div>
+      <div className="sidebar-list"> 
+        <FiHome/>
+      </div>
+  </div>
 </div>
 
 

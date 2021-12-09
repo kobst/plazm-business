@@ -38,7 +38,7 @@ const Dashboard = ({
             userId={userId}
           /> */}
 
-            <SideBar
+            <SideBarTabs
             isUserOpen={isUserOpen}
             displayTab={displayTab}
             setDisplayTab={setDisplayTab}
