@@ -207,10 +207,10 @@ const GridContainer = () => {
 
     return (
         <div>
-              <container className="grid-container-small">
+              {/* <container className="grid-container-small">
                  <GridView center={draggedCenter} places={places} selectPlace={setSelectPlace} hovering={showPreview} />
 
-            </container>
+            </container> */}
 
             <div className="radar-container">
                 <RadarView />

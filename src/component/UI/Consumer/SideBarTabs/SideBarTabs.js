@@ -53,9 +53,7 @@ const SideBarTabs = ({
   userId,
 }) => {
   const [displayChangePassword, setDisplayChangePassword] = useState(false);
-  const [tabIndex, setTabIndex] = useState(
-    isBusinessOpen ? 4 : isUserOpen ? 1 : 0
-  );
+  const [tabIndex, setTabIndex] = useState(2);
   const user = useSelector((state) => state.user.user);
   const userLocation = useSelector((state) => state.business.userLocation);
   const [selectedListId, setSelectedListId] = useState(null);
@@ -84,11 +82,10 @@ const SideBarTabs = ({
     /** to clear selected data on tab click */
     const homeSearchFunction = () => {
 
-      setTabSelectedTest(true)
 
-      console.log("home search")
+      console.log("home search" + tabIndex)
       setFavoriteIndex(null);
-      // if (tabIndex !== 1 && !loading) {
+      if (tabIndex !== 1 && !loading) {
         // const obj = {
         //   search: "",
         //   value: 0,
@@ -106,12 +103,38 @@ const SideBarTabs = ({
         dispatch(clearTopPost());
         setSearchIndex(null);
         history.push("/");
-      // }
+      }
     };
 
-    const myFeedFunction = () => {
-        console.log(" my feed")
+        
+
+    /** to clear selected data on tab click */
+  const myFeedFunction = () => {
+    console.log(" my feed" + tabIndex)
+    if (tabIndex !== 2 && !loading) {
+      const obj = {
+        id: user._id,
+        value: 0,
+        filters: { closest: false, updated: false },
+        latitude: userLocation
+          ? userLocation.latitude
+          : process.env.REACT_APP_LATITUDE,
+        longitude: userLocation
+          ? userLocation.longitude
+          : process.env.REACT_APP_LONGITUDE,
+        search: "",
+      };
+      dispatch(setSearchData(""));
+      setUserDataId(null);
+      setSelectedListId(null);
+      history.push("/");
+      dispatch(setSideFiltersHomeSearch());
+      dispatch(clearMyFeedData());
+      dispatch(fetchMyFeedData(obj));
+      dispatch(clearBusinessData());
+      dispatch(clearTopPost());
     }
+  };
 
     const exitFunction = () => {
       setTabSelectedTest(false)
@@ -141,7 +164,7 @@ const SideBarTabs = ({
   }
 
   return (
-  
+  <>
     <div className={expanded ? "Sidebar expanded" : "Sidebar"} onMouseEnter={handleHover} onMouseLeave={handleLeave}>
         <Tabs selectedIndex={tabIndex} onSelect={setTab} >
             <TabList className={"tablist"} >
@@ -309,7 +332,38 @@ const SideBarTabs = ({
   </div>
 </div>
 
+<div className="panel-content">
+{tabIndex === 1 && 
+  <HomeSearchComponent
+    setDisplayTab={() => setTabIndex(0)}
+    setSelectedListId={setSelectedListId}
+    setListClickedFromSearch={setListClickedFromSearch}
+    setSearchIndex={setSearchIndex}
+  /> }
 
+{tabIndex === 2 && 
+  <MyFeed
+    setDisplayTab={() => setTabIndex(0)}
+    setMyFeedIndex={setMyFeedIndex}
+    setSelectedListId={setSelectedListId}
+  /> } 
+
+
+{tabIndex === 5 && 
+  <ListDescriptionView
+    listOpenedFromBusiness={false}
+    setDisplayTab={() => setTabIndex(0)}
+    setSelectedListId={setSelectedListId}
+    selectedListId={selectedListId}
+    listClickedFromSearch={listClickedFromSearch}
+    setListClickedFromSearch={setListClickedFromSearch}
+    setListIndex={setListIndex}
+    readMore={readMore}
+    setDiscoverBtn={setDiscoverBtn}
+  />}
+
+</div>
+</>
 
        
   )
