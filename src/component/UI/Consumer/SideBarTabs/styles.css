@@ -91,7 +91,7 @@
 
 
 .list-scroll {
-  background-color: crimson;
+  background-color: darkgrey;
   /* align-items: center; */
   display: flex;
   flex-direction: column;
@@ -106,13 +106,22 @@
   padding: 25px 15px;
 }
 
+.sidebar-list-tab {
+  height: 25px;
+  background-color: darkblue;
+  padding: 25px 15px;
+}
+
+
+
 .sidebar-list:hover {
   background-color: indigo;
 }
 
 
 .panel-content {
-  width: 50vw;
+  padding-left: 52px;
+  width: 36vw;
   height: 90vh;
   overflow: auto;
   overflow-x: hidden;

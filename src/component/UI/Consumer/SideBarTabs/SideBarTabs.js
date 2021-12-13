@@ -20,16 +20,30 @@ import ChangePassword from "../../../Consumer/ChangePassword";
 import ProfileSettings from "../../../Consumer/ProfileSettings";
 import HomeSearchComponent from "../../../Consumer/HomeSearch";
 import { useHistory } from "react-router-dom";
+import { unwrapResult } from "@reduxjs/toolkit";
+
+
 import {
   clearBusinessData,
   clearTopPost,
 } from "../../../../reducers/businessReducer";
+
+
+import {
+  fetchUserLists,
+  fetchUserCreatedAndFollowedList,
+  clearListData,
+} from "../../../../reducers/listReducer";
+
+
 import { FiSearch, FiHome, FiGlobe, FiHeart, FiBell, FiList } from "react-icons/fi";
 import { BsListUl, BsThreeDots } from "react-icons/bs";
 import PolygonArrow from "../../../../images/Polygon.png";
 import { Auth } from "aws-amplify";
 import { setGloablLoader } from "../../../../reducers/consumerReducer";
 import DiscoverList from "../../../Consumer/DiscoverList";
+
+import ListTab from './ListTab'
 
 const TabIcon = styled.div`
   width: 36px;
@@ -58,8 +72,19 @@ const SideBarTabs = ({
   const userLocation = useSelector((state) => state.business.userLocation);
   const [selectedListId, setSelectedListId] = useState(null);
   const [listClickedFromSearch, setListClickedFromSearch] = useState(false);
+
+
+  
+  const filteredListData = useSelector((state) => state.list.filteredList);
+  const totalList = useSelector((state) => state.list.totalList);
+  const listData = useSelector((state) => state.list.data);
+
+  const userLists = useSelector((state) => state.list.userLists);
   const loading = useSelector((state) => state.myFeed.loading);
   const loader = useSelector((state) => state.consumer.globalLoader);
+
+
+
   const [searchIndex, setSearchIndex] = useState(null);
   const [myFeedIndex, setMyFeedIndex] = useState(null);
   const [listIndex, setListIndex] = useState(null);
@@ -75,9 +100,54 @@ const SideBarTabs = ({
   const dispatch = useDispatch();
   const history = useHistory();
 
+  // useEffect(() => {
+  //   console.log(userId + " user I d ")
+  //   setUserDataId(userId);
+  //   dispatch(fetchUserLists(userId));
+
+  // }, [userId]);
+
   useEffect(() => {
-    setUserDataId(userId);
-  }, [userId]);
+    if (userLists.length === 0 && user && user._id)
+      dispatch(fetchUserLists(user._id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
+  useEffect(()=>{
+    console.log("user lists" + JSON.stringify(userLists))
+  }, [userLists])
+
+
+
+    /** to fetch all the user created and subscribed lists */
+    useEffect(() => {
+      if (user && user._id) {
+        
+        const fetchListData = async () => {
+          const obj = {
+            id: user._id,
+            value: 0,
+          };
+          dispatch(clearListData());
+          const data = await dispatch(fetchUserCreatedAndFollowedList(obj));
+          const res = await unwrapResult(data);
+          if (res) {
+            setFlag(false);
+          }
+        };
+        fetchListData();
+      }
+
+    }, [dispatch, user]);
+
+
+
+    useEffect(()=>{
+      console.log("list data" + JSON.stringify(listData))
+      
+
+    }, [listData])
+
 
     /** to clear selected data on tab click */
     const homeSearchFunction = () => {
@@ -136,6 +206,20 @@ const SideBarTabs = ({
     }
   };
 
+    /** to clear selected data on tab click */
+    const listView = () => {
+      if (tabIndex !== 5 && !loading) {
+        dispatch(clearMyFeedData());
+        dispatch(clearBusinessData());
+        dispatch(clearTopPost());
+        setSelectedListId(null);
+        setListIndex(null);
+        setUserDataId(null);
+        history.push("/");
+        setDiscoverBtn(false);
+      }
+    };
+
     const exitFunction = () => {
       setTabSelectedTest(false)
     }
@@ -164,7 +248,7 @@ const SideBarTabs = ({
   }
 
   return (
-  <>
+  <div >
     <div className={expanded ? "Sidebar expanded" : "Sidebar"} onMouseEnter={handleHover} onMouseLeave={handleLeave}>
         <Tabs selectedIndex={tabIndex} onSelect={setTab} >
             <TabList className={"tablist"} >
@@ -287,48 +371,20 @@ const SideBarTabs = ({
 </Tabs>
 
   <div className="list-scroll" onScroll={handleScroll}>
-      <div className="sidebar-list"> 
-        <FiHome/>
-      </div>
-      <div className="sidebar-list"> 
-        <FiHome/>
-      </div>
-      <div className="sidebar-list"> 
-        <FiHome/>
-      </div>
-      <div className="sidebar-list"> 
-        <FiHome/>
-      </div>
-      <div className="sidebar-list"> 
-        <FiHome/>
-      </div>
-      <div className="sidebar-list"> 
-        <FiHome/>
-      </div>
-      <div className="sidebar-list"> 
-        <FiHome/>
-      </div>
-      <div className="sidebar-list"> 
-        <FiHome/>
-      </div>
-      <div className="sidebar-list"> 
-        <FiHome/>
-      </div>
-      <div className="sidebar-list"> 
-        <FiHome/>
-      </div>
-      <div className="sidebar-list"> 
-        <FiHome/>
-      </div>
-      <div className="sidebar-list"> 
-        <FiHome/>
-      </div>
-      <div className="sidebar-list"> 
-        <FiHome/>
-      </div>
-      <div className="sidebar-list"> 
-        <FiHome/>
-      </div>
+  {listData.length > 0 ? (
+              listData.map((i, key) => (
+                <ListTab
+                  data={i}
+                  key={key}
+                  // setSelectedListId={setSelectedListId}
+                  // selectedList={selectedList}
+                  // setSelectedList={setSelectedList}
+                />
+              ))
+            ) : (
+              <h6>No Lists To Display</h6>
+            )}
+
   </div>
 </div>
 
@@ -350,20 +406,27 @@ const SideBarTabs = ({
 
 
 {tabIndex === 5 && 
-  <ListDescriptionView
-    listOpenedFromBusiness={false}
-    setDisplayTab={() => setTabIndex(0)}
-    setSelectedListId={setSelectedListId}
-    selectedListId={selectedListId}
-    listClickedFromSearch={listClickedFromSearch}
-    setListClickedFromSearch={setListClickedFromSearch}
-    setListIndex={setListIndex}
-    readMore={readMore}
-    setDiscoverBtn={setDiscoverBtn}
-  />}
+              <ListOptionView
+              setDisplayTab={() => setTabIndex(0)}
+              setSelectedListId={setSelectedListId}
+              selectedListId={selectedListId}
+              setDiscoverBtn={setDiscoverBtn}
+            />
+  // <ListDescriptionView
+  //   listOpenedFromBusiness={false}
+  //   setDisplayTab={() => setTabIndex(0)}
+  //   setSelectedListId={setSelectedListId}
+  //   selectedListId={selectedListId}
+  //   listClickedFromSearch={listClickedFromSearch}
+  //   setListClickedFromSearch={setListClickedFromSearch}
+  //   setListIndex={setListIndex}
+  //   readMore={readMore}
+  //   setDiscoverBtn={setDiscoverBtn}
+  // />
+  }
 
 </div>
-</>
+</div>
 
        
   )

@@ -42,6 +42,9 @@ const getUserLists = (ownerId) => {
                     _id
                     name
                   }
+                  media {
+                    image
+                  }
                 }
               }
           }`,

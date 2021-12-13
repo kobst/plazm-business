@@ -43,6 +43,8 @@ export const createList = createAsyncThunk("data/createList", async (obj) => {
 export const fetchUserLists = createAsyncThunk(
   "data/fetchUserLists",
   async (obj) => {
+    console.log(obj)
+    console.log("fetching user lists")
     const graphQl = getUserLists(obj);
     const response = await graphQlEndPoint(graphQl);
     return response.data.getUserLists.list;
