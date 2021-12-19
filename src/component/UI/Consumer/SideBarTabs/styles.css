@@ -91,7 +91,7 @@
 
 
 .list-scroll {
-  background-color: darkgrey;
+  background-color: rgb(20, 11, 46);
   /* align-items: center; */
   display: flex;
   flex-direction: column;

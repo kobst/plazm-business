@@ -242,9 +242,18 @@ const SideBarTabs = ({
   const setTab = (index) => {
     console.log("setting index " + index)
     setTabIndex(index)
-
     // <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
+  }
 
+
+  const setListTab = () => {
+    // setTabIndex(6)
+
+  }
+
+  const handleListTabClick = (data) => {
+    console.log("handle list tab" + data.name)
+    setTabIndex(-1)
   }
 
   return (
@@ -367,6 +376,49 @@ const SideBarTabs = ({
                         <span className="sidebar-text">Lists</span>
                     </div>
                 </Tab>
+
+                {/* <div className="list-scroll" onScroll={handleScroll}>
+                    {listData.length > 0 ? (
+                      listData.map((i, key) => (
+                        <Tab
+                        disabled={loading || tabIndex === 6}
+                        // className={
+                        //   (6 + key) === tabIndex - 1
+                        //     ? tabIndex === (7 + key)
+                        //       ? "react-tabs__tab LIBefore removeBorder"
+                        //       : "react-tabs__tab LIBefore"
+                        //     : tabIndex + 1 === (6 + key)
+                        //     ? "react-tabs__tab"
+                        //     : tabIndex === (6 + key)
+                        //     ? "react-tabs__tab react-tabs__tab--selected removeBorder"
+                        //     : "react-tabs__tab"
+                        // }
+                        className={
+                          6 === tabIndex - 1
+                            ? tabIndex === 7
+                              ? "react-tabs__tab LIBefore removeBorder"
+                              : "react-tabs__tab LIBefore"
+                            : tabIndex + 1 === 6
+                            ? "react-tabs__tab"
+                            : tabIndex === 6
+                            ? "react-tabs__tab react-tabs__tab--selected removeBorder"
+                            : "react-tabs__tab"
+                        }
+                        onClick={() => handleListTabClick(i.name)}
+                        >
+                         
+                          <ListTab
+                          data={i}
+                          key={key}
+                          setSelectedListId={setSelectedListId}
+                        />
+                      </Tab>
+                      ))
+                    ) : (
+                    <h6>lists loading</h6>
+                      )}
+                </div> */}
+
       </TabList>
 </Tabs>
 
@@ -376,15 +428,15 @@ const SideBarTabs = ({
                 <ListTab
                   data={i}
                   key={key}
-                  // setSelectedListId={setSelectedListId}
+                  handleListTabClick={handleListTabClick}
+                  setSelectedListId={setSelectedListId}
                   // selectedList={selectedList}
                   // setSelectedList={setSelectedList}
                 />
               ))
             ) : (
-              <h6>No Lists To Display</h6>
+              <h6></h6>
             )}
-
   </div>
 </div>
 
@@ -402,27 +454,35 @@ const SideBarTabs = ({
     setDisplayTab={() => setTabIndex(0)}
     setMyFeedIndex={setMyFeedIndex}
     setSelectedListId={setSelectedListId}
+ 
   /> } 
 
 
 {tabIndex === 5 && 
               <ListOptionView
+              index={tabIndex}
               setDisplayTab={() => setTabIndex(0)}
               setSelectedListId={setSelectedListId}
               selectedListId={selectedListId}
               setDiscoverBtn={setDiscoverBtn}
+              setListTab={setListTab}
             />
-  // <ListDescriptionView
-  //   listOpenedFromBusiness={false}
-  //   setDisplayTab={() => setTabIndex(0)}
-  //   setSelectedListId={setSelectedListId}
-  //   selectedListId={selectedListId}
-  //   listClickedFromSearch={listClickedFromSearch}
-  //   setListClickedFromSearch={setListClickedFromSearch}
-  //   setListIndex={setListIndex}
-  //   readMore={readMore}
-  //   setDiscoverBtn={setDiscoverBtn}
-  // />
+}
+
+
+
+{tabIndex === -1 && 
+  <ListDescriptionView
+    listOpenedFromBusiness={false}
+    // setDisplayTab={() => setTabIndex(0)}
+    setSelectedListId={setSelectedListId}
+    selectedListId={selectedListId}
+    listClickedFromSearch={listClickedFromSearch}
+    setListClickedFromSearch={setListClickedFromSearch}
+    setListIndex={setListIndex}
+    readMore={readMore}
+    setDiscoverBtn={setDiscoverBtn}
+  />
   }
 
 </div>
