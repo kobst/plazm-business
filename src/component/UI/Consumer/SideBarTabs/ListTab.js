@@ -16,7 +16,7 @@ const ListTab = ({
     data,
     handleListTabClick,
     setSelectedListId,
-    selectedListId
+    selectedListId,
     setListTab,
     selectedList,
     setSelectedList,
