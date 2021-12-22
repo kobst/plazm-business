@@ -119,6 +119,11 @@ const GetListDetails = (obj) => {
               data {
                 _id
                 data
+                title
+                eventSchedule {
+                    start_time
+                    end_time
+                }
                 business {
                   _id
                   company_name

@@ -39,6 +39,11 @@ const getPlace = (obj) => {
                 postDetails {
                     _id
                     data
+                    title
+                    eventSchedule {
+                        start_time
+                        end_time
+                    }
                     businessLocation {
                       type
                       coordinates
@@ -267,7 +272,7 @@ const homeSearch = (obj) => {
       value: obj.value,
       filters: obj.filters,
       longitude: parseFloat(obj.longitude),
-      latitude: parseFloat(obj.latitude)
+      latitude: parseFloat(obj.latitude),
     },
   };
   return graphQl;
