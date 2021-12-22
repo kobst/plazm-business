@@ -217,146 +217,52 @@ const DisplayFavoriteBusiness = ({
     history.push(`/b/${businessInfo._id}`);
   };
 
-  return data ? (
-    <>
-      {!search && businessInfo.company_name !== null ? (
-        <UserMsgWrap
-          className={
-            data.eventSchedule !== null ||
-            data.data !== null ||
-            (data.body !== null && data.type === "Post") ||
-            (data.body !== null && data.type === "Events")
-              ? "search-active"
-              : ""
-          }
-        >
-          <UserMessageContent>
-            <ProfileNameHeader>
-              <ProfileThumbBanner>
-                <img
-                  src={businessInfo.default_image_url ? image : ProfileImg}
-                  onError={() => setImage(ProfileImg)}
-                  alt=""
-                />
-              </ProfileThumbBanner>
-              <ProfileNameWrap>
-                <ProfileName>
-                  <div
-                    className="businessNameTitle"
-                    onClick={() => displayBusinessDetail()}
-                  >
-                    {businessInfo.company_name}
-                  </div>
-                  <ChatInput>
-                    <p>
-                      <span className="postSpan">
-                        {data.totalPosts && data.totalPosts.length > 0
-                          ? data.totalPosts[0].totalPosts
-                          : 0}
-                      </span>{" "}
-                      Posts
-                    </p>
-                  </ChatInput>
-                </ProfileName>
-              </ProfileNameWrap>
-            </ProfileNameHeader>
-          </UserMessageContent>
-        </UserMsgWrap>
-      ) : (data.body !== null && data.type === "Post" && search) ||
-        (data.data !== null && search) ? (
-        <ProfileThumbBannerFeed>
-          <img
-            src={businessInfo.default_image_url ? image : ProfileImg}
-            onError={() => setImage(ProfileImg)}
-            alt=""
-          />
-          <ProfileThumbOverlay />
-          <ProfileNameFeed>
-            <span>{businessInfo.company_name}</span>
-          </ProfileNameFeed>
-        </ProfileThumbBannerFeed>
-      ) : null}
-
-      {data.eventSchedule !== null ? (
-        <UserMessageEvents
-          eventData={data}
-          businessInfo={businessInfo}
-          setSearchIndex={setSearchIndex}
-          myFeedView={true}
-          setMyFeedIndex={setSearchIndex}
-          setSelectedListId={setSelectedListId}
-        />
-      ) : data.data !== null ? (
-        <UserMessage
-          postData={data}
-          businessData={businessInfo}
-          listView={true}
-          setSelectedListId={setSelectedListId}
-          setListClickedFromSearch={setListClickedFromSearch}
-          type="search"
-          myFeedView={true}
-          setMyFeedIndex={setSearchIndex}
-        />
-      ) : data.body !== null && data.type === "Post" ? (
-        <DisplayComment
-          postData={data}
-          businessData={businessInfo}
-          setSelectedListId={setSelectedListId}
-        />
-      ) : data.body !== null && data.type === "Events" ? (
-        <DisplayCommentForEvent postData={data} businessData={businessInfo} />
-      ) : search && businessInfo.company_name !== null ? (
-        <UserMsgWrap
-          className={
-            data.eventSchedule !== null ||
-            data.data !== null ||
-            (data.body !== null && data.type === "Post") ||
-            (data.body !== null && data.type === "Events")
-              ? "search-active"
-              : ""
-          }
-        >
-          <UserMessageContent>
-            <ProfileNameHeader>
-              <ProfileThumbBanner>
-                <img
-                  src={businessInfo.default_image_url ? image : ProfileImg}
-                  onError={() => setImage(ProfileImg)}
-                  alt=""
-                />
-                {businessInfo.hours_format &&
-                businessInfo.hours_format.length === 0 ? (
-                  <div className="CloseDiv">Closed</div>
-                ) : checkBusinessOpenClose() === true ? null : (
-                  <div className="CloseDiv">Closed</div>
-                )}
-              </ProfileThumbBanner>
-              <ProfileNameWrap>
-                <ProfileName>
-                  <div
-                    className="businessNameTitle"
-                    onClick={() => displayBusinessDetail()}
-                  >
-                    {businessInfo.company_name}
-                  </div>
-                  <ChatInput>
-                    <p>
-                      <span className="postSpan">
-                        {data.totalPosts && data.totalPosts.length > 0
-                          ? data.totalPosts[0].totalPosts
-                          : 0}
-                      </span>{" "}
-                      Posts
-                    </p>
-                  </ChatInput>
-                </ProfileName>
-              </ProfileNameWrap>
-            </ProfileNameHeader>
-          </UserMessageContent>
-        </UserMsgWrap>
-      ) : null}
-    </>
-  ) : null;
+  return (
+    data && (
+      <UserMsgWrap
+        className={
+          data.eventSchedule !== null ||
+          data.data !== null ||
+          (data.body !== null && data.type === "Post") ||
+          (data.body !== null && data.type === "Events")
+            ? "search-active"
+            : ""
+        }
+      >
+        <UserMessageContent>
+          <ProfileNameHeader>
+            <ProfileThumbBanner>
+              <img
+                src={businessInfo.default_image_url ? image : ProfileImg}
+                onError={() => setImage(ProfileImg)}
+                alt=""
+              />
+            </ProfileThumbBanner>
+            <ProfileNameWrap>
+              <ProfileName>
+                <div
+                  className="businessNameTitle"
+                  onClick={() => displayBusinessDetail()}
+                >
+                  {businessInfo.company_name}
+                </div>
+                <ChatInput>
+                  <p>
+                    <span className="postSpan">
+                      {data.totalPosts && data.totalPosts.length > 0
+                        ? data.totalPosts[0].totalPosts
+                        : 0}
+                    </span>{" "}
+                    Posts
+                  </p>
+                </ChatInput>
+              </ProfileName>
+            </ProfileNameWrap>
+          </ProfileNameHeader>
+        </UserMessageContent>
+      </UserMsgWrap>
+    )
+  );
 };
 
 export default DisplayFavoriteBusiness;
