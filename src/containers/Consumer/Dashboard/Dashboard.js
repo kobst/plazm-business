@@ -48,13 +48,13 @@ const DashboardContainer = (props) => {
             setProfile(res.data.getUser.user);
           }
         } else {
-          // history.push("/business");
-          // window.location.reload();
+          history.push("/business");
+          window.location.reload();
         }
       } catch {
         /* if not authenticated then redirect to login consumer page */
-        // history.push("/consumer/login");
-        // window.location.reload();
+        history.push("/consumer/login");
+        window.location.reload();
       }
     };
     getProfile();

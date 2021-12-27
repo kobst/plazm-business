@@ -69,10 +69,9 @@ const ListTab = ({
       <>
         <div
           onClick={() => handleClick(data._id)}
-          className="item"
+          className={selected ? "listTab-item selected" : "listTab-item"}
         >
-          
-            <img src={image} className="sidebar-icon" alt="" onError={() => errorFunction()} />
+            <img src={image} className="listTab-icon" alt="" onError={() => errorFunction()} />
             <span className="sidebar-text">{data.name}</span>
   
         </div>
