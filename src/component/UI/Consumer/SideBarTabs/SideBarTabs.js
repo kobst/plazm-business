@@ -253,6 +253,8 @@ const SideBarTabs = ({
 
   const handleListTabClick = (data) => {
     console.log("handle list tab" + data.name)
+    dispatch(clearMyFeedData());
+
     setTabIndex(-1)
   }
 
@@ -377,47 +379,7 @@ const SideBarTabs = ({
                     </div>
                 </Tab>
 
-                {/* <div className="list-scroll" onScroll={handleScroll}>
-                    {listData.length > 0 ? (
-                      listData.map((i, key) => (
-                        <Tab
-                        disabled={loading || tabIndex === 6}
-                        // className={
-                        //   (6 + key) === tabIndex - 1
-                        //     ? tabIndex === (7 + key)
-                        //       ? "react-tabs__tab LIBefore removeBorder"
-                        //       : "react-tabs__tab LIBefore"
-                        //     : tabIndex + 1 === (6 + key)
-                        //     ? "react-tabs__tab"
-                        //     : tabIndex === (6 + key)
-                        //     ? "react-tabs__tab react-tabs__tab--selected removeBorder"
-                        //     : "react-tabs__tab"
-                        // }
-                        className={
-                          6 === tabIndex - 1
-                            ? tabIndex === 7
-                              ? "react-tabs__tab LIBefore removeBorder"
-                              : "react-tabs__tab LIBefore"
-                            : tabIndex + 1 === 6
-                            ? "react-tabs__tab"
-                            : tabIndex === 6
-                            ? "react-tabs__tab react-tabs__tab--selected removeBorder"
-                            : "react-tabs__tab"
-                        }
-                        onClick={() => handleListTabClick(i.name)}
-                        >
-                         
-                          <ListTab
-                          data={i}
-                          key={key}
-                          setSelectedListId={setSelectedListId}
-                        />
-                      </Tab>
-                      ))
-                    ) : (
-                    <h6>lists loading</h6>
-                      )}
-                </div> */}
+ 
 
       </TabList>
 </Tabs>
@@ -498,76 +460,44 @@ export default SideBarTabs
 
 
 
-// <div className={expanded ? "Sidebar expanded" : "Sidebar"} onMouseEnter={handleHover} onMouseLeave={handleLeave}>
-// <div className="sidebar-header">
-//     <h1 className="sidebar-logo">PLAZM</h1>
-// </div>
-// <div className="sidebar-items">
-//   <div className="item">
-//       <FiGlobe className="sidebar-icon"/>
-//     <span className="sidebar-text">Explore</span>
-//   </div>
-//   <div className="item"  onClick={() => homeSearchFunction()}>
-//       <FiHome className="sidebar-icon" />
-//     <span className="sidebar-text">Home</span>
-//   </div>
-//   <div className="item" onClick={() => exitFunction()}>
-//       <FiBell className="sidebar-icon" />
-//     <span className="sidebar-text">Notifications</span>
-//   </div>
-//   <div className="item">
-//       <FiHeart className="sidebar-icon"/>
-//     <span className="sidebar-text">Favorites</span>
-//   </div>
-//   <div className="item">
-//       <FiList className="sidebar-icon"/>
-//     <span className="sidebar-text">Lists</span>
-//   </div>
-// </div>
-// </div>
-
-{/* <div className="list-scroll" onScroll={handleScroll}>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-<div className="sidebar-list"> 
-  <FiHome/>
-</div>
-
-</div> */}
+               {/* <div className="list-scroll" onScroll={handleScroll}>
+                    {listData.length > 0 ? (
+                      listData.map((i, key) => (
+                        <Tab
+                        disabled={loading || tabIndex === 6}
+                        // className={
+                        //   (6 + key) === tabIndex - 1
+                        //     ? tabIndex === (7 + key)
+                        //       ? "react-tabs__tab LIBefore removeBorder"
+                        //       : "react-tabs__tab LIBefore"
+                        //     : tabIndex + 1 === (6 + key)
+                        //     ? "react-tabs__tab"
+                        //     : tabIndex === (6 + key)
+                        //     ? "react-tabs__tab react-tabs__tab--selected removeBorder"
+                        //     : "react-tabs__tab"
+                        // }
+                        className={
+                          6 === tabIndex - 1
+                            ? tabIndex === 7
+                              ? "react-tabs__tab LIBefore removeBorder"
+                              : "react-tabs__tab LIBefore"
+                            : tabIndex + 1 === 6
+                            ? "react-tabs__tab"
+                            : tabIndex === 6
+                            ? "react-tabs__tab react-tabs__tab--selected removeBorder"
+                            : "react-tabs__tab"
+                        }
+                        onClick={() => handleListTabClick(i.name)}
+                        >
+                         
+                          <ListTab
+                          data={i}
+                          key={key}
+                          setSelectedListId={setSelectedListId}
+                        />
+                      </Tab>
+                      ))
+                    ) : (
+                    <h6>lists loading</h6>
+                      )}
+                </div> */}
