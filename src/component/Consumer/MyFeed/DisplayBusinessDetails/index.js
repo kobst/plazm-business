@@ -1,22 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import ProfileImg from "../../../../images/profile-img.png";
-import UserMessage from "../../HomeSearch/BusinessListing/UserMessage";
 import UserMessageEvents from "../../HomeSearch/BusinessListing/Events/UserMessageEvents";
-
-import { useHistory } from "react-router";
-import {
-  ProfileThumbBanner,
-  ProfileThumbOverlay,
-  ProfileName,
-} from "../../FeedContent/styled";
-
-const UserMsgWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  position: relative;
-`;
+import UserMessage from "../../HomeSearch/BusinessListing/UserMessage";
 
 const FeedListItem = styled.div`
   .background-active {
@@ -34,32 +19,11 @@ const DisplayBusinessDetails = ({
   setMyFeedIndex,
   setSelectedListId,
 }) => {
-  const history = useHistory();
-
-  /** to display business details page */
-  const displayBusinessDetail = () => {
-    setMyFeedIndex(data.business[0]._id);
-    history.push(`/b/${data.business[0]._id}`);
-  };
-
   return data ? (
     <FeedListItem>
       <div
         className={id % 2 === 0 ? "background-active" : "background-inactive"}
       >
-        <UserMsgWrap>
-          <ProfileThumbBanner onClick={() => displayBusinessDetail()}>
-            <img
-              src={data.business[0].default_image_url || ProfileImg}
-              alt=""
-            />
-            <ProfileThumbOverlay />
-            <ProfileName>
-              <span>{data.business[0].company_name}</span>
-            </ProfileName>
-          </ProfileThumbBanner>
-        </UserMsgWrap>
-
         {/* to display event for the business */}
         {data.eventSchedule !== null ? (
           <UserMessageEvents
