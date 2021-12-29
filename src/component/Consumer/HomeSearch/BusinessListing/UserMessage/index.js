@@ -421,7 +421,6 @@ const UserMessage = ({
                   </ListNameWrap>
                 </InnerListBanner>
               )}
-              {console.log("post data in list view: ", postData)}
               {postData.title && <SubHeading>{postData.title}</SubHeading>}
               <ChatInput>
                 {findDesc(
