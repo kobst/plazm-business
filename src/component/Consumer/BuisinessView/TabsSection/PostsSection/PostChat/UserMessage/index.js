@@ -29,6 +29,8 @@ import {
   ListName,
   ListNameWrap,
 } from "../../../../../FeedContent/styled";
+import DateBar from "../../../EventsSection/PostChat/DateBar";
+import TimeBar from "../../../EventsSection/PostChat/TimeBar";
 
 const reactStringReplace = require("react-string-replace");
 
@@ -52,6 +54,7 @@ const UserMessageContent = styled.div`
     overflow-x: hidden;
   }
 `;
+
 const UserMsgWrap = styled.div`
   display: flex;
   flex-direction: column;
@@ -102,6 +105,25 @@ const LoaderWrap = styled.div`
   align-items: center;
   margin: 30px 0 20px;
 `;
+
+const SubHeading = styled.div`
+  font-style: normal;
+  font-size: 13px;
+  line-height: normal;
+  margin: 0 0 5px 0;
+  font-weight: 700;
+  color: #00c2ff;
+`;
+
+const days = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 
 const UserMessage = ({ postData, setSelectedListId }) => {
   const dispatch = useDispatch();
@@ -382,6 +404,9 @@ const UserMessage = ({ postData, setSelectedListId }) => {
                   </ListNameWrap>
                 </InnerListBanner>
               ) : null}
+              {postData.postDetails.title && (
+                <SubHeading>{postData.postDetails.title}</SubHeading>
+              )}
               <FeedDescription>
                 {findDesc(
                   postData.postDetails.data,
@@ -389,6 +414,36 @@ const UserMessage = ({ postData, setSelectedListId }) => {
                   postData.postDetails.taggedLists
                 )}
               </FeedDescription>
+              {postData.postDetails.eventSchedule.start_time &&
+                postData.postDetails.eventSchedule.end_time && (
+                  <>
+                    {" "}
+                    <DateBar
+                      startDay={
+                        days[
+                          new Date(
+                            postData.postDetails.eventSchedule.start_time
+                          ).getDay()
+                        ]
+                      }
+                      endDay={
+                        days[
+                          new Date(
+                            postData.postDetails.eventSchedule.end_time
+                          ).getDay()
+                        ]
+                      }
+                    />
+                    <TimeBar
+                      startTime={
+                        new Date(postData.postDetails.eventSchedule.start_time)
+                      }
+                      endTime={
+                        new Date(postData.postDetails.eventSchedule.end_time)
+                      }
+                    />
+                  </>
+                )}
               {postData.postDetails.media.length > 0 && (
                 <FeedBigImage>
                   <img src={postData.postDetails.media[0]} alt="" />

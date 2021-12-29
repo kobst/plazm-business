@@ -29,7 +29,8 @@ import {
   ListName,
   ListNameWrap,
 } from "../../../FeedContent/styled";
-
+import DateBar from "../../../BuisinessView/TabsSection/EventsSection/PostChat/DateBar/index.js";
+import TimeBar from "../../../BuisinessView/TabsSection/EventsSection/PostChat/TimeBar/index.js";
 const reactStringReplace = require("react-string-replace");
 
 const UserMessageContent = styled.div`
@@ -120,6 +121,25 @@ const LoaderWrap = styled.div`
   align-items: center;
   margin: 30px 0 10px;
 `;
+
+const SubHeading = styled.div`
+  font-style: normal;
+  font-size: 13px;
+  line-height: normal;
+  margin: 0 0 5px 0;
+  font-weight: 700;
+  color: #00c2ff;
+`;
+
+const days = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 
 const UserMessage = ({
   postData,
@@ -401,6 +421,8 @@ const UserMessage = ({
                   </ListNameWrap>
                 </InnerListBanner>
               )}
+              {console.log("post data in list view: ", postData)}
+              {postData.title && <SubHeading>{postData.title}</SubHeading>}
               <ChatInput>
                 {findDesc(
                   postData.data,
@@ -408,6 +430,23 @@ const UserMessage = ({
                   postData.taggedLists || []
                 )}
               </ChatInput>
+              {postData.eventSchedule && (
+                <>
+                  {" "}
+                  <DateBar
+                    startDay={
+                      days[new Date(postData.eventSchedule.start_time).getDay()]
+                    }
+                    endDay={
+                      days[new Date(postData.eventSchedule.end_time).getDay()]
+                    }
+                  />
+                  <TimeBar
+                    startTime={new Date(postData.eventSchedule.start_time)}
+                    endTime={new Date(postData.eventSchedule.end_time)}
+                  />
+                </>
+              )}
               {listDescriptionView || myFeedView ? (
                 <BigImage image={postData.media} />
               ) : null}

@@ -281,6 +281,8 @@ export const slice = createSlice({
         postDetails: {
           _id: action.payload._id,
           data: action.payload.data,
+          title: action.payload.title,
+          eventSchedule: action.payload.eventSchedule,
           list:
             action.payload.listId && action.payload.listId.length > 0
               ? action.payload.listId[0]
