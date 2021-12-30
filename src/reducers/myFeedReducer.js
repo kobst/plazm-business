@@ -200,6 +200,7 @@ export const slice = createSlice({
   name: "myFeed",
   initialState: {
     loading: false,
+    searchFeed: [],
     myFeed: [],
     totalData: 0,
     loadingPostComments: false,
@@ -666,7 +667,8 @@ export const slice = createSlice({
           }));
           // if (state.filterByClosest || state.filterByUpdatedAt)
           //   state.myFeed = [];
-          state.myFeed = state.myFeed.concat(data);
+          // state.myFeed = state.myFeed.concat(data);
+          state.searchFeed = state.searchFeed.concat(data)
           state.totalData = action.payload.totalPlaces;
         }
       }
@@ -680,7 +682,8 @@ export const slice = createSlice({
     [HomeSearchInitial.pending]: (state) => {
       if (!state.loading) {
         state.loading = true;
-        state.myFeed = [];
+        // state.myFeed = [];
+        state.searchFeed = []
       }
     },
     [HomeSearchInitial.fulfilled]: (state, action) => {
@@ -697,7 +700,8 @@ export const slice = createSlice({
                 obj.list && obj.list.image ? [].concat(obj.list.image) : [],
             }),
           }));
-          state.myFeed = state.myFeed.concat(data);
+          // state.myFeed = state.myFeed.concat(data);
+          state.searchFeed = state.searchFeed.concat(data)
           state.totalData = action.payload.totalPlaces;
         }
       }

@@ -24,6 +24,7 @@ const GridContainer = () => {
     // const userLists = useSelector((state) => state.list.userLists);
 
     const feedData = useSelector((state) => state.myFeed.myFeed);
+    const searchData = useSelector((state) => state.myFeed.searchFeed);
 
     // const [draggedCenter, setDraggedCenter] = useState({
     //     lat: JSON.stringify(process.env.REACT_APP_LATITUDE),
@@ -55,6 +56,8 @@ const GridContainer = () => {
 
     const draggedCenter = useStore((state) => state.draggedCenter)
     const setDraggedCenter = useStore((state) => state.setDraggedCenter)
+
+    const tabSelected = useStore((state) => state.tabSelected)
    
 
 
@@ -65,22 +68,44 @@ const GridContainer = () => {
 // should I put Re-Center Here?
 
     useEffect(() => {
+        if (feedData.length > 0){
+            loadData(feedData)
+        }
+    }, [feedData])
+
+    useEffect(() => {
+        if (searchData.length > 0 && tabSelected == 1){
+            loadData(searchData)
+        }
+    }, [searchData, tabSelected])
+
+
+    useEffect(() => {
+        console.log("grid index" + tabSelected)
+        // if (tabSelected == 1) {
+        //     loadData()
+        // }
+
+
+    }, [tabSelected])
+
+
+    const loadData = (data) => {
         let _places = []
         console.log("getting feed data " + feedData.length)
-        feedData.forEach(element => {
+        data.forEach(element => {
             let deepClone = JSON.parse(JSON.stringify(element));
             if (!deepClone.businessLocation && deepClone.location) {
                 deepClone.businessLocation = deepClone.location
             }
-            console.log(deepClone)
+            // console.log(deepClone)
             _places.push(deepClone)
         });
         setPlacesLoading(false)
         setPlaces(_places)
         setGridView(true)
 
-    }, [feedData])
-
+    }
 
     // call Recenter 
 

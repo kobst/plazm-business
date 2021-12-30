@@ -2,6 +2,7 @@
 import create from 'zustand'
 
 const [useStore] = create(set => ({
+    tabSelected: 1,
     places: [],
     orderedPlaces: [],
     placeCoordDict: { 0: [0, 0, 0] },
@@ -24,6 +25,10 @@ const [useStore] = create(set => ({
     gridView: true,
     maxViewable: 10,
     maxViewableDepth: 4,
+    setTabSelected: (tabSelected) => set((state) => ({
+        ...state,
+        tabSelected
+    })),
     setPlaces: (places) => set((state) => ({
         ...state,
         places

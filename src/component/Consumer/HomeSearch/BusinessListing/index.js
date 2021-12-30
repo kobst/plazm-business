@@ -52,7 +52,7 @@ const BusinessListing = ({
   coords,
   closestFilter,
 }) => {
-  const businessData = useSelector((state) => state.myFeed.myFeed);
+  const businessData = useSelector((state) => state.myFeed.searchFeed);
   const loading = useSelector((state) => state.myFeed.loading);
   const [offset, setOffset] = useState(0);
   const [hasMore, setHasMore] = useState(true);

@@ -8,6 +8,8 @@ import BusinessList from "../../../Consumer/BusinessList";
 import { useDispatch, useSelector } from "react-redux";
 import ListOptionView from "../../../Consumer/ListOptionView";
 import ListDescriptionView from "../../../Consumer/ListDescriptionView";
+import ListDetail from "../../../Consumer/ListDescriptionView/ListDetail";
+
 import MyFeed from "../../../Consumer/MyFeed";
 import {
   clearMyFeedData,
@@ -34,6 +36,9 @@ import {
   fetchUserCreatedAndFollowedList,
   clearListData,
 } from "../../../../reducers/listReducer";
+
+
+import useStore from '../../../Consumer/GridComponents/useState/index'
 
 
 import { FiSearch, FiHome, FiGlobe, FiHeart, FiBell, FiList } from "react-icons/fi";
@@ -96,6 +101,9 @@ const SideBarTabs = ({
 
   const [tabSelectedTest, setTabSelectedTest] = useState(false)
 
+  const selectedTab= useStore((state) => state.tabSelected)
+  const setSelectedTab = useStore((state) => state.setTabSelected)
+
   const [expanded, setExpanded] = useState(false)
   const dispatch = useDispatch();
   const history = useHistory();
@@ -143,9 +151,8 @@ const SideBarTabs = ({
 
 
     useEffect(()=>{
-      console.log("list data" + JSON.stringify(listData))
+      // console.log("list data" + JSON.stringify(listData))
       
-
     }, [listData])
 
 
@@ -242,20 +249,16 @@ const SideBarTabs = ({
   const setTab = (index) => {
     console.log("setting index " + index)
     setTabIndex(index)
-    // <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
+    setSelectedTab(index)
   }
 
 
-  const setListTab = () => {
-    // setTabIndex(6)
-
-  }
 
   const handleListTabClick = (data) => {
     console.log("handle list tab" + data.name)
     dispatch(clearMyFeedData());
-
     setTabIndex(-1)
+    setSelectedTab(-1)
   }
 
   return (
@@ -405,7 +408,7 @@ const SideBarTabs = ({
 <div className="panel-content">
 {tabIndex === 1 && 
   <HomeSearchComponent
-    setDisplayTab={() => setTabIndex(0)}
+    // setDisplayTab={() => setTabIndex(0)}
     setSelectedListId={setSelectedListId}
     setListClickedFromSearch={setListClickedFromSearch}
     setSearchIndex={setSearchIndex}
@@ -413,28 +416,16 @@ const SideBarTabs = ({
 
 {tabIndex === 2 && 
   <MyFeed
-    setDisplayTab={() => setTabIndex(0)}
+    // setDisplayTab={() => setTabIndex(0)}
     setMyFeedIndex={setMyFeedIndex}
     setSelectedListId={setSelectedListId}
  
   /> } 
 
 
-{tabIndex === 5 && 
-              <ListOptionView
-              index={tabIndex}
-              setDisplayTab={() => setTabIndex(0)}
-              setSelectedListId={setSelectedListId}
-              selectedListId={selectedListId}
-              setDiscoverBtn={setDiscoverBtn}
-              setListTab={setListTab}
-            />
-}
-
-
 
 {tabIndex === -1 && 
-  <ListDescriptionView
+  <ListDetail
     listOpenedFromBusiness={false}
     // setDisplayTab={() => setTabIndex(0)}
     setSelectedListId={setSelectedListId}

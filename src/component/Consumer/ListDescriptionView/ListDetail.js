@@ -1,0 +1,407 @@
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { IoMdClose } from "react-icons/io";
+import moment from "moment";
+import InfiniteScroll from "react-infinite-scroll-component";
+import BannerImg from "../../../images/sliderimg.png";
+import styled from "styled-components";
+import { CgLock } from "react-icons/cg";
+
+import {
+  UnSubscribeToAList,
+  SubscribeToAListAction,
+  fetchUserLists,
+  clearListSearchData,
+} from "../../../reducers/listReducer";
+import {
+  fetchSelectedListDetails,
+  clearMyFeedData,
+} from "../../../reducers/myFeedReducer";
+import ValueLoader from "../../../utils/loader";
+import DisplayPostInAList from "./DisplayPostsInAList";
+import { unwrapResult } from "@reduxjs/toolkit";
+import {
+  addSubscribedList,
+  removeSubscribedList,
+} from "../../../reducers/userReducer";
+import { useHistory } from "react-router-dom";
+import ButtonOrange from "../UI/ButtonOrange";
+
+const ListOptionSection = styled.div`
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 0px;
+  @media (max-width: 767px) {
+    margin: 0;
+  }
+  .ScrollDivInner {
+    .infinite-scroll-component {
+      overflow: visible !important;
+    }
+  }
+`;
+
+const HeadingWrap = styled.div`
+  padding: 0px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const TopHeadingWrap = styled.div`
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+`;
+
+const CloseDiv = styled.div`
+  width: 40px;
+  position: relative;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: -40px;
+  cursor: pointer;
+  top: 0px;
+  background: #fe02b9;
+  box-shadow: 4px 0px 14px -5px #fe02b9;
+  svg {
+    font-size: 32px;
+    color: #fff;
+  }
+  @media (max-width: 767px) {
+    left: 0;
+    right: inherit;
+    width: 30px;
+    height: 30px;
+  }
+`;
+
+const ListingOptionWrap = styled.div`
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+`;
+
+const LoaderWrap = styled.div`
+  width: 100%;
+  position: relative;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 100px 0 0 0;
+  @media (max-width: 767px) {
+    margin: 30px 0 0 0;
+  }
+`;
+
+const NoMorePost = styled.p`
+  font-style: normal;
+  font-size: 12px;
+  line-height: normal;
+  margin: 0 0 5px;
+  color: #fff;
+`;
+
+const NoData = styled.div`
+  font-style: normal;
+  font-size: 12px;
+  line-height: normal;
+  margin: 0 0 5px;
+  color: #fff;
+  text-align: center;
+`;
+
+const ListBannerSection = styled.div`
+  width: 100%;
+  height: 210px;
+  padding: 0 20px 20px;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  position: relative;
+  img {
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+    top: 0;
+    @media (max-width: 767px) {
+      top: 0;
+    }
+  }
+  h1 {
+    font-size: 18px;
+    font-weight: 800;
+    color: #fff;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    @media (max-width: 767px) {
+      font-size: 14px;
+    }
+  }
+  h5 {
+    font-size: 12px;
+    font-weight: normal;
+    color: #fff;
+    margin-bottom: 0px;
+    span {
+      color: #ff2e9a;
+      border-right: 1px solid #fff;
+      padding-right: 10px;
+      cursor: pointer;
+    }
+    strong {
+      margin-left: 0px;
+      font-weight: bold;
+      margin-right: 5px;
+    }
+  }
+  p {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin: 0 0 7px;
+    padding: 0;
+    line-height: normal;
+    @media (max-width: 767px) {
+      font-size: 12px;
+    }
+  }
+  .BannerWrapBtn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+`;
+
+const ButtonOuterDiv = styled.div`
+  button {
+    border: 0px;
+    margin-right: 8px;
+    font-size: 9px;
+    font-weight: bold;
+    color: #fff;
+    border-radius: 2px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  button:last-child {
+    margin-right: 0;
+  }
+  button.PinkColor {
+    background-color: #ff2e9a;
+  }
+  button.OrangeColor {
+    background-color: #ff6067;
+  }
+`;
+
+const LockDiv = styled.div`
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  border: 0;
+  background: #ff2e9a;
+  display: inline-block;
+  text-align: center;
+  line-height: 18px;
+  margin-left: 12px;
+  svg {
+    font-size: 12px;
+    color: #fff;
+    position: relative;
+    top: 2px;
+  }
+`;
+
+/*
+ * @desc: to display list description
+ */
+
+const ArrowBack = styled.div`
+  background: #000;
+  border-radius: 0px;
+  padding: 0 18px;
+  color: #fff;
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: 800;
+  font-size: 12px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 0px;
+  cursor: pointer;
+  top: 0px;
+  z-index: 2;
+  @media (max-width: 767px) {
+    /* width: 24px;
+    height: 24px; */
+  }
+`;
+
+
+const ListDetailView = ({
+  setDisplayTab,
+  setSelectedListId,
+  selectedListId,
+  setListIndex,
+  listOpenedFromBusiness,
+  setFavoriteIndex,
+  readMore,
+  setDiscoverBtn,
+}) => {
+  const dispatch = useDispatch();
+  const loading = useSelector((state) => state.myFeed.loadingSelectedList);
+  const loadingUnSubScribe = useSelector(
+    (state) => state.list.loadingUnSubscribe
+  );
+  const loadingSelectedList = useSelector(
+    (state) => state.myFeed.loadingSelectedList
+  );
+  const totalData = useSelector((state) => state.myFeed.totalData);
+  const postsInList = useSelector((state) => state.myFeed.myFeed);
+  const selectedList = useSelector((state) => state.myFeed.selectedListDetails);
+  const userLists = useSelector((state) => state.list.userLists);
+  const user = useSelector((state) => state.user.user);
+  const [hasMore, setHasMore] = useState(true);
+  const [offset, setOffSet] = useState(0);
+  const [flag, setFlag] = useState(true);
+  const [image, setImage] = useState(
+    selectedList && selectedList.media.length > 0
+      ? selectedList.media[0].image
+      : BannerImg
+  );
+  const history = useHistory();
+
+  useEffect(() => {
+    if (selectedList && selectedList.media.length > 0)
+      setImage(selectedList.media[0].image);
+  }, [selectedList]);
+
+  /** to fetch user lists */
+  useEffect(() => {
+    if (userLists.length === 0 && user && user._id)
+      dispatch(fetchUserLists(user._id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
+  /** to clear all the data initially */
+  useEffect(() => {
+    dispatch(clearMyFeedData());
+    setOffSet(0);
+    setHasMore(true);
+  }, [dispatch]);
+
+  /** to fetch initial posts in a list */
+  useEffect(() => {
+    const fetchListDetails = async () => {
+      const result = await dispatch(
+        fetchSelectedListDetails({ id: selectedListId, value: offset })
+      );
+      const data = await unwrapResult(result);
+      if (data) {
+        setFlag(false);
+      }
+    };
+    offset === 0 && fetchListDetails();
+  }, [dispatch, selectedListId, offset]);
+
+  const fetchMorePosts = () => {
+    if (offset + 20 < totalData) {
+      setOffSet(offset + 20);
+      dispatch(
+        fetchSelectedListDetails({ id: selectedListId, value: offset + 20 })
+      );
+    } else setHasMore(false);
+  };
+
+
+  return (loading &&
+    offset === 0 &&
+    !loadingUnSubScribe &&
+    !loadingSelectedList) ||
+    loadingUnSubScribe ||
+    loadingSelectedList ||
+    flag ? (
+    <LoaderWrap>
+      <ValueLoader />
+    </LoaderWrap>
+  ) : (
+    <>
+      {selectedList ? (
+        <ListOptionSection>
+
+          <div
+            id="scrollableDiv"
+            style={{ height: "110vh", overflow: "auto" }}
+            className="ScrollDivInner"
+          >
+            <InfiniteScroll
+              dataLength={postsInList ? postsInList.length : 0}
+              next={fetchMorePosts}
+              hasMore={hasMore}
+              loader={
+                offset < totalData && loading ? (
+                  <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
+                    {" "}
+                    <ValueLoader height="40" width="40" />
+                  </div>
+                ) : null
+              }
+              scrollableTarget="scrollableDiv"
+              endMessage={
+                postsInList.length > 20 && !loading ? (
+                  <center>
+                    <NoMorePost className="noMorePost">
+                      No more List to show
+                    </NoMorePost>
+                  </center>
+                ) : null
+              }
+            >
+              <ListingOptionWrap>
+                {postsInList.length > 0 ? (
+                  postsInList.map((i, key) => (
+                    <DisplayPostInAList
+                      data={i}
+                      key={key}
+                      id={key}
+                      setListIndex={setListIndex}
+                      setSelectedListId={setSelectedListId}
+                      setFavoriteIndex={setFavoriteIndex}
+                    />
+                  ))
+                ) : (
+                  <NoData>No Posts In A List To Display</NoData>
+                )}
+              </ListingOptionWrap>
+            </InfiniteScroll>
+          </div>
+        </ListOptionSection>
+      ) : null}
+    </>
+  );
+};
+
+export default ListDetailView;
