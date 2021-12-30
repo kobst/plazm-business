@@ -2,7 +2,7 @@
 import create from 'zustand'
 
 const [useStore] = create(set => ({
-    tabSelected: 1,
+    tabSelected: 2,
     places: [],
     orderedPlaces: [],
     placeCoordDict: { 0: [0, 0, 0] },

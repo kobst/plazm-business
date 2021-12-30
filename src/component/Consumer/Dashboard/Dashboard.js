@@ -3,6 +3,7 @@ import styled from "styled-components";
 import LeftBar from "../../UI/Consumer/LeftBar";
 import SideBar from "../../UI/Consumer/SideBar/SideBar";
 import SideBarTabs from "../../UI/Consumer/SideBarTabs/SideBarTabs";
+import Header from "../../UI/Consumer/Header/Header"
 import RightBar from "../Dashboard/RightBar";
 import GridContainer from "../GridComponents/index"
 
@@ -38,6 +39,10 @@ const Dashboard = ({
             userId={userId}
           /> */}
 
+
+         
+
+
             <SideBarTabs
             isUserOpen={isUserOpen}
             displayTab={displayTab}
@@ -51,6 +56,8 @@ const Dashboard = ({
           /> 
 
           <GridContainer/>
+
+          <Header/>
           {/* <RightBar displayTab={displayTab} /> */}
         </DashboardContent>
     </>

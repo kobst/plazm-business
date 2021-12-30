@@ -67,17 +67,23 @@ const GridContainer = () => {
 
 // should I put Re-Center Here?
 
-    useEffect(() => {
-        if (feedData.length > 0){
-            loadData(feedData)
-        }
-    }, [feedData])
+    // useEffect(() => {
+    //     if (feedData.length > 0){
+    //         loadData(feedData)
+    //     }
+    // }, [feedData])
 
     useEffect(() => {
         if (searchData.length > 0 && tabSelected == 1){
             loadData(searchData)
         }
-    }, [searchData, tabSelected])
+        if (searchData.length > 0 && tabSelected == 2){
+            loadData(feedData)
+        }
+        if (searchData.length > 0 && tabSelected == -1){
+            loadData(feedData)
+        }
+    }, [feedData, searchData, tabSelected])
 
 
     useEffect(() => {
