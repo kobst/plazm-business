@@ -22,7 +22,7 @@ const Header = () => {
 
     const selectedTab = useStore((state) => state.tabSelected)
 
-    const [tabTitle, setTabTitle] = useState("Home")
+    const [tabTitle, setTabTitle] = useState()
 
 
     useEffect(()=>{
@@ -50,9 +50,17 @@ const Header = () => {
 
     return (
         <div className="header">
-                <h4 className="title">
-                    {tabTitle}
-                </h4>
+            <div className="left-header">
+
+            </div>
+
+            <div className="title">
+                <h4>{tabTitle}</h4>
+            </div>
+
+            <div className="right-header">
+                
+            </div>
         </div>
     )
 

@@ -7,13 +7,32 @@
   z-index: 110;
   background-color: black;
   align-items: center;
+  justify-items: center;
   position: fixed;
   top: 0;
   left: 0;
 }
 
+.left-header {
+  width: 33vw;
+  background-color: gray;
+  color: gray;
+}
+
 
 .title {
+  width: 33vw;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   color: hotpink;
   font-size: 24px;
+}
+
+.right-header {
+  width: 33vw;
+  background-color: gray;
+  color: gray;
+
+
 }
