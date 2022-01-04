@@ -1,0 +1,11 @@
+.radar-container {
+  position: absolute;
+  top: 0%;
+  right: 0%;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 0 10px 10px #4c146c;
+  z-index: 10;
+}

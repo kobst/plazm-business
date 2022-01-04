@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import mapboxgl, { MapMouseEvent } from 'mapbox-gl';
 import ReactMapboxGl, { Layer, Source, Feature, MapContext } from "react-mapbox-gl";
 import useStore from '../useState/index'
-
+import './styles.css'
 
 // import '../../App.css';
 
@@ -251,7 +251,7 @@ const MapView = (props) => {
 
     return (
         // <div className="circleDiv">
-        <div>
+        <div className="map-container">
             <Map
                 style='mapbox://styles/kobstr/cj0itw9ku003l2smnu8wbz94o'
                 // style='mapbox://styles/mapbox/streets-v9'

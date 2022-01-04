@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 
 import useStore from '../useState/index'
 
+import './styles.css'
 
 
 extend({ OrbitControls })
@@ -206,6 +207,7 @@ const RadarView = () => {
 
 
     return (
+        <div className="radar-container">
         <Canvas>
             {/* camera={{ position: [0, 0, 20], zoom: 50 }}> */}
 
@@ -227,6 +229,8 @@ const RadarView = () => {
             {/* </BackgroundRadar> */}
 
         </Canvas >
+        </div>
+
     )
 }
 

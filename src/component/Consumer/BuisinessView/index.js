@@ -9,7 +9,7 @@ import ValueLoader from "../../../utils/loader";
 import { setSideFilters } from "../../../reducers/businessReducer";
 
 
-import useStore from '../GridComponents/useState/index'
+import useStore from '../useState/index'
 
 const BuisinessViewContent = styled.div`
   width: 100%;

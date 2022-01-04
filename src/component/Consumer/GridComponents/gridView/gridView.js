@@ -7,7 +7,7 @@ import { Polyhedron, Plane, RoundedBox, OrthographicCamera } from '@react-three/
 
 import { useSelector } from "react-redux";
 
-import useStore from '../useState/index'
+import useStore from '../../useState/index'
 
 // import CameraMain from './camera'
 import PlaceMesh from './placeMesh'
@@ -283,7 +283,7 @@ const GridView = (props) => {
 
     return (
         <>
-        <div style={{width:'100%', height:'100%'}}onWheel={handleScroll}>
+        <div style={{width:'100%', height:'100%'}} onWheel={handleScroll}>
             <Canvas>
                 {/* camera={{ position: [0, 0, 20], near: 10, far: 60 }}>  */}
                 <CameraMain

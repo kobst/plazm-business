@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import useStore from '../../../Consumer/GridComponents/useState/index'
+import useStore from '../../../Consumer/useState/index'
 import styled from "styled-components";
 import "./styles.css";
 
@@ -18,12 +18,25 @@ import "./styles.css";
 //   left: 0;
 // `;
 
-const Header = () => {
+const Header = (
+    {gridMode,
+    setGridMode}) => {
 
     const selectedTab = useStore((state) => state.tabSelected)
 
     const [tabTitle, setTabTitle] = useState()
 
+    const handleToggle = () => {
+        console.log(gridMode)
+        if (gridMode){
+            console.log("setting grid mode")
+            setGridMode(false)
+        } 
+        if (!gridMode) {
+            console.log("setting list mode")
+            setGridMode(true)
+        }
+    }
 
     useEffect(()=>{
         console.log(selectedTab + "selected Tab Header")
@@ -51,7 +64,9 @@ const Header = () => {
     return (
         <div className="header">
             <div className="left-header">
-
+            <button className="toggle" onClick={handleToggle}>
+                List / Grid
+            </button>
             </div>
 
             <div className="title">

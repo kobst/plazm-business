@@ -38,7 +38,7 @@ import {
 } from "../../../../reducers/listReducer";
 
 
-import useStore from '../../../Consumer/GridComponents/useState/index'
+import useStore from '../../../Consumer/useState/index'
 
 
 import { FiSearch, FiHome, FiGlobe, FiHeart, FiBell, FiList } from "react-icons/fi";
@@ -406,7 +406,7 @@ const SideBarTabs = ({
 </div>
 
 <div className="panel-content">
-{tabIndex === 1 && 
+{tabIndex === 1 && !isBusinessOpen &&
   <HomeSearchComponent
     // setDisplayTab={() => setTabIndex(0)}
     setSelectedListId={setSelectedListId}
@@ -414,7 +414,7 @@ const SideBarTabs = ({
     setSearchIndex={setSearchIndex}
   /> }
 
-{tabIndex === 2 && 
+{tabIndex === 2 && !isBusinessOpen &&
   <MyFeed
     // setDisplayTab={() => setTabIndex(0)}
     setMyFeedIndex={setMyFeedIndex}
@@ -424,7 +424,7 @@ const SideBarTabs = ({
 
 
 
-{tabIndex === -1 && 
+{tabIndex === -1 && !isBusinessOpen &&
   <ListDetail
     listOpenedFromBusiness={false}
     // setDisplayTab={() => setTabIndex(0)}
@@ -438,7 +438,29 @@ const SideBarTabs = ({
   />
   }
 
+
+      {isBusinessOpen && 
+        <BuisinessView
+          profile={profile}
+          businessExists={businessExists}
+          businessId={businessId}
+          searchIndex={searchIndex}
+          setTabIndex={setTabIndex}
+          setSearchIndex={setSearchIndex}
+          myFeedIndex={myFeedIndex}
+          setMyFeedIndex={setMyFeedIndex}
+          setListIndex={setListIndex}
+          listIndex={listIndex}
+          favoriteIndex={favoriteIndex}
+          setFavoriteIndex={setFavoriteIndex}
+          setDisplayTab={() => console.log("businessView")}
+        />
+        }
+
 </div>
+
+
+ 
 </div>
 
        

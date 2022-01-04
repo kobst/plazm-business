@@ -8,7 +8,7 @@ import { Polyhedron, Plane, RoundedBox, OrthographicCamera } from '@react-three/
 
 import { useSelector } from "react-redux";
 
-import useStore from '../useState/index'
+import useStore from '../../useState/index'
 
 import { Text } from "troika-three-text";
 import { useSpring, a } from '@react-spring/three'

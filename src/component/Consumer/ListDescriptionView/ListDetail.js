@@ -337,6 +337,56 @@ const ListDetailView = ({
   };
 
 
+
+
+    /** to unsubscribe from a list */
+    const listUnSubscribe = async () => {
+        const obj = {
+          userId: user._id,
+          listId: selectedList._id,
+        };
+        const list = await dispatch(UnSubscribeToAList(obj));
+        const response = await unwrapResult(list);
+        if (response) {
+          dispatch(removeSubscribedList(response.listId));
+        }
+      };
+    
+      /** to subscribe from a list */
+      const listSubscribe = async () => {
+        const obj = {
+          userId: user._id,
+          listId: selectedList._id,
+        };
+        const list = await dispatch(SubscribeToAListAction(obj));
+        const response = await unwrapResult(list);
+        if (response) {
+          dispatch(addSubscribedList(response.listId));
+        }
+      };
+    
+      // /** to delete a list */
+      // const deleteList = async () => {
+      //   const obj = {
+      //     userId: user._id,
+      //     listId: selectedList._id,
+      //   };
+      //   const data = await dispatch(deleteUserCreatedList(obj));
+      //   const response = await unwrapResult(data);
+      //   if (response) {
+      //     setSelectedListId(null);
+      //   }
+      // };
+    
+      const onCloseTab = () => {
+        if (!listOpenedFromBusiness) setDisplayTab(false);
+        else if (readMore) setDiscoverBtn(true);
+        dispatch(clearMyFeedData());
+        dispatch(clearListSearchData());
+        setSelectedListId(null);
+      };
+
+
   return (loading &&
     offset === 0 &&
     !loadingUnSubScribe &&
@@ -351,6 +401,79 @@ const ListDetailView = ({
     <>
       {selectedList ? (
         <ListOptionSection>
+          <HeadingWrap>
+            <TopHeadingWrap>
+            <ArrowBack onClick={() => console.log("back")}>BACK</ArrowBack>
+
+              <ListBannerSection>
+                <img src={image} alt="" onError={() => setImage(BannerImg)} />
+                <h1>{selectedList.name}</h1>
+                <p>{selectedList.description}</p>
+                <div className="BannerWrapBtn">
+                  <h5>
+                    by{" "}
+                    <strong>
+                      <span
+                        onClick={() =>
+                          history.push(`/u/${selectedList.ownerId._id}`)
+                        }
+                      >
+                        {selectedList.ownerId.name}
+                      </span>
+                    </strong>{" "}
+                    Updated{" "}
+                    {moment(selectedList.updatedAt).format(
+                      "MMM DD,YYYY, hh:MM a"
+                    )}{" "}
+                    EST{" "}
+                    {!selectedList.isPublic && (
+                      <LockDiv>
+                        <CgLock />
+                      </LockDiv>
+                    )}
+                  </h5>
+
+                  {selectedList &&
+                  selectedList.ownerId &&
+                  selectedList.ownerId._id === user._id ? (
+                    <>
+                      <ButtonOuterDiv>
+                        {/* <button className="PinkColor">Make Public</button>
+                        <button className="PinkColor">Invite</button>
+                        <button
+                          className="OrangeColor"
+                          onClick={() => deleteList()}
+                        >
+                          Delete
+                        </button> */}
+                      </ButtonOuterDiv>
+                    </>
+                  ) : !user.listFollowed.includes(selectedList._id) ? (
+                    <ButtonOrange
+                      className="subscribe"
+                      onClick={() => listSubscribe()}
+                    >
+                      Subscribe
+                    </ButtonOrange>
+                  ) : (
+                    <ButtonOrange
+                      className="unsubscribe"
+                      onClick={() => listUnSubscribe()}
+                    >
+                      Unsubscribe
+                    </ButtonOrange>
+                  )}
+                </div>
+              </ListBannerSection>
+              <CloseDiv>
+                <IoMdClose onClick={() => onCloseTab()} />
+              </CloseDiv>
+            </TopHeadingWrap>
+          </HeadingWrap>
+
+
+
+
 
           <div
             id="scrollableDiv"

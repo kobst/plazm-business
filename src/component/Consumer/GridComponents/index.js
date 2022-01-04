@@ -11,14 +11,14 @@ import { AssignMolecularDict, AssignHexDict,  _createXYZ } from './functions/ind
 // import GridThreeJS from './GridThree'
 // import RadarView from './RadarView'
 
-import MapView from './mapView/index';
-import RadarView from './radarView/radarView'
+import MapView from '../mapView/index';
+import RadarView from '../radarView/radarView'
 import GridView from './gridView/gridView'
-import useStore from './useState/index'
+import useStore from '../useState/index'
 
 import './style.css';
 
-const GridContainer = () => {
+const GridContainer = ({gridMode}) => {
 
     // const dispatch = useDispatch()
     // const userLists = useSelector((state) => state.list.userLists);
@@ -75,12 +75,15 @@ const GridContainer = () => {
 
     useEffect(() => {
         if (searchData.length > 0 && tabSelected == 1){
+            console.log("grid " + tabSelected)
             loadData(searchData)
         }
         if (searchData.length > 0 && tabSelected == 2){
+            console.log("grid " + tabSelected)
             loadData(feedData)
         }
         if (searchData.length > 0 && tabSelected == -1){
+            console.log("grid " + tabSelected)
             loadData(feedData)
         }
     }, [feedData, searchData, tabSelected])
@@ -225,33 +228,28 @@ const GridContainer = () => {
     const onScroll = (e) => {
         console.log(e.deltaX + " e.delta " + e.deltaY)
 
-        // if (!shifting) {
-        // setDeltaX(deltaX + e.deltaX)
-        // setDeltaY(deltaY + e.deltaY)
-        // }
-        // setDeltaX(deltaX + e.deltaX)
-        // setDeltaY(deltaY + e.deltaY)
-        // setDeltaX(e.deltaX)
-        // setDeltaY(e.deltaY)
+
     }
 
 
     return (
         <div>
-            {/* <container className="grid-container-small">
+            {gridMode && <container className="grid-container-small">
                  <GridView center={draggedCenter} places={places} selectPlace={setSelectPlace} hovering={showPreview} />
-            </container>     */}
-
-            <div className="radar-container">
-                <RadarView />
-            </div> 
-
-            {/* {gridView ? <div className="map-overlay"></div> : <div className="map-overlay-large"></div>} */}
-            <div className="map-container">
-                <MapView />
-            </div> 
+            </container>  }
         </div >
     )
 }
 
 export default GridContainer
+
+
+
+           {/* <div className="radar-container"> */}
+                {/* <RadarView /> */}
+            {/* </div>  */}
+
+            {/* {gridView ? <div className="map-overlay"></div> : <div className="map-overlay-large"></div>} */}
+            {/* <div className="map-container"> */}
+                {/* <MapView /> */}
+            {/* </div>  */}
