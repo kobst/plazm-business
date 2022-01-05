@@ -49,6 +49,7 @@ import { setGloablLoader } from "../../../../reducers/consumerReducer";
 import DiscoverList from "../../../Consumer/DiscoverList";
 
 import ListTab from './ListTab'
+import PanelContent from '../Panel-Content/PanelContent'
 
 const TabIcon = styled.div`
   width: 36px;
@@ -83,7 +84,6 @@ const SideBarTabs = ({
   const filteredListData = useSelector((state) => state.list.filteredList);
   const totalList = useSelector((state) => state.list.totalList);
   const listData = useSelector((state) => state.list.data);
-
   const userLists = useSelector((state) => state.list.userLists);
   const loading = useSelector((state) => state.myFeed.loading);
   const loader = useSelector((state) => state.consumer.globalLoader);
@@ -98,9 +98,13 @@ const SideBarTabs = ({
   const [userDataId, setUserDataId] = useState(userId);
   const [discoverBtn, setDiscoverBtn] = useState(false);
   const [readMore, setReadMore] = useState(false);
-
   const [tabSelectedTest, setTabSelectedTest] = useState(false)
 
+
+
+
+
+  
   const selectedTab= useStore((state) => state.tabSelected)
   const setSelectedTab = useStore((state) => state.setTabSelected)
 
@@ -108,12 +112,6 @@ const SideBarTabs = ({
   const dispatch = useDispatch();
   const history = useHistory();
 
-  // useEffect(() => {
-  //   console.log(userId + " user I d ")
-  //   setUserDataId(userId);
-  //   dispatch(fetchUserLists(userId));
-
-  // }, [userId]);
 
   useEffect(() => {
     if (userLists.length === 0 && user && user._id)
@@ -204,12 +202,13 @@ const SideBarTabs = ({
       dispatch(setSearchData(""));
       setUserDataId(null);
       setSelectedListId(null);
-      history.push("/home");
       dispatch(setSideFiltersHomeSearch());
       dispatch(clearMyFeedData());
       dispatch(fetchMyFeedData(obj));
       dispatch(clearBusinessData());
       dispatch(clearTopPost());
+      history.push("/home");
+
     }
   };
 
@@ -406,7 +405,9 @@ const SideBarTabs = ({
   </div>
 </div>
 
-<div className="panel-content">
+{/* <PanelContent isBusinessOpen={isBusinessOpen} tabIndex={tabIndex} selectedListId={selectedListId} /> */}
+
+ <div className="panel-content">
 {tabIndex === 1 && !isBusinessOpen &&
   <HomeSearchComponent
     // setDisplayTab={() => setTabIndex(0)}
@@ -458,9 +459,7 @@ const SideBarTabs = ({
         />
         }
 
-</div>
-
-
+</div> 
  
 </div>
 
@@ -470,6 +469,10 @@ const SideBarTabs = ({
 }
 
 export default SideBarTabs
+
+
+
+
 
 
 

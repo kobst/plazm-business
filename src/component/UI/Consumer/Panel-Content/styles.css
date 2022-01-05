@@ -1,0 +1,7 @@
+.panel-content {
+  padding-left: 52px;
+  width: 36vw;
+  height: 90vh;
+  overflow: auto;
+  overflow-x: hidden;
+}

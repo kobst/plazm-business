@@ -37,8 +37,6 @@ const Dashboard = ({
   return (
     <>
         <DashboardContent>
-
-
             <SideBarTabs
             isUserOpen={isUserOpen}
             displayTab={displayTab}
@@ -52,7 +50,6 @@ const Dashboard = ({
           /> 
 
         {/*  break out panel content*/}
-
 
           <GridContainer gridMode={gridMode}/>
           <MapView/>
