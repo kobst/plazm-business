@@ -12,6 +12,8 @@ import {
 } from "../../../../reducers/myFeedReducer";
 import error from "../../../../constants";
 
+import useStore from "../../useState";
+
 const BusinessListWrap = styled.div`
   width: 100%;
   position: relative;
@@ -44,10 +46,6 @@ const NoMorePost = styled.p`
 `;
 
 const BusinessListing = ({
-  setSelectedListId,
-  setListClickedFromSearch,
-  setSearchIndex,
-  setDisplayTab,
   loader,
   coords,
   closestFilter,
@@ -65,6 +63,12 @@ const BusinessListing = ({
   );
   const [filterSelected, setFilterSelected] = useState(false);
   const [flag, setFlag] = useState(true);
+
+
+  const setSelectedListId = useStore((state) => state.setSelectedListId)
+  const setSearchIndex = useStore((state) => state.setSearchIndex)
+  const setListClickedFromSearch = useStore((state) => state.setListClickedFromSearch)
+
 
   /** useEffect called when any side filters are selected */
   useEffect(() => {
@@ -119,7 +123,7 @@ const BusinessListing = ({
         offset={offset}
         setOffset={setOffset}
         setFilterSelected={setFilterSelected}
-        setDisplayTab={setDisplayTab}
+        // setDisplayTab={setDisplayTab}
       />
       {(loading && offset === 0) || flag ? (
         <LoaderWrap>

@@ -3,6 +3,15 @@ import create from 'zustand'
 
 const [useStore] = create(set => ({
     tabSelected: 2,
+    selectedListId: null,
+    searchIndex: null, 
+    listClickedFromSearch: null,
+    myFeedIndex: null,
+    listIndex: null, 
+    favoriteIndex: null, 
+    userDataId: null, 
+    discoverBtn: false,
+    readMore: false,   
     places: [],
     orderedPlaces: [],
     placeCoordDict: { 0: [0, 0, 0] },
@@ -28,6 +37,42 @@ const [useStore] = create(set => ({
     setTabSelected: (tabSelected) => set((state) => ({
         ...state,
         tabSelected
+    })),
+    setSelectedListId: (selectedListId) => set((state) => ({
+        ...state,
+        selectedListId
+    })),
+    setSearchIndex: (searchIndex) => set((state) => ({
+        ...state,
+        searchIndex
+    })),
+    setListClickedFromSearch: (listClickedFromSearch) => set((state) => ({
+        ...state,
+        listClickedFromSearch
+    })),
+    setMyFeedIndex: (myFeedIndex) => set((state) => ({
+        ...state,
+        myFeedIndex
+    })),
+    setListIndex: (listIndex) => set((state) => ({
+        ...state,
+        listIndex
+    })),
+    setFavoriteIndex: (favoriteIndex) => set((state) => ({
+        ...state,
+        favoriteIndex
+    })),
+    setUserDataId: (userDataId) => set((state) => ({
+        ...state,
+        userDataId
+    })),
+    setDiscoverBtn: (discoverBtn) => set((state) => ({
+        ...state,
+        discoverBtn
+    })),
+    setReadMore: (readMore) => set((state) => ({
+        ...state,
+        readMore
     })),
     setPlaces: (places) => set((state) => ({
         ...state,

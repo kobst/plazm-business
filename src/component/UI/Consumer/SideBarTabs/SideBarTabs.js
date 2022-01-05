@@ -72,15 +72,12 @@ const SideBarTabs = ({
   isUserOpen,
   userId,
 }) => {
-  const [displayChangePassword, setDisplayChangePassword] = useState(false);
-  const [tabIndex, setTabIndex] = useState(2);
+
+  const dispatch = useDispatch();
+  const history = useHistory();
+  
   const user = useSelector((state) => state.user.user);
   const userLocation = useSelector((state) => state.business.userLocation);
-  const [selectedListId, setSelectedListId] = useState(null);
-  const [listClickedFromSearch, setListClickedFromSearch] = useState(false);
-
-
-  
   const filteredListData = useSelector((state) => state.list.filteredList);
   const totalList = useSelector((state) => state.list.totalList);
   const listData = useSelector((state) => state.list.data);
@@ -89,28 +86,50 @@ const SideBarTabs = ({
   const loader = useSelector((state) => state.consumer.globalLoader);
 
 
+  const [displayChangePassword, setDisplayChangePassword] = useState(false);
+  const [tabIndex, setTabIndex] = useState(2);
+  // const [selectedListId, setSelectedListId] = useState(null);
+  // const [listClickedFromSearch, setListClickedFromSearch] = useState(false);
+  // const [searchIndex, setSearchIndex] = useState(null);
+  // const [myFeedIndex, setMyFeedIndex] = useState(null);
+  // const [listIndex, setListIndex] = useState(null);
+  // const [favoriteIndex, setFavoriteIndex] = useState(null);
 
-  const [searchIndex, setSearchIndex] = useState(null);
-  const [myFeedIndex, setMyFeedIndex] = useState(null);
-  const [listIndex, setListIndex] = useState(null);
-  const [favoriteIndex, setFavoriteIndex] = useState(null);
-  const [profileClosed, setProfileClosed] = useState(false);
-  const [userDataId, setUserDataId] = useState(userId);
-  const [discoverBtn, setDiscoverBtn] = useState(false);
-  const [readMore, setReadMore] = useState(false);
-  const [tabSelectedTest, setTabSelectedTest] = useState(false)
+  // const [profileClosed, setProfileClosed] = useState(false);
+  // const [userDataId, setUserDataId] = useState(userId);
+  // const [discoverBtn, setDiscoverBtn] = useState(false);
+  // const [readMore, setReadMore] = useState(false);
 
 
-
-
-
-  
+  // new useStore
   const selectedTab= useStore((state) => state.tabSelected)
+  const selectedListId = useStore((state) => state.selectedListId)
+  const searchIndex = useStore((state) => state.searchIndex)
+  const listClickedFromSearch = useStore((state) => state.listClickedFromSearch)
+  const myFeedIndex = useStore((state) => state.myFeedIndex)
+  const listIndex = useStore((state) => state.listIndex)
+  const favoriteIndex = useStore((state) => state.favoriteIndex)
+  const userDataId = useStore((state) => state.userDataId)
+  const discoverBtn = useStore((state) => state.discoverBtn)
+
+  const readMore = useStore((state) => state.readMore)
+
   const setSelectedTab = useStore((state) => state.setTabSelected)
+  const setSelectedListId = useStore((state) => state.setSelectedListId)
+  const setSearchIndex = useStore((state) => state.setSearchIndex)
+  const setListClickedFromSearch = useStore((state) => state.setListClickedFromSearch)
+  const setMyFeedIndex = useStore((state) => state.setMyFeedIndex)
+  const setListIndex = useStore((state) => state.setListIndex)
+  const setFavoriteIndex = useStore((state) => state.setFavoriteIndex)
+  const setUserDataId = useStore((state) => state.setUserDataId)
+  const setDiscoverBtn = useStore((state) => state.setDiscoverBtn)
+  const setReadMore = useStore((state) => state.setReadMore)
+
+
+//old useStore
 
   const [expanded, setExpanded] = useState(false)
-  const dispatch = useDispatch();
-  const history = useHistory();
+
 
 
   useEffect(() => {
@@ -148,15 +167,8 @@ const SideBarTabs = ({
 
 
 
-    useEffect(()=>{
-      // console.log("list data" + JSON.stringify(listData))
-      
-    }, [listData])
-
-
     /** to clear selected data on tab click */
     const homeSearchFunction = () => {
-
 
       console.log("home search" + tabIndex)
       setFavoriteIndex(null);
@@ -226,9 +238,6 @@ const SideBarTabs = ({
       }
     };
 
-    const exitFunction = () => {
-      setTabSelectedTest(false)
-    }
 
   const handleHover = () => {
     console.log("set expanded true")
@@ -260,6 +269,33 @@ const SideBarTabs = ({
     setTabIndex(-1)
     setSelectedTab(-1)
   }
+
+
+
+
+    /** to open user profile tab */
+    const showUserProfile = () => {
+      setTabIndex(6);
+    };
+  
+    /** for logout functionality redirection */
+    const redirectUserToLoginScreen = () => {
+      dispatch(setGloablLoader(false));
+      history.push("/consumer/login");
+    };
+    /** logout consumer */
+    const consumerLogout = async () => {
+      try {
+        dispatch(setGloablLoader(true));
+        await Auth.signOut();
+        setTimeout(() => redirectUserToLoginScreen(), 3000);
+      } catch (error) {
+        dispatch(setGloablLoader(false));
+        console.log("error signing out: ", error);
+      }
+    };
+
+
 
   return (
   <div >

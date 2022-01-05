@@ -11,6 +11,8 @@ import {
   ProfileName,
 } from "../../FeedContent/styled";
 
+import useStore from "../../useState";
+
 const UserMsgWrap = styled.div`
   display: flex;
   flex-direction: column;
@@ -30,10 +32,15 @@ const FeedListItem = styled.div`
 /** display business details */
 const DisplayBusinessDetails = ({
   data,
-  id,
-  setMyFeedIndex,
-  setSelectedListId,
+  id
 }) => {
+
+  const setSelectedListId = useStore((state) => state.setSelectedListId)
+
+  const setMyFeedIndex = useStore((state) => state.setMyFeedIndex)
+
+
+
   const history = useHistory();
 
   /** to display business details page */

@@ -9,6 +9,8 @@ import {
 import ValueLoader from "../../../utils/loader";
 import { setUserlocation } from "../../../reducers/businessReducer";
 
+import useStore from "../useState";
+
 const ContentWrap = styled.div`
   padding: 0px;
 `;
@@ -28,10 +30,6 @@ const LoaderWrap = styled.div`
 `;
 
 const HomeSearch = ({
-  setSelectedListId,
-  setListClickedFromSearch,
-  setSearchIndex,
-  setDisplayTab,
   ...props
 }) => {
   const dispatch = useDispatch();
@@ -39,6 +37,17 @@ const HomeSearch = ({
   const [loader, setLoader] = useState(null);
   const [coords, setCoords] = useState(null);
   const [closestFilter, setClosestFilter] = useState(false);
+
+
+
+  
+  const setSelectedListId = useStore((state) => state.setSelectedListId)
+  const setSearchIndex = useStore((state) => state.setSearchIndex)
+  const setListClickedFromSearch = useStore((state) => state.setListClickedFromSearch)
+
+
+
+
 
   useEffect(() => {
     dispatch(setSideFiltersHomeSearch());
@@ -90,7 +99,7 @@ const HomeSearch = ({
             setSearchIndex={setSearchIndex}
             loader={loader}
             coords={coords}
-            setDisplayTab={setDisplayTab}
+            // setDisplayTab={setDisplayTab}
             closestFilter={closestFilter}
           />
         ) : (

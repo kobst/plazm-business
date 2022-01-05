@@ -11,6 +11,9 @@ import DisplayBusinessDetails from "./DisplayBusinessDetails";
 import { unwrapResult } from "@reduxjs/toolkit";
 import SearchBar from "./SearchBar";
 
+import useStore from "../useState";
+
+
 const LoaderWrap = styled.div`
   width: 100%;
   position: relative;
@@ -98,7 +101,7 @@ const NoMorePost = styled.p`
   color: #fff;
 `;
 
-const MyFeed = ({ setDisplayTab, setMyFeedIndex, setSelectedListId }) => {
+const MyFeed = () => {
   const user = useSelector((state) => state.user.user);
   const loading = useSelector((state) => state.myFeed.loading);
   const feedData = useSelector((state) => state.myFeed.myFeed);
@@ -113,6 +116,11 @@ const MyFeed = ({ setDisplayTab, setMyFeedIndex, setSelectedListId }) => {
   const [offset, setOffSet] = useState(0);
   const dispatch = useDispatch();
   const [flag, setFlag] = useState(true);
+
+
+  const setSelectedListId = useStore((state) => state.setSelectedListId)
+  const setMyFeedIndex = useStore((state) => state.setMyFeedIndex)
+ 
 
   /** to fetch data initially */
   useEffect(() => {
@@ -175,7 +183,7 @@ const MyFeed = ({ setDisplayTab, setMyFeedIndex, setSelectedListId }) => {
         <BuisinessViewContent>
           <SearchBar
             setOffset={setOffSet}
-            setDisplayTab={setDisplayTab}
+            // setDisplayTab={setDisplayTab}
             setFlag={setFlag}
           />
           <div

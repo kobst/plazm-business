@@ -27,6 +27,9 @@ import {
 import { useHistory } from "react-router-dom";
 import ButtonOrange from "../UI/ButtonOrange";
 
+import useStore from "../useState";
+
+
 const ListOptionSection = styled.div`
   width: 100%;
   position: relative;
@@ -262,14 +265,7 @@ const ArrowBack = styled.div`
 
 
 const ListDetailView = ({
-  setDisplayTab,
-  setSelectedListId,
-  selectedListId,
-  setListIndex,
-  listOpenedFromBusiness,
-  setFavoriteIndex,
-  readMore,
-  setDiscoverBtn,
+  listOpenedFromBusiness
 }) => {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.myFeed.loadingSelectedList);
@@ -292,6 +288,17 @@ const ListDetailView = ({
       ? selectedList.media[0].image
       : BannerImg
   );
+
+  const selectedListId = useStore((state) => state.selectedListId)
+  const setSelectedListId = useStore((state) => state.setSelectedListId)
+  const setListIndex = useStore((state) => state.setListIndex)
+  const setFavoriteIndex = useStore((state) => state.setFavoriteIndex)
+  const setDiscoverBtn = useStore((state) => state.setDiscoverBtn)
+  const readMore = useStore((state) => state.readMore)
+
+
+
+
   const history = useHistory();
 
   useEffect(() => {
@@ -379,8 +386,8 @@ const ListDetailView = ({
       // };
     
       const onCloseTab = () => {
-        if (!listOpenedFromBusiness) setDisplayTab(false);
-        else if (readMore) setDiscoverBtn(true);
+        // if (!listOpenedFromBusiness) setDisplayTab(false);
+        // else if (readMore) setDiscoverBtn(true);
         dispatch(clearMyFeedData());
         dispatch(clearListSearchData());
         setSelectedListId(null);
