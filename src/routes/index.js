@@ -32,7 +32,21 @@ const Routes = () => (
       <Route path="/user/forgot-password" component={ForgotPassword} />
       {/* <Route path="/user/forgot-password" component={ForgotPassword} /> */}
       <Route path="/business" exact component={Dashboard} />
-      <Route path="/" exact component={ConsumerDashboard} />
+
+      {/* <Route path="/" exact component={ConsumerDashboard} /> */}
+      {/* <Route path="/" exact render={(props) => <ConsumerDashboard {...props} />} /> */}
+
+      <Redirect exact from="/" to="/home" /> 
+      {/* <Route path="/home" exact component={ConsumerDashboard} />  */}
+      <Route path="/home" exact render={(props) => <ConsumerDashboard {...props} />} />
+      <Route path="/explore" exact render={(props) => <ConsumerDashboard {...props} />} />
+      <Route path="/list" exact render={(props) => <ConsumerDashboard {...props} />} />
+
+      {/* <Route path="/explore" exact component={ConsumerDashboard} />
+      <Route path="/list" exact component={ConsumerDashboard} /> */}
+      {/* <Route path="/list/:id" exact component={ConsumerDashboard} /> */}
+      {/* <Route path="/lists" exact component={ConsumerDashboard} /> */}
+
       <Route path="/edit-profile" component={EditProfile} />
       <Route path="/b/:id" exact render={(props) => <ConsumerDashboard isBusinessOpen={true} isUserOpen={false} {...props} />} />
       <Route path="/u/:id" exact render={(props) => <ConsumerDashboard isUserOpen={true} isBusinessOpen={false} {...props}/>} />

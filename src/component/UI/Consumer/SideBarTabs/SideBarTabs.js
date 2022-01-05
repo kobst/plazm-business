@@ -179,7 +179,7 @@ const SideBarTabs = ({
         dispatch(clearBusinessData());
         dispatch(clearTopPost());
         setSearchIndex(null);
-        history.push("/");
+        history.push("/explore");
       }
     };
 
@@ -204,7 +204,7 @@ const SideBarTabs = ({
       dispatch(setSearchData(""));
       setUserDataId(null);
       setSelectedListId(null);
-      history.push("/");
+      history.push("/home");
       dispatch(setSideFiltersHomeSearch());
       dispatch(clearMyFeedData());
       dispatch(fetchMyFeedData(obj));
@@ -257,6 +257,7 @@ const SideBarTabs = ({
   const handleListTabClick = (data) => {
     console.log("handle list tab" + data.name)
     dispatch(clearMyFeedData());
+    history.push("/list");
     setTabIndex(-1)
     setSelectedTab(-1)
   }
