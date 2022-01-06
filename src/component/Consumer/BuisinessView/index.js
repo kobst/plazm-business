@@ -37,17 +37,17 @@ const BuisinessView = ({
   setDisplayTab,
   profile,
   businessExists,
-  businessId,
-  searchIndex,
-  setTabIndex,
-  setSearchIndex,
-  myFeedIndex,
-  setMyFeedIndex,
-  listIndex,
-  setListIndex,
-  favoriteIndex,
-  setFavoriteIndex,
-  setSelectedListId,
+  businessId
+  // searchIndex,
+  // setTabIndex,
+  // setSearchIndex,
+  // myFeedIndex,
+  // setMyFeedIndex,
+  // listIndex,
+  // setListIndex,
+  // favoriteIndex,
+  // setFavoriteIndex,
+  // setSelectedListId,
 }) => {
   const loading = useSelector((state) => state.business.loading);
   const businessProfile = useSelector((state) => state.business.business);
@@ -95,29 +95,29 @@ const BuisinessView = ({
                 displayBusinessProfile={displayBusinessProfile}
                 setDisplayBusinessProfile={setDisplayBusinessProfile}
                 setDisplayTab={setDisplayTab}
-                searchIndex={searchIndex}
-                setTabIndex={setTabIndex}
-                setSearchIndex={setSearchIndex}
-                myFeedIndex={myFeedIndex}
-                setMyFeedIndex={setMyFeedIndex}
-                favoriteIndex={favoriteIndex}
-                setFavoriteIndex={setFavoriteIndex}
-                listIndex={listIndex}
-                setListIndex={setListIndex}
+                // searchIndex={searchIndex}
+                // setTabIndex={setTabIndex}
+                // setSearchIndex={setSearchIndex}
+                // myFeedIndex={myFeedIndex}
+                // setMyFeedIndex={setMyFeedIndex}
+                // favoriteIndex={favoriteIndex}
+                // setFavoriteIndex={setFavoriteIndex}
+                // listIndex={listIndex}
+                // setListIndex={setListIndex}
               />
             ) : (
               <BuisinessHeader
                 setDisplayTab={setDisplayTab}
                 setDisplayBusinessProfile={setDisplayBusinessProfile}
-                searchIndex={searchIndex}
-                setTabIndex={setTabIndex}
-                setSearchIndex={setSearchIndex}
-                myFeedIndex={myFeedIndex}
-                setMyFeedIndex={setMyFeedIndex}
-                listIndex={listIndex}
-                setListIndex={setListIndex}
-                favoriteIndex={favoriteIndex}
-                setFavoriteIndex={setFavoriteIndex}
+                // searchIndex={searchIndex}
+                // setTabIndex={setTabIndex}
+                // setSearchIndex={setSearchIndex}
+                // myFeedIndex={myFeedIndex}
+                // setMyFeedIndex={setMyFeedIndex}
+                // listIndex={listIndex}
+                // setListIndex={setListIndex}
+                // favoriteIndex={favoriteIndex}
+                // setFavoriteIndex={setFavoriteIndex}
               />
             ))}
           {!displayBusinessProfile &&
@@ -127,7 +127,7 @@ const BuisinessView = ({
               <TabsSection
                 profile={profile}
                 businessId={businessId}
-                setSelectedListId={setSelectedListId}
+                // setSelectedListId={setSelectedListId}
               />
             )}
         </BuisinessViewContent>

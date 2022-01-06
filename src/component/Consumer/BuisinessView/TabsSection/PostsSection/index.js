@@ -4,6 +4,7 @@ import AddPostSection from "./AddPostSection";
 // import PostFilter from "./PostFilter";
 import PostChat from "./PostChat";
 import PostFilterButton from "./PostFilterButtons";
+import useStore from "../../../useState";
 
 const PostsSectionContent = styled.div`
   width: 100%;
@@ -12,7 +13,7 @@ const PostsSectionContent = styled.div`
   flex-direction: column;
 `;
 
-const PostsSection = ({ profile, businessId, setSelectedListId }) => {
+const PostsSection = ({ profile, businessId}) => {
   const [filterArr, setFilterArr] = useState([]);
   return (
     <>
@@ -21,7 +22,7 @@ const PostsSection = ({ profile, businessId, setSelectedListId }) => {
         {/* <PostFilter setFilterArr={setFilterArr} /> */}
         <PostFilterButton setFilterArr={setFilterArr} />
         <PostChat
-          setSelectedListId={setSelectedListId}
+          // setSelectedListId={setSelectedListId}
           filterArr={filterArr}
           setFilterArr={setFilterArr}
         />

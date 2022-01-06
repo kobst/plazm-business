@@ -447,16 +447,16 @@ const SideBarTabs = ({
 {tabIndex === 1 && !isBusinessOpen &&
   <HomeSearchComponent
     // setDisplayTab={() => setTabIndex(0)}
-    setSelectedListId={setSelectedListId}
-    setListClickedFromSearch={setListClickedFromSearch}
-    setSearchIndex={setSearchIndex}
+    // setSelectedListId={setSelectedListId}
+    // setListClickedFromSearch={setListClickedFromSearch}
+    // setSearchIndex={setSearchIndex}
   /> }
 
 {tabIndex === 2 && !isBusinessOpen &&
   <MyFeed
     // setDisplayTab={() => setTabIndex(0)}
-    setMyFeedIndex={setMyFeedIndex}
-    setSelectedListId={setSelectedListId}
+    // setMyFeedIndex={setMyFeedIndex}
+    // setSelectedListId={setSelectedListId}
  
   /> } 
 
@@ -466,13 +466,13 @@ const SideBarTabs = ({
   <ListDetail
     listOpenedFromBusiness={false}
     // setDisplayTab={() => setTabIndex(0)}
-    setSelectedListId={setSelectedListId}
-    selectedListId={selectedListId}
-    listClickedFromSearch={listClickedFromSearch}
-    setListClickedFromSearch={setListClickedFromSearch}
-    setListIndex={setListIndex}
-    readMore={readMore}
-    setDiscoverBtn={setDiscoverBtn}
+    // setSelectedListId={setSelectedListId}
+    // selectedListId={selectedListId}
+    // listClickedFromSearch={listClickedFromSearch}
+    // setListClickedFromSearch={setListClickedFromSearch}
+    // setListIndex={setListIndex}
+    // readMore={readMore}
+    // setDiscoverBtn={setDiscoverBtn}
   />
   }
 
@@ -482,16 +482,16 @@ const SideBarTabs = ({
           profile={profile}
           businessExists={businessExists}
           businessId={businessId}
-          searchIndex={searchIndex}
-          setTabIndex={setTabIndex}
-          setSearchIndex={setSearchIndex}
-          myFeedIndex={myFeedIndex}
-          setMyFeedIndex={setMyFeedIndex}
-          setListIndex={setListIndex}
-          listIndex={listIndex}
-          favoriteIndex={favoriteIndex}
-          setFavoriteIndex={setFavoriteIndex}
-          setDisplayTab={() => console.log("businessView")}
+          // searchIndex={searchIndex}
+          // setTabIndex={setTabIndex}
+          // setSearchIndex={setSearchIndex}
+          // myFeedIndex={myFeedIndex}
+          // setMyFeedIndex={setMyFeedIndex}
+          // setListIndex={setListIndex}
+          // listIndex={listIndex}
+          // favoriteIndex={favoriteIndex}
+          // setFavoriteIndex={setFavoriteIndex}
+          // setDisplayTab={() => console.log("businessView")}
         />
         }
 

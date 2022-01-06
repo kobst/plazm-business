@@ -30,6 +30,8 @@ import {
   ListNameWrap,
 } from "../../../../../FeedContent/styled";
 
+import useStore from "../../../../../useState";
+
 const reactStringReplace = require("react-string-replace");
 
 const UserMessageContent = styled.div`
@@ -103,7 +105,7 @@ const LoaderWrap = styled.div`
   margin: 30px 0 20px;
 `;
 
-const UserMessage = ({ postData, setSelectedListId }) => {
+const UserMessage = ({ postData}) => {
   const dispatch = useDispatch();
   const [displayComments, setDisplayComments] = useState(false);
   const loadingComments = useSelector(
@@ -122,6 +124,9 @@ const UserMessage = ({ postData, setSelectedListId }) => {
       ? postData.postDetails.list.image
       : BannerImg
   );
+
+  const setSelectedListId = useStore((state) => state.setSelectedListId)
+
 
   ws.onmessage = (evt) => {
     const message = JSON.parse(evt.data);

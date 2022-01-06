@@ -33,6 +33,8 @@ import {
   ListNameWrap,
 } from "../../../../../FeedContent/styled";
 
+import useStore from "../../../../../useState";
+
 const reactStringReplace = require("react-string-replace");
 
 const UserMessageContent = styled.div`
@@ -118,7 +120,7 @@ const LoaderWrap = styled.div`
   margin: 30px 0 20px;
 `;
 
-const UserMessage = ({ eventData, setSelectedListId }) => {
+const UserMessage = ({ eventData}) => {
   const [listImage, setListImage] = useState(
     eventData.list.image ? eventData.list.image : BannerImg
   );
@@ -134,6 +136,9 @@ const UserMessage = ({ eventData, setSelectedListId }) => {
   const ws = useSelector((state) => state.user.ws);
   const user = useSelector((state) => state.user.user);
   const selectedDate = useSelector((state) => state.event.selectedDate);
+  
+  const setSelectedListId = useStore((state) => state.setSelectedListId)
+
   const dispatch = useDispatch();
   const history = useHistory();
 

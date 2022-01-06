@@ -15,6 +15,8 @@ import {
 } from "../../../../reducers/businessReducer";
 import { clearTopEvent } from "../../../../reducers/eventReducer";
 
+import useStore from "../../useState";
+
 const BuisinessHeaderContent = styled.div`
   width: 100%;
   position: relative;
@@ -228,15 +230,16 @@ const BuisinessHeader = ({
   setDisplayBusinessProfile,
   isProfile,
   displayBusinessProfile,
-  searchIndex,
-  setTabIndex,
-  setSearchIndex,
-  myFeedIndex,
-  setMyFeedIndex,
-  listIndex,
-  setListIndex,
-  favoriteIndex,
-  setFavoriteIndex,
+
+  // searchIndex,
+  // setTabIndex,
+  // setSearchIndex,
+  // myFeedIndex,
+  // setMyFeedIndex,
+  // listIndex,
+  // setListIndex,
+  // favoriteIndex,
+  // setFavoriteIndex,
 }) => {
   const history = useHistory();
   const businessProfile = useSelector((state) => state.business.business)[0];
@@ -246,6 +249,17 @@ const BuisinessHeader = ({
       : ProfileImg
   );
   const dispatch = useDispatch();
+
+  const listIndex = useStore((state) => state.listIndex)
+  const searchIndex = useStore((state) => state.listIndex)
+  const myFeedIndex = useStore((state) => state.myFeedIndex)
+
+  const setSearchIndex = useStore((state) => state.setSearchIndex)
+  const setMyFeedIndex = useStore((state) => state.setMyFeedIndex)
+  const setListIndex = useStore((state) => state.setListIndex)
+  const setFavoriteIndex = useStore((state) => state.setFavoriteIndex)
+  const setTabIndex = useStore((state) => state.setTabSelected)
+
 
   /*
    * @desc: close tab function to be called on cross icon click
@@ -258,7 +272,7 @@ const BuisinessHeader = ({
     }
   };
 
-  /** to return to all business listing */
+  /** to return to all business listing */ // redo backbutton here...
   const backBusiness = () => {
     dispatch(clearBusinessData());
     dispatch(clearTopEvent());
@@ -280,6 +294,8 @@ const BuisinessHeader = ({
       history.push("/");
     }
   };
+
+
   return (
     <>
       <BuisinessHeaderContent

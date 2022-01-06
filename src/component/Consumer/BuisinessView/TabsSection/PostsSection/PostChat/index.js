@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ValueLoader from "../../../../../../utils/loader";
 import { addFilteredPosts } from "../../../../../../reducers/businessReducer";
-
+import useStore from "../../../../useState";
 const ChatContent = styled.div`
   width: 100%;
   position: relative;
@@ -39,7 +39,7 @@ const LoaderWrap = styled.div`
   }
 `;
 
-const PostChat = ({ setSelectedListId }) => {
+const PostChat = () => {
   const posts = useSelector((state) => state.business.posts);
   const business = useSelector((state) => state.business.business);
   const user = useSelector((state) => state.user.user);
@@ -58,6 +58,10 @@ const PostChat = ({ setSelectedListId }) => {
   const topPostId = useSelector((state) => state.business.topPostId);
   const [offset, setOffSet] = useState(0);
   const [hasMore, setHasMore] = useState(true);
+
+
+  const setSelectedListId = useStore((state) => state.setSelectedListId)
+
   const dispatch = useDispatch();
   
   useEffect(() => {
@@ -90,7 +94,7 @@ const PostChat = ({ setSelectedListId }) => {
         {topPost && (
           <UserMessage
             postData={topPostId}
-            setSelectedListId={setSelectedListId}
+            // setSelectedListId={setSelectedListId}
           />
         )}
         {topPost && <hr />}
@@ -126,7 +130,7 @@ const PostChat = ({ setSelectedListId }) => {
                 <UserMessage
                   postData={i}
                   key={key}
-                  setSelectedListId={setSelectedListId}
+                  // setSelectedListId={setSelectedListId}
                 />
               ))
             ) : loadingFilterData ? (
