@@ -83,23 +83,12 @@ const SideBar = ({
 
     /** to clear selected data on tab click */
     const homeSearchFunction = () => {
-
       setTabSelectedTest(true)
-
       console.log("home search")
       setFavoriteIndex(null);
-      // if (tabIndex !== 1 && !loading) {
-        // const obj = {
-        //   search: "",
-        //   value: 0,
-        //   filters: { closest: false, updated: false },
-        //   latitude: process.env.REACT_APP_LATITUDE,
-        //   longitude: process.env.REACT_APP_LONGITUDE,
-        // };
         dispatch(setSearchData(""));
         dispatch(clearMyFeedData());
         dispatch(setSideFiltersHomeSearch());
-        // dispatch(HomeSearch(obj));
         setUserDataId(null);
         setSelectedListId(null);
         dispatch(clearBusinessData());

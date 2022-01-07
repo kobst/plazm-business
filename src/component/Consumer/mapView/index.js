@@ -184,7 +184,7 @@ const MapView = (props) => {
         console.log("reading selected place from mapview")
 
         if (selectedPlace) {
-            console.log(selectedPlace)
+            // console.log(selectedPlace)
             setGridView(false)
 
         }

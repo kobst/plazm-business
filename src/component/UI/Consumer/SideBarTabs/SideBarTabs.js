@@ -68,9 +68,11 @@ const SideBarTabs = ({
   setFlag,
   isBusinessOpen,
   businessExists,
+  detailId,
   businessId,
   isUserOpen,
   userId,
+  view
 }) => {
 
   const dispatch = useDispatch();
@@ -87,18 +89,7 @@ const SideBarTabs = ({
 
 
   const [displayChangePassword, setDisplayChangePassword] = useState(false);
-  const [tabIndex, setTabIndex] = useState(2);
-  // const [selectedListId, setSelectedListId] = useState(null);
-  // const [listClickedFromSearch, setListClickedFromSearch] = useState(false);
-  // const [searchIndex, setSearchIndex] = useState(null);
-  // const [myFeedIndex, setMyFeedIndex] = useState(null);
-  // const [listIndex, setListIndex] = useState(null);
-  // const [favoriteIndex, setFavoriteIndex] = useState(null);
-
-  // const [profileClosed, setProfileClosed] = useState(false);
-  // const [userDataId, setUserDataId] = useState(userId);
-  // const [discoverBtn, setDiscoverBtn] = useState(false);
-  // const [readMore, setReadMore] = useState(false);
+  const [tabIndex, setTabIndex] = useState();
 
 
   // new useStore
@@ -111,9 +102,11 @@ const SideBarTabs = ({
   const favoriteIndex = useStore((state) => state.favoriteIndex)
   const userDataId = useStore((state) => state.userDataId)
   const discoverBtn = useStore((state) => state.discoverBtn)
-
+  const businessDetailProfile = useStore((state) => state.businessDetailProfile)
   const readMore = useStore((state) => state.readMore)
 
+
+  const setBusinessDetailProfile = useStore((state) => state.setBusinessDetailProfile)
   const setSelectedTab = useStore((state) => state.setTabSelected)
   const setSelectedListId = useStore((state) => state.setSelectedListId)
   const setSearchIndex = useStore((state) => state.setSearchIndex)
@@ -130,6 +123,9 @@ const SideBarTabs = ({
 
   const [expanded, setExpanded] = useState(false)
 
+  useEffect(() => {
+
+  }, []);
 
 
   useEffect(() => {
@@ -138,11 +134,14 @@ const SideBarTabs = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
+  // useEffect(()=>{
+  //   console.log("user lists" + JSON.stringify(userLists))
+  // }, [userLists])
+
+
   useEffect(()=>{
-    console.log("user lists" + JSON.stringify(userLists))
-  }, [userLists])
-
-
+    console.log("selectedListId" + JSON.stringify(selectedListId))
+  }, [selectedListId])
 
     /** to fetch all the user created and subscribed lists */
     useEffect(() => {
@@ -170,16 +169,9 @@ const SideBarTabs = ({
     /** to clear selected data on tab click */
     const homeSearchFunction = () => {
 
-      console.log("home search" + tabIndex)
+      console.log("home search" + selectedTab)
       setFavoriteIndex(null);
-      if (tabIndex !== 1 && !loading) {
-        // const obj = {
-        //   search: "",
-        //   value: 0,
-        //   filters: { closest: false, updated: false },
-        //   latitude: process.env.REACT_APP_LATITUDE,
-        //   longitude: process.env.REACT_APP_LONGITUDE,
-        // };
+      if (!loading) {
         dispatch(setSearchData(""));
         dispatch(clearMyFeedData());
         dispatch(setSideFiltersHomeSearch());
@@ -197,8 +189,9 @@ const SideBarTabs = ({
 
     /** to clear selected data on tab click */
   const myFeedFunction = () => {
-    console.log(" my feed" + tabIndex)
-    if (tabIndex !== 2 && !loading) {
+    console.log(" my feed" + selectedTab)
+    if (!loading) {
+      console.log("in home feed ")
       const obj = {
         id: user._id,
         value: 0,
@@ -226,7 +219,7 @@ const SideBarTabs = ({
 
     /** to clear selected data on tab click */
     const listView = () => {
-      if (tabIndex !== 5 && !loading) {
+      if (selectedTab !== 5 && !loading) {
         dispatch(clearMyFeedData());
         dispatch(clearBusinessData());
         dispatch(clearTopPost());
@@ -250,27 +243,19 @@ const SideBarTabs = ({
 
   }
 
-  const handleScroll = () => {
-    console.log("scrolling")
-  }
-
   const setTab = (index) => {
     console.log("setting index " + index)
     setTabIndex(index)
     setSelectedTab(index)
   }
 
-
-
   const handleListTabClick = (data) => {
     console.log("handle list tab" + data.name)
     dispatch(clearMyFeedData());
-    history.push("/list");
+    // history.push("/list");
     setTabIndex(-1)
     setSelectedTab(-1)
   }
-
-
 
 
     /** to open user profile tab */
@@ -300,18 +285,18 @@ const SideBarTabs = ({
   return (
   <div >
     <div className={expanded ? "Sidebar expanded" : "Sidebar"} onMouseEnter={handleHover} onMouseLeave={handleLeave}>
-        <Tabs selectedIndex={tabIndex} onSelect={setTab} >
+        <Tabs selectedIndex={selectedTab} onSelect={setTab} >
             <TabList className={"tablist"} >
                 <Tab
-                    disabled={loading || tabIndex === 0}
+                    disabled={loading || selectedTab === 0}
                     className={
-                    0 === tabIndex - 1
-                    ? tabIndex === 1
+                    0 === selectedTab - 1
+                    ? selectedTab === 1
                     ? "react-tabs__tab LIBefore removeBorder"
                     : "react-tabs__tab LIBefore"
-                    : tabIndex + 1 === 0
+                    : selectedTab + 1 === 0
                     ? "react-tabs__tab LIAFter"
-                    : tabIndex === 0
+                    : selectedTab === 0
                     ? "react-tabs__tab react-tabs__tab--selected"
                     : "react-tabs__tab"
                     }
@@ -321,15 +306,15 @@ const SideBarTabs = ({
                     </div>
                 </Tab>
                 <Tab
-                    disabled={loading || tabIndex === 1}
+                    disabled={loading || selectedTab === 1}
                     className={
-                      1 === tabIndex - 1
-                        ? tabIndex === 2
+                      1 === selectedTab - 1
+                        ? selectedTab === 2
                           ? "react-tabs__tab LIBefore removeBorder"
                           : "react-tabs__tab LIBefore"
-                        : tabIndex + 1 === 1
+                        : selectedTab + 1 === 1
                         ? "react-tabs__tab"
-                        : tabIndex === 1
+                        : selectedTab === 1
                         ? "react-tabs__tab react-tabs__tab--selected removeBorder"
                         : "react-tabs__tab"
                     }
@@ -341,15 +326,15 @@ const SideBarTabs = ({
                     </div>
                 </Tab>
                 <Tab
-                    disabled={loading || tabIndex === 2}
+                    disabled={loading || selectedTab === 2}
                     className={
-                      2 === tabIndex - 1
-                        ? tabIndex === 3
+                      2 === selectedTab - 1
+                        ? selectedTab === 3
                           ? "react-tabs__tab LIBefore removeBorder"
                           : "react-tabs__tab LIBefore"
-                        : tabIndex + 1 === 2
+                        : selectedTab + 1 === 2
                         ? "react-tabs__tab"
-                        : tabIndex === 2
+                        : selectedTab === 2
                         ? "react-tabs__tab react-tabs__tab--selected removeBorder"
                         : "react-tabs__tab"
                     }
@@ -361,15 +346,15 @@ const SideBarTabs = ({
                     </div>
                 </Tab>
                 <Tab
-                    disabled={loading || tabIndex === 3}
+                    disabled={loading || selectedTab === 3}
                     className={
-                      3 === tabIndex - 1
-                        ? tabIndex === 4
+                      3 === selectedTab - 1
+                        ? selectedTab === 4
                           ? "react-tabs__tab LIBefore removeBorder"
                           : "react-tabs__tab LIBefore"
-                        : tabIndex + 1 === 3
+                        : selectedTab + 1 === 3
                         ? "react-tabs__tab"
-                        : tabIndex === 3
+                        : selectedTab === 3
                         ? "react-tabs__tab react-tabs__tab--selected removeBorder"
                         : "react-tabs__tab"
                     }
@@ -380,15 +365,15 @@ const SideBarTabs = ({
                     </div>
                 </Tab>
                 <Tab
-                    disabled={loading || tabIndex === 4}
+                    disabled={loading || selectedTab === 4}
                     className={
-                      4 === tabIndex - 1
-                        ? tabIndex === 5
+                      4 === selectedTab - 1
+                        ? selectedTab === 5
                           ? "react-tabs__tab LIBefore removeBorder"
                           : "react-tabs__tab LIBefore"
-                        : tabIndex + 1 === 4
+                        : selectedTab + 1 === 4
                         ? "react-tabs__tab"
-                        : tabIndex === 4
+                        : selectedTab === 4
                         ? "react-tabs__tab react-tabs__tab--selected removeBorder"
                         : "react-tabs__tab"
                     }
@@ -399,15 +384,15 @@ const SideBarTabs = ({
                     </div>
                 </Tab>
                 <Tab
-                    disabled={loading || tabIndex === 5}
+                    disabled={loading || selectedTab === 5}
                     className={
-                      5 === tabIndex - 1
-                        ? tabIndex === 6
+                      5 === selectedTab - 1
+                        ? selectedTab === 6
                           ? "react-tabs__tab LIBefore removeBorder"
                           : "react-tabs__tab LIBefore"
-                        : tabIndex + 1 === 5
+                        : selectedTab + 1 === 5
                         ? "react-tabs__tab"
-                        : tabIndex === 5
+                        : selectedTab === 5
                         ? "react-tabs__tab react-tabs__tab--selected removeBorder"
                         : "react-tabs__tab"
                     }
@@ -423,7 +408,7 @@ const SideBarTabs = ({
       </TabList>
 </Tabs>
 
-  <div className="list-scroll" onScroll={handleScroll}>
+  <div className="list-scroll" >
   {listData.length > 0 ? (
               listData.map((i, key) => (
                 <ListTab
@@ -431,8 +416,6 @@ const SideBarTabs = ({
                   key={key}
                   handleListTabClick={handleListTabClick}
                   setSelectedListId={setSelectedListId}
-                  // selectedList={selectedList}
-                  // setSelectedList={setSelectedList}
                 />
               ))
             ) : (
@@ -441,61 +424,26 @@ const SideBarTabs = ({
   </div>
 </div>
 
-{/* <PanelContent isBusinessOpen={isBusinessOpen} tabIndex={tabIndex} selectedListId={selectedListId} /> */}
+ {/* <div className="panel-content">
 
- <div className="panel-content">
-{tabIndex === 1 && !isBusinessOpen &&
-  <HomeSearchComponent
-    // setDisplayTab={() => setTabIndex(0)}
-    // setSelectedListId={setSelectedListId}
-    // setListClickedFromSearch={setListClickedFromSearch}
-    // setSearchIndex={setSearchIndex}
-  /> }
+{selectedTab === 1 && view !== "business_detail" && view !== "list_detail" &&
+  <HomeSearchComponent/> }
 
-{tabIndex === 2 && !isBusinessOpen &&
-  <MyFeed
-    // setDisplayTab={() => setTabIndex(0)}
-    // setMyFeedIndex={setMyFeedIndex}
-    // setSelectedListId={setSelectedListId}
- 
-  /> } 
+{selectedTab === 2 && view !== "business_detail" && view !== "list_detail" &&
+  <MyFeed/> } 
 
+{view ==="list_detail" && 
+  <ListDetail/>
+}
 
-
-{tabIndex === -1 && !isBusinessOpen &&
-  <ListDetail
-    listOpenedFromBusiness={false}
-    // setDisplayTab={() => setTabIndex(0)}
-    // setSelectedListId={setSelectedListId}
-    // selectedListId={selectedListId}
-    // listClickedFromSearch={listClickedFromSearch}
-    // setListClickedFromSearch={setListClickedFromSearch}
-    // setListIndex={setListIndex}
-    // readMore={readMore}
-    // setDiscoverBtn={setDiscoverBtn}
-  />
-  }
-
-
-      {isBusinessOpen && 
-        <BuisinessView
-          profile={profile}
-          businessExists={businessExists}
-          businessId={businessId}
-          // searchIndex={searchIndex}
-          // setTabIndex={setTabIndex}
-          // setSearchIndex={setSearchIndex}
-          // myFeedIndex={myFeedIndex}
-          // setMyFeedIndex={setMyFeedIndex}
-          // setListIndex={setListIndex}
-          // listIndex={listIndex}
-          // favoriteIndex={favoriteIndex}
-          // setFavoriteIndex={setFavoriteIndex}
-          // setDisplayTab={() => console.log("businessView")}
-        />
-        }
-
-</div> 
+{view ==="business_detail" && 
+    <BuisinessView
+      // profile={profile}
+      // businessExists={businessExists}
+      businessId={detailId}
+    />
+}
+</div>  */}
  
 </div>
 
@@ -509,48 +457,3 @@ export default SideBarTabs
 
 
 
-
-
-
-
-               {/* <div className="list-scroll" onScroll={handleScroll}>
-                    {listData.length > 0 ? (
-                      listData.map((i, key) => (
-                        <Tab
-                        disabled={loading || tabIndex === 6}
-                        // className={
-                        //   (6 + key) === tabIndex - 1
-                        //     ? tabIndex === (7 + key)
-                        //       ? "react-tabs__tab LIBefore removeBorder"
-                        //       : "react-tabs__tab LIBefore"
-                        //     : tabIndex + 1 === (6 + key)
-                        //     ? "react-tabs__tab"
-                        //     : tabIndex === (6 + key)
-                        //     ? "react-tabs__tab react-tabs__tab--selected removeBorder"
-                        //     : "react-tabs__tab"
-                        // }
-                        className={
-                          6 === tabIndex - 1
-                            ? tabIndex === 7
-                              ? "react-tabs__tab LIBefore removeBorder"
-                              : "react-tabs__tab LIBefore"
-                            : tabIndex + 1 === 6
-                            ? "react-tabs__tab"
-                            : tabIndex === 6
-                            ? "react-tabs__tab react-tabs__tab--selected removeBorder"
-                            : "react-tabs__tab"
-                        }
-                        onClick={() => handleListTabClick(i.name)}
-                        >
-                         
-                          <ListTab
-                          data={i}
-                          key={key}
-                          setSelectedListId={setSelectedListId}
-                        />
-                      </Tab>
-                      ))
-                    ) : (
-                    <h6>lists loading</h6>
-                      )}
-                </div> */}

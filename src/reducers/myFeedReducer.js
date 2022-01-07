@@ -209,7 +209,7 @@ export const slice = createSlice({
     loadingEventReplies: false,
     searchData: "",
     filterByUpdatedAt: false,
-    filterByClosest: false,
+    filterByClosest: true,
     selectedListDetails: null,
     loadingSelectedList: false,
     enterClicked: false,

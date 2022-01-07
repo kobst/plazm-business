@@ -2,7 +2,10 @@
 import create from 'zustand'
 
 const [useStore] = create(set => ({
-    tabSelected: 2,
+    profile: null,
+    businessDetailProfile: null,
+    detailId: null,
+    tabSelected: -1,
     selectedListId: null,
     searchIndex: null, 
     listClickedFromSearch: null,
@@ -34,6 +37,18 @@ const [useStore] = create(set => ({
     gridView: true,
     maxViewable: 10,
     maxViewableDepth: 4,
+    setProfile: (profile) => set((state) => ({
+        ...state,
+        profile
+    })),
+    setBusinessDetailProfile: (businessDetailProfile) => set((state) => ({
+        ...state,
+        businessDetailProfile
+    })),
+    setDetailId: (detailId) => set((state) => ({
+        ...state,
+        detailId
+    })),
     setTabSelected: (tabSelected) => set((state) => ({
         ...state,
         tabSelected

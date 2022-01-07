@@ -7,9 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import BuisinessProfileDetails from "./BuisinessProfileDetails";
 import ValueLoader from "../../../utils/loader";
 import { setSideFilters } from "../../../reducers/businessReducer";
+import useStore from "../useState/index";
 
-
-import useStore from '../useState/index'
 
 const BuisinessViewContent = styled.div`
   width: 100%;
@@ -35,8 +34,8 @@ const LoaderWrap = styled.div`
 
 const BuisinessView = ({
   setDisplayTab,
-  profile,
-  businessExists,
+  // profile,
+  // businessExists,
   businessId
   // searchIndex,
   // setTabIndex,
@@ -54,6 +53,7 @@ const BuisinessView = ({
   const flag = useSelector((state) => state.business.flag);
   const [displayBusinessProfile, setDisplayBusinessProfile] = useState(false);
   const setSelectedBusiness = useStore((state) => state.setSelectedPlace)
+  // const businessProfile = useStore((state) => state.businessDetailProfile)
 
   
 
@@ -78,7 +78,7 @@ const BuisinessView = ({
   return (
     <>
       {!loading &&
-      !businessExists &&
+      // !businessExists &&
       ((!flag && businessProfile && businessProfile.length === 0) ||
         (!businessProfile && !loading)) ? (
         <h3>Business Does Not Exist</h3>
@@ -125,7 +125,7 @@ const BuisinessView = ({
             businessProfile &&
             businessProfile.length > 0 && (
               <TabsSection
-                profile={profile}
+                // profile={profile}
                 businessId={businessId}
                 // setSelectedListId={setSelectedListId}
               />

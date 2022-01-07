@@ -11,19 +11,64 @@ import {
 } from "../../../reducers/businessReducer";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { fetchUserDetails, setWs } from "../../../reducers/userReducer";
+import useStore from "../../../component/Consumer/useState";
+// import BuisinessProfileDetails from "../../../component/Consumer/BuisinessView/BuisinessProfileDetails";
+
 
 const DashboardContainer = (props) => {
-  const [profile, setProfile] = useState();
-  const [flag, setFlag] = useState(false);
+
   const [businessExists, setBusinessExists] = useState(false);
-  const [businessId, setBusinessId] = useState("");
+
   const filters = useSelector((state) => state.business.filters);
   const user = useSelector((state) => state.user.user);
   const sideFilterForLikes = useSelector(
     (state) => state.business.filterByMostLiked
   );
   const globalLoader = useSelector((state) => state.consumer.globalLoader);
+
+
   const dispatch = useDispatch();
+  const [businessId, setBusinessId] = useState("");
+
+  const businessDetailProfile = useStore((state) => state.businessDetailProfile)
+  const setBusinessDetailProfile = useStore((state) => state.setBusinessDetailProfile)
+  const detailId = useStore((state) => state.detailId)
+  const setDetailId = useStore((state) => state.setDetailId)
+  const profile = useStore((state) => state.profile)
+  const setProfile = useStore((state) => state.setProfile)
+  const setSelectedTab = useStore((state) => state.setTabSelected)
+  const setSelectedListId = useStore((state) => state.setSelectedListId)
+
+  
+  // const [profile, setProfile] = useState();
+  const [flag, setFlag] = useState(false);
+
+
+
+  useEffect(() => {
+    if (props.view === "business_detail" || props.view === "user_detail" ) {
+      setDetailId(props.match.params.id ? props.match.params.id : "");
+    }
+
+    if (props.view === "list_detail") {
+      setSelectedListId(props.match.params.id ? props.match.params.id : "")
+    }
+
+    if (props.view === "my_feed") {
+        console.log("my feed route")
+        setSelectedTab(2)}
+
+    if (props.view === "explore") {
+        console.log("my explore route")
+        setSelectedTab(1)}
+
+    if (props.view === "lists") {
+       console.log("my list explore route")
+        setSelectedTab(5)}
+
+
+  },[props.view])
+
 
   useEffect(() => {
     /* to get loggedIn user profile */
@@ -60,11 +105,15 @@ const DashboardContainer = (props) => {
     getProfile();
     setFlag(false);
   }, [flag, dispatch]);
+
+
   useEffect(() => {
     /** find business function */
-    let findBusiness = async (isOpen) => {
-      if (isOpen === true) {
-        setBusinessId(props.match.params.id ? props.match.params.id : "");
+    // let findBusiness = async (isOpen) => {
+    //   if (isOpen === true) {
+    let findBusiness = async (view) => {
+      if (view === "business_detail") {
+        // setBusinessId(props.match.params.id ? props.match.params.id : "");
         /** to check if business exists or not */
         const response = await dispatch(
           checkBusiness({
@@ -93,27 +142,35 @@ const DashboardContainer = (props) => {
         if (data.success === true && data.place.length > 0) {
           /** fetch business images */
           dispatch(setFlagReducer());
+          setBusinessDetailProfile(data.place[0])
           setBusinessExists(true);
+          console.log("business data" + JSON.stringify(data.place))
         } else {
           dispatch(setFlagReducer());
           setBusinessExists(false);
+          // set error business does not exist
         }
       }
     };
 
-    if (user._id) findBusiness(props.isBusinessOpen);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.isBusinessOpen, props.match.params.id, dispatch, user]);
+    // if (user._id) findBusiness(props.isBusinessOpen);
+    if (user._id) findBusiness(props.view);
+
+  }, [props.view, props.isBusinessOpen, props.match.params.id, dispatch, user]);
 
   return profile && !globalLoader ? (
     <Dashboard
       profile={profile}
       setFlag={setFlag}
-      isBusinessOpen={props.isBusinessOpen}
-      isUserOpen={props.isUserOpen}
-      businessExists={businessExists}
-      businessId={props.match.params.id ? businessId : null}
-      userId={props.isUserOpen ? props.match.params.id : null}
+      // isBusinessOpen={props.isBusinessOpen}
+      // isUserOpen={props.isUserOpen}
+      // businessExists={businessExists}
+      // businessId={props.match.params.id ? businessId : null}
+      // userId={props.isUserOpen ? props.match.params.id : null}
+      // listId={props.isListOpen ? props.match.params.id : null}
+      detailId={detailId}
+      view={props.view}
+
     />
   ) : (
     <div

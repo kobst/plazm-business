@@ -30,7 +30,6 @@ const RightBarContent = styled.div`
 const RightBar = ({displayTab}) => (
     <>
         <RightBarContent className={displayTab===true?"imgSlide_onTabOpen":""}>
-            <img src={RightBG} alt="rightImg" />
         </RightBarContent>
     </>
   )

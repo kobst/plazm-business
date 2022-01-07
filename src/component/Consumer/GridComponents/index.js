@@ -78,25 +78,16 @@ const GridContainer = ({gridMode}) => {
             console.log("grid " + tabSelected)
             loadData(searchData)
         }
-        if (searchData.length > 0 && tabSelected == 2){
+        if (feedData.length > 0 && tabSelected == 2){
             console.log("grid " + tabSelected)
             loadData(feedData)
         }
-        if (searchData.length > 0 && tabSelected == -1){
+        if (feedData.length > 0 && tabSelected == -1){
             console.log("grid " + tabSelected)
             loadData(feedData)
         }
     }, [feedData, searchData, tabSelected])
 
-
-    useEffect(() => {
-        console.log("grid index" + tabSelected)
-        // if (tabSelected == 1) {
-        //     loadData()
-        // }
-
-
-    }, [tabSelected])
 
 
     const loadData = (data) => {

@@ -1,7 +1,9 @@
 import { FaDivide } from "react-icons/fa";
 import React, { useEffect, useState, useRef } from "react";
-
 import { useDispatch, useSelector } from "react-redux";
+import useStore from "../../../Consumer/useState";
+
+import { useHistory } from "react-router-dom";
 
 import UploadImg from "../../../../images/upload-img.jpg";
 import "./styles.css";
@@ -15,19 +17,25 @@ import {
 const ListTab = ({
     data,
     handleListTabClick,
-    setSelectedListId,
-    selectedListId,
-    setListTab,
-    selectedList,
-    setSelectedList,
+    // setSelectedListId,
+    // selectedListId,
+    // setListTab,
+    // selectedList,
+    // setSelectedList,
   }) => {
+
+    const history = useHistory();
+
     const user = useSelector((state) => state.user.user);
     const [uploadMenu, setUploadMenu] = useState(false);
     const menuRef = useRef(null);
     const dispatch = useDispatch();
     const [image, setImage] = useState(null);
-
     const [selected, setSelected] = useState(false)
+
+    const selectedListId = useStore((state) => state.selectedListId)
+    const setSelectedListId = useStore((state) => state.setSelectedListId)
+
   
     /** to check if list view size image exists in bucket */
     useEffect(() => {
@@ -57,8 +65,10 @@ const ListTab = ({
     };
 
     const handleClick = ()=> {
+       
         setSelectedListId(data._id)
         handleListTabClick(data)
+        history.push(`/list/${data._id}`);
     }
 
 

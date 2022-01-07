@@ -40,7 +40,7 @@ const TabsSection = ({ profile, businessId }) => {
 
           <TabPanel>
             <PostsSection
-              profile={profile}
+              // profile={profile}
               businessId={businessId}
               // setSelectedListId={setSelectedListId}
             />

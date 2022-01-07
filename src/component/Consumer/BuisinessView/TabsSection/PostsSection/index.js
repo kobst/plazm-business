@@ -18,7 +18,9 @@ const PostsSection = ({ profile, businessId}) => {
   return (
     <>
       <PostsSectionContent>
-        <AddPostSection profile={profile} businessId={businessId} />
+        <AddPostSection 
+        // profile={profile} 
+        businessId={businessId} />
         {/* <PostFilter setFilterArr={setFilterArr} /> */}
         <PostFilterButton setFilterArr={setFilterArr} />
         <PostChat
