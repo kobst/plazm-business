@@ -36,7 +36,7 @@ const HomeSearch = ({
   const [locationState, setLocationState] = useState("prompt");
   const [loader, setLoader] = useState(null);
   const [coords, setCoords] = useState(null);
-  const [closestFilter, setClosestFilter] = useState(false);
+  const [closestFilter, setClosestFilter] = useState(true);
 
 
 

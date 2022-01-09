@@ -231,6 +231,20 @@ const SideBarTabs = ({
       }
     };
 
+    const listDiscovery = () => {
+      // if (!loading) {
+        console.log(" list discovery - xxx")
+        dispatch(clearMyFeedData());
+        dispatch(clearBusinessData());
+        dispatch(clearTopPost());
+        setSelectedListId(null);
+        setListIndex(null);
+        setUserDataId(null);
+        history.push("/lists");
+        setDiscoverBtn(false);
+      // }
+    }
+
 
   const handleHover = () => {
     console.log("set expanded true")
@@ -396,6 +410,7 @@ const SideBarTabs = ({
                         ? "react-tabs__tab react-tabs__tab--selected removeBorder"
                         : "react-tabs__tab"
                     }
+                    onClick={() => listDiscovery()}
                 >
                     <div className="item">
                         <FiList className="sidebar-icon"/>
@@ -403,7 +418,6 @@ const SideBarTabs = ({
                     </div>
                 </Tab>
 
- 
 
       </TabList>
 </Tabs>
@@ -424,7 +438,7 @@ const SideBarTabs = ({
   </div>
 </div>
 
- {/* <div className="panel-content">
+{/* <div className="panel-content">
 
 {selectedTab === 1 && view !== "business_detail" && view !== "list_detail" &&
   <HomeSearchComponent/> }

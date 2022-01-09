@@ -60,17 +60,15 @@ const Dashboard = ({
             view={view}
             detailId={detailId}
           /> 
-        {/*  break out panel content*/}
 
         <PanelContent view={view}/>
 
-          <GridContainer gridMode={gridMode}/>
-          <MapView/>
-          <RadarView/>
+        <GridContainer gridMode={gridMode}/>
+        <MapView/>
+        <RadarView/>
 
-          {/* <Header gridMode={gridMode} setGridMode={setGridMode}/> */}
+      {/* <Header gridMode={gridMode} setGridMode={setGridMode}/> */}
 
-          {/* <RightBar displayTab={displayTab} /> */}
         </DashboardContent>
     </>
   );

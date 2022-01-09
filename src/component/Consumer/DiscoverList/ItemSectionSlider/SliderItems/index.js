@@ -33,6 +33,9 @@ import {
 } from "../../../../../reducers/userReducer";
 import ValueLoader from "../../../../../utils/loader";
 
+import { useHistory } from "react-router-dom";
+
+
 const NewInBuzzItems = ({
   data,
   setSelectedListId,
@@ -46,6 +49,8 @@ const NewInBuzzItems = ({
   setTotalLists,
   totalLists,
 }) => {
+
+
   const user = useSelector((state) => state.user.user);
   const [offsetLeft, setOffsetLeft] = useState(0);
   const [offsetTop, setOffsetTop] = useState(0);
@@ -55,6 +60,7 @@ const NewInBuzzItems = ({
   );
   const divRef = useRef();
   const dispatch = useDispatch();
+  const history = useHistory()
 
   /** to set position on hover of text */
   const displayData = () => {
@@ -69,9 +75,12 @@ const NewInBuzzItems = ({
 
   /** to open list description view */
   const ReadMore = () => {
+    console.log(" reading more")
     setDiscoverBtn(false);
     setSelectedListId(data._id);
     setReadMore(true);
+    history.push(`/list/${data._id}`);
+    
   };
 
   /** to unsubscribe from a list */

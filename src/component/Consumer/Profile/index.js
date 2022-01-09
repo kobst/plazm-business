@@ -40,6 +40,7 @@ const ProfileContent = ({ userId, setDisplayTab, setProfileClosed }) => {
     if(userId)
     fetchUserProfile()
   }, [dispatch, userId]);
+
   return loading || flag ? (
     <LoaderWrap>
       <ValueLoader />
@@ -47,8 +48,8 @@ const ProfileContent = ({ userId, setDisplayTab, setProfileClosed }) => {
   ) : userProfile !== null ? (
     <div>
       <ProfileDetail
-        setDisplayTab={setDisplayTab}
-        setProfileClosed={setProfileClosed}
+        // setDisplayTab={setDisplayTab}
+        // setProfileClosed={setProfileClosed}
       />
       <ProfileTabs />
       <ProfileLock />

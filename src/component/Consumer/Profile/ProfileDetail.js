@@ -85,9 +85,10 @@ const ProfileLock = ({ setDisplayTab, setProfileClosed }) => {
    */
   const closeTab = () => {
     // setDisplayTab();
-    setProfileClosed(true)
+    // setProfileClosed(true)
     // history.push("/");
   };
+
   return (
     <ProfileOuter>
       <CloseDiv>

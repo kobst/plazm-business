@@ -62,7 +62,7 @@ const DashboardContainer = (props) => {
         console.log("my explore route")
         setSelectedTab(1)}
 
-    if (props.view === "lists") {
+    if (props.view === "list_explore") {
        console.log("my list explore route")
         setSelectedTab(5)}
 
