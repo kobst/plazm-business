@@ -1,7 +1,6 @@
 import React, { useState, useEffect} from "react";
 import styled from "styled-components";
 import LeftBar from "../../UI/Consumer/LeftBar";
-import SideBar from "../../UI/Consumer/SideBar/SideBar";
 import SideBarTabs from "../../UI/Consumer/SideBarTabs/SideBarTabs";
 import PanelContent from "../../UI/Consumer/Panel-Content/PanelContent";
 

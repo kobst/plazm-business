@@ -26,7 +26,7 @@ const GridContainer = ({gridMode}) => {
     const feedData = useSelector((state) => state.myFeed.myFeed);
     const searchData = useSelector((state) => state.myFeed.searchFeed);
 
-    // const [draggedCenter, setDraggedCenter] = useState({
+    // const [draggedLocation, setDraggedLocation] = useState({
     //     lat: JSON.stringify(process.env.REACT_APP_LATITUDE),
     //     lng: JSON.stringify(process.env.REACT_APP_LONGITUDE)
     // })
@@ -54,8 +54,8 @@ const GridContainer = ({gridMode}) => {
     const placeCoordDict = useStore((state) => state.placeCoordDict)
     const setPlaceCoordDict = useStore((state) => state.setPlaceCoordDict)
 
-    const draggedCenter = useStore((state) => state.draggedCenter)
-    const setDraggedCenter = useStore((state) => state.setDraggedCenter)
+    const draggedLocation = useStore((state) => state.draggedLocation)
+    const setDraggedLocation = useStore((state) => state.setDraggedLocation)
 
     const tabSelected = useStore((state) => state.tabSelected)
    
@@ -113,7 +113,7 @@ const GridContainer = ({gridMode}) => {
     useEffect(() => {
         console.log("initial props places")
         ReCenter(null)
-    }, [places, draggedCenter])
+    }, [places, draggedLocation])
 
     // on shifting centerPlace..
     useEffect(() => {
@@ -138,14 +138,14 @@ const GridContainer = ({gridMode}) => {
     //     return () => {
     //         clearTimeout(timer1);
     //     };
-    // }, [draggedCenter]);
+    // }, [draggedLocation]);
 
 
 
 
     const resetCenter = (newCenter) => {
         console.log('new center from passed' + newCenter)
-        // setDraggedCenter(newCenter)
+        // setDraggedLocation(newCenter)
     }
 
     const showPreview = (place) => {
@@ -171,7 +171,7 @@ const GridContainer = ({gridMode}) => {
             // props.selectPlace(place)
             // all in one
             // const { _orderedPlacesResponse, _slotDictResponse, _multiDictResponse } = AssignMolecularDict(places, props.center, place)
-            const { _orderedPlacesResponse, _slotDictResponse, _multiDictResponse } = AssignHexDict(places, draggedCenter, place)
+            const { _orderedPlacesResponse, _slotDictResponse, _multiDictResponse } = AssignHexDict(places, draggedLocation, place)
 
             if (_orderedPlacesResponse.length < limit) {
                 limit = _orderedPlacesResponse.length
@@ -189,7 +189,7 @@ const GridContainer = ({gridMode}) => {
                 console.log(places.length + " length ---")
                 // all in one
                 // const { _orderedPlacesResponse, _slotDictResponse, _multiDictResponse } = AssignMolecularDict(props.places, props.center)
-                const { _orderedPlacesResponse, _slotDictResponse, _multiDictResponse } = AssignHexDict(places, draggedCenter, place)
+                const { _orderedPlacesResponse, _slotDictResponse, _multiDictResponse } = AssignHexDict(places, draggedLocation, place)
 
 
                 if (_orderedPlacesResponse.length < limit) {
@@ -226,7 +226,7 @@ const GridContainer = ({gridMode}) => {
     return (
         <div>
             {gridMode && <container className="grid-container-small">
-                 <GridView center={draggedCenter} places={places} selectPlace={setSelectPlace} hovering={showPreview} />
+                 <GridView center={draggedLocation} places={places} selectPlace={setSelectPlace} hovering={showPreview} />
             </container>  }
         </div >
     )

@@ -73,6 +73,7 @@ const MapView = (props) => {
     const [places_0, setPlaces_0] = useState([])
     const [places_1, setPlaces_1] = useState([])
     const [places_2, setPlaces_2] = useState([])
+    const [tempCenter, setTempCenter] = useState()
 
     const places = useStore(state => state.places)
     const selectedPlace = useStore(state => state.selectedPlace)
@@ -83,7 +84,7 @@ const MapView = (props) => {
     const gridView = useStore(state => state.gridView)
     const setGridView = useStore(state => state.setGridView)
 
-    const setDraggedCenter = useStore(state => state.setDraggedCenter)
+    const setDraggedLocation = useStore(state => state.setDraggedLocation)
     const draggedCenter = useStore(state => state.draggedCenter)
 
     const gridContainerStyle = {
@@ -208,10 +209,20 @@ const MapView = (props) => {
             console.log('Map bounds have been changed by user interaction')
             let cntr = map.getCenter()
             console.log(cntr)
-            setDraggedCenter(cntr)      
+            setTempCenter(cntr)
+            setDraggedLocation(cntr)      
           }
 
     }
+
+    // useEffect(() => {
+
+    //     let timer1 = setTimeout(() => setDraggedLocation(tempCenter), 2000);
+    //     // this will clear Timeout when component unmount like in willComponentUnmount
+    //     return () => {
+    //         clearTimeout(timer1);
+    //     };
+    // }, [tempCenter]);
 
 
 

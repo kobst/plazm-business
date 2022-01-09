@@ -80,6 +80,7 @@ const detailId = useStore((state) => state.detailId)
 
                 {view ==="user_detail" && <Profile userId={detailId}/>}
 
+
         </div>
 
         {view === "list_explore" && <DiscoverList/>}

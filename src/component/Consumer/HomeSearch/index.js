@@ -46,9 +46,6 @@ const HomeSearch = ({
   const setListClickedFromSearch = useStore((state) => state.setListClickedFromSearch)
 
 
-
-
-
   useEffect(() => {
     dispatch(setSideFiltersHomeSearch());
     dispatch(clearMyFeedData());

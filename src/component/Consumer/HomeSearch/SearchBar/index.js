@@ -12,6 +12,8 @@ import {
   setSideFiltersByClosest,
   setSideFiltersByUpdatedAt,
 } from "../../../../reducers/myFeedReducer";
+
+import useStore from "../../useState";
 import DropdwonArrowTop from "../../../../images/top_arrow_polygon.png";
 import { FaFilter } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
@@ -176,12 +178,8 @@ const DropdownContent = styled.div`
       margin: 0;
       cursor: pointer;
       background: transparent;
-<<<<<<< HEAD
       :hover,
       :focus {
-=======
-      :hover, :focus {
->>>>>>> master
         color: #fff;
       }
     }
@@ -204,6 +202,8 @@ const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
     (state) => state.myFeed.filterByUpdatedAt
   );
   const searchData = useSelector((state) => state.myFeed.searchData);
+
+  const draggedLocation = useStore((state) => state.draggedLocation)
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -243,12 +243,8 @@ const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
           search: search,
           value: 0,
           filters: { closest: filterClosest, updated: updatedAtFilter },
-          latitude: userLocation
-            ? userLocation.latitude
-            : process.env.REACT_APP_LATITUDE,
-          longitude: userLocation
-            ? userLocation.longitude
-            : process.env.REACT_APP_LONGITUDE,
+          latitude: draggedLocation.lat,
+          longitude: draggedLocation.lng,
         };
         dispatch(setEnterClicked(true));
         dispatch(HomeSearch(obj));

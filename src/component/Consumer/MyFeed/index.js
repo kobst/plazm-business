@@ -120,22 +120,26 @@ const MyFeed = () => {
 
   const setSelectedListId = useStore((state) => state.setSelectedListId)
   const setMyFeedIndex = useStore((state) => state.setMyFeedIndex)
+  const draggedLocation = useStore((state) => state.draggedLocation)
  
 
   /** to fetch data initially */
   useEffect(() => {
+    console.log(draggedLocation.lat + " lat  " + draggedLocation.lng + "lng")
+
+    // console.log(userLocation.latitude + " lat  " + userLocation.longitude + "lng")
+
+    console.log(process.env.REACT_APP_LATITUDE + " lat  " + process.env.REACT_APP_LONGITUDE + "lng")
+
+    
     const fetchData = async () => {
       const obj = {
         id: user._id,
         value: 0,
         search: searchData,
         filters: { closest: filterByClosest, updated: filterByUpdatedAt },
-        latitude: userLocation
-          ? userLocation.latitude
-          : process.env.REACT_APP_LATITUDE,
-        longitude: userLocation
-          ? userLocation.longitude
-          : process.env.REACT_APP_LONGITUDE,
+        latitude: draggedLocation.lat,
+        longitude: draggedLocation.lng,
       };
       dispatch(clearMyFeedData());
       const res = await dispatch(fetchMyFeedData(obj));
@@ -162,12 +166,8 @@ const MyFeed = () => {
           value: offset + 20,
           search: searchData,
           filters: { closest: filterByClosest, updated: filterByUpdatedAt },
-          latitude: userLocation
-            ? userLocation.latitude
-            : process.env.REACT_APP_LATITUDE,
-          longitude: userLocation
-            ? userLocation.longitude
-            : process.env.REACT_APP_LONGITUDE,
+          latitude: draggedLocation.lat,
+          longitude: draggedLocation.lng,
         })
       );
     } else setHasMore(false);

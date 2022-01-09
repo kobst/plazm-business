@@ -117,6 +117,7 @@ const SideBarTabs = ({
   const setUserDataId = useStore((state) => state.setUserDataId)
   const setDiscoverBtn = useStore((state) => state.setDiscoverBtn)
   const setReadMore = useStore((state) => state.setReadMore)
+  const draggedLocation = useStore((state) => state.draggedLocation)
 
 
 //old useStore
@@ -196,12 +197,8 @@ const SideBarTabs = ({
         id: user._id,
         value: 0,
         filters: { closest: false, updated: false },
-        latitude: userLocation
-          ? userLocation.latitude
-          : process.env.REACT_APP_LATITUDE,
-        longitude: userLocation
-          ? userLocation.longitude
-          : process.env.REACT_APP_LONGITUDE,
+        latitude: draggedLocation.lat,
+        longitude: draggedLocation.lng,
         search: "",
       };
       dispatch(setSearchData(""));

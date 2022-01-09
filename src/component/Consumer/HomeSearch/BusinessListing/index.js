@@ -68,7 +68,7 @@ const BusinessListing = ({
   const setSelectedListId = useStore((state) => state.setSelectedListId)
   const setSearchIndex = useStore((state) => state.setSearchIndex)
   const setListClickedFromSearch = useStore((state) => state.setListClickedFromSearch)
-
+  const draggedLocation = useStore((state => state.draggedLocation))
 
   /** useEffect called when any side filters are selected */
   useEffect(() => {
@@ -81,8 +81,8 @@ const BusinessListing = ({
             closestFilter && !updatedAtFilter ? closestFilter : filterClosest,
           updated: updatedAtFilter,
         },
-        latitude: coords ? coords.latitude : process.env.REACT_APP_LATITUDE,
-        longitude: coords ? coords.longitude : process.env.REACT_APP_LONGITUDE,
+        latitude: draggedLocation.lat,
+        longitude: draggedLocation.lng,
       };
       const result = await dispatch(HomeSearchInitial(obj));
       const data = await unwrapResult(result);
@@ -110,8 +110,8 @@ const BusinessListing = ({
         search: search,
         value: offset + 20,
         filters: { closest: filterClosest, updated: updatedAtFilter },
-        latitude: process.env.REACT_APP_LATITUDE,
-        longitude: process.env.REACT_APP_LONGITUDE,
+        latitude: draggedLocation.lat,
+        longitude: draggedLocation.lng,
       };
       dispatch(HomeSearch(obj));
     } else setHasMore(false);

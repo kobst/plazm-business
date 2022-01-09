@@ -10,6 +10,8 @@ import {
 } from "../../../reducers/userReducer";
 import { unwrapResult } from "@reduxjs/toolkit";
 import SearchBar from "./SearchBar";
+import useStore from "../useState";
+
 
 const LoaderWrap = styled.div`
   width: 100%;
@@ -108,7 +110,7 @@ const BusinessList = ({ setDisplayTab, setFavoriteIndex }) => {
   const loadingFavoriteBusiness = useSelector(
     (state) => state.user.loadingFavoriteBusiness
   );
-  const userLocation = useSelector((state) => state.business.userLocation);
+  // const userLocation = useSelector((state) => state.business.userLocation);
   const favoriteBusiness = useSelector((state) => state.user.favoriteBusiness);
   const filterByClosest = useSelector((state) => state.myFeed.filterByClosest);
   const filterByUpdatedAt = useSelector(
@@ -117,6 +119,8 @@ const BusinessList = ({ setDisplayTab, setFavoriteIndex }) => {
   const [flag, setFlag] = useState(true);
   const [search, setSearch] = useState("");
   const [filteredData, setFilteredData] = useState([]);
+
+  const draggedLocation = useStore((state) => state.draggedLocation)
   const dispatch = useDispatch();
 
   const userFavorites =
@@ -134,12 +138,8 @@ const BusinessList = ({ setDisplayTab, setFavoriteIndex }) => {
         fetchUserFavoritesBusiness({
           id: user._id,
           value: offset,
-          latitude: userLocation
-            ? userLocation.latitude
-            : process.env.REACT_APP_LATITUDE,
-          longitude: userLocation
-            ? userLocation.longitude
-            : process.env.REACT_APP_LONGITUDE,
+          latitude: draggedLocation.lat,
+          longitude: draggedLocation.lng,
           filters: { closest: filterByClosest, updated: filterByUpdatedAt },
         })
       );
@@ -155,7 +155,7 @@ const BusinessList = ({ setDisplayTab, setFavoriteIndex }) => {
     offset,
     filterByClosest,
     filterByUpdatedAt,
-    userLocation,
+    draggedLocation,
   ]);
 
   useEffect(() => {
@@ -171,8 +171,8 @@ const BusinessList = ({ setDisplayTab, setFavoriteIndex }) => {
         fetchUserFavoritesBusiness({
           id: user._id,
           value: offset + 20,
-          latitude: process.env.REACT_APP_LATITUDE,
-          longitude: process.env.REACT_APP_LONGITUDE,
+          latitude: draggedLocation.lat,
+          longitude: draggedLocation.lng,
           filters: { closest: filterByClosest, updated: filterByUpdatedAt },
         })
       );

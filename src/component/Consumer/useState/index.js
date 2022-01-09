@@ -21,7 +21,8 @@ const [useStore] = create(set => ({
     coordPlaceDict: {},
     centerId: null,
     centerPlace: null,
-    draggedCenter: {lat: JSON.stringify(process.env.REACT_APP_LATITUDE), lng: JSON.stringify(process.env.REACT_APP_LONGITUDE)},
+    userLocation: {lat: process.env.REACT_APP_LATITUDE, lng: process.env.REACT_APP_LONGITUDE},
+    draggedLocation: {lat: process.env.REACT_APP_LATITUDE, lng: process.env.REACT_APP_LONGITUDE},
     Depth1Places: [],
     positionCenter: [0, 0, 0],
     centerHexPosition: [0, 0, 0],
@@ -117,9 +118,13 @@ const [useStore] = create(set => ({
         ...state,
         centerPlace
     })),
-    setDraggedCenter: (draggedCenter) => set((state) => ({
+    setUserLocation: (userLocation) => set((state) => ({
         ...state,
-        draggedCenter
+        userLocation
+    })),
+    setDraggedLocation: (draggedLocation) => set((state) => ({
+        ...state,
+        draggedLocation
     })),
     setDepth1Places: (depth1Places) => set((state) => ({
         ...state,
