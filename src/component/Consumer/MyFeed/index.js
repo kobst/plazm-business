@@ -131,7 +131,6 @@ const MyFeed = () => {
 
     console.log(process.env.REACT_APP_LATITUDE + " lat  " + process.env.REACT_APP_LONGITUDE + "lng")
 
-    
     const fetchData = async () => {
       const obj = {
         id: user._id,
@@ -153,6 +152,7 @@ const MyFeed = () => {
     filterByClosest,
     filterByUpdatedAt,
     userLocation,
+    draggedLocation,
     searchData,
   ]);
 

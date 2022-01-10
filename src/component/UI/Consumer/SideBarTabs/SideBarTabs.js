@@ -173,15 +173,17 @@ const SideBarTabs = ({
       console.log("home search" + selectedTab)
       setFavoriteIndex(null);
       if (!loading) {
-        dispatch(setSearchData(""));
-        dispatch(clearMyFeedData());
-        dispatch(setSideFiltersHomeSearch());
-        // dispatch(HomeSearch(obj));
-        setUserDataId(null);
-        setSelectedListId(null);
-        dispatch(clearBusinessData());
-        dispatch(clearTopPost());
-        setSearchIndex(null);
+
+        // dispatch(setSearchData(""));
+        // dispatch(clearMyFeedData());
+        // dispatch(setSideFiltersHomeSearch());
+        // // dispatch(HomeSearch(obj));
+        // setUserDataId(null);
+        // setSelectedListId(null);
+        // dispatch(clearBusinessData());
+        // dispatch(clearTopPost());
+        // setSearchIndex(null);
+
         history.push("/explore");
       }
     };
@@ -190,25 +192,25 @@ const SideBarTabs = ({
 
     /** to clear selected data on tab click */
   const myFeedFunction = () => {
-    console.log(" my feed" + selectedTab)
     if (!loading) {
       console.log("in home feed ")
-      const obj = {
-        id: user._id,
-        value: 0,
-        filters: { closest: false, updated: false },
-        latitude: draggedLocation.lat,
-        longitude: draggedLocation.lng,
-        search: "",
-      };
-      dispatch(setSearchData(""));
-      setUserDataId(null);
-      setSelectedListId(null);
-      dispatch(setSideFiltersHomeSearch());
-      dispatch(clearMyFeedData());
-      dispatch(fetchMyFeedData(obj));
-      dispatch(clearBusinessData());
-      dispatch(clearTopPost());
+      // const obj = {
+      //   id: user._id,
+      //   value: 0,
+      //   filters: { closest: false, updated: false },
+      //   latitude: draggedLocation.lat,
+      //   longitude: draggedLocation.lng,
+      //   search: "",
+      // };
+      // dispatch(setSearchData(""));
+      // setUserDataId(null);
+      // setSelectedListId(null);
+      // dispatch(setSideFiltersHomeSearch());
+      // dispatch(clearMyFeedData());
+      // dispatch(fetchMyFeedData(obj));
+      // dispatch(clearBusinessData());
+      // dispatch(clearTopPost());
+
       history.push("/home");
 
     }
@@ -231,12 +233,14 @@ const SideBarTabs = ({
     const listDiscovery = () => {
       // if (!loading) {
         console.log(" list discovery - xxx")
-        dispatch(clearMyFeedData());
-        dispatch(clearBusinessData());
-        dispatch(clearTopPost());
-        setSelectedListId(null);
-        setListIndex(null);
-        setUserDataId(null);
+        
+        // dispatch(clearMyFeedData());
+        // dispatch(clearBusinessData());
+        // dispatch(clearTopPost());
+        // setSelectedListId(null);
+        // setListIndex(null);
+        // setUserDataId(null);
+
         history.push("/lists");
         setDiscoverBtn(false);
       // }

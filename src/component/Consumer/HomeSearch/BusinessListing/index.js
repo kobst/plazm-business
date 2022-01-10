@@ -100,6 +100,7 @@ const BusinessListing = ({
     updatedAtFilter,
     offset,
     loader,
+    draggedLocation
   ]);
 
   /** to fetch more places matching the search */
