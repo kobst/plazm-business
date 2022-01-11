@@ -20,6 +20,7 @@ import HomeSearchComponent from "../../../Consumer/HomeSearch";
 import BuisinessView from "../../../Consumer/BuisinessView";
 import BusinessList from "../../../Consumer/BusinessList";
 import DiscoverList from "../../../Consumer/DiscoverList";
+import ListMenu from "../../../Consumer/DiscoverList/ListMenu";
 
 
 
@@ -70,19 +71,18 @@ const detailId = useStore((state) => state.detailId)
     return (
         <>
         <div className="panel-content">
-                {selectedTab === 1 && <HomeSearchComponent/> }
+                {view ==="explore" && <HomeSearchComponent/> }
 
-                {selectedTab === 2 && <MyFeed/> } 
+                {view =="my_feed" && <MyFeed/> } 
 
                 {view ==="list_detail" && <ListDetail/>}
 
                 {view ==="business_detail" && <BuisinessView businessId={detailId}/>}
 
                 {view ==="user_detail" && <Profile userId={detailId}/>}
-
-
         </div>
 
+        {/* {view === "list_explore" && <ListMenu/>} */}
         {view === "list_explore" && <DiscoverList/>}
 
         </>

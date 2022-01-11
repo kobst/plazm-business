@@ -23,8 +23,11 @@ const Header = (
     setGridMode}) => {
 
     const selectedTab = useStore((state) => state.tabSelected)
+    const selectedList = useStore((state) => state.selectedList)
+    const draggedLocation = useStore((state) => state.draggedLocation)
 
     const [tabTitle, setTabTitle] = useState()
+    const [coords, setCoords] = useState()
 
     const handleToggle = () => {
         console.log(gridMode)
@@ -56,10 +59,19 @@ const Header = (
             setTabTitle("Discover Lists")
         }
         if (selectedTab === -1) {
-            setTabTitle("Explore")
+            if (selectedList) {
+                setTabTitle(selectedList.name)
+            }
         }
 
     }, [selectedTab])
+
+
+    useEffect(()=> {
+        let loc = draggedLocation.lat + " lat " + draggedLocation.lng + " long "
+        setCoords(loc)
+
+    }, [draggedLocation])
 
     return (
         <div className="header">
@@ -74,7 +86,7 @@ const Header = (
             </div>
 
             <div className="right-header">
-                
+                <h6>{coords}</h6>
             </div>
         </div>
     )

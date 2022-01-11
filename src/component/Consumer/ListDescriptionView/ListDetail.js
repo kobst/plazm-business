@@ -277,33 +277,36 @@ const ListDetailView = ({
   );
   const totalData = useSelector((state) => state.myFeed.totalData);
   const postsInList = useSelector((state) => state.myFeed.myFeed);
-  const selectedList = useSelector((state) => state.myFeed.selectedListDetails);
+//   const selectedList = useSelector((state) => state.myFeed.selectedListDetails);
   const userLists = useSelector((state) => state.list.userLists);
   const user = useSelector((state) => state.user.user);
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffSet] = useState(0);
   const [flag, setFlag] = useState(true);
+
+
+  const selectedList = useStore((state) => state.selectedList)
+  const selectedListId = useStore((state) => state.selectedListId)
+  const setSelectedListId = useStore((state) => state.setSelectedListId)
+  const setSelectedListName = useStore((state) => state.setSelectedListName)
+  const setListIndex = useStore((state) => state.setListIndex)
+  const setFavoriteIndex = useStore((state) => state.setFavoriteIndex)
+  const setDiscoverBtn = useStore((state) => state.setDiscoverBtn)
+  const readMore = useStore((state) => state.readMore)
+
   const [image, setImage] = useState(
     selectedList && selectedList.media.length > 0
       ? selectedList.media[0].image
       : BannerImg
   );
 
-  const selectedListId = useStore((state) => state.selectedListId)
-  const setSelectedListId = useStore((state) => state.setSelectedListId)
-  const setListIndex = useStore((state) => state.setListIndex)
-  const setFavoriteIndex = useStore((state) => state.setFavoriteIndex)
-  const setDiscoverBtn = useStore((state) => state.setDiscoverBtn)
-  const readMore = useStore((state) => state.readMore)
-
-
-
-
   const history = useHistory();
 
   useEffect(() => {
     if (selectedList && selectedList.media.length > 0)
+    console.log(JSON.stringify(selectedList))
       setImage(selectedList.media[0].image);
+    //   setSelectedListName(selectedList.name)
   }, [selectedList]);
 
   /** to fetch user lists */

@@ -6,6 +6,7 @@ const [useStore] = create(set => ({
     businessDetailProfile: null,
     detailId: null,
     tabSelected: -1,
+    selectedList: null,
     selectedListId: null,
     searchIndex: null, 
     listClickedFromSearch: null,
@@ -53,6 +54,10 @@ const [useStore] = create(set => ({
     setTabSelected: (tabSelected) => set((state) => ({
         ...state,
         tabSelected
+    })),
+    setSelectedList: (selectedList) => set((state) => ({
+        ...state,
+        selectedList
     })),
     setSelectedListId: (selectedListId) => set((state) => ({
         ...state,

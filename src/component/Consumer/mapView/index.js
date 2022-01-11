@@ -210,19 +210,19 @@ const MapView = (props) => {
             let cntr = map.getCenter()
             console.log(cntr)
             setTempCenter(cntr)
-            setDraggedLocation(cntr)      
+            // setDraggedLocation(cntr)      
           }
 
     }
 
-    // useEffect(() => {
+    useEffect(() => {
 
-    //     let timer1 = setTimeout(() => setDraggedLocation(tempCenter), 2000);
-    //     // this will clear Timeout when component unmount like in willComponentUnmount
-    //     return () => {
-    //         clearTimeout(timer1);
-    //     };
-    // }, [tempCenter]);
+        let timer1 = setTimeout(() => setDraggedLocation(tempCenter), 3000);
+        // this will clear Timeout when component unmount like in willComponentUnmount
+        return () => {
+            clearTimeout(timer1);
+        };
+    }, [tempCenter]);
 
 
 

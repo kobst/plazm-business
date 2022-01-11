@@ -47,26 +47,26 @@ const Dashboard = ({
     <>
         <DashboardContent>
             <SideBarTabs
-            // isUserOpen={isUserOpen}
             displayTab={displayTab}
             setDisplayTab={setDisplayTab}
-            // profile={profile}
             setFlag={setFlag}
-            // isBusinessOpen={isBusinessOpen}
-            // businessExists={businessExists}
-            // businessId={businessId}
-            // userId={userId}
             view={view}
             detailId={detailId}
           /> 
 
-        <PanelContent view={view}/>
+        {!gridMode && <PanelContent view={view}/>}
 
-        <GridContainer gridMode={gridMode}/>
-        <MapView/>
-        <RadarView/>
+        {view !== "list_explore" && <>
 
-      {/* <Header gridMode={gridMode} setGridMode={setGridMode}/> */}
+          <GridContainer gridMode={gridMode}/>
+          <MapView/>
+          <RadarView/>
+      
+      </>}
+
+  
+
+      <Header gridMode={gridMode} setGridMode={setGridMode}/>
 
         </DashboardContent>
     </>
@@ -78,14 +78,3 @@ export default Dashboard;
 
 
 
-          {/* <LeftBar
-            isUserOpen={isUserOpen}
-            displayTab={displayTab}
-            setDisplayTab={setDisplayTab}
-            profile={profile}
-            setFlag={setFlag}
-            isBusinessOpen={isBusinessOpen}
-            businessExists={businessExists}
-            businessId={businessId}
-            userId={userId}
-          /> */}

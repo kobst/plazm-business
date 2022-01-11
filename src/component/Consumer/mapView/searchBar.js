@@ -2,21 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Input from "../../UI/Input/Input";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import error from "../../../../constants";
-import {
-  HomeSearch,
-  clearSearchFeed,
-  setSearchData,
-  setSideFiltersHomeSearch,
-  setEnterClicked,
-  setSideFiltersByClosest,
-  setSideFiltersByUpdatedAt,
-} from "../../../../reducers/myFeedReducer";
-
-import useStore from "../../useState";
-import DropdwonArrowTop from "../../../../images/top_arrow_polygon.png";
-import { FaFilter } from "react-icons/fa";
-import { IoMdClose } from "react-icons/io";
+import useStore from '../useState/index'
 
 const SearchWrap = styled.div`
   height: 40px;
@@ -193,16 +179,8 @@ const DropdownContent = styled.div`
 const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
   const menuRef = useRef(null);
   const [search, setSearch] = useState("");
-  const loader = useSelector((state) => state.myFeed.loading);
   const [searchError, setSearchError] = useState("");
   const [uploadMenu, setUploadMenu] = useState(false);
-  const userLocation = useSelector((state) => state.business.userLocation);
-  const filterClosest = useSelector((state) => state.myFeed.filterByClosest);
-  const updatedAtFilter = useSelector(
-    (state) => state.myFeed.filterByUpdatedAt
-  );
-  const searchData = useSelector((state) => state.myFeed.searchData);
-
   const draggedLocation = useStore((state) => state.draggedLocation)
   const dispatch = useDispatch();
 
@@ -215,50 +193,13 @@ const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
     setUploadMenu(!uploadMenu);
   };
 
-  /** to set side filter by closest */
-  const closestFilter = () => {
-    setOffset(0);
-    dispatch(setSideFiltersByClosest());
-    setFilterSelected(true);
-    setUploadMenu(false);
-  };
-
-  /** to set side filter by recently updated */
-  const recentlyUpdatedFilter = () => {
-    setOffset(0);
-    dispatch(setSideFiltersByUpdatedAt());
-    setFilterSelected(true);
-    setUploadMenu(false);
-  };
 
   /** on key press handler for search */
-  const searchList = (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      if (search !== "" && search.length >= 4 && !search.trim() === false) {
-        setOffset(0);
-        dispatch(clearSearchFeed());
-        dispatch(setSideFiltersHomeSearch());
-        const obj = {
-          search: search,
-          value: 0,
-          filters: { closest: filterClosest, updated: updatedAtFilter },
-          latitude: draggedLocation.lat,
-          longitude: draggedLocation.lng,
-        };
-        dispatch(setEnterClicked(true));
-        dispatch(HomeSearch(obj));
-        setSearchError("");
-      } else if (search.length >= 0 && search.length < 4) {
-        setSearchError(error.SEARCH_ERROR);
-      }
-    }
-  };
+
 
   /** on change handler for search */
   const onChangeSearch = (e) => {
     setSearch(e.target.value);
-    dispatch(setSearchData(e.target.value));
   };
   return (
     <>
@@ -267,43 +208,11 @@ const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
         <RightSearchWrap>
           <Input
             value={search}
-            onKeyPress={(event) => searchList(event)}
             onChange={(e) => onChangeSearch(e)}
             disabled={loader}
             placeholder="Search"
           />
-          <FilterBox ref={menuRef}>
-            <FaFilter onClick={toggleUploadMenu} />
-            {uploadMenu && (
-              <DropdownContent>
-                <ul>
-                  <li>
-                    {" "}
-                    <button
-                      onClick={() => closestFilter()}
-                      disabled={filterClosest}
-                    >
-                      Closest 
-                    </button>
-                  </li>
-
-                  <li>
-                    <button
-                      onClick={() => recentlyUpdatedFilter()}
-                      disabled={updatedAtFilter}
-                    >
-                      {" "}
-                      Recently Updated
-                    </button>
-                  </li>
-                </ul>
-              </DropdownContent>
-            )}
-          </FilterBox>
         </RightSearchWrap>
-        <CloseDiv>
-          <IoMdClose onClick={() => setDisplayTab()} />
-        </CloseDiv>
       </SearchWrap>
       {searchError !== "" ? <ErrorDiv>{searchError}</ErrorDiv> : null}
     </>

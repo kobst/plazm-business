@@ -31,6 +31,8 @@ import {
   removeSubscribedList,
   addSubscribedList,
 } from "../../../../../reducers/userReducer";
+
+import useStore from "../../../useState";
 import ValueLoader from "../../../../../utils/loader";
 
 import { useHistory } from "react-router-dom";
@@ -38,7 +40,7 @@ import { useHistory } from "react-router-dom";
 
 const NewInBuzzItems = ({
   data,
-  setSelectedListId,
+  // setSelectedListId,
   setDiscoverBtn,
   setReadMore,
   heading,
@@ -58,6 +60,11 @@ const NewInBuzzItems = ({
   const [image, setImage] = useState(
     data && data.media && data.media.length > 0 ? data.media[0].image : EventImg
   );
+
+
+  const setSelectedListId = useStore((state) => state.setSelectedListId)
+  const setSelectedList = useStore((state) => state.setSelectedList)
+
   const divRef = useRef();
   const dispatch = useDispatch();
   const history = useHistory()
@@ -78,6 +85,7 @@ const NewInBuzzItems = ({
     console.log(" reading more")
     setDiscoverBtn(false);
     setSelectedListId(data._id);
+    setSelectedList(data)
     setReadMore(true);
     history.push(`/list/${data._id}`);
     

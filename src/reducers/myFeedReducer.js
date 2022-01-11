@@ -255,8 +255,8 @@ export const slice = createSlice({
       state.filterByUpdatedAt = false;
       state.filterByClosest = true;
     },
-    clearSearchedData: (state) => {
-      state.myFeed = [];
+    clearSearchFeed: (state) => {
+      state.searchFeed = [];
     },
     updatePostInMyFeed: (state, action) => {
       state.myFeed = state.myFeed.map((x) => {
@@ -769,7 +769,7 @@ export const {
   setSideFiltersByClosest,
   setSideFiltersByUpdatedAt,
   setSideFiltersHomeSearch,
-  clearSearchedData,
+  clearSearchFeed,
   setEnterClicked,
   setPostId,
   setEventId,

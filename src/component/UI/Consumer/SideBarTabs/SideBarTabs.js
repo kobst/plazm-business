@@ -233,7 +233,7 @@ const SideBarTabs = ({
     const listDiscovery = () => {
       // if (!loading) {
         console.log(" list discovery - xxx")
-        
+
         // dispatch(clearMyFeedData());
         // dispatch(clearBusinessData());
         // dispatch(clearTopPost());
@@ -267,7 +267,6 @@ const SideBarTabs = ({
   const handleListTabClick = (data) => {
     console.log("handle list tab" + data.name)
     dispatch(clearMyFeedData());
-    // history.push("/list");
     setTabIndex(-1)
     setSelectedTab(-1)
   }
@@ -275,7 +274,7 @@ const SideBarTabs = ({
 
     /** to open user profile tab */
     const showUserProfile = () => {
-      setTabIndex(6);
+      // setTabIndex(6);
     };
   
     /** for logout functionality redirection */

@@ -35,7 +35,7 @@ const ListTab = ({
 
     const selectedListId = useStore((state) => state.selectedListId)
     const setSelectedListId = useStore((state) => state.setSelectedListId)
-
+    const setSelectedList = useStore((state) => state.setSelectedList)
   
     /** to check if list view size image exists in bucket */
     useEffect(() => {
@@ -65,7 +65,7 @@ const ListTab = ({
     };
 
     const handleClick = ()=> {
-       
+        setSelectedList(data)
         setSelectedListId(data._id)
         handleListTabClick(data)
         history.push(`/list/${data._id}`);
