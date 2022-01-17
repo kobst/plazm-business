@@ -4,6 +4,8 @@ import mapboxgl, { MapMouseEvent } from 'mapbox-gl';
 import ReactMapboxGl, { Layer, Source, Feature, MapContext } from "react-mapbox-gl";
 import useStore from '../useState/index'
 import './styles.css'
+import Geocode from "react-geocode";
+import GoogleMapReact from "google-map-react";
 
 // import '../../App.css';
 
@@ -65,6 +67,10 @@ const Map = ReactMapboxGl({
     interactive: true
 });
 
+
+Geocode.setApiKey("AIzaSyAYVZIvAZkQsaxLD3UdFH5EH3DvYmSYG6Q");
+
+
 const MapView = (props) => {
 
     const [boundBox, setBox] = useState(null)
@@ -74,6 +80,8 @@ const MapView = (props) => {
     const [places_1, setPlaces_1] = useState([])
     const [places_2, setPlaces_2] = useState([])
     const [tempCenter, setTempCenter] = useState()
+    // const [sublocality, setSubLocality] = useState("")
+    // const [city, setCity] = useState("")
 
     const places = useStore(state => state.places)
     const selectedPlace = useStore(state => state.selectedPlace)
@@ -83,9 +91,11 @@ const MapView = (props) => {
     const setPosDict = useStore(state => state.setMapPosDict)
     const gridView = useStore(state => state.gridView)
     const setGridView = useStore(state => state.setGridView)
+    const setSubLocality = useStore(state => state.setSublocality)
+    const setCity = useStore(state => state.setCity)
 
     const setDraggedLocation = useStore(state => state.setDraggedLocation)
-    const draggedCenter = useStore(state => state.draggedCenter)
+    const draggedLocation = useStore(state => state.draggedLocation)
 
     const gridContainerStyle = {
         // height: '100vh',
@@ -192,7 +202,36 @@ const MapView = (props) => {
     }, [selectedPlace])
 
 
+    useEffect(()=> {
+        console.log(" geocode ")
+        Geocode.fromLatLng(JSON.stringify(draggedLocation.lat), JSON.stringify(draggedLocation.lng)).then(
+            (response) => {
+              const address = response.results[0].formatted_address;
+              console.log(address);
+              // "sublocality" "locality" 
+              for (let i = 0; i < response.results[0].address_components.length; i++) {
+                for (let j = 0; j < response.results[0].address_components[i].types.length; j++) {
+                    if (response.results[0].address_components[i].types[j] === "sublocality") {
+                        setSubLocality(response.results[0].address_components[i].long_name)
+                        console.log(response.results[0].address_components[i].long_name)
 
+                    }
+                    if (response.results[0].address_components[i].types[j] === "locality"){
+                        setCity(response.results[0].address_components[i].long_name)
+                        console.log(response.results[0].address_components[i].long_name)
+                    }
+                }
+                }
+            },
+            (error) => {
+              console.error(error);
+            })
+
+    }, [draggedLocation])
+
+
+
+   
 
     const clickHandler = (event) => {
         console.log("map clicked")
@@ -210,19 +249,23 @@ const MapView = (props) => {
             let cntr = map.getCenter()
             console.log(cntr)
             setTempCenter(cntr)
-            // setDraggedLocation(cntr)      
+            setDraggedLocation(cntr)      
           }
-
     }
 
-    useEffect(() => {
 
-        let timer1 = setTimeout(() => setDraggedLocation(tempCenter), 3000);
-        // this will clear Timeout when component unmount like in willComponentUnmount
-        return () => {
-            clearTimeout(timer1);
-        };
-    }, [tempCenter]);
+    
+
+
+    // this doesn't work on load, prob because tempCenter starts as null and then setDraggedLocation becomes null
+    // useEffect(() => {
+
+    //     let timer1 = setTimeout(() => setDraggedLocation(tempCenter), 3000);
+    //     // this will clear Timeout when component unmount like in willComponentUnmount
+    //     return () => {
+    //         clearTimeout(timer1);
+    //     };
+    // }, [tempCenter]);
 
 
 
@@ -354,7 +397,6 @@ const MapView = (props) => {
                 </Layer> */}
 
 
-
                 {selectedPlace && selectedPlace.businessLocation && <Layer type="circle" id="selectedPlace_id" paint={{
                     "circle-radius": 20,
                     "circle-opacity": 0,
@@ -365,13 +407,13 @@ const MapView = (props) => {
                 </Layer>}
 
 
-                {draggedCenter && <Layer type="circle" id="draggedLocation" paint={{
+                {draggedLocation && <Layer type="circle" id="draggedLocation" paint={{
                     "circle-radius": 10,
                     "circle-opacity": 1,
                     "circle-stroke-width": 2,
                     "circle-stroke-color": "#ff0000"
                 }}>
-                    <Feature coordinates={[draggedCenter.lng, draggedCenter.lat]} />
+                    <Feature coordinates={[draggedLocation.lng, draggedLocation.lat]} />
                 </Layer>}
                 
 

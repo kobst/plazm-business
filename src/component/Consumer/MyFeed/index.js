@@ -125,7 +125,7 @@ const MyFeed = () => {
 
   /** to fetch data initially */
   useEffect(() => {
-    console.log(draggedLocation.lat + " lat  " + draggedLocation.lng + "lng")
+    // console.log(draggedLocation.lat + " lat  " + draggedLocation.lng + "lng")
 
     // console.log(userLocation.latitude + " lat  " + userLocation.longitude + "lng")
 

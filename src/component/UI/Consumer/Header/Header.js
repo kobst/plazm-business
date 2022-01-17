@@ -25,6 +25,8 @@ const Header = (
     const selectedTab = useStore((state) => state.tabSelected)
     const selectedList = useStore((state) => state.selectedList)
     const draggedLocation = useStore((state) => state.draggedLocation)
+    const sublocality = useStore((state) => state.sublocality)
+    const city = useStore((state) => state.city)
 
     const [tabTitle, setTabTitle] = useState()
     const [coords, setCoords] = useState()
@@ -86,7 +88,9 @@ const Header = (
             </div>
 
             <div className="right-header">
-                <h6>{coords}</h6>
+                {/* <h6>{coords}</h6> */}
+                <h6>{sublocality}</h6>
+                <h6>{city}</h6>
             </div>
         </div>
     )

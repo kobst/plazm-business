@@ -141,8 +141,6 @@ const GridContainer = ({gridMode}) => {
     // }, [draggedLocation]);
 
 
-
-
     const resetCenter = (newCenter) => {
         console.log('new center from passed' + newCenter)
         // setDraggedLocation(newCenter)
@@ -162,10 +160,11 @@ const GridContainer = ({gridMode}) => {
         console.log("Recenter  -   " + place)
         let limit = 20
         const tilt = 10
-        let _orderedPlaces
-        let _multiDict
+        // let _orderedPlaces
+        // let _multiDict
+        // let _vect = [0, 0, 0]
+
         let limitedOrderedPlaces
-        let _vect = [0, 0, 0]
         if (place) {
             console.log("----place---" + place.company_name)
             // props.selectPlace(place)
@@ -202,8 +201,7 @@ const GridContainer = ({gridMode}) => {
                 setDisplacedCenterHexPosition([0, 0, 0])
                 setCamPos([0, 0, 5])
 
-                
-
+            
             } else {
                 console.log(" nooooo places")
                 setOrderedPlaces([])

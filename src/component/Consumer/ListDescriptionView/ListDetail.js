@@ -275,6 +275,11 @@ const ListDetailView = ({
   const loadingSelectedList = useSelector(
     (state) => state.myFeed.loadingSelectedList
   );
+
+  const selectedListDetails = useSelector((state) => state.myFeed.selectedListDetails);
+
+
+  
   const totalData = useSelector((state) => state.myFeed.totalData);
   const postsInList = useSelector((state) => state.myFeed.myFeed);
 //   const selectedList = useSelector((state) => state.myFeed.selectedListDetails);
@@ -303,21 +308,36 @@ const ListDetailView = ({
   const history = useHistory();
 
   useEffect(() => {
-    if (selectedList && selectedList.media.length > 0)
-    console.log(JSON.stringify(selectedList))
-      setImage(selectedList.media[0].image);
-    //   setSelectedListName(selectedList.name)
-  }, [selectedList]);
+    console.log("selected List use Effect" + selectedList)
+    if (!image) {
+        if (selectedList) {
+            if (selectedList.media.length > 0) {
+                console.log(JSON.stringify(selectedList))
+                setImage(selectedList.media[0].image);
+            }
+        }  else {
+            if (selectedListDetails) {
+                console.log(JSON.stringify(selectedListDetails))
+                if (selectedListDetails.media.length > 0) {
+                    console.log(JSON.stringify(selectedList))
+                    setImage(selectedListDetails.media[0].image);
+                }
+            }
+        }
+    }
+ 
+  }, [selectedList, selectedListDetails]);
 
-  /** to fetch user lists */
-  useEffect(() => {
-    if (userLists.length === 0 && user && user._id)
-      dispatch(fetchUserLists(user._id));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  /** to fetch user lists - do we need this here? */
+//   useEffect(() => {
+//     if (userLists.length === 0 && user && user._id)
+//       dispatch(fetchUserLists(user._id));
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, [user]);
 
   /** to clear all the data initially */
   useEffect(() => {
+      console.log("clear feed data")
     dispatch(clearMyFeedData());
     setOffSet(0);
     setHasMore(true);
@@ -325,6 +345,7 @@ const ListDetailView = ({
 
   /** to fetch initial posts in a list */
   useEffect(() => {
+    console.log("fetching initial posts")
     const fetchListDetails = async () => {
       const result = await dispatch(
         fetchSelectedListDetails({ id: selectedListId, value: offset })

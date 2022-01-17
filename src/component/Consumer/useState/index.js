@@ -22,6 +22,8 @@ const [useStore] = create(set => ({
     coordPlaceDict: {},
     centerId: null,
     centerPlace: null,
+    sublocality: "",
+    city: "",
     userLocation: {lat: process.env.REACT_APP_LATITUDE, lng: process.env.REACT_APP_LONGITUDE},
     draggedLocation: {lat: process.env.REACT_APP_LATITUDE, lng: process.env.REACT_APP_LONGITUDE},
     Depth1Places: [],
@@ -122,6 +124,14 @@ const [useStore] = create(set => ({
     setCenterPlace: (centerPlace) => set((state) => ({
         ...state,
         centerPlace
+    })),
+    setSublocality: (sublocality) => set((state) => ({
+        ...state,
+        sublocality
+    })),
+    setCity: (city) => set((state) => ({
+        ...state,
+        city
     })),
     setUserLocation: (userLocation) => set((state) => ({
         ...state,
