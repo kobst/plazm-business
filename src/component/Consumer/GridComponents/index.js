@@ -223,7 +223,7 @@ const GridContainer = ({gridMode}) => {
 
     return (
         <div>
-            {gridMode && <container className="grid-container-small">
+            {gridMode && <container className="grid-container-left">
                  <GridView center={draggedLocation} places={places} selectPlace={setSelectPlace} hovering={showPreview} />
             </container>  }
         </div >

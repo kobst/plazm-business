@@ -502,7 +502,7 @@ const PlaceMesh = ((props) => {
                 ) : null}
             </a.text>} */}
 
-             <PreviewCard position={[0, 0, 10]} previewActive={previewActive}/>
+             {/* <PreviewCard position={[0, 0, 10]} previewActive={previewActive}/> */}
 
             <HexTile
                 innerRef={hexBackground}

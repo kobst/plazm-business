@@ -23,6 +23,19 @@
   z-index: 9;
 }
 
+.grid-container-left {
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  width: 50vw;
+  height: 100vh;
+  border-radius: 10%;
+  display: block;
+  overflow: hidden;
+  box-shadow: 0 0 10px 10px #4c146c;
+  z-index: 9;
+}
+
 
 .map-overlay {
   position: absolute;
