@@ -48,23 +48,29 @@ const DashboardContainer = (props) => {
   useEffect(() => {
     if (props.view === "business_detail" || props.view === "user_detail" ) {
       setDetailId(props.match.params.id ? props.match.params.id : "");
+      setSelectedTab(-1)
     }
 
     if (props.view === "list_detail") {
       setSelectedListId(props.match.params.id ? props.match.params.id : "")
+      setSelectedTab(-1)
+
     }
 
     if (props.view === "my_feed") {
         console.log("my feed route")
-        setSelectedTab(2)}
+        setSelectedTab(2)
+      }
 
     if (props.view === "explore") {
         console.log("my explore route")
-        setSelectedTab(1)}
+        setSelectedTab(1)
+      }
 
     if (props.view === "list_explore") {
        console.log("my list explore route")
-        setSelectedTab(5)}
+        setSelectedTab(5)
+      }
 
 
   },[props.view])

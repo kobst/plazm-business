@@ -73,6 +73,22 @@ const GridContainer = ({gridMode}) => {
     //     }
     // }, [feedData])
 
+    // useEffect(() => {
+    //     if (searchData.length > 0 && tabSelected == 1){
+    //         console.log("grid " + tabSelected)
+    //         loadData(searchData)
+    //     }
+    //     if (feedData.length > 0 && tabSelected == 2){
+    //         console.log("grid " + tabSelected)
+    //         loadData(feedData)
+    //     }
+    //     if (feedData.length > 0 && tabSelected == -1){
+    //         console.log("grid " + tabSelected)
+    //         loadData(feedData)
+    //     }
+    // }, [feedData, searchData, tabSelected])
+
+
     useEffect(() => {
         if (searchData.length > 0 && tabSelected == 1){
             console.log("grid " + tabSelected)
@@ -86,8 +102,7 @@ const GridContainer = ({gridMode}) => {
             console.log("grid " + tabSelected)
             loadData(feedData)
         }
-    }, [feedData, searchData, tabSelected])
-
+    }, [feedData, searchData])
 
 
     const loadData = (data) => {

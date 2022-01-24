@@ -118,7 +118,7 @@ const SideBarTabs = ({
   const setDiscoverBtn = useStore((state) => state.setDiscoverBtn)
   const setReadMore = useStore((state) => state.setReadMore)
   const draggedLocation = useStore((state) => state.draggedLocation)
-
+  const setSelectedList = useStore((state) => state.setSelectedList)
 
 //old useStore
 
@@ -172,6 +172,8 @@ const SideBarTabs = ({
 
       console.log("home search" + selectedTab)
       setFavoriteIndex(null);
+      setSelectedList(null)
+      setSelectedListId(null)
       if (!loading) {
 
         // dispatch(setSearchData(""));
@@ -210,6 +212,9 @@ const SideBarTabs = ({
       // dispatch(fetchMyFeedData(obj));
       // dispatch(clearBusinessData());
       // dispatch(clearTopPost());
+
+      setSelectedList(null)
+      setSelectedListId(null)
 
       history.push("/home");
 
