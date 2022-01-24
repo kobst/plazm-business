@@ -126,7 +126,9 @@ const SideBarTabs = ({
 
   useEffect(() => {
 
-  }, []);
+    
+
+  }, [selectedTab]);
 
 
   useEffect(() => {

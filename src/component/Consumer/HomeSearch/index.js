@@ -38,8 +38,6 @@ const HomeSearch = ({
   const [coords, setCoords] = useState(null);
   const [closestFilter, setClosestFilter] = useState(true);
 
-
-
   
   const setSelectedListId = useStore((state) => state.setSelectedListId)
   const setSearchIndex = useStore((state) => state.setSearchIndex)

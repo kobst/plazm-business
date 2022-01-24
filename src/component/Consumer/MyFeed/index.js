@@ -146,8 +146,7 @@ const MyFeed = () => {
       if (data) setFlag(false);
     };
     fetchData();
-  }, [
-    dispatch,
+  }, [dispatch,
     user._id,
     filterByClosest,
     filterByUpdatedAt,
