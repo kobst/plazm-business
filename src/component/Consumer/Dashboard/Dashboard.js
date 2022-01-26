@@ -10,6 +10,7 @@ import GridContainer from "../GridComponents/index"
 import MapView from "../mapView/index"
 import RadarView from "../radarView/radarView"
 
+import useStore from "../useState";
 
 
 const DashboardContent = styled.div`
@@ -19,20 +20,11 @@ const DashboardContent = styled.div`
   height: 100%;
 `;
 
-const Dashboard = ({
-  profile,
-  setFlag,
-  isBusinessOpen,
-  // businessExists,
-  // businessId,
-  // isUserOpen,
-  userId,
-  view,
-  detailId
-}) => {
-  const [displayTab, setDisplayTab] = useState(false);
-  const [gridMode, setGridMode] = useState(false)
+const Dashboard = ({view}) => {
 
+
+
+  const gridMode = useStore((state) => state.gridMode)
 
   useEffect(() => {
     if (gridMode) {
@@ -40,25 +32,27 @@ const Dashboard = ({
   }, [gridMode])
 
 
+  // put all the grid logic here?  for the map and radar
+  // put all the loading for the views here? use effect on view....
+
+  useEffect(()=>{
+
+    
+
+  }, [view])
 
 
 
   return (
     <>
         <DashboardContent>
-            <SideBarTabs
-            displayTab={displayTab}
-            setDisplayTab={setDisplayTab}
-            setFlag={setFlag}
-            view={view}
-            detailId={detailId}
-          /> 
+          <SideBarTabs/>
 
-        {!gridMode && <PanelContent view={view}/>}
+        {<PanelContent view={view}/>}
 
         {view !== "list_explore" && <>
 
-          <GridContainer gridMode={gridMode}/>
+          <GridContainer />
           <MapView/>
           <RadarView/>
       
@@ -66,7 +60,7 @@ const Dashboard = ({
 
   
 
-      <Header gridMode={gridMode} setGridMode={setGridMode}/>
+      {/* <Header/> */}
 
         </DashboardContent>
     </>
@@ -77,4 +71,24 @@ export default Dashboard;
 
 
 
+// const Dashboard = ({
+//   // profile,
+//   // setFlag,
+//   // isBusinessOpen,
+//   // businessExists,
+//   // businessId,
+//   // isUserOpen,
+//   // userId,
+//   view,
+//   // detailId
+// }) => {
+
+
+           {/* <SideBarTabs
+            // displayTab={displayTab}
+            // setDisplayTab={setDisplayTab}
+            // setFlag={setFlag}
+            // view={view}
+            // detailId={detailId}
+          />  */}
 

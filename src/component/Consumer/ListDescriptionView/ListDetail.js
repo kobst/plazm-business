@@ -278,7 +278,6 @@ const ListDetailView = ({
 
   const selectedListDetails = useSelector((state) => state.myFeed.selectedListDetails);
 
-
   
   const totalData = useSelector((state) => state.myFeed.totalData);
   const postsInList = useSelector((state) => state.myFeed.myFeed);

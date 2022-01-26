@@ -39,6 +39,7 @@ const [useStore] = create(set => ({
     hovering: false,
     orderedPlacesDict: {},
     gridView: true,
+    gridMode: false, 
     maxViewable: 10,
     maxViewableDepth: 4,
     setProfile: (profile) => set((state) => ({
@@ -116,6 +117,10 @@ const [useStore] = create(set => ({
     setGridView: (gridView) => set((state) => ({
         ...state,
         gridView
+    })),
+    setGridMode: (gridMode) => set((state) => ({
+        ...state,
+        gridMode
     })),
     setHovering: (hovering) => set((state) => ({
         ...state,

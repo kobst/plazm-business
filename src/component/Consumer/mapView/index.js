@@ -307,7 +307,9 @@ const MapView = (props) => {
         // <div className="circleDiv">
         <div className="map-container">
             <Map
-                style='mapbox://styles/kobstr/cj0itw9ku003l2smnu8wbz94o'
+                // style='mapbox://styles/kobstr/cj0itw9ku003l2smnu8wbz94o'
+                style='mapbox://styles/kobstr/cka78e4mj1aef1io837hkirap'
+                // style ='mapbox://styles/kobstr/cjryb7aiy1xjy1fohrw6z6ow3'
                 // style='mapbox://styles/mapbox/streets-v9'
                 pitch={[60]}
                 fitBounds={boundBox}

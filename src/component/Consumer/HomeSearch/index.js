@@ -10,6 +10,7 @@ import ValueLoader from "../../../utils/loader";
 import { setUserlocation } from "../../../reducers/businessReducer";
 
 import useStore from "../useState";
+import GridView from "../GridComponents/gridView/gridView";
 
 const ContentWrap = styled.div`
   padding: 0px;
@@ -41,8 +42,8 @@ const HomeSearch = ({
   
   const setSelectedListId = useStore((state) => state.setSelectedListId)
   const setSearchIndex = useStore((state) => state.setSearchIndex)
-  const setListClickedFromSearch = useStore((state) => state.setListClickedFromSearch)
-
+  const setListClickedFromSearch = useStore((state) => state.setListClickedFromSearch) 
+  const draggedLocation = useStore((state) => state.draggedLocation)
 
   useEffect(() => {
     dispatch(setSideFiltersHomeSearch());
@@ -51,23 +52,24 @@ const HomeSearch = ({
 
   // /** to set coordinates when location is enabled */
   useEffect(() => {
-    if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function (position) {
         setClosestFilter(true);
         setLocationState("granted");
         setCoords({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
+          latitude: draggedLocation.lat,
+          longitude: draggedLocation.lng,
         });
         dispatch(
           setUserlocation({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
+            latitude: draggedLocation.lat,
+            longitude: draggedLocation.lat,
           })
         );
       });
-    }
+  
   }, [dispatch]);
+
+
 
   /** to wait for 3 sec for user reply to allow/deny geoLocation */
   useEffect(() => {
@@ -84,10 +86,11 @@ const HomeSearch = ({
 
   return (
     <>
+
       <ContentWrap>
-        {(locationState === "granted" && coords !== null) ||
+        {/* {(locationState === "granted" && coords !== null) ||
         locationState === "denied" ||
-        locationState === "prompt" ? (
+        locationState === "prompt" ? ( */}
           <BusinessListing
             setSelectedListId={setSelectedListId}
             setListClickedFromSearch={setListClickedFromSearch}
@@ -97,11 +100,11 @@ const HomeSearch = ({
             // setDisplayTab={setDisplayTab}
             closestFilter={closestFilter}
           />
-        ) : (
+        {/* ) : (
           <LoaderWrap>
             <ValueLoader />
           </LoaderWrap>
-        )}
+        )} */}
       </ContentWrap>
     </>
   );

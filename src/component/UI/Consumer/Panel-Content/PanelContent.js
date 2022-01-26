@@ -66,6 +66,7 @@ const PanelContent = ({view}) => {
 
 const selectedTab= useStore((state) => state.tabSelected)
 const detailId = useStore((state) => state.detailId)
+const gridMode = useStore((state) => state.gridMode)
 
 
     return (
