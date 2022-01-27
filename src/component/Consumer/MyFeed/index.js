@@ -125,6 +125,10 @@ const MyFeed = () => {
   const gridMode =  useStore((state) => state.gridMode)
  
 
+  useEffect(()=>{
+    console.log(gridMode + "gridMode")
+  },[gridMode])
+
   /** to fetch data initially */
   useEffect(() => {
     // console.log(draggedLocation.lat + " lat  " + draggedLocation.lng + "lng")
@@ -180,7 +184,7 @@ const MyFeed = () => {
         <LoaderWrap>
           <ValueLoader />
         </LoaderWrap>
-      ) : (
+      ) : (!gridMode &&
         <BuisinessViewContent>
           <SearchBar
             setOffset={setOffSet}

@@ -96,7 +96,6 @@ function CameraMain(props) {
     )
 }
 
-<GridView center={draggedLocation} places={places} selectPlace={setSelectPlace} hovering={showPreview} />
 
 const GridView = (props) => {
 

@@ -44,6 +44,7 @@ const HomeSearch = ({
   const setSearchIndex = useStore((state) => state.setSearchIndex)
   const setListClickedFromSearch = useStore((state) => state.setListClickedFromSearch) 
   const draggedLocation = useStore((state) => state.draggedLocation)
+  const gridMode = useStore((state) => state.gridMode)
 
   useEffect(() => {
     dispatch(setSideFiltersHomeSearch());
@@ -86,7 +87,7 @@ const HomeSearch = ({
 
   return (
     <>
-
+      {!gridMode &&
       <ContentWrap>
         {/* {(locationState === "granted" && coords !== null) ||
         locationState === "denied" ||
@@ -105,7 +106,7 @@ const HomeSearch = ({
             <ValueLoader />
           </LoaderWrap>
         )} */}
-      </ContentWrap>
+      </ContentWrap> }
     </>
   );
 };

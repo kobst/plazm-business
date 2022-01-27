@@ -45,7 +45,8 @@ import useStore from '../../../Consumer/useState/index'
 
 
 
-const PanelContent = ({view}) => {
+// const PanelContent = ({view}) => {
+const PanelContent = () => {
 
 // const user = useSelector((state) => state.user.user);
 // const userLocation = useSelector((state) => state.business.userLocation);
@@ -67,6 +68,7 @@ const PanelContent = ({view}) => {
 const selectedTab= useStore((state) => state.tabSelected)
 const detailId = useStore((state) => state.detailId)
 const gridMode = useStore((state) => state.gridMode)
+const view = useStore((state) => state.view)
 
 
     return (

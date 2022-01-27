@@ -38,6 +38,8 @@ const DashboardContainer = (props) => {
   const setProfile = useStore((state) => state.setProfile)
   const setSelectedTab = useStore((state) => state.setTabSelected)
   const setSelectedListId = useStore((state) => state.setSelectedListId)
+  const view = useStore((state)=> state.view)
+  const setView = useStore((state)=> state.setView)
 
   
   // const [profile, setProfile] = useState();
@@ -46,6 +48,9 @@ const DashboardContainer = (props) => {
 
 
   useEffect(() => {
+
+    setView(props.view)
+    
     if (props.view === "business_detail" || props.view === "user_detail" ) {
       setDetailId(props.match.params.id ? props.match.params.id : "");
       setSelectedTab(-1)

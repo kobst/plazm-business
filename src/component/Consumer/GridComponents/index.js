@@ -115,7 +115,7 @@ const GridContainer = () => {
             if (!deepClone.businessLocation && deepClone.location) {
                 deepClone.businessLocation = deepClone.location
             }
-            console.log(deepClone)
+            // console.log(deepClone)
             _places.push(deepClone)
         });
         setPlacesLoading(false)
