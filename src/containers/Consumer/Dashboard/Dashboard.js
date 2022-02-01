@@ -38,6 +38,8 @@ const DashboardContainer = (props) => {
   const setProfile = useStore((state) => state.setProfile)
   const setSelectedTab = useStore((state) => state.setTabSelected)
   const setSelectedListId = useStore((state) => state.setSelectedListId)
+  const view = useStore((state)=> state.view)
+  const setView = useStore((state)=> state.setView)
 
   
   // const [profile, setProfile] = useState();
@@ -46,6 +48,9 @@ const DashboardContainer = (props) => {
 
 
   useEffect(() => {
+
+    setView(props.view)
+    
     if (props.view === "business_detail" || props.view === "user_detail" ) {
       setDetailId(props.match.params.id ? props.match.params.id : "");
       setSelectedTab(-1)
@@ -54,7 +59,6 @@ const DashboardContainer = (props) => {
     if (props.view === "list_detail") {
       setSelectedListId(props.match.params.id ? props.match.params.id : "")
       setSelectedTab(-1)
-
     }
 
     if (props.view === "my_feed") {
@@ -66,13 +70,10 @@ const DashboardContainer = (props) => {
         console.log("my explore route")
         setSelectedTab(1)
       }
-
     if (props.view === "list_explore") {
        console.log("my list explore route")
         setSelectedTab(5)
       }
-
-
   },[props.view])
 
 
@@ -165,19 +166,7 @@ const DashboardContainer = (props) => {
   }, [props.view, props.isBusinessOpen, props.match.params.id, dispatch, user]);
 
   return profile && !globalLoader ? (
-    <Dashboard
-      profile={profile}
-      setFlag={setFlag}
-      // isBusinessOpen={props.isBusinessOpen}
-      // isUserOpen={props.isUserOpen}
-      // businessExists={businessExists}
-      // businessId={props.match.params.id ? businessId : null}
-      // userId={props.isUserOpen ? props.match.params.id : null}
-      // listId={props.isListOpen ? props.match.params.id : null}
-      detailId={detailId}
-      view={props.view}
-
-    />
+    <Dashboard view={props.view}/>
   ) : (
     <div
       style={{
@@ -195,3 +184,18 @@ const DashboardContainer = (props) => {
 };
 
 export default DashboardContainer;
+
+
+{/* <Dashboard
+// profile={profile}
+// setFlag={setFlag}
+// isBusinessOpen={props.isBusinessOpen}
+// isUserOpen={props.isUserOpen}
+// businessExists={businessExists}
+// businessId={props.match.params.id ? businessId : null}
+// userId={props.isUserOpen ? props.match.params.id : null}
+// listId={props.isListOpen ? props.match.params.id : null}
+// detailId={detailId}
+view={props.view}
+
+/> */}

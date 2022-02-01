@@ -26,7 +26,6 @@ import {
 } from "../../../reducers/userReducer";
 import { useHistory } from "react-router-dom";
 import ButtonOrange from "../UI/ButtonOrange";
-
 import useStore from "../useState";
 
 
@@ -278,7 +277,6 @@ const ListDetailView = ({
 
   const selectedListDetails = useSelector((state) => state.myFeed.selectedListDetails);
 
-
   
   const totalData = useSelector((state) => state.myFeed.totalData);
   const postsInList = useSelector((state) => state.myFeed.myFeed);
@@ -298,6 +296,8 @@ const ListDetailView = ({
   const setFavoriteIndex = useStore((state) => state.setFavoriteIndex)
   const setDiscoverBtn = useStore((state) => state.setDiscoverBtn)
   const readMore = useStore((state) => state.readMore)
+  const gridMode = useStore((state) => state.gridMode)
+
 
   const [image, setImage] = useState(
     selectedList && selectedList.media.length > 0
@@ -428,7 +428,7 @@ const ListDetailView = ({
     <LoaderWrap>
       <ValueLoader />
     </LoaderWrap>
-  ) : (
+  ) : ( !gridMode &&
     <>
       {selectedList ? (
         <ListOptionSection>

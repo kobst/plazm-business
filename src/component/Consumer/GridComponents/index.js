@@ -18,7 +18,7 @@ import useStore from '../useState/index'
 
 import './style.css';
 
-const GridContainer = ({gridMode}) => {
+const GridContainer = () => {
 
     // const dispatch = useDispatch()
     // const userLists = useSelector((state) => state.list.userLists);
@@ -35,6 +35,8 @@ const GridContainer = ({gridMode}) => {
 
 
     const gridView = useStore((state) => state.gridView)
+    const gridMode = useStore((state) => state.gridMode)
+
     const setGridView = useStore((state) => state.setGridView)
 
 
@@ -156,18 +158,18 @@ const GridContainer = ({gridMode}) => {
     // }, [draggedLocation]);
 
 
-    const resetCenter = (newCenter) => {
-        console.log('new center from passed' + newCenter)
-        // setDraggedLocation(newCenter)
-    }
+    // const resetCenter = (newCenter) => {
+    //     console.log('new center from passed' + newCenter)
+    //     // setDraggedLocation(newCenter)
+    // }
 
-    const showPreview = (place) => {
-        console.log('show preview' + place)
-    }
+    // const showPreview = (place) => {
+    //     console.log('show preview' + place)
+    // }
 
-    const setSelectPlace = (place) => {
-        console.log('select Place' + place)
-    }
+    // const setSelectPlace = (place) => {
+    //     console.log('select Place' + place)
+    // }
 
 
     const ReCenter = (place) => {
@@ -239,7 +241,7 @@ const GridContainer = ({gridMode}) => {
     return (
         <div>
             {gridMode && <container className="grid-container-left">
-                 <GridView center={draggedLocation} places={places} selectPlace={setSelectPlace} hovering={showPreview} />
+                 <GridView center={draggedLocation} places={places} />
             </container>  }
         </div >
     )

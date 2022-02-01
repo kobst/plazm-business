@@ -6,6 +6,7 @@ const [useStore] = create(set => ({
     businessDetailProfile: null,
     detailId: null,
     tabSelected: -1,
+    view: "",
     selectedList: null,
     selectedListId: null,
     searchIndex: null, 
@@ -39,6 +40,7 @@ const [useStore] = create(set => ({
     hovering: false,
     orderedPlacesDict: {},
     gridView: true,
+    gridMode: false, 
     maxViewable: 10,
     maxViewableDepth: 4,
     setProfile: (profile) => set((state) => ({
@@ -56,6 +58,10 @@ const [useStore] = create(set => ({
     setTabSelected: (tabSelected) => set((state) => ({
         ...state,
         tabSelected
+    })),
+    setView: (view) => set((state) => ({
+        ...state,
+        view
     })),
     setSelectedList: (selectedList) => set((state) => ({
         ...state,
@@ -116,6 +122,10 @@ const [useStore] = create(set => ({
     setGridView: (gridView) => set((state) => ({
         ...state,
         gridView
+    })),
+    setGridMode: (gridMode) => set((state) => ({
+        ...state,
+        gridMode
     })),
     setHovering: (hovering) => set((state) => ({
         ...state,

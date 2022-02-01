@@ -18,9 +18,10 @@ import "./styles.css";
 //   left: 0;
 // `;
 
-const Header = (
-    {gridMode,
-    setGridMode}) => {
+const Header = () => {
+
+    const [tabTitle, setTabTitle] = useState()
+    const [coords, setCoords] = useState()
 
     const selectedTab = useStore((state) => state.tabSelected)
     const selectedList = useStore((state) => state.selectedList)
@@ -28,8 +29,9 @@ const Header = (
     const sublocality = useStore((state) => state.sublocality)
     const city = useStore((state) => state.city)
 
-    const [tabTitle, setTabTitle] = useState()
-    const [coords, setCoords] = useState()
+    const setGridMode = useStore((state) => state.setGridMode)
+    const gridMode = useStore((state) => state.gridMode)
+
 
     const handleToggle = () => {
         console.log(gridMode)
@@ -79,7 +81,7 @@ const Header = (
         <div className="header">
             <div className="left-header">
             <button className="toggle" onClick={handleToggle}>
-                List / Grid
+                {gridMode? "List" : "Grid"}
             </button>
             </div>
 
