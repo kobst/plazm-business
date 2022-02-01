@@ -71,8 +71,8 @@
 
 .listTab-item {
   display: flex;
-  align-items: center;
-  padding: 10px 2px;
+  align-items: left;
+  padding: 12px 10px;
   transition: background-color 0.2s;
   cursor: pointer;
   background-color: mediumblue;
@@ -84,7 +84,8 @@
 
 
 .listTab-icon {
-  width: 36px;
+  width: 30px;
+  height: 30px;
   /* padding-left: 4px;
   padding-right: 4px; */
   color: #767676;
@@ -136,7 +137,7 @@
 
 .list-scroll {
   background-color: rgb(20, 11, 46);
-  align-items: center;
+  align-items: left;
   display: flex;
   flex-direction: column;
   width: auto;
