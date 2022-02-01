@@ -10,6 +10,7 @@ import {
 import DisplayBusinessDetails from "./DisplayBusinessDetails";
 import { unwrapResult } from "@reduxjs/toolkit";
 import SearchBar from "./SearchBar";
+import GridView from "../GridComponents/gridView/gridView";
 
 import useStore from "../useState";
 
@@ -121,7 +122,12 @@ const MyFeed = () => {
   const setSelectedListId = useStore((state) => state.setSelectedListId)
   const setMyFeedIndex = useStore((state) => state.setMyFeedIndex)
   const draggedLocation = useStore((state) => state.draggedLocation)
+  const gridMode =  useStore((state) => state.gridMode)
  
+
+  useEffect(()=>{
+    console.log(gridMode + "gridMode")
+  },[gridMode])
 
   /** to fetch data initially */
   useEffect(() => {
@@ -178,7 +184,7 @@ const MyFeed = () => {
         <LoaderWrap>
           <ValueLoader />
         </LoaderWrap>
-      ) : (
+      ) : (!gridMode &&
         <BuisinessViewContent>
           <SearchBar
             setOffset={setOffSet}

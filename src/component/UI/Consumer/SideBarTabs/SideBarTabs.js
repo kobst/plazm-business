@@ -124,11 +124,6 @@ const SideBarTabs = ({
 
   const [expanded, setExpanded] = useState(false)
 
-  useEffect(() => {
-
-    
-
-  }, [selectedTab]);
 
 
   useEffect(() => {
@@ -141,10 +136,9 @@ const SideBarTabs = ({
   //   console.log("user lists" + JSON.stringify(userLists))
   // }, [userLists])
 
-
-  useEffect(()=>{
-    console.log("selectedListId" + JSON.stringify(selectedListId))
-  }, [selectedListId])
+  // useEffect(()=>{
+  //   console.log("selectedListId" + JSON.stringify(selectedListId))
+  // }, [selectedListId])
 
     /** to fetch all the user created and subscribed lists */
     useEffect(() => {
@@ -159,7 +153,7 @@ const SideBarTabs = ({
           const data = await dispatch(fetchUserCreatedAndFollowedList(obj));
           const res = await unwrapResult(data);
           if (res) {
-            setFlag(false);
+            // setFlag(false);
           }
         };
         fetchListData();
@@ -444,27 +438,6 @@ const SideBarTabs = ({
             )}
   </div>
 </div>
-
-{/* <div className="panel-content">
-
-{selectedTab === 1 && view !== "business_detail" && view !== "list_detail" &&
-  <HomeSearchComponent/> }
-
-{selectedTab === 2 && view !== "business_detail" && view !== "list_detail" &&
-  <MyFeed/> } 
-
-{view ==="list_detail" && 
-  <ListDetail/>
-}
-
-{view ==="business_detail" && 
-    <BuisinessView
-      // profile={profile}
-      // businessExists={businessExists}
-      businessId={detailId}
-    />
-}
-</div>  */}
  
 </div>
 
