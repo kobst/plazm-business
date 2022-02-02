@@ -8,6 +8,8 @@ import {
   replaceBucket,
 } from "../../../../utilities/checkResizedImage";
 
+import useStore from "../../useState";
+
 const UserMessageContent = styled.div`
   width: 100%;
   position: relative;
@@ -132,10 +134,14 @@ const DescriptionViewItem = styled.div`
 /** display business details */
 const DisplayPostInAList = ({
   data,
-  id,
-  setListIndex,
-  setSelectedListId,
+  id
 }) => {
+
+  const setSelectedListId = useStore((state) => state.setSelectedListId)
+  const setListIndex = useStore((state) => state.setListIndex)
+
+
+
   const [image, setImage] = useState(
     data.business[0].default_image_url
       ? data.business[0].default_image_url

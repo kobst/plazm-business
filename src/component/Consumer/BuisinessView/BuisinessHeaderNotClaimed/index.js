@@ -16,6 +16,9 @@ import {
   RemoveBusinessFavorite,
 } from "../../../../reducers/userReducer";
 import { clearBusinessData } from "../../../../reducers/businessReducer";
+import useStore from "../../useState";
+
+
 
 const BuisinessHeaderContent = styled.div`
   width: 100%;
@@ -198,14 +201,14 @@ const BuisinessHeaderNotClaimed = ({
   setDisplayTab,
   setDisplayBusinessProfile,
   isProfile,
-  searchIndex,
-  setTabIndex,
-  setSearchIndex,
-  setMyFeedIndex,
-  myFeedIndex,
-  setFavoriteIndex,
-  listIndex,
-  setListIndex
+  // searchIndex,
+  // setTabIndex,
+  // setSearchIndex,
+  // setMyFeedIndex,
+  // myFeedIndex,
+  // setFavoriteIndex,
+  // listIndex,
+  // setListIndex
 }) => {
   const [favoriteBusiness, setFavoriteBusiness] = useState(false);
   const businessProfile = useSelector((state) => state.business.business);
@@ -213,8 +216,24 @@ const BuisinessHeaderNotClaimed = ({
     businessProfile[0] ? businessProfile[0].default_image_url : ProfileImg
   );
   const user = useSelector((state) => state.user.user);
+
+  const listIndex = useStore((state) => state.listIndex)
+  const searchIndex = useStore((state) => state.listIndex)
+  const myFeedIndex = useStore((state) => state.myFeedIndex)
+
+  const setSearchIndex = useStore((state) => state.setSearchIndex)
+  const setMyFeedIndex = useStore((state) => state.setMyFeedIndex)
+  const setListIndex = useStore((state) => state.setListIndex)
+  const setFavoriteIndex = useStore((state) => state.setFavoriteIndex)
+  const setTabIndex = useStore((state) => state.setTabSelected)
+
+
+
   const dispatch = useDispatch();
   const history = useHistory();
+
+
+
 
   useEffect(() => {
     if (businessProfile && businessProfile.length > 0) {

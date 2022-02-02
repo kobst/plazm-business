@@ -7,6 +7,7 @@ import "./styles.css";
 import PostsSection from "./PostsSection";
 import EventsSection from "./EventsSection";
 import { setCurrentDate } from "../../../../reducers/eventReducer";
+import useStore from "../../useState";
 
 const TabsSectionContent = styled.div`
   width: 100%;
@@ -15,10 +16,11 @@ const TabsSectionContent = styled.div`
   height: 100%;
 `;
 
-const TabsSection = ({ profile, businessId, setSelectedListId }) => {
+const TabsSection = ({ profile, businessId }) => {
   const dispatch = useDispatch();
   const topEvent = useSelector((state) => state.event.topEvent);
   const [selectedIndex, setSelectedIndex] = useState(topEvent ? 1 : 0);
+
 
   /** to fetch current date events on tab change */
   const eventTabChange = async () => {
@@ -38,15 +40,15 @@ const TabsSection = ({ profile, businessId, setSelectedListId }) => {
 
           <TabPanel>
             <PostsSection
-              profile={profile}
+              // profile={profile}
               businessId={businessId}
-              setSelectedListId={setSelectedListId}
+              // setSelectedListId={setSelectedListId}
             />
           </TabPanel>
           <TabPanel>
             <EventsSection
               businessId={businessId}
-              setSelectedListId={setSelectedListId}
+              // setSelectedListId={setSelectedListId}
             />
           </TabPanel>
         </Tabs>

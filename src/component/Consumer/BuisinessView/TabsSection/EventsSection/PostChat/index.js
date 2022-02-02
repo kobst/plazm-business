@@ -3,6 +3,7 @@ import styled from "styled-components";
 import UserMessage from "./UserMessage";
 import { Scrollbars } from "react-custom-scrollbars";
 import { useSelector } from "react-redux";
+import useStore from "../../../../useState";
 
 const ChatContent = styled.div`
   width: 100%;
@@ -22,7 +23,7 @@ const NoMorePost = styled.p`
   color: #fff;
 `;
 
-const PostChat = ({ setSelectedListId }) => {
+const PostChat = () => {
   const events = useSelector((state) => state.event.events);
   const loading = useSelector((state) => state.event.loading);
   const loadingForAWeek = useSelector((state) => state.event.loadingForAWeek);
@@ -53,7 +54,7 @@ const PostChat = ({ setSelectedListId }) => {
               <UserMessage
                 eventData={i}
                 key={key}
-                setSelectedListId={setSelectedListId}
+                // setSelectedListId={setSelectedListId}
               />
             ))
           ) : !loading && !loadingForAWeek && !loadingForInitialWeek ? (

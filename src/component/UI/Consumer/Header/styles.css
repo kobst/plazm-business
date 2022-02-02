@@ -1,0 +1,45 @@
+.header {
+  height: 60px;
+  width: 100vw;
+  display: flex;
+  box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
+  flex-direction: row;
+  z-index: 110;
+  background-color: black;
+  align-items: center;
+  justify-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.left-header {
+  width: 33vw;
+
+}
+
+
+.title {
+  width: 33vw;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: hotpink;
+  font-size: 24px;
+}
+
+.right-header {
+  width: 33vw;
+  font-size: 20px;
+  color: purple;
+
+
+
+}
+
+.toggle {
+  color: red;
+  width: 30px;
+  height: auto;
+
+}

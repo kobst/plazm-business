@@ -32,10 +32,21 @@ const Routes = () => (
       <Route path="/user/forgot-password" component={ForgotPassword} />
       {/* <Route path="/user/forgot-password" component={ForgotPassword} /> */}
       <Route path="/business" exact component={Dashboard} />
-      <Route path="/" exact component={ConsumerDashboard} />
+
+
+      <Redirect exact from="/" to="/home" /> 
+      <Route path="/home" exact render={(props) => <ConsumerDashboard view={"my_feed"} {...props} />} />
+      <Route path="/explore" exact render={(props) => <ConsumerDashboard view={"explore"} {...props} />} />
+      <Route path="/lists" exact render={(props) => <ConsumerDashboard view={"list_explore"} {...props} />} />
+     
+      <Route path="/b/:id" exact render={(props) => <ConsumerDashboard view={"business_detail"} isBusinessOpen={true} isUserOpen={false} {...props} />} />
+      <Route path="/u/:id" exact render={(props) => <ConsumerDashboard view={"user_detail"} isUserOpen={true} isBusinessOpen={false} {...props}/>} />
+      <Route path="/list/:id" exact render={(props) => <ConsumerDashboard view={"list_detail"} {...props} />} />
+
+
+      {/* <Route path="/b/:id" exact render={(props) => <ConsumerDashboard view={"business_detail"} {...props} />} /> */}
+
       <Route path="/edit-profile" component={EditProfile} />
-      <Route path="/b/:id" exact render={(props) => <ConsumerDashboard isBusinessOpen={true} isUserOpen={false} {...props} />} />
-      <Route path="/u/:id" exact render={(props) => <ConsumerDashboard isUserOpen={true} isBusinessOpen={false} {...props}/>} />
       <Redirect exact from="/*" to="/business/login" />
     </Switch>
   </Router>

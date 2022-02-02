@@ -10,6 +10,10 @@ import {
 import DisplayBusinessDetails from "./DisplayBusinessDetails";
 import { unwrapResult } from "@reduxjs/toolkit";
 import SearchBar from "./SearchBar";
+import GridView from "../GridComponents/gridView/gridView";
+
+import useStore from "../useState";
+
 
 const LoaderWrap = styled.div`
   width: 100%;
@@ -98,7 +102,7 @@ const NoMorePost = styled.p`
   color: #fff;
 `;
 
-const MyFeed = ({ setDisplayTab, setMyFeedIndex, setSelectedListId }) => {
+const MyFeed = () => {
   const user = useSelector((state) => state.user.user);
   const loading = useSelector((state) => state.myFeed.loading);
   const feedData = useSelector((state) => state.myFeed.myFeed);
@@ -114,20 +118,33 @@ const MyFeed = ({ setDisplayTab, setMyFeedIndex, setSelectedListId }) => {
   const dispatch = useDispatch();
   const [flag, setFlag] = useState(true);
 
+
+  const setSelectedListId = useStore((state) => state.setSelectedListId)
+  const setMyFeedIndex = useStore((state) => state.setMyFeedIndex)
+  const draggedLocation = useStore((state) => state.draggedLocation)
+  const gridMode =  useStore((state) => state.gridMode)
+ 
+
+  useEffect(()=>{
+    console.log(gridMode + "gridMode")
+  },[gridMode])
+
   /** to fetch data initially */
   useEffect(() => {
+    // console.log(draggedLocation.lat + " lat  " + draggedLocation.lng + "lng")
+
+    // console.log(userLocation.latitude + " lat  " + userLocation.longitude + "lng")
+
+    console.log(process.env.REACT_APP_LATITUDE + " lat  " + process.env.REACT_APP_LONGITUDE + "lng")
+
     const fetchData = async () => {
       const obj = {
         id: user._id,
         value: 0,
         search: searchData,
         filters: { closest: filterByClosest, updated: filterByUpdatedAt },
-        latitude: userLocation
-          ? userLocation.latitude
-          : process.env.REACT_APP_LATITUDE,
-        longitude: userLocation
-          ? userLocation.longitude
-          : process.env.REACT_APP_LONGITUDE,
+        latitude: draggedLocation.lat,
+        longitude: draggedLocation.lng,
       };
       dispatch(clearMyFeedData());
       const res = await dispatch(fetchMyFeedData(obj));
@@ -135,12 +152,12 @@ const MyFeed = ({ setDisplayTab, setMyFeedIndex, setSelectedListId }) => {
       if (data) setFlag(false);
     };
     fetchData();
-  }, [
-    dispatch,
+  }, [dispatch,
     user._id,
     filterByClosest,
     filterByUpdatedAt,
     userLocation,
+    draggedLocation,
     searchData,
   ]);
 
@@ -154,12 +171,8 @@ const MyFeed = ({ setDisplayTab, setMyFeedIndex, setSelectedListId }) => {
           value: offset + 20,
           search: searchData,
           filters: { closest: filterByClosest, updated: filterByUpdatedAt },
-          latitude: userLocation
-            ? userLocation.latitude
-            : process.env.REACT_APP_LATITUDE,
-          longitude: userLocation
-            ? userLocation.longitude
-            : process.env.REACT_APP_LONGITUDE,
+          latitude: draggedLocation.lat,
+          longitude: draggedLocation.lng,
         })
       );
     } else setHasMore(false);
@@ -171,11 +184,11 @@ const MyFeed = ({ setDisplayTab, setMyFeedIndex, setSelectedListId }) => {
         <LoaderWrap>
           <ValueLoader />
         </LoaderWrap>
-      ) : (
+      ) : (!gridMode &&
         <BuisinessViewContent>
           <SearchBar
             setOffset={setOffSet}
-            setDisplayTab={setDisplayTab}
+            // setDisplayTab={setDisplayTab}
             setFlag={setFlag}
           />
           <div

@@ -13,6 +13,9 @@ import Input from "../../UI/Input/Input";
 import SearchSection from "./SearchSection";
 import SliderSection from "./SliderSection";
 import error from "../../../constants";
+
+import useStore from "../useState";
+
 import {
   TopSectionWrap,
   LeftWrap,
@@ -22,7 +25,11 @@ import {
   LoaderWrap,
 } from "./styled.js";
 
-const DiscoverList = ({ setDiscoverBtn, setSelectedListId, setReadMore }) => {
+const DiscoverList = ({ 
+  // setDiscoverBtn, 
+  // setSelectedListId, 
+  // setReadMore 
+  }) => {
   const dispatch = useDispatch();
   const loadindTrending = useSelector(
     (state) => state.list.loadingTrendingLists
@@ -42,6 +49,9 @@ const DiscoverList = ({ setDiscoverBtn, setSelectedListId, setReadMore }) => {
   const userLists = listData.filter((i) => i.ownerId === user._id);
   const loading = useSelector((state) => state.list.loadingSearchList);
   const listSearch = useSelector((state) => state.list.listSearch);
+
+
+
   const [searchError, setSearchError] = useState("");
   const [search, setSearch] = useState("");
   const [offset, setOffSet] = useState(0);
@@ -55,8 +65,17 @@ const DiscoverList = ({ setDiscoverBtn, setSelectedListId, setReadMore }) => {
     parseInt(totalList - userLists.length)
   );
 
+
+  const setSelectedListId = useStore((state)=> state.setSelectedListId)
+  const setDiscoverBtn = useStore((state) => state.setDiscoverBtn)
+  const setReadMore = useStore((state) => state.setReadMore)
+
+
+
+
   useEffect(() => {
     const fetchData = async () => {
+      console.log("fetching trendibg lists")
       /** to fetch most trending list data */
       const trending = await dispatch(FetchTrendingLists(0));
       const resTrending = await unwrapResult(trending);
@@ -133,7 +152,7 @@ const DiscoverList = ({ setDiscoverBtn, setSelectedListId, setReadMore }) => {
         />
       ) : (
         <>
-          <SliderSection
+          {/* <SliderSection
             heading="Trending"
             data={trendingLists}
             totalList={totalTrendingList}
@@ -150,7 +169,7 @@ const DiscoverList = ({ setDiscoverBtn, setSelectedListId, setReadMore }) => {
             selectedId={selectedId}
             setTotalLists={setTotalLists}
             totalLists={totalLists}
-          />
+          /> */}
           <SliderSection
             heading="Most Popular"
             data={popularLists}

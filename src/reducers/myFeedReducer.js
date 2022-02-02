@@ -200,6 +200,7 @@ export const slice = createSlice({
   name: "myFeed",
   initialState: {
     loading: false,
+    searchFeed: [],
     myFeed: [],
     totalData: 0,
     loadingPostComments: false,
@@ -208,7 +209,7 @@ export const slice = createSlice({
     loadingEventReplies: false,
     searchData: "",
     filterByUpdatedAt: false,
-    filterByClosest: false,
+    filterByClosest: true,
     selectedListDetails: null,
     loadingSelectedList: false,
     enterClicked: false,
@@ -252,10 +253,10 @@ export const slice = createSlice({
     setSideFiltersHomeSearch: (state) => {
       state.myFeed = [];
       state.filterByUpdatedAt = false;
-      state.filterByClosest = false;
+      state.filterByClosest = true;
     },
-    clearSearchedData: (state) => {
-      state.myFeed = [];
+    clearSearchFeed: (state) => {
+      state.searchFeed = [];
     },
     updatePostInMyFeed: (state, action) => {
       state.myFeed = state.myFeed.map((x) => {
@@ -666,7 +667,8 @@ export const slice = createSlice({
           }));
           // if (state.filterByClosest || state.filterByUpdatedAt)
           //   state.myFeed = [];
-          state.myFeed = state.myFeed.concat(data);
+          // state.myFeed = state.myFeed.concat(data);
+          state.searchFeed = state.searchFeed.concat(data)
           state.totalData = action.payload.totalPlaces;
         }
       }
@@ -680,7 +682,8 @@ export const slice = createSlice({
     [HomeSearchInitial.pending]: (state) => {
       if (!state.loading) {
         state.loading = true;
-        state.myFeed = [];
+        // state.myFeed = [];
+        state.searchFeed = []
       }
     },
     [HomeSearchInitial.fulfilled]: (state, action) => {
@@ -697,7 +700,8 @@ export const slice = createSlice({
                 obj.list && obj.list.image ? [].concat(obj.list.image) : [],
             }),
           }));
-          state.myFeed = state.myFeed.concat(data);
+          // state.myFeed = state.myFeed.concat(data);
+          state.searchFeed = state.searchFeed.concat(data)
           state.totalData = action.payload.totalPlaces;
         }
       }
@@ -765,7 +769,7 @@ export const {
   setSideFiltersByClosest,
   setSideFiltersByUpdatedAt,
   setSideFiltersHomeSearch,
-  clearSearchedData,
+  clearSearchFeed,
   setEnterClicked,
   setPostId,
   setEventId,

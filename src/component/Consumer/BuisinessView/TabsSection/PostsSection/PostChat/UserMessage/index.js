@@ -32,6 +32,8 @@ import {
 import DateBar from "../../../EventsSection/PostChat/DateBar";
 import TimeBar from "../../../EventsSection/PostChat/TimeBar";
 
+import useStore from "../../../../../useState";
+
 const reactStringReplace = require("react-string-replace");
 
 const UserMessageContent = styled.div`
@@ -144,6 +146,9 @@ const UserMessage = ({ postData, setSelectedListId }) => {
       ? postData.postDetails.list.image
       : BannerImg
   );
+
+  const setSelectedListId = useStore((state) => state.setSelectedListId)
+
 
   ws.onmessage = (evt) => {
     const message = JSON.parse(evt.data);

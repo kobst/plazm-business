@@ -28,15 +28,15 @@ const BuisinessProfileDetails = ({
   setDisplayBusinessProfile,
   setDisplayTab,
   displayBusinessProfile,
-  searchIndex,
-  setTabIndex,
-  setSearchIndex,
-  myFeedIndex,
-  setMyFeedIndex,
-  listIndex,
-  setListIndex,
-  favoriteIndex,
-  setFavoriteIndex,
+  // searchIndex,
+  // setTabIndex,
+  // setSearchIndex,
+  // myFeedIndex,
+  // setMyFeedIndex,
+  // listIndex,
+  // setListIndex,
+  // favoriteIndex,
+  // setFavoriteIndex,
 }) => {
   const businessProfile = useSelector((state) => state.business.business)[0];
   return (
@@ -48,30 +48,30 @@ const BuisinessProfileDetails = ({
             isProfile={true}
             setDisplayBusinessProfile={setDisplayBusinessProfile}
             setDisplayTab={setDisplayTab}
-            searchIndex={searchIndex}
-            setTabIndex={setTabIndex}
-            setSearchIndex={setSearchIndex}
-            myFeedIndex={myFeedIndex}
-            setMyFeedIndex={setMyFeedIndex}
-            favoriteIndex={favoriteIndex}
-            setFavoriteIndex={setFavoriteIndex}
-            listIndex={listIndex}
-            setListIndex={setListIndex}
+            // searchIndex={searchIndex}
+            // setTabIndex={setTabIndex}
+            // setSearchIndex={setSearchIndex}
+            // myFeedIndex={myFeedIndex}
+            // setMyFeedIndex={setMyFeedIndex}
+            // favoriteIndex={favoriteIndex}
+            // setFavoriteIndex={setFavoriteIndex}
+            // listIndex={listIndex}
+            // setListIndex={setListIndex}
           />
         ) : (
           <BuisinessHeaderNotClaimed
             isProfile={true}
             setDisplayBusinessProfile={setDisplayBusinessProfile}
             setDisplayTab={setDisplayTab}
-            searchIndex={searchIndex}
-            setTabIndex={setTabIndex}
-            setSearchIndex={setSearchIndex}
-            myFeedIndex={myFeedIndex}
-            setMyFeedIndex={setMyFeedIndex}
-            favoriteIndex={favoriteIndex}
-            setFavoriteIndex={setFavoriteIndex}
-            listIndex={listIndex}
-            setListIndex={setListIndex}
+            // searchIndex={searchIndex}
+            // setTabIndex={setTabIndex}
+            // setSearchIndex={setSearchIndex}
+            // myFeedIndex={myFeedIndex}
+            // setMyFeedIndex={setMyFeedIndex}
+            // favoriteIndex={favoriteIndex}
+            // setFavoriteIndex={setFavoriteIndex}
+            // listIndex={listIndex}
+            // setListIndex={setListIndex}
           />
         )}
         <Scrollbars

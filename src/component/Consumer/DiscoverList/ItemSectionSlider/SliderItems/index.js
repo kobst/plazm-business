@@ -31,11 +31,16 @@ import {
   removeSubscribedList,
   addSubscribedList,
 } from "../../../../../reducers/userReducer";
+
+import useStore from "../../../useState";
 import ValueLoader from "../../../../../utils/loader";
+
+import { useHistory } from "react-router-dom";
+
 
 const NewInBuzzItems = ({
   data,
-  setSelectedListId,
+  // setSelectedListId,
   setDiscoverBtn,
   setReadMore,
   heading,
@@ -46,6 +51,8 @@ const NewInBuzzItems = ({
   setTotalLists,
   totalLists,
 }) => {
+
+
   const user = useSelector((state) => state.user.user);
   const [offsetLeft, setOffsetLeft] = useState(0);
   const [offsetTop, setOffsetTop] = useState(0);
@@ -53,8 +60,14 @@ const NewInBuzzItems = ({
   const [image, setImage] = useState(
     data && data.media && data.media.length > 0 ? data.media[0].image : EventImg
   );
+
+
+  const setSelectedListId = useStore((state) => state.setSelectedListId)
+  const setSelectedList = useStore((state) => state.setSelectedList)
+
   const divRef = useRef();
   const dispatch = useDispatch();
+  const history = useHistory()
 
   /** to set position on hover of text */
   const displayData = () => {
@@ -69,9 +82,13 @@ const NewInBuzzItems = ({
 
   /** to open list description view */
   const ReadMore = () => {
+    console.log(" reading more")
     setDiscoverBtn(false);
     setSelectedListId(data._id);
+    setSelectedList(data)
     setReadMore(true);
+    history.push(`/list/${data._id}`);
+    
   };
 
   /** to unsubscribe from a list */

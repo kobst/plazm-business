@@ -70,9 +70,12 @@
   height: 111%;
   z-index: 1;
   animation: fadein 0.5s;
-  -moz-animation: fadein 0.5s; /* Firefox */
-  -webkit-animation: fadein 0.5s; /* Safari and Chrome */
-  -o-animation: fadein 0.5s; /* Opera */
+  -moz-animation: fadein 0.5s;
+  /* Firefox */
+  -webkit-animation: fadein 0.5s;
+  /* Safari and Chrome */
+  -o-animation: fadein 0.5s;
+  /* Opera */
 }
 
 .MainTabs [role="tabpanel"] {
@@ -84,9 +87,12 @@
   height: 111%;
   z-index: 1;
   animation: fadein 0.5s;
-  -moz-animation: fadein 0.5s; /* Firefox */
-  -webkit-animation: fadein 0.5s; /* Safari and Chrome */
-  -o-animation: fadein 0.5s; /* Opera */
+  -moz-animation: fadein 0.5s;
+  /* Firefox */
+  -webkit-animation: fadein 0.5s;
+  /* Safari and Chrome */
+  -o-animation: fadein 0.5s;
+  /* Opera */
 }
 
 .MainTabs .DiscoverWrapper {
@@ -98,9 +104,12 @@
   height: 111%;
   z-index: 1;
   animation: fadein 0.5s;
-  -moz-animation: fadein 0.5s; /* Firefox */
-  -webkit-animation: fadein 0.5s; /* Safari and Chrome */
-  -o-animation: fadein 0.5s; /* Opera */
+  -moz-animation: fadein 0.5s;
+  /* Firefox */
+  -webkit-animation: fadein 0.5s;
+  /* Safari and Chrome */
+  -o-animation: fadein 0.5s;
+  /* Opera */
 }
 
 @media (max-width: 1599px) {
@@ -108,6 +117,7 @@
     width: 90vw;
   }
 }
+
 @media (max-width: 1024px) {
   .MainTabs .DiscoverWrapper {
     width: 85vw;
@@ -124,33 +134,43 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
 }
+
 @-moz-keyframes fadein {
+
   /* Firefox */
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
 }
+
 @-webkit-keyframes fadein {
+
   /* Safari and Chrome */
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
 }
+
 @-o-keyframes fadein {
+
   /* Opera */
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -160,11 +180,9 @@
   display: block;
 }
 
-.MainTabs .react-tabs__tab {
-}
+.MainTabs .react-tabs__tab {}
 
-.MainTabs .react-tabs__tab--selected {
-}
+.MainTabs .react-tabs__tab--selected {}
 
 .MainTabs #react-tabs-1 {
   display: none;
@@ -183,7 +201,7 @@
 
 .MainTabs .react-tabs__tab.react-tabs__tab--selected:nth-child(2) {
   border: 0 !important;
-} 
+}
 
 .MainTabs .react-tabs__tab:nth-child(1),
 .MainTabs .react-tabs__tab:nth-child(2) {
@@ -194,15 +212,18 @@
   /* border-radius: 0 0 15px; */
   background: url(../../../../images/top-curve.jpg) no-repeat bottom -1px center !important;
 }
+
 .MainTabs .react-tabs__tab.LIAFter {
   /* border-radius: 0 15px 0px 0; */
   background: url(../../../../images/bottom-curve.jpg) no-repeat top -1px center !important;
 }
+
 .MainTabs .react-tabs__tab.LiDisable {
   border-radius: 0;
 }
 
-.MainTabs .react-tabs__tab.LIBefore.removeBorder, .MainTabs .react-tabs__tab.react-tabs__tab--selected.removeBorder{
+.MainTabs .react-tabs__tab.LIBefore.removeBorder,
+.MainTabs .react-tabs__tab.react-tabs__tab--selected.removeBorder {
   border: 0 !important;
 }
 
@@ -231,30 +252,36 @@
 }
 
 @media (max-width: 767px) {
+
   .MainTabs .react-tabs__tab-panel,
   .MainTabs [role="tabpanel"] {
     left: 50px;
     width: 300px;
     height: 100%;
   }
+
   .MainTabs .react-tabs__tab img {
     max-width: 26px;
   }
+
   .MainTabs .react-tabs__tab,
   .react-tabs__tab:nth-child(1) {
     height: 50px;
   }
+
   .MainTabs .panel-content {
     height: 90vh;
     overflow: auto;
     overflow-x: hidden;
   }
 }
+
 @media (min-width: 480px) and (max-width: 767px) {
   .MainTabs .react-tabs__tab-panel {
     width: 80vw;
   }
 }
+
 @media (max-width: 359px) {
   .MainTabs .react-tabs__tab-panel {
     left: 50px;

@@ -3,6 +3,22 @@ import styled from "styled-components";
 import UserMessageEvents from "../../HomeSearch/BusinessListing/Events/UserMessageEvents";
 import UserMessage from "../../HomeSearch/BusinessListing/UserMessage";
 
+import { useHistory } from "react-router";
+import {
+  ProfileThumbBanner,
+  ProfileThumbOverlay,
+  ProfileName,
+} from "../../FeedContent/styled";
+
+import useStore from "../../useState";
+
+const UserMsgWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  position: relative;
+`;
+
 const FeedListItem = styled.div`
   .background-active {
     background-color: #221e45;
@@ -15,10 +31,23 @@ const FeedListItem = styled.div`
 /** display business details */
 const DisplayBusinessDetails = ({
   data,
-  id,
-  setMyFeedIndex,
-  setSelectedListId,
+  id
 }) => {
+
+  const setSelectedListId = useStore((state) => state.setSelectedListId)
+
+  const setMyFeedIndex = useStore((state) => state.setMyFeedIndex)
+
+
+
+  const history = useHistory();
+
+  /** to display business details page */
+  const displayBusinessDetail = () => {
+    setMyFeedIndex(data.business[0]._id);
+    history.push(`/b/${data.business[0]._id}`);
+  };
+
   return data ? (
     <FeedListItem>
       <div

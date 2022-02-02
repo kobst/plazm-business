@@ -10,12 +10,14 @@ const PostsSectionContent = styled.div`
   flex-direction: column;
 `;
 
-const PostsSection = ({ businessId, setSelectedListId }) => {
+const PostsSection = ({ businessId }) => {
   return (
     <>
       <PostsSectionContent>
         <CalenderSection businessId={businessId} />
-        <PostChat setSelectedListId={setSelectedListId} />
+        <PostChat 
+        // setSelectedListId={setSelectedListId} 
+        />
       </PostsSectionContent>
     </>
   );

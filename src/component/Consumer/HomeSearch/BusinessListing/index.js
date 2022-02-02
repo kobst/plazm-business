@@ -12,6 +12,8 @@ import {
 } from "../../../../reducers/myFeedReducer";
 import error from "../../../../constants";
 
+import useStore from "../../useState";
+
 const BusinessListWrap = styled.div`
   width: 100%;
   position: relative;
@@ -44,15 +46,11 @@ const NoMorePost = styled.p`
 `;
 
 const BusinessListing = ({
-  setSelectedListId,
-  setListClickedFromSearch,
-  setSearchIndex,
-  setDisplayTab,
   loader,
   coords,
   closestFilter,
 }) => {
-  const businessData = useSelector((state) => state.myFeed.myFeed);
+  const businessData = useSelector((state) => state.myFeed.searchFeed);
   const loading = useSelector((state) => state.myFeed.loading);
   const [offset, setOffset] = useState(0);
   const [hasMore, setHasMore] = useState(true);
@@ -66,6 +64,12 @@ const BusinessListing = ({
   const [filterSelected, setFilterSelected] = useState(false);
   const [flag, setFlag] = useState(true);
 
+
+  const setSelectedListId = useStore((state) => state.setSelectedListId)
+  const setSearchIndex = useStore((state) => state.setSearchIndex)
+  const setListClickedFromSearch = useStore((state) => state.setListClickedFromSearch)
+  const draggedLocation = useStore((state => state.draggedLocation))
+
   /** useEffect called when any side filters are selected */
   useEffect(() => {
     const fetchSearchData = async () => {
@@ -77,8 +81,8 @@ const BusinessListing = ({
             closestFilter && !updatedAtFilter ? closestFilter : filterClosest,
           updated: updatedAtFilter,
         },
-        latitude: coords ? coords.latitude : process.env.REACT_APP_LATITUDE,
-        longitude: coords ? coords.longitude : process.env.REACT_APP_LONGITUDE,
+        latitude: draggedLocation.lat,
+        longitude: draggedLocation.lng,
       };
       const result = await dispatch(HomeSearchInitial(obj));
       const data = await unwrapResult(result);
@@ -96,6 +100,7 @@ const BusinessListing = ({
     updatedAtFilter,
     offset,
     loader,
+    draggedLocation
   ]);
 
   /** to fetch more places matching the search */
@@ -106,8 +111,8 @@ const BusinessListing = ({
         search: search,
         value: offset + 20,
         filters: { closest: filterClosest, updated: updatedAtFilter },
-        latitude: process.env.REACT_APP_LATITUDE,
-        longitude: process.env.REACT_APP_LONGITUDE,
+        latitude: draggedLocation.lat,
+        longitude: draggedLocation.lng,
       };
       dispatch(HomeSearch(obj));
     } else setHasMore(false);
@@ -119,7 +124,7 @@ const BusinessListing = ({
         offset={offset}
         setOffset={setOffset}
         setFilterSelected={setFilterSelected}
-        setDisplayTab={setDisplayTab}
+        // setDisplayTab={setDisplayTab}
       />
       {(loading && offset === 0) || flag ? (
         <LoaderWrap>
