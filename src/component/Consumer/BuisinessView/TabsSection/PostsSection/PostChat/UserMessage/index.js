@@ -127,7 +127,7 @@ const days = [
   "Saturday",
 ];
 
-const UserMessage = ({ postData, setSelectedListId }) => {
+const UserMessage = ({ postData }) => {
   const dispatch = useDispatch();
   const [displayComments, setDisplayComments] = useState(false);
   const loadingComments = useSelector(
