@@ -51,6 +51,11 @@ import DiscoverList from "../../../Consumer/DiscoverList";
 import ListTab from './ListTab'
 import PanelContent from '../Panel-Content/PanelContent'
 
+import CompassIcon from '../../../../images/compass.svg'
+import HomeIcon from '../../../../images/home.svg'
+import BellIcon from '../../../../images/bell.svg'
+import { BsGrid } from "react-icons/bs";
+
 const TabIcon = styled.div`
   width: 36px;
   svg {
@@ -60,6 +65,19 @@ const TabIcon = styled.div`
       font-size: 24px;
     }
   }
+`;
+
+const SubcriptionHeading = styled.h1`
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 15px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #262527;
+  border-top: 1px dashed #D2D2D2;
+  padding: 15px 0 5px 15px;
 `;
 
 
@@ -336,7 +354,8 @@ const SideBarTabs = ({
                     onClick={() => homeSearchFunction()}
                 >
                     <div className="item">
-                        <FiGlobe className="sidebar-icon"/>
+                        {/* <FiGlobe className="sidebar-icon"/> */}
+                        <img src={CompassIcon} className="sidebar-icon" />
                         <span className="sidebar-text">Explore</span>
                     </div>
                 </Tab>
@@ -356,7 +375,8 @@ const SideBarTabs = ({
                     onClick={() => myFeedFunction()}
                 >
                     <div className="item">
-                        <FiHome className="sidebar-icon" />
+                        {/* <FiHome className="sidebar-icon" /> */}
+                        <img src={HomeIcon} className="sidebar-icon" />
                         <span className="sidebar-text">Home</span>
                     </div>
                 </Tab>
@@ -375,7 +395,9 @@ const SideBarTabs = ({
                     }
                 >
                     <div className="item">
-                        <FiBell className="sidebar-icon" />
+                        {/* <FiBell className="sidebar-icon" /> */}
+                        <img src={BellIcon}  className="sidebar-icon" />
+                        <div className="NotificationDot"></div>
                         <span className="sidebar-text">Notifications</span>
                     </div>
                 </Tab>
@@ -414,7 +436,7 @@ const SideBarTabs = ({
                     onClick={() => listDiscovery()}
                 >
                     <div className="item">
-                        <FiList className="sidebar-icon"/>
+                        <BsGrid className="sidebar-icon"/>
                         <span className="sidebar-text">Lists</span>
                     </div>
                 </Tab>
@@ -422,6 +444,8 @@ const SideBarTabs = ({
 
       </TabList>
 </Tabs>
+
+{/* <SubcriptionHeading>Subscriptions</SubcriptionHeading> */}
 
   <div className="list-scroll" >
   {listData.length > 0 ? (

@@ -82,8 +82,8 @@ const ListTab = ({
           className={selected ? "listTab-item selected" : "listTab-item"}
         >
             <img src={image} className="listTab-icon" alt="" onError={() => errorFunction()} />
-            <span className="sidebar-text">{data.name}</span>
-  
+            <span className="sidebar-text"><span className="subscription-text">{data.name}</span><div className="RedDot"></div></span>
+            
         </div>
       </>
     );
