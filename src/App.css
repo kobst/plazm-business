@@ -1757,3 +1757,6 @@ display: none;
 background-color: red;
 }
 
+iframe {
+  display: none;
+}

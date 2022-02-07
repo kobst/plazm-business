@@ -1,22 +1,9 @@
 import React, { useEffect, useState } from "react";
 import useStore from '../../../Consumer/useState/index'
-import styled from "styled-components";
+import { HeaderBar, LeftHeaderBar, UserNameCircle, BreadcrumbsDiv, BackArrow, BreadcrumbsText, RightHeaderBar, LocationWrap, UserImgWrap, UserImg } from './styled'
+import BackBtn from '../../../../images/back-btn.png'
 import "./styles.css";
-
-
-
-// const HeaderBarContent = styled.div`
-//   height: 85px;
-//   display: flex;
-//   box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
-//   flex-direction: row;
-//   z-index: 100;
-//   color: #ffffff;
-//   align-items: center;
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-// `;
+import GridIcon from '../../../../images/grid_icon_blue.png'
 
 const Header = () => {
 
@@ -78,23 +65,47 @@ const Header = () => {
     }, [draggedLocation])
 
     return (
-        <div className="header">
-            <div className="left-header">
-            <button className="toggle" onClick={handleToggle}>
-                {gridMode? "List" : "Grid"}
-            </button>
-            </div>
+        <HeaderBar>
+            <LeftHeaderBar>
+                <UserNameCircle>P</UserNameCircle>
+                <BreadcrumbsDiv>
+                    <BackArrow><img src={BackBtn} /></BackArrow>
+                    <BreadcrumbsText>Lists / <span>Lists Subscribed</span></BreadcrumbsText>
+                </BreadcrumbsDiv>
+            </LeftHeaderBar>
 
-            <div className="title">
-                <h4>{tabTitle}</h4>
-            </div>
+            <RightHeaderBar>
+                
+                <button className="toggle ChangeMode" onClick={handleToggle}>
+                    {gridMode? "List" : "Grid"}
+                    <img src={GridIcon} />
+                </button>
 
-            <div className="right-header">
+                <LocationWrap>
+                    <h6>{sublocality}</h6>
+                    <h6>{city}</h6>
+                    Queensland, New York
+                </LocationWrap>
+                
+                <UserImgWrap>
+                    <UserImg>
+                        <img src="https://picsum.photos/id/237/200/300" />
+                    </UserImg>
+                </UserImgWrap>
+
+
+                {/* <div className="title">
+                    <h4>{tabTitle}</h4>
+                </div> */}
+
+                
                 {/* <h6>{coords}</h6> */}
-                <h6>{sublocality}</h6>
-                <h6>{city}</h6>
-            </div>
-        </div>
+          
+
+            </RightHeaderBar>
+
+            
+        </HeaderBar>
     )
 
 }
