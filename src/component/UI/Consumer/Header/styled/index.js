@@ -13,7 +13,7 @@ export const HeaderBar = styled.div`
   left: 0;
   width: 99.1%;
   @media (max-width: 1199px) {
-    width: 100%;
+    width: 100%;   
   }
   @media (max-width: 767px) {
     height: auto;

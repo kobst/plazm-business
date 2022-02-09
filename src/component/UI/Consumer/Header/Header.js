@@ -77,7 +77,7 @@ const Header = () => {
             <RightHeaderBar>
                 
                 <button className="toggle ChangeMode" onClick={handleToggle}>
-                    {gridMode? "List" : "Grid"}
+                    {gridMode? "List" : "Grid"}  
                     <img src={GridIcon} />
                 </button>
 
