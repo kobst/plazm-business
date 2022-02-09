@@ -61,8 +61,8 @@ const getUserLists = (ownerId) => {
 const getUserCreatedAndFollowedLists = (obj) => {
   const graphQl = {
     query: `
-          query GetUserCreatedAndFollowedLists($id: ID!, $value: Int){
-            getUserCreatedAndFollowedLists (input: {id: $id, value:$value}){
+          query GetUserCreatedAndFollowedLists($id: ID!, $value: Int, $limit: Int){
+            getUserCreatedAndFollowedLists (input: {id: $id, value:$value, limit: $limit}){
               message
               success
               totalLists
@@ -90,6 +90,7 @@ const getUserCreatedAndFollowedLists = (obj) => {
     variables: {
       id: obj.id,
       value: obj.value,
+      limit: obj?.limit || 15,
     },
   };
   return graphQl;

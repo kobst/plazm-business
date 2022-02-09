@@ -43,8 +43,6 @@ export const createList = createAsyncThunk("data/createList", async (obj) => {
 export const fetchUserLists = createAsyncThunk(
   "data/fetchUserLists",
   async (obj) => {
-    console.log(obj)
-    console.log("fetching user lists")
     const graphQl = getUserLists(obj);
     const response = await graphQlEndPoint(graphQl);
     return response.data.getUserLists.list;
@@ -241,51 +239,76 @@ export const slice = createSlice({
     filterByAll: (state) => {
       state.filteredList = state.data;
     },
+    setSelectedListDetails: (state, action) => {
+      state.selectedListDetails = action.payload;
+    },
+    setListData: (state, action) => {
+      state.data = state.data.concat(action.payload.list);
+      state.totalList = action.payload.totalList;
+    },
     userSubscribeToAList: (state, action) => {
-      if (action.payload.type === "Trending") {
-        const findList = state.trendingLists.find(
-          (i) => i._id === action.payload.listId
-        );
-        if (findList) {
-          findList.subscribers = findList.subscribers.concat({
+      let listName;
+      let findList;
+      switch (action.payload.type) {
+        case "Trending":
+          listName = "trendingLists";
+          findList = state[listName].find(
+            (i) => i._id === action.payload.listId
+          );
+          break;
+        case "Most Popular":
+          listName = "popularLists";
+          findList = state[listName].find(
+            (i) => i._id === action.payload.listId
+          );
+          break;
+        case "Selected":
+          listName = "selectedListDetails";
+          findList = state.selectedListDetails;
+          break;
+      }
+      if (findList) {
+        findList.subscribers =
+          listName !== "selectedListDetails" &&
+          findList.subscribers.concat({
             _id: action.payload.user._id,
-            name: action.payload.user.name,
-            image: action.payload.user.photo,
           });
-        }
-      } else {
-        const findList = state.popularLists.find(
-          (i) => i._id === action.payload.listId
-        );
-        if (findList) {
-          findList.subscribers = findList.subscribers.concat({
-            _id: action.payload.user._id,
-            name: action.payload.user.name,
-            image: action.payload.user.photo,
-          });
-        }
+        state.data = [findList, ...state.data];
+        state.totalList = state.data.length;
       }
     },
     userUnSubscribeToAList: (state, action) => {
-      if (action.payload.type === "Trending") {
-        const findList = state.trendingLists.find(
-          (i) => i._id === action.payload.listId
-        );
-        if (findList) {
-          findList.subscribers = findList.subscribers.filter(
-            (i) => i._id !== action.payload.user._id
+      let listName;
+      let findList;
+      switch (action.payload.type) {
+        case "Trending":
+          listName = "trendingLists";
+          findList = state[listName].find(
+            (i) => i._id === action.payload.listId
           );
-        }
-      } else {
-        const findList = state.popularLists.find(
-          (i) => i._id === action.payload.listId
-        );
-        if (findList) {
-          findList.subscribers = findList.subscribers.filter(
-            (i) => i._id !== action.payload.user._id
+          break;
+        case "Most Popular":
+          listName = "popularLists";
+          findList = state[listName].find(
+            (i) => i._id === action.payload.listId
           );
-        }
+          break;
+        case "Selected":
+          listName = "selectedListDetails";
+          findList = state.selectedListDetails;
+          break;
       }
+      if (findList && listName !== "selectedListDetails") {
+        findList.subscribers = findList.subscribers.filter(
+          (i) => i._id !== action.payload.user._id
+        );
+      }
+      if (findList && listName === "selectedListDetails") {
+        state.data = state.data.filter(
+          (i) => i._id !== state.selectedListDetails._id
+        );
+      }
+      state.totalList = state.data.length;
     },
   },
   extraReducers: {
@@ -475,5 +498,7 @@ export const {
   userUnSubscribeToAList,
   setListSearch,
   clearListSearchData,
+  setSelectedListDetails,
+  setListData,
 } = slice.actions;
 export default slice.reducer;

@@ -15,7 +15,7 @@ import {
 export const fetchUserDetails = createAsyncThunk(
   "data/fetchUserDetails",
   async (userSub) => {
-    const graphQl = getUser(userSub);
+    const graphQl = getUser(userSub, 0, 15);
     const response = graphQlEndPoint(graphQl);
     return response;
   }
