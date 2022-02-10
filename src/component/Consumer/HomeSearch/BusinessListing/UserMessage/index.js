@@ -28,9 +28,18 @@ import {
   ListInfo,
   ListName,
   ListNameWrap,
+  TopListHeader,
+  RightBuisinessName,
+  BuisinessNme,
+  LeftListHeader,
+  ShowMoreDiv,
+  ImgThumbWrap,
 } from "../../../FeedContent/styled";
 import DateBar from "../../../BuisinessView/TabsSection/EventsSection/PostChat/DateBar/index.js";
 import TimeBar from "../../../BuisinessView/TabsSection/EventsSection/PostChat/TimeBar/index.js";
+import ArrowSm from "../../../../../images/arrow-sm.png"
+import ImageSlider from "./imageslider";
+
 const reactStringReplace = require("react-string-replace");
 
 const UserMessageContent = styled.div`
@@ -70,6 +79,7 @@ const ProfileNameHeader = styled.div`
   &.UserMessageView {
     padding-left: 15px;
     width: 100%;
+    font-family: 'Roboto',sans-serif;
   }
 `;
 
@@ -396,32 +406,45 @@ const UserMessage = ({
           >
             <ProfileNameWrap className="UserMessageViewProfileName">
               {myFeedView && (
-                <InnerListBanner onClick={() => listNavigate()}>
-                  <img
-                    src={listImage}
-                    alt=""
-                    onError={() => setListImage(BannerImg)}
-                  />
-                  <InnerOverlay />
+                <>
+                <TopListHeader>
+                  <LeftListHeader>
+                  <InnerListBanner onClick={() => listNavigate()}>
+                    <img
+                      src={listImage}
+                      alt=""
+                      onError={() => setListImage(BannerImg)} />
+                  </InnerListBanner>
                   <ListNameWrap>
-                    <ListName>{postData.listId[0].name}</ListName>
-                    <ListInfo>
-                      <FaCaretRight />
-                      <ListAuthorName onClick={() => displayUserDetails()}>
-                      {postData.ownerId[0].name}
-                      </ListAuthorName>
-                      <span>|</span>
-                      <ListAuthorName>
-                        {moment(postData.createdAt).format(
-                          "MMM DD,YYYY, hh:MM a"
-                        )}{" "}
-                        EDT{" "}
-                      </ListAuthorName>
-                    </ListInfo>
-                  </ListNameWrap>
-                </InnerListBanner>
+                      <ListName>{postData.listId[0].name}</ListName>
+                      <ListInfo>
+                        <FaCaretRight />
+                        <ListAuthorName onClick={() => displayUserDetails()}>
+                          {postData.ownerId[0].name}
+                        </ListAuthorName>
+                        <span>|</span>
+                        <ListAuthorName>
+                          {moment(postData.createdAt).format(
+                            "MMM DD,YYYY, hh:MM a"
+                          )}{" "}
+                          EDT{" "}
+                        </ListAuthorName>
+                      </ListInfo>
+                    </ListNameWrap>
+                    </LeftListHeader>
+                    <RightBuisinessName>
+                      <BuisinessNme>Bedvyne Brew</BuisinessNme>
+                      <div className="hex">
+                        <div className="hex-background">
+                            <img src="https://picsum.photos/200/300" />
+                        </div>
+                      </div>
+                    </RightBuisinessName>
+                  </TopListHeader>
+                  </>
               )}
               {postData.title && <SubHeading>{postData.title}</SubHeading>}
+            
               <ChatInput>
                 {findDesc(
                   postData.data,
@@ -446,9 +469,25 @@ const UserMessage = ({
                   />
                 </>
               )}
+              
+              <ImgThumbWrap>
+              <img src="https://picsum.photos/200/300" />
+              <img src="https://picsum.photos/200/300" />
+              <img src="https://picsum.photos/200/300" />
+              <img src="https://picsum.photos/200/300" />
+              </ImgThumbWrap>
+
+              <ShowMoreDiv>
+                <span>Show More <img src={ArrowSm} className="ArrowSm" /></span>
+              </ShowMoreDiv>
+
+              <ImageSlider />
+
               {listDescriptionView || myFeedView ? (
                 <BigImage image={postData.media} />
               ) : null}
+
+              
               <LikesBar
                 type="comment"
                 totalLikes={postData.likes ? postData.likes.length : 0}

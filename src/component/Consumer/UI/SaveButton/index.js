@@ -12,7 +12,7 @@ color:#fff;
 font-weight:bold;
 min-width: 100px;
 max-width:${props => props.maxWidth ? props.maxWidth : 'inherit'};
-border-radius: 2px;
+border-radius: 5px;
 border:0;
 :hover,:focus{
   opacity:0.6;
