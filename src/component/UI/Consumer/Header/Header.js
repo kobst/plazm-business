@@ -1,113 +1,141 @@
-import React, { useEffect, useState } from "react";
-import useStore from '../../../Consumer/useState/index'
-import { HeaderBar, LeftHeaderBar, UserNameCircle, BreadcrumbsDiv, BackArrow, BreadcrumbsText, RightHeaderBar, LocationWrap, UserImgWrap, UserImg } from './styled'
-import BackBtn from '../../../../images/back-btn.png'
+import React, { Fragment, useEffect, useState } from "react";
+import useStore from "../../../Consumer/useState/index";
+import {
+  HeaderBar,
+  LeftHeaderBar,
+  UserNameCircle,
+  BreadcrumbsDiv,
+  BackArrow,
+  BreadcrumbsText,
+  RightHeaderBar,
+  LocationWrap,
+  UserImgWrap,
+  UserImg,
+} from "./styled";
+import BackBtn from "../../../../images/back-btn.png";
 import "./styles.css";
-import GridIcon from '../../../../images/grid_icon_blue.png'
+import GridIcon from "../../../../images/grid_icon_blue.png";
+import { useHistory, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Header = () => {
-
-    const [tabTitle, setTabTitle] = useState()
-    const [coords, setCoords] = useState()
-
-    const selectedTab = useStore((state) => state.tabSelected)
-    const selectedList = useStore((state) => state.selectedList)
-    const draggedLocation = useStore((state) => state.draggedLocation)
-    const sublocality = useStore((state) => state.sublocality)
-    const city = useStore((state) => state.city)
-
-    const setGridMode = useStore((state) => state.setGridMode)
-    const gridMode = useStore((state) => state.gridMode)
-
-
-    const handleToggle = () => {
-        console.log(gridMode)
-        if (gridMode){
-            console.log("setting grid mode")
-            setGridMode(false)
-        } 
-        if (!gridMode) {
-            console.log("setting list mode")
-            setGridMode(true)
-        }
+  const [tabTitle, setTabTitle] = useState();
+  const [coords, setCoords] = useState();
+  const routeObj = {
+    u: "User",
+    b: "Business",
+    list: "List",
+  };
+  const history = useLocation()
+    .pathname.split("/")
+    .filter((item) => item);
+  const selectedTab = useStore((state) => state.tabSelected);
+  const selectedList = useStore((state) => state.selectedList);
+  const draggedLocation = useStore((state) => state.draggedLocation);
+  const sublocality = useStore((state) => state.sublocality);
+  const city = useStore((state) => state.city);
+  const selectedUser = useSelector((state) => state.user);
+  const selectedBusiness = useSelector((state) => state.business);
+  const setGridMode = useStore((state) => state.setGridMode);
+  const gridMode = useStore((state) => state.gridMode);
+  const handleToggle = () => {
+    if (gridMode) {
+      setGridMode(false);
     }
+    if (!gridMode) {
+      setGridMode(true);
+    }
+  };
 
-    useEffect(()=>{
-        console.log(selectedTab + "selected Tab Header")
-        if (selectedTab === 1) {
-            setTabTitle("Explore")
-        }
-        if (selectedTab === 2) {
-            setTabTitle("Home")
-        }
-        if (selectedTab === 3) {
-            setTabTitle("Notifications")
-        }
-        if (selectedTab === 4) {
-            setTabTitle("Favorites")
-        }
-        if (selectedTab === 5) {
-            setTabTitle("Discover Lists")
-        }
-        if (selectedTab === -1) {
-            if (selectedList) {
-                setTabTitle(selectedList.name)
-            }
-        }
+  useEffect(() => {
+    switch (selectedTab) {
+      case 1:
+        setTabTitle("Explore");
+        break;
+      case 2:
+        setTabTitle("Home");
+        break;
+      case 3:
+        setTabTitle("Notifications");
+        break;
+      case 4:
+        setTabTitle("Favorites");
+        break;
+      case 5:
+        setTabTitle("Discover Lists");
+        break;
+      case -1:
+        setTabTitle((prev) => prev);
+        break;
+    }
+  }, [selectedTab]);
 
-    }, [selectedTab])
+  useEffect(() => {
+    let loc = draggedLocation.lat + " lat " + draggedLocation.lng + " long ";
+    setCoords(loc);
+  }, [draggedLocation]);
 
+  const isObjectId = (id) => {
+    return id.length === 24 && !isNaN(Number("0x" + id));
+  };
+  return (
+    <HeaderBar>
+      <LeftHeaderBar>
+        <UserNameCircle>P</UserNameCircle>
+        <BreadcrumbsDiv>
+          <BackArrow>
+            <img src={BackBtn} />
+          </BackArrow>
+          <BreadcrumbsText>
+            {tabTitle}{" "}
+            {routeObj[history[0]] && <span>{"/ " + routeObj[history[0]]}</span>}
+            {history.length > 1 && isObjectId(history[1]) && (
+              <Fragment>
+                {routeObj[history[0]] === routeObj.u &&
+                  selectedUser?.selectedUser?.name && (
+                    <span>{"/ " + selectedUser.selectedUser.name}</span>
+                  )}
+                {routeObj[history[0]] === routeObj.b &&
+                  selectedBusiness.business[0]?.company_name && (
+                    <span>
+                      {"/ " + selectedBusiness.business[0]?.company_name}
+                    </span>
+                  )}
+                {routeObj[history[0]] === routeObj.list && selectedList && (
+                  <span>{"/ " + selectedList.name}</span>
+                )}
+              </Fragment>
+            )}
+          </BreadcrumbsText>
+        </BreadcrumbsDiv>
+      </LeftHeaderBar>
 
-    useEffect(()=> {
-        let loc = draggedLocation.lat + " lat " + draggedLocation.lng + " long "
-        setCoords(loc)
+      <RightHeaderBar>
+        <button className="toggle ChangeMode" onClick={handleToggle}>
+          {gridMode ? "List" : "Grid"}
+          <img src={GridIcon} />
+        </button>
 
-    }, [draggedLocation])
+        <LocationWrap>
+          <h6>{sublocality}</h6>
+          <h6>{city}</h6>
+          Queensland, New York
+        </LocationWrap>
 
-    return (
-        <HeaderBar>
-            <LeftHeaderBar>
-                <UserNameCircle>P</UserNameCircle>
-                <BreadcrumbsDiv>
-                    <BackArrow><img src={BackBtn} /></BackArrow>
-                    <BreadcrumbsText>Lists / <span>Lists Subscribed</span></BreadcrumbsText>
-                </BreadcrumbsDiv>
-            </LeftHeaderBar>
+        <UserImgWrap>
+          <UserImg>
+            <img src="https://picsum.photos/id/237/200/300" />
+          </UserImg>
+        </UserImgWrap>
 
-            <RightHeaderBar>
-                
-                <button className="toggle ChangeMode" onClick={handleToggle}>
-                    {gridMode? "List" : "Grid"}  
-                    <img src={GridIcon} />
-                </button>
-
-                <LocationWrap>
-                    <h6>{sublocality}</h6>
-                    <h6>{city}</h6>
-                    Queensland, New York
-                </LocationWrap>
-                
-                <UserImgWrap>
-                    <UserImg>
-                        <img src="https://picsum.photos/id/237/200/300" />
-                    </UserImg>
-                </UserImgWrap>
-
-
-                {/* <div className="title">
+        {/* <div className="title">
                     <h4>{tabTitle}</h4>
                 </div> */}
 
-                
-                {/* <h6>{coords}</h6> */}
-          
+        {/* <h6>{coords}</h6> */}
+      </RightHeaderBar>
+    </HeaderBar>
+  );
+};
 
-            </RightHeaderBar>
-
-            
-        </HeaderBar>
-    )
-
-}
-
-export default Header
+export default Header;
