@@ -15,6 +15,7 @@ import {
 import BackBtn from "../../../../images/back-btn.png";
 import "./styles.css";
 import GridIcon from "../../../../images/grid_icon_blue.png";
+import ListIcon from "../../../../images/Grid_icon.png";
 import { useHistory, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -113,13 +114,12 @@ const Header = () => {
       <RightHeaderBar>
         <button className="toggle ChangeMode" onClick={handleToggle}>
           {gridMode ? "List" : "Grid"}
-          <img src={GridIcon} />
+          {gridMode ? <img src={ListIcon} /> : <img src={GridIcon} />}
         </button>
 
         <LocationWrap>
-          <h6>{sublocality}</h6>
-          <h6>{city}</h6>
-          Queensland, New York
+          {sublocality + " "}
+          {city}
         </LocationWrap>
 
         <UserImgWrap>
