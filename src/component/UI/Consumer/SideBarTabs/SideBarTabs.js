@@ -437,6 +437,10 @@ const SideBarTabs = ({
               <h6></h6>
             )}
   </div>
+
+  <button onClick={() => consumerLogout()} disabled={loader}>
+                  Logout
+    </button>
 </div>
  
 </div>

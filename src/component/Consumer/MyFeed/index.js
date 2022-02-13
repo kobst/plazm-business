@@ -123,6 +123,7 @@ const MyFeed = () => {
   const setMyFeedIndex = useStore((state) => state.setMyFeedIndex)
   const draggedLocation = useStore((state) => state.draggedLocation)
   const gridMode =  useStore((state) => state.gridMode)
+  const orderedPlaces = useStore((state) => state.orderedPlaces)
  
 
   useEffect(()=>{
@@ -220,7 +221,7 @@ const MyFeed = () => {
             >
               <BusinessListWrap>
                 {feedData.length > 0 ? (
-                  feedData.map((i, key) => (
+                  feedData.map((i, key) => ( 
                     <DisplayBusinessDetails
                       data={i}
                       id={key}

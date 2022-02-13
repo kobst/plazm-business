@@ -298,6 +298,7 @@ const ListDetailView = ({
   const readMore = useStore((state) => state.readMore)
   const gridMode = useStore((state) => state.gridMode)
 
+  const orderedPlaces = useStore((state) => state.orderedPlaces)
 
   const [image, setImage] = useState(
     selectedList && selectedList.media.length > 0
@@ -535,8 +536,10 @@ const ListDetailView = ({
               }
             >
               <ListingOptionWrap>
-                {postsInList.length > 0 ? (
-                  postsInList.map((i, key) => (
+                {/* {postsInList.length > 0 ? (
+                  postsInList.map((i, key) => ( */}
+                {orderedPlaces.length > 0 ? (
+                    orderedPlaces.map((i, key) => (
                     <DisplayPostInAList
                       data={i}
                       key={key}

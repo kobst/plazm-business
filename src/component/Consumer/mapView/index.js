@@ -6,6 +6,7 @@ import useStore from '../useState/index'
 import './styles.css'
 import Geocode from "react-geocode";
 import GoogleMapReact from "google-map-react";
+import ColorDict from '../GridComponents/functions/colorSlotDict'
 
 // import '../../App.css';
 
@@ -41,25 +42,25 @@ function distance(lat1, lon1, lat2, lon2) {
 
 
 
-function orderPlaces(places, selectedPlace, defaultCenter) {
+// function orderPlaces(places, selectedPlace, defaultCenter) {
 
-    let center = {}
-    if (selectedPlace) {
-        center.lat = selectedPlace.businessLocation.coordinates[1]
-        center.lng = selectedPlace.businessLocation.coordinates[0]
-    } else {
-        center = defaultCenter
-    }
+//     let center = {}
+//     if (selectedPlace) {
+//         center.lat = selectedPlace.businessLocation.coordinates[1]
+//         center.lng = selectedPlace.businessLocation.coordinates[0]
+//     } else {
+//         center = defaultCenter
+//     }
 
-    places.sort(function (a, b) {
-        let distA = distance(a.businessLocation.coordinates[1], a.businessLocation.coordinates[0], center.lat, center.lng)
-        let distB = distance(b.businessLocation.coordinates[1], b.businessLocation.coordinates[0], center.lat, center.lng)
-        return distA - distB
-    })
+//     places.sort(function (a, b) {
+//         let distA = distance(a.businessLocation.coordinates[1], a.businessLocation.coordinates[0], center.lat, center.lng)
+//         let distB = distance(b.businessLocation.coordinates[1], b.businessLocation.coordinates[0], center.lat, center.lng)
+//         return distA - distB
+//     })
 
-    return places
+//     return places
 
-}
+// }
 
 
 const Map = ReactMapboxGl({
@@ -76,15 +77,23 @@ const MapView = (props) => {
     const [boundBox, setBox] = useState(null)
     const [features, setFeatures] = useState(null)
     const [places_center, setPlaces_center] = useState([])
-    const [places_0, setPlaces_0] = useState([])
-    const [places_1, setPlaces_1] = useState([])
-    const [places_2, setPlaces_2] = useState([])
+    const [placesOuter, setPlacesOuter] = useState([])
+    const [places_0, setPlaces_0] = useState()
+    const [places_1, setPlaces_1] = useState()
+    const [places_2, setPlaces_2] = useState()
+    const [places_3, setPlaces_3] = useState()
+    const [places_4, setPlaces_4] = useState()
+    const [places_5, setPlaces_5] = useState()
+    const [places_6, setPlaces_6] = useState()
+   
     const [tempCenter, setTempCenter] = useState()
     // const [sublocality, setSubLocality] = useState("")
     // const [city, setCity] = useState("")
+    const _colorDict = ColorDict()
 
     const places = useStore(state => state.places)
     const selectedPlace = useStore(state => state.selectedPlace)
+    const centerPlace = useStore(state => state.centerPlace)
     const multiDictSub = useStore(state => state.multiDict)
     const orderedPlaces = useStore(state => state.orderedPlaces)
     const maxViewable = useStore(state => state.maxViewable)
@@ -273,32 +282,72 @@ const MapView = (props) => {
     useEffect(() => {
         // console.log("- - multi effect - - ")
         let mounted = true;
-        let places_0 = []
-        let places_1 = []
-        let places_2 = []
-        let places_center = []
-        places.forEach((element) => {
+        let places_outer= []
 
-            let obj = multiDictSub[element._id]
-            if (obj) {
-                let posVector = obj.posVector[2]
-                if (posVector < -2) {
-                    places_2.push(element)
-                } else if (posVector < -1) {
-                    places_1.push(element)
-                } else if (posVector < 0) {
-                    places_0.push(element)
-                } else if (posVector < 1) {
-                    places_center.push(element)
-                }
+        places.forEach((element) => {
+            let _color = element.icon_color
+            switch (_color) {
+                case 'white':
+                    setPlaces_0(element)
+                    break
+                case 'red':
+                    setPlaces_1(element)
+                    break
+                case 'orange':
+                    setPlaces_2(element)
+                    break
+                case 'yellow':
+                    setPlaces_3(element)
+                    break
+                case 'green':
+                    setPlaces_4(element)
+                    break
+                case 'blue':
+                    setPlaces_5(element)
+                    break
+                case 'purple':
+                    setPlaces_6(element)
+                    break
+                default:
+                    places_outer.push(element)
+                    break
             }
-        })
-        setPlaces_center(places_center)
-        setPlaces_0(places_0)
-        setPlaces_1(places_1)
-        setPlaces_2(places_2)
-        return () => mounted = false;
-    }, [multiDictSub])
+
+            // let obj = multiDictSub[element._id]
+            // if (obj) {
+
+            //     let cubeString = obj.cubeCoor[0] + "-" + obj.cubeCoor[1] + "-" + obj.cubeCoor[2] 
+            //     let color = _colorDict[cubeString]
+            //     if (color) {
+            //         // element.icon_color = color
+            //         switch (color) {
+            //             case 'white':
+            //                 places_0.push(element)
+            //                 break
+            //         }
+            //     } else {
+            //         // element.icon_color = 'grey'
+            //         places_outer.push(element)
+            //     }
+
+                // let posVector = obj.posVector[2]
+                // if (posVector < -2) {
+                //     places_2.push(element)
+                // } else if (posVector < -1) {
+                //     places_1.push(element)
+                // } else if (posVector < 0) {
+                //     places_0.push(element)
+                // } else if (posVector < 1) {
+                //     places_center.push(element)
+                // }
+            })
+            setPlacesOuter(places_outer)
+
+            return () => mounted = false;
+
+        }, [multiDictSub])
+ 
+ 
 
 
 
@@ -344,19 +393,63 @@ const MapView = (props) => {
                 </MapContext.Consumer>
 
 
+                    {/* {places_0.map(({ ...otherProps }) => {
+                        return <Layer type="circle" id="layer_id_0" paint={{"circle-radius": 10, "circle-color": otherProps.icon_color}}>
 
 
-                {gridView &&
-                    <>
-                        <Layer type="circle" id="layer_id_0" paint={{
+                    }) */}
+
+                        <Layer type="circle" id="layer_id_1" paint={{"circle-radius": 10, "circle-color": "black"}}>
+                        {placesOuter.map(({ ...otherProps }) => {
+                            return <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} /> 
+                        })}
+                        </Layer>
+
+                        <Layer type="circle" id='white' paint={{"circle-radius": 10, "circle-color": 'white'}}>
+                            {places_0 ? <Feature key={places_0._id} coordinates={places_0.businessLocation.coordinates} /> : null}
+                        </Layer>
+
+                        <Layer type="circle" id='red' paint={{"circle-radius": 10, "circle-color": 'red'}}>
+                            {places_1 ? <Feature key={places_1._id} coordinates={places_1.businessLocation.coordinates} /> : null}
+                        </Layer>
+
+                        <Layer type="circle" id='orange' paint={{"circle-radius": 10, "circle-color": 'orange'}}>
+                            {places_2 ? <Feature key={places_2._id} coordinates={places_2.businessLocation.coordinates} /> : null}
+                        </Layer>
+
+                        <Layer type="circle" id='yellow' paint={{"circle-radius": 10, "circle-color": 'yellow'}}>
+                             {places_3 ? <Feature key={places_3._id} coordinates={places_3.businessLocation.coordinates} /> : null}
+                        </Layer>
+
+                        <Layer type="circle" id='green' paint={{"circle-radius": 10, "circle-color": 'green'}}>
+                            {places_4 ? <Feature key={places_4._id} coordinates={places_4.businessLocation.coordinates} /> : null}
+                        </Layer>
+
+                        <Layer type="circle" id='blue' paint={{"circle-radius": 10, "circle-color": 'blue'}}>
+                            {places_5 ? <Feature key={places_5._id} coordinates={places_5.businessLocation.coordinates} /> : null}
+                        </Layer>
+
+                        <Layer type="circle" id='purple' paint={{"circle-radius": 10, "circle-color": 'purple'}}>
+                            {places_6 ? <Feature key={places_6._id} coordinates={places_6.businessLocation.coordinates} /> : null}
+                        </Layer>
+
+
+                    {/* {places_outer.map(({ ...otherProps }) => {
+                        return <Layer type="circle" id= {otherProps._id} paint={{"circle-radius": 10, "circle-color": otherProps.icon_color}}>
+                                <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} /> 
+                                </Layer>
+                    })}
+             */}
+    
+                        {/* <Layer type="circle" id="layer_id_0" paint={{
                             "circle-radius": 10,
                             "circle-color": "yellow"
                         }}>
                             {places_0.map(({ ...otherProps }) => {
                                 return <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />
                             })}
-                        </Layer>
-                        <Layer type="circle" id="layer_id_1" paint={{
+                        </Layer> */}
+                        {/* <Layer type="circle" id="layer_id_1" paint={{
                             "circle-radius": 10,
                             "circle-color": "magenta"
                         }}>
@@ -372,8 +465,8 @@ const MapView = (props) => {
                             {places_2.map(({ ...otherProps }) => {
                                 return <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />
                             })}
-                        </Layer>
-                        <Layer type="circle" id="layer_id_3" paint={{
+                        </Layer> */}
+                        {/* <Layer type="circle" id="layer_id_3" paint={{
                             "circle-radius": 10,
                             "circle-color": "red"
                         }}>
@@ -381,9 +474,9 @@ const MapView = (props) => {
 
                                 return <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />
                             })}
-                        </Layer>
-                    </>
-                }
+                        </Layer> */}
+                
+           
 
 
 

@@ -1,6 +1,9 @@
+import { isElement } from 'react-dom/test-utils';
 import hexSlotFunction from './hexSlots'
 import slotArrayXYZ from './slotArrayXYZ'
+import ColorDict from './colorSlotDict'
 
+const _colorDict = ColorDict()
 
 function distance(lat1, lon1, lat2, lon2) {
   if ((lat1 == lat2) && (lon1 == lon2)) {
@@ -157,7 +160,7 @@ const AssignMolecularDict = (_places, defaultCenter, selectedPlace) => {
   let coordDict = {}
   let multiDict = {}
   let slotDict = {}
-
+  let placesSet = []
   
 
   let newCenter = places[0]
@@ -173,6 +176,10 @@ const AssignMolecularDict = (_places, defaultCenter, selectedPlace) => {
     posVector: zeroObject
   }
 
+  newCenter.posVector = zeroObject
+  newCenter.cubeCoor = zeroObject
+  newCenter.icon_color = 'white'
+  placesSet.push(newCenter)
 
   coordDict[newCenter._id] = zeroObject
 
@@ -237,7 +244,15 @@ const AssignMolecularDict = (_places, defaultCenter, selectedPlace) => {
         element.coordinates = [newCoordinateX, newCoordinateY, newCoordinateZ]
         element.posVector = [newPositionX, newPositionY, newPositionZ]
         slotDict[newCoordinateKey] = element
-
+        
+        let color = _colorDict[newCoordinateKey]
+        if (color) {
+          element.icon_color = color
+        } else {
+          element.icon_color = "gray"
+        }
+        
+        placesSet.push(element)
 
         const cubeObject = {
           x: newCoordinateX,
@@ -265,7 +280,7 @@ const AssignMolecularDict = (_places, defaultCenter, selectedPlace) => {
 
 
   let obj = {
-    _orderedPlacesResponse: places,
+    _orderedPlacesResponse: placesSet,
     _slotDictResponse: slotDict,
     _multiDictResponse: multiDict
   }
@@ -283,13 +298,13 @@ const AssignHexDict = (_places, defaultCenter, selectedPlace) => {
   let newXyz = slotArrayXYZ
   let multiDict = {}
   let slotDict = {}
+  let placesSet = []
+
 
   const zeroObject = [0, 0, 0]
   // console.log(JSON.stringify(newCenter.company_name))
-
   var closestDistance = 0
   var farthestDistance = 1000
-
 
   let places = _OrderDistanceSeperate(_places, defaultCenter, selectedPlace)
 
@@ -298,20 +313,27 @@ const AssignHexDict = (_places, defaultCenter, selectedPlace) => {
   let newCenterPlace = places[0]
 
 
+
   multiDict[newCenterPlace._id] = {
       cubeCoor: zeroObject,
       posVector: zeroObject
     }
   
- 
+    newCenterPlace.posVector = zeroObject
+    newCenterPlace.cubeCoor = zeroObject
+    newCenterPlace.icon_color = 'white'
+    placesSet.push(newCenterPlace)
+
 
   slotDict["0-0-0"] = newCenterPlace
 
   for (let index = 1; index < places.length; index++) {
+      console.log(index + " top " )
+
       var element = places[index]
       const angle = bearing(newCenterPlace.businessLocation.coordinates[1], newCenterPlace.businessLocation.coordinates[0], element.businessLocation.coordinates[1], element.businessLocation.coordinates[0])
-   
     for (let slotIndex = 1; slotIndex < newXyz.length - 1; slotIndex++) {
+      console.log(angle)
       let slot = newXyz[slotIndex]
       let position = slot.posVector
       let coordinates = slot.coordinate
@@ -319,8 +341,6 @@ const AssignHexDict = (_places, defaultCenter, selectedPlace) => {
       if (slotDict[newCoordinateKey]) {
           continue
         }
-
-
       if ((slot.rangeMax < slot.rangeMin &&
           (angle >= slot.rangeMin || angle < slot.rangeMax)) ||
         (angle >= slot.rangeMin && angle < slot.rangeMax)) {
@@ -329,18 +349,31 @@ const AssignHexDict = (_places, defaultCenter, selectedPlace) => {
         element.cubeVector = coordinates
         element.posVector = position
         slotDict[newCoordinateKey] = element
+        
+        let color = _colorDict[newCoordinateKey]
+        if (color) {
+          element.icon_color = color
+        } else {
+          element.icon_color = "gray"
+        }
+        
+
+        placesSet.push(element)
         const obj = {
           cubeCoor: coordinates,
           posVector: position
         }
         multiDict[element._id] = obj
+        console.log(element.company_name)
+        console.log(index + " hex dict")
+
         break
       }
     }
   };
 
   let obj = {
-      _orderedPlacesResponse: places,
+      _orderedPlacesResponse: placesSet,
       _slotDictResponse: slotDict,
       _multiDictResponse: multiDict
     }

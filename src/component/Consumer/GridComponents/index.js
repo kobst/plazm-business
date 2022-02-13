@@ -67,30 +67,6 @@ const GridContainer = () => {
     const setDisplacedCenterHexPosition = useStore((state) => state.setDisplacedCenterHexPosition)
 
 
-// should I put Re-Center Here?
-
-    // useEffect(() => {
-    //     if (feedData.length > 0){
-    //         loadData(feedData)
-    //     }
-    // }, [feedData])
-
-    // useEffect(() => {
-    //     if (searchData.length > 0 && tabSelected == 1){
-    //         console.log("grid " + tabSelected)
-    //         loadData(searchData)
-    //     }
-    //     if (feedData.length > 0 && tabSelected == 2){
-    //         console.log("grid " + tabSelected)
-    //         loadData(feedData)
-    //     }
-    //     if (feedData.length > 0 && tabSelected == -1){
-    //         console.log("grid " + tabSelected)
-    //         loadData(feedData)
-    //     }
-    // }, [feedData, searchData, tabSelected])
-
-
     useEffect(() => {
         if (searchData.length > 0 && tabSelected == 1){
             console.log("grid " + tabSelected)
@@ -131,6 +107,11 @@ const GridContainer = () => {
         console.log("initial props places")
         ReCenter(null)
     }, [places, draggedLocation])
+
+    useEffect(() => {
+        console.log("length " + Object.keys(multiDict).length)
+    
+    }, [multiDict])
 
     // on shifting centerPlace..
     useEffect(() => {
@@ -174,7 +155,6 @@ const GridContainer = () => {
 
     const ReCenter = (place) => {
         //props.selectPlace(place)
-        console.log("Recenter  -   " + place)
         let limit = 20
         const tilt = 10
         // let _orderedPlaces
@@ -186,8 +166,8 @@ const GridContainer = () => {
             console.log("----place---" + place.company_name)
             // props.selectPlace(place)
             // all in one
-            // const { _orderedPlacesResponse, _slotDictResponse, _multiDictResponse } = AssignMolecularDict(places, props.center, place)
-            const { _orderedPlacesResponse, _slotDictResponse, _multiDictResponse } = AssignHexDict(places, draggedLocation, place)
+            const { _orderedPlacesResponse, _slotDictResponse, _multiDictResponse } = AssignMolecularDict(places, draggedLocation, place)
+            // const { _orderedPlacesResponse, _slotDictResponse, _multiDictResponse } = AssignHexDict(places, draggedLocation, place)
 
             if (_orderedPlacesResponse.length < limit) {
                 limit = _orderedPlacesResponse.length
@@ -204,8 +184,8 @@ const GridContainer = () => {
             if (places.length > 0) {
                 console.log(places.length + " length ---")
                 // all in one
-                // const { _orderedPlacesResponse, _slotDictResponse, _multiDictResponse } = AssignMolecularDict(props.places, props.center)
-                const { _orderedPlacesResponse, _slotDictResponse, _multiDictResponse } = AssignHexDict(places, draggedLocation, place)
+                const { _orderedPlacesResponse, _slotDictResponse, _multiDictResponse } = AssignMolecularDict(places, draggedLocation, place)
+                // const { _orderedPlacesResponse, _slotDictResponse, _multiDictResponse } = AssignHexDict(places, draggedLocation, place)
 
 
                 if (_orderedPlacesResponse.length < limit) {
@@ -233,6 +213,7 @@ const GridContainer = () => {
 
     const onScroll = (e) => {
         console.log(e.deltaX + " e.delta " + e.deltaY)
+
 
 
     }

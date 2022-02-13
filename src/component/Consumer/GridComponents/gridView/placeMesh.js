@@ -7,6 +7,7 @@ import { OrbitControls, MapControls, MOUSE } from 'three/examples/jsm/controls/O
 import { Polyhedron, Plane, RoundedBox, OrthographicCamera } from '@react-three/drei';
 
 import { useSelector } from "react-redux";
+import colorDict from '../functions/colorSlotDict'
 
 import useStore from '../../useState/index'
 
@@ -24,7 +25,56 @@ extend({ Text });
 
 
 
+const IconButton = (props) => {
 
+    const groupRef = useRef()
+    const loader = new THREE.TextureLoader();
+    const texture = loader.load(props.placeImage);
+    const [active, setActive] = useState(false)
+    // texture.offset.set(xOffset, yOffset);
+    // texture.repeat.set(0.25, 0.25);
+
+
+
+    var geoCircle = new THREE.CircleGeometry( 2, 32 );
+    var geoCircleBack = new THREE.CircleGeometry( 2, 32 );
+    geoCircleBack = geoCircleBack.applyMatrix4(new THREE.Matrix4().makeRotationY(Math.PI))
+
+    const { rotation } = useSpring({
+        rotation: active ? [0, 0, 0] : [0, THREE.Math.degToRad(180), 0],
+        config: { mass: 10, tension: 500, friction: 200, precision: 0.00001 }
+
+    })
+
+    useFrame(() => {
+        if (groupRef.current) {
+            // if (!active) {
+            let ran = Math.floor(Math.random() * 40)
+            if (ran == 3) {
+                setActive(!active)
+            }
+            // hexRef.current.rotation.y = hexRef.current.rotation.y += 0.01
+        }
+
+    })
+
+    return (
+        <a.group
+            position={[0,0,5]}
+            rotation={rotation}
+            ref ={groupRef} >
+             <mesh
+                geometry={geoCircle}>
+                {texture && <meshBasicMaterial attach="material" map={texture} side="THREE.DoubleSide" />}
+            </mesh>
+
+            <mesh
+                geometry={geoCircleBack}>
+                {texture && <meshBasicMaterial attach="material" map={texture} side="THREE.DoubleSide" />}
+            </mesh>
+        </a.group>
+    )
+}
 
 
 const PreviewCard = (props) => {
@@ -52,6 +102,8 @@ const PreviewCard = (props) => {
 
     }, [props.previewActive])
 
+
+    
 
 
 
@@ -185,10 +237,22 @@ const HexTile = (props) => {
             // rotation={rotation}
             // scale={5}
             ref={hexRef}>
+
+            <mesh
+                geometry={geomShape}>
+                <meshBasicMaterial attach="material" color={props.color} side="THREE.DoubleSide" />
+            </mesh> 
+            
+{/*           
             <mesh
                 geometry={geomShape}>
                 {texture && <meshBasicMaterial attach="material" map={texture} side="THREE.DoubleSide" />}
-            </mesh>
+            </mesh> */}
+
+            {/* <mesh
+                geometry={geomShape2}>
+                <meshBasicMaterial attach="material" color={props.color} side="THREE.DoubleSide" />
+            </mesh> */}
 
             {/* <mesh
                 geometry={geomShape2}>
@@ -287,16 +351,22 @@ const PlaceMesh = ((props) => {
     const cubes = useRef([])
     const rotation = useRef([0, 0])
     const mapPoint = useRef([0, 0])
+    
 
 
-    const [preview, setPreview] = useState(false)
+    const _colorDict = colorDict()
+
+    // const [preview, setPreview] = useState(false)
     const [depth1, setDepth1] = useState(false)
     const [outerDepth, setOuterDepth] = useState(true)
 
     const [hovered, setHover] = useState(false)
     const [previewActive, setPreviewActive] = useState(false)
     const [startPos, setStartPos] = useState([-50, 50, 0])
-    const [tileColor, setTileColor] = useState("red")
+    const [tileColor, setTileColor] = useState("black")
+    
+
+    const previewMode = useStore((state) => state.previewMode)
     // const [vecCenter] = useState(() => new THREE.Vector3())
 
     const [opts, setOpts] = useState({
@@ -322,6 +392,7 @@ const PlaceMesh = ((props) => {
     const maxViewableDepth = useStore((state) => state.maxViewableDepth)
 
     const centerPlace = useStore((state) => state.centerPlace)
+    const setSelectedPlace = useStore(state => state.setSelectedPlace)
 
     const [vec] = useState(() => new THREE.Vector3())
 
@@ -333,7 +404,7 @@ const PlaceMesh = ((props) => {
         // color: active ? 'hotpink' : 'white',
         // pos: active ? [0, 0, 2] : [0, 0, 0],
         // rotation: active ? [0, 0, 0] : [0, THREE.Math.degToRad(180), 0],
-        scaleText: preview ? [2, 2, 2] : [1, 1, 1],
+        scaleText: previewActive ? [2, 2, 2] : [1, 1, 1],
         onRest: () => console.log("rest"),
         config: { mass: 10, tension: 500, friction: 200, precision: 0.00001 }
     })
@@ -368,24 +439,39 @@ const PlaceMesh = ((props) => {
 
 
     useEffect(() => {
-
+        const previewMargin = 2
         let obj = multiDictSub[props._id]
         if (obj) {
-            coords.current = obj.posVector
+            // console.log(obj.cubeCoor + " " + props.placeObject.company_name)
+            let x, y, z
+            x = previewMode ? obj.posVector[0] * previewMargin : obj.posVector[0] 
+            y = previewMode ? obj.posVector[1] * previewMargin : obj.posVector[1]
+            z = previewMode ? obj.posVector[2] * previewMargin : obj.posVector[2] 
+            coords.current = [x, y, z]
             cubes.current = obj.cubeCoor
             rotation.current = [obj.xRotation, obj.yRotation]
             let depth = Math.max(Math.abs(cubes.current[0]), Math.abs(cubes.current[1]), Math.abs(cubes.current[2]))
 
+            let cubeString = cubes.current[0] + "-" + cubes.current[1] + "-" + cubes.current[2] 
+            let color = _colorDict[cubeString]
+            if (color) {
+                setTileColor(color)
+            } else {
+                setTileColor("black")
+            }
+           
             if (depth === 1) {
                 // console.log(props.placeObject.company_name)
-                setPreview(false)
+                setPreviewActive(false)
                 setDepth1(true)
                 setOuterDepth(false)
             } if (depth > 1) {
-                setPreview(false)
+                setPreviewActive(false)
                 setDepth1(false)
                 setOuterDepth(true)
             }
+        } else {
+            console.log("no place " + props.placeObject.company_name)
         }
         // console.log("coor coord" + coords.current)
 
@@ -442,19 +528,22 @@ const PlaceMesh = ((props) => {
 
     const handleHover = (place) => {
         // props.hovering(true)
-        // if (meshGroup.current) {
-        //     meshGroup.current.scale.set(1.25, 1.25, 1.25)
-        // }
+        if (meshGroup.current) {
+            meshGroup.current.scale.set(1.25, 1.25, 1.25)
+        }
+        console.log(place.company_name + " hovering")
+        setSelectedPlace(place)
         // props.hover(place)
         // setHover(true)
     }
 
 
-    const handleLeave = (left_hover) => {
+    const handleLeave = () => {
         // props.hovering(left_hover)
-        // if (meshGroup.current) {
-        //     meshGroup.current.scale.set(1, 1, 1)
-        // }
+        if (meshGroup.current) {
+            meshGroup.current.scale.set(1, 1, 1)
+        }
+        // setSelectedPlace(null)
         // // props.hover(null)
         // setHover(false)
 
@@ -473,7 +562,7 @@ const PlaceMesh = ((props) => {
             // {...props}
             userData={props.placeObject}
             ref={meshGroup}
-            position={[0,0,0]}
+            position={[0,0,-5]}
             scale={(1, 1, 1)}
             onClick={() => handleClick(props.placeObject)}
             onPointerOver={() => handleHover(props.placeObject)}
@@ -504,14 +593,25 @@ const PlaceMesh = ((props) => {
 
              {/* <PreviewCard position={[0, 0, 10]} previewActive={previewActive}/> */}
 
+
+             <IconButton 
+                _id = {props._id}
+                // position={[0, 0, 10]}
+                placeImage={props.placeObject.default_image_url}>
+           </IconButton>
+
+            
             <HexTile
                 innerRef={hexBackground}
                 color={tileColor}
-                position={[0, 0, 0]}
+                // position={[0, 0, -10]}
                 // listImage={props.placeObject.listImage}
                 placeImage={props.placeObject.default_image_url}
                 _id={props._id}>
             </HexTile>
+
+
+
 
             {/* {depth1 && <text
                 ref={textRef}

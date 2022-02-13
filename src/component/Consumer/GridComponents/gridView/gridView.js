@@ -24,10 +24,14 @@ const _hexArray = hexSlotFunction()
 function CameraMain(props) {
     const cam = useRef()
     const posCoords = useRef()
+    const group = useRef()
+
     const sampleBox = useRef()
     // const [y] = Scroll([-100, 100], { domTarget: window });
-    const setCamPos = useStore((state) => state.setCamPosition)
+  
     const camPos = useStore(state => state.camPosition)
+
+    const setCamPos = useStore((state) => state.setCamPosition)
     const setGridView = useStore((state) => state.setGridView)
     const centerPlace = useStore((state) => state.centerPlace)
     const gridView = useStore((state) => state.gridView)
@@ -36,8 +40,6 @@ function CameraMain(props) {
 
 
     const [vec] = useState(() => new THREE.Vector3())
-    
-
     const set = useThree((state) => state.set);
     const { setDefaultCamera } = useThree()
 
@@ -51,34 +53,33 @@ function CameraMain(props) {
 
 
     useFrame(() => {
-        if (cam.current) {
-            cam.current.position.lerp(vec.set(posCoords.current[0], posCoords.current[1], 5), 0.05)
+        if (group.current && posCoords.current) {
+            group.current.position.lerp(vec.set(posCoords.current[0], posCoords.current[1], 5), 0.05)
 
-            let zoomLevel = cam.current.zoom
-
-            if (zoomLevel > 50) {
-                setGridView(false)
-            } else if (zoomLevel > 40) {
-                setGridView(true)
-                setMaxViewable(6)
-                setMaxViewableDepth(2)
-            } else if (zoomLevel > 30) {
-                setGridView(true)
-                setMaxViewable(9)
-                setMaxViewableDepth(3)
-            } else if (zoomLevel > 20) {
-                setGridView(true)
-                setMaxViewable(12)
-                setMaxViewableDepth(3)
-            } else if (zoomLevel > 10) {
-                setGridView(true)
-                setMaxViewable(15)
-                setMaxViewableDepth(4)
-            } else {
-                setMaxViewable(18)
-                setMaxViewableDepth(4)
-                setGridView(true)
-            }
+            // let zoomLevel = cam.current.zoom
+            // if (zoomLevel > 50) {
+            //     setGridView(false)
+            // } else if (zoomLevel > 40) {
+            //     setGridView(true)
+            //     setMaxViewable(6)
+            //     setMaxViewableDepth(2)
+            // } else if (zoomLevel > 30) {
+            //     setGridView(true)
+            //     setMaxViewable(9)
+            //     setMaxViewableDepth(3)
+            // } else if (zoomLevel > 20) {
+            //     setGridView(true)
+            //     setMaxViewable(12)
+            //     setMaxViewableDepth(3)
+            // } else if (zoomLevel > 10) {
+            //     setGridView(true)
+            //     setMaxViewable(15)
+            //     setMaxViewableDepth(4)
+            // } else {
+            //     setMaxViewable(18)
+            //     setMaxViewableDepth(4)
+            //     setGridView(true)
+            // }
 
         }
     })
@@ -86,7 +87,7 @@ function CameraMain(props) {
 
 
     return (
-        <group>
+        <group ref={group}>
             {/* <a.perspectiveCamera ref={cam} {...props} position-y={y.to((y) => (y / 500))} /> */}
             {/* <perspectiveCamera ref={cam} zoom={20} {...props} /> */}
             <OrthographicCamera ref={cam} zoom={20} {...props} />
@@ -217,14 +218,9 @@ const GridView = (props) => {
     const handleScroll = (e) => {
         console.log(e.deltaX + " e.delta " + e.deltaY)
 
-        // if (!shifting) {
-        // setDeltaX(deltaX + e.deltaX)
-        // setDeltaY(deltaY + e.deltaY)
-        // }
         setDeltaX(deltaX + e.deltaX)
         setDeltaY(deltaY + e.deltaY)
-        // setDeltaX(e.deltaX)
-        // setDeltaY(e.deltaY)
+  
     }
 
 
@@ -284,7 +280,8 @@ const GridView = (props) => {
     return (
         <>
         <div style={{width:'100%', height:'100%'}} onWheel={handleScroll}>
-            <Canvas>
+            <Canvas >
+            {/* mode="concurrent" */}
                 {/* camera={{ position: [0, 0, 20], near: 10, far: 60 }}>  */}
                 <CameraMain
                     ref={camera}

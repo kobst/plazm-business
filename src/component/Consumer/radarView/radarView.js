@@ -37,6 +37,7 @@ const RadarDot = (props) => {
         if (obj) {
             coords.current = obj.posVector
 
+            // console.log(obj.cubeCoor + " " + props.placeObject.company_name)
 
             // if (obj.posVector[2] < -2) {
             //     setColor("blue")
@@ -147,6 +148,7 @@ function Camera(props) {
 
 
     useEffect(() => {
+        console.log("move grid cam")
         camCoords.current = [camPos[0], camPos[1], 20]
 
     }, [camPos])
