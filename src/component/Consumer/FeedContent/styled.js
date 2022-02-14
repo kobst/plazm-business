@@ -386,3 +386,106 @@ export const ImgThumbWrap = styled.div`
     margin: 0 5px 0 0;
   }
 `;
+
+export const TopBuisinessBar = styled.div`
+      position: absolute;
+    top: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+  .hex {
+  display: block;
+  margin: 0 auto;
+  position: relative;
+  width: 32px;
+  height: 30px; /* width * 0.866 */
+  background: #fff;
+  box-sizing: border-box;
+  -webkit-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+  -moz-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+}
+
+.hex-background {
+  position: absolute;
+  background-color: orange; /*color of the main-background*/
+  top: 2px; /* equal to border thickness */
+  left: 2px; /* equal to border thickness */
+  width: 28px;
+  height: 26px;/* width * 0.866 */
+  -webkit-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+  -moz-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+}
+
+.hex img {
+  position: absolute;
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover;
+  -webkit-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+  -moz-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+}
+`;
+
+export const BottomShowMoreDiv = styled.div`
+    position: absolute;
+    bottom: 0;
+    z-index: 1;
+    width: 100%;
+    display: flex;
+    right: 0px;
+    background: linear-gradient(360deg, #07060D 0%, rgba(18, 15, 41, 0) 100%);
+    border-radius: 10px 10px 0px 0px;
+    padding: 10px 5px;
+`;
+
+export const BuisinessThumbImages = styled.div`
+  display: flex;
+  flex-flow: row wrap;
+`;
+
+export const BuisinessThumbImg = styled.div`
+  border: 1px solid #FFFFFF;
+  width: 22px;
+  height:22px;
+  border-radius: 50%;
+  margin: 0 5px 0 0;
+  overflow: hidden;
+  img {
+    width: 100%;
+    height:100%;
+  }
+`;
+
+export const HastagWrap = styled.div`
+  display: flex;
+  align-items: center;
+  flex-flow: row wrap;
+  padding: 0 5px;
+`;
+
+export const HastagDiv = styled.div`
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 9px;
+  line-height: 11px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  text-transform: capitalize;
+  color: #000000;
+  margin: 0 5px 0 0;
+  background: #F7F7F7;
+  border-radius: 28px;
+  padding: 5px 8px;
+`;
+
+export const HeartIcon = styled.div`
+  
+`;
+
+export const RightBuisinessImg = styled.div`
+  display: flex;
+  align-items: center;
+`;

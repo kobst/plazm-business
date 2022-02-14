@@ -120,12 +120,12 @@ const BusinessListing = ({
 
   return (
     <>
-      <SearchBar
+      {/* <SearchBar
         offset={offset}
         setOffset={setOffset}
         setFilterSelected={setFilterSelected}
         // setDisplayTab={setDisplayTab}
-      />
+      /> */}
       {(loading && offset === 0) || flag ? (
         <LoaderWrap>
           <ValueLoader />
