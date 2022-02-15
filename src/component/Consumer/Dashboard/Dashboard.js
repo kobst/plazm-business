@@ -18,6 +18,7 @@ import GridContainer from "../GridComponents/index"
 import MapView from "../mapView/index"
 import RadarView from "../radarView/radarView"
 import useStore from "../useState";
+import GlobalSearch from "../GlobalSearch";
 
 
 const DashboardContent = styled.div`
@@ -75,6 +76,8 @@ const Dashboard = () => {
         <DashboardContent>
           <SideBarTabs/>
 
+      
+
         <PanelContentContainer>
 
               {view ==="explore" && <HomeSearch/> }
@@ -92,6 +95,7 @@ const Dashboard = () => {
 
       {view === "list_explore" && <DiscoverList/>}
 
+        <GlobalSearch />
         <GridContainer />
 
         {view !== "list_explore" && <>
