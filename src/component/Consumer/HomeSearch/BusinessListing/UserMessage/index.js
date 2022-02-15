@@ -40,6 +40,7 @@ import TimeBar from "../../../BuisinessView/TabsSection/EventsSection/PostChat/T
 import ArrowSm from "../../../../../images/arrow-sm.png"
 import ImageSlider from "./imageslider";
 
+
 const reactStringReplace = require("react-string-replace");
 
 const UserMessageContent = styled.div`
@@ -398,7 +399,8 @@ const UserMessage = ({
   return (
     <>
       <UserMsgWrap>
-        <UserMessageContent>
+      
+        <UserMessageContent>          
           <ProfileNameHeader
             className={
               listDescriptionView || myFeedView ? "UserMessageView" : ""
