@@ -13,7 +13,20 @@ import {
   ProfileNameFeed,
   ProfileThumbBannerFeed,
   ProfileThumbOverlay,
+  TopBuisinessBar,
+  HeartIcon,
+  RightBuisinessImg,
+  BuisinessNme,
+  ShowMoreDiv,
+  BottomShowMoreDiv,
+  BuisinessThumbImages,
+  BuisinessThumbImg,
+  HastagWrap,
+  HastagDiv,
 } from "../../../FeedContent/styled";
+
+import HeartBorder from "../../../../../images/heart-border.png"
+import ArrowSm from "../../../../../images/arrow-sm.png"
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -21,6 +34,7 @@ const UserMessageContent = styled.div`
   display: flex;
   padding: 0;
   flex-direction: column;
+  border-bottom: 1px solid #fff;
   @media (max-width: 767px) {
     justify-content: flex-start;
     align-items: flex-start;
@@ -37,6 +51,10 @@ const UserMsgWrap = styled.div`
   flex-direction: column;
   padding: 0;
   position: relative;
+  border: 1px solid #322C5C;
+  border-radius: 10px;
+  margin: 5px 15px 0px;
+  overflow: hidden;
   // &.search-active {
   //   &:after {
   //     content: "";
@@ -61,14 +79,14 @@ const ProfileNameHeader = styled.div`
 
 const ProfileThumbBanner = styled.div`
   width: 100%;
-  height: 204px;
+  height: 135px;
   margin: 0;
   overflow: hidden;
   position: relative;
   img {
     object-fit: cover;
-    height: 204px;
-    width: auto;
+    height: 135px;
+    width: 100%;
   }
 `;
 //   object-fit: cover;
@@ -81,22 +99,20 @@ const ProfileNameWrap = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: center;
   max-width: 100%;
-  padding: 0 0 0 15px;
+  padding: 0 0 0 11px;
   width: 100%;
-  position: absolute;
-  bottom: 0;
-  height: 50px;
-  background: rgba(0, 0, 0, 0.75);
-  flex-direction: column;
+  position: relative;
+  height: 95px;
+  background: linear-gradient(360deg, #07060D 0%, #120F29 100%);
+  border-radius: 0px 0px 10px 10px;
 `;
 
 const ProfileName = styled.div`
   font-style: normal;
   font-size: 13px;
   line-height: normal;
-  margin: 7px 0 0px 0;
+  margin: 11px 0 0px 0;
   font-weight: 700;
   color: #fff;
   .businessNameTitle {
@@ -144,6 +160,8 @@ const ChatInput = styled.div`
   margin: 0 0 5px;
   color: #fff;
   width: 100%;
+  flex-direction: row;
+    display: flex;
   span {
     font-size: 12px;
     color: #ff2e9a;
@@ -157,11 +175,14 @@ const ChatInput = styled.div`
   p {
     display: flex;
     font-size: 12px !important;
+    margin: 0 10px 0 0;
     @media (max-width: 767px) {
-      margin: 5px 0 0 !important;
+      margin: 0 5px 0 0 !important;
     }
   }
 `;
+
+
 
 /** display favorite business */
 const DisplayFavoriteBusiness = ({
@@ -246,15 +267,49 @@ const DisplayFavoriteBusiness = ({
                   alt=""
                 />
               </ProfileThumbBanner>
+              <TopBuisinessBar>
+                <HeartIcon>
+                  <img src={HeartBorder} />
+                </HeartIcon>
+                <RightBuisinessImg>
+                <BuisinessNme>Bedvyne Brew</BuisinessNme>
+                <div className="hex">
+                        <div className="hex-background">
+                            <img src="https://picsum.photos/200/300" />
+                        </div>
+                </div>
+                </RightBuisinessImg>
+              </TopBuisinessBar>
+
+              <BottomShowMoreDiv>
+                <ShowMoreDiv>
+                  <span>Show More <img src={ArrowSm} className="ArrowSm" /></span>
+                </ShowMoreDiv>
+              </BottomShowMoreDiv>
+
+              <HastagWrap>
+                <HastagDiv>#burger</HastagDiv>
+                <HastagDiv>#Credit Card</HastagDiv>
+                <HastagDiv>#Fresh Fruits</HastagDiv>
+                <HastagDiv>#Takeaway</HastagDiv>
+                <HastagDiv>#burger</HastagDiv>
+              </HastagWrap>
+
               <ProfileNameWrap>
                 <ProfileName>
-                  <div
+                  {/* <div
                     className="businessNameTitle"
                     onClick={() => displayBusinessDetail()}
                   >
                     {businessInfo.company_name}
-                  </div>
+                  </div> */}
                   <ChatInput>
+                  <p>
+                      <span className="postSpan">
+                        245
+                      </span>{" "}
+                      Followers
+                    </p>
                     <p>
                       <span className="postSpan">
                         {data.totalPosts && data.totalPosts.length > 0
@@ -264,6 +319,12 @@ const DisplayFavoriteBusiness = ({
                       Posts
                     </p>
                   </ChatInput>
+                  <BuisinessThumbImages>
+                    <BuisinessThumbImg><img src="https://picsum.photos/200/300" /></BuisinessThumbImg>
+                    <BuisinessThumbImg><img src="https://picsum.photos/200/300" /></BuisinessThumbImg>
+                    <BuisinessThumbImg><img src="https://picsum.photos/200/300" /></BuisinessThumbImg>
+                    <BuisinessThumbImg><img src="https://picsum.photos/200/300" /></BuisinessThumbImg>
+                  </BuisinessThumbImages>
                 </ProfileName>
               </ProfileNameWrap>
             </ProfileNameHeader>
@@ -338,6 +399,7 @@ const DisplayFavoriteBusiness = ({
                   <div className="CloseDiv">Closed</div>
                 )} */}
               </ProfileThumbBanner>
+              
               <ProfileNameWrap>
                 <ProfileName>
                   <div

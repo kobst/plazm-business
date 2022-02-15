@@ -34,9 +34,11 @@ const PanelContentContainer = styled.div`
   position: relative;
   display: flex;
   height: calc(100vh - 70px);
-  overflow-x: hidden;
+  overflow: hidden;
   top: 60px;
   max-width: 620px;
+  z-index: 1;
+  background: #221e45;
   /* overflow: auto; */
 `;
 // const Dashboard = ({view}) => {
