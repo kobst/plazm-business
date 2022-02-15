@@ -172,14 +172,14 @@ export const RightIcons = styled.div`
   }
 `;
 export const InnerListBanner = styled.div`
-  width: 100%;
-  height: 80px;
-  margin: 0 0 15px;
+  width: 27px;
+    height: 27px;
+  margin: 0 8px 0 0;
   overflow: hidden;
   position: relative;
+  border-radius: 50%;
+  border: 1px solid #FFFFFF;
   img {
-    width: 100%;
-    max-height: 80px;
   }
 `;
 
@@ -195,27 +195,23 @@ export const ListNameWrap = styled.div`
   font-style: normal;
   font-size: 13px;
   line-height: normal;
-  margin: 0;
+  margin: 4px 0 0 0;
   font-weight: 700;
   color: #fff;
-  position: absolute;
-  left: 15px;
-  bottom: 15px;
+  position: relative;
   justify-content: space-between;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 93%;
-  @media (max-width: 767px) {
-    left: 5px;
-  }
+  width: 100%;
+  font-family: 'Roboto',sans-serif;
 `;
 
 export const ListName = styled.div`
   font-style: normal;
-  font-size: 12px;
+  font-size: 11px;
   line-height: normal;
-  margin: 0 0 5px;
+  margin: 0 0 3px;
   font-weight: 700;
   color: #fff;
   display: -webkit-box;
@@ -291,4 +287,102 @@ export const EventBigImage = styled.p`
   align-items: center;
   justify-content: center;
   margin: 0 0 15px;
+`;
+
+export const TopListHeader = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 15px;
+  @media (max-width: 767px) {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+`;
+
+export const RightBuisinessName = styled.div`
+  display: flex;
+  align-items: center;
+  .hex {
+  display: block;
+  margin: 0 auto;
+  position: relative;
+  width: 32px;
+  height: 30px; /* width * 0.866 */
+  background: #fff;
+  box-sizing: border-box;
+  -webkit-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+  -moz-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+}
+
+.hex-background {
+  position: absolute;
+  background-color: orange; /*color of the main-background*/
+  top: 2px; /* equal to border thickness */
+  left: 2px; /* equal to border thickness */
+  width: 28px;
+  height: 26px;/* width * 0.866 */
+  -webkit-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+  -moz-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+}
+
+.hex img {
+  position: absolute;
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover;
+  -webkit-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+  -moz-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+}
+`;
+
+export const BuisinessNme = styled.div`
+  font-weight: bold;
+  font-size: 13px;
+  text-align: right;
+  text-transform: capitalize;
+  color: #FFFFFF;
+  text-shadow: 0px 0px 7px #000000;
+  margin: 0 5px 0 0;
+`;
+
+export const LeftListHeader = styled.div`
+  display: flex;
+  align-items: center;
+  width: 60%;
+  @media (max-width: 767px) {
+    width: 100%;
+    margin: 0 0 10px;
+  }
+`;
+
+
+export const ShowMoreDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  font-weight: 500;
+  font-size: 9px;
+  color: #FFFFFF;
+  span {
+    cursor: pointer;
+  }
+  .ArrowSm {
+    margin: 2px 0 0 4px;
+  }
+`;
+
+export const ImgThumbWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  img {
+    width: 41px;
+    height: 30px;
+    margin: 0 5px 0 0;
+  }
 `;

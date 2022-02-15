@@ -4,6 +4,9 @@
   padding:0px;
 }
 body, html{font-family: 'Roboto',sans-serif; height: 100%; background-color:#eee; color:#000;}
+input, button, select, option{
+  font-family: 'Roboto',sans-serif !important;
+}
 .input-error{
   border-color: red;
 }

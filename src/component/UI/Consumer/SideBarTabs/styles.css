@@ -69,13 +69,13 @@
 
 .listTab-item {
   display: flex;
-  align-items: left;
   padding: 12px 10px;
   transition: background-color 0.2s;
   cursor: pointer;
   background-color: #f3f3f3;
   align-items: center;
   position: relative;
+  width: 100%;
 }
 
 .listTab-item.selected {
@@ -154,8 +154,8 @@
 
 
 .list-scroll {
-  background-color: rgb(20, 11, 46);
-  align-items: left;
+  background-color: #f3f3f3;
+  align-items: flex-start;
   display: flex;
   flex-direction: column;
   width: auto;

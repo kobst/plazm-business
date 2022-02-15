@@ -20,12 +20,16 @@ const UserMsgWrap = styled.div`
 `;
 
 const FeedListItem = styled.div`
-  .background-active {
+  /* .background-active {
     background-color: #221e45;
   }
   .background-inactive {
     background-color: #282352;
-  }
+  } */
+  background: #120F29;
+  border: 1px solid #3F3777;
+  border-radius: 10px;
+  margin: 0 10px 3px;
 `;
 
 /** display business details */

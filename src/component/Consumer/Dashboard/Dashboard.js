@@ -25,18 +25,19 @@ const DashboardContent = styled.div`
   position: relative;
   display: flex;
   height: 100%;
+  overflow: hidden;
 `;
 
 const PanelContentContainer = styled.div`
-  padding-left: 50px;
-  width: 50%;
+  padding-left: 60px;
+  width: 100%;
   position: relative;
   display: flex;
-  height: 100%;
+  height: calc(100vh - 70px);
   overflow-x: hidden;
-  overflow: auto;
-
-
+  top: 60px;
+  max-width: 620px;
+  /* overflow: auto; */
 `;
 // const Dashboard = ({view}) => {
 

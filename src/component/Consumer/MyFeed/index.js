@@ -186,11 +186,11 @@ const MyFeed = () => {
         </LoaderWrap>
       ) : (!gridMode &&
         <BuisinessViewContent>
-          <SearchBar
+          {/* <SearchBar
             setOffset={setOffSet}
             // setDisplayTab={setDisplayTab}
             setFlag={setFlag}
-          />
+          /> */}
           <div
             id="scrollableDiv"
             style={{ height: "calc(100vh - 44px)", overflow: "auto" }}
