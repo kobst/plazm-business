@@ -55,6 +55,110 @@ const FormWrap = styled.div`
   width: 100%;
 `;
 
+const RepeatDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 3px;
+  border: 1px solid #fff;
+  padding-top: 7px;
+  padding-right: 15px;
+  margin-bottom: 15px;
+  @media (max-width: 767px) {
+    margin-bottom: 15px;
+  }
+  .container {
+    display: block;
+    position: relative;
+    padding-left: 28px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 14px;
+    display: flex;
+    align-items: center;
+    color: #FFFFFF;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    padding-top: 4px;
+  }
+
+  .container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .checkmark {
+    position: absolute;
+    top: 6px;
+    left: 10px;
+    height: 10px;
+    width: 10px;
+    background-color: #fff;
+    border-radius: 50%;
+  }
+
+  .container:hover input ~ .checkmark {
+    background-color: #ccc;
+  }
+
+  .container input:checked ~ .checkmark {
+    background-color: #fff;
+  }
+
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+
+  .container input:checked ~ .checkmark:after {
+    display: block;
+  }
+
+  .container .checkmark:after {
+    top: 1px;
+    left: 1px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #FF2E9A;
+    border: 0;
+    border-width: 0;
+  }
+`;
+
+
+const DaysWrap = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-flow: row wrap;
+  a {
+    background: transparent;
+    border-radius: 3px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 9px;
+    line-height: 11px;
+    cursor: pointer;
+    padding: 5px 7px 7px;
+    text-transform: uppercase;
+    &.blueBg{
+      background: #3F3777;
+    }
+    &.ColrRed {
+      color: #FD3B44;
+    }
+  }
+`;
+
 /*
  *@desc: form body for add event schedule details
  */
@@ -105,7 +209,7 @@ function FormBody({ formik, setStartDateFocus, setEndDateFocus }) {
           </>
         </MuiPickersUtilsProvider>
       </InputContainer>
-      <InputContainer>
+      {/* <InputContainer>
         <LabelText>Repeat</LabelText>
         <FormikSelect name="repeat">
           <option value="once">ONCE</option>
@@ -114,7 +218,26 @@ function FormBody({ formik, setStartDateFocus, setEndDateFocus }) {
           <option value="Monday-Friday">MONDAY - FRIDAY</option>
           <option value="Weekend">WEEKEND (SAT-SUN)</option>
         </FormikSelect>
-      </InputContainer>
+      </InputContainer> */}
+      <RepeatDiv>
+        <label class="container">One Time
+          <input type="radio" checked="checked" name="radio" />
+          <span class="checkmark"></span>
+        </label>
+        <label class="container">Repeat
+          <input type="radio" name="radio" />
+          <span class="checkmark"></span>
+        </label>
+      </RepeatDiv>
+      <DaysWrap>
+        <a className="blueBg ColrRed">sun</a>
+        <a>mon</a>
+        <a className="blueBg">tue</a>
+        <a>wed</a>
+        <a className="blueBg">thr</a>
+        <a>fri</a>
+        <a className="blueBg">sat</a>
+      </DaysWrap>
     </FormWrap>
   );
 }
