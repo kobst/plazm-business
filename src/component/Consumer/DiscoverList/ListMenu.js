@@ -3,6 +3,7 @@ import { MdChevronLeft } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import 'react-tabs/style/react-tabs.css';
 
 import styled from "styled-components";
 
@@ -29,14 +30,49 @@ import {
     ErrorDiv,
     LoaderWrap,
   } from "./styled.js";
+import NewInBuzzItems from "./ItemSectionSlider/SliderItems";
 
 
 const TopContent = styled.div`
-  width: 100vw;
+  width: 100%;
   position: relative;
   display: flex;
   box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
   flex-direction: row;
+  .react-tabs {
+    width: 100%;
+  }
+  .react-tabs__tab-list {
+    display: flex;
+    justify-content: space-between;
+    background: #18123A;
+    border: 0;
+    min-height: 60px;
+    align-items: center;
+    padding: 0 20px 0 60px;
+  }
+  .LeftTabsList {
+    display: flex;
+    height: 100%;
+  }
+  .react-tabs__tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Roboto;
+    font-weight: bold;
+    font-size: 18px;
+    color: #FFFFFF;
+    min-height: 60px;
+    border: 0;
+    padding: 0px 20px;
+  }
+  .react-tabs__tab--selected {
+    background: #FF2E9A;
+    color: #FFFFFF;
+    border-radius: 0;
+    border: 0;
+  }
 `;
 
 
@@ -150,16 +186,29 @@ const ListMenu = ({
 
     return (
         <>
-        <h1>LIST DISCOVER</h1>
     <TopContent >
         <Tabs selectedIndex={selectedTab} onSelect={setTab} >
-            <Tab label="Subscribed Lists" />
-             <Tab label="My Lists"  />
-            <Tab label="Explore"  />
-        </Tabs>
-    </TopContent>
-    <TabPanel index={0}>
+          <TabList>
+            <div className="LeftTabsList">
+            <Tab>Lists Subscribed</Tab>
+            <Tab>My Lists</Tab>
+            <Tab>Discover More</Tab>
+            </div>
+            <RightSearchWrap>
+              <Input
+                value={search}
+                onKeyPress={(event) => searchListsData(event)}
+                onChange={(e) => setSearch(e.target.value)}
+                className="SearchSubscriptionsInput"
+                placeholder="Search Lists"
+                disabled={loading}
+              />
+            </RightSearchWrap>
+          </TabList>
+        
 
+        <TabPanel index={0}>
+grfgd
         </TabPanel>
       <TabPanel  index={1}>
         Item Two
@@ -191,7 +240,8 @@ const ListMenu = ({
             totalLists={totalLists}
           />
       </TabPanel>
-
+      </Tabs>
+      </TopContent>
     </>
  
     )};
