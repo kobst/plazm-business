@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import styled from "styled-components";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import FormikSelect from "../../UI/FormikSelect";
 import Input from "../../UI/FormikInput";
 import moment from "moment";
-
+import Constants from "../../../../constants/index";
 const InputContainer = styled.div`
   border: 1px solid ${(props) => (props.usererror ? "#FF7171" : "#ffffff")};
   min-height: 60px;
@@ -79,7 +79,7 @@ const RepeatDiv = styled.div`
     line-height: 14px;
     display: flex;
     align-items: center;
-    color: #FFFFFF;
+    color: #ffffff;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -127,12 +127,11 @@ const RepeatDiv = styled.div`
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: #FF2E9A;
+    background: #ff2e9a;
     border: 0;
     border-width: 0;
   }
 `;
-
 
 const DaysWrap = styled.div`
   width: 100%;
@@ -150,11 +149,11 @@ const DaysWrap = styled.div`
     cursor: pointer;
     padding: 5px 7px 7px;
     text-transform: uppercase;
-    &.blueBg{
-      background: #3F3777;
+    &.blueBg {
+      background: #3f3777;
     }
     &.ColrRed {
-      color: #FD3B44;
+      color: #fd3b44;
     }
   }
 `;
@@ -163,11 +162,35 @@ const DaysWrap = styled.div`
  *@desc: form body for add event schedule details
  */
 function FormBody({ formik, setStartDateFocus, setEndDateFocus }) {
-
+  console.log({ values: formik.values });
+  // const [repeat, setRepeat] = useState(false);
   const setFieldFocus = (val) => {
     setStartDateFocus(val);
     setEndDateFocus(!val);
   };
+
+  const handleRepetition = () => {
+    // setRepeat((prev) => !prev);
+    if (formik.values.repeat == 8) {
+      const dayToday = new Date().getDay();
+      formik.setFieldValue("repeat", [dayToday + 1]);
+    } else {
+      formik.setFieldValue("repeat", [8]);
+    }
+  };
+
+  const handleDayClick = (e) => {
+    const day = +e.target.id;
+    if (formik.values.repeat.includes(day)) {
+      formik.setFieldValue(
+        "repeat",
+        formik.values.repeat.filter((val) => val !== day)
+      );
+    } else {
+      formik.setFieldValue("repeat", [...formik.values.repeat, day]);
+    }
+  };
+
   return (
     <FormWrap>
       <InputContainer>
@@ -179,7 +202,12 @@ function FormBody({ formik, setStartDateFocus, setEndDateFocus }) {
               value={moment(formik.values.startTime).format(
                 "DD/MM/yyyy HH:mm a"
               )}
-              onChange={(e) => formik.setFieldValue("startTime", moment(e).format("DD/MM/yyyy HH:mm a"))}
+              onChange={(e) =>
+                formik.setFieldValue(
+                  "startTime",
+                  moment(e).format("DD/MM/yyyy HH:mm a")
+                )
+              }
               onFocus={() => setFieldFocus(true)}
             />
             {formik.errors && formik.errors.startTime ? (
@@ -198,7 +226,12 @@ function FormBody({ formik, setStartDateFocus, setEndDateFocus }) {
             <Input
               name="endTime"
               value={moment(formik.values.endTime).format("DD/MM/yyyy HH:mm a")}
-              onChange={(e) => formik.setFieldValue("endTime", moment(e).format("DD/MM/yyyy HH:mm a"))}
+              onChange={(e) =>
+                formik.setFieldValue(
+                  "endTime",
+                  moment(e).format("DD/MM/yyyy HH:mm a")
+                )
+              }
               onFocus={() => setFieldFocus(false)}
             />
             {/* {formik.errors && formik.errors.endDate ? (
@@ -220,23 +253,54 @@ function FormBody({ formik, setStartDateFocus, setEndDateFocus }) {
         </FormikSelect>
       </InputContainer> */}
       <RepeatDiv>
-        <label class="container">One Time
-          <input type="radio" checked="checked" name="radio" />
+        <label class="container">
+          One Time
+          <input
+            type="radio"
+            checked={formik.values.repeat == 8}
+            onClick={handleRepetition}
+            name="radio"
+          />
           <span class="checkmark"></span>
         </label>
-        <label class="container">Repeat
-          <input type="radio" name="radio" />
+        <label class="container">
+          Repeat
+          <input
+            type="radio"
+            checked={formik.values.repeat != 8}
+            onClick={handleRepetition}
+            name="radio"
+          />
           <span class="checkmark"></span>
         </label>
       </RepeatDiv>
       <DaysWrap>
-        <a className="blueBg ColrRed">sun</a>
-        <a>mon</a>
-        <a className="blueBg">tue</a>
-        <a>wed</a>
-        <a className="blueBg">thr</a>
-        <a>fri</a>
-        <a className="blueBg">sat</a>
+        {formik.values.repeat != 8 && (
+          <Fragment>
+            {Object.entries(Constants.REPETITION_DAY).map(([key, value]) => {
+              let className = parseInt(key) % 2 === 0 ? "" : "blueBg";
+              if (formik.values.repeat.includes(+key)) {
+                className += " ColrRed";
+              }
+              return (
+                <a
+                  key={key}
+                  id={key}
+                  className={className}
+                  onClick={handleDayClick}
+                >
+                  {value}
+                </a>
+              );
+            })}
+            {/* <a>mon</a>
+            <a className="blueBg">tue</a>
+            <a>wed</a>
+            <a className="blueBg">thr</a>
+            <a>fri</a>
+            <a className="blueBg">sat</a> */}
+          </Fragment>
+        )}
       </DaysWrap>
     </FormWrap>
   );

@@ -33,6 +33,7 @@ import DateBar from "../../../EventsSection/PostChat/DateBar";
 import TimeBar from "../../../EventsSection/PostChat/TimeBar";
 
 import useStore from "../../../../../useState";
+import DaysBar from "../../../EventsSection/PostChat/DaysBar";
 
 const reactStringReplace = require("react-string-replace");
 
@@ -147,8 +148,7 @@ const UserMessage = ({ postData }) => {
       : BannerImg
   );
 
-  const setSelectedListId = useStore((state) => state.setSelectedListId)
-
+  const setSelectedListId = useStore((state) => state.setSelectedListId);
 
   ws.onmessage = (evt) => {
     const message = JSON.parse(evt.data);
@@ -419,35 +419,58 @@ const UserMessage = ({ postData }) => {
                   postData.postDetails.taggedLists
                 )}
               </FeedDescription>
-              {postData.postDetails.eventSchedule && (
-                <>
-                  {" "}
-                  <DateBar
-                    startDay={
-                      days[
-                        new Date(
-                          postData.postDetails.eventSchedule.start_time
-                        ).getDay()
-                      ]
-                    }
-                    endDay={
-                      days[
-                        new Date(
-                          postData.postDetails.eventSchedule.end_time
-                        ).getDay()
-                      ]
-                    }
-                  />
-                  <TimeBar
-                    startTime={
-                      new Date(postData.postDetails.eventSchedule.start_time)
-                    }
-                    endTime={
-                      new Date(postData.postDetails.eventSchedule.end_time)
-                    }
-                  />
-                </>
-              )}
+
+              {/* TODO: Need to remove "postData.postDetails.recurring.length" condition
+               placed here due to previous schema*/}
+              {postData.postDetails.recurring != 8 &&
+                postData.postDetails.eventSchedule &&
+                postData.postDetails.recurring.length > 0 && (
+                  <>
+                    <DaysBar days={postData.postDetails.recurring} />
+
+                    <TimeBar
+                      startTime={
+                        new Date(postData.postDetails.eventSchedule.start_time)
+                      }
+                      endTime={
+                        new Date(postData.postDetails.eventSchedule.end_time)
+                      }
+                    />
+                  </>
+                )}
+              {/* TODO: Need to remove "postData.postDetails.recurring.length" condition
+               placed here due to previous schema*/}
+              {(postData.postDetails.recurring == 8 ||
+                postData.postDetails.recurring.length === 0) &&
+                postData.postDetails.eventSchedule && (
+                  <>
+                    {" "}
+                    <DateBar
+                      startDay={
+                        days[
+                          new Date(
+                            postData.postDetails.eventSchedule.start_time
+                          ).getDay()
+                        ]
+                      }
+                      endDay={
+                        days[
+                          new Date(
+                            postData.postDetails.eventSchedule.end_time
+                          ).getDay()
+                        ]
+                      }
+                    />
+                    <TimeBar
+                      startTime={
+                        new Date(postData.postDetails.eventSchedule.start_time)
+                      }
+                      endTime={
+                        new Date(postData.postDetails.eventSchedule.end_time)
+                      }
+                    />
+                  </>
+                )}
               {postData.postDetails.media.length > 0 && (
                 <FeedBigImage>
                   <img src={postData.postDetails.media[0]} alt="" />

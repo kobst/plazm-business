@@ -9,6 +9,7 @@ import BannerImg from "../../../../../../../images/sliderimg.png";
 import ReplyInput from "./ReplyInput";
 import LikesBar from "../LikesBar";
 import DateBar from "../DateBar";
+import DaysBar from "../DaysBar";
 import TimeBar from "../TimeBar";
 import ImageComment from "../ImageComment";
 import ValueLoader from "../../../../../../../utils/loader";
@@ -120,7 +121,7 @@ const LoaderWrap = styled.div`
   margin: 30px 0 20px;
 `;
 
-const UserMessage = ({ eventData}) => {
+const UserMessage = ({ eventData }) => {
   const [listImage, setListImage] = useState(
     eventData.list.image ? eventData.list.image : BannerImg
   );
@@ -136,8 +137,8 @@ const UserMessage = ({ eventData}) => {
   const ws = useSelector((state) => state.user.ws);
   const user = useSelector((state) => state.user.user);
   const selectedDate = useSelector((state) => state.event.selectedDate);
-  
-  const setSelectedListId = useStore((state) => state.setSelectedListId)
+
+  const setSelectedListId = useStore((state) => state.setSelectedListId);
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -404,12 +405,17 @@ const UserMessage = ({ eventData}) => {
                 eventData.taggedLists
               )}
             </ChatInput>
-            <DateBar
-              startDay={
-                days[new Date(eventData.eventSchedule.start_time).getDay()]
-              }
-              endDay={days[new Date(eventData.eventSchedule.end_time).getDay()]}
-            />
+            {eventData.recurring == 8 && (
+              <DateBar
+                startDay={
+                  days[new Date(eventData.eventSchedule.start_time).getDay()]
+                }
+                endDay={
+                  days[new Date(eventData.eventSchedule.end_time).getDay()]
+                }
+              />
+            )}
+            {eventData.recurring != 8 && <DaysBar days={eventData.recurring} />}
             <TimeBar
               startTime={new Date(eventData.eventSchedule.start_time)}
               endTime={new Date(eventData.eventSchedule.end_time)}
