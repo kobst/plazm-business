@@ -420,8 +420,9 @@ const UserMessage = ({ postData }) => {
                 )}
               </FeedDescription>
 
-              {/* TODO: Need to remove "postData.postDetails.recurring.length" condition
-               placed here due to previous schema*/}
+              {/* TODO: Need to remove "
+              postData.postDetails.recurring.length" 
+              condition placed here due to previous schema*/}
               {postData.postDetails.recurring != 8 &&
                 postData.postDetails.eventSchedule &&
                 postData.postDetails.recurring.length > 0 && (
@@ -438,8 +439,9 @@ const UserMessage = ({ postData }) => {
                     />
                   </>
                 )}
-              {/* TODO: Need to remove "postData.postDetails.recurring.length" condition
-               placed here due to previous schema*/}
+              {/* TODO: Need to remove 
+              "postData.postDetails.recurring.length" 
+              condition placed here due to previous schema*/}
               {(postData.postDetails.recurring == 8 ||
                 postData.postDetails.recurring.length === 0) &&
                 postData.postDetails.eventSchedule && (
