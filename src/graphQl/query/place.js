@@ -86,6 +86,7 @@ const getPlace = (obj) => {
                       name
                       _id
                     }
+                    recurring
                     media
                     location {
                         type

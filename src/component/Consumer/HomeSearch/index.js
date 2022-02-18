@@ -14,6 +14,7 @@ import GridView from "../GridComponents/gridView/gridView";
 
 const ContentWrap = styled.div`
   padding: 0px;
+  width: 100%;
 `;
 
 const LoaderWrap = styled.div`

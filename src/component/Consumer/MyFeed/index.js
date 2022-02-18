@@ -13,6 +13,7 @@ import SearchBar from "./SearchBar";
 import GridView from "../GridComponents/gridView/gridView";
 
 import useStore from "../useState";
+import GlobalSearchBox from "../GlobalSearch/GlobalSearchBox";
 
 
 const LoaderWrap = styled.div`
@@ -186,11 +187,14 @@ const MyFeed = () => {
         </LoaderWrap>
       ) : (!gridMode &&
         <BuisinessViewContent>
-          <SearchBar
+          {/* <SearchBar
             setOffset={setOffSet}
             // setDisplayTab={setDisplayTab}
             setFlag={setFlag}
-          />
+          /> */}
+
+          <GlobalSearchBox />
+
           <div
             id="scrollableDiv"
             style={{ height: "calc(100vh - 44px)", overflow: "auto" }}

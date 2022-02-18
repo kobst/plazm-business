@@ -10,7 +10,7 @@ const ModalContent = styled.div`
   position: relative;
   display: flex;
   padding: 20px;
-  max-width: 540px;
+  max-width: 600px;
   min-width: 536px;
   background: #282352;
   box-shadow: 0px 32px 70px rgba(0, 0, 0, 0.25);
@@ -19,9 +19,10 @@ const ModalContent = styled.div`
     padding: 15px;
     min-width: 300px;
     max-width: 300px;
-    max-height: 80vh;
+    max-height: 70vh;
     overflow-y: auto;
     overflow-x: hidden;
+    margin-top: 60px;
   }
   @media (max-width: 991px) and (orientation: landscape) {
     max-height: 80vh;

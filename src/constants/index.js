@@ -31,4 +31,13 @@ export default {
   END_DAY_ERROR: "start day cannot be greater than end day",
   POST_LIST_ERROR: "Post should be a part of the list",
   EVENT_LIST_ERROR: "Event should be a part of the list",
+  REPETITION_DAY: {
+    1: "Sun",
+    2: "Mon",
+    3: "Tue",
+    4: "Wed",
+    5: "Thu",
+    6: "Fri",
+    7: "Sat",
+  },
 };

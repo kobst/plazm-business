@@ -87,7 +87,7 @@ const RightDiv = styled.div`
   font-size: 13px;
   align-items: center;
   display: flex;
-  margin: 0 0 0 20px;
+  margin: 0 0 0 10px;
   position: relative;
   @media (max-width: 767px) {
     margin: 8px 15px 0 0px;

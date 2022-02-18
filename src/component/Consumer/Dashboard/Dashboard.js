@@ -18,6 +18,7 @@ import GridContainer from "../GridComponents/index"
 import MapView from "../mapView/index"
 import RadarView from "../radarView/radarView"
 import useStore from "../useState";
+import GlobalSearch from "../GlobalSearch";
 
 
 const DashboardContent = styled.div`
@@ -25,18 +26,21 @@ const DashboardContent = styled.div`
   position: relative;
   display: flex;
   height: 100%;
+  overflow: hidden;
 `;
 
 const PanelContentContainer = styled.div`
-  padding-left: 50px;
-  width: 50%;
+  padding-left: 60px;
+  width: 100%;
   position: relative;
   display: flex;
-  height: 100%;
-  overflow-x: hidden;
-  overflow: auto;
-
-
+  height: calc(100vh - 70px);
+  overflow: hidden;
+  top: 60px;
+  max-width: 620px;
+  z-index: 1;
+  background: #221e45;
+  /* overflow: auto; */
 `;
 // const Dashboard = ({view}) => {
 
@@ -72,6 +76,8 @@ const Dashboard = () => {
         <DashboardContent>
           <SideBarTabs/>
 
+      
+
         <PanelContentContainer>
 
               {view ==="explore" && <HomeSearch/> }
@@ -89,6 +95,7 @@ const Dashboard = () => {
 
       {view === "list_explore" && <DiscoverList/>}
 
+        <GlobalSearch />
         <GridContainer />
 
         {view !== "list_explore" && <>
