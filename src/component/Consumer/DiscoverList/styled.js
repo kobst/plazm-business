@@ -5,9 +5,11 @@ export const TopSectionWrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 15px 30px;
+  padding: 0px 20px 0 60px;
+  background: #18123A;
+  min-height: 60px;
   @media (max-width: 767px) {
-    padding: 15px;
+    padding: 0 15px;
   }
   @media (max-width: 479px) {
     flex-direction: column;
@@ -58,18 +60,19 @@ export const RightSearchWrap = styled.div`
   display: flex;
   max-width: 285px;
   width: 100%;
-  height: 38px;
+  height: 26px;
   @media (max-width: 767px) {
     max-width: 200px;
   }
   .SearchSubscriptionsInput {
     background: url(${SearchIcon}) no-repeat right 10px center #fff;
-    border-radius: 2px;
-    border: 1px solid #e4e4e4;
-    height: 38px;
-    font-size: 14px;
+    height: 26px;
+    font-size: 12px;
     padding-right: 35px;
     margin: 0;
+    border: 1px solid #F0F0F0;
+    border-radius: 50px;
+    background-size: 14px;
     ::placeholder {
       color: #c8c8c8;
     }
@@ -237,7 +240,7 @@ export const CoverImg = styled.div`
     width: 100%;
     height: 100%;
     object-fit: cover;
-    z-index: -1;
+    z-index: 0;
     @media only screen and (min-width: 992px) {
       @media not all and (min-resolution: 0.001dpcm) {
         @media {
@@ -491,4 +494,14 @@ export const ErrorDiv = styled.div`
   margin-left: 20px;
   float: right;
   margin-right: 30px;
+`;
+
+
+export const ListWraper = styled.div`
+    position: relative;
+    top: 60px;
+    display: flex;
+    flex-direction: column;
+    width: 97%;
+    background: #141414;
 `;

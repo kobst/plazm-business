@@ -23,7 +23,9 @@ import {
   RightSearchWrap,
   ErrorDiv,
   LoaderWrap,
+  ListWraper,
 } from "./styled.js";
+import ListMenu from "./ListMenu";
 
 const DiscoverList = ({ 
   // setDiscoverBtn, 
@@ -121,7 +123,9 @@ const DiscoverList = ({
   };
   return (!loadindTrending && !flag) || (!loadingPopular && !flag) ? (
     <>
-      <TopSectionWrap>
+      <ListWraper>
+      <ListMenu />
+      {/* <TopSectionWrap>
         <LeftWrap>
           <button className="BackButtonArrow" onClick={() => backBtn()}>
             <MdChevronLeft />
@@ -140,7 +144,7 @@ const DiscoverList = ({
             disabled={loading}
           />
         </RightSearchWrap>
-      </TopSectionWrap>
+      </TopSectionWrap> */}
       {searchError !== "" ? <ErrorDiv>{searchError}</ErrorDiv> : null}
       {listSearch !== "" && !listSearch.trim() === false ? (
         <SearchSection
@@ -190,6 +194,7 @@ const DiscoverList = ({
           />
         </>
       )}
+      </ListWraper>
     </>
   ) : (
     <LoaderWrap className="DiscoverLoaderWrap">
