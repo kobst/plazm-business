@@ -25,9 +25,9 @@ import {
   HastagDiv,
 } from "../../../FeedContent/styled";
 
-import HeartBorder from "../../../../../images/heart-border.png"
-import ArrowSm from "../../../../../images/arrow-sm.png"
-
+import HeartBorder from "../../../../../images/heart-border.png";
+import ArrowSm from "../../../../../images/arrow-sm.png";
+import ArrowSmUP from "../../../../../images/arrow-sm-up.png";
 const UserMessageContent = styled.div`
   width: 100%;
   position: relative;
@@ -51,7 +51,7 @@ const UserMsgWrap = styled.div`
   flex-direction: column;
   padding: 0;
   position: relative;
-  border: 1px solid #322C5C;
+  border: 1px solid #322c5c;
   border-radius: 10px;
   margin: 5px 15px 0px;
   overflow: hidden;
@@ -92,8 +92,8 @@ const ProfileThumbBanner = styled.div`
 //   object-fit: cover;
 //height: 204px;
 
-//    width: 100%;   
-    // max-height: 204px;
+//    width: 100%;
+// max-height: 204px;
 
 const ProfileNameWrap = styled.div`
   display: flex;
@@ -104,7 +104,7 @@ const ProfileNameWrap = styled.div`
   width: 100%;
   position: relative;
   height: 95px;
-  background: linear-gradient(360deg, #07060D 0%, #120F29 100%);
+  background: linear-gradient(360deg, #07060d 0%, #120f29 100%);
   border-radius: 0px 0px 10px 10px;
 `;
 
@@ -161,7 +161,7 @@ const ChatInput = styled.div`
   color: #fff;
   width: 100%;
   flex-direction: row;
-    display: flex;
+  display: flex;
   span {
     font-size: 12px;
     color: #ff2e9a;
@@ -181,8 +181,6 @@ const ChatInput = styled.div`
     }
   }
 `;
-
-
 
 /** display favorite business */
 const DisplayFavoriteBusiness = ({
@@ -209,7 +207,7 @@ const DisplayFavoriteBusiness = ({
     "Friday",
     "Saturday",
   ];
-
+  const [showDiv, setShowDiv] = useState(false);
   /** to check if business is open/close */
   const checkBusinessOpenClose = () => {
     if (businessInfo.hours_format) {
@@ -272,61 +270,75 @@ const DisplayFavoriteBusiness = ({
                   <img src={HeartBorder} />
                 </HeartIcon>
                 <RightBuisinessImg>
-                <BuisinessNme>Bedvyne Brew</BuisinessNme>
-                <div className="hex">
-                        <div className="hex-background">
-                            <img src="https://picsum.photos/200/300" />
-                        </div>
-                </div>
+                  <BuisinessNme>Bedvyne Brew</BuisinessNme>
+                  <div className="hex">
+                    <div className="hex-background">
+                      <img src="https://picsum.photos/200/300" />
+                    </div>
+                  </div>
                 </RightBuisinessImg>
               </TopBuisinessBar>
 
-              <BottomShowMoreDiv>
+              <BottomShowMoreDiv
+                onClick={() => {
+                  setShowDiv((prev) => !prev);
+                }}
+              >
                 <ShowMoreDiv>
-                  <span>Show More <img src={ArrowSm} className="ArrowSm" /></span>
+                  {!showDiv && (
+                    <span>
+                      Show More <img src={ArrowSm} className="ArrowSm" />
+                    </span>
+                  )}
+                  {showDiv && (
+                    <span>
+                      Show Less <img src={ArrowSmUP} className="ArrowSm" />
+                    </span>
+                  )}
                 </ShowMoreDiv>
               </BottomShowMoreDiv>
 
-              <HastagWrap>
+              {/* <HastagWrap>
                 <HastagDiv>#burger</HastagDiv>
                 <HastagDiv>#Credit Card</HastagDiv>
                 <HastagDiv>#Fresh Fruits</HastagDiv>
                 <HastagDiv>#Takeaway</HastagDiv>
                 <HastagDiv>#burger</HastagDiv>
-              </HastagWrap>
-
-              <ProfileNameWrap>
-                <ProfileName>
-                  {/* <div
+              </HastagWrap> */}
+              {showDiv && (
+                <ProfileNameWrap>
+                  <ProfileName>
+                    {/* <div
                     className="businessNameTitle"
                     onClick={() => displayBusinessDetail()}
                   >
                     {businessInfo.company_name}
                   </div> */}
-                  <ChatInput>
-                  <p>
+                    <ChatInput>
+                      {/* <p>
                       <span className="postSpan">
                         245
                       </span>{" "}
                       Followers
-                    </p>
-                    <p>
-                      <span className="postSpan">
-                        {data.totalPosts && data.totalPosts.length > 0
-                          ? data.totalPosts[0].totalPosts
-                          : 0}
-                      </span>{" "}
-                      Posts
-                    </p>
-                  </ChatInput>
-                  <BuisinessThumbImages>
+                    </p> */}
+                      <p>
+                        <span className="postSpan">
+                          {data.totalPosts && data.totalPosts.length > 0
+                            ? data.totalPosts[0].totalPosts
+                            : 0}
+                        </span>{" "}
+                        Posts
+                      </p>
+                    </ChatInput>
+                    {/* <BuisinessThumbImages>
                     <BuisinessThumbImg><img src="https://picsum.photos/200/300" /></BuisinessThumbImg>
                     <BuisinessThumbImg><img src="https://picsum.photos/200/300" /></BuisinessThumbImg>
                     <BuisinessThumbImg><img src="https://picsum.photos/200/300" /></BuisinessThumbImg>
                     <BuisinessThumbImg><img src="https://picsum.photos/200/300" /></BuisinessThumbImg>
-                  </BuisinessThumbImages>
-                </ProfileName>
-              </ProfileNameWrap>
+                  </BuisinessThumbImages> */}
+                  </ProfileName>
+                </ProfileNameWrap>
+              )}
             </ProfileNameHeader>
           </UserMessageContent>
         </UserMsgWrap>
@@ -399,7 +411,7 @@ const DisplayFavoriteBusiness = ({
                   <div className="CloseDiv">Closed</div>
                 )} */}
               </ProfileThumbBanner>
-              
+
               <ProfileNameWrap>
                 <ProfileName>
                   <div

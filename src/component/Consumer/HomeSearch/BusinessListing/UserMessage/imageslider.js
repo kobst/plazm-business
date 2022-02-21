@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Slider from "react-slick";
-import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const ImageSliderWrap = styled.div`
@@ -19,11 +19,11 @@ const ImageSliderWrap = styled.div`
   }
   .slick-dots li button:before {
     opacity: 1;
-    color: #6C6C6C;
+    color: #6c6c6c;
   }
   .slick-dots li.slick-active button:before {
     opacity: 1;
-    color: #FF2E9A;
+    color: #ff2e9a;
   }
   .ImgWrapper {
     img {
@@ -33,27 +33,18 @@ const ImageSliderWrap = styled.div`
   }
 `;
 
-const ImageSlider = ({  }) => {      
-      return (
-        <ImageSliderWrap>
-          <Slider 
-            dots = {true}
-            autoplay = {true}
-          >
-            <div className="ImgWrapper">
-              <img src="https://picsum.photos/200/300" />
-            </div>
-            <div className="ImgWrapper">
-              <img src="https://picsum.photos/id/237/200/300" />
-            </div>
-            <div className="ImgWrapper">
-              <img src="https://picsum.photos/seed/picsum/200/300" />
-            </div>
-            
-            
-          </Slider>
-        </ImageSliderWrap>
-      );  
+const ImageSlider = ({ imgSources }) => {
+  return (
+    <ImageSliderWrap>
+      <Slider dots={true} autoplay={true}>
+        {imgSources.map((src) => (
+          <div key={src} className="ImgWrapper">
+            <img src={src} />
+          </div>
+        ))}
+      </Slider>
+    </ImageSliderWrap>
+  );
 };
 
 export default ImageSlider;
