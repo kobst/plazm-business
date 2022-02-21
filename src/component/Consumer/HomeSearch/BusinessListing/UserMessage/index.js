@@ -395,6 +395,7 @@ const UserMessage = ({
   const displayUserDetails = () => {
     history.push(`/u/${postData.ownerId[0]._id}`);
   };
+  
 
   return (
     <>
