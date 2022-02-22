@@ -1,7 +1,7 @@
 /*
 @desc: getUser query
 */
-const getUser = (userSub, value, limit=15) => {
+const getUser = (userSub, value, limit = 15) => {
   const graphQl = {
     query: `
           query GetUser($userSub: String, $value: Int, $limit: Int){
@@ -225,6 +225,7 @@ const GetMyFeedData = (obj) => {
                   start_time
                   end_time
                 }
+                recurring
                 user {
                   name
                   photo

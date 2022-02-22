@@ -14,14 +14,20 @@ import ReplyInput from "./ReplyInput";
 import Comments from "./comments";
 import {
   EventBigImage,
+  ImgThumbWrap,
   InnerListBanner,
   InnerOverlay,
   ListAuthorName,
   ListInfo,
   ListName,
   ListNameWrap,
+  ShowMoreDiv,
 } from "../../../../FeedContent/styled";
 import { useHistory } from "react-router";
+import DaysBar from "../../../../BuisinessView/TabsSection/EventsSection/PostChat/DaysBar";
+import ArrowSm from "../../../../../../images/arrow-sm-up.png";
+import ArrowSmDown from "../../../../../../images/arrow-sm.png";
+import ImageSlider from "../../UserMessage/imageslider";
 
 const reactStringReplace = require("react-string-replace");
 
@@ -129,6 +135,7 @@ const UserMessageEvents = ({
       ? eventData.listId[0].media[0].image
       : BannerImg
   );
+  const [readMore, setReadMore] = useState(false);
   const loadingComments = useSelector(
     (state) => state.myFeed.loadingEventComments
   );
@@ -375,26 +382,81 @@ const UserMessageEvents = ({
             <SubHeading>{eventData.title}</SubHeading>
             <ChatInput>
               {findDesc(
-                eventData.data,
+                eventData.data.length > 225 && !readMore
+                  ? eventData.data.substring(0, 225)
+                  : eventData.data,
                 eventData.taggedUsers,
                 eventData.taggedLists
               )}
+              {!readMore && eventData.data.length > 225 && (
+                <b
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    setReadMore((prev) => !prev);
+                  }}
+                >
+                  ...Read More
+                </b>
+              )}
             </ChatInput>
-            <DateBar
-              startDay={
-                days[new Date(eventData.eventSchedule.start_time).getDay()]
-              }
-              endDay={days[new Date(eventData.eventSchedule.end_time).getDay()]}
-            />
+            {(!Array.isArray(eventData.recurring) ||
+              eventData.recurring == 8) && (
+              <DateBar
+                startDay={
+                  days[new Date(eventData.eventSchedule.start_time).getDay()]
+                }
+                endDay={
+                  days[new Date(eventData.eventSchedule.end_time).getDay()]
+                }
+              />
+            )}
+            {Array.isArray(eventData.recurring) && eventData.recurring != 8 && (
+              <DaysBar days={eventData.recurring} />
+            )}
+
             <TimeBar
               startTime={new Date(eventData.eventSchedule.start_time)}
               endTime={new Date(eventData.eventSchedule.end_time)}
             />
-            <EventBigImage>
+
+            {!readMore && (
+              <ImgThumbWrap>
+                {eventData.media.map((src) => (
+                  <img key={src} src={src} />
+                ))}
+              </ImgThumbWrap>
+            )}
+            {readMore && eventData.media.length >= 1 && (
+              <ImageSlider imgSources={eventData.media} />
+            )}
+            {!readMore && (
+              <ShowMoreDiv
+                onClick={() => {
+                  setReadMore((prev) => !prev);
+                }}
+              >
+                <span>
+                  Show More <img src={ArrowSmDown} className="ArrowSm" />
+                </span>
+              </ShowMoreDiv>
+            )}
+            {readMore && (
+              <ShowMoreDiv
+                onClick={() => {
+                  setReadMore((prev) => !prev);
+                }}
+              >
+                <span>
+                  Show Less <img src={ArrowSm} className="ArrowSm" />
+                </span>
+              </ShowMoreDiv>
+            )}
+            {/* <EventBigImage>
               <ImageComment
                 image={eventData.media.length > 0 ? eventData.media[0] : ""}
               />
-            </EventBigImage>
+            </EventBigImage> */}
+
             <LikeBar
               type="comment"
               eventId={eventData._id}

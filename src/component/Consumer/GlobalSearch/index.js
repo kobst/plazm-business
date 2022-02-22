@@ -1,6 +1,10 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import SearchIcon from "../../../images/search-icon.png"
+import SearchIcon from "../../../images/search-icon.png";
+import { useDispatch, useSelector } from "react-redux";
+import { setDisplayBar } from "../../../reducers/globalSearchReducer";
+import error from "../../../constants";
+import { setSearchData } from "../../../reducers/myFeedReducer";
 
 const GlobalSearchBtnWrap = styled.div`
   position: relative;
@@ -12,8 +16,8 @@ const GlobalSearchBtnWrap = styled.div`
   button {
     width: 100%;
     height: 100%;
-    background: #FFFFFF;
-    border: 1px solid #F0F0F0;
+    background: #ffffff;
+    border: 1px solid #f0f0f0;
     border-radius: 5px;
     display: flex;
     align-items: center;
@@ -22,18 +26,23 @@ const GlobalSearchBtnWrap = styled.div`
   }
 `;
 
-
 const GlobalSearch = () => {
+  const dispatch = useDispatch();
+  const currentStatus = useSelector((state) => state.globalSearch.displayBar);
+
+  const handleClick = () => {
+    dispatch(setDisplayBar(!currentStatus));
+  };
 
   return (
     <>
       <GlobalSearchBtnWrap>
-        <button><img src={SearchIcon} /></button>
+        <button onClick={handleClick}>
+          <img src={SearchIcon} />
+        </button>
       </GlobalSearchBtnWrap>
     </>
   );
 };
 
 export default GlobalSearch;
-
-

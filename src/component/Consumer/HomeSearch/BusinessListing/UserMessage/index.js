@@ -37,9 +37,9 @@ import {
 } from "../../../FeedContent/styled";
 import DateBar from "../../../BuisinessView/TabsSection/EventsSection/PostChat/DateBar/index.js";
 import TimeBar from "../../../BuisinessView/TabsSection/EventsSection/PostChat/TimeBar/index.js";
-import ArrowSm from "../../../../../images/arrow-sm.png"
+import ArrowSm from "../../../../../images/arrow-sm-up.png";
+import ArrowSmDown from "../../../../../images/arrow-sm.png";
 import ImageSlider from "./imageslider";
-
 
 const reactStringReplace = require("react-string-replace");
 
@@ -80,7 +80,7 @@ const ProfileNameHeader = styled.div`
   &.UserMessageView {
     padding-left: 15px;
     width: 100%;
-    font-family: 'Roboto',sans-serif;
+    font-family: "Roboto", sans-serif;
   }
 `;
 
@@ -188,7 +188,7 @@ const UserMessage = ({
       ? postData.listId[0].media[0].image
       : BannerImg
   );
-
+  const [readMore, setReadMore] = useState(false);
   const listNavigate = () => {
     if (type === "search") {
       setSelectedListId(postData.listId[0]._id);
@@ -395,12 +395,12 @@ const UserMessage = ({
   const displayUserDetails = () => {
     history.push(`/u/${postData.ownerId[0]._id}`);
   };
+  
 
   return (
     <>
       <UserMsgWrap>
-      
-        <UserMessageContent>          
+        <UserMessageContent>
           <ProfileNameHeader
             className={
               listDescriptionView || myFeedView ? "UserMessageView" : ""
@@ -409,49 +409,62 @@ const UserMessage = ({
             <ProfileNameWrap className="UserMessageViewProfileName">
               {myFeedView && (
                 <>
-                <TopListHeader>
-                  <LeftListHeader>
-                  <InnerListBanner onClick={() => listNavigate()}>
-                    <img
-                      src={listImage}
-                      alt=""
-                      onError={() => setListImage(BannerImg)} />
-                  </InnerListBanner>
-                  <ListNameWrap>
-                      <ListName>{postData.listId[0].name}</ListName>
-                      <ListInfo>
-                        <FaCaretRight />
-                        <ListAuthorName onClick={() => displayUserDetails()}>
-                          {postData.ownerId[0].name}
-                        </ListAuthorName>
-                        <span>|</span>
-                        <ListAuthorName>
-                          {moment(postData.createdAt).format(
-                            "MMM DD,YYYY, hh:MM a"
-                          )}{" "}
-                          EDT{" "}
-                        </ListAuthorName>
-                      </ListInfo>
-                    </ListNameWrap>
+                  <TopListHeader>
+                    <LeftListHeader>
+                      <InnerListBanner onClick={() => listNavigate()}>
+                        <img
+                          src={listImage}
+                          alt=""
+                          onError={() => setListImage(BannerImg)}
+                        />
+                      </InnerListBanner>
+                      <ListNameWrap>
+                        <ListName>{postData.listId[0].name}</ListName>
+                        <ListInfo>
+                          <FaCaretRight />
+                          <ListAuthorName onClick={() => displayUserDetails()}>
+                            {postData.ownerId[0].name}
+                          </ListAuthorName>
+                          <span>|</span>
+                          <ListAuthorName>
+                            {moment(postData.createdAt).format(
+                              "MMM DD,YYYY, hh:MM a"
+                            )}{" "}
+                            EDT{" "}
+                          </ListAuthorName>
+                        </ListInfo>
+                      </ListNameWrap>
                     </LeftListHeader>
                     <RightBuisinessName>
                       <BuisinessNme>Bedvyne Brew</BuisinessNme>
                       <div className="hex">
                         <div className="hex-background">
-                            <img src="https://picsum.photos/200/300" />
+                          <img src="https://picsum.photos/200/300" />
                         </div>
                       </div>
                     </RightBuisinessName>
                   </TopListHeader>
-                  </>
+                </>
               )}
               {postData.title && <SubHeading>{postData.title}</SubHeading>}
-            
+
               <ChatInput>
                 {findDesc(
-                  postData.data,
+                  postData.data.length > 225 && !readMore
+                    ? postData.data.substring(0, 225)
+                    : postData.data,
                   postData.taggedUsers || [],
                   postData.taggedLists || []
+                )}
+                {!readMore && postData.data.length > 225 && (
+                  <b
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      setReadMore((prev) => !prev);
+                    }}
+                  >
+                    ...Read More
+                  </b>
                 )}
               </ChatInput>
               {postData.eventSchedule && (
@@ -471,25 +484,49 @@ const UserMessage = ({
                   />
                 </>
               )}
-              
-              <ImgThumbWrap>
-              <img src="https://picsum.photos/200/300" />
-              <img src="https://picsum.photos/200/300" />
-              <img src="https://picsum.photos/200/300" />
-              <img src="https://picsum.photos/200/300" />
-              </ImgThumbWrap>
 
-              <ShowMoreDiv>
-                <span>Show More <img src={ArrowSm} className="ArrowSm" /></span>
-              </ShowMoreDiv>
+              {!readMore && (
+                <ImgThumbWrap>
+                  {postData.media.map((src) => (
+                    <img src={src} />
+                  ))}
+                </ImgThumbWrap>
+              )}
+              {(listDescriptionView || myFeedView) &&
+                readMore &&
+                postData.media.length >= 1 && (
+                  <ImageSlider imgSources={postData.media} />
+                )}
 
-              <ImageSlider />
+              {!readMore && (
+                <ShowMoreDiv
+                  onClick={() => {
+                    setReadMore((prev) => !prev);
+                  }}
+                >
+                  <span>
+                    Show More <img src={ArrowSmDown} className="ArrowSm" />
+                  </span>
+                </ShowMoreDiv>
+              )}
+              {readMore && (
+                <ShowMoreDiv
+                  onClick={() => {
+                    setReadMore((prev) => !prev);
+                  }}
+                >
+                  <span>
+                    Show Less <img src={ArrowSm} className="ArrowSm" />
+                  </span>
+                </ShowMoreDiv>
+              )}
 
-              {listDescriptionView || myFeedView ? (
+              {/* {(listDescriptionView || myFeedView) &&
+              readMore &&
+              postData.media.length === 1 ? (
                 <BigImage image={postData.media} />
-              ) : null}
+              ) : null} */}
 
-              
               <LikesBar
                 type="comment"
                 totalLikes={postData.likes ? postData.likes.length : 0}
