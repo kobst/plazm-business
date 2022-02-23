@@ -29,10 +29,9 @@ const getUser = (userSub, value, limit = 15) => {
                 isPublic
                 ownerId
                 subscribers {
-                  userId {
                     name
                     photo
-                  }
+                    _id
                 }
                 name
                 description

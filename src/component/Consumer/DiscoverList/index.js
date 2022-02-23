@@ -27,11 +27,13 @@ import {
 } from "./styled.js";
 import ListMenu from "./ListMenu";
 
-const DiscoverList = ({ 
-  // setDiscoverBtn, 
-  // setSelectedListId, 
-  // setReadMore 
-  }) => {
+const DiscoverList = (
+  {
+    // setDiscoverBtn,
+    // setSelectedListId,
+    // setReadMore
+  }
+) => {
   const dispatch = useDispatch();
   const loadindTrending = useSelector(
     (state) => state.list.loadingTrendingLists
@@ -52,8 +54,6 @@ const DiscoverList = ({
   const loading = useSelector((state) => state.list.loadingSearchList);
   const listSearch = useSelector((state) => state.list.listSearch);
 
-
-
   const [searchError, setSearchError] = useState("");
   const [search, setSearch] = useState("");
   const [offset, setOffSet] = useState(0);
@@ -67,17 +67,13 @@ const DiscoverList = ({
     parseInt(totalList - userLists.length)
   );
 
-
-  const setSelectedListId = useStore((state)=> state.setSelectedListId)
-  const setDiscoverBtn = useStore((state) => state.setDiscoverBtn)
-  const setReadMore = useStore((state) => state.setReadMore)
-
-
-
+  const setSelectedListId = useStore((state) => state.setSelectedListId);
+  const setDiscoverBtn = useStore((state) => state.setDiscoverBtn);
+  const setReadMore = useStore((state) => state.setReadMore);
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log("fetching trendibg lists")
+      console.log("fetching trendibg lists");
       /** to fetch most trending list data */
       const trending = await dispatch(FetchTrendingLists(0));
       const resTrending = await unwrapResult(trending);
@@ -124,8 +120,8 @@ const DiscoverList = ({
   return (!loadindTrending && !flag) || (!loadingPopular && !flag) ? (
     <>
       <ListWraper>
-      <ListMenu />
-      {/* <TopSectionWrap>
+        <ListMenu />
+        {/* <TopSectionWrap>
         <LeftWrap>
           <button className="BackButtonArrow" onClick={() => backBtn()}>
             <MdChevronLeft />
@@ -145,18 +141,19 @@ const DiscoverList = ({
           />
         </RightSearchWrap>
       </TopSectionWrap> */}
-      {searchError !== "" ? <ErrorDiv>{searchError}</ErrorDiv> : null}
-      {listSearch !== "" && !listSearch.trim() === false ? (
-        <SearchSection
-          setSelectedListId={setSelectedListId}
-          setDiscoverBtn={setDiscoverBtn}
-          setReadMore={setReadMore}
-          offset={offsetSearch}
-          setOffSet={setOffSetSearch}
-        />
-      ) : (
-        <>
-          {/* <SliderSection
+        {/* {searchError !== "" ? <ErrorDiv>{searchError}</ErrorDiv> : null} */}
+        {listSearch !== "" && !listSearch.trim() === false ? (
+          <></>
+        ) : (
+          // <SearchSection
+          //   setSelectedListId={setSelectedListId}
+          //   setDiscoverBtn={setDiscoverBtn}
+          //   setReadMore={setReadMore}
+          //   offset={offsetSearch}
+          //   setOffSet={setOffSetSearch}
+          // />
+          <>
+            {/* <SliderSection
             heading="Trending"
             data={trendingLists}
             totalList={totalTrendingList}
@@ -174,26 +171,26 @@ const DiscoverList = ({
             setTotalLists={setTotalLists}
             totalLists={totalLists}
           /> */}
-          <SliderSection
-            heading="Most Popular"
-            data={popularLists}
-            totalList={totalPopularLists}
-            setSelectedListId={setSelectedListId}
-            setDiscoverBtn={setDiscoverBtn}
-            setReadMore={setReadMore}
-            offset={offsetPopular}
-            setOffSet={setOffSetPopular}
-            loader={loader}
-            setLoader={setLoader}
-            modal={displayTrendingModel}
-            setModal={setDisplayTrendingModel}
-            setSelectedId={setSelectedId}
-            selectedId={selectedId}
-            setTotalLists={setTotalLists}
-            totalLists={totalLists}
-          />
-        </>
-      )}
+            {/* <SliderSection
+              heading="Most Popular"
+              data={popularLists}
+              totalList={totalPopularLists}
+              setSelectedListId={setSelectedListId}
+              setDiscoverBtn={setDiscoverBtn}
+              setReadMore={setReadMore}
+              offset={offsetPopular}
+              setOffSet={setOffSetPopular}
+              loader={loader}
+              setLoader={setLoader}
+              modal={displayTrendingModel}
+              setModal={setDisplayTrendingModel}
+              setSelectedId={setSelectedId}
+              selectedId={selectedId}
+              setTotalLists={setTotalLists}
+              totalLists={totalLists}
+            /> */}
+          </>
+        )}
       </ListWraper>
     </>
   ) : (
