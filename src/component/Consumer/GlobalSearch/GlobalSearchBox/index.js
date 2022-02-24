@@ -36,7 +36,7 @@ const GlobalSearchInputWrap = styled.div`
   overflow: hidden;
   input {
     width: calc(100% - 38px);
-    height: 46px;
+    height: 40px;
     background: #ffffff;
     border: 0;
     display: flex;
@@ -48,7 +48,7 @@ const GlobalSearchInputWrap = styled.div`
   }
   button {
     width: 38px;
-    height: 46px;
+    height: 40px;
     background: #ffffff;
     border: 0;
     display: flex;

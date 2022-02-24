@@ -48,10 +48,23 @@ const TopContent = styled.div`
     min-height: 60px;
     align-items: center;
     padding: 0 20px 0 60px;
+    @media (max-width: 1024px) {
+      padding: 0 10px 0 0px;
+    }
+    @media (max-width: 767px) {
+      padding: 60px 10px 0 0px;
+    }
+    @media (max-width: 599px) {
+      flex-direction: column;
+      padding: 60px 10px 10px 0px;
+    }
   }
   .LeftTabsList {
     display: flex;
     height: 100%;
+    @media (max-width: 599px) {
+      margin: 0 0 10px 0;
+    }
   }
   .react-tabs__tab {
     display: flex;
@@ -64,12 +77,21 @@ const TopContent = styled.div`
     min-height: 60px;
     border: 0;
     padding: 0px 20px;
+    @media (max-width: 991px) {
+      font-size: 14px;
+      padding: 0px 10px;
+    }
+    @media (max-width: 479px) {
+      font-size: 11px;
+      padding: 0px 5px;
+    }
   }
   .react-tabs__tab--selected {
     background: #ff2e9a;
     color: #ffffff;
     border-radius: 0;
     border: 0;
+    top: 0;
   }
 `;
 

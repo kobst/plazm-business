@@ -373,6 +373,9 @@ export const ShowMoreDiv = styled.div`
   .ArrowSm {
     margin: 2px 0 0 4px;
   }
+  &.ListingShowMore {
+    margin: 0 0 10px;
+  }
 `;
 
 export const ImgThumbWrap = styled.div`

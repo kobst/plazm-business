@@ -431,7 +431,7 @@ export const SearchItemsContainer = styled.div`
   width: 100%;
   display: flex;
   flex-flow: row wrap;
-  height: calc(100vh - 140px);
+  height: calc(100vh - 500px);
   // &.test {
   //   height: calc(100vh - 140px);
   // }
