@@ -6,7 +6,7 @@ export const TopSectionWrap = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 0px 20px 0 60px;
-  background: #18123A;
+  background: #18123a;
   min-height: 60px;
   @media (max-width: 767px) {
     padding: 0 15px;
@@ -70,7 +70,7 @@ export const RightSearchWrap = styled.div`
     font-size: 12px;
     padding-right: 35px;
     margin: 0;
-    border: 1px solid #F0F0F0;
+    border: 1px solid #f0f0f0;
     border-radius: 50px;
     background-size: 14px;
     ::placeholder {
@@ -496,12 +496,12 @@ export const ErrorDiv = styled.div`
   margin-right: 30px;
 `;
 
-
 export const ListWraper = styled.div`
-    position: relative;
-    top: 60px;
-    display: flex;
-    flex-direction: column;
-    width: 97%;
-    background: #141414;
+  position: relative;
+  top: 60px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: #141414;
+  padding-left: 60px;
 `;
