@@ -500,6 +500,7 @@ const UserMessage = ({
 
               {!readMore && (
                 <ShowMoreDiv
+                 className="ListingShowMore"
                   onClick={() => {
                     setReadMore((prev) => !prev);
                   }}
@@ -511,6 +512,7 @@ const UserMessage = ({
               )}
               {readMore && (
                 <ShowMoreDiv
+                className="ListingShowMore"
                   onClick={() => {
                     setReadMore((prev) => !prev);
                   }}
