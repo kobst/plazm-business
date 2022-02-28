@@ -270,10 +270,17 @@ const DisplayFavoriteBusiness = ({
                   <img src={HeartBorder} />
                 </HeartIcon>
                 <RightBuisinessImg>
-                  <BuisinessNme>Bedvyne Brew</BuisinessNme>
+                  <BuisinessNme onClick={() => displayBusinessDetail()}>
+                    {businessInfo.company_name}
+                  </BuisinessNme>
                   <div className="hex">
                     <div className="hex-background">
-                      <img src="https://picsum.photos/200/300" />
+                      <img
+                        src={
+                          businessInfo.default_image_url ? image : ProfileImg
+                        }
+                        onError={() => setImage(ProfileImg)}
+                      />
                     </div>
                   </div>
                 </RightBuisinessImg>
@@ -309,11 +316,11 @@ const DisplayFavoriteBusiness = ({
                 <ProfileNameWrap>
                   <ProfileName>
                     {/* <div
-                    className="businessNameTitle"
-                    onClick={() => displayBusinessDetail()}
-                  >
-                    {businessInfo.company_name}
-                  </div> */}
+                      className="businessNameTitle"
+                      onClick={() => displayBusinessDetail()}
+                    >
+                      {businessInfo.company_name}
+                    </div> */}
                     <ChatInput>
                       {/* <p>
                       <span className="postSpan">
