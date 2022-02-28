@@ -90,7 +90,11 @@ const Dashboard = () => {
             <Profile userId={detailId} />
           </PanelContentContainer>
         )}
-        {view === "list_detail" && <ListDetail />}
+        {view === "list_detail" && (
+          <PanelContentContainer>
+            <ListDetail />
+          </PanelContentContainer>
+        )}
         {view === "list_explore" && <DiscoverList />}
         {(view === "explore" || view === "my_feed") && <GlobalSearch />}
         <GridContainer />

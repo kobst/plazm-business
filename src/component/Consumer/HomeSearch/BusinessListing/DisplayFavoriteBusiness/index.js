@@ -55,6 +55,7 @@ const UserMsgWrap = styled.div`
   border-radius: 10px;
   margin: 5px 15px 0px;
   overflow: hidden;
+  cursor: pointer;
   // &.search-active {
   //   &:after {
   //     content: "";
@@ -247,6 +248,7 @@ const DisplayFavoriteBusiness = ({
     <>
       {!search && businessInfo.company_name !== null ? (
         <UserMsgWrap
+          onClick={() => displayBusinessDetail()}
           className={
             data.eventSchedule !== null ||
             data.data !== null ||
@@ -266,20 +268,28 @@ const DisplayFavoriteBusiness = ({
                 />
               </ProfileThumbBanner>
               <TopBuisinessBar>
-                <HeartIcon>
+                {/* <HeartIcon>
                   <img src={HeartBorder} />
-                </HeartIcon>
+                </HeartIcon> */}
                 <RightBuisinessImg>
-                  <BuisinessNme>Bedvyne Brew</BuisinessNme>
+                  <BuisinessNme onClick={() => displayBusinessDetail()}>
+                    {businessInfo.company_name}
+                  </BuisinessNme>
                   <div className="hex">
                     <div className="hex-background">
-                      <img src="https://picsum.photos/200/300" />
+                      <img
+                        src={
+                          businessInfo.default_image_url ? image : ProfileImg
+                        }
+                        onError={() => setImage(ProfileImg)}
+                        onClick={() => displayBusinessDetail()}
+                      />
                     </div>
                   </div>
                 </RightBuisinessImg>
               </TopBuisinessBar>
 
-              <BottomShowMoreDiv
+              {/* <BottomShowMoreDiv
                 onClick={() => {
                   setShowDiv((prev) => !prev);
                 }}
@@ -296,7 +306,7 @@ const DisplayFavoriteBusiness = ({
                     </span>
                   )}
                 </ShowMoreDiv>
-              </BottomShowMoreDiv>
+              </BottomShowMoreDiv> */}
 
               {/* <HastagWrap>
                 <HastagDiv>#burger</HastagDiv>
@@ -309,11 +319,11 @@ const DisplayFavoriteBusiness = ({
                 <ProfileNameWrap>
                   <ProfileName>
                     {/* <div
-                    className="businessNameTitle"
-                    onClick={() => displayBusinessDetail()}
-                  >
-                    {businessInfo.company_name}
-                  </div> */}
+                      className="businessNameTitle"
+                      onClick={() => displayBusinessDetail()}
+                    >
+                      {businessInfo.company_name}
+                    </div> */}
                     <ChatInput>
                       {/* <p>
                       <span className="postSpan">

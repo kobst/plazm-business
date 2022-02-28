@@ -172,7 +172,7 @@ const DashboardContainer = (props) => {
         height: "100%",
       }}
     >
-      <ValueLoader height="100" width="100" />
+      <ValueLoader />
     </div>
   );
 };

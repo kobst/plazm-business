@@ -139,6 +139,7 @@ const DaysWrap = styled.div`
   align-items: center;
   justify-content: space-between;
   flex-flow: row wrap;
+  margin-bottom: 5px;
   a {
     background: transparent;
     border-radius: 3px;

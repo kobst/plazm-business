@@ -173,12 +173,12 @@ export const RightIcons = styled.div`
 `;
 export const InnerListBanner = styled.div`
   width: 27px;
-    height: 27px;
+  height: 27px;
   margin: 0 8px 0 0;
   overflow: hidden;
   position: relative;
   border-radius: 50%;
-  border: 1px solid #FFFFFF;
+  border: 1px solid #ffffff;
   img {
   }
 `;
@@ -204,7 +204,7 @@ export const ListNameWrap = styled.div`
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
-  font-family: 'Roboto',sans-serif;
+  font-family: "Roboto", sans-serif;
 `;
 
 export const ListName = styled.div`
@@ -306,36 +306,78 @@ export const RightBuisinessName = styled.div`
   display: flex;
   align-items: center;
   .hex {
-  display: block;
-  margin: 0 auto;
-  position: relative;
-  width: 32px;
-  height: 30px; /* width * 0.866 */
-  background: #fff;
-  box-sizing: border-box;
-  -webkit-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
-  -moz-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
-}
+    display: block;
+    margin: 0 auto;
+    position: relative;
+    width: 32px;
+    height: 30px; /* width * 0.866 */
+    background: #fff;
+    box-sizing: border-box;
+    -webkit-clip-path: polygon(
+      0% 50%,
+      25% 0%,
+      75% 0%,
+      100% 50%,
+      75% 100%,
+      25% 100%
+    );
+    -moz-clip-path: polygon(
+      0% 50%,
+      25% 0%,
+      75% 0%,
+      100% 50%,
+      75% 100%,
+      25% 100%
+    );
+  }
 
-.hex-background {
-  position: absolute;
-  background-color: orange; /*color of the main-background*/
-  top: 2px; /* equal to border thickness */
-  left: 2px; /* equal to border thickness */
-  width: 28px;
-  height: 26px;/* width * 0.866 */
-  -webkit-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
-  -moz-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
-}
+  .hex-background {
+    position: absolute;
+    background-color: orange; /*color of the main-background*/
+    top: 2px; /* equal to border thickness */
+    left: 2px; /* equal to border thickness */
+    width: 28px;
+    height: 26px; /* width * 0.866 */
+    -webkit-clip-path: polygon(
+      0% 50%,
+      25% 0%,
+      75% 0%,
+      100% 50%,
+      75% 100%,
+      25% 100%
+    );
+    -moz-clip-path: polygon(
+      0% 50%,
+      25% 0%,
+      75% 0%,
+      100% 50%,
+      75% 100%,
+      25% 100%
+    );
+  }
 
-.hex img {
-  position: absolute;
-  width: 100%; 
-  height: 100%; 
-  object-fit: cover;
-  -webkit-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
-  -moz-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
-}
+  .hex img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    -webkit-clip-path: polygon(
+      0% 50%,
+      25% 0%,
+      75% 0%,
+      100% 50%,
+      75% 100%,
+      25% 100%
+    );
+    -moz-clip-path: polygon(
+      0% 50%,
+      25% 0%,
+      75% 0%,
+      100% 50%,
+      75% 100%,
+      25% 100%
+    );
+  }
 `;
 
 export const BuisinessNme = styled.div`
@@ -343,9 +385,10 @@ export const BuisinessNme = styled.div`
   font-size: 13px;
   text-align: right;
   text-transform: capitalize;
-  color: #FFFFFF;
+  color: #ffffff;
   text-shadow: 0px 0px 7px #000000;
   margin: 0 5px 0 0;
+  cursor: pointer;
 `;
 
 export const LeftListHeader = styled.div`
@@ -358,7 +401,6 @@ export const LeftListHeader = styled.div`
   }
 `;
 
-
 export const ShowMoreDiv = styled.div`
   display: flex;
   align-items: center;
@@ -366,7 +408,7 @@ export const ShowMoreDiv = styled.div`
   width: 100%;
   font-weight: 500;
   font-size: 9px;
-  color: #FFFFFF;
+  color: #ffffff;
   span {
     cursor: pointer;
   }
@@ -391,55 +433,97 @@ export const ImgThumbWrap = styled.div`
 `;
 
 export const TopBuisinessBar = styled.div`
-      position: absolute;
-    top: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    padding: 8px;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px;
   .hex {
-  display: block;
-  margin: 0 auto;
-  position: relative;
-  width: 32px;
-  height: 30px; /* width * 0.866 */
-  background: #fff;
-  box-sizing: border-box;
-  -webkit-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
-  -moz-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
-}
+    display: block;
+    margin: 0 auto;
+    position: relative;
+    width: 32px;
+    height: 30px; /* width * 0.866 */
+    background: #fff;
+    box-sizing: border-box;
+    -webkit-clip-path: polygon(
+      0% 50%,
+      25% 0%,
+      75% 0%,
+      100% 50%,
+      75% 100%,
+      25% 100%
+    );
+    -moz-clip-path: polygon(
+      0% 50%,
+      25% 0%,
+      75% 0%,
+      100% 50%,
+      75% 100%,
+      25% 100%
+    );
+  }
 
-.hex-background {
-  position: absolute;
-  background-color: orange; /*color of the main-background*/
-  top: 2px; /* equal to border thickness */
-  left: 2px; /* equal to border thickness */
-  width: 28px;
-  height: 26px;/* width * 0.866 */
-  -webkit-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
-  -moz-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
-}
+  .hex-background {
+    position: absolute;
+    background-color: orange; /*color of the main-background*/
+    top: 2px; /* equal to border thickness */
+    left: 2px; /* equal to border thickness */
+    width: 28px;
+    height: 26px; /* width * 0.866 */
+    -webkit-clip-path: polygon(
+      0% 50%,
+      25% 0%,
+      75% 0%,
+      100% 50%,
+      75% 100%,
+      25% 100%
+    );
+    -moz-clip-path: polygon(
+      0% 50%,
+      25% 0%,
+      75% 0%,
+      100% 50%,
+      75% 100%,
+      25% 100%
+    );
+  }
 
-.hex img {
-  position: absolute;
-  width: 100%; 
-  height: 100%; 
-  object-fit: cover;
-  -webkit-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
-  -moz-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
-}
+  .hex img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    -webkit-clip-path: polygon(
+      0% 50%,
+      25% 0%,
+      75% 0%,
+      100% 50%,
+      75% 100%,
+      25% 100%
+    );
+    -moz-clip-path: polygon(
+      0% 50%,
+      25% 0%,
+      75% 0%,
+      100% 50%,
+      75% 100%,
+      25% 100%
+    );
+  }
 `;
 
 export const BottomShowMoreDiv = styled.div`
-    position: absolute;
-    bottom: 0;
-    z-index: 1;
-    width: 100%;
-    display: flex;
-    right: 0px;
-    background: linear-gradient(360deg, #07060D 0%, rgba(18, 15, 41, 0) 100%);
-    border-radius: 10px 10px 0px 0px;
-    padding: 10px 5px;
+  position: absolute;
+  bottom: 0;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  right: 0px;
+  background: linear-gradient(360deg, #07060d 0%, rgba(18, 15, 41, 0) 100%);
+  border-radius: 10px 10px 0px 0px;
+  padding: 10px 5px;
 `;
 
 export const BuisinessThumbImages = styled.div`
@@ -448,15 +532,15 @@ export const BuisinessThumbImages = styled.div`
 `;
 
 export const BuisinessThumbImg = styled.div`
-  border: 1px solid #FFFFFF;
+  border: 1px solid #ffffff;
   width: 22px;
-  height:22px;
+  height: 22px;
   border-radius: 50%;
   margin: 0 5px 0 0;
   overflow: hidden;
   img {
     width: 100%;
-    height:100%;
+    height: 100%;
   }
 `;
 
@@ -479,14 +563,12 @@ export const HastagDiv = styled.div`
   text-transform: capitalize;
   color: #000000;
   margin: 0 5px 0 0;
-  background: #F7F7F7;
+  background: #f7f7f7;
   border-radius: 28px;
   padding: 5px 8px;
 `;
 
-export const HeartIcon = styled.div`
-  
-`;
+export const HeartIcon = styled.div``;
 
 export const RightBuisinessImg = styled.div`
   display: flex;
