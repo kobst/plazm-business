@@ -55,6 +55,7 @@ const UserMsgWrap = styled.div`
   border-radius: 10px;
   margin: 5px 15px 0px;
   overflow: hidden;
+  cursor: pointer;
   // &.search-active {
   //   &:after {
   //     content: "";
@@ -247,6 +248,7 @@ const DisplayFavoriteBusiness = ({
     <>
       {!search && businessInfo.company_name !== null ? (
         <UserMsgWrap
+          onClick={() => displayBusinessDetail()}
           className={
             data.eventSchedule !== null ||
             data.data !== null ||
@@ -266,9 +268,9 @@ const DisplayFavoriteBusiness = ({
                 />
               </ProfileThumbBanner>
               <TopBuisinessBar>
-                <HeartIcon>
+                {/* <HeartIcon>
                   <img src={HeartBorder} />
-                </HeartIcon>
+                </HeartIcon> */}
                 <RightBuisinessImg>
                   <BuisinessNme onClick={() => displayBusinessDetail()}>
                     {businessInfo.company_name}
@@ -280,13 +282,14 @@ const DisplayFavoriteBusiness = ({
                           businessInfo.default_image_url ? image : ProfileImg
                         }
                         onError={() => setImage(ProfileImg)}
+                        onClick={() => displayBusinessDetail()}
                       />
                     </div>
                   </div>
                 </RightBuisinessImg>
               </TopBuisinessBar>
 
-              <BottomShowMoreDiv
+              {/* <BottomShowMoreDiv
                 onClick={() => {
                   setShowDiv((prev) => !prev);
                 }}
@@ -303,7 +306,7 @@ const DisplayFavoriteBusiness = ({
                     </span>
                   )}
                 </ShowMoreDiv>
-              </BottomShowMoreDiv>
+              </BottomShowMoreDiv> */}
 
               {/* <HastagWrap>
                 <HastagDiv>#burger</HastagDiv>

@@ -36,7 +36,7 @@ const SearchSection = ({
 
   return (loading && offset === 0) || flag ? (
     <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
-      <ValueLoader height="100" width="100" />
+      <ValueLoader />
     </div>
   ) : (
     <>

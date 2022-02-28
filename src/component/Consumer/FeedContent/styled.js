@@ -434,7 +434,7 @@ export const TopBuisinessBar = styled.div`
   top: 0;
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 8px;
   .hex {
     display: block;
