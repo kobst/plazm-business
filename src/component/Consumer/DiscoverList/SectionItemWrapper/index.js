@@ -44,7 +44,7 @@ const SectionItemWrapper = ({
             offset < totalList && loading ? (
               <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
                 {" "}
-                <ValueLoader height="40" width="40" />
+                <ValueLoader />
               </div>
             ) : null
           }

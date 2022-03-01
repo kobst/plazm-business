@@ -100,7 +100,7 @@ const ListMenu = (
   const loading = useSelector((state) => state.list.loadingSearchList);
   const listSearch = useSelector((state) => state.list.listSearch);
 
-  const [selectedTab, setSelectedTab] = useState(1);
+  const [selectedTab, setSelectedTab] = useState(2);
   const [tabIndex, setTabIndex] = useState();
   const userCreatedLists = useSelector((state) => state.list.userLists);
   const userFollowedLists = useSelector((state) => state.list.data);

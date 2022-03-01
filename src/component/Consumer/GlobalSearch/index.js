@@ -29,18 +29,20 @@ const GlobalSearchBtnWrap = styled.div`
 const GlobalSearch = () => {
   const dispatch = useDispatch();
   const currentStatus = useSelector((state) => state.globalSearch.displayBar);
-
+  const loading = useSelector((state) => state.myFeed.loading);
   const handleClick = () => {
     dispatch(setDisplayBar(!currentStatus));
   };
 
   return (
     <>
-      <GlobalSearchBtnWrap>
-        <button onClick={handleClick}>
-          <img src={SearchIcon} />
-        </button>
-      </GlobalSearchBtnWrap>
+      {!loading && (
+        <GlobalSearchBtnWrap>
+          <button onClick={handleClick}>
+            <img src={SearchIcon} />
+          </button>
+        </GlobalSearchBtnWrap>
+      )}
     </>
   );
 };

@@ -395,7 +395,6 @@ const UserMessage = ({
   const displayUserDetails = () => {
     history.push(`/u/${postData.ownerId[0]._id}`);
   };
-  
 
   return (
     <>
@@ -428,7 +427,7 @@ const UserMessage = ({
                           <span>|</span>
                           <ListAuthorName>
                             {moment(postData.createdAt).format(
-                              "MMM DD,YYYY, hh:MM a"
+                              "MMM DD, YYYY, hh:MMa"
                             )}{" "}
                             EDT{" "}
                           </ListAuthorName>
@@ -436,10 +435,10 @@ const UserMessage = ({
                       </ListNameWrap>
                     </LeftListHeader>
                     <RightBuisinessName>
-                      <BuisinessNme>Bedvyne Brew</BuisinessNme>
+                      <BuisinessNme>{businessData.company_name}</BuisinessNme>
                       <div className="hex">
                         <div className="hex-background">
-                          <img src="https://picsum.photos/200/300" />
+                          <img src={businessData.default_image_url} />
                         </div>
                       </div>
                     </RightBuisinessName>
@@ -456,16 +455,7 @@ const UserMessage = ({
                   postData.taggedUsers || [],
                   postData.taggedLists || []
                 )}
-                {!readMore && postData.data.length > 225 && (
-                  <b
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      setReadMore((prev) => !prev);
-                    }}
-                  >
-                    ...Read More
-                  </b>
-                )}
+                {!readMore && postData.data.length > 225 && <b>...</b>}
               </ChatInput>
               {postData.eventSchedule && (
                 <>
@@ -510,15 +500,42 @@ const UserMessage = ({
                 </ShowMoreDiv>
               )}
               {readMore && (
-                <ShowMoreDiv
-                  onClick={() => {
-                    setReadMore((prev) => !prev);
-                  }}
-                >
-                  <span>
-                    Show Less <img src={ArrowSm} className="ArrowSm" />
-                  </span>
-                </ShowMoreDiv>
+                <>
+                  <ShowMoreDiv
+                    onClick={() => {
+                      setReadMore((prev) => !prev);
+                    }}
+                  >
+                    <span>
+                      Show Less <img src={ArrowSm} className="ArrowSm" />
+                    </span>
+                  </ShowMoreDiv>
+                  <LikesBar
+                    type="comment"
+                    totalLikes={postData.likes ? postData.likes.length : 0}
+                    totalComments={
+                      postData.totalComments.length > 0
+                        ? postData.totalComments[0].totalCount
+                        : 0
+                    }
+                    date={new Date(postData.createdAt)}
+                    setDisplayComments={setDisplayComments}
+                    displayComments={displayComments}
+                    postId={postData._id}
+                    postLikes={postData.likes}
+                    displayCommentInput={displayCommentInput}
+                    setDisplayCommentInput={setDisplayCommentInput}
+                    setFlag={setFlag}
+                    flag={flag}
+                    business={businessData}
+                    commentsRef={commentsRef}
+                    listDescriptionView={listDescriptionView}
+                    listData={postData}
+                    setListIndex={setListIndex}
+                    myFeedView={myFeedView}
+                    setMyFeedIndex={setMyFeedIndex}
+                  />
+                </>
               )}
 
               {/* {(listDescriptionView || myFeedView) &&
@@ -526,32 +543,6 @@ const UserMessage = ({
               postData.media.length === 1 ? (
                 <BigImage image={postData.media} />
               ) : null} */}
-
-              <LikesBar
-                type="comment"
-                totalLikes={postData.likes ? postData.likes.length : 0}
-                totalComments={
-                  postData.totalComments.length > 0
-                    ? postData.totalComments[0].totalCount
-                    : 0
-                }
-                date={new Date(postData.createdAt)}
-                setDisplayComments={setDisplayComments}
-                displayComments={displayComments}
-                postId={postData._id}
-                postLikes={postData.likes}
-                displayCommentInput={displayCommentInput}
-                setDisplayCommentInput={setDisplayCommentInput}
-                setFlag={setFlag}
-                flag={flag}
-                business={businessData}
-                commentsRef={commentsRef}
-                listDescriptionView={listDescriptionView}
-                listData={postData}
-                setListIndex={setListIndex}
-                myFeedView={myFeedView}
-                setMyFeedIndex={setMyFeedIndex}
-              />
             </ProfileNameWrap>
           </ProfileNameHeader>
         </UserMessageContent>

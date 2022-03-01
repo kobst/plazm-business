@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 const AllListingsContent = styled.div`
   width: 100%;
   display: flex;
+  position: relative;
   align-items: center;
   justify-content: space-between;
   margin: 0 0 15px;
@@ -39,6 +40,9 @@ const EventListing = styled.div`
 `;
 
 const CloseList = styled.div`
+  position: absolute;
+  top: 5px;
+  right: 5px;
   cursor: pointer;
   svg {
     color: #fff;

@@ -457,7 +457,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
                       </strong>{" "}
                       Updated{" "}
                       {moment(selectedList.updatedAt).format(
-                        "MMM DD,YYYY, hh:MM a"
+                        "MMM DD,YYYY, hh:MMa"
                       )}{" "}
                       EST{" "}
                       {!selectedList.isPublic && (

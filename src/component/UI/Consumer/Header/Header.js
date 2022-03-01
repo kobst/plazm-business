@@ -27,6 +27,7 @@ const Header = () => {
     b: "Business",
     list: "List",
   };
+  const prevRoute = useHistory();
   const history = useLocation()
     .pathname.split("/")
     .filter((item) => item);
@@ -63,7 +64,7 @@ const Header = () => {
         setTabTitle("Favorites");
         break;
       case 5:
-        setTabTitle("Discover Lists");
+        setTabTitle("Lists");
         break;
       case -1:
         setTabTitle((prev) => prev);
@@ -82,28 +83,40 @@ const Header = () => {
   return (
     <HeaderBar>
       <LeftHeaderBar>
-        <UserNameCircle>P</UserNameCircle>
+        {console.log(selectedUser.user.name[0])}
+        <UserNameCircle>{selectedUser.user.name[0]}</UserNameCircle>
         <BreadcrumbsDiv>
-          <BackArrow>
+          <BackArrow onClick={prevRoute.goBack}>
             <img src={BackBtn} />
           </BackArrow>
           <BreadcrumbsText>
-            {tabTitle}{" "}
-            {routeObj[history[0]] && <span>{"/ " + routeObj[history[0]]}</span>}
+            {history.length === 1 && selectedTab !== -1 ? (
+              <span className="crumb-text">{tabTitle}</span>
+            ) : (
+              <div className="crumb-text">{tabTitle}</div>
+            )}{" "}
+            {routeObj[history[0]] && history.length > 1 && (
+              <div className="crumb-text">{"/ " + routeObj[history[0]]}</div>
+            )}{" "}
+            {routeObj[history[0]] && history.length === 1 && (
+              <span className="crumb-text">{"/ " + routeObj[history[0]]}</span>
+            )}
             {history.length > 1 && isObjectId(history[1]) && (
               <Fragment>
                 {routeObj[history[0]] === routeObj.u &&
                   selectedUser?.selectedUser?.name && (
-                    <span>{"/ " + selectedUser.selectedUser.name}</span>
+                    <span className="crumb-text">
+                      {"/ " + selectedUser.selectedUser.name}
+                    </span>
                   )}
                 {routeObj[history[0]] === routeObj.b &&
                   selectedBusiness.business[0]?.company_name && (
-                    <span>
+                    <span className="crumb-text">
                       {"/ " + selectedBusiness.business[0]?.company_name}
                     </span>
                   )}
                 {routeObj[history[0]] === routeObj.list && selectedList && (
-                  <span>{"/ " + selectedList.name}</span>
+                  <span className="crumb-text">{"/ " + selectedList.name}</span>
                 )}
               </Fragment>
             )}

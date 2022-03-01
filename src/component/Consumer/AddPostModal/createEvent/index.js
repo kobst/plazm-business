@@ -75,6 +75,7 @@ const AddYourPostBar = styled.div`
   margin: 0 0 14px;
   border: 1px dashed #ffffff;
   align-items: center;
+  position: relative;
   padding: 13px;
   button {
     outline: 0;
@@ -485,9 +486,16 @@ const CreateEventModal = ({
                 >
                   Cancel
                 </ButtonGrey>
-                <SaveButton type="submit" disabled={loader}>
-                  {loader ? <ValueLoader /> : "Create"}
-                </SaveButton>
+                {loader && (
+                  <div style={{ marginTop: "3px" }}>
+                    <ValueLoader />
+                  </div>
+                )}
+                {!loader && (
+                  <SaveButton type="submit" disabled={loader}>
+                    Create
+                  </SaveButton>
+                )}
               </BottomBtnWrap>
             </BottomButtonsBar>
           </form>
