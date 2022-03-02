@@ -54,6 +54,7 @@ import DiscoverList from "../../../Consumer/DiscoverList";
 import ListTab from "./ListTab";
 import PanelContent from "../Panel-Content/PanelContent";
 
+import ValueLoader from "../../../../utils/loader";
 import CompassIconWhite from "../../../../images/compass-white.png";
 import CompassIcon from "../../../../images/compass.svg";
 import HomeIconWhite from "../../../../images/home-white.png";
@@ -418,7 +419,11 @@ const SideBarTabs = ({
           ) : (
             <h6></h6>
           )}
-          {listLoader && <div>Loading</div>}
+          {listLoader && (
+            <div className="sidebar-loader">
+              <ValueLoader />
+            </div>
+          )}
           {totalList > listData.length && !listLoader && (
             <button
               onClick={() => {

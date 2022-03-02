@@ -24,6 +24,16 @@ const GlobalSearchBtnWrap = styled.div`
     justify-content: center;
     cursor: pointer;
   }
+  @media (max-width: 1279px) {
+    z-index: 99;
+    top: 70px;
+  }
+  @media (max-width: 767px) {
+    top: 120px;
+    right: -40px;
+    left: inherit;
+    margin-top: 10px;
+  }
 `;
 
 const GlobalSearch = () => {

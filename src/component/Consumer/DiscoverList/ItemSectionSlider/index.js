@@ -5,6 +5,7 @@ import { LoaderWrap, NewInBuzzSliderWrapper, NoMorePost } from "../styled";
 import {
   FetchMostPopularLists,
   FetchTrendingLists,
+  fetchUserCreatedAndFollowedList,
 } from "../../../../reducers/listReducer";
 import ValueLoader from "../../../../utils/loader";
 
@@ -30,6 +31,7 @@ const NewCollectionSectionSlider = ({
   const dispatch = useDispatch();
   const trendingLists = useSelector((state) => state.list.trendingLists);
   const popularLists = useSelector((state) => state.list.popularLists);
+  const user = useSelector((state) => state.user.user);
   const divRef = useRef(null);
 
   /** fetch more data when scrollbar reaches end */
@@ -44,12 +46,23 @@ const NewCollectionSectionSlider = ({
         setOffSet(offset + 12);
         dispatch(FetchTrendingLists(offset + 12));
       } else if (
-        heading !== "Trending" &&
+        heading === "Most Popular" &&
         popularLists.length === offset + 12
       ) {
         setLoader({ value: true, heading });
         setOffSet(offset + 12);
         dispatch(FetchMostPopularLists(offset + 12));
+      } else if (heading === "Subscribed Lists") {
+        setLoader({ value: true, heading });
+        setOffSet(offset + 12);
+        const obj = {
+          id: user._id,
+          value: offset,
+        };
+        dispatch(fetchUserCreatedAndFollowedList(obj));
+      } else if (heading === "My Lists") {
+        setLoader({ value: true, heading });
+        setOffSet(offset + 12);
       }
     } else {
       setLoader({ value: false, heading });
@@ -87,7 +100,7 @@ const NewCollectionSectionSlider = ({
             totalLists={totalLists}
           />
         ))}
-        {loader && loader.heading === heading && loader.value && (
+        {loader && (
           <LoaderWrap>
             <ValueLoader />
           </LoaderWrap>

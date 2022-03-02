@@ -83,7 +83,6 @@ const Header = () => {
   return (
     <HeaderBar>
       <LeftHeaderBar>
-        {console.log(selectedUser.user.name[0])}
         <UserNameCircle>{selectedUser.user.name[0]}</UserNameCircle>
         <BreadcrumbsDiv>
           <BackArrow onClick={prevRoute.goBack}>

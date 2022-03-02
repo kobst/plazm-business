@@ -79,10 +79,10 @@ const getUserCreatedAndFollowedLists = (obj) => {
                   isPublic
                   ownerId
                   subscribers {
-                    userId {
-                      name
-                      photo
-                    }
+                    _id
+                    name
+                    photo
+                    
                   }
                   name
                   description

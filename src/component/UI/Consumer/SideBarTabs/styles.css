@@ -167,11 +167,13 @@
 .loadMore {
   margin: 0 auto 10px;
   border: 0;
-  background: #ff2e9a;
-  color: #fff;
+  background: transparent;
+  color: #ff2e9a;
   border-radius: 5px;
   padding: 5px 10px;
   cursor: pointer;
+  text-decoration: underline;
+  font-weight: 600;
 }
 .sidebar-list {
   height: 25px;
@@ -254,4 +256,10 @@
   position: absolute;
   left: 31px;
   top: 32px;
+}
+.sidebar-loader {
+  margin: 0 auto 10px;
+}
+.sidebar-loader img {
+  max-width: 50px;
 }
