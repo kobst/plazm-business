@@ -82,7 +82,6 @@
   background-color: floralwhite;
 }
 
-
 .listTab-icon {
   width: 24px;
   height: 24px;
@@ -92,7 +91,7 @@
   font-size: 26px;
   border-radius: 50%;
   margin: 0 0 0 7px;
-  border: 1px solid #FFFFFF;
+  border: 1px solid #ffffff;
 
   /* @media (max-width: 767px) {
     font-size: 26px;
@@ -102,8 +101,6 @@
 .Sidebar.expanded .listTab-icon {
   margin-right: 4px;
 }
-
-
 
 /* .sidebar-icon {
   margin-right: 16px;
@@ -127,14 +124,15 @@
   line-height: 15px;
   letter-spacing: 0.02em;
   color: #767676;
-  font-family: 'Roboto',sans-serif;
+  font-family: "Roboto", sans-serif;
+  max-width: calc(100% - 40px);
 }
 
 .subscription-text {
   margin: 0 0 0 7px;
   display: -webkit-box !important;
   -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;  
+  -webkit-box-orient: vertical;
   overflow: hidden;
   width: 94%;
   font-size: 11px;
@@ -144,14 +142,12 @@
   display: flex;
 }
 
-
 .Sidebar.expanded {
   width: 200px;
   transition: width 0.3s;
 }
 
 /* somehow padding-right affects size of icon */
-
 
 .list-scroll {
   background-color: #f3f3f3;
@@ -168,7 +164,17 @@
   visibility: hidden;
   display: none;
 }
-
+.loadMore {
+  margin: 0 auto 10px;
+  border: 0;
+  background: transparent;
+  color: #ff2e9a;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: 600;
+}
 .sidebar-list {
   height: 25px;
   background-color: darkblue;
@@ -181,12 +187,9 @@
   padding: 25px 15px;
 }
 
-
-
 .sidebar-list:hover {
   background-color: indigo;
 }
-
 
 .panel-content {
   padding-left: 52px;
@@ -196,7 +199,6 @@
   overflow-x: hidden;
 }
 
-
 .Sidebar .react-tabs__tab {
   min-height: 60px;
   align-items: center;
@@ -205,28 +207,59 @@
 }
 
 .Sidebar .react-tabs__tab--selected {
-  background: transparent;
+  background: #3b3946;
   border-color: transparent;
   border-radius: 0;
 }
+.Sidebar .react-tabs__tab--selected .sidebar-text,
+.Sidebar .react-tabs__tab--selected .sidebar-icon {
+  color: #fff;
+}
+.Sidebar .react-tabs__tab:focus {
+  box-shadow: none !important;
+}
 
-.RedDot{
+.Sidebar .react-tabs__tab:focus:after {
+  display: none;
+}
+.RedDot {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #FF2E9A;
+  background: #ff2e9a;
   position: absolute;
   right: 10px;
   top: 24px;
 }
-
-.NotificationDot{
+.tool-tip {
+  background: #ffffff;
+  border: 1px solid #a9a9a9;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 10px;
+  line-height: 12px;
+  color: #595959;
+  padding: 7px;
+  position: absolute;
+  z-index: 1;
+  max-width: 400px;
+  left: 100px;
+}
+.NotificationDot {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: #EE3840;
-  border: 1px solid #F3F3F3;
+  background: #ee3840;
+  border: 1px solid #f3f3f3;
   position: absolute;
   left: 31px;
   top: 32px;
+}
+.sidebar-loader {
+  margin: 0 auto 10px;
+}
+.sidebar-loader img {
+  max-width: 50px;
 }

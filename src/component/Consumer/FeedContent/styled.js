@@ -180,6 +180,8 @@ export const InnerListBanner = styled.div`
   border-radius: 50%;
   border: 1px solid #ffffff;
   img {
+    width: 100%;
+    height: 100%;
   }
 `;
 
@@ -203,7 +205,7 @@ export const ListNameWrap = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 100%;
+  width: calc(100% - 30px);
   font-family: "Roboto", sans-serif;
 `;
 

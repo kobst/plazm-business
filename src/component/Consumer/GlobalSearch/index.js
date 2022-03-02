@@ -24,23 +24,35 @@ const GlobalSearchBtnWrap = styled.div`
     justify-content: center;
     cursor: pointer;
   }
+  @media (max-width: 1279px) {
+    z-index: 99;
+    top: 70px;
+  }
+  @media (max-width: 767px) {
+    top: 120px;
+    right: -40px;
+    left: inherit;
+    margin-top: 10px;
+  }
 `;
 
 const GlobalSearch = () => {
   const dispatch = useDispatch();
   const currentStatus = useSelector((state) => state.globalSearch.displayBar);
-
+  const loading = useSelector((state) => state.myFeed.loading);
   const handleClick = () => {
     dispatch(setDisplayBar(!currentStatus));
   };
 
   return (
     <>
-      <GlobalSearchBtnWrap>
-        <button onClick={handleClick}>
-          <img src={SearchIcon} />
-        </button>
-      </GlobalSearchBtnWrap>
+      {!loading && (
+        <GlobalSearchBtnWrap>
+          <button onClick={handleClick}>
+            <img src={SearchIcon} />
+          </button>
+        </GlobalSearchBtnWrap>
+      )}
     </>
   );
 };

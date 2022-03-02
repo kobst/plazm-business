@@ -8,7 +8,6 @@ const AllListingsContent = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 0 0 15px;
   p {
     font-size: 12px;
     font-weight: 600;
@@ -38,6 +37,9 @@ const EventListing = styled.div`
 
 const CloseList = styled.button`
   cursor: pointer;
+  position: absolute;
+  top: 5px;
+  right: 5px;
   svg {
     color: #fff;
     font-size: 20px;

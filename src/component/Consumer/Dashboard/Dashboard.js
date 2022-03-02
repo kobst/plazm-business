@@ -19,6 +19,8 @@ import MapView from "../mapView/index";
 import RadarView from "../radarView/radarView";
 import useStore from "../useState";
 import GlobalSearch from "../GlobalSearch";
+import GlobalSearchBox from "../GlobalSearch/GlobalSearchBox";
+import { useSelector } from "react-redux";
 
 const DashboardContent = styled.div`
   width: 100%;
@@ -27,7 +29,23 @@ const DashboardContent = styled.div`
   height: 100%;
   overflow: hidden;
 `;
-
+const BusinessSearch = styled.div`
+    position: absolute;
+    top: 60px;
+    z-index: 11;
+    right: 60px;
+    width: 530px;
+    @media (max-width: 1279px){
+      right: inherit;
+      width: 400px;
+      left: 60px;
+      top: 60px;
+    }
+    @media (max-width: 767px){
+      width: 85%;
+      top: 120px;
+    }
+}`;
 const PanelContentContainer = styled.div`
   padding-left: 60px;
   width: 100%;
@@ -47,7 +65,7 @@ const Dashboard = () => {
   const gridMode = useStore((state) => state.gridMode);
   const view = useStore((state) => state.view);
   const detailId = useStore((state) => state.detailId);
-
+  const showSearchBar = useSelector((state) => state.globalSearch.displayBar);
   useEffect(() => {
     if (gridMode) {
       console.log("show grid");
@@ -62,7 +80,6 @@ const Dashboard = () => {
 
     // put all the loading for the views here? use effect on view....
   }, [view]);
-
   return (
     <>
       <DashboardContent>
@@ -96,9 +113,16 @@ const Dashboard = () => {
           </PanelContentContainer>
         )}
         {view === "list_explore" && <DiscoverList />}
-        {(view === "explore" || view === "my_feed") && <GlobalSearch />}
+        {(view === "explore" ||
+          view === "my_feed" ||
+          view === "business_detail") && <GlobalSearch />}
         <GridContainer />
 
+        {showSearchBar && view === "business_detail" && (
+          <BusinessSearch>
+            <GlobalSearchBox type={"Search Feed"} />
+          </BusinessSearch>
+        )}
         {view !== "list_explore" && (
           <>
             <MapView />

@@ -112,6 +112,7 @@ const ListMenu = (
     (state) => state.list.totalTrendingList
   );
   const popularLists = useSelector((state) => state.list.popularLists);
+  const popularLoading = useSelector((state) => state.list.loadingPopularLists);
   const totalPopularLists = useSelector(
     (state) => state.list.totalPopularLists
   );
@@ -122,9 +123,12 @@ const ListMenu = (
   const loading = useSelector((state) => state.list.loadingSearchList);
   const listSearch = useSelector((state) => state.list.listSearch);
 
-  const [selectedTab, setSelectedTab] = useState(1);
+  const [selectedTab, setSelectedTab] = useState(2);
   const [tabIndex, setTabIndex] = useState();
   const userCreatedLists = useSelector((state) => state.list.userLists);
+  const userCreatedLoading = useSelector(
+    (state) => state.list.loadingUserLists
+  );
   const userFollowedLists = useSelector((state) => state.list.data);
   const [searchError, setSearchError] = useState("");
   const [search, setSearch] = useState("");
@@ -145,7 +149,6 @@ const ListMenu = (
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log("fetching trendibg lists");
       /** to fetch most trending list data */
       const trending = await dispatch(FetchTrendingLists(0));
       const resTrending = await unwrapResult(trending);
@@ -164,6 +167,9 @@ const ListMenu = (
   const searchListsData = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
+      if (!search.trim()) {
+        dispatch(setListSearch(event.target.value));
+      }
       if (search !== "" && search.length >= 4 && !search.trim() === false) {
         dispatch(clearListSearchData());
         dispatch(setListSearch(event.target.value));
@@ -191,9 +197,9 @@ const ListMenu = (
   };
 
   const setTab = (index) => {
-    console.log("setting index " + index);
     setSearch("");
     dispatch(clearListSearchData());
+    dispatch(setListSearch(""));
     setTabIndex(index);
     setSelectedTab(index);
   };
@@ -220,88 +226,105 @@ const ListMenu = (
             </RightSearchWrap>
           </TabList>
           <TabPanel index={0}>
-            <SliderSection
-              heading=""
-              data={userFollowedLists}
-              totalList={totalPopularLists}
-              setSelectedListId={setSelectedListId}
-              setDiscoverBtn={setDiscoverBtn}
-              setReadMore={setReadMore}
-              offset={offsetPopular}
-              setOffSet={setOffSetPopular}
-              loader={loader}
-              setLoader={setLoader}
-              modal={displayTrendingModel}
-              setModal={setDisplayTrendingModel}
-              setSelectedId={setSelectedId}
-              selectedId={selectedId}
-              setTotalLists={setTotalLists}
-              totalLists={totalLists}
-            />
-            <SearchSection
-              setSelectedListId={setSelectedListId}
-              setDiscoverBtn={setDiscoverBtn}
-              setReadMore={setReadMore}
-              offset={offsetSearch}
-              setOffSet={setOffSetSearch}
-              obj={{ subscriberId: user._id }}
-            />
+            {!listSearch && (
+              <SliderSection
+                heading="Subscribed Lists"
+                data={userFollowedLists}
+                totalList={totalPopularLists}
+                setSelectedListId={setSelectedListId}
+                setDiscoverBtn={setDiscoverBtn}
+                setReadMore={setReadMore}
+                offset={offsetPopular}
+                setOffSet={setOffSetPopular}
+                loader={loader}
+                setLoader={setLoader}
+                modal={displayTrendingModel}
+                setModal={setDisplayTrendingModel}
+                setSelectedId={setSelectedId}
+                selectedId={selectedId}
+                setTotalLists={setTotalLists}
+                totalLists={totalLists}
+              />
+            )}
+            {listSearch && (
+              <SearchSection
+                setSelectedListId={setSelectedListId}
+                setDiscoverBtn={setDiscoverBtn}
+                setReadMore={setReadMore}
+                offset={offsetSearch}
+                setOffSet={setOffSetSearch}
+                obj={{ subscriberId: user._id }}
+              />
+            )}
           </TabPanel>
           <TabPanel index={1}>
-            <SliderSection
-              heading=""
-              data={userCreatedLists}
-              totalList={totalPopularLists}
-              setSelectedListId={setSelectedListId}
-              setDiscoverBtn={setDiscoverBtn}
-              setReadMore={setReadMore}
-              offset={offsetPopular}
-              setOffSet={setOffSetPopular}
-              loader={loader}
-              setLoader={setLoader}
-              modal={displayTrendingModel}
-              setModal={setDisplayTrendingModel}
-              setSelectedId={setSelectedId}
-              selectedId={selectedId}
-              setTotalLists={setTotalLists}
-              totalLists={totalLists}
-            />
-            <SearchSection
-              setSelectedListId={setSelectedListId}
-              setDiscoverBtn={setDiscoverBtn}
-              setReadMore={setReadMore}
-              offset={offsetSearch}
-              setOffSet={setOffSetSearch}
-              obj={{ userId: user._id }}
-            />
+            {!listSearch && (
+              <SliderSection
+                heading="My Lists"
+                data={userCreatedLists}
+                totalList={totalPopularLists}
+                setSelectedListId={setSelectedListId}
+                setDiscoverBtn={setDiscoverBtn}
+                setReadMore={setReadMore}
+                offset={offsetPopular}
+                setOffSet={setOffSetPopular}
+                loader={loader}
+                setLoader={setLoader}
+                modal={displayTrendingModel}
+                setModal={setDisplayTrendingModel}
+                setSelectedId={setSelectedId}
+                selectedId={selectedId}
+                setTotalLists={setTotalLists}
+                totalLists={totalLists}
+              />
+            )}
+            {listSearch && (
+              <SearchSection
+                setSelectedListId={setSelectedListId}
+                setDiscoverBtn={setDiscoverBtn}
+                setReadMore={setReadMore}
+                offset={offsetSearch}
+                setOffSet={setOffSetSearch}
+                obj={{ userId: user._id }}
+              />
+            )}
           </TabPanel>
           <TabPanel index={2}>
-            <SliderSection
-              heading="Most Popular"
-              data={popularLists}
-              totalList={totalPopularLists}
-              setSelectedListId={setSelectedListId}
-              setDiscoverBtn={setDiscoverBtn}
-              setReadMore={setReadMore}
-              offset={offsetPopular}
-              setOffSet={setOffSetPopular}
-              loader={loader}
-              setLoader={setLoader}
-              modal={displayTrendingModel}
-              setModal={setDisplayTrendingModel}
-              setSelectedId={setSelectedId}
-              selectedId={selectedId}
-              setTotalLists={setTotalLists}
-              totalLists={totalLists}
-            />
-            <SearchSection
-              setSelectedListId={setSelectedListId}
-              setDiscoverBtn={setDiscoverBtn}
-              setReadMore={setReadMore}
-              offset={offsetSearch}
-              setOffSet={setOffSetSearch}
-              obj={{}}
-            />
+            {!listSearch && !popularLoading && popularLists.length && (
+              <SliderSection
+                heading="Most Popular"
+                data={popularLists}
+                totalList={totalPopularLists}
+                setSelectedListId={setSelectedListId}
+                setDiscoverBtn={setDiscoverBtn}
+                setReadMore={setReadMore}
+                offset={offsetPopular}
+                setOffSet={setOffSetPopular}
+                loader={loader}
+                setLoader={setLoader}
+                modal={displayTrendingModel}
+                setModal={setDisplayTrendingModel}
+                setSelectedId={setSelectedId}
+                selectedId={selectedId}
+                setTotalLists={setTotalLists}
+                totalLists={totalLists}
+              />
+            )}
+            {listSearch && (
+              <SearchSection
+                setSelectedListId={setSelectedListId}
+                setDiscoverBtn={setDiscoverBtn}
+                setReadMore={setReadMore}
+                offset={offsetSearch}
+                setOffSet={setOffSetSearch}
+                obj={{}}
+              />
+            )}
+            {(popularLoading || userCreatedLoading) && !listSearch && (
+              <div style={{ textAlign: "center" }}>
+                <ValueLoader />
+              </div>
+            )}
           </TabPanel>
         </Tabs>
       </TopContent>

@@ -34,7 +34,6 @@ const UserMessageContent = styled.div`
   display: flex;
   padding: 0;
   flex-direction: column;
-  border-bottom: 1px solid #fff;
   @media (max-width: 767px) {
     justify-content: flex-start;
     align-items: flex-start;

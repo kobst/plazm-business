@@ -54,8 +54,12 @@ import DiscoverList from "../../../Consumer/DiscoverList";
 import ListTab from "./ListTab";
 import PanelContent from "../Panel-Content/PanelContent";
 
+import ValueLoader from "../../../../utils/loader";
+import CompassIconWhite from "../../../../images/compass-white.png";
 import CompassIcon from "../../../../images/compass.svg";
+import HomeIconWhite from "../../../../images/home-white.png";
 import HomeIcon from "../../../../images/home.svg";
+import BellIconWhite from "../../../../images/bell-white.png";
 import BellIcon from "../../../../images/bell.svg";
 import { BsGrid } from "react-icons/bs";
 
@@ -301,7 +305,10 @@ const SideBarTabs = ({
             >
               <div className="item">
                 {/* <FiGlobe className="sidebar-icon"/> */}
-                <img src={CompassIcon} className="sidebar-icon" />
+                <img
+                  src={selectedTab === 1 ? CompassIconWhite : CompassIcon}
+                  className="sidebar-icon"
+                />
                 <span className="sidebar-text">Explore</span>
               </div>
             </Tab>
@@ -322,7 +329,10 @@ const SideBarTabs = ({
             >
               <div className="item">
                 {/* <FiHome className="sidebar-icon" /> */}
-                <img src={HomeIcon} className="sidebar-icon" />
+                <img
+                  src={selectedTab === 2 ? HomeIconWhite : HomeIcon}
+                  className="sidebar-icon"
+                />
                 <span className="sidebar-text">Home</span>
               </div>
             </Tab>
@@ -342,7 +352,10 @@ const SideBarTabs = ({
             >
               <div className="item">
                 {/* <FiBell className="sidebar-icon" /> */}
-                <img src={BellIcon} className="sidebar-icon" />
+                <img
+                  src={selectedTab === 3 ? BellIconWhite : BellIcon}
+                  className="sidebar-icon"
+                />
                 <div className="NotificationDot"></div>
                 <span className="sidebar-text">Notifications</span>
               </div>
@@ -383,13 +396,15 @@ const SideBarTabs = ({
             >
               <div className="item">
                 <BsGrid className="sidebar-icon" />
-                <span className="sidebar-text">Lists</span>
+                <span className="sidebar-text">Subscriptions</span>
               </div>
             </Tab>
           </TabList>
         </Tabs>
 
-        {/* <SubcriptionHeading>Subscriptions</SubcriptionHeading> */}
+        {listData.length > 0 && (
+          <SubcriptionHeading>{expanded && "Subscriptions"}</SubcriptionHeading>
+        )}
 
         <div className="list-scroll">
           {listData.length > 0 ? (
@@ -404,12 +419,17 @@ const SideBarTabs = ({
           ) : (
             <h6></h6>
           )}
-          {listLoader && <div>Loading</div>}
+          {listLoader && (
+            <div className="sidebar-loader">
+              <ValueLoader />
+            </div>
+          )}
           {totalList > listData.length && !listLoader && (
             <button
               onClick={() => {
                 setPage((prev) => prev + 1);
               }}
+              className="loadMore"
             >
               Load
             </button>

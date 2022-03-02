@@ -373,7 +373,7 @@ const UserMessageEvents = ({
                   <span>|</span>
                   <ListAuthorName>
                     Added on{" "}
-                    {moment(eventData.createdAt).format("MMM DD,YYYY, hh:MM a")}{" "}
+                    {moment(eventData.createdAt).format("MMM DD, YYYY, hh:MMa")}{" "}
                     EDT{" "}
                   </ListAuthorName>
                 </ListInfo>
@@ -382,22 +382,13 @@ const UserMessageEvents = ({
             <SubHeading>{eventData.title}</SubHeading>
             <ChatInput>
               {findDesc(
-                eventData.data.length > 225 && !readMore
-                  ? eventData.data.substring(0, 225)
+                eventData.data.length > 200 && !readMore
+                  ? eventData.data.substring(0, 200)
                   : eventData.data,
                 eventData.taggedUsers,
                 eventData.taggedLists
               )}
-              {!readMore && eventData.data.length > 225 && (
-                <b
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    setReadMore((prev) => !prev);
-                  }}
-                >
-                  ...Read More
-                </b>
-              )}
+              {!readMore && eventData.data.length > 200 && <b>...</b>}
             </ChatInput>
             {(!Array.isArray(eventData.recurring) ||
               eventData.recurring == 8) && (
@@ -457,29 +448,31 @@ const UserMessageEvents = ({
               />
             </EventBigImage> */}
 
-            <LikeBar
-              type="comment"
-              eventId={eventData._id}
-              date={new Date(eventData.createdAt)}
-              totalLikes={eventData.likes ? eventData.likes.length : 0}
-              totalComments={
-                eventData.totalComments.length > 0
-                  ? eventData.totalComments[0].totalCount
-                  : 0
-              }
-              setDisplayEventComments={setDisplayEventComments}
-              displayEventComments={displayEventComments}
-              postLikes={eventData.likes || []}
-              displayEventCommentInput={displayEventCommentInput}
-              setDisplayEventCommentInput={setDisplayEventCommentInput}
-              flag={flag}
-              setFlag={setFlag}
-              business={businessInfo}
-              commentsRef={commentsRef}
-              setSearchIndex={setSearchIndex}
-              myFeedView={myFeedView}
-              eventData={eventData}
-            />
+            {readMore && (
+              <LikeBar
+                type="comment"
+                eventId={eventData._id}
+                date={new Date(eventData.createdAt)}
+                totalLikes={eventData.likes ? eventData.likes.length : 0}
+                totalComments={
+                  eventData.totalComments.length > 0
+                    ? eventData.totalComments[0].totalCount
+                    : 0
+                }
+                setDisplayEventComments={setDisplayEventComments}
+                displayEventComments={displayEventComments}
+                postLikes={eventData.likes || []}
+                displayEventCommentInput={displayEventCommentInput}
+                setDisplayEventCommentInput={setDisplayEventCommentInput}
+                flag={flag}
+                setFlag={setFlag}
+                business={businessInfo}
+                commentsRef={commentsRef}
+                setSearchIndex={setSearchIndex}
+                myFeedView={myFeedView}
+                eventData={eventData}
+              />
+            )}
           </ProfileNameWrap>
         </ProfileNameHeader>
       </UserMessageContent>

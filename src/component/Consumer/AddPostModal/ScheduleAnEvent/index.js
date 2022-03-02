@@ -12,7 +12,6 @@ import moment from "moment";
 const EventWrap = styled.div`
   width: 100%;
   position: relative;
-  margin: 0 0 15px;
   display: flex;
   flex-flow: row wrap;
   form {

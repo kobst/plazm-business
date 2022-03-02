@@ -30,6 +30,7 @@ const BottomBarLikes = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
+  margin-top: 10px;
   @media (max-width: 767px) {
     align-items: flex-start;
   }
