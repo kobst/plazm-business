@@ -129,6 +129,7 @@ const days = [
 ];
 
 const UserMessage = ({ postData }) => {
+  console.log({ postData });
   const dispatch = useDispatch();
   const [displayComments, setDisplayComments] = useState(false);
   const loadingComments = useSelector(
@@ -381,6 +382,7 @@ const UserMessage = ({ postData }) => {
         <UserMessageContent>
           <ProfileNameHeader>
             <ProfileNameWrap>
+              {console.log(postData.postDetails.list)}
               {postData.postDetails.list._id !== null ? (
                 <InnerListBanner>
                   <img
@@ -420,59 +422,6 @@ const UserMessage = ({ postData }) => {
                 )}
               </FeedDescription>
 
-              {/* TODO: Need to remove "
-              postData.postDetails.recurring.length" 
-              condition placed here due to previous schema*/}
-              {postData.postDetails.recurring != 8 &&
-                postData.postDetails.eventSchedule &&
-                postData.postDetails.recurring.length > 0 && (
-                  <>
-                    <DaysBar days={postData.postDetails.recurring} />
-
-                    <TimeBar
-                      startTime={
-                        new Date(postData.postDetails.eventSchedule.start_time)
-                      }
-                      endTime={
-                        new Date(postData.postDetails.eventSchedule.end_time)
-                      }
-                    />
-                  </>
-                )}
-              {/* TODO: Need to remove 
-              "postData.postDetails.recurring.length" 
-              condition placed here due to previous schema*/}
-              {(postData.postDetails.recurring == 8 ||
-                postData.postDetails.recurring.length === 0) &&
-                postData.postDetails.eventSchedule && (
-                  <>
-                    {" "}
-                    <DateBar
-                      startDay={
-                        days[
-                          new Date(
-                            postData.postDetails.eventSchedule.start_time
-                          ).getDay()
-                        ]
-                      }
-                      endDay={
-                        days[
-                          new Date(
-                            postData.postDetails.eventSchedule.end_time
-                          ).getDay()
-                        ]
-                      }
-                    />
-                    <TimeBar
-                      startTime={
-                        new Date(postData.postDetails.eventSchedule.start_time)
-                      }
-                      endTime={
-                        new Date(postData.postDetails.eventSchedule.end_time)
-                      }
-                    />
-                  </>
-                )}
               {postData.postDetails.media.length > 0 && (
                 <FeedBigImage>
                   <img src={postData.postDetails.media[0]} alt="" />

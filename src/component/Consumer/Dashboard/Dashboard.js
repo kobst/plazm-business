@@ -65,7 +65,6 @@ const Dashboard = () => {
   const gridMode = useStore((state) => state.gridMode);
   const view = useStore((state) => state.view);
   const detailId = useStore((state) => state.detailId);
-  const showSearchBar = useSelector((state) => state.globalSearch.displayBar);
   useEffect(() => {
     if (gridMode) {
       console.log("show grid");
@@ -118,11 +117,6 @@ const Dashboard = () => {
           view === "business_detail") && <GlobalSearch />}
         <GridContainer />
 
-        {showSearchBar && view === "business_detail" && (
-          <BusinessSearch>
-            <GlobalSearchBox type={"Search Feed"} />
-          </BusinessSearch>
-        )}
         {view !== "list_explore" && (
           <>
             <MapView />

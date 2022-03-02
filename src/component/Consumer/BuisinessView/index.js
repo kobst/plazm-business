@@ -49,6 +49,7 @@ const BuisinessView = ({
   // setSelectedListId,
 }) => {
   const loading = useSelector((state) => state.business.loading);
+  const showSearchBar = useSelector((state) => state.globalSearch.displayBar);
   const businessProfile = useSelector((state) => state.business.business);
   const flag = useSelector((state) => state.business.flag);
   const [displayBusinessProfile, setDisplayBusinessProfile] = useState(false);
@@ -84,6 +85,7 @@ const BuisinessView = ({
         </LoaderWrap>
       ) : (
         <BuisinessViewContent>
+          {showSearchBar && <GlobalSearchBox type={"Business Search"} />}
           {businessProfile &&
             businessProfile.length > 0 &&
             (displayBusinessProfile ? (
