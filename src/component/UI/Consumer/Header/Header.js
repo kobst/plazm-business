@@ -22,6 +22,7 @@ import { useSelector } from "react-redux";
 const Header = () => {
   const [tabTitle, setTabTitle] = useState();
   const [coords, setCoords] = useState();
+  const subListTabName = ["Lists Subscribe", "My List", "Discover More"];
   const routeObj = {
     u: "User",
     b: "Business",
@@ -32,6 +33,7 @@ const Header = () => {
     .pathname.split("/")
     .filter((item) => item);
   const selectedTab = useStore((state) => state.tabSelected);
+  const listTabSelected = useStore((state) => state.listTabSelected);
   const selectedList = useStore((state) => state.selectedList);
   const draggedLocation = useStore((state) => state.draggedLocation);
   const sublocality = useStore((state) => state.sublocality);
@@ -46,6 +48,7 @@ const Header = () => {
     }
     if (!gridMode) {
       setGridMode(true);
+      prevRoute.push("/explore");
     }
   };
 
@@ -70,6 +73,9 @@ const Header = () => {
         setTabTitle((prev) => prev);
         break;
     }
+    if (selectedTab !== 1) {
+      setGridMode(false);
+    }
   }, [selectedTab]);
 
   useEffect(() => {
@@ -89,7 +95,7 @@ const Header = () => {
             <img src={BackBtn} />
           </BackArrow>
           <BreadcrumbsText>
-            {history.length === 1 && selectedTab !== -1 ? (
+            {history.length === 1 && selectedTab !== -1 && selectedTab !== 5 ? (
               <span className="crumb-text">{tabTitle}</span>
             ) : (
               <div className="crumb-text">{tabTitle}</div>
@@ -118,6 +124,11 @@ const Header = () => {
                   <span className="crumb-text">{"/ " + selectedList.name}</span>
                 )}
               </Fragment>
+            )}
+            {selectedTab === 5 && (
+              <span className="crumb-text">
+                {"/ " + subListTabName[listTabSelected]}
+              </span>
             )}
           </BreadcrumbsText>
         </BreadcrumbsDiv>

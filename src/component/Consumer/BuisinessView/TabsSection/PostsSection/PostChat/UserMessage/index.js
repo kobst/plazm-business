@@ -36,7 +36,10 @@ import useStore from "../../../../../useState";
 import DaysBar from "../../../EventsSection/PostChat/DaysBar";
 
 const reactStringReplace = require("react-string-replace");
-
+const TitleBarWrap = styled.div`
+  display: flex;
+  width: 100%;
+`;
 const UserMessageContent = styled.div`
   width: 100%;
   position: relative;
@@ -382,13 +385,16 @@ const UserMessage = ({ postData }) => {
           <ProfileNameHeader>
             <ProfileNameWrap>
               {postData.postDetails.list._id !== null ? (
-                <InnerListBanner>
-                  <img
-                    src={listImage}
-                    alt=""
-                    onError={() => setListImage(BannerImg)}
-                  />
-                  <InnerOverlay />
+                <TitleBarWrap>
+                  <InnerListBanner>
+                    <img
+                      src={listImage}
+                      alt=""
+                      onError={() => setListImage(BannerImg)}
+                    />
+                    {/* <InnerOverlay /> */}
+                  </InnerListBanner>
+
                   <ListNameWrap>
                     <ListName>{postData.postDetails.list.name}</ListName>
                     <ListInfo>
@@ -401,13 +407,13 @@ const UserMessage = ({ postData }) => {
                       <ListAuthorName>
                         Added on{" "}
                         {moment(postData.postDetails.createdAt).format(
-                          "MMM DD,YYYY, hh:MM a"
+                          "MMM DD, YYYY, hh:MMa"
                         )}{" "}
                         EDT{" "}
                       </ListAuthorName>
                     </ListInfo>
                   </ListNameWrap>
-                </InnerListBanner>
+                </TitleBarWrap>
               ) : null}
               {postData.postDetails.title && (
                 <SubHeading>{postData.postDetails.title}</SubHeading>
@@ -420,59 +426,6 @@ const UserMessage = ({ postData }) => {
                 )}
               </FeedDescription>
 
-              {/* TODO: Need to remove "
-              postData.postDetails.recurring.length" 
-              condition placed here due to previous schema*/}
-              {postData.postDetails.recurring != 8 &&
-                postData.postDetails.eventSchedule &&
-                postData.postDetails.recurring.length > 0 && (
-                  <>
-                    <DaysBar days={postData.postDetails.recurring} />
-
-                    <TimeBar
-                      startTime={
-                        new Date(postData.postDetails.eventSchedule.start_time)
-                      }
-                      endTime={
-                        new Date(postData.postDetails.eventSchedule.end_time)
-                      }
-                    />
-                  </>
-                )}
-              {/* TODO: Need to remove 
-              "postData.postDetails.recurring.length" 
-              condition placed here due to previous schema*/}
-              {(postData.postDetails.recurring == 8 ||
-                postData.postDetails.recurring.length === 0) &&
-                postData.postDetails.eventSchedule && (
-                  <>
-                    {" "}
-                    <DateBar
-                      startDay={
-                        days[
-                          new Date(
-                            postData.postDetails.eventSchedule.start_time
-                          ).getDay()
-                        ]
-                      }
-                      endDay={
-                        days[
-                          new Date(
-                            postData.postDetails.eventSchedule.end_time
-                          ).getDay()
-                        ]
-                      }
-                    />
-                    <TimeBar
-                      startTime={
-                        new Date(postData.postDetails.eventSchedule.start_time)
-                      }
-                      endTime={
-                        new Date(postData.postDetails.eventSchedule.end_time)
-                      }
-                    />
-                  </>
-                )}
               {postData.postDetails.media.length > 0 && (
                 <FeedBigImage>
                   <img src={postData.postDetails.media[0]} alt="" />

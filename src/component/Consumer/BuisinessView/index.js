@@ -32,6 +32,12 @@ const LoaderWrap = styled.div`
   }
 `;
 
+const BusinessWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
+
 const BuisinessView = ({
   setDisplayTab,
   // profile,
@@ -49,6 +55,7 @@ const BuisinessView = ({
   // setSelectedListId,
 }) => {
   const loading = useSelector((state) => state.business.loading);
+  const showSearchBar = useSelector((state) => state.globalSearch.displayBar);
   const businessProfile = useSelector((state) => state.business.business);
   const flag = useSelector((state) => state.business.flag);
   const [displayBusinessProfile, setDisplayBusinessProfile] = useState(false);
@@ -83,50 +90,59 @@ const BuisinessView = ({
           <ValueLoader />
         </LoaderWrap>
       ) : (
-        <BuisinessViewContent>
-          {businessProfile &&
-            businessProfile.length > 0 &&
-            (displayBusinessProfile ? (
-              <BuisinessProfileDetails
-                displayBusinessProfile={displayBusinessProfile}
-                setDisplayBusinessProfile={setDisplayBusinessProfile}
-                setDisplayTab={setDisplayTab}
-                // searchIndex={searchIndex}
-                // setTabIndex={setTabIndex}
-                // setSearchIndex={setSearchIndex}
-                // myFeedIndex={myFeedIndex}
-                // setMyFeedIndex={setMyFeedIndex}
-                // favoriteIndex={favoriteIndex}
-                // setFavoriteIndex={setFavoriteIndex}
-                // listIndex={listIndex}
-                // setListIndex={setListIndex}
-              />
-            ) : (
-              <BuisinessHeader
-                setDisplayTab={setDisplayTab}
-                setDisplayBusinessProfile={setDisplayBusinessProfile}
-                // searchIndex={searchIndex}
-                // setTabIndex={setTabIndex}
-                // setSearchIndex={setSearchIndex}
-                // myFeedIndex={myFeedIndex}
-                // setMyFeedIndex={setMyFeedIndex}
-                // listIndex={listIndex}
-                // setListIndex={setListIndex}
-                // favoriteIndex={favoriteIndex}
-                // setFavoriteIndex={setFavoriteIndex}
-              />
-            ))}
-          {!displayBusinessProfile &&
-            !loading &&
-            businessProfile &&
-            businessProfile.length > 0 && (
-              <TabsSection
-                // profile={profile}
-                businessId={businessId}
-                // setSelectedListId={setSelectedListId}
-              />
+        <BusinessWrap>
+          <div style={{ width: "100%" }}>
+            {showSearchBar && (
+              <GlobalSearchBox setOffset={() => {}} type={"Business Search"} />
             )}
-        </BuisinessViewContent>
+          </div>
+          <div style={{ width: "100%" }}>
+            <BuisinessViewContent>
+              {businessProfile &&
+                businessProfile.length > 0 &&
+                (displayBusinessProfile ? (
+                  <BuisinessProfileDetails
+                    displayBusinessProfile={displayBusinessProfile}
+                    setDisplayBusinessProfile={setDisplayBusinessProfile}
+                    setDisplayTab={setDisplayTab}
+                    // searchIndex={searchIndex}
+                    // setTabIndex={setTabIndex}
+                    // setSearchIndex={setSearchIndex}
+                    // myFeedIndex={myFeedIndex}
+                    // setMyFeedIndex={setMyFeedIndex}
+                    // favoriteIndex={favoriteIndex}
+                    // setFavoriteIndex={setFavoriteIndex}
+                    // listIndex={listIndex}
+                    // setListIndex={setListIndex}
+                  />
+                ) : (
+                  <BuisinessHeader
+                    setDisplayTab={setDisplayTab}
+                    setDisplayBusinessProfile={setDisplayBusinessProfile}
+                    // searchIndex={searchIndex}
+                    // setTabIndex={setTabIndex}
+                    // setSearchIndex={setSearchIndex}
+                    // myFeedIndex={myFeedIndex}
+                    // setMyFeedIndex={setMyFeedIndex}
+                    // listIndex={listIndex}
+                    // setListIndex={setListIndex}
+                    // favoriteIndex={favoriteIndex}
+                    // setFavoriteIndex={setFavoriteIndex}
+                  />
+                ))}
+              {!displayBusinessProfile &&
+                !loading &&
+                businessProfile &&
+                businessProfile.length > 0 && (
+                  <TabsSection
+                    // profile={profile}
+                    businessId={businessId}
+                    // setSelectedListId={setSelectedListId}
+                  />
+                )}
+            </BuisinessViewContent>
+          </div>
+        </BusinessWrap>
       )}
     </>
   );

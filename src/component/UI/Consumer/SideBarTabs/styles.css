@@ -232,20 +232,16 @@
   top: 24px;
 }
 .tool-tip {
-  background: #ffffff;
+  background-color: #ffffff !important;
   border: 1px solid #a9a9a9;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
   font-family: Roboto;
   font-style: normal;
   font-weight: normal;
   font-size: 10px;
   line-height: 12px;
-  color: #595959;
-  padding: 7px;
-  position: absolute;
+  color: #595959 !important;
   z-index: 1;
   max-width: 400px;
-  left: 100px;
 }
 .NotificationDot {
   width: 5px;

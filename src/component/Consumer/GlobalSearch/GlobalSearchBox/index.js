@@ -12,18 +12,18 @@ import {
   setSideFiltersHomeSearch,
   setEnterClicked,
 } from "../../../../reducers/myFeedReducer";
+import { checkBusiness } from "../../../../reducers/businessReducer";
+import { useLocation } from "react-router-dom";
 
 const ErrorDiv = styled.div`
   color: #ff0000;
   font-weight: 600;
   font-size: 12px;
   margin: 0;
-  margin-bottom: 10px;
-  margin-left: 20px;
-  padding: 10px 0 0 172px;
-  @media (max-width: 767px) {
-    padding: 10px 0 0 0px;
-  }
+  margin-bottom: 15px;
+  margin-left: 0;
+  width: 100%;
+  text-align: center;
 `;
 
 const GlobalSearchInputWrap = styled.div`
@@ -60,12 +60,21 @@ const GlobalSearchInputWrap = styled.div`
 
 const GlobalSearchBox = ({ setOffset, type }) => {
   const dispatch = useDispatch();
+
+  const history = useLocation()
+    .pathname.split("/")
+    .filter((item) => item);
   const [search, setSearch] = useState("");
   const loader = useSelector((state) => state.myFeed.loading);
   const [searchError, setSearchError] = useState("");
   // const [uploadMenu, setUploadMenu] = useState(false);
   const searchData = useSelector((state) => state.myFeed.searchData);
   const filterClosest = useSelector((state) => state.myFeed.filterByClosest);
+  const filters = useSelector((state) => state.business.filters);
+  const user = useSelector((state) => state.user.user);
+  const sideFilterForLikes = useSelector(
+    (state) => state.business.filterByMostLiked
+  );
   const updatedAtFilter = useSelector(
     (state) => state.myFeed.filterByUpdatedAt
   );
@@ -74,6 +83,7 @@ const GlobalSearchBox = ({ setOffset, type }) => {
     return () => {
       dispatch(setSearchData(""));
       dispatch(setDisplayBar(false));
+      setSearch("");
     };
   }, []);
   useEffect(() => {
@@ -102,6 +112,32 @@ const GlobalSearchBox = ({ setOffset, type }) => {
             dispatch(setEnterClicked(true));
             dispatch(HomeSearch(obj));
             break;
+          case "Business Search":
+            dispatch(
+              checkBusiness({
+                businessId: history.at(-1),
+                filters: {
+                  PostsByMe: filters.PostsByMe
+                    ? filters.PostsByMe
+                    : !filters.Business &&
+                      !filters.PostsByMe &&
+                      !filters.MySubscriptions &&
+                      !filters.Others
+                    ? true
+                    : false,
+                  Business: false,
+                  MySubscriptions: filters.MySubscriptions
+                    ? filters.MySubscriptions
+                    : false,
+                  Others: filters.Others ? filters.Others : false,
+                },
+                value: 0,
+                ownerId: user ? user._id : null,
+                sideFilters: { likes: sideFilterForLikes },
+                search: search,
+              })
+            );
+            break;
         }
       } else if (search.length >= 0 && search.length < 4) {
         setSearchError(error.SEARCH_ERROR);
@@ -126,8 +162,8 @@ const GlobalSearchBox = ({ setOffset, type }) => {
         <button>
           <img src={SearchIcon} />
         </button>
-        {searchError !== "" ? <ErrorDiv>{searchError}</ErrorDiv> : null}
       </GlobalSearchInputWrap>
+      {searchError !== "" ? <ErrorDiv>{searchError}</ErrorDiv> : null}
     </>
   );
 };

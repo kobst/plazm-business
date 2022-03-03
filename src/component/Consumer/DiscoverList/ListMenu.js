@@ -59,6 +59,12 @@ const TopContent = styled.div`
       padding: 60px 10px 10px 0px;
     }
   }
+  .react-tabs__tab-panel {
+    padding: 0 60px;
+    @media (max-width: 767px) {
+      padding: 0 10px;
+    }
+  }
   .LeftTabsList {
     display: flex;
     height: 100%;
@@ -93,6 +99,13 @@ const TopContent = styled.div`
     border: 0;
     top: 0;
   }
+  .react-tabs__tab:focus {
+    box-shadow: none !important;
+  }
+
+  .react-tabs__tab:focus:after {
+    display: none;
+  }
 `;
 
 const ListMenu = (
@@ -111,6 +124,7 @@ const ListMenu = (
   const totalTrendingList = useSelector(
     (state) => state.list.totalTrendingList
   );
+  const setListTabSelected = useStore((state) => state.setListTabSelected);
   const popularLists = useSelector((state) => state.list.popularLists);
   const popularLoading = useSelector((state) => state.list.loadingPopularLists);
   const totalPopularLists = useSelector(
@@ -202,6 +216,7 @@ const ListMenu = (
     dispatch(setListSearch(""));
     setTabIndex(index);
     setSelectedTab(index);
+    setListTabSelected(index);
   };
 
   return (
