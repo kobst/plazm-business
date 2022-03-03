@@ -33,9 +33,9 @@
   display: block;
   overflow: hidden;
   box-shadow: 0 0 10px 10px #4c146c;
+  background: #221e45;
   z-index: 9;
 }
-
 
 .map-overlay {
   position: absolute;

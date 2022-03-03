@@ -36,7 +36,10 @@ import useStore from "../../../../../useState";
 import DaysBar from "../../../EventsSection/PostChat/DaysBar";
 
 const reactStringReplace = require("react-string-replace");
-
+const TitleBarWrap = styled.div`
+  display: flex;
+  width: 100%;
+`;
 const UserMessageContent = styled.div`
   width: 100%;
   position: relative;
@@ -129,7 +132,6 @@ const days = [
 ];
 
 const UserMessage = ({ postData }) => {
-  console.log({ postData });
   const dispatch = useDispatch();
   const [displayComments, setDisplayComments] = useState(false);
   const loadingComments = useSelector(
@@ -382,15 +384,17 @@ const UserMessage = ({ postData }) => {
         <UserMessageContent>
           <ProfileNameHeader>
             <ProfileNameWrap>
-              {console.log(postData.postDetails.list)}
               {postData.postDetails.list._id !== null ? (
-                <InnerListBanner>
-                  <img
-                    src={listImage}
-                    alt=""
-                    onError={() => setListImage(BannerImg)}
-                  />
-                  <InnerOverlay />
+                <TitleBarWrap>
+                  <InnerListBanner>
+                    <img
+                      src={listImage}
+                      alt=""
+                      onError={() => setListImage(BannerImg)}
+                    />
+                    {/* <InnerOverlay /> */}
+                  </InnerListBanner>
+
                   <ListNameWrap>
                     <ListName>{postData.postDetails.list.name}</ListName>
                     <ListInfo>
@@ -403,13 +407,13 @@ const UserMessage = ({ postData }) => {
                       <ListAuthorName>
                         Added on{" "}
                         {moment(postData.postDetails.createdAt).format(
-                          "MMM DD,YYYY, hh:MM a"
+                          "MMM DD, YYYY, hh:MMa"
                         )}{" "}
                         EDT{" "}
                       </ListAuthorName>
                     </ListInfo>
                   </ListNameWrap>
-                </InnerListBanner>
+                </TitleBarWrap>
               ) : null}
               {postData.postDetails.title && (
                 <SubHeading>{postData.postDetails.title}</SubHeading>

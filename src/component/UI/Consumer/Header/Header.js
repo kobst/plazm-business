@@ -48,6 +48,7 @@ const Header = () => {
     }
     if (!gridMode) {
       setGridMode(true);
+      prevRoute.push("/explore");
     }
   };
 
@@ -71,6 +72,9 @@ const Header = () => {
       case -1:
         setTabTitle((prev) => prev);
         break;
+    }
+    if (selectedTab !== 1) {
+      setGridMode(false);
     }
   }, [selectedTab]);
 

@@ -49,6 +49,12 @@ const TopContent = styled.div`
     align-items: center;
     padding: 0 20px 0 60px;
   }
+  .react-tabs__tab-panel {
+    padding: 0 60px;
+    @media (max-width: 767px) {
+      padding: 0 10px;
+    }
+  }
   .LeftTabsList {
     display: flex;
     height: 100%;
@@ -70,6 +76,13 @@ const TopContent = styled.div`
     color: #ffffff;
     border-radius: 0;
     border: 0;
+  }
+  .react-tabs__tab:focus {
+    box-shadow: none !important;
+  }
+
+  .react-tabs__tab:focus:after {
+    display: none;
   }
 `;
 
@@ -102,7 +115,7 @@ const ListMenu = (
   const loading = useSelector((state) => state.list.loadingSearchList);
   const listSearch = useSelector((state) => state.list.listSearch);
 
-  const [selectedTab, setSelectedTab] = useState(1);
+  const [selectedTab, setSelectedTab] = useState(2);
   const [tabIndex, setTabIndex] = useState();
   const userCreatedLists = useSelector((state) => state.list.userLists);
   const userCreatedLoading = useSelector(

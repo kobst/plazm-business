@@ -4,8 +4,8 @@
 const getPlace = (obj) => {
   const graphQl = {
     query: `
-          query SearchPlacesByUserId($id: ID!, $value: Int, $filters: filterInput, $ownerId:ID, $sideFilters: sideFilterInput){
-            searchPlacesByUserId(input: {id:$id, value:$value, filters:$filters, ownerId:$ownerId, sideFilters: $sideFilters}) {
+          query SearchPlacesByUserId($id: ID!, $value: Int, $filters: filterInput, $ownerId:ID, $sideFilters: sideFilterInput, $search: String){
+            searchPlacesByUserId(input: {id:$id, value:$value, filters:$filters, ownerId:$ownerId, sideFilters: $sideFilters, search: $search}) {
               message
               success
               totalPosts
@@ -121,6 +121,7 @@ const getPlace = (obj) => {
       filters: obj.filters,
       ownerId: obj.ownerId || null,
       sideFilters: obj.sideFilters || { likes: false, recent: true },
+      search: obj?.search || "",
     },
   };
   return graphQl;
