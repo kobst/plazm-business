@@ -12,6 +12,7 @@ import {
   checkMime,
   replaceBucket,
 } from "../../../../utilities/checkResizedImage";
+import ReactTooltip from "react-tooltip";
 
 const ListTab = ({
   data,
@@ -78,8 +79,10 @@ const ListTab = ({
         className={selected ? "listTab-item selected" : "listTab-item"}
         onMouseOver={handelHover}
         onMouseLeave={handelLeave}
+        data-tip={`${data.name}`}
       >
-        {hover && <div className="tool-tip">{data.name}</div>}
+        <ReactTooltip className="tool-tip" arrowColor="#fff" place="right" />
+        {/* {hover && <div className="tool-tip">{data.name}</div>} */}
         <img
           src={image}
           className="listTab-icon"
