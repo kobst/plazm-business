@@ -287,15 +287,19 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   const [offset, setOffSet] = useState(0);
   const [flag, setFlag] = useState(true);
 
-  const selectedList = useStore((state) => state.selectedList);
-  const selectedListId = useStore((state) => state.selectedListId);
-  const setSelectedListId = useStore((state) => state.setSelectedListId);
-  const setSelectedListName = useStore((state) => state.setSelectedListName);
-  const setListIndex = useStore((state) => state.setListIndex);
-  const setFavoriteIndex = useStore((state) => state.setFavoriteIndex);
-  const setDiscoverBtn = useStore((state) => state.setDiscoverBtn);
-  const readMore = useStore((state) => state.readMore);
-  const gridMode = useStore((state) => state.gridMode);
+
+  const selectedList = useStore((state) => state.selectedList)
+  const selectedListId = useStore((state) => state.selectedListId)
+  const setSelectedListId = useStore((state) => state.setSelectedListId)
+  const setSelectedListName = useStore((state) => state.setSelectedListName)
+  const setListIndex = useStore((state) => state.setListIndex)
+  const setFavoriteIndex = useStore((state) => state.setFavoriteIndex)
+  const setDiscoverBtn = useStore((state) => state.setDiscoverBtn)
+  const readMore = useStore((state) => state.readMore)
+  const gridMode = useStore((state) => state.gridMode)
+
+  const orderedPlaces = useStore((state) => state.orderedPlaces)
+
 
   const [image, setImage] = useState(
     selectedList && selectedList.media.length > 0
@@ -550,6 +554,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
                   ) : (
                     <NoData>No Posts In A List To Display</NoData>
                   )}
+
                 </ListingOptionWrap>
               </InfiniteScroll>
             </div>

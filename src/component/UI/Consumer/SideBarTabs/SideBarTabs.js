@@ -160,6 +160,7 @@ const SideBarTabs = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
+
   /** to fetch all the user created and subscribed lists */
   useEffect(() => {
     if (user && user._id) {

@@ -141,12 +141,12 @@ const DisplayPostInAList = ({
   const setListIndex = useStore((state) => state.setListIndex)
 
 
-
-  const [image, setImage] = useState(
-    data.business[0].default_image_url
-      ? data.business[0].default_image_url
-      : ProfileImg
-  );
+const [image, setImage] = useState(ProfileImg)
+  // const [image, setImage] = useState(
+  //   data.business[0].default_image_url
+  //     ? data.business[0].default_image_url
+  //     : ProfileImg
+  // );
 
   useEffect(() => {
     if (data.business[0].default_image_url) {

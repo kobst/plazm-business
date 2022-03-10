@@ -123,6 +123,10 @@ const MyFeed = () => {
   const draggedLocation = useStore((state) => state.draggedLocation);
   const gridMode = useStore((state) => state.gridMode);
 
+
+  const orderedPlaces = useStore((state) => state.orderedPlaces)
+ 
+
   const showSearchBar = useSelector((state) => state.globalSearch.displayBar);
 
   useEffect(() => {
