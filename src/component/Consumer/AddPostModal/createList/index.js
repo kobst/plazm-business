@@ -301,12 +301,12 @@ const CreateListModel = ({
               <BackButton onClick={(e) => cancelButton(e)} disabled={loader}>
                 Cancel
               </BackButton>
-              {!loader && (
+              {loader && (
                 <div style={{ marginTop: "3px" }}>
                   <ValueLoader />
                 </div>
               )}
-              {loader && (
+              {!loader && (
                 <SaveButton type="submit" disabled={loader}>
                   Create
                 </SaveButton>

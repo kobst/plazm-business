@@ -232,6 +232,7 @@ const SideBarTabs = ({
   const setTab = (index) => {
     setTabIndex(index);
     setSelectedTab(index);
+    dispatch(setSearchData(""));
   };
 
   const handleListTabClick = (data) => {

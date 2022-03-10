@@ -61,6 +61,7 @@ export const RightSearchWrap = styled.div`
   max-width: 285px;
   width: 100%;
   height: 26px;
+  position: relative;
   @media (max-width: 767px) {
     max-width: 200px;
   }
@@ -494,6 +495,12 @@ export const ErrorDiv = styled.div`
   margin-left: 20px;
   float: right;
   margin-right: 30px;
+  &.list-error {
+    position: absolute;
+    right: 5px;
+    top: 7px;
+    font-size: 10px;
+  }
 `;
 
 export const ListWraper = styled.div`

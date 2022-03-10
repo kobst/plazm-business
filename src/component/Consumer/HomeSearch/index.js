@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import BusinessListing from "./BusinessListing";
 import {
   clearMyFeedData,
+  setLoading,
   setSideFiltersHomeSearch,
 } from "../../../reducers/myFeedReducer";
 import ValueLoader from "../../../utils/loader";
@@ -77,6 +78,7 @@ const HomeSearch = ({
   useEffect(() => {
     if (locationState) {
       setLoader(true);
+      dispatch(setLoading())
       if (locationState === "prompt") {
         setTimeout(() => {
           setLoader(false);

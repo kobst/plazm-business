@@ -219,6 +219,11 @@ const ListMenu = (
     setListTabSelected(index);
   };
 
+  const handleSearchChange = (e) => {
+    setSearchError("");
+    setSearch(e.target.value);
+  };
+
   return (
     <>
       <TopContent>
@@ -233,11 +238,14 @@ const ListMenu = (
               <Input
                 value={search}
                 onKeyPress={(event) => searchListsData(event)}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={handleSearchChange}
                 className="SearchSubscriptionsInput"
                 placeholder="Search Lists"
                 disabled={loading}
               />
+              {searchError && (
+                <ErrorDiv className="list-error">{searchError}</ErrorDiv>
+              )}
             </RightSearchWrap>
           </TabList>
           <TabPanel index={0}>
