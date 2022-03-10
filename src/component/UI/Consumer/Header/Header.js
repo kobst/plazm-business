@@ -48,7 +48,7 @@ const Header = () => {
     }
     if (!gridMode) {
       setGridMode(true);
-      prevRoute.push("/explore");
+      // prevRoute.push("/explore");
     }
   };
   
@@ -73,9 +73,9 @@ const Header = () => {
         setTabTitle((prev) => prev);
         break;
     }
-    if (selectedTab !== 1) {
-      setGridMode(false);
-    }
+    // if (selectedTab !== 1) {
+    //   setGridMode(false);
+    // }
   }, [selectedTab]);
 
   useEffect(() => {
