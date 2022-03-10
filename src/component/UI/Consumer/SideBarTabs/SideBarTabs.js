@@ -153,7 +153,10 @@ const SideBarTabs = ({
           const data = await dispatch(fetchUserCreatedAndFollowedList(obj));
           const res = await unwrapResult(data);
           if (res) {
-            // setFlag(false);
+            console.log("list data incoming")
+          } else {
+            console.log("NO LIST DATA ---")
+
           }
         };
         fetchListData();

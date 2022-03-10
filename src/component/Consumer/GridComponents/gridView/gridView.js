@@ -21,6 +21,44 @@ extend({ MapControls })
 
 const _hexArray = hexSlotFunction()
 
+const HexHighlight = (props) => {
+    // works
+    const color1 = new THREE.Color("rgb(225,109,245)")
+    const color2 = new THREE.Color("rgb(78,248,231)")
+
+    const [size, setSize] = useState(2.7)
+    const highlightRef = useRef()
+
+
+    const w = 2 * size
+    const h = Math.sqrt(3) * size
+
+
+    const [_color, setColor] = useState(color1)
+    const points = [
+
+        new THREE.Vector3(w * -0.25, h * 0.5, 0),
+        new THREE.Vector3(w * 0.25, h * 0.5, 0),
+        new THREE.Vector3(w * 0.5, 0, 0),
+        new THREE.Vector3(w * 0.25, h * -0.5, 0),
+        new THREE.Vector3(w * -0.25, h * -0.5, 0),
+        new THREE.Vector3(w * -0.5, 0, 0),
+        new THREE.Vector3(w * -0.25, h * 0.5, 0),
+
+    ]
+
+    var geomShape = new THREE.ShapeBufferGeometry(new THREE.Shape(points));
+    const geometry = new THREE.BufferGeometry().setFromPoints( points );
+
+    return (
+        <line
+            geometry={geometry}>
+            <lineBasicMaterial attach="material" color="black" linewidth="4" />
+        </line> 
+    )
+
+}
+
 function CameraMain(props) {
     const cam = useRef()
     const posCoords = useRef()
@@ -37,6 +75,7 @@ function CameraMain(props) {
     const gridView = useStore((state) => state.gridView)
     const setMaxViewable = useStore((state) => state.setMaxViewable)
     const setMaxViewableDepth = useStore((state) => state.setMaxViewableDepth)
+    const previewMode = useStore((state) => state.previewMode)
 
 
     const [vec] = useState(() => new THREE.Vector3())
@@ -48,7 +87,19 @@ function CameraMain(props) {
 
     useEffect(() => {
         console.log(" read cam pos in camera " + camPos)
-        posCoords.current = camPos
+        // if (previewMode) {
+        //     let x, y, z
+        //     x = camPos[0]
+        // }
+
+
+        const previewMarginX = 2
+        const previewMarginY = 2
+        let x, y, z
+        x = previewMode ? camPos[0] * previewMarginX : camPos[0] 
+        y = previewMode ? camPos[1] * previewMarginY : camPos[1]
+        z = camPos[2] 
+        posCoords.current = [x,y,z]
     }, [camPos])
 
 
@@ -89,8 +140,13 @@ function CameraMain(props) {
     return (
         <group ref={group}>
             {/* <a.perspectiveCamera ref={cam} {...props} position-y={y.to((y) => (y / 500))} /> */}
-            {/* <perspectiveCamera ref={cam} zoom={20} {...props} /> */}
+
+            <HexHighlight position={[0,0,-10]}/>
+
             <OrthographicCamera ref={cam} zoom={20} {...props} />
+
+            {/* <perspectiveCamera ref={cam} zoom={20} {...props} /> */}
+
 
         </group>
 
@@ -154,15 +210,14 @@ const GridView = (props) => {
 
             setTempCenter(placeShiftedTowards)
             console.log("position exists " + newCoordinateKey + " name " + placeShiftedTowards.company_name)
-            let obj = multiDict[placeShiftedTowards._id]
+            // let obj = multiDict[placeShiftedTowards._id]
 
-            if (obj) {
-                setCamPos(obj.posVector)
+            // change to placeShiftedTowards.posVector
+            if (placeShiftedTowards.posVector) {
+                setCamPos(placeShiftedTowards.posVector)
                 setCenterPlace(placeShiftedTowards)
                 setDisplacedCenterHexPosition([newCoordinateX, newCoordinateY, newCoordinateZ])
-                console.log([cameraPos[0] + obj.posVector[0], cameraPos[1] + obj.posVector[1], 5])
                 console.log("position exists " + newCoordinateKey + " name " + placeShiftedTowards.company_name)
-
 
             } else {
                 console.log("shift camera place not in multDct")
@@ -266,6 +321,8 @@ const GridView = (props) => {
                     _id={otherProps._id}
                     key={otherProps._id}
                     placeObject={otherProps}
+                    position={otherProps.posVector}
+                    color={otherProps.icon_color}
                     // placeObject={otherProps.business[0]}
                     // hover={hoverPlace}
                     // hovering={setPreview}

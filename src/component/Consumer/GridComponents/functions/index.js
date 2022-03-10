@@ -254,25 +254,25 @@ const AssignMolecularDict = (_places, defaultCenter, selectedPlace) => {
         
         placesSet.push(element)
 
-        const cubeObject = {
-          x: newCoordinateX,
-          y: newCoordinateY,
-          z: newCoordinateZ
-        }
-        const posObject = {
-          x: newPositionX,
-          y: newPositionY,
-          z: newPositionY
-        }
+        // const cubeObject = {
+        //   x: newCoordinateX,
+        //   y: newCoordinateY,
+        //   z: newCoordinateZ
+        // }
+        // const posObject = {
+        //   x: newPositionX,
+        //   y: newPositionY,
+        //   z: newPositionY
+        // }
 
-        const _cubeObject = [newCoordinateX, newCoordinateY, newCoordinateZ]
-        const _posObject = [newPositionX, newPositionY, newPositionZ]
+        // const _cubeObject = [newCoordinateX, newCoordinateY, newCoordinateZ]
+        // const _posObject = [newPositionX, newPositionY, newPositionZ]
 
-        const obj = {
-          cubeCoor: _cubeObject,
-          posVector: _posObject
-        }
-        multiDict[element._id] = obj
+        // const obj = {
+        //   cubeCoor: _cubeObject,
+        //   posVector: _posObject
+        // }
+        // multiDict[element._id] = obj
         break
       }
     }
@@ -281,8 +281,8 @@ const AssignMolecularDict = (_places, defaultCenter, selectedPlace) => {
 
   let obj = {
     _orderedPlacesResponse: placesSet,
-    _slotDictResponse: slotDict,
-    _multiDictResponse: multiDict
+    _slotDictResponse: slotDict
+    // _multiDictResponse: multiDict
   }
   return obj
 
@@ -328,12 +328,12 @@ const AssignHexDict = (_places, defaultCenter, selectedPlace) => {
   slotDict["0-0-0"] = newCenterPlace
 
   for (let index = 1; index < places.length; index++) {
-      console.log(index + " top " )
+      // console.log(index + " top " )
 
       var element = places[index]
       const angle = bearing(newCenterPlace.businessLocation.coordinates[1], newCenterPlace.businessLocation.coordinates[0], element.businessLocation.coordinates[1], element.businessLocation.coordinates[0])
     for (let slotIndex = 1; slotIndex < newXyz.length - 1; slotIndex++) {
-      console.log(angle)
+      // console.log(angle)
       let slot = newXyz[slotIndex]
       let position = slot.posVector
       let coordinates = slot.coordinate
@@ -359,13 +359,13 @@ const AssignHexDict = (_places, defaultCenter, selectedPlace) => {
         
 
         placesSet.push(element)
-        const obj = {
-          cubeCoor: coordinates,
-          posVector: position
-        }
-        multiDict[element._id] = obj
-        console.log(element.company_name)
-        console.log(index + " hex dict")
+        // const obj = {
+        //   cubeCoor: coordinates,
+        //   posVector: position
+        // }
+        // multiDict[element._id] = obj
+        // console.log(element.company_name)
+        // console.log(index + " hex dict")
 
         break
       }
@@ -374,8 +374,8 @@ const AssignHexDict = (_places, defaultCenter, selectedPlace) => {
 
   let obj = {
       _orderedPlacesResponse: placesSet,
-      _slotDictResponse: slotDict,
-      _multiDictResponse: multiDict
+      _slotDictResponse: slotDict
+      // _multiDictResponse: multiDict
     }
     return obj
 }

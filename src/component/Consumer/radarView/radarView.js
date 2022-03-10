@@ -16,9 +16,26 @@ import './styles.css'
 extend({ OrbitControls })
 extend({ MapControls })
 
+// pointy hex
+// const points = [
+//     new THREE.Vector3(0, 0, 0),
+//     new THREE.Vector3(0, h * 0.5, 0),
+//     new THREE.Vector3(w * 0.5, h * 0.25, 0),
+//     new THREE.Vector3(w * 0.5, h * -0.25, 0),
+//     new THREE.Vector3(0, h * -0.5, 0),
+//     new THREE.Vector3(w * -0.5, h * -0.25, 0),
+//     new THREE.Vector3(w * -0.5, h * 0.25, 0)
+// ]
 
 
-
+const pointsPoity =        [
+    new THREE.Vector3(-0, 4.67915522605119, -1.4574704987822955),
+    new THREE.Vector3(4.052267294011048, 2.3395776130255945, -1.4574704987822955),
+    new THREE.Vector3(4.052267294011048, -2.339577613025594, -1.4574704987822955),
+    new THREE.Vector3(5.7303124702972e-16, -4.67915522605119, -1.4574704987822955),
+    new THREE.Vector3(-4.052267294011049, -2.339577613025593, -1.4574704987822955),
+    new THREE.Vector3(-4.052267294011048, 2.3395776130255945, -1.4574704987822955)
+]
 
 const RadarDot = (props) => {
 
@@ -29,13 +46,14 @@ const RadarDot = (props) => {
     const coords = useRef()
     const mesh = useRef()
 
+    const [geo, setGeo] = useState()
     const [vec] = useState(() => new THREE.Vector3())
 
-    useEffect(() => {
+    // useEffect(() => {
         // console.log("- - multi effect - - ")
-        let obj = multiDict[props.placeObject._id]
-        if (obj) {
-            coords.current = obj.posVector
+        // let obj = multiDict[props.placeObject._id]
+        // if (obj) {
+        //     coords.current = obj.posVector
 
             // console.log(obj.cubeCoor + " " + props.placeObject.company_name)
 
@@ -48,19 +66,29 @@ const RadarDot = (props) => {
             // } else {
             //     setColor("red")
             // }
-        }
+    //     }
 
-    }, [multiDict])
+    // }, [multiDict])
 
     useEffect(() => {
-        if (centerPlace) {
-            if (centerPlace._id === props.placeObject._id) {
-                setColor('red')
-            } else {
-                setColor('purple')
-            }
+        coords.current = props.position
+        let _color = props.color
+        setColor(_color)
+        if (_color = "red") {
+
         }
-    }, [centerPlace])
+    
+    }, [props.position])
+
+    // useEffect(() => {
+    //     if (centerPlace) {
+    //         if (centerPlace._id === props.placeObject._id) {
+    //             setColor('red')
+    //         } else {
+    //             setColor('purple')
+    //         }
+    //     }
+    // }, [centerPlace])
 
     useFrame(() => {
 
@@ -72,13 +100,21 @@ const RadarDot = (props) => {
     })
 
     return (
-        <mesh
-            position={[0, 0, 0]}
-            ref={mesh}>
+        <group 
+            ref={mesh}
+            position={[0, 0, 0]}>
+            <mesh>
+                 <circleGeometry args={[1, 32]} attach="geometry" />
+                <meshBasicMaterial attach="material" color={color} />
+            </mesh>
 
-            <circleGeometry args={[1, 32]} attach="geometry" />
-            <meshBasicMaterial attach="material" color={color} />
-        </mesh>
+        {/* <line
+            geometry={geometry}>
+            <lineBasicMaterial attach="material" color="black" linewidth="4" />
+        </line>  */}
+   
+        </group>
+
     )
 }
 
@@ -201,6 +237,8 @@ const RadarView = () => {
                 <RadarDot
                     key={otherProps._id}
                     placeObject={otherProps}
+                    color={otherProps.icon_color}
+                    position={otherProps.posVector}
                 />))
         )
     }, [orderedPlaces])
@@ -213,7 +251,7 @@ const RadarView = () => {
         <Canvas>
             {/* camera={{ position: [0, 0, 20], zoom: 50 }}> */}
 
-            <color attach="background" args={["blue"]} />
+            <color attach="background" args={["black"]} />
             <Camera position={[0, 0, 20]} />
 
             {/* <BackgroundRadar> */}
