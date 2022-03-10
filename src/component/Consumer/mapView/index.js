@@ -331,7 +331,26 @@ const MapView = (props) => {
             // console.log(selectedPlace)
             setGridView(false)
         }
-      },[draggedLocation]);
+      },[selectedPlace]);
+
+
+    //   useEffect(() => {
+    //     console.log(" geocode ");
+    //     Geocode.fromLatLng(
+    //       JSON.stringify(draggedLocation.lat),
+    //       JSON.stringify(draggedLocation.lng)
+    //     ).then(
+    //       (response) => {
+    //         const address = response.results[0].formatted_address;
+    //         console.log(address);
+    //         // "sublocality" "locality"
+    //         for (let i = 0; i < response.results[0].address_components.length; i++) {
+    //           for (let j = 0; j < response.results[0].address_components[i].types.length; j++) {
+    //             if (response.results[0].address_components[i].types[j] ==="sublocality") {
+    //               setSubLocality(response.results[0].address_components[i].long_name);
+    //               console.log(response.results[0].address_components[i].long_name);
+    //             }}}
+    //       })}, [draggedLocation])   
 
   const clickHandler = (map, event) => {
     console.log("map clicked");
@@ -363,6 +382,9 @@ const MapView = (props) => {
       setDraggedLocation(cntr);
     }
   }
+
+
+
 
 
 
