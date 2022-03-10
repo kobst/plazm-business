@@ -63,7 +63,7 @@ const PostChat = () => {
   const setSelectedListId = useStore((state) => state.setSelectedListId)
 
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     setOffSet(0);
     setHasMore(true);
@@ -126,13 +126,23 @@ const PostChat = () => {
         >
           <ChatContent>
             {!loadingFilterData && posts.length > 0 ? (
-              posts.map((i, key) => (
-                <UserMessage
-                  postData={i}
-                  key={key}
-                  // setSelectedListId={setSelectedListId}
-                />
-              ))
+              posts.map((i, key) => {
+                return topPostId ? (
+                  i.postDetails._id !== topPostId.postId && (
+                    <UserMessage
+                      postData={i}
+                      key={key}
+                      setSelectedListId={setSelectedListId}
+                    />
+                  )
+                ) : (
+                  <UserMessage
+                    postData={i}
+                    key={key}
+                    setSelectedListId={setSelectedListId}
+                  />
+                );
+              })
             ) : loadingFilterData ? (
               <LoaderWrap>
                 <ValueLoader />

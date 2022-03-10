@@ -12,6 +12,7 @@ const SearchSection = ({
   setReadMore,
   offset,
   setOffSet,
+  obj,
 }) => {
   const listSearch = useSelector((state) => state.list.listSearch);
   const loading = useSelector((state) => state.list.loadingSearchList);
@@ -23,7 +24,7 @@ const SearchSection = ({
   useEffect(() => {
     const searchData = async () => {
       const data = await dispatch(
-        SearchListApi({ value: 0, search: listSearch })
+        SearchListApi({ value: 0, search: listSearch, ...obj })
       );
       const res = await unwrapResult(data);
       if (res) {
@@ -35,7 +36,7 @@ const SearchSection = ({
 
   return (loading && offset === 0) || flag ? (
     <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
-      <ValueLoader height="100" width="100" />
+      <ValueLoader />
     </div>
   ) : (
     <>
@@ -50,6 +51,7 @@ const SearchSection = ({
             setSelectedListId={setSelectedListId}
             setDiscoverBtn={setDiscoverBtn}
             setReadMore={setReadMore}
+            obj={obj}
           />
         </FeatureContainer>
       </FeatureWrapper>

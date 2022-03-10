@@ -4,8 +4,8 @@
 const getPlace = (obj) => {
   const graphQl = {
     query: `
-          query SearchPlacesByUserId($id: ID!, $value: Int, $filters: filterInput, $ownerId:ID, $sideFilters: sideFilterInput){
-            searchPlacesByUserId(input: {id:$id, value:$value, filters:$filters, ownerId:$ownerId, sideFilters: $sideFilters}) {
+          query SearchPlacesByUserId($id: ID!, $value: Int, $filters: filterInput, $ownerId:ID, $sideFilters: sideFilterInput, $search: String){
+            searchPlacesByUserId(input: {id:$id, value:$value, filters:$filters, ownerId:$ownerId, sideFilters: $sideFilters, search: $search}) {
               message
               success
               totalPosts
@@ -43,6 +43,11 @@ const getPlace = (obj) => {
                 postDetails {
                     _id
                     data
+                    title
+                    eventSchedule {
+                        start_time
+                        end_time
+                    }
                     businessLocation {
                       type
                       coordinates
@@ -81,6 +86,7 @@ const getPlace = (obj) => {
                       name
                       _id
                     }
+                    recurring
                     media
                     location {
                         type
@@ -115,6 +121,7 @@ const getPlace = (obj) => {
       filters: obj.filters,
       ownerId: obj.ownerId || null,
       sideFilters: obj.sideFilters || { likes: false, recent: true },
+      search: obj?.search || "",
     },
   };
   return graphQl;
@@ -271,7 +278,7 @@ const homeSearch = (obj) => {
       value: obj.value,
       filters: obj.filters,
       longitude: parseFloat(obj.longitude),
-      latitude: parseFloat(obj.latitude)
+      latitude: parseFloat(obj.latitude),
     },
   };
   return graphQl;

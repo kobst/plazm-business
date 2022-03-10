@@ -1,11 +1,11 @@
 /*
 @desc: getUser query
 */
-const getUser = (userSub) => {
+const getUser = (userSub, value, limit = 15) => {
   const graphQl = {
     query: `
-          query GetUser($userSub: String){
-            getUser(input: {userSub:$userSub}) {
+          query GetUser($userSub: String, $value: Int, $limit: Int){
+            getUser: getUser(input: {userSub:$userSub}) {
               message
               success
               user {
@@ -20,9 +20,34 @@ const getUser = (userSub) => {
                   listFollowed
               }
             }
+            userCreateAndFollowList: getUserSubCreatedAndFollowedLists(input: {userSub: $userSub, value: $value, limit: $limit}) {
+              message
+              success
+              totalLists
+              list {
+                _id
+                isPublic
+                ownerId
+                subscribers {
+                    name
+                    photo
+                    _id
+                }
+                name
+                description
+                type
+                media {
+                  image
+                }
+                createdAt
+                updatedAt
+              }
+            }
           }`,
     variables: {
       userSub: userSub,
+      value: value,
+      limit: limit,
     },
   };
   return graphQl;
@@ -199,6 +224,7 @@ const GetMyFeedData = (obj) => {
                   start_time
                   end_time
                 }
+                recurring
                 user {
                   name
                   photo

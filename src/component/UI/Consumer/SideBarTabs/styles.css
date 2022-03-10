@@ -5,11 +5,12 @@
   bottom: 0;
   display: flex;
   flex-direction: column;
-  width: 52px;
+  width: 60px;
   height: 100%;
-  background-color: black;
+  background-color: #f3f3f3;
   z-index: 100;
   color: #ffffff;
+  transition: width 0.3s;
 }
 
 .tabs {
@@ -55,53 +56,51 @@
 } */
 
 .Sidebar.expanded .sidebar-icon {
-  margin-right: 16;
+  margin-right: 0px;
   padding-right: 14px;
+  width: 36px;
 }
 
 .sidebar-icon {
-  width: 36px;
   color: #767676;
-  font-size: 26px;
-
-  @media (max-width: 767px) {
-    font-size: 26px;
-  }
+  font-size: 18px;
+  width: 22px;
 }
 
 .listTab-item {
   display: flex;
-  align-items: left;
   padding: 12px 10px;
   transition: background-color 0.2s;
   cursor: pointer;
-  background-color: mediumblue;
+  background-color: #f3f3f3;
+  align-items: center;
+  position: relative;
+  width: 100%;
 }
 
 .listTab-item.selected {
   background-color: floralwhite;
 }
 
-
 .listTab-icon {
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
   /* padding-left: 4px;
   padding-right: 4px; */
   color: #767676;
   font-size: 26px;
   border-radius: 50%;
+  margin: 0 0 0 7px;
+  border: 1px solid #ffffff;
 
-  @media (max-width: 767px) {
+  /* @media (max-width: 767px) {
     font-size: 26px;
-  }
+  } */
 }
 
 .Sidebar.expanded .listTab-icon {
   margin-right: 4px;
 }
-
-
 
 /* .sidebar-icon {
   margin-right: 16px;
@@ -116,35 +115,66 @@
 } */
 
 .sidebar-text {
-  color: hotpink;
   display: none;
   /* white-space: nowrap;
   overflow: hidden; */
   /* text-overflow: ellipsis; */
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 15px;
+  letter-spacing: 0.02em;
+  color: #767676;
+  font-family: "Roboto", sans-serif;
+  max-width: calc(100% - 40px);
+}
+
+.subscription-text {
+  margin: 0 0 0 7px;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  width: 94%;
+  font-size: 11px;
 }
 
 .Sidebar.expanded .sidebar-text {
   display: flex;
 }
 
-
 .Sidebar.expanded {
   width: 200px;
+  transition: width 0.3s;
 }
 
 /* somehow padding-right affects size of icon */
 
-
 .list-scroll {
-  background-color: rgb(20, 11, 46);
-  align-items: left;
+  background-color: #f3f3f3;
+  align-items: flex-start;
   display: flex;
   flex-direction: column;
   width: auto;
-  height: 200px;
+  height: calc(100vh - 360px);
   overflow-y: scroll;
 }
 
+.list-scroll::-webkit-scrollbar,
+.list-scroll::-webkit-scrollbar {
+  visibility: hidden;
+  display: none;
+}
+.loadMore {
+  margin: 0 auto 10px;
+  border: 0;
+  background: transparent;
+  color: #ff2e9a;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: 600;
+}
 .sidebar-list {
   height: 25px;
   background-color: darkblue;
@@ -157,12 +187,9 @@
   padding: 25px 15px;
 }
 
-
-
 .sidebar-list:hover {
   background-color: indigo;
 }
-
 
 .panel-content {
   padding-left: 52px;
@@ -170,4 +197,65 @@
   height: 90vh;
   overflow: auto;
   overflow-x: hidden;
+}
+
+.Sidebar .react-tabs__tab {
+  min-height: 60px;
+  align-items: center;
+  padding: 6px 14px;
+  display: flex;
+}
+
+.Sidebar .react-tabs__tab--selected {
+  background: #3b3946;
+  border-color: transparent;
+  border-radius: 0;
+}
+.Sidebar .react-tabs__tab--selected .sidebar-text,
+.Sidebar .react-tabs__tab--selected .sidebar-icon {
+  color: #fff;
+}
+.Sidebar .react-tabs__tab:focus {
+  box-shadow: none !important;
+}
+
+.Sidebar .react-tabs__tab:focus:after {
+  display: none;
+}
+.RedDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #ff2e9a;
+  position: absolute;
+  right: 10px;
+  top: 24px;
+}
+.tool-tip {
+  background-color: #ffffff !important;
+  border: 1px solid #a9a9a9;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 10px;
+  line-height: 12px;
+  color: #595959 !important;
+  z-index: 1;
+  max-width: 400px;
+}
+.NotificationDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #ee3840;
+  border: 1px solid #f3f3f3;
+  position: absolute;
+  left: 31px;
+  top: 32px;
+}
+.sidebar-loader {
+  margin: 0 auto 10px;
+}
+.sidebar-loader img {
+  max-width: 50px;
 }

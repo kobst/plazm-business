@@ -12,6 +12,9 @@ import {
   SubscribeToAListAction,
   fetchUserLists,
   clearListSearchData,
+  userSubscribeToAList,
+  userUnSubscribeToAList,
+  setSelectedListDetails,
 } from "../../../reducers/listReducer";
 import {
   fetchSelectedListDetails,
@@ -27,7 +30,6 @@ import {
 import { useHistory } from "react-router-dom";
 import ButtonOrange from "../UI/ButtonOrange";
 import useStore from "../useState";
-
 
 const ListOptionSection = styled.div`
   width: 100%;
@@ -262,10 +264,7 @@ const ArrowBack = styled.div`
   }
 `;
 
-
-const ListDetailView = ({
-  listOpenedFromBusiness
-}) => {
+const ListDetailView = ({ listOpenedFromBusiness }) => {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.myFeed.loadingSelectedList);
   const loadingUnSubScribe = useSelector(
@@ -275,12 +274,13 @@ const ListDetailView = ({
     (state) => state.myFeed.loadingSelectedList
   );
 
-  const selectedListDetails = useSelector((state) => state.myFeed.selectedListDetails);
+  const selectedListDetails = useSelector(
+    (state) => state.myFeed.selectedListDetails
+  );
 
-  
   const totalData = useSelector((state) => state.myFeed.totalData);
   const postsInList = useSelector((state) => state.myFeed.myFeed);
-//   const selectedList = useSelector((state) => state.myFeed.selectedListDetails);
+  //   const selectedList = useSelector((state) => state.myFeed.selectedListDetails);
   const userLists = useSelector((state) => state.list.userLists);
   const user = useSelector((state) => state.user.user);
   const [hasMore, setHasMore] = useState(true);
@@ -300,6 +300,7 @@ const ListDetailView = ({
 
   const orderedPlaces = useStore((state) => state.orderedPlaces)
 
+
   const [image, setImage] = useState(
     selectedList && selectedList.media.length > 0
       ? selectedList.media[0].image
@@ -309,36 +310,30 @@ const ListDetailView = ({
   const history = useHistory();
 
   useEffect(() => {
-    console.log("selected List use Effect" + selectedList)
     if (!image) {
-        if (selectedList) {
-            if (selectedList.media.length > 0) {
-                console.log(JSON.stringify(selectedList))
-                setImage(selectedList.media[0].image);
-            }
-        }  else {
-            if (selectedListDetails) {
-                console.log(JSON.stringify(selectedListDetails))
-                if (selectedListDetails.media.length > 0) {
-                    console.log(JSON.stringify(selectedList))
-                    setImage(selectedListDetails.media[0].image);
-                }
-            }
+      if (selectedList) {
+        if (selectedList.media.length > 0) {
+          setImage(selectedList.media[0].image);
         }
+      } else {
+        if (selectedListDetails) {
+          if (selectedListDetails.media.length > 0) {
+            setImage(selectedListDetails.media[0].image);
+          }
+        }
+      }
     }
- 
   }, [selectedList, selectedListDetails]);
 
   /** to fetch user lists - do we need this here? */
-//   useEffect(() => {
-//     if (userLists.length === 0 && user && user._id)
-//       dispatch(fetchUserLists(user._id));
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }, [user]);
+  //   useEffect(() => {
+  //     if (userLists.length === 0 && user && user._id)
+  //       dispatch(fetchUserLists(user._id));
+  //     // eslint-disable-next-line react-hooks/exhaustive-deps
+  //   }, [user]);
 
   /** to clear all the data initially */
   useEffect(() => {
-      console.log("clear feed data")
     dispatch(clearMyFeedData());
     setOffSet(0);
     setHasMore(true);
@@ -346,12 +341,12 @@ const ListDetailView = ({
 
   /** to fetch initial posts in a list */
   useEffect(() => {
-    console.log("fetching initial posts")
     const fetchListDetails = async () => {
       const result = await dispatch(
         fetchSelectedListDetails({ id: selectedListId, value: offset })
       );
       const data = await unwrapResult(result);
+      dispatch(setSelectedListDetails(data?.listDetails));
       if (data) {
         setFlag(false);
       }
@@ -368,56 +363,66 @@ const ListDetailView = ({
     } else setHasMore(false);
   };
 
-
-
-
-    /** to unsubscribe from a list */
-    const listUnSubscribe = async () => {
-        const obj = {
-          userId: user._id,
+  /** to unsubscribe from a list */
+  const listUnSubscribe = async () => {
+    const obj = {
+      userId: user._id,
+      listId: selectedList._id,
+    };
+    const list = await dispatch(UnSubscribeToAList(obj));
+    const response = await unwrapResult(list);
+    if (response) {
+      dispatch(removeSubscribedList(response.listId));
+      dispatch(
+        userUnSubscribeToAList({
+          type: "Selected",
           listId: selectedList._id,
-        };
-        const list = await dispatch(UnSubscribeToAList(obj));
-        const response = await unwrapResult(list);
-        if (response) {
-          dispatch(removeSubscribedList(response.listId));
-        }
-      };
-    
-      /** to subscribe from a list */
-      const listSubscribe = async () => {
-        const obj = {
-          userId: user._id,
-          listId: selectedList._id,
-        };
-        const list = await dispatch(SubscribeToAListAction(obj));
-        const response = await unwrapResult(list);
-        if (response) {
-          dispatch(addSubscribedList(response.listId));
-        }
-      };
-    
-      // /** to delete a list */
-      // const deleteList = async () => {
-      //   const obj = {
-      //     userId: user._id,
-      //     listId: selectedList._id,
-      //   };
-      //   const data = await dispatch(deleteUserCreatedList(obj));
-      //   const response = await unwrapResult(data);
-      //   if (response) {
-      //     setSelectedListId(null);
-      //   }
-      // };
-    
-      const onCloseTab = () => {
-        // if (!listOpenedFromBusiness) setDisplayTab(false);
-        // else if (readMore) setDiscoverBtn(true);
-        dispatch(clearMyFeedData());
-        dispatch(clearListSearchData());
-        setSelectedListId(null);
-      };
+          user: user,
+        })
+      );
+    }
+  };
 
+  /** to subscribe from a list */
+  const listSubscribe = async () => {
+    const obj = {
+      userId: user._id,
+      listId: selectedList._id,
+    };
+    const list = await dispatch(SubscribeToAListAction(obj));
+    const response = await unwrapResult(list);
+    if (response) {
+      dispatch(addSubscribedList(response.listId));
+      dispatch(
+        userSubscribeToAList({
+          type: "Selected",
+          listId: response.listId,
+          user: user,
+        })
+      );
+    }
+  };
+
+  // /** to delete a list */
+  // const deleteList = async () => {
+  //   const obj = {
+  //     userId: user._id,
+  //     listId: selectedList._id,
+  //   };
+  //   const data = await dispatch(deleteUserCreatedList(obj));
+  //   const response = await unwrapResult(data);
+  //   if (response) {
+  //     setSelectedListId(null);
+  //   }
+  // };
+
+  const onCloseTab = () => {
+    // if (!listOpenedFromBusiness) setDisplayTab(false);
+    // else if (readMore) setDiscoverBtn(true);
+    dispatch(clearMyFeedData());
+    dispatch(clearListSearchData());
+    setSelectedListId(null);
+  };
 
   return (loading &&
     offset === 0 &&
@@ -429,48 +434,49 @@ const ListDetailView = ({
     <LoaderWrap>
       <ValueLoader />
     </LoaderWrap>
-  ) : ( !gridMode &&
-    <>
-      {selectedList ? (
-        <ListOptionSection>
-          <HeadingWrap>
-            <TopHeadingWrap>
-            <ArrowBack onClick={() => console.log("back")}>BACK</ArrowBack>
+  ) : (
+    !gridMode && (
+      <>
+        {selectedList ? (
+          <ListOptionSection>
+            <HeadingWrap>
+              <TopHeadingWrap>
+                <ArrowBack onClick={() => console.log("back")}>BACK</ArrowBack>
 
-              <ListBannerSection>
-                <img src={image} alt="" onError={() => setImage(BannerImg)} />
-                <h1>{selectedList.name}</h1>
-                <p>{selectedList.description}</p>
-                <div className="BannerWrapBtn">
-                  <h5>
-                    by{" "}
-                    <strong>
-                      <span
-                        onClick={() =>
-                          history.push(`/u/${selectedList.ownerId._id}`)
-                        }
-                      >
-                        {selectedList.ownerId.name}
-                      </span>
-                    </strong>{" "}
-                    Updated{" "}
-                    {moment(selectedList.updatedAt).format(
-                      "MMM DD,YYYY, hh:MM a"
-                    )}{" "}
-                    EST{" "}
-                    {!selectedList.isPublic && (
-                      <LockDiv>
-                        <CgLock />
-                      </LockDiv>
-                    )}
-                  </h5>
+                <ListBannerSection>
+                  <img src={image} alt="" onError={() => setImage(BannerImg)} />
+                  <h1>{selectedList.name}</h1>
+                  <p>{selectedList.description}</p>
+                  <div className="BannerWrapBtn">
+                    <h5>
+                      by{" "}
+                      <strong>
+                        <span
+                          onClick={() =>
+                            history.push(`/u/${selectedList.ownerId._id}`)
+                          }
+                        >
+                          {selectedList.ownerId.name}
+                        </span>
+                      </strong>{" "}
+                      Updated{" "}
+                      {moment(selectedList.updatedAt).format(
+                        "MMM DD,YYYY, hh:MMa"
+                      )}{" "}
+                      EST{" "}
+                      {!selectedList.isPublic && (
+                        <LockDiv>
+                          <CgLock />
+                        </LockDiv>
+                      )}
+                    </h5>
 
-                  {selectedList &&
-                  selectedList.ownerId &&
-                  selectedList.ownerId._id === user._id ? (
-                    <>
-                      <ButtonOuterDiv>
-                        {/* <button className="PinkColor">Make Public</button>
+                    {selectedList &&
+                    selectedList.ownerId &&
+                    selectedList.ownerId._id === user._id ? (
+                      <>
+                        <ButtonOuterDiv>
+                          {/* <button className="PinkColor">Make Public</button>
                         <button className="PinkColor">Invite</button>
                         <button
                           className="OrangeColor"
@@ -478,86 +484,84 @@ const ListDetailView = ({
                         >
                           Delete
                         </button> */}
-                      </ButtonOuterDiv>
-                    </>
-                  ) : !user.listFollowed.includes(selectedList._id) ? (
-                    <ButtonOrange
-                      className="subscribe"
-                      onClick={() => listSubscribe()}
-                    >
-                      Subscribe
-                    </ButtonOrange>
-                  ) : (
-                    <ButtonOrange
-                      className="unsubscribe"
-                      onClick={() => listUnSubscribe()}
-                    >
-                      Unsubscribe
-                    </ButtonOrange>
-                  )}
-                </div>
-              </ListBannerSection>
-              <CloseDiv>
-                <IoMdClose onClick={() => onCloseTab()} />
-              </CloseDiv>
-            </TopHeadingWrap>
-          </HeadingWrap>
-
-
-
-
-
-          <div
-            id="scrollableDiv"
-            style={{ height: "110vh", overflow: "auto" }}
-            className="ScrollDivInner"
-          >
-            <InfiniteScroll
-              dataLength={postsInList ? postsInList.length : 0}
-              next={fetchMorePosts}
-              hasMore={hasMore}
-              loader={
-                offset < totalData && loading ? (
-                  <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
-                    {" "}
-                    <ValueLoader height="40" width="40" />
+                        </ButtonOuterDiv>
+                      </>
+                    ) : !user.listFollowed.includes(selectedList._id) ? (
+                      <ButtonOrange
+                        className="subscribe"
+                        onClick={() => listSubscribe()}
+                      >
+                        Subscribe
+                      </ButtonOrange>
+                    ) : (
+                      <ButtonOrange
+                        className="unsubscribe"
+                        onClick={() => listUnSubscribe()}
+                      >
+                        Unsubscribe
+                      </ButtonOrange>
+                    )}
                   </div>
-                ) : null
-              }
-              scrollableTarget="scrollableDiv"
-              endMessage={
-                postsInList.length > 20 && !loading ? (
-                  <center>
-                    <NoMorePost className="noMorePost">
-                      No more List to show
-                    </NoMorePost>
-                  </center>
-                ) : null
-              }
+                </ListBannerSection>
+                <CloseDiv>
+                  <IoMdClose onClick={() => onCloseTab()} />
+                </CloseDiv>
+              </TopHeadingWrap>
+            </HeadingWrap>
+
+            <div
+              id="scrollableDiv"
+              style={{ height: "110vh", overflow: "auto" }}
+              className="ScrollDivInner"
             >
-              <ListingOptionWrap>
-                {/* {postsInList.length > 0 ? (
-                  postsInList.map((i, key) => ( */}
-                {orderedPlaces.length > 0 ? (
-                    orderedPlaces.map((i, key) => (
-                    <DisplayPostInAList
-                      data={i}
-                      key={key}
-                      id={key}
-                      setListIndex={setListIndex}
-                      setSelectedListId={setSelectedListId}
-                      setFavoriteIndex={setFavoriteIndex}
-                    />
-                  ))
-                ) : (
-                  <NoData>No Posts In A List To Display</NoData>
-                )}
-              </ListingOptionWrap>
-            </InfiniteScroll>
-          </div>
-        </ListOptionSection>
-      ) : null}
-    </>
+              <InfiniteScroll
+                dataLength={postsInList ? postsInList.length : 0}
+                next={fetchMorePosts}
+                hasMore={hasMore}
+                loader={
+                  offset < totalData && loading ? (
+                    <div
+                      style={{ textAlign: "center", margin: " 40px auto 0" }}
+                    >
+                      {" "}
+                      <ValueLoader height="40" width="40" />
+                    </div>
+                  ) : null
+                }
+                scrollableTarget="scrollableDiv"
+                endMessage={
+                  postsInList.length > 20 && !loading ? (
+                    <center>
+                      <NoMorePost className="noMorePost">
+                        No more List to show
+                      </NoMorePost>
+                    </center>
+                  ) : null
+                }
+              >
+                <ListingOptionWrap>
+                  {postsInList.length > 0 ? (
+                    postsInList.map((i, key) => (
+                      <DisplayPostInAList
+                        data={i}
+                        key={key}
+                        id={key}
+                        setListIndex={setListIndex}
+                        setSelectedListId={setSelectedListId}
+                        setFavoriteIndex={setFavoriteIndex}
+                      />
+                    ))
+                  ) : (
+                    <NoData>No Posts In A List To Display</NoData>
+                  )}
+
+                </ListingOptionWrap>
+              </InfiniteScroll>
+            </div>
+          </ListOptionSection>
+        ) : null}
+      </>
+    )
   );
 };
 

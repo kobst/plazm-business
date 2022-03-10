@@ -12,7 +12,6 @@ import moment from "moment";
 const EventWrap = styled.div`
   width: 100%;
   position: relative;
-  margin: 0 0 15px;
   display: flex;
   flex-flow: row wrap;
   form {
@@ -106,7 +105,6 @@ const CustomFirst = styled.div`
   }
 `;
 
-
 const ScheduleAnEvent = ({
   setDisplayCalendar,
   setEventDetails,
@@ -126,66 +124,73 @@ const ScheduleAnEvent = ({
         <Heading>Schedule An Event</Heading>
       </TopBar>
       <CalenderTopWrap>
-      
-      <FormWrap>
-        <Formik
-          enableReinitialize={true}
-          initialValues={{
-            startDate: moment(date),
-            endDate: moment(endDate),
-            startTime: date,
-            endTime: endDate,
-            repeat: "Once",
-          }}
-          /*validation schema */
-          validationSchema={Yup.object(validate)}
-          validateOnChange={false}
-          validateOnBlur={false}
-          onSubmit={(values) => {
-            /*to set event details*/
-            const obj = {
-              eventDate: `${moment(date).format("DD MMM YYYY")} to ${moment(
-                endDate
-              ).format("DD MMM YYYY")}`,
-              eventTime: `FROM: ${moment(values.startTime).format(
-                "HH:mm A"
-              )} to ${moment(values.endTime).format("HH:mm A")}`,
-              eventRepeat: values.repeat,
-              start_time: values.startTime,
-              end_time: values.endTime,
-            };
-            setEventDetails(obj);
-            setDisplayCalendar(false);
-            setDisplayList(false);
-          }}
-        >
-          {(formik) => (
-            <form onSubmit={formik.handleSubmit} method="POST">
-              <CustomFirst>
-              <CalendarWrap>
-                {startDateFocus ? (
-                  <Calendar date={date} changeDate={changeDate} minDate={null}/>
-                ) : endDateFocus ? (
-                  <Calendar date={endDate} changeDate={setEndDate} minDate={date}/>
-                ) : null}
-              </CalendarWrap>
-              <FormBody
-                formik={formik}
-                setStartDateFocus={setStartDateFocus}
-                setEndDateFocus={setEndDateFocus}
-              />
-              </CustomFirst>
-              {/* bottom buttons bar */}
-              <BottomButtonsBar>
-                <BackButton onClick={(e) => displayCalendar(e)}>
-                  Back
-                </BackButton>
-                <SaveButton type="submit">Confirm</SaveButton>
-              </BottomButtonsBar>
-            </form>
-          )}
-        </Formik>
-      </FormWrap>
+        <FormWrap>
+          <Formik
+            enableReinitialize={true}
+            initialValues={{
+              startDate: moment(date),
+              endDate: moment(endDate),
+              startTime: date,
+              endTime: endDate,
+              repeat: [8],
+            }}
+            /*validation schema */
+            validationSchema={Yup.object(validate)}
+            validateOnChange={false}
+            validateOnBlur={false}
+            onSubmit={(values) => {
+              /*to set event details*/
+              const obj = {
+                eventDate: `${moment(date).format("DD MMM YYYY")} to ${moment(
+                  endDate
+                ).format("DD MMM YYYY")}`,
+                eventTime: `FROM: ${moment(values.startTime).format(
+                  "HH:mm A"
+                )} to ${moment(values.endTime).format("HH:mm A")}`,
+                eventRepeat: values.repeat,
+                start_time: values.startTime,
+                end_time: values.endTime,
+              };
+              setEventDetails(obj);
+              setDisplayCalendar(false);
+              setDisplayList(false);
+            }}
+          >
+            {(formik) => (
+              <form onSubmit={formik.handleSubmit} method="POST">
+                <CustomFirst>
+                  <CalendarWrap>
+                    {startDateFocus ? (
+                      <Calendar
+                        date={date}
+                        changeDate={changeDate}
+                        minDate={null}
+                      />
+                    ) : endDateFocus ? (
+                      <Calendar
+                        date={endDate}
+                        changeDate={setEndDate}
+                        minDate={date}
+                      />
+                    ) : null}
+                  </CalendarWrap>
+                  <FormBody
+                    formik={formik}
+                    setStartDateFocus={setStartDateFocus}
+                    setEndDateFocus={setEndDateFocus}
+                  />
+                </CustomFirst>
+                {/* bottom buttons bar */}
+                <BottomButtonsBar>
+                  <BackButton onClick={(e) => displayCalendar(e)}>
+                    Back
+                  </BackButton>
+                  <SaveButton type="submit">Confirm</SaveButton>
+                </BottomButtonsBar>
+              </form>
+            )}
+          </Formik>
+        </FormWrap>
       </CalenderTopWrap>
     </EventWrap>
   );

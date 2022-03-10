@@ -37,7 +37,6 @@ import ValueLoader from "../../../../../utils/loader";
 
 import { useHistory } from "react-router-dom";
 
-
 const NewInBuzzItems = ({
   data,
   // setSelectedListId,
@@ -51,8 +50,6 @@ const NewInBuzzItems = ({
   setTotalLists,
   totalLists,
 }) => {
-
-
   const user = useSelector((state) => state.user.user);
   const [offsetLeft, setOffsetLeft] = useState(0);
   const [offsetTop, setOffsetTop] = useState(0);
@@ -61,13 +58,12 @@ const NewInBuzzItems = ({
     data && data.media && data.media.length > 0 ? data.media[0].image : EventImg
   );
 
-
-  const setSelectedListId = useStore((state) => state.setSelectedListId)
-  const setSelectedList = useStore((state) => state.setSelectedList)
+  const setSelectedListId = useStore((state) => state.setSelectedListId);
+  const setSelectedList = useStore((state) => state.setSelectedList);
 
   const divRef = useRef();
   const dispatch = useDispatch();
-  const history = useHistory()
+  const history = useHistory();
 
   /** to set position on hover of text */
   const displayData = () => {
@@ -82,13 +78,12 @@ const NewInBuzzItems = ({
 
   /** to open list description view */
   const ReadMore = () => {
-    console.log(" reading more")
+    console.log(" reading more");
     setDiscoverBtn(false);
     setSelectedListId(data._id);
-    setSelectedList(data)
+    setSelectedList(data);
     setReadMore(true);
     history.push(`/list/${data._id}`);
-    
   };
 
   /** to unsubscribe from a list */
@@ -193,9 +188,9 @@ const NewInBuzzItems = ({
                     )} EST{" "}
                   </AuthorInfo>
                   <FollowedBy>
-                    {data.subscribers.length > 0 && <h2>Followed by</h2>}
+                    {data?.subscribers?.length > 0 && <h2>Followed by</h2>}
                     <FollowedByListUl>
-                      {data.subscribers.length > 0 &&
+                      {data?.subscribers?.length > 0 &&
                         data.subscribers.slice(0, 8).map((i, key) => {
                           return (
                             <li key={key}>
@@ -210,7 +205,7 @@ const NewInBuzzItems = ({
                             </li>
                           );
                         })}
-                      {data.subscribers.length > 7 ? (
+                      {data?.subscribers?.length > 7 ? (
                         <div className="MorePlus">
                           +{data.subscribers.length - 7} more
                         </div>
@@ -218,11 +213,11 @@ const NewInBuzzItems = ({
                     </FollowedByListUl>
                   </FollowedBy>
                   <InnerDescriptionPara>
-                    {data.description}....
+                    {data?.description}....
                     <strong onClick={() => ReadMore()}>Read More</strong>
                   </InnerDescriptionPara>
-                  {data.subscribers.length === 0 ||
-                  !data.subscribers.find((i) => i._id === user._id) ? (
+                  {data?.subscribers.length === 0 ||
+                  !data?.subscribers.find((i) => i._id === user._id) ? (
                     <SubscribeBtn
                       onClick={() => listSubscribe()}
                       disabled={loader}

@@ -8,7 +8,7 @@ import BuisinessProfileDetails from "./BuisinessProfileDetails";
 import ValueLoader from "../../../utils/loader";
 import { setSideFilters } from "../../../reducers/businessReducer";
 import useStore from "../useState/index";
-
+import GlobalSearchBox from "../GlobalSearch/GlobalSearchBox";
 
 const BuisinessViewContent = styled.div`
   width: 100%;
@@ -32,11 +32,17 @@ const LoaderWrap = styled.div`
   }
 `;
 
+const BusinessWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
+
 const BuisinessView = ({
   setDisplayTab,
   // profile,
   // businessExists,
-  businessId
+  businessId,
   // searchIndex,
   // setTabIndex,
   // setSearchIndex,
@@ -49,28 +55,25 @@ const BuisinessView = ({
   // setSelectedListId,
 }) => {
   const loading = useSelector((state) => state.business.loading);
+  const showSearchBar = useSelector((state) => state.globalSearch.displayBar);
   const businessProfile = useSelector((state) => state.business.business);
   const flag = useSelector((state) => state.business.flag);
   const [displayBusinessProfile, setDisplayBusinessProfile] = useState(false);
-  const setSelectedBusiness = useStore((state) => state.setSelectedPlace)
+  const setSelectedBusiness = useStore((state) => state.setSelectedPlace);
   // const businessProfile = useStore((state) => state.businessDetailProfile)
 
-  
-
-  useEffect(()=>{
- 
-    if (businessProfile[0]){
-
+  useEffect(() => {
+    if (businessProfile[0]) {
       let deepClone = JSON.parse(JSON.stringify(businessProfile[0]));
-      deepClone.businessLocation = deepClone.location
+      deepClone.businessLocation = deepClone.location;
 
-      console.log("XXXX   business view coordinates XXXXX")
-      console.log(deepClone)
+      console.log("XXXX   business view coordinates XXXXX");
+      console.log(deepClone);
 
-      setSelectedBusiness(deepClone)
+      setSelectedBusiness(deepClone);
     }
-  }, [businessProfile])
-  
+  }, [businessProfile]);
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(setSideFilters());
@@ -87,50 +90,59 @@ const BuisinessView = ({
           <ValueLoader />
         </LoaderWrap>
       ) : (
-        <BuisinessViewContent>
-          {businessProfile &&
-            businessProfile.length > 0 &&
-            (displayBusinessProfile ? (
-              <BuisinessProfileDetails
-                displayBusinessProfile={displayBusinessProfile}
-                setDisplayBusinessProfile={setDisplayBusinessProfile}
-                setDisplayTab={setDisplayTab}
-                // searchIndex={searchIndex}
-                // setTabIndex={setTabIndex}
-                // setSearchIndex={setSearchIndex}
-                // myFeedIndex={myFeedIndex}
-                // setMyFeedIndex={setMyFeedIndex}
-                // favoriteIndex={favoriteIndex}
-                // setFavoriteIndex={setFavoriteIndex}
-                // listIndex={listIndex}
-                // setListIndex={setListIndex}
-              />
-            ) : (
-              <BuisinessHeader
-                setDisplayTab={setDisplayTab}
-                setDisplayBusinessProfile={setDisplayBusinessProfile}
-                // searchIndex={searchIndex}
-                // setTabIndex={setTabIndex}
-                // setSearchIndex={setSearchIndex}
-                // myFeedIndex={myFeedIndex}
-                // setMyFeedIndex={setMyFeedIndex}
-                // listIndex={listIndex}
-                // setListIndex={setListIndex}
-                // favoriteIndex={favoriteIndex}
-                // setFavoriteIndex={setFavoriteIndex}
-              />
-            ))}
-          {!displayBusinessProfile &&
-            !loading &&
-            businessProfile &&
-            businessProfile.length > 0 && (
-              <TabsSection
-                // profile={profile}
-                businessId={businessId}
-                // setSelectedListId={setSelectedListId}
-              />
+        <BusinessWrap>
+          <div style={{ width: "100%" }}>
+            {showSearchBar && (
+              <GlobalSearchBox setOffset={() => {}} type={"Business Search"} />
             )}
-        </BuisinessViewContent>
+          </div>
+          <div style={{ width: "100%" }}>
+            <BuisinessViewContent>
+              {businessProfile &&
+                businessProfile.length > 0 &&
+                (displayBusinessProfile ? (
+                  <BuisinessProfileDetails
+                    displayBusinessProfile={displayBusinessProfile}
+                    setDisplayBusinessProfile={setDisplayBusinessProfile}
+                    setDisplayTab={setDisplayTab}
+                    // searchIndex={searchIndex}
+                    // setTabIndex={setTabIndex}
+                    // setSearchIndex={setSearchIndex}
+                    // myFeedIndex={myFeedIndex}
+                    // setMyFeedIndex={setMyFeedIndex}
+                    // favoriteIndex={favoriteIndex}
+                    // setFavoriteIndex={setFavoriteIndex}
+                    // listIndex={listIndex}
+                    // setListIndex={setListIndex}
+                  />
+                ) : (
+                  <BuisinessHeader
+                    setDisplayTab={setDisplayTab}
+                    setDisplayBusinessProfile={setDisplayBusinessProfile}
+                    // searchIndex={searchIndex}
+                    // setTabIndex={setTabIndex}
+                    // setSearchIndex={setSearchIndex}
+                    // myFeedIndex={myFeedIndex}
+                    // setMyFeedIndex={setMyFeedIndex}
+                    // listIndex={listIndex}
+                    // setListIndex={setListIndex}
+                    // favoriteIndex={favoriteIndex}
+                    // setFavoriteIndex={setFavoriteIndex}
+                  />
+                ))}
+              {!displayBusinessProfile &&
+                !loading &&
+                businessProfile &&
+                businessProfile.length > 0 && (
+                  <TabsSection
+                    // profile={profile}
+                    businessId={businessId}
+                    // setSelectedListId={setSelectedListId}
+                  />
+                )}
+            </BuisinessViewContent>
+          </div>
+        </BusinessWrap>
       )}
     </>
   );

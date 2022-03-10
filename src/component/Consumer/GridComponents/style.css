@@ -33,9 +33,9 @@
   display: block;
   overflow: hidden;
   box-shadow: 0 0 10px 10px #4c146c;
+  background: #221e45;
   z-index: 9;
 }
-
 
 .map-overlay {
   position: absolute;
@@ -77,7 +77,7 @@
     bottom: -15% */
   right: 0%;
   bottom: 0%;
-  z-index: 5;
+  z-index: 0;
   /* box-shadow: 0 0 100px 100px purple; */
   /* border-radius: 50%;
     box-shadow: 0 0 100px 100px purple; */

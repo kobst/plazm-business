@@ -12,6 +12,7 @@ const SectionItemWrapper = ({
   setSelectedListId,
   setDiscoverBtn,
   setReadMore,
+  obj,
 }) => {
   const listSearch = useSelector((state) => state.list.listSearch);
   const searchList = useSelector((state) => state.list.searchList);
@@ -24,7 +25,9 @@ const SectionItemWrapper = ({
   const fetchMoreList = () => {
     if (offset + 30 < totalList) {
       setOffSet(offset + 30);
-      dispatch(SearchListApi({ value: offset + 30, search: listSearch }));
+      dispatch(
+        SearchListApi({ value: offset + 30, search: listSearch, ...obj })
+      );
     } else {
       setHasMore(false);
     }
@@ -41,7 +44,7 @@ const SectionItemWrapper = ({
             offset < totalList && loading ? (
               <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
                 {" "}
-                <ValueLoader height="40" width="40" />
+                <ValueLoader />
               </div>
             ) : null
           }

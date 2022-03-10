@@ -35,16 +35,24 @@ const getUserLists = (ownerId) => {
             getUserLists(input: {id: $id}) {
               message
               success
+              totalLists
               list {
                   _id
-                  name
-                  ownerId {
-                    _id
+                  isPublic
+                  ownerId
+                  subscribers {
                     name
+                    photo
+                    _id
                   }
+                  name
+                  description
+                  type
                   media {
                     image
                   }
+                  createdAt
+                  updatedAt
                 }
               }
           }`,
@@ -61,8 +69,8 @@ const getUserLists = (ownerId) => {
 const getUserCreatedAndFollowedLists = (obj) => {
   const graphQl = {
     query: `
-          query GetUserCreatedAndFollowedLists($id: ID!, $value: Int){
-            getUserCreatedAndFollowedLists (input: {id: $id, value:$value}){
+          query GetUserCreatedAndFollowedLists($id: ID!, $value: Int, $limit: Int){
+            getUserCreatedAndFollowedLists (input: {id: $id, value:$value, limit: $limit}){
               message
               success
               totalLists
@@ -71,10 +79,10 @@ const getUserCreatedAndFollowedLists = (obj) => {
                   isPublic
                   ownerId
                   subscribers {
-                    userId {
-                      name
-                      photo
-                    }
+                    _id
+                    name
+                    photo
+                    
                   }
                   name
                   description
@@ -90,6 +98,7 @@ const getUserCreatedAndFollowedLists = (obj) => {
     variables: {
       id: obj.id,
       value: obj.value,
+      limit: obj?.limit || 15,
     },
   };
   return graphQl;
@@ -122,6 +131,11 @@ const GetListDetails = (obj) => {
               data {
                 _id
                 data
+                title
+                eventSchedule {
+                    start_time
+                    end_time
+                }
                 business {
                   _id
                   company_name
@@ -264,8 +278,8 @@ const getMostPopularLists = (value) => {
 const SearchLists = (obj) => {
   const graphQl = {
     query: `
-          query ListSearch($value: Int, $search: String){
-            listSearch(input: {value: $value, search: $search}) {
+          query ListSearch($value: Int, $search: String, $userId: String, $subscriberId: String){
+            listSearch(input: {value: $value, search: $search, userId: $userId, subscriberId: $subscriberId}) {
               message
               success
               totalLists
@@ -279,12 +293,9 @@ const SearchLists = (obj) => {
                 }
                 ownerId
                 subscribers {
-                  userId {
-                    _id
-                    name
-                    photo
-                  }
-                  created_on
+                  _id
+                  name
+                  photo
                 }
                 updatedAt
               }
@@ -293,6 +304,8 @@ const SearchLists = (obj) => {
     variables: {
       value: obj.value,
       search: obj.search,
+      userId: obj.userId,
+      subscriberId: obj.subscriberId,
     },
   };
   return graphQl;

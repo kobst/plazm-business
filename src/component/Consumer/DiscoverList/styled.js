@@ -5,9 +5,11 @@ export const TopSectionWrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 15px 30px;
+  padding: 0px 20px 0 60px;
+  background: #18123a;
+  min-height: 60px;
   @media (max-width: 767px) {
-    padding: 15px;
+    padding: 0 15px;
   }
   @media (max-width: 479px) {
     flex-direction: column;
@@ -58,18 +60,20 @@ export const RightSearchWrap = styled.div`
   display: flex;
   max-width: 285px;
   width: 100%;
-  height: 38px;
+  height: 26px;
+  position: relative;
   @media (max-width: 767px) {
     max-width: 200px;
   }
   .SearchSubscriptionsInput {
     background: url(${SearchIcon}) no-repeat right 10px center #fff;
-    border-radius: 2px;
-    border: 1px solid #e4e4e4;
-    height: 38px;
-    font-size: 14px;
+    height: 26px;
+    font-size: 12px;
     padding-right: 35px;
     margin: 0;
+    border: 1px solid #f0f0f0;
+    border-radius: 50px;
+    background-size: 14px;
     ::placeholder {
       color: #c8c8c8;
     }
@@ -237,7 +241,7 @@ export const CoverImg = styled.div`
     width: 100%;
     height: 100%;
     object-fit: cover;
-    z-index: -1;
+    z-index: 0;
     @media only screen and (min-width: 992px) {
       @media not all and (min-resolution: 0.001dpcm) {
         @media {
@@ -428,7 +432,7 @@ export const SearchItemsContainer = styled.div`
   width: 100%;
   display: flex;
   flex-flow: row wrap;
-  height: calc(100vh - 140px);
+  height: calc(100vh - 200px);
   // &.test {
   //   height: calc(100vh - 140px);
   // }
@@ -491,4 +495,20 @@ export const ErrorDiv = styled.div`
   margin-left: 20px;
   float: right;
   margin-right: 30px;
+  &.list-error {
+    position: absolute;
+    right: 5px;
+    top: 7px;
+    font-size: 10px;
+  }
+`;
+
+export const ListWraper = styled.div`
+  position: relative;
+  top: 60px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: #141414;
+  padding-left: 60px;
 `;

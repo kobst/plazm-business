@@ -28,7 +28,18 @@ import {
   ListInfo,
   ListName,
   ListNameWrap,
+  TopListHeader,
+  RightBuisinessName,
+  BuisinessNme,
+  LeftListHeader,
+  ShowMoreDiv,
+  ImgThumbWrap,
 } from "../../../FeedContent/styled";
+import DateBar from "../../../BuisinessView/TabsSection/EventsSection/PostChat/DateBar/index.js";
+import TimeBar from "../../../BuisinessView/TabsSection/EventsSection/PostChat/TimeBar/index.js";
+import ArrowSm from "../../../../../images/arrow-sm-up.png";
+import ArrowSmDown from "../../../../../images/arrow-sm.png";
+import ImageSlider from "./imageslider";
 
 const reactStringReplace = require("react-string-replace");
 
@@ -69,6 +80,7 @@ const ProfileNameHeader = styled.div`
   &.UserMessageView {
     padding-left: 15px;
     width: 100%;
+    font-family: "Roboto", sans-serif;
   }
 `;
 
@@ -121,6 +133,25 @@ const LoaderWrap = styled.div`
   margin: 30px 0 10px;
 `;
 
+const SubHeading = styled.div`
+  font-style: normal;
+  font-size: 13px;
+  line-height: normal;
+  margin: 0 0 5px 0;
+  font-weight: 700;
+  color: #00c2ff;
+`;
+
+const days = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
 const UserMessage = ({
   postData,
   businessData,
@@ -157,7 +188,7 @@ const UserMessage = ({
       ? postData.listId[0].media[0].image
       : BannerImg
   );
-
+  const [readMore, setReadMore] = useState(false);
   const listNavigate = () => {
     if (type === "search") {
       setSelectedListId(postData.listId[0]._id);
@@ -376,66 +407,143 @@ const UserMessage = ({
           >
             <ProfileNameWrap className="UserMessageViewProfileName">
               {myFeedView && (
-                <InnerListBanner onClick={() => listNavigate()}>
-                  <img
-                    src={listImage}
-                    alt=""
-                    onError={() => setListImage(BannerImg)}
-                  />
-                  <InnerOverlay />
-                  <ListNameWrap>
-                    <ListName>{postData.listId[0].name}</ListName>
-                    <ListInfo>
-                      <FaCaretRight />
-                      <ListAuthorName onClick={() => displayUserDetails()}>
-                      {postData.ownerId[0].name}
-                      </ListAuthorName>
-                      <span>|</span>
-                      <ListAuthorName>
-                        {moment(postData.createdAt).format(
-                          "MMM DD,YYYY, hh:MM a"
-                        )}{" "}
-                        EDT{" "}
-                      </ListAuthorName>
-                    </ListInfo>
-                  </ListNameWrap>
-                </InnerListBanner>
+                <>
+                  <TopListHeader>
+                    <LeftListHeader>
+                      <InnerListBanner onClick={() => listNavigate()}>
+                        <img
+                          src={listImage}
+                          alt=""
+                          onError={() => setListImage(BannerImg)}
+                        />
+                      </InnerListBanner>
+                      <ListNameWrap>
+                        <ListName>{postData.listId[0].name}</ListName>
+                        <ListInfo>
+                          <FaCaretRight />
+                          <ListAuthorName onClick={() => displayUserDetails()}>
+                            {postData.ownerId[0].name}
+                          </ListAuthorName>
+                          <span>|</span>
+                          <ListAuthorName>
+                            {moment(postData.createdAt).format(
+                              "MMM DD, YYYY, hh:MMa"
+                            )}{" "}
+                            EDT{" "}
+                          </ListAuthorName>
+                        </ListInfo>
+                      </ListNameWrap>
+                    </LeftListHeader>
+                    <RightBuisinessName>
+                      <BuisinessNme>{businessData.company_name}</BuisinessNme>
+                      <div className="hex">
+                        <div className="hex-background">
+                          <img src={businessData.default_image_url} />
+                        </div>
+                      </div>
+                    </RightBuisinessName>
+                  </TopListHeader>
+                </>
               )}
+              {postData.title && <SubHeading>{postData.title}</SubHeading>}
+
               <ChatInput>
                 {findDesc(
-                  postData.data,
+                  postData.data.length > 225 && !readMore
+                    ? postData.data.substring(0, 225)
+                    : postData.data,
                   postData.taggedUsers || [],
                   postData.taggedLists || []
                 )}
+                {!readMore && postData.data.length > 225 && <b>...</b>}
               </ChatInput>
-              {listDescriptionView || myFeedView ? (
+              {postData.eventSchedule && (
+                <>
+                  {" "}
+                  <DateBar
+                    startDay={
+                      days[new Date(postData.eventSchedule.start_time).getDay()]
+                    }
+                    endDay={
+                      days[new Date(postData.eventSchedule.end_time).getDay()]
+                    }
+                  />
+                  <TimeBar
+                    startTime={new Date(postData.eventSchedule.start_time)}
+                    endTime={new Date(postData.eventSchedule.end_time)}
+                  />
+                </>
+              )}
+
+              {!readMore && (
+                <ImgThumbWrap>
+                  {postData.media.map((src) => (
+                    <img src={src} />
+                  ))}
+                </ImgThumbWrap>
+              )}
+              {(listDescriptionView || myFeedView) &&
+                readMore &&
+                postData.media.length >= 1 && (
+                  <ImageSlider imgSources={postData.media} />
+                )}
+
+              {!readMore && (
+                <ShowMoreDiv
+                 className="ListingShowMore"
+                  onClick={() => {
+                    setReadMore((prev) => !prev);
+                  }}
+                >
+                  <span>
+                    Show More <img src={ArrowSmDown} className="ArrowSm" />
+                  </span>
+                </ShowMoreDiv>
+              )}
+              {readMore && (
+                <>
+                  <ShowMoreDiv
+                    onClick={() => {
+                      setReadMore((prev) => !prev);
+                    }}
+                  >
+                    <span>
+                      Show Less <img src={ArrowSm} className="ArrowSm" />
+                    </span>
+                  </ShowMoreDiv>
+                  <LikesBar
+                    type="comment"
+                    totalLikes={postData.likes ? postData.likes.length : 0}
+                    totalComments={
+                      postData.totalComments.length > 0
+                        ? postData.totalComments[0].totalCount
+                        : 0
+                    }
+                    date={new Date(postData.createdAt)}
+                    setDisplayComments={setDisplayComments}
+                    displayComments={displayComments}
+                    postId={postData._id}
+                    postLikes={postData.likes}
+                    displayCommentInput={displayCommentInput}
+                    setDisplayCommentInput={setDisplayCommentInput}
+                    setFlag={setFlag}
+                    flag={flag}
+                    business={businessData}
+                    commentsRef={commentsRef}
+                    listDescriptionView={listDescriptionView}
+                    listData={postData}
+                    setListIndex={setListIndex}
+                    myFeedView={myFeedView}
+                    setMyFeedIndex={setMyFeedIndex}
+                  />
+                </>
+              )}
+
+              {/* {(listDescriptionView || myFeedView) &&
+              readMore &&
+              postData.media.length === 1 ? (
                 <BigImage image={postData.media} />
-              ) : null}
-              <LikesBar
-                type="comment"
-                totalLikes={postData.likes ? postData.likes.length : 0}
-                totalComments={
-                  postData.totalComments.length > 0
-                    ? postData.totalComments[0].totalCount
-                    : 0
-                }
-                date={new Date(postData.createdAt)}
-                setDisplayComments={setDisplayComments}
-                displayComments={displayComments}
-                postId={postData._id}
-                postLikes={postData.likes}
-                displayCommentInput={displayCommentInput}
-                setDisplayCommentInput={setDisplayCommentInput}
-                setFlag={setFlag}
-                flag={flag}
-                business={businessData}
-                commentsRef={commentsRef}
-                listDescriptionView={listDescriptionView}
-                listData={postData}
-                setListIndex={setListIndex}
-                myFeedView={myFeedView}
-                setMyFeedIndex={setMyFeedIndex}
-              />
+              ) : null} */}
             </ProfileNameWrap>
           </ProfileNameHeader>
         </UserMessageContent>

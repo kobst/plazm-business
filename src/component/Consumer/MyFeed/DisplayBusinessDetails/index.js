@@ -1,8 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import ProfileImg from "../../../../images/profile-img.png";
-import UserMessage from "../../HomeSearch/BusinessListing/UserMessage";
 import UserMessageEvents from "../../HomeSearch/BusinessListing/Events/UserMessageEvents";
+import UserMessage from "../../HomeSearch/BusinessListing/UserMessage";
 
 import { useHistory } from "react-router";
 import {
@@ -21,12 +20,16 @@ const UserMsgWrap = styled.div`
 `;
 
 const FeedListItem = styled.div`
-  .background-active {
+  /* .background-active {
     background-color: #221e45;
   }
   .background-inactive {
     background-color: #282352;
-  }
+  } */
+  background: #120F29;
+  border: 1px solid #3F3777;
+  border-radius: 10px;
+  margin: 0 10px 3px;
 `;
 
 /** display business details */
@@ -54,19 +57,6 @@ const DisplayBusinessDetails = ({
       <div
         className={id % 2 === 0 ? "background-active" : "background-inactive"}
       >
-        <UserMsgWrap>
-          <ProfileThumbBanner onClick={() => displayBusinessDetail()}>
-            <img
-              src={data.business[0].default_image_url || ProfileImg}
-              alt=""
-            />
-            <ProfileThumbOverlay />
-            <ProfileName>
-              <span>{data.business[0].company_name}</span>
-            </ProfileName>
-          </ProfileThumbBanner>
-        </UserMsgWrap>
-
         {/* to display event for the business */}
         {data.eventSchedule !== null ? (
           <UserMessageEvents

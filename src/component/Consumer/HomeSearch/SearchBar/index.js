@@ -195,8 +195,8 @@ const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
   const [search, setSearch] = useState("");
   const loader = useSelector((state) => state.myFeed.loading);
   const [searchError, setSearchError] = useState("");
-  const [uploadMenu, setUploadMenu] = useState(false);
-  const userLocation = useSelector((state) => state.business.userLocation);
+  // const [uploadMenu, setUploadMenu] = useState(false);
+  // const userLocation = useSelector((state) => state.business.userLocation);
   const filterClosest = useSelector((state) => state.myFeed.filterByClosest);
   const updatedAtFilter = useSelector(
     (state) => state.myFeed.filterByUpdatedAt
@@ -211,25 +211,25 @@ const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
   }, [searchData]);
 
   /** to toggle side filter menu */
-  const toggleUploadMenu = () => {
-    setUploadMenu(!uploadMenu);
-  };
+  // const toggleUploadMenu = () => {
+  //   setUploadMenu(!uploadMenu);
+  // };
 
-  /** to set side filter by closest */
-  const closestFilter = () => {
-    setOffset(0);
-    dispatch(setSideFiltersByClosest());
-    setFilterSelected(true);
-    setUploadMenu(false);
-  };
+  // /** to set side filter by closest */
+  // const closestFilter = () => {
+  //   setOffset(0);
+  //   dispatch(setSideFiltersByClosest());
+  //   setFilterSelected(true);
+  //   setUploadMenu(false);
+  // };
 
-  /** to set side filter by recently updated */
-  const recentlyUpdatedFilter = () => {
-    setOffset(0);
-    dispatch(setSideFiltersByUpdatedAt());
-    setFilterSelected(true);
-    setUploadMenu(false);
-  };
+  // /** to set side filter by recently updated */
+  // const recentlyUpdatedFilter = () => {
+  //   setOffset(0);
+  //   dispatch(setSideFiltersByUpdatedAt());
+  //   setFilterSelected(true);
+  //   setUploadMenu(false);
+  // };
 
   /** on key press handler for search */
   const searchList = (event) => {
@@ -272,7 +272,7 @@ const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
             disabled={loader}
             placeholder="Search"
           />
-          <FilterBox ref={menuRef}>
+          {/* <FilterBox ref={menuRef}>
             <FaFilter onClick={toggleUploadMenu} />
             {uploadMenu && (
               <DropdownContent>
@@ -299,11 +299,11 @@ const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
                 </ul>
               </DropdownContent>
             )}
-          </FilterBox>
+          </FilterBox> */}
         </RightSearchWrap>
-        <CloseDiv>
+        {/* <CloseDiv>
           <IoMdClose onClick={() => setDisplayTab()} />
-        </CloseDiv>
+        </CloseDiv> */}
       </SearchWrap>
       {searchError !== "" ? <ErrorDiv>{searchError}</ErrorDiv> : null}
     </>

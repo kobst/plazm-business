@@ -13,7 +13,7 @@ import SearchBar from "./SearchBar";
 import GridView from "../GridComponents/gridView/gridView";
 
 import useStore from "../useState";
-
+import GlobalSearchBox from "../GlobalSearch/GlobalSearchBox";
 
 const LoaderWrap = styled.div`
   width: 100%;
@@ -118,17 +118,20 @@ const MyFeed = () => {
   const dispatch = useDispatch();
   const [flag, setFlag] = useState(true);
 
+  const setSelectedListId = useStore((state) => state.setSelectedListId);
+  const setMyFeedIndex = useStore((state) => state.setMyFeedIndex);
+  const draggedLocation = useStore((state) => state.draggedLocation);
+  const gridMode = useStore((state) => state.gridMode);
 
-  const setSelectedListId = useStore((state) => state.setSelectedListId)
-  const setMyFeedIndex = useStore((state) => state.setMyFeedIndex)
-  const draggedLocation = useStore((state) => state.draggedLocation)
-  const gridMode =  useStore((state) => state.gridMode)
+
   const orderedPlaces = useStore((state) => state.orderedPlaces)
  
 
-  useEffect(()=>{
-    console.log(gridMode + "gridMode")
-  },[gridMode])
+  const showSearchBar = useSelector((state) => state.globalSearch.displayBar);
+
+  useEffect(() => {
+    console.log(gridMode + "gridMode");
+  }, [gridMode]);
 
   /** to fetch data initially */
   useEffect(() => {
@@ -136,7 +139,12 @@ const MyFeed = () => {
 
     // console.log(userLocation.latitude + " lat  " + userLocation.longitude + "lng")
 
-    console.log(process.env.REACT_APP_LATITUDE + " lat  " + process.env.REACT_APP_LONGITUDE + "lng")
+    console.log(
+      process.env.REACT_APP_LATITUDE +
+        " lat  " +
+        process.env.REACT_APP_LONGITUDE +
+        "lng"
+    );
 
     const fetchData = async () => {
       const obj = {
@@ -153,7 +161,8 @@ const MyFeed = () => {
       if (data) setFlag(false);
     };
     fetchData();
-  }, [dispatch,
+  }, [
+    dispatch,
     user._id,
     filterByClosest,
     filterByUpdatedAt,
@@ -185,58 +194,66 @@ const MyFeed = () => {
         <LoaderWrap>
           <ValueLoader />
         </LoaderWrap>
-      ) : (!gridMode &&
-        <BuisinessViewContent>
-          <SearchBar
-            setOffset={setOffSet}
-            // setDisplayTab={setDisplayTab}
-            setFlag={setFlag}
-          />
-          <div
-            id="scrollableDiv"
-            style={{ height: "calc(100vh - 44px)", overflow: "auto" }}
-          >
-            <InfiniteScroll
-              dataLength={feedData ? feedData.length : 0}
-              next={fetchMoreData}
-              hasMore={hasMore}
-              loader={
-                offset < totalData && loading ? (
-                  <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
-                    {" "}
-                    <ValueLoader height="40" width="40" />
-                  </div>
-                ) : null
-              }
-              scrollableTarget="scrollableDiv"
-              endMessage={
-                feedData.length > 20 && !loading ? (
-                  <center>
-                    <NoMorePost className="noMorePost">
-                      No more Data to show
-                    </NoMorePost>
-                  </center>
-                ) : null
-              }
+      ) : (
+        !gridMode && (
+          <BuisinessViewContent>
+            {/* <SearchBar
+              setOffset={setOffSet}
+              // setDisplayTab={setDisplayTab}
+              setFlag={setFlag}
+            /> */}
+            {showSearchBar && (
+              <GlobalSearchBox setOffset={setOffSet} type={"Search Feed"} />
+            )}
+
+            <div
+              id="scrollableDiv"
+              style={{ height: "calc(100vh - 44px)", overflow: "auto" }}
             >
-              <BusinessListWrap>
-                {feedData.length > 0 ? (
-                  feedData.map((i, key) => ( 
-                    <DisplayBusinessDetails
-                      data={i}
-                      id={key}
-                      key={key}
-                      setMyFeedIndex={setMyFeedIndex}
-                      setSelectedListId={setSelectedListId}
-                    />
-                  ))
-                ) : !loading ? (
-                  <NoData>No Data To Display</NoData>
-                ) : null}
-              </BusinessListWrap>
-            </InfiniteScroll>
-          </div>
-        </BuisinessViewContent>
+              <InfiniteScroll
+                dataLength={feedData ? feedData.length : 0}
+                next={fetchMoreData}
+                hasMore={hasMore}
+                loader={
+                  offset < totalData && loading ? (
+                    <div
+                      style={{ textAlign: "center", margin: " 40px auto 0" }}
+                    >
+                      {" "}
+                      <ValueLoader height="40" width="40" />
+                    </div>
+                  ) : null
+                }
+                scrollableTarget="scrollableDiv"
+                endMessage={
+                  feedData.length > 20 && !loading ? (
+                    <center>
+                      <NoMorePost className="noMorePost">
+                        No more Data to show
+                      </NoMorePost>
+                    </center>
+                  ) : null
+                }
+              >
+                <BusinessListWrap>
+                  {feedData.length > 0 ? (
+                    feedData.map((i, key) => (
+                      <DisplayBusinessDetails
+                        data={i}
+                        id={key}
+                        key={key}
+                        setMyFeedIndex={setMyFeedIndex}
+                        setSelectedListId={setSelectedListId}
+                      />
+                    ))
+                  ) : !loading ? (
+                    <NoData>No Data To Display</NoData>
+                  ) : null}
+                </BusinessListWrap>
+              </InfiniteScroll>
+            </div>
+          </BuisinessViewContent>
+        )
       )}
     </>
   );

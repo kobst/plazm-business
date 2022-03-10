@@ -12,6 +12,7 @@ import {
 } from "../../../../reducers/myFeedReducer";
 import error from "../../../../constants";
 
+import GlobalSearchBox from "../../GlobalSearch/GlobalSearchBox";
 import useStore from "../../useState";
 
 const BusinessListWrap = styled.div`
@@ -45,11 +46,7 @@ const NoMorePost = styled.p`
   color: #fff;
 `;
 
-const BusinessListing = ({
-  loader,
-  coords,
-  closestFilter,
-}) => {
+const BusinessListing = ({ loader, coords, closestFilter }) => {
   const businessData = useSelector((state) => state.myFeed.searchFeed);
   const loading = useSelector((state) => state.myFeed.loading);
   const [offset, setOffset] = useState(0);
@@ -61,14 +58,17 @@ const BusinessListing = ({
   const updatedAtFilter = useSelector(
     (state) => state.myFeed.filterByUpdatedAt
   );
+
+  const showSearchBar = useSelector((state) => state.globalSearch.displayBar);
   const [filterSelected, setFilterSelected] = useState(false);
   const [flag, setFlag] = useState(true);
 
-
-  const setSelectedListId = useStore((state) => state.setSelectedListId)
-  const setSearchIndex = useStore((state) => state.setSearchIndex)
-  const setListClickedFromSearch = useStore((state) => state.setListClickedFromSearch)
-  const draggedLocation = useStore((state => state.draggedLocation))
+  const setSelectedListId = useStore((state) => state.setSelectedListId);
+  const setSearchIndex = useStore((state) => state.setSearchIndex);
+  const setListClickedFromSearch = useStore(
+    (state) => state.setListClickedFromSearch
+  );
+  const draggedLocation = useStore((state) => state.draggedLocation);
 
   /** useEffect called when any side filters are selected */
   useEffect(() => {
@@ -100,7 +100,7 @@ const BusinessListing = ({
     updatedAtFilter,
     offset,
     loader,
-    draggedLocation
+    draggedLocation,
   ]);
 
   /** to fetch more places matching the search */
@@ -120,12 +120,16 @@ const BusinessListing = ({
 
   return (
     <>
-      <SearchBar
+      {/* <SearchBar
         offset={offset}
         setOffset={setOffset}
         setFilterSelected={setFilterSelected}
         // setDisplayTab={setDisplayTab}
-      />
+      /> */}
+
+      {showSearchBar && (
+        <GlobalSearchBox setOffset={setOffset} type={"Explore"} />
+      )}
       {(loading && offset === 0) || flag ? (
         <LoaderWrap>
           <ValueLoader />

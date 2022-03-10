@@ -1,44 +1,51 @@
-import React, { Component, useState, useEffect, useMemo, useRef } from 'react';
-import ReactDOM from 'react-dom';
-import mapboxgl, { MapMouseEvent } from 'mapbox-gl';
-import ReactMapboxGl, { Layer, Source, Feature, MapContext, GeoJSONLayer } from "react-mapbox-gl";
-import useStore from '../useState/index'
-import './styles.css'
+
+import React, { Component, useState, useEffect, useMemo, useRef } from "react";
+import ReactDOM from "react-dom";
+import mapboxgl, { MapMouseEvent } from "mapbox-gl";
+import ReactMapboxGl, {
+  Layer,
+  Source,
+  Feature,
+  MapContext,
+} from "react-mapbox-gl";
+import useStore from "../useState/index";
+import "./styles.css";
 import Geocode from "react-geocode";
 import GoogleMapReact from "google-map-react";
 import ColorDict from '../GridComponents/functions/colorSlotDict'
 
 // import '../../App.css';
 
-
-import * as turf from '@turf/turf'
-import { connect } from 'react-redux'
+import * as turf from "@turf/turf";
+import { connect } from "react-redux";
 
 // https://github.com/bryik/mapbox-react-examples/blob/basic-hooks/basic/src/index.js
 
 // https://alex3165.github.io/react-mapbox-gl/demos
 
 function distance(lat1, lon1, lat2, lon2) {
-    if ((lat1 == lat2) && (lon1 == lon2)) {
-        return 0;
+  if (lat1 == lat2 && lon1 == lon2) {
+    return 0;
+  } else {
+    var radlat1 = (Math.PI * lat1) / 180;
+    var radlat2 = (Math.PI * lat2) / 180;
+    var theta = lon1 - lon2;
+    var radtheta = (Math.PI * theta) / 180;
+    var dist =
+      Math.sin(radlat1) * Math.sin(radlat2) +
+      Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+    if (dist > 1) {
+      dist = 1;
     }
-    else {
-        var radlat1 = Math.PI * lat1 / 180;
-        var radlat2 = Math.PI * lat2 / 180;
-        var theta = lon1 - lon2;
-        var radtheta = Math.PI * theta / 180;
-        var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-        if (dist > 1) {
-            dist = 1;
-        }
-        dist = Math.acos(dist);
-        dist = dist * 180 / Math.PI;
-        dist = dist * 60 * 1.1515;
-        // if (unit=="K") { dist = dist * 1.609344 }
-        // if (unit=="N") { dist = dist * 0.8684 }
-        return dist;
-    }
+    dist = Math.acos(dist);
+    dist = (dist * 180) / Math.PI;
+    dist = dist * 60 * 1.1515;
+    // if (unit=="K") { dist = dist * 1.609344 }
+    // if (unit=="N") { dist = dist * 0.8684 }
+    return dist;
+  }
 }
+
 
 
 
@@ -64,13 +71,11 @@ function distance(lat1, lon1, lat2, lon2) {
 
 
 const Map = ReactMapboxGl({
-    accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
-    interactive: true
+  accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
+  interactive: true,
 });
 
-
 Geocode.setApiKey("AIzaSyAYVZIvAZkQsaxLD3UdFH5EH3DvYmSYG6Q");
-
 
 const MapView = (props) => {
 
@@ -125,39 +130,104 @@ const MapView = (props) => {
         width: '50vw',
         borderRadius: '10%'
     }
+    if (maxViewable) {
+      limit = maxViewable;
+    }
+    console.log("ordered places " + orderedPlaces.length);
 
-    const mapContainerStyle = {
-        // height: '100vh',
-        // width: '100%',
-        height: '80vh',
-        width: '40vw',
-        borderRadius: '10%'
+    for (let i = 0; i < limit; i++) {
+      // console.log(i)
+      // console.log(orderedPlaces[i])
+      if (orderedPlaces[i]) {
+        let coords = orderedPlaces[i].businessLocation.coordinates;
+        coordArray.push(coords);
+      }
     }
 
-    const [dimensions, setDimensions] = useState(gridContainerStyle)
+    // console.log("coord array  " + coordArray)
+    const geoJsonFeatures = {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {},
+          geometry: {
+            type: "Polygon",
+            coordinates: [coordArray],
+          },
+        },
+      ],
+    };
 
+    let lngLatBox = turf.bbox(geoJsonFeatures);
+    // console.log('lngLatBox', lngLatBox)
+    let sw = [lngLatBox[0], lngLatBox[1]];
+    let ne = [lngLatBox[2], lngLatBox[3]];
+    let fitboundsObj = [sw, ne];
+    setBox(fitboundsObj);
+  };
 
+  useEffect(() => {
+    let mounted = true;
+    if (orderedPlaces.length > 1 && mounted) {
+      setBBox();
+    }
+    return () => (mounted = false);
+  }, [orderedPlaces, maxViewable]);
 
-    const setBBox = () => {
-       
-            let coordArray = []
-            var limit = 10
-            if (orderedPlaces.length < limit) {
-                limit = orderedPlaces.length - 1
-            }
-            if (maxViewable) {
-                limit = maxViewable
-            }
-            console.log("ordered places " + orderedPlaces.length)
+  // only use if not using second map
+  useMemo(() => {
+    console.log("map view toggle");
+    if (gridView) {
+      console.log("gridView true");
+      setDimensions(gridContainerStyle);
+      // Map.resize()
+      // ReCenter()
+    } else {
+      console.log("gridView false");
+      setDimensions(mapContainerStyle);
+      // Map.resize()
+      // ReCenter()
+    }
+  }, [gridView]);
 
-            for (let i = 0; i < limit; i++) {
-                // console.log(i)
-                // console.log(orderedPlaces[i])
-                if (orderedPlaces[i]) {
-                    let coords = orderedPlaces[i].businessLocation.coordinates
-                    coordArray.push(coords)
-                }
+  useEffect(() => {
+    console.log("reading selected place from mapview");
 
+    if (selectedPlace) {
+      // console.log(selectedPlace)
+      setGridView(false);
+    }
+  }, [selectedPlace]);
+
+  useEffect(() => {
+    console.log(" geocode ");
+    Geocode.fromLatLng(
+      JSON.stringify(draggedLocation.lat),
+      JSON.stringify(draggedLocation.lng)
+    ).then(
+      (response) => {
+        const address = response.results[0].formatted_address;
+        console.log(address);
+        // "sublocality" "locality"
+        for (
+          let i = 0;
+          i < response.results[0].address_components.length;
+          i++
+        ) {
+          for (
+            let j = 0;
+            j < response.results[0].address_components[i].types.length;
+            j++
+          ) {
+            if (
+              response.results[0].address_components[i].types[j] ===
+              "sublocality"
+            ) {
+              setSubLocality(
+                response.results[0].address_components[i].long_name
+              );
+              console.log(response.results[0].address_components[i].long_name);
             }
 
             // console.log("coord array  " + coordArray)
@@ -289,60 +359,45 @@ const MapView = (props) => {
             // console.log(selectedPlace)
             setGridView(false)
 
+
         }
-    }, [selectedPlace])
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+  }, [draggedLocation]);
 
+  const clickHandler = (map, event) => {
+    console.log("map clicked");
+    // let coordinates = event.lnglat.wrap()
+    console.log({ map, event });
+    // props.toggle(event)
+    if (event.fitboundUpdate) {
+      console.log("Map bounds have been programmatically changed");
+      console.log(map.getCenter());
+    } else {
+      console.log("Map bounds have been changed by user interaction");
+      let cntr = map.getCenter();
+      console.log(cntr);
+      setTempCenter(cntr);
+      setDraggedLocation(cntr);
+    }
+  };
 
-    useEffect(()=> {
-        console.log(" geocode ")
-        Geocode.fromLatLng(JSON.stringify(draggedLocation.lat), JSON.stringify(draggedLocation.lng)).then(
-            (response) => {
-              const address = response.results[0].formatted_address;
-              console.log(address);
-              // "sublocality" "locality" 
-              for (let i = 0; i < response.results[0].address_components.length; i++) {
-                for (let j = 0; j < response.results[0].address_components[i].types.length; j++) {
-                    if (response.results[0].address_components[i].types[j] === "sublocality") {
-                        setSubLocality(response.results[0].address_components[i].long_name)
-                        console.log(response.results[0].address_components[i].long_name)
-
-                    }
-                    if (response.results[0].address_components[i].types[j] === "locality"){
-                        setCity(response.results[0].address_components[i].long_name)
-                        console.log(response.results[0].address_components[i].long_name)
-                    }
-                }
-                }
-            },
-            (error) => {
-              console.error(error);
-            })
-
-    }, [draggedLocation])
-
-
-
-   
-
-    const clickHandler = (event) => {
-        console.log("map clicked")
-        // let coordinates = event.lnglat.wrap()
-        console.log(event)
-        // props.toggle(event)
+  const dragHandler = (map, event) => {
+    console.log({ map, event });
+    if (event.fitboundUpdate) {
+      console.log("Map bounds have been programmatically changed");
+      console.log(map.getCenter());
+    } else {
+      console.log("Map bounds have been changed by user interaction");
+      let cntr = map.getCenter();
+      console.log(cntr);
+      setTempCenter(cntr);
+      setDraggedLocation(cntr);
     }
 
-    const dragHandler = (map, event) => {
-        if (event.fitboundUpdate) {
-            console.log('Map bounds have been programmatically changed')
-            console.log(map.getCenter())
-          } else {
-            console.log('Map bounds have been changed by user interaction')
-            let cntr = map.getCenter()
-            console.log(cntr)
-            setTempCenter(cntr)
-            setDraggedLocation(cntr)      
-          }
-    }
 
 
 

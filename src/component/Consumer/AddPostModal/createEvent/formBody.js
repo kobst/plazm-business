@@ -67,7 +67,7 @@ const InputContainer = styled.div`
   }
   textarea {
     border: none;
-    font-size: 16px;
+    font-size: 16px !important;
     font-weight: bold;
     color: black;
     padding: 10px 0 0 0;

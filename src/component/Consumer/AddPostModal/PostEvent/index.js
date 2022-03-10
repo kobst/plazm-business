@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import { IoMdCloseCircle } from "react-icons/io";
+import Constants from "../../../../constants/index";
 
 const AllListingsContent = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 0 0 15px;
   p {
     font-size: 12px;
     font-weight: 600;
@@ -37,6 +37,9 @@ const EventListing = styled.div`
 
 const CloseList = styled.button`
   cursor: pointer;
+  position: absolute;
+  top: 5px;
+  right: 5px;
   svg {
     color: #fff;
     font-size: 20px;
@@ -68,7 +71,13 @@ const PostEvent = ({ eventDetails, setEventDetails, loader }) => {
             <span>
               <EventListing>
                 <span className="TitleSpan">Event Repeat :</span>{" "}
-                <span>{eventDetails.eventRepeat}</span>
+                {eventDetails.eventRepeat == 8 ? (
+                  <span>Once</span>
+                ) : (
+                  eventDetails.eventRepeat.map((val) => (
+                    <span>{Constants.REPETITION_DAY[val] + " "}</span>
+                  ))
+                )}
               </EventListing>
             </span>
           </div>

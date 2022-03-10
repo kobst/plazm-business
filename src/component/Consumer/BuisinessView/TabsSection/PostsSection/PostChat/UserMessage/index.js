@@ -29,11 +29,17 @@ import {
   ListName,
   ListNameWrap,
 } from "../../../../../FeedContent/styled";
+import DateBar from "../../../EventsSection/PostChat/DateBar";
+import TimeBar from "../../../EventsSection/PostChat/TimeBar";
 
 import useStore from "../../../../../useState";
+import DaysBar from "../../../EventsSection/PostChat/DaysBar";
 
 const reactStringReplace = require("react-string-replace");
-
+const TitleBarWrap = styled.div`
+  display: flex;
+  width: 100%;
+`;
 const UserMessageContent = styled.div`
   width: 100%;
   position: relative;
@@ -54,6 +60,7 @@ const UserMessageContent = styled.div`
     overflow-x: hidden;
   }
 `;
+
 const UserMsgWrap = styled.div`
   display: flex;
   flex-direction: column;
@@ -105,7 +112,26 @@ const LoaderWrap = styled.div`
   margin: 30px 0 20px;
 `;
 
-const UserMessage = ({ postData}) => {
+const SubHeading = styled.div`
+  font-style: normal;
+  font-size: 13px;
+  line-height: normal;
+  margin: 0 0 5px 0;
+  font-weight: 700;
+  color: #00c2ff;
+`;
+
+const days = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
+const UserMessage = ({ postData }) => {
   const dispatch = useDispatch();
   const [displayComments, setDisplayComments] = useState(false);
   const loadingComments = useSelector(
@@ -125,8 +151,7 @@ const UserMessage = ({ postData}) => {
       : BannerImg
   );
 
-  const setSelectedListId = useStore((state) => state.setSelectedListId)
-
+  const setSelectedListId = useStore((state) => state.setSelectedListId);
 
   ws.onmessage = (evt) => {
     const message = JSON.parse(evt.data);
@@ -360,13 +385,16 @@ const UserMessage = ({ postData}) => {
           <ProfileNameHeader>
             <ProfileNameWrap>
               {postData.postDetails.list._id !== null ? (
-                <InnerListBanner>
-                  <img
-                    src={listImage}
-                    alt=""
-                    onError={() => setListImage(BannerImg)}
-                  />
-                  <InnerOverlay />
+                <TitleBarWrap>
+                  <InnerListBanner>
+                    <img
+                      src={listImage}
+                      alt=""
+                      onError={() => setListImage(BannerImg)}
+                    />
+                    {/* <InnerOverlay /> */}
+                  </InnerListBanner>
+
                   <ListNameWrap>
                     <ListName>{postData.postDetails.list.name}</ListName>
                     <ListInfo>
@@ -379,14 +407,17 @@ const UserMessage = ({ postData}) => {
                       <ListAuthorName>
                         Added on{" "}
                         {moment(postData.postDetails.createdAt).format(
-                          "MMM DD,YYYY, hh:MM a"
+                          "MMM DD, YYYY, hh:MMa"
                         )}{" "}
                         EDT{" "}
                       </ListAuthorName>
                     </ListInfo>
                   </ListNameWrap>
-                </InnerListBanner>
+                </TitleBarWrap>
               ) : null}
+              {postData.postDetails.title && (
+                <SubHeading>{postData.postDetails.title}</SubHeading>
+              )}
               <FeedDescription>
                 {findDesc(
                   postData.postDetails.data,
@@ -394,6 +425,7 @@ const UserMessage = ({ postData}) => {
                   postData.postDetails.taggedLists
                 )}
               </FeedDescription>
+
               {postData.postDetails.media.length > 0 && (
                 <FeedBigImage>
                   <img src={postData.postDetails.media[0]} alt="" />

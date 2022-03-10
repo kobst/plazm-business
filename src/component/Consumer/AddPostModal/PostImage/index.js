@@ -5,7 +5,6 @@ import CrossIcon from "../../../../images/cross-icon.svg";
 
 const AllListingsContent = styled.div`
   width: 100%;
-  position: relative;
   margin: 0;
   display: flex;
 `;
