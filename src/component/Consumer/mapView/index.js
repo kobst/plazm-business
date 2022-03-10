@@ -1,4 +1,3 @@
-
 import React, { Component, useState, useEffect, useMemo, useRef } from "react";
 import ReactDOM from "react-dom";
 import mapboxgl, { MapMouseEvent } from "mapbox-gl";
@@ -130,6 +129,24 @@ const MapView = (props) => {
         width: '50vw',
         borderRadius: '10%'
     }
+
+    
+  const mapContainerStyle = {
+    // height: '100vh',
+    // width: '100%',
+    height: "80vh",
+    width: "40vw",
+    borderRadius: "10%",
+  };
+
+  const [dimensions, setDimensions] = useState(gridContainerStyle);
+
+  const setBBox = () => {
+    let coordArray = [];
+    var limit = 10;
+    if (orderedPlaces.length < limit) {
+      limit = orderedPlaces.length - 1;
+    }
     if (maxViewable) {
       limit = maxViewable;
     }
@@ -160,12 +177,12 @@ const MapView = (props) => {
     };
 
     let lngLatBox = turf.bbox(geoJsonFeatures);
-    // console.log('lngLatBox', lngLatBox)
     let sw = [lngLatBox[0], lngLatBox[1]];
     let ne = [lngLatBox[2], lngLatBox[3]];
     let fitboundsObj = [sw, ne];
     setBox(fitboundsObj);
-  };
+
+
 
   useEffect(() => {
     let mounted = true;
@@ -358,15 +375,8 @@ const MapView = (props) => {
         if (selectedPlace) {
             // console.log(selectedPlace)
             setGridView(false)
-
-
         }
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
-  }, [draggedLocation]);
+      },[draggedLocation]);
 
   const clickHandler = (map, event) => {
     console.log("map clicked");
@@ -515,10 +525,6 @@ const MapView = (props) => {
 
 
 export default MapView
-
-
-
-    
 
 
     // this doesn't work on load, prob because tempCenter starts as null and then setDraggedLocation becomes null
