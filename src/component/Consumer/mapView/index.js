@@ -68,6 +68,50 @@ function distance(lat1, lon1, lat2, lon2) {
 
 // }
 
+const setBBox = (_orderedPlaces) => {
+    let maxViewable = 10
+    let coordArray = [];
+    var limit = 10;
+    if (_orderedPlaces.length < limit) {
+      limit = _orderedPlaces.length - 1;
+    }
+    if (maxViewable) {
+      limit = maxViewable;
+    }
+    console.log("ordered places " + _orderedPlaces.length);
+
+    for (let i = 0; i < limit; i++) {
+      // console.log(i)
+      // console.log(orderedPlaces[i])
+      if (_orderedPlaces[i]) {
+        let coords = _orderedPlaces[i].businessLocation.coordinates;
+        coordArray.push(coords);
+      }
+    }
+
+    // console.log("coord array  " + coordArray)
+    const geoJsonFeatures = {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {},
+          geometry: {
+            type: "Polygon",
+            coordinates: [coordArray],
+          },
+        },
+      ],
+    };
+
+    let lngLatBox = turf.bbox(geoJsonFeatures);
+    let sw = [lngLatBox[0], lngLatBox[1]];
+    let ne = [lngLatBox[2], lngLatBox[3]];
+    let fitBoundsObj = [sw, ne];
+    return fitBoundsObj
+    // setBox(fitboundsObj);
+};
+
 
 const Map = ReactMapboxGl({
   accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
@@ -131,66 +175,26 @@ const MapView = (props) => {
     }
 
     
-  const mapContainerStyle = {
+    const mapContainerStyle = {
     // height: '100vh',
     // width: '100%',
-    height: "80vh",
-    width: "40vw",
-    borderRadius: "10%",
-  };
+      height: "80vh",
+     width: "40vw",
+     borderRadius: "10%",
+    };
 
   const [dimensions, setDimensions] = useState(gridContainerStyle);
 
-  const setBBox = () => {
-    let coordArray = [];
-    var limit = 10;
-    if (orderedPlaces.length < limit) {
-      limit = orderedPlaces.length - 1;
-    }
-    if (maxViewable) {
-      limit = maxViewable;
-    }
-    console.log("ordered places " + orderedPlaces.length);
-
-    for (let i = 0; i < limit; i++) {
-      // console.log(i)
-      // console.log(orderedPlaces[i])
-      if (orderedPlaces[i]) {
-        let coords = orderedPlaces[i].businessLocation.coordinates;
-        coordArray.push(coords);
-      }
-    }
-
-    // console.log("coord array  " + coordArray)
-    const geoJsonFeatures = {
-      type: "FeatureCollection",
-      features: [
-        {
-          type: "Feature",
-          properties: {},
-          geometry: {
-            type: "Polygon",
-            coordinates: [coordArray],
-          },
-        },
-      ],
-    };
-
-    let lngLatBox = turf.bbox(geoJsonFeatures);
-    let sw = [lngLatBox[0], lngLatBox[1]];
-    let ne = [lngLatBox[2], lngLatBox[3]];
-    let fitboundsObj = [sw, ne];
-    setBox(fitboundsObj);
 
 
+//   useEffect(() => {
+//     let mounted = true;
+//     if (orderedPlaces.length > 1 && mounted) {
+//       setBBox(orderedPlaces);
+//     }
+//     return () => (mounted = false);
+//   }, [orderedPlaces, maxViewable]);
 
-  useEffect(() => {
-    let mounted = true;
-    if (orderedPlaces.length > 1 && mounted) {
-      setBBox();
-    }
-    return () => (mounted = false);
-  }, [orderedPlaces, maxViewable]);
 
   // only use if not using second map
   useMemo(() => {
@@ -217,61 +221,11 @@ const MapView = (props) => {
     }
   }, [selectedPlace]);
 
-  useEffect(() => {
-    console.log(" geocode ");
-    Geocode.fromLatLng(
-      JSON.stringify(draggedLocation.lat),
-      JSON.stringify(draggedLocation.lng)
-    ).then(
-      (response) => {
-        const address = response.results[0].formatted_address;
-        console.log(address);
-        // "sublocality" "locality"
-        for (
-          let i = 0;
-          i < response.results[0].address_components.length;
-          i++
-        ) {
-          for (
-            let j = 0;
-            j < response.results[0].address_components[i].types.length;
-            j++
-          ) {
-            if (
-              response.results[0].address_components[i].types[j] ===
-              "sublocality"
-            ) {
-              setSubLocality(
-                response.results[0].address_components[i].long_name
-              );
-              console.log(response.results[0].address_components[i].long_name);
-            }
-
-            // console.log("coord array  " + coordArray)
-            const geoJsonFeatures = {
-                type: 'FeatureCollection',
-                features: [{
-                    type: 'Feature',
-                    properties: {},
-                    geometry: {
-                        type: "Polygon",
-                        coordinates: [coordArray]
-                    }
-                }]
-            }
 
 
-            let lngLatBox = turf.bbox(geoJsonFeatures);
-            // console.log('lngLatBox', lngLatBox)
-            let sw = [lngLatBox[0], lngLatBox[1]]
-            let ne = [lngLatBox[2], lngLatBox[3]]
-            let fitboundsObj = [sw, ne]
-            setBox(fitboundsObj)
-            setLineArray(coordArray)
-            let hex = turf.hexGrid(lngLatBox, 0.2)
-            setHex(hex)
-    
-    }
+
+
+
 
     const setLines = (dict) => {
         let centerWhite = dict["0-0-0"]
@@ -334,7 +288,8 @@ const MapView = (props) => {
     useEffect(() => {
         let mounted = true;
         if (orderedPlaces.length > 1 && mounted) {
-            setBBox()
+            let obj = setBBox(orderedPlaces)
+            setBox(obj)
         }
         return () => mounted = false;
     }, [orderedPlaces, maxViewable]);
@@ -407,7 +362,7 @@ const MapView = (props) => {
       setTempCenter(cntr);
       setDraggedLocation(cntr);
     }
-
+  }
 
 
 
@@ -525,180 +480,3 @@ const MapView = (props) => {
 
 
 export default MapView
-
-
-    // this doesn't work on load, prob because tempCenter starts as null and then setDraggedLocation becomes null
-    // useEffect(() => {
-
-    //     let timer1 = setTimeout(() => setDraggedLocation(tempCenter), 3000);
-    //     // this will clear Timeout when component unmount like in willComponentUnmount
-    //     return () => {
-    //         clearTimeout(timer1);
-    //     };
-    // }, [tempCenter]);
-
-
-
-
-    // useEffect(() => {
-    //     // console.log("- - multi effect - - ")
-    //     let mounted = true;
-    //     let places_outer= []
-
-    //     orderedPlaces.forEach((element) => {
-    //         let _color = element.icon_color
-    //         switch (_color) {
-    //             case 'white':
-    //                 setPlaces_0(element)
-    //                 break
-    //             case 'red':
-    //                 setPlaces_1(element)
-    //                 break
-    //             case 'orange':
-    //                 setPlaces_2(element)
-    //                 break
-    //             case 'yellow':
-    //                 setPlaces_3(element)
-    //                 break
-    //             case 'green':
-    //                 setPlaces_4(element)
-    //                 break
-    //             case 'blue':
-    //                 setPlaces_5(element)
-    //                 break
-    //             case 'purple':
-    //                 setPlaces_6(element)
-    //                 break
-    //             default:
-    //                 places_outer.push(element)
-    //                 break
-    //         }
-
-    //         // let obj = multiDictSub[element._id]
-    //         // if (obj) {
-
-    //         //     let cubeString = obj.cubeCoor[0] + "-" + obj.cubeCoor[1] + "-" + obj.cubeCoor[2] 
-    //         //     let color = _colorDict[cubeString]
-    //         //     if (color) {
-    //         //         // element.icon_color = color
-    //         //         switch (color) {
-    //         //             case 'white':
-    //         //                 places_0.push(element)
-    //         //                 break
-    //         //         }
-    //         //     } else {
-    //         //         // element.icon_color = 'grey'
-    //         //         places_outer.push(element)
-    //         //     }
-
-    //             // let posVector = obj.posVector[2]
-    //             // if (posVector < -2) {
-    //             //     places_2.push(element)
-    //             // } else if (posVector < -1) {
-    //             //     places_1.push(element)
-    //             // } else if (posVector < 0) {
-    //             //     places_0.push(element)
-    //             // } else if (posVector < 1) {
-    //             //     places_center.push(element)
-    //             // }
-    //         })
-    //         setPlacesOuter(places_outer)
-
-    //         return () => mounted = false;
-
-    //     }, [orderedPlaces])
- 
- 
-
-
-               {/* <Layer type="circle" id="layer_id_1" paint={{"circle-radius": 10, "circle-color": "black"}}>
-                        {placesOuter.map(({ ...otherProps }) => {
-                            return <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} /> 
-                        })}
-                        </Layer>
-
-                        <Layer type="circle" id='white' paint={{"circle-radius": 10, "circle-color": 'white'}}>
-                            {places_0 ? <Feature key={places_0._id} coordinates={places_0.businessLocation.coordinates} /> : null}
-                        </Layer>
-
-                        <Layer type="circle" id='red' paint={{"circle-radius": 10, "circle-color": 'red'}}>
-                            {places_1 ? <Feature key={places_1._id} coordinates={places_1.businessLocation.coordinates} /> : null}
-                        </Layer>
-
-                        <Layer type="circle" id='orange' paint={{"circle-radius": 10, "circle-color": 'orange'}}>
-                            {places_2 ? <Feature key={places_2._id} coordinates={places_2.businessLocation.coordinates} /> : null}
-                        </Layer>
-
-                        <Layer type="circle" id='yellow' paint={{"circle-radius": 10, "circle-color": 'yellow'}}>
-                             {places_3 ? <Feature key={places_3._id} coordinates={places_3.businessLocation.coordinates} /> : null}
-                        </Layer>
-
-                        <Layer type="circle" id='green' paint={{"circle-radius": 10, "circle-color": 'green'}}>
-                            {places_4 ? <Feature key={places_4._id} coordinates={places_4.businessLocation.coordinates} /> : null}
-                        </Layer>
-
-                        <Layer type="circle" id='blue' paint={{"circle-radius": 10, "circle-color": 'blue'}}>
-                            {places_5 ? <Feature key={places_5._id} coordinates={places_5.businessLocation.coordinates} /> : null}
-                        </Layer>
-
-                        <Layer type="circle" id='purple' paint={{"circle-radius": 10, "circle-color": 'purple'}}>
-                            {places_6 ? <Feature key={places_6._id} coordinates={places_6.businessLocation.coordinates} /> : null}
-                        </Layer> */}
-
-
-                    {/* {places_outer.map(({ ...otherProps }) => {
-                        return <Layer type="circle" id= {otherProps._id} paint={{"circle-radius": 10, "circle-color": otherProps.icon_color}}>
-                                <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} /> 
-                                </Layer>
-                    })}
-             */}
-    
-                        {/* <Layer type="circle" id="layer_id_0" paint={{
-                            "circle-radius": 10,
-                            "circle-color": "yellow"
-                        }}>
-                            {places_0.map(({ ...otherProps }) => {
-                                return <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />
-                            })}
-                        </Layer> */}
-                        {/* <Layer type="circle" id="layer_id_1" paint={{
-                            "circle-radius": 10,
-                            "circle-color": "magenta"
-                        }}>
-                            {places_1.map(({ ...otherProps }) => {
-
-                                return <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />
-                            })}
-                        </Layer>
-                        <Layer type="circle" id="layer_id_2" paint={{
-                            "circle-radius": 10,
-                            "circle-color": "blue"
-                        }}>
-                            {places_2.map(({ ...otherProps }) => {
-                                return <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />
-                            })}
-                        </Layer> */}
-                        {/* <Layer type="circle" id="layer_id_3" paint={{
-                            "circle-radius": 10,
-                            "circle-color": "red"
-                        }}>
-                            {places_center.map(({ ...otherProps }) => {
-
-                                return <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />
-                            })}
-                        </Layer> */}
-                
-           
-
-
-
-
-
-                {/* <Layer type="circle" id="layer_id" paint={{
-                    "circle-radius": 10,
-                    "circle-color": "green"
-                }}>
-                    {places_1.map(({ ...otherProps }) => {
-                        return <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />
-                    })}
-                </Layer> */}
