@@ -51,7 +51,7 @@ const Header = () => {
       prevRoute.push("/explore");
     }
   };
-
+  
   useEffect(() => {
     switch (selectedTab) {
       case 1:

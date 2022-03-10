@@ -219,6 +219,9 @@ export const slice = createSlice({
     loadingDeletePost: false,
   },
   reducers: {
+    setLoading: (state) => {
+      state.loading = true;
+    },
     clearMyFeedData: (state) => {
       state.myFeed = [];
     },
@@ -668,7 +671,7 @@ export const slice = createSlice({
           // if (state.filterByClosest || state.filterByUpdatedAt)
           //   state.myFeed = [];
           // state.myFeed = state.myFeed.concat(data);
-          state.searchFeed = state.searchFeed.concat(data)
+          state.searchFeed = state.searchFeed.concat(data);
           state.totalData = action.payload.totalPlaces;
         }
       }
@@ -683,7 +686,7 @@ export const slice = createSlice({
       if (!state.loading) {
         state.loading = true;
         // state.myFeed = [];
-        state.searchFeed = []
+        state.searchFeed = [];
       }
     },
     [HomeSearchInitial.fulfilled]: (state, action) => {
@@ -701,7 +704,7 @@ export const slice = createSlice({
             }),
           }));
           // state.myFeed = state.myFeed.concat(data);
-          state.searchFeed = state.searchFeed.concat(data)
+          state.searchFeed = state.searchFeed.concat(data);
           state.totalData = action.payload.totalPlaces;
         }
       }
@@ -765,6 +768,7 @@ export const slice = createSlice({
 export const { clearMyFeedData } = slice.actions;
 
 export const {
+  setLoading,
   setSearchData,
   setSideFiltersByClosest,
   setSideFiltersByUpdatedAt,

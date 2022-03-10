@@ -121,6 +121,10 @@ const LoaderWrap = styled.div`
   margin: 30px 0 20px;
 `;
 
+const TitleBarWrap = styled.div`
+  display: flex;
+  width: 100%;
+`;
 const UserMessage = ({ eventData }) => {
   const [listImage, setListImage] = useState(
     eventData.list.image ? eventData.list.image : BannerImg
@@ -373,13 +377,18 @@ const UserMessage = ({ eventData }) => {
   const displayUserDetails = () => {
     history.push(`/u/${user._id}`);
   };
-
   return (
     <>
       <UserMessageContent>
-        <InnerListBanner>
-          <img src={listImage} onError={() => setListImage(BannerImg)} alt="" />
-          <InnerOverlay />
+        <TitleBarWrap>
+          <InnerListBanner>
+            <img
+              src={listImage}
+              onError={() => setListImage(BannerImg)}
+              alt=""
+            />
+            {/* <InnerOverlay /> */}
+          </InnerListBanner>
           <ListNameWrap>
             <ListName>{eventData.list.name}</ListName>
             <ListInfo>
@@ -394,7 +403,7 @@ const UserMessage = ({ eventData }) => {
               </ListAuthorName>
             </ListInfo>
           </ListNameWrap>
-        </InnerListBanner>
+        </TitleBarWrap>
         <ProfileNameHeader>
           <ProfileNameWrap>
             <SubHeading>{eventData.title}</SubHeading>
