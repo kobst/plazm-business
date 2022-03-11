@@ -149,6 +149,7 @@ const SideBarTabs = ({
   const setReadMore = useStore((state) => state.setReadMore);
   const draggedLocation = useStore((state) => state.draggedLocation);
   const setSelectedList = useStore((state) => state.setSelectedList);
+  const setOrderedPlaces = useStore((state) => state.setOrderedPlaces);
 
   //old useStore
 
@@ -188,6 +189,7 @@ const SideBarTabs = ({
     setFavoriteIndex(null);
     setSelectedList(null);
     setSelectedListId(null);
+    setOrderedPlaces([])
     if (!loading) {
       history.push("/explore");
     }
@@ -195,27 +197,32 @@ const SideBarTabs = ({
 
   /** to clear selected data on tab click */
   const myFeedFunction = () => {
-    if (!loading) {
-      setSelectedList(null);
-      setSelectedListId(null);
-
-      history.push("/home");
-    }
+    console.log(loading + "feed func")
+    setSelectedList(null);
+    setSelectedListId(null);
+    setOrderedPlaces([])
+    history.push("/home");
+    // if (!loading) {
+    //   setSelectedList(null);
+    //   setSelectedListId(null);
+    //   setOrderedPlaces([])
+    //   history.push("/home");
+    // }
   };
 
   /** to clear selected data on tab click */
-  const listView = () => {
-    if (selectedTab !== 5 && !loading) {
-      dispatch(clearMyFeedData());
-      dispatch(clearBusinessData());
-      dispatch(clearTopPost());
-      setSelectedListId(null);
-      setListIndex(null);
-      setUserDataId(null);
-      history.push("/");
-      setDiscoverBtn(false);
-    }
-  };
+  // const listView = () => {
+  //   if (selectedTab !== 5 && !loading) {
+  //     dispatch(clearMyFeedData());
+  //     dispatch(clearBusinessData());
+  //     dispatch(clearTopPost());
+  //     setSelectedListId(null);
+  //     setListIndex(null);
+  //     setUserDataId(null);
+  //     history.push("/");
+  //     setDiscoverBtn(false);
+  //   }
+  // };
 
   const listDiscovery = () => {
     history.push("/lists");

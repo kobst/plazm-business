@@ -309,8 +309,14 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
 
   const history = useHistory();
 
+
+  useEffect(()=> {
+    console.log("ordered places list detail")
+    console.log(orderedPlaces)
+  }, [orderedPlaces])
+
   useEffect(() => {
-    if (!image) {
+    // if (!image) {
       if (selectedList) {
         if (selectedList.media.length > 0) {
           setImage(selectedList.media[0].image);
@@ -322,7 +328,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
           }
         }
       }
-    }
+    // }
   }, [selectedList, selectedListDetails]);
 
   /** to fetch user lists - do we need this here? */
@@ -515,7 +521,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
               className="ScrollDivInner"
             >
               <InfiniteScroll
-                dataLength={postsInList ? postsInList.length : 0}
+                dataLength={orderedPlaces ? orderedPlaces.length : 0}
                 next={fetchMorePosts}
                 hasMore={hasMore}
                 loader={
@@ -530,7 +536,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
                 }
                 scrollableTarget="scrollableDiv"
                 endMessage={
-                  postsInList.length > 20 && !loading ? (
+                  orderedPlaces.length > 20 && !loading ? (
                     <center>
                       <NoMorePost className="noMorePost">
                         No more List to show
@@ -540,8 +546,8 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
                 }
               >
                 <ListingOptionWrap>
-                  {postsInList.length > 0 ? (
-                    postsInList.map((i, key) => (
+                  {orderedPlaces.length > 0 ? (
+                    orderedPlaces.map((i, key) => (
                       <DisplayPostInAList
                         data={i}
                         key={key}

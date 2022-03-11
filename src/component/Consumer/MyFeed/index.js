@@ -211,7 +211,7 @@ const MyFeed = () => {
               style={{ height: "calc(100vh - 44px)", overflow: "auto" }}
             >
               <InfiniteScroll
-                dataLength={feedData ? feedData.length : 0}
+                dataLength={orderedPlaces ? orderedPlaces.length : 0}
                 next={fetchMoreData}
                 hasMore={hasMore}
                 loader={
@@ -226,7 +226,7 @@ const MyFeed = () => {
                 }
                 scrollableTarget="scrollableDiv"
                 endMessage={
-                  feedData.length > 20 && !loading ? (
+                  orderedPlaces.length > 20 && !loading ? (
                     <center>
                       <NoMorePost className="noMorePost">
                         No more Data to show
@@ -236,8 +236,8 @@ const MyFeed = () => {
                 }
               >
                 <BusinessListWrap>
-                  {feedData.length > 0 ? (
-                    feedData.map((i, key) => (
+                  {orderedPlaces.length > 0 ? (
+                    orderedPlaces.map((i, key) => (
                       <DisplayBusinessDetails
                         data={i}
                         id={key}
