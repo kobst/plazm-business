@@ -18,6 +18,8 @@ import useStore from '../useState/index'
 
 import './style.css';
 
+
+
 const GridContainer = () => {
 
     // const dispatch = useDispatch()
@@ -96,7 +98,7 @@ const GridContainer = () => {
         });
         setPlacesLoading(false)
         setPlaces(_places)
-        setGridView(true)
+        // setGridView(true)
 
     }
 
@@ -221,6 +223,10 @@ const GridContainer = () => {
 
     return (
         <div>
+     
+            {/* <h1 >
+                grid view grid view grid view
+            </h1> */}
             {gridMode && <container className="grid-container-left">
                  <GridView center={draggedLocation} places={places} />
             </container>  }
@@ -230,13 +236,3 @@ const GridContainer = () => {
 
 export default GridContainer
 
-
-
-           {/* <div className="radar-container"> */}
-                {/* <RadarView /> */}
-            {/* </div>  */}
-
-            {/* {gridView ? <div className="map-overlay"></div> : <div className="map-overlay-large"></div>} */}
-            {/* <div className="map-container"> */}
-                {/* <MapView /> */}
-            {/* </div>  */}

@@ -159,9 +159,7 @@ function Camera(props) {
     // const [y] = Scroll([-100, 100], { domTarget: window });
     const setCamPos = useStore((state) => state.setCamPosition)
     const camPos = useStore(state => state.camPosition)
-    // const setGridView = useStore((state) => state.setGridView)
-    // const centerPlace = useStore((state) => state.centerPlace)
-    // const gridView = useStore((state) => state.gridView)
+
 
     const [vec] = useState(() => new THREE.Vector3())
     
@@ -219,7 +217,6 @@ const RadarView = () => {
 
     const cam = useRef()
     const camCoords = useRef()
-    const gridView = useStore((state) => state.gridView)
     const cameraPos = useStore((state) => state.camPosition)
     const centerPlace = useStore((state) => state.centerPlace)
     const multiDict = useStore((state) => state.multiDict)

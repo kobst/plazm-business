@@ -197,18 +197,20 @@ const SideBarTabs = ({
 
   /** to clear selected data on tab click */
   const myFeedFunction = () => {
-    console.log(loading + "feed func")
-    setSelectedList(null);
-    setSelectedListId(null);
-    setOrderedPlaces([])
-    history.push("/home");
+    // setSelectedList(null);
+    // setSelectedListId(null);
+    // history.push("/home");
     // if (!loading) {
-    //   setSelectedList(null);
-    //   setSelectedListId(null);
-    //   setOrderedPlaces([])
-    //   history.push("/home");
+      setSelectedList(null);
+      setSelectedListId(null);
+      setOrderedPlaces([])
+      history.push("/home");
+      
     // }
   };
+
+
+ 
 
   /** to clear selected data on tab click */
   // const listView = () => {

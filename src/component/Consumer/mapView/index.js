@@ -157,8 +157,7 @@ const MapView = (props) => {
     const slotDict = useStore(state => state.placeCoordDict)
     const maxViewable = useStore(state => state.maxViewable)
     const setPosDict = useStore(state => state.setMapPosDict)
-    const gridView = useStore(state => state.gridView)
-    const setGridView = useStore(state => state.setGridView)
+    const gridMode = useStore(state => state.gridMode)
     const setSubLocality = useStore(state => state.setSublocality)
     const setCity = useStore(state => state.setCity)
 
@@ -170,36 +169,25 @@ const MapView = (props) => {
         // height: '100vh',
         // width: '100%'
         height: '100vh',
-        width: '50vw',
-        borderRadius: '10%'
+        width: '100vw',
+        borderRadius: '5%'
     }
 
     
     const mapContainerStyle = {
     // height: '100vh',
     // width: '100%',
-      height: "80vh",
+      height: "100vh",
      width: "40vw",
      borderRadius: "10%",
     };
 
-  const [dimensions, setDimensions] = useState(gridContainerStyle);
-
-
-
-//   useEffect(() => {
-//     let mounted = true;
-//     if (orderedPlaces.length > 1 && mounted) {
-//       setBBox(orderedPlaces);
-//     }
-//     return () => (mounted = false);
-//   }, [orderedPlaces, maxViewable]);
-
+  const [dimensions, setDimensions] = useState(mapContainerStyle);
 
   // only use if not using second map
   useMemo(() => {
     console.log("map view toggle");
-    if (gridView) {
+    if (gridMode) {
       console.log("gridView true");
       setDimensions(gridContainerStyle);
       // Map.resize()
@@ -210,17 +198,16 @@ const MapView = (props) => {
       // Map.resize()
       // ReCenter()
     }
-  }, [gridView]);
+  }, [gridMode]);
 
-  useEffect(() => {
-    console.log("reading selected place from mapview");
+//   useEffect(() => {
+//     console.log("reading selected place from mapview");
 
-    if (selectedPlace) {
-      // console.log(selectedPlace)
-      setGridView(false);
-    }
-  }, [selectedPlace]);
-
+//     if (selectedPlace) {
+//       // console.log(selectedPlace)
+//     //   setGridView(false);
+//     }
+//   }, [selectedPlace]);
 
 
 
@@ -297,7 +284,7 @@ const MapView = (props) => {
 
     useEffect(() => {
         let mounted = true;
-        if (mounted) {
+        if (mounted && gridMode) {
             setLines(slotDict)
         }
         return () => mounted = false;
@@ -305,52 +292,26 @@ const MapView = (props) => {
 
 
 
-    // only use if not using second map
-    useMemo(() => {
-        console.log('map view toggle')
-        if (gridView) {
-            console.log("gridView true")
-            setDimensions(gridContainerStyle)
-            // Map.resize()
-            // ReCenter()
-
-        } else {
-            console.log("gridView false")
-            setDimensions(mapContainerStyle)
-            // Map.resize()
-            // ReCenter()
-
-        }
-    }, [gridView])
 
 
-    useEffect(()=>{
-        console.log("reading selected place from mapview")
 
-        if (selectedPlace) {
-            // console.log(selectedPlace)
-            setGridView(false)
-        }
-      },[selectedPlace]);
-
-
-    //   useEffect(() => {
-    //     console.log(" geocode ");
-    //     Geocode.fromLatLng(
-    //       JSON.stringify(draggedLocation.lat),
-    //       JSON.stringify(draggedLocation.lng)
-    //     ).then(
-    //       (response) => {
-    //         const address = response.results[0].formatted_address;
-    //         console.log(address);
-    //         // "sublocality" "locality"
-    //         for (let i = 0; i < response.results[0].address_components.length; i++) {
-    //           for (let j = 0; j < response.results[0].address_components[i].types.length; j++) {
-    //             if (response.results[0].address_components[i].types[j] ==="sublocality") {
-    //               setSubLocality(response.results[0].address_components[i].long_name);
-    //               console.log(response.results[0].address_components[i].long_name);
-    //             }}}
-    //       })}, [draggedLocation])   
+      useEffect(() => {
+        console.log(" geocode ");
+        Geocode.fromLatLng(
+          JSON.stringify(draggedLocation.lat),
+          JSON.stringify(draggedLocation.lng)
+        ).then(
+          (response) => {
+            const address = response.results[0].formatted_address;
+            console.log(address);
+            // "sublocality" "locality"
+            for (let i = 0; i < response.results[0].address_components.length; i++) {
+              for (let j = 0; j < response.results[0].address_components[i].types.length; j++) {
+                if (response.results[0].address_components[i].types[j] ==="sublocality") {
+                  setSubLocality(response.results[0].address_components[i].long_name);
+                  console.log(response.results[0].address_components[i].long_name);
+                }}}
+          })}, [draggedLocation])   
 
   const clickHandler = (map, event) => {
     console.log("map clicked");

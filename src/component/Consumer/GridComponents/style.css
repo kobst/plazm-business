@@ -33,8 +33,10 @@
   display: block;
   overflow: hidden;
   box-shadow: 0 0 10px 10px #4c146c;
-  background: #221e45;
-  z-index: 9;
+  /* background: #221e45; */
+  background-color: transparent;
+  background: transparent;
+  z-index: 3;
 }
 
 .map-overlay {
@@ -93,4 +95,15 @@
   overflow: hidden;
   box-shadow: 0 0 10px 10px #4c146c;
   z-index: 10;
+}
+
+
+.containerOuter {
+  top: 0%;
+  left: 0%;
+  /* height: 100%; */
+  /* width: 100%; */
+  align-items: center;
+  color: darkmagenta;
+  background: red;
 }

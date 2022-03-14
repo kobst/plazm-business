@@ -109,27 +109,21 @@ function CameraMain(props) {
 
             // let zoomLevel = cam.current.zoom
             // if (zoomLevel > 50) {
-            //     setGridView(false)
             // } else if (zoomLevel > 40) {
-            //     setGridView(true)
             //     setMaxViewable(6)
             //     setMaxViewableDepth(2)
             // } else if (zoomLevel > 30) {
-            //     setGridView(true)
             //     setMaxViewable(9)
             //     setMaxViewableDepth(3)
             // } else if (zoomLevel > 20) {
-            //     setGridView(true)
             //     setMaxViewable(12)
             //     setMaxViewableDepth(3)
             // } else if (zoomLevel > 10) {
-            //     setGridView(true)
             //     setMaxViewable(15)
             //     setMaxViewableDepth(4)
             // } else {
             //     setMaxViewable(18)
             //     setMaxViewableDepth(4)
-            //     setGridView(true)
             // }
 
         }
@@ -333,11 +327,13 @@ const GridView = (props) => {
     }, [orderedPlaces])
 
 
+    // <color attach="background" args={["black"]} />
 
     return (
         <>
         <div style={{width:'100%', height:'100%'}} onWheel={handleScroll}>
-            <Canvas >
+            <Canvas 
+            color attach="background" args={["transparent"]} >
             {/* mode="concurrent" */}
                 {/* camera={{ position: [0, 0, 20], near: 10, far: 60 }}>  */}
                 <CameraMain
