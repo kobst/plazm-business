@@ -20,6 +20,8 @@ const SearchItems = ({
     data.media && data.media.length > 0 ? data.media[0].image : EventImg
   );
 
+  console.log(data.name + "search items!!!")
+
   /** to display list details page */
   const displayListDetails = () => {
     setDiscoverBtn(false);

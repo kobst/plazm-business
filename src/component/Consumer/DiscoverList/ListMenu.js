@@ -271,11 +271,19 @@ const ListMenu = (
             )}
             {listSearch && (
               <SearchSection
+                heading="Search"
                 setSelectedListId={setSelectedListId}
                 setDiscoverBtn={setDiscoverBtn}
                 setReadMore={setReadMore}
                 offset={offsetSearch}
                 setOffSet={setOffSetSearch}
+                loader={loader}
+                setLoader={setLoader}
+                modal={displayTrendingModel}
+                setModal={setDisplayTrendingModel}
+                setSelectedId={setSelectedId}
+                selectedId={selectedId}
+                setTotalLists={setTotalLists}
                 obj={{ subscriberId: user._id }}
               />
             )}
@@ -302,14 +310,22 @@ const ListMenu = (
               />
             )}
             {listSearch && (
-              <SearchSection
-                setSelectedListId={setSelectedListId}
-                setDiscoverBtn={setDiscoverBtn}
-                setReadMore={setReadMore}
-                offset={offsetSearch}
-                setOffSet={setOffSetSearch}
-                obj={{ userId: user._id }}
-              />
+        <SearchSection
+        heading="Search"
+        setSelectedListId={setSelectedListId}
+        setDiscoverBtn={setDiscoverBtn}
+        setReadMore={setReadMore}
+        offset={offsetSearch}
+        setOffSet={setOffSetSearch}
+        loader={loader}
+        setLoader={setLoader}
+        modal={displayTrendingModel}
+        setModal={setDisplayTrendingModel}
+        setSelectedId={setSelectedId}
+        selectedId={selectedId}
+        setTotalLists={setTotalLists}
+        obj={{ subscriberId: user._id }}
+      />
             )}
           </TabPanel>
           <TabPanel index={2}>
@@ -334,14 +350,22 @@ const ListMenu = (
               />
             )}
             {listSearch && (
-              <SearchSection
-                setSelectedListId={setSelectedListId}
-                setDiscoverBtn={setDiscoverBtn}
-                setReadMore={setReadMore}
-                offset={offsetSearch}
-                setOffSet={setOffSetSearch}
-                obj={{}}
-              />
+        <SearchSection
+        heading="Search"
+        setSelectedListId={setSelectedListId}
+        setDiscoverBtn={setDiscoverBtn}
+        setReadMore={setReadMore}
+        offset={offsetSearch}
+        setOffSet={setOffSetSearch}
+        loader={loader}
+        setLoader={setLoader}
+        modal={displayTrendingModel}
+        setModal={setDisplayTrendingModel}
+        setSelectedId={setSelectedId}
+        selectedId={selectedId}
+        setTotalLists={setTotalLists}
+        obj={{ subscriberId: user._id }}
+      />
             )}
             {(popularLoading || userCreatedLoading) && !listSearch && (
               <div style={{ textAlign: "center" }}>

@@ -7,12 +7,20 @@ import SectionItemWrapper from "../SectionItemWrapper";
 import { FeatureWrapper, FeatureContainer, ListResultHeading } from "../styled";
 
 const SearchSection = ({
+  heading,
   setSelectedListId,
   setDiscoverBtn,
   setReadMore,
   offset,
   setOffSet,
   obj,
+  loader,
+  setLoader,
+  modal,
+  setModal,
+  setSelectedId,
+  selectedId,
+  setTotalLists,
 }) => {
   const listSearch = useSelector((state) => state.list.listSearch);
   const loading = useSelector((state) => state.list.loadingSearchList);
@@ -22,6 +30,7 @@ const SearchSection = ({
 
   /** to search data based on input */
   useEffect(() => {
+    console.log("list search" + listSearch)
     const searchData = async () => {
       const data = await dispatch(
         SearchListApi({ value: 0, search: listSearch, ...obj })
@@ -46,12 +55,20 @@ const SearchSection = ({
             {totalList} Search Results for <span>{listSearch}</span>
           </ListResultHeading>
           <SectionItemWrapper
+            heading={heading}
             offset={offset}
             setOffSet={setOffSet}
             setSelectedListId={setSelectedListId}
             setDiscoverBtn={setDiscoverBtn}
             setReadMore={setReadMore}
             obj={obj}
+            loader={loader}
+            setLoader={setLoader}
+            modal={modal}
+            setModal={setModal}
+            setSelectedId={setSelectedId}
+            selectedId={selectedId}
+            setTotalLists={setTotalLists}
           />
         </FeatureContainer>
       </FeatureWrapper>
