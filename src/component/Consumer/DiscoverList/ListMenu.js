@@ -12,7 +12,10 @@ import {
   FetchMostPopularLists,
   FetchTrendingLists,
   setListSearch,
+  SearchListApi,
 } from "../../../reducers/listReducer";
+
+
 import ValueLoader from "../../../utils/loader";
 import Input from "../../UI/Input/Input";
 import SearchSection from "./SearchSection";
@@ -136,6 +139,7 @@ const ListMenu = (
   const userLists = listData.filter((i) => i.ownerId === user._id);
   const loading = useSelector((state) => state.list.loadingSearchList);
   const listSearch = useSelector((state) => state.list.listSearch);
+  const searchList = useSelector((state) => state.list.searchList);
 
   const [selectedTab, setSelectedTab] = useState(2);
   const [tabIndex, setTabIndex] = useState();
@@ -144,6 +148,8 @@ const ListMenu = (
     (state) => state.list.loadingUserLists
   );
   const userFollowedLists = useSelector((state) => state.list.data);
+
+  // const [obj, setObj] = useState()
   const [searchError, setSearchError] = useState("");
   const [search, setSearch] = useState("");
   const [offset, setOffSet] = useState(0);
@@ -156,12 +162,14 @@ const ListMenu = (
   const [totalLists, setTotalLists] = useState(
     parseInt(totalList - userLists.length)
   );
+  const [results, setResults] = useState()
 
   const setSelectedListId = useStore((state) => state.setSelectedListId);
   const setDiscoverBtn = useStore((state) => state.setDiscoverBtn);
   const setReadMore = useStore((state) => state.setReadMore);
 
   useEffect(() => {
+    // setObj({ subscriberId: user._id })
     const fetchData = async () => {
       /** to fetch most trending list data */
       const trending = await dispatch(FetchTrendingLists(0));
@@ -196,9 +204,49 @@ const ListMenu = (
   };
 
   /** to set search value */
+  // useEffect(() => {
+  //   setSearch(listSearch);
+  // }, [listSearch]);
+
   useEffect(() => {
-    setSearch(listSearch);
-  }, [listSearch]);
+    console.log("search list")
+   console.log(searchList)
+  }, [searchList]);
+
+    /** to search data based on input */
+    useEffect(() => {
+      // console.log("search data" + JSON.stringify(obj))
+      let obj = {}
+      console.log("search data" + JSON.stringify(obj))
+      setSearch(listSearch);
+      const searchData = async () => {
+        console.log("search data" + obj)
+        const data = await dispatch(
+          SearchListApi({ value: 0, search: listSearch, ...obj })
+        );
+        const res = await unwrapResult(data);
+        if (res) {
+          console.log(res)
+
+          setFlag(false);
+        }
+      };
+      searchData();
+    }, [listSearch, dispatch]);
+
+  /** to fetch more lists */
+  // const fetchMoreList = () => {
+  //   if (offset + 30 < totalList) {
+  //     setOffSet(offset + 30);
+  //     dispatch(
+  //       SearchListApi({ value: offset + 30, search: listSearch, ...obj })
+  //     );
+  //   } else {
+  //     setHasMore(false);
+  //   }
+  // };
+
+
 
   /** back btn */
   const backBtn = () => {
@@ -334,14 +382,35 @@ const ListMenu = (
               />
             )}
             {listSearch && (
-              <SearchSection
+              <>
+              <SliderSection
+                heading="search results"
+                data={searchList}
+                totalList={totalPopularLists}
+                setSelectedListId={setSelectedListId}
+                setDiscoverBtn={setDiscoverBtn}
+                setReadMore={setReadMore}
+                offset={offsetPopular}
+                setOffSet={setOffSetPopular}
+                loader={loader}
+                setLoader={setLoader}
+                modal={displayTrendingModel}
+                setModal={setDisplayTrendingModel}
+                setSelectedId={setSelectedId}
+                selectedId={selectedId}
+                setTotalLists={setTotalLists}
+                totalLists={totalLists}
+            />
+
+               {/* <SearchSection
                 setSelectedListId={setSelectedListId}
                 setDiscoverBtn={setDiscoverBtn}
                 setReadMore={setReadMore}
                 offset={offsetSearch}
                 setOffSet={setOffSetSearch}
                 obj={{}}
-              />
+              /> */}
+              </>
             )}
             {(popularLoading || userCreatedLoading) && !listSearch && (
               <div style={{ textAlign: "center" }}>

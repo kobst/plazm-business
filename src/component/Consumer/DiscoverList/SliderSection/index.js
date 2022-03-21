@@ -1,5 +1,7 @@
 import React from "react";
 import NewInBuzzSectionSlider from "../ItemSectionSlider";
+import NewCollectionSectionGrid from "../ItemSectionSlider/grid";
+
 import { FeatureWrapper, FeatureContainer, MainHeading } from "../styled";
 
 const SliderSection = ({
@@ -25,7 +27,7 @@ const SliderSection = ({
       <FeatureWrapper>
         <FeatureContainer>
           <MainHeading>{heading}</MainHeading>
-          <NewInBuzzSectionSlider
+          <NewCollectionSectionGrid
             data={data}
             totalList={totalList}
             heading={heading}
@@ -43,6 +45,26 @@ const SliderSection = ({
             setTotalLists={setTotalLists}
             totalLists={totalLists}
           />
+
+
+          {/* <NewInBuzzSectionSlider
+            data={data}
+            totalList={totalList}
+            heading={heading}
+            setSelectedListId={setSelectedListId}
+            setDiscoverBtn={setDiscoverBtn}
+            setReadMore={setReadMore}
+            offset={offset}
+            setOffSet={setOffSet}
+            loader={loader}
+            setLoader={setLoader}
+            modal={modal}
+            setModal={setModal}
+            setSelectedId={setSelectedId}
+            selectedId={selectedId}
+            setTotalLists={setTotalLists}
+            totalLists={totalLists}
+          /> */}
         </FeatureContainer>
       </FeatureWrapper>
     </>
