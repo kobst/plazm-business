@@ -216,7 +216,11 @@ const ListMenu = (
     /** to search data based on input */
     useEffect(() => {
       // console.log("search data" + JSON.stringify(obj))
-      let obj = {}
+      var obj = {}
+      if (tabIndex != 2) {
+        obj={ subscriberId: user._id }
+      }
+
       console.log("search data" + JSON.stringify(obj))
       setSearch(listSearch);
       const searchData = async () => {
@@ -318,14 +322,24 @@ const ListMenu = (
               />
             )}
             {listSearch && (
-              <SearchSection
-                setSelectedListId={setSelectedListId}
-                setDiscoverBtn={setDiscoverBtn}
-                setReadMore={setReadMore}
-                offset={offsetSearch}
-                setOffSet={setOffSetSearch}
-                obj={{ subscriberId: user._id }}
-              />
+              <SliderSection
+              heading="search results"
+              data={searchList}
+              totalList={totalPopularLists}
+              setSelectedListId={setSelectedListId}
+              setDiscoverBtn={setDiscoverBtn}
+              setReadMore={setReadMore}
+              offset={offsetPopular}
+              setOffSet={setOffSetPopular}
+              loader={loader}
+              setLoader={setLoader}
+              modal={displayTrendingModel}
+              setModal={setDisplayTrendingModel}
+              setSelectedId={setSelectedId}
+              selectedId={selectedId}
+              setTotalLists={setTotalLists}
+              totalLists={totalLists}
+          />
             )}
           </TabPanel>
           <TabPanel index={1}>
@@ -350,14 +364,24 @@ const ListMenu = (
               />
             )}
             {listSearch && (
-              <SearchSection
-                setSelectedListId={setSelectedListId}
-                setDiscoverBtn={setDiscoverBtn}
-                setReadMore={setReadMore}
-                offset={offsetSearch}
-                setOffSet={setOffSetSearch}
-                obj={{ userId: user._id }}
-              />
+              <SliderSection
+              heading="search results"
+              data={searchList}
+              totalList={totalPopularLists}
+              setSelectedListId={setSelectedListId}
+              setDiscoverBtn={setDiscoverBtn}
+              setReadMore={setReadMore}
+              offset={offsetPopular}
+              setOffSet={setOffSetPopular}
+              loader={loader}
+              setLoader={setLoader}
+              modal={displayTrendingModel}
+              setModal={setDisplayTrendingModel}
+              setSelectedId={setSelectedId}
+              selectedId={selectedId}
+              setTotalLists={setTotalLists}
+              totalLists={totalLists}
+          />
             )}
           </TabPanel>
           <TabPanel index={2}>
