@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -11,7 +11,7 @@ import DisplayBusinessDetails from "./DisplayBusinessDetails";
 import { unwrapResult } from "@reduxjs/toolkit";
 import SearchBar from "./SearchBar";
 import GridView from "../GridComponents/gridView/gridView";
-
+import { getHomeFeedRest } from "../../../Api";
 import useStore from "../useState";
 import GlobalSearchBox from "../GlobalSearch/GlobalSearchBox";
 
@@ -117,12 +117,18 @@ const MyFeed = () => {
   const [offset, setOffSet] = useState(0);
   const dispatch = useDispatch();
   const [flag, setFlag] = useState(true);
+  const mountedRef = useRef(true)
 
   const setSelectedListId = useStore((state) => state.setSelectedListId);
   const setMyFeedIndex = useStore((state) => state.setMyFeedIndex);
   const draggedLocation = useStore((state) => state.draggedLocation);
   const setGridMode = useStore((state) => state.setGridMode);
   const gridMode = useStore((state) => state.gridMode);
+  const setMyFeedItems = useStore((state) => state.setMyFeedItems)
+  const myFeedItems = useStore((state) => state.myFeedItems)
+
+  const orderedPlaces = useStore((state) => state.orderedPlaces)
+ 
 
   const setSearchIndex = useStore((state) => state.setSearchIndex);
   const setListClickedFromSearch = useStore(
@@ -130,22 +136,45 @@ const MyFeed = () => {
   );
   const showSearchBar = useSelector((state) => state.globalSearch.displayBar);
 
+
+
+  
+
   useEffect(() => {
-    console.log(gridMode + "gridMode");
-  }, [gridMode]);
+    const getHomeFeed = async () => {
+      console.log("getting home feed")
+  
+      const response = await fetch(`${process.env.REACT_APP_API_LOCAL}/api/list-home-fetch/${user._id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+
+      const data = await response.json()
+      const dataShort = data[0]
+      // console.log(JSON.stringify(dataShort))
+      setMyFeedItems(data)
+      if (data) {
+        setFlag (false)
+      }
+      // const data = await unwrapResult(response);
+      // console.log(data)
+      // const val = JSON.parse(data);
+      // console.log(val)
+    }
+    // if (myFeedItems == []){
+    //   getHomeFeed()
+    // }
+    getHomeFeed()
+  }, []);
+
 
   /** to fetch data initially */
   useEffect(() => {
-    // console.log(draggedLocation.lat + " lat  " + draggedLocation.lng + "lng")
-
-    // console.log(userLocation.latitude + " lat  " + userLocation.longitude + "lng")
-
-    console.log(
-      process.env.REACT_APP_LATITUDE +
-        " lat  " +
-        process.env.REACT_APP_LONGITUDE +
-        "lng"
-    );
+ 
     const fetchData = async () => {
       const _gridMode = gridMode;
       if (_gridMode) {
@@ -167,7 +196,9 @@ const MyFeed = () => {
         setGridMode(true);
       }
     };
-    fetchData();
+    
+      fetchData();
+   
   }, [
     dispatch,
     user._id,
@@ -218,7 +249,7 @@ const MyFeed = () => {
               style={{ height: "calc(100vh - 44px)", overflow: "auto" }}
             >
               <InfiniteScroll
-                dataLength={feedData ? feedData.length : 0}
+                dataLength={orderedPlaces ? orderedPlaces.length : 0}
                 next={fetchMoreData}
                 hasMore={hasMore}
                 loader={
@@ -233,7 +264,7 @@ const MyFeed = () => {
                 }
                 scrollableTarget="scrollableDiv"
                 endMessage={
-                  feedData.length > 20 && !loading ? (
+                  orderedPlaces.length > 20 && !loading ? (
                     <center>
                       <NoMorePost className="noMorePost">
                         No more Data to show
@@ -243,8 +274,8 @@ const MyFeed = () => {
                 }
               >
                 <BusinessListWrap>
-                  {feedData.length > 0 ? (
-                    feedData.map((i, key) => (
+                  {orderedPlaces.length > 0 ? (
+                    orderedPlaces.map((i, key) => (
                       <DisplayBusinessDetails
                         data={i}
                         id={key}
@@ -255,7 +286,7 @@ const MyFeed = () => {
                     ))
                   ) : !loading ? (
                     <NoData>No Data To Display</NoData>
-                  ) : null}
+                  ) : null} 
                 </BusinessListWrap>
               </InfiniteScroll>
             </div>

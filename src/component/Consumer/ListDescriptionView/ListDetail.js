@@ -287,15 +287,19 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   const [offset, setOffSet] = useState(0);
   const [flag, setFlag] = useState(true);
 
-  const selectedList = useStore((state) => state.selectedList);
-  const selectedListId = useStore((state) => state.selectedListId);
-  const setSelectedListId = useStore((state) => state.setSelectedListId);
-  const setSelectedListName = useStore((state) => state.setSelectedListName);
-  const setListIndex = useStore((state) => state.setListIndex);
-  const setFavoriteIndex = useStore((state) => state.setFavoriteIndex);
-  const setDiscoverBtn = useStore((state) => state.setDiscoverBtn);
-  const readMore = useStore((state) => state.readMore);
-  const gridMode = useStore((state) => state.gridMode);
+
+  const selectedList = useStore((state) => state.selectedList)
+  const selectedListId = useStore((state) => state.selectedListId)
+  const setSelectedListId = useStore((state) => state.setSelectedListId)
+  const setSelectedListName = useStore((state) => state.setSelectedListName)
+  const setListIndex = useStore((state) => state.setListIndex)
+  const setFavoriteIndex = useStore((state) => state.setFavoriteIndex)
+  const setDiscoverBtn = useStore((state) => state.setDiscoverBtn)
+  const readMore = useStore((state) => state.readMore)
+  const gridMode = useStore((state) => state.gridMode)
+
+  const orderedPlaces = useStore((state) => state.orderedPlaces)
+
 
   const [image, setImage] = useState(
     selectedList && selectedList.media.length > 0
@@ -304,6 +308,12 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   );
 
   const history = useHistory();
+
+
+  useEffect(()=> {
+    console.log("ordered places list detail")
+    console.log(orderedPlaces)
+  }, [orderedPlaces])
 
   useEffect(() => {
     // if (!image) {
@@ -511,7 +521,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
               className="ScrollDivInner"
             >
               <InfiniteScroll
-                dataLength={postsInList ? postsInList.length : 0}
+                dataLength={orderedPlaces ? orderedPlaces.length : 0}
                 next={fetchMorePosts}
                 hasMore={hasMore}
                 loader={
@@ -526,7 +536,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
                 }
                 scrollableTarget="scrollableDiv"
                 endMessage={
-                  postsInList.length > 20 && !loading ? (
+                  orderedPlaces.length > 20 && !loading ? (
                     <center>
                       <NoMorePost className="noMorePost">
                         No more List to show
@@ -536,8 +546,8 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
                 }
               >
                 <ListingOptionWrap>
-                  {postsInList.length > 0 ? (
-                    postsInList.map((i, key) => (
+                  {orderedPlaces.length > 0 ? (
+                    orderedPlaces.map((i, key) => (
                       <DisplayPostInAList
                         data={i}
                         key={key}
@@ -550,6 +560,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
                   ) : (
                     <NoData>No Posts In A List To Display</NoData>
                   )}
+
                 </ListingOptionWrap>
               </InfiniteScroll>
             </div>

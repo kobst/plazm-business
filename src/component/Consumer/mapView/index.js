@@ -11,6 +11,7 @@ import useStore from "../useState/index";
 import "./styles.css";
 import Geocode from "react-geocode";
 import GoogleMapReact from "google-map-react";
+import ColorDict from '../GridComponents/functions/colorSlotDict'
 
 // import '../../App.css';
 
@@ -44,100 +45,46 @@ function distance(lat1, lon1, lat2, lon2) {
   }
 }
 
-function orderPlaces(places, selectedPlace, defaultCenter) {
-  let center = {};
-  if (selectedPlace) {
-    center.lat = selectedPlace.businessLocation.coordinates[1];
-    center.lng = selectedPlace.businessLocation.coordinates[0];
-  } else {
-    center = defaultCenter;
-  }
 
-  places.sort(function (a, b) {
-    let distA = distance(
-      a.businessLocation.coordinates[1],
-      a.businessLocation.coordinates[0],
-      center.lat,
-      center.lng
-    );
-    let distB = distance(
-      b.businessLocation.coordinates[1],
-      b.businessLocation.coordinates[0],
-      center.lat,
-      center.lng
-    );
-    return distA - distB;
-  });
 
-  return places;
-}
 
-const Map = ReactMapboxGl({
-  accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
-  interactive: true,
-});
+// function orderPlaces(places, selectedPlace, defaultCenter) {
 
-Geocode.setApiKey("AIzaSyAYVZIvAZkQsaxLD3UdFH5EH3DvYmSYG6Q");
+//     let center = {}
+//     if (selectedPlace) {
+//         center.lat = selectedPlace.businessLocation.coordinates[1]
+//         center.lng = selectedPlace.businessLocation.coordinates[0]
+//     } else {
+//         center = defaultCenter
+//     }
 
-const MapView = (props) => {
-  const [boundBox, setBox] = useState(null);
-  const [features, setFeatures] = useState(null);
-  const [places_center, setPlaces_center] = useState([]);
-  const [places_0, setPlaces_0] = useState([]);
-  const [places_1, setPlaces_1] = useState([]);
-  const [places_2, setPlaces_2] = useState([]);
-  const [tempCenter, setTempCenter] = useState();
-  // const [sublocality, setSubLocality] = useState("")
-  // const [city, setCity] = useState("")
+//     places.sort(function (a, b) {
+//         let distA = distance(a.businessLocation.coordinates[1], a.businessLocation.coordinates[0], center.lat, center.lng)
+//         let distB = distance(b.businessLocation.coordinates[1], b.businessLocation.coordinates[0], center.lat, center.lng)
+//         return distA - distB
+//     })
 
-  const places = useStore((state) => state.places);
-  const selectedPlace = useStore((state) => state.selectedPlace);
-  const multiDictSub = useStore((state) => state.multiDict);
-  const orderedPlaces = useStore((state) => state.orderedPlaces);
-  const maxViewable = useStore((state) => state.maxViewable);
-  const setPosDict = useStore((state) => state.setMapPosDict);
-  const gridView = useStore((state) => state.gridView);
-  const setGridView = useStore((state) => state.setGridView);
-  const setSubLocality = useStore((state) => state.setSublocality);
-  const setCity = useStore((state) => state.setCity);
+//     return places
 
-  const setDraggedLocation = useStore((state) => state.setDraggedLocation);
-  const draggedLocation = useStore((state) => state.draggedLocation);
+// }
 
-  const gridContainerStyle = {
-    // height: '100vh',
-    // width: '100%'
-    height: "100vh",
-    width: "50vw",
-    borderRadius: "10%",
-  };
-
-  const mapContainerStyle = {
-    // height: '100vh',
-    // width: '100%',
-    height: "80vh",
-    width: "40vw",
-    borderRadius: "10%",
-  };
-
-  const [dimensions, setDimensions] = useState(gridContainerStyle);
-
-  const setBBox = () => {
+const setBBox = (_orderedPlaces) => {
+    let maxViewable = 10
     let coordArray = [];
     var limit = 10;
-    if (orderedPlaces.length < limit) {
-      limit = orderedPlaces.length - 1;
+    if (_orderedPlaces.length < limit) {
+      limit = _orderedPlaces.length - 1;
     }
     if (maxViewable) {
       limit = maxViewable;
     }
-    console.log("ordered places " + orderedPlaces.length);
+    console.log("ordered places " + _orderedPlaces.length);
 
     for (let i = 0; i < limit; i++) {
       // console.log(i)
       // console.log(orderedPlaces[i])
-      if (orderedPlaces[i]) {
-        let coords = orderedPlaces[i].businessLocation.coordinates;
+      if (_orderedPlaces[i]) {
+        let coords = _orderedPlaces[i].businessLocation.coordinates;
         coordArray.push(coords);
       }
     }
@@ -158,25 +105,89 @@ const MapView = (props) => {
     };
 
     let lngLatBox = turf.bbox(geoJsonFeatures);
-    // console.log('lngLatBox', lngLatBox)
     let sw = [lngLatBox[0], lngLatBox[1]];
     let ne = [lngLatBox[2], lngLatBox[3]];
-    let fitboundsObj = [sw, ne];
-    setBox(fitboundsObj);
-  };
+    let fitBoundsObj = [sw, ne];
+    return fitBoundsObj
+    // setBox(fitboundsObj);
+};
 
-  useEffect(() => {
-    let mounted = true;
-    if (orderedPlaces.length > 1 && mounted) {
-      setBBox();
+
+const Map = ReactMapboxGl({
+  accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
+  interactive: true,
+});
+
+Geocode.setApiKey("AIzaSyAYVZIvAZkQsaxLD3UdFH5EH3DvYmSYG6Q");
+
+const MapView = (props) => {
+
+    const [boundBox, setBox] = useState(null)
+    const [lineArray, setLineArray] = useState([])
+    const [hex, setHex] = useState()
+    const [features, setFeatures] = useState(null)
+    const [places_center, setPlaces_center] = useState([])
+    const [placesOuter, setPlacesOuter] = useState([])
+    const [places_0, setPlaces_0] = useState()
+    const [places_1, setPlaces_1] = useState()
+    const [places_2, setPlaces_2] = useState()
+    const [places_3, setPlaces_3] = useState()
+    const [places_4, setPlaces_4] = useState()
+    const [places_5, setPlaces_5] = useState()
+    const [places_6, setPlaces_6] = useState()
+
+    const [redLine, setRedLine] = useState(null)
+    const [orangeLine, setOrangeLine] = useState(null)
+    const [yellowLine, setYellowLine] = useState(null)
+    const [greenLine, setGreenLine] = useState(null)
+    const [blueLine, setBlueLine] = useState(null)
+    const [violetLine, setVioletLine] = useState(null)
+   
+    const [tempCenter, setTempCenter] = useState()
+    // const [sublocality, setSubLocality] = useState("")
+    // const [city, setCity] = useState("")
+    const _colorDict = ColorDict()
+
+    
+    const places = useStore(state => state.places)
+    const selectedPlace = useStore(state => state.selectedPlace)
+    const centerPlace = useStore(state => state.centerPlace)
+    const multiDictSub = useStore(state => state.multiDict)
+    const orderedPlaces = useStore(state => state.orderedPlaces)
+    const slotDict = useStore(state => state.placeCoordDict)
+    const maxViewable = useStore(state => state.maxViewable)
+    const setPosDict = useStore(state => state.setMapPosDict)
+    const gridMode = useStore(state => state.gridMode)
+    const setSubLocality = useStore(state => state.setSublocality)
+    const setCity = useStore(state => state.setCity)
+
+
+    const setDraggedLocation = useStore(state => state.setDraggedLocation)
+    const draggedLocation = useStore(state => state.draggedLocation)
+
+    const gridContainerStyle = {
+        // height: '100vh',
+        // width: '100%'
+        height: '100vh',
+        width: '100vw',
+        borderRadius: '5%'
     }
-    return () => (mounted = false);
-  }, [orderedPlaces, maxViewable]);
+
+    
+    const mapContainerStyle = {
+    // height: '100vh',
+    // width: '100%',
+      height: "100vh",
+     width: "60vw",
+     borderRadius: "10%",
+    };
+
+  const [dimensions, setDimensions] = useState(mapContainerStyle);
 
   // only use if not using second map
   useMemo(() => {
     console.log("map view toggle");
-    if (gridView) {
+    if (gridMode) {
       console.log("gridView true");
       setDimensions(gridContainerStyle);
       // Map.resize()
@@ -187,57 +198,120 @@ const MapView = (props) => {
       // Map.resize()
       // ReCenter()
     }
-  }, [gridView]);
+  }, [gridMode]);
 
-  useEffect(() => {
-    console.log("reading selected place from mapview");
+//   useEffect(() => {
+//     console.log("reading selected place from mapview");
 
-    if (selectedPlace) {
-      // console.log(selectedPlace)
-      setGridView(false);
-    }
-  }, [selectedPlace]);
+//     if (selectedPlace) {
+//       // console.log(selectedPlace)
+//     //   setGridView(false);
+//     }
+//   }, [selectedPlace]);
 
-  useEffect(() => {
-    console.log(" geocode ");
-    Geocode.fromLatLng(draggedLocation.lat, draggedLocation.lng).then(
-      (response) => {
-        const address = response.results[0].formatted_address;
-        console.log(address);
-        // "sublocality" "locality"
-        for (
-          let i = 0;
-          i < response.results[0].address_components.length;
-          i++
-        ) {
-          for (
-            let j = 0;
-            j < response.results[0].address_components[i].types.length;
-            j++
-          ) {
-            if (
-              response.results[0].address_components[i].types[j] ===
-              "sublocality"
-            ) {
-              setSubLocality(
-                response.results[0].address_components[i].long_name
-              );
-              console.log(response.results[0].address_components[i].long_name);
+
+
+
+
+
+    const setLines = (dict) => {
+        let centerWhite = dict["0-0-0"]
+        let topRed = dict["0--1-1"]
+        let topRightOrange = dict["1--1-0"]
+        let bottomRightYellow = dict["1-0--1"]
+        let bottomGreen = dict["0-1--1"]
+        let bottomLeftBlue = dict["-1-1-0"]
+        let topLeftViolet = dict["-1-0-1"]
+
+        if (centerWhite) {
+            if (topRed) {
+                setRedLine([centerWhite.businessLocation.coordinates, topRed.businessLocation.coordinates])
+            } else {
+                setRedLine(null)
             }
-            if (
-              response.results[0].address_components[i].types[j] === "locality"
-            ) {
-              setCity(response.results[0].address_components[i].long_name);
-              console.log(response.results[0].address_components[i].long_name);
+
+            if (topRightOrange) {
+                setOrangeLine([centerWhite.businessLocation.coordinates, topRightOrange.businessLocation.coordinates])
+            } else {
+                setOrangeLine(null)
             }
-          }
+
+            if (bottomRightYellow) {
+                setYellowLine([centerWhite.businessLocation.coordinates, bottomRightYellow.businessLocation.coordinates])
+            } else {
+                setYellowLine(null)
+            }
+
+            if (bottomGreen) {
+                setGreenLine([centerWhite.businessLocation.coordinates, bottomGreen.businessLocation.coordinates])
+            } else {
+                setGreenLine(null)
+            }
+
+            if (bottomLeftBlue) {
+                setBlueLine([centerWhite.businessLocation.coordinates, bottomLeftBlue.businessLocation.coordinates])
+            } else {
+                setBlueLine(null)
+            }
+
+            if (topLeftViolet) {
+                setVioletLine([centerWhite.businessLocation.coordinates, topLeftViolet.businessLocation.coordinates])
+            } else {
+                setVioletLine(null)
+            }
+        } else {
+            setRedLine(null)
+            setOrangeLine(null)
+            setYellowLine(null)
+            setGreenLine(null)
+            setBlueLine(null)
+            setVioletLine(null)
         }
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
-  }, [draggedLocation]);
+
+    }
+
+
+
+    useEffect(() => {
+        let mounted = true;
+        if (orderedPlaces.length > 1 && mounted) {
+            let obj = setBBox(orderedPlaces)
+            setBox(obj)
+        }
+        return () => mounted = false;
+    }, [orderedPlaces, maxViewable]);
+
+
+    useEffect(() => {
+        let mounted = true;
+        if (mounted && gridMode) {
+            setLines(slotDict)
+        }
+        return () => mounted = false;
+    }, [slotDict]);
+
+
+
+
+
+
+      useEffect(() => {
+        console.log(" geocode ");
+        Geocode.fromLatLng(
+          JSON.stringify(draggedLocation.lat),
+          JSON.stringify(draggedLocation.lng)
+        ).then(
+          (response) => {
+            const address = response.results[0].formatted_address;
+            console.log(address);
+            // "sublocality" "locality"
+            for (let i = 0; i < response.results[0].address_components.length; i++) {
+              for (let j = 0; j < response.results[0].address_components[i].types.length; j++) {
+                if (response.results[0].address_components[i].types[j] ==="sublocality") {
+                  setSubLocality(response.results[0].address_components[i].long_name);
+                  console.log(response.results[0].address_components[i].long_name);
+                }}}
+          })}, [draggedLocation])   
 
   const clickHandler = (map, event) => {
     console.log("map clicked");
@@ -268,199 +342,124 @@ const MapView = (props) => {
       setTempCenter(cntr);
       setDraggedLocation(cntr);
     }
-  };
+  }
 
-  // this doesn't work on load, prob because tempCenter starts as null and then setDraggedLocation becomes null
-  // useEffect(() => {
 
-  //     let timer1 = setTimeout(() => setDraggedLocation(tempCenter), 3000);
-  //     // this will clear Timeout when component unmount like in willComponentUnmount
-  //     return () => {
-  //         clearTimeout(timer1);
-  //     };
-  // }, [tempCenter]);
 
-  useEffect(() => {
-    // console.log("- - multi effect - - ")
-    let mounted = true;
-    let places_0 = [];
-    let places_1 = [];
-    let places_2 = [];
-    let places_center = [];
-    places.forEach((element) => {
-      let obj = multiDictSub[element._id];
-      if (obj) {
-        let posVector = obj.posVector[2];
-        if (posVector < -2) {
-          places_2.push(element);
-        } else if (posVector < -1) {
-          places_1.push(element);
-        } else if (posVector < 0) {
-          places_0.push(element);
-        } else if (posVector < 1) {
-          places_center.push(element);
-        }
-      }
-    });
-    setPlaces_center(places_center);
-    setPlaces_0(places_0);
-    setPlaces_1(places_1);
-    setPlaces_2(places_2);
-    return () => (mounted = false);
-  }, [multiDictSub]);
 
-  return (
-    // <div className="circleDiv">
-    <div className="map-container">
-      <Map
-        // style='mapbox://styles/kobstr/cj0itw9ku003l2smnu8wbz94o'
-        style="mapbox://styles/kobstr/cka78e4mj1aef1io837hkirap"
-        // style ='mapbox://styles/kobstr/cjryb7aiy1xjy1fohrw6z6ow3'
-        // style='mapbox://styles/mapbox/streets-v9'
-        pitch={[60]}
-        fitBounds={boundBox}
-        onDragEnd={dragHandler}
-        onClick={clickHandler}
-        containerStyle={dimensions}
-      >
-        <MapContext.Consumer>
-          {(map) => {
-            // use `map` here
-            // console.log("map" + map)
-            const newPosDict = {};
 
-            orderedPlaces.forEach((place) => {
-              // console.log(place.businessLocation.coordinates + "inside map")
-              let pix = map.project(place.businessLocation.coordinates);
-              // console.log(pix)
-              // console.log("-----------")
-              let obj = { pos: pix, name: place.company_name };
-              // obj._id = place._id
-              // obj.mapPos = pix
-              newPosDict[place._id] = obj;
-            });
 
-            map.on("idle", function () {
-              map.resize();
-              map.zoom = 15;
-            });
-          }}
-        </MapContext.Consumer>
 
-        {gridView && (
-          <>
-            <Layer
-              type="circle"
-              id="layer_id_0"
-              paint={{
-                "circle-radius": 10,
-                "circle-color": "yellow",
-              }}
-            >
-              {places_0.map(({ ...otherProps }) => {
-                return (
-                  <Feature
-                    key={otherProps._id}
-                    coordinates={otherProps.businessLocation.coordinates}
-                  />
-                );
-              })}
-            </Layer>
-            <Layer
-              type="circle"
-              id="layer_id_1"
-              paint={{
-                "circle-radius": 10,
-                "circle-color": "magenta",
-              }}
-            >
-              {places_1.map(({ ...otherProps }) => {
-                return (
-                  <Feature
-                    key={otherProps._id}
-                    coordinates={otherProps.businessLocation.coordinates}
-                  />
-                );
-              })}
-            </Layer>
-            <Layer
-              type="circle"
-              id="layer_id_2"
-              paint={{
-                "circle-radius": 10,
-                "circle-color": "blue",
-              }}
-            >
-              {places_2.map(({ ...otherProps }) => {
-                return (
-                  <Feature
-                    key={otherProps._id}
-                    coordinates={otherProps.businessLocation.coordinates}
-                  />
-                );
-              })}
-            </Layer>
-            <Layer
-              type="circle"
-              id="layer_id_3"
-              paint={{
-                "circle-radius": 10,
-                "circle-color": "red",
-              }}
-            >
-              {places_center.map(({ ...otherProps }) => {
-                return (
-                  <Feature
-                    key={otherProps._id}
-                    coordinates={otherProps.businessLocation.coordinates}
-                  />
-                );
-              })}
-            </Layer>
-          </>
-        )}
+    return (
+        // <div className="circleDiv">
+        <div className="map-container">
+            <Map
+                // style='mapbox://styles/kobstr/cj0itw9ku003l2smnu8wbz94o'
+                // style='mapbox://styles/kobstr/cka78e4mj1aef1io837hkirap'
+                // style ='mapbox://styles/kobstr/cjryb7aiy1xjy1fohrw6z6ow3'
+                // style='mapbox://styles/mapbox/streets-v9'
+                style='mapbox://styles/kobstr/ckyank9on08ld14nuzyhrwddi'
+                pitch={[60]}
+                fitBounds={boundBox}
+                onDragEnd={dragHandler}
+                onClick={clickHandler}
+                containerStyle={dimensions}>
 
-        {/* <Layer type="circle" id="layer_id" paint={{
-                    "circle-radius": 10,
-                    "circle-color": "green"
+                <MapContext.Consumer>
+                    {(map) => {
+                        // use `map` here
+                        // console.log("map" + map)
+                        const newPosDict = {}
+
+                        // orderedPlaces.forEach((place) => {
+                        //     // console.log(place.businessLocation.coordinates + "inside map")
+                        //     let pix = map.project(place.businessLocation.coordinates)
+                        //     // console.log(pix)
+                        //     // console.log("-----------")
+                        //     let obj = { pos: pix, name: place.company_name }
+                        //     // obj._id = place._id
+                        //     // obj.mapPos = pix
+                        //     newPosDict[place._id] = obj
+
+                        // })
+                
+                        map.on('idle', function () {
+                            map.resize()
+                            map.zoom = 15
+                        })
+                    }}
+
+                </MapContext.Consumer>
+
+
+                {orderedPlaces.map(({ ...otherProps }) => {
+                    return <Layer type="circle" id={otherProps._id} paint={{"circle-radius": 10, "circle-color": otherProps.icon_color}}>
+                            <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />
+                            </Layer>
+                })}
+
+                {/* <GeoJSONLayer  paint={{"line-color": "white", "line-width": 4, "line-opacity": 1}} data={hex} /> */}
+
+
+
+                <Layer type="line" id='violet' paint={{"line-width": 10, "line-color": 'red'}}>
+                     {lineArray ? <Feature key={"line"} coordinates={lineArray} /> : null}
+                 </Layer>
+
+                 <Layer type="line" id='red' paint={{"line-width": 10, "line-color": 'red'}}>
+                     {redLine ? <Feature key={"line"} coordinates={redLine} /> : null}
+                 </Layer>
+
+                 <Layer type="line" id='orange' paint={{"line-width": 10, "line-color": 'orange'}}>
+                     {orangeLine ? <Feature key={"line"} coordinates={orangeLine} /> : null}
+                 </Layer>
+
+                 <Layer type="line" id='yellow' paint={{"line-width": 10, "line-color": 'yellow'}}>
+                     {yellowLine ? <Feature key={"line"} coordinates={yellowLine} /> : null}
+                 </Layer>
+
+                 <Layer type="line" id='green' paint={{"line-width": 10, "line-color": 'green'}}>
+                     {greenLine ? <Feature key={"line"} coordinates={greenLine} /> : null}
+                 </Layer>
+
+                 <Layer type="line" id='blue' paint={{"line-width": 10, "line-color": 'blue'}}>
+                     {blueLine ? <Feature key={"line"} coordinates={blueLine} /> : null}
+                 </Layer>
+
+                 <Layer type="line" id='violet' paint={{"line-width": 10, "line-color": 'violet'}}>
+                     {violetLine ? <Feature key={"line"} coordinates={violetLine} /> : null}
+                 </Layer>
+
+
+
+                {selectedPlace && selectedPlace.businessLocation && <Layer type="circle" id="selectedPlace_id" paint={{
+                    "circle-radius": 20,
+                    "circle-opacity": 0,
+                    "circle-stroke-width": 1,
+                    "circle-stroke-color": "#ff0000"
                 }}>
-                    {places_1.map(({ ...otherProps }) => {
-                        return <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />
-                    })}
-                </Layer> */}
+                    <Feature coordinates={selectedPlace.businessLocation.coordinates} />
+                </Layer>}
 
-        {selectedPlace && selectedPlace.businessLocation && (
-          <Layer
-            type="circle"
-            id="selectedPlace_id"
-            paint={{
-              "circle-radius": 20,
-              "circle-opacity": 0,
-              "circle-stroke-width": 1,
-              "circle-stroke-color": "#ff0000",
-            }}
-          >
-            <Feature coordinates={selectedPlace.businessLocation.coordinates} />
-          </Layer>
-        )}
 
-        {draggedLocation && (
-          <Layer
-            type="circle"
-            id="draggedLocation"
-            paint={{
-              "circle-radius": 10,
-              "circle-opacity": 1,
-              "circle-stroke-width": 2,
-              "circle-stroke-color": "#ff0000",
-            }}
-          >
-            <Feature coordinates={[draggedLocation.lng, draggedLocation.lat]} />
-          </Layer>
-        )}
-      </Map>
-    </div>
-  );
-};
+                {draggedLocation && <Layer type="circle" id="draggedLocation" paint={{
+                    "circle-radius": 10,
+                    "circle-opacity": 1,
+                    "circle-stroke-width": 2,
+                    "circle-stroke-color": "#ff0000"
+                }}>
+                    <Feature coordinates={[draggedLocation.lng, draggedLocation.lat]} />
+                </Layer>}
+                
 
-export default MapView;
+            </Map>
+        </div>
+    )
+
+}
+
+
+
+
+
+export default MapView

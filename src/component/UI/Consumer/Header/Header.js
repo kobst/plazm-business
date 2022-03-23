@@ -72,9 +72,9 @@ const Header = () => {
         setTabTitle((prev) => prev);
         break;
     }
-    if (selectedTab < 1 || selectedTab > 2) {
-      setGridMode(false);
-    }
+    // if (selectedTab !== 1) {
+    //   setGridMode(false);
+    // }
   }, [selectedTab]);
 
   useEffect(() => {
