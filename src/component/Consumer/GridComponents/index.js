@@ -130,8 +130,7 @@ const GridContainer = () => {
     useEffect(() => {
         console.log("initial props places")
         ReCenter(null)
-    }, [places, draggedLocation])
-
+    }, [places, draggedLocation, gridMode])
     // on shifting centerPlace..
     useEffect(() => {
         if (centerPlace) {

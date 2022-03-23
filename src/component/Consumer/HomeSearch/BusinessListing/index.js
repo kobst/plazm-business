@@ -7,8 +7,10 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import ValueLoader from "../../../../utils/loader";
 import SearchBar from "../SearchBar";
 import {
+  clearSearchFeed,
   HomeSearch,
   HomeSearchInitial,
+  setEnterClicked,
 } from "../../../../reducers/myFeedReducer";
 import error from "../../../../constants";
 
@@ -69,10 +71,22 @@ const BusinessListing = ({ loader, coords, closestFilter }) => {
     (state) => state.setListClickedFromSearch
   );
   const draggedLocation = useStore((state) => state.draggedLocation);
-
+  const setGridMode = useStore((state) => state.setGridMode);
+  const gridMode = useStore((state) => state.gridMode);
+  useEffect(() => {
+    dispatch(setEnterClicked(false));
+    dispatch(clearSearchFeed());
+  }, []);
+  useEffect(() => {
+    console.log(gridMode + "gridMode");
+  }, [gridMode]);
   /** useEffect called when any side filters are selected */
   useEffect(() => {
     const fetchSearchData = async () => {
+      const _gridMode = gridMode;
+      if (_gridMode) {
+        setGridMode(false);
+      }
       const obj = {
         search: search,
         value: 0,
@@ -88,6 +102,9 @@ const BusinessListing = ({ loader, coords, closestFilter }) => {
       const data = await unwrapResult(result);
       if (data) {
         setFlag(false);
+      }
+      if (_gridMode) {
+        setGridMode(true);
       }
       // setFilterSelected(false);
     };
@@ -135,54 +152,56 @@ const BusinessListing = ({ loader, coords, closestFilter }) => {
           <ValueLoader />
         </LoaderWrap>
       ) : (
-        <div
-          id="scrollableDiv"
-          style={{ height: "calc(100vh - 44px)", overflow: "auto" }}
-        >
-          <InfiniteScroll
-            dataLength={businessData ? businessData.length : 0}
-            next={fetchMorePlaces}
-            hasMore={hasMore}
-            loader={
-              offset < totalPlaces && loading ? (
-                <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
-                  {" "}
-                  <ValueLoader height="40" width="40" />
-                </div>
-              ) : null
-            }
-            scrollableTarget="scrollableDiv"
-            endMessage={
-              businessData.length > 20 && !loading && !flag ? (
-                <center>
-                  <NoMorePost className="noMorePost">
-                    {error.NO_MORE_BUSINESS_TO_DISPLAY}
-                  </NoMorePost>
-                </center>
-              ) : null
-            }
+        !gridMode && (
+          <div
+            id="scrollableDiv"
+            style={{ height: "calc(100vh - 44px)", overflow: "auto" }}
           >
-            <BusinessListWrap>
-              {businessData.length > 0 ? (
-                businessData.map((i, key) => (
-                  <DisplayFavoriteBusiness
-                    data={i}
-                    key={key}
-                    setSelectedListId={setSelectedListId}
-                    setListClickedFromSearch={setListClickedFromSearch}
-                    setSearchIndex={setSearchIndex}
-                  />
-                ))
-              ) : !loading && !flag && businessData.length === 0 ? (
-                <center>
-                  <NoMorePost className="noMorePost">
-                    {error.NO_BUSINESS_FOUND}
-                  </NoMorePost>
-                </center>
-              ) : null}
-            </BusinessListWrap>
-          </InfiniteScroll>
-        </div>
+            <InfiniteScroll
+              dataLength={businessData ? businessData.length : 0}
+              next={fetchMorePlaces}
+              hasMore={hasMore}
+              loader={
+                offset < totalPlaces && loading ? (
+                  <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
+                    {" "}
+                    <ValueLoader height="40" width="40" />
+                  </div>
+                ) : null
+              }
+              scrollableTarget="scrollableDiv"
+              endMessage={
+                businessData.length > 20 && !loading && !flag ? (
+                  <center>
+                    <NoMorePost className="noMorePost">
+                      {error.NO_MORE_BUSINESS_TO_DISPLAY}
+                    </NoMorePost>
+                  </center>
+                ) : null
+              }
+            >
+              <BusinessListWrap>
+                {businessData.length > 0 ? (
+                  businessData.map((i, key) => (
+                    <DisplayFavoriteBusiness
+                      data={i}
+                      key={key}
+                      setSelectedListId={setSelectedListId}
+                      setListClickedFromSearch={setListClickedFromSearch}
+                      setSearchIndex={setSearchIndex}
+                    />
+                  ))
+                ) : !loading && !flag && businessData.length === 0 ? (
+                  <center>
+                    <NoMorePost className="noMorePost">
+                      {error.NO_BUSINESS_FOUND}
+                    </NoMorePost>
+                  </center>
+                ) : null}
+              </BusinessListWrap>
+            </InfiniteScroll>
+          </div>
+        )
       )}
     </>
   );

@@ -121,8 +121,13 @@ const MyFeed = () => {
   const setSelectedListId = useStore((state) => state.setSelectedListId);
   const setMyFeedIndex = useStore((state) => state.setMyFeedIndex);
   const draggedLocation = useStore((state) => state.draggedLocation);
+  const setGridMode = useStore((state) => state.setGridMode);
   const gridMode = useStore((state) => state.gridMode);
 
+  const setSearchIndex = useStore((state) => state.setSearchIndex);
+  const setListClickedFromSearch = useStore(
+    (state) => state.setListClickedFromSearch
+  );
   const showSearchBar = useSelector((state) => state.globalSearch.displayBar);
 
   useEffect(() => {
@@ -141,8 +146,11 @@ const MyFeed = () => {
         process.env.REACT_APP_LONGITUDE +
         "lng"
     );
-
     const fetchData = async () => {
+      const _gridMode = gridMode;
+      if (_gridMode) {
+        setGridMode(false);
+      }
       const obj = {
         id: user._id,
         value: 0,
@@ -155,6 +163,9 @@ const MyFeed = () => {
       const res = await dispatch(fetchMyFeedData(obj));
       const data = await unwrapResult(res);
       if (data) setFlag(false);
+      if (_gridMode) {
+        setGridMode(true);
+      }
     };
     fetchData();
   }, [

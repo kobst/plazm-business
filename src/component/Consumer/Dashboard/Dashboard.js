@@ -51,7 +51,7 @@ const PanelContentContainer = styled.div`
   width: 100%;
   position: relative;
   display: flex;
-  height: calc(100vh - 70px);
+  height: calc(100vh - 60px);
   overflow: hidden;
   top: 60px;
   max-width: 620px;
@@ -83,6 +83,7 @@ const Dashboard = () => {
     <>
       <DashboardContent>
         <SideBarTabs />
+        <GridContainer />
         {view === "explore" && (
           <PanelContentContainer>
             <HomeSearch />
@@ -115,7 +116,6 @@ const Dashboard = () => {
         {(view === "explore" ||
           view === "my_feed" ||
           view === "business_detail") && <GlobalSearch />}
-        <GridContainer />
 
         {view !== "list_explore" && (
           <>

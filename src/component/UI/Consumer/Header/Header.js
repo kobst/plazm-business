@@ -46,12 +46,11 @@ const Header = () => {
     if (gridMode) {
       setGridMode(false);
     }
-    if (!gridMode) {
+    if (!gridMode && (selectedTab === 1 || selectedTab === 2)) {
       setGridMode(true);
-      prevRoute.push("/explore");
     }
   };
-  
+
   useEffect(() => {
     switch (selectedTab) {
       case 1:
@@ -73,7 +72,7 @@ const Header = () => {
         setTabTitle((prev) => prev);
         break;
     }
-    if (selectedTab !== 1) {
+    if (selectedTab < 1 || selectedTab > 2) {
       setGridMode(false);
     }
   }, [selectedTab]);
