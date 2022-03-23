@@ -200,10 +200,7 @@ const MapView = (props) => {
 
   useEffect(() => {
     console.log(" geocode ");
-    Geocode.fromLatLng(
-      JSON.stringify(draggedLocation.lat),
-      JSON.stringify(draggedLocation.lng)
-    ).then(
+    Geocode.fromLatLng(draggedLocation.lat, draggedLocation.lng).then(
       (response) => {
         const address = response.results[0].formatted_address;
         console.log(address);

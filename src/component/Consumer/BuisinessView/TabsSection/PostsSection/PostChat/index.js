@@ -59,8 +59,7 @@ const PostChat = () => {
   const [offset, setOffSet] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
-
-  const setSelectedListId = useStore((state) => state.setSelectedListId)
+  const setSelectedListId = useStore((state) => state.setSelectedListId);
 
   const dispatch = useDispatch();
 
@@ -88,7 +87,7 @@ const PostChat = () => {
     <>
       <div
         id="scrollableDiv"
-        style={{ height: "calc(100vh - 398px)", overflow: "auto" }}
+        style={{ height: "calc(100vh - 465px)", overflow: "auto" }}
       >
         {/* to display Top Post If any */}
         {topPost && (

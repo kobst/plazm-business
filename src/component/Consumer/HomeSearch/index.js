@@ -90,7 +90,7 @@ const HomeSearch = ({
 
   return (
     <>
-      {!gridMode &&
+      {/* {!gridMode && */}
       <ContentWrap>
         {/* {(locationState === "granted" && coords !== null) ||
         locationState === "denied" ||
@@ -109,7 +109,8 @@ const HomeSearch = ({
             <ValueLoader />
           </LoaderWrap>
         )} */}
-      </ContentWrap> }
+      </ContentWrap> 
+      {/* } */}
     </>
   );
 };

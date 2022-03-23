@@ -306,7 +306,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   const history = useHistory();
 
   useEffect(() => {
-    if (!image) {
+    // if (!image) {
       if (selectedList) {
         if (selectedList.media.length > 0) {
           setImage(selectedList.media[0].image);
@@ -318,7 +318,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
           }
         }
       }
-    }
+    // }
   }, [selectedList, selectedListDetails]);
 
   /** to fetch user lists - do we need this here? */

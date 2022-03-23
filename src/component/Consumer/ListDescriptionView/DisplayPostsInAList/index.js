@@ -9,6 +9,7 @@ import {
 } from "../../../../utilities/checkResizedImage";
 
 import useStore from "../../useState";
+import { InnerListBanner } from "../../FeedContent/styled";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -83,10 +84,7 @@ const ProfileName = styled.div`
   margin: 0;
   font-weight: 700;
   color: #fff;
-  position: absolute;
-  top: 15px;
-  left: 15px;
-
+  margin-top: 5px;
   svg {
     color: #ff0000;
     margin: 0;
@@ -131,16 +129,15 @@ const DescriptionViewItem = styled.div`
   }
 `;
 
+const TitleBarWrap = styled.div`
+  display: flex;
+  width: 100%;
+`;
+
 /** display business details */
-const DisplayPostInAList = ({
-  data,
-  id
-}) => {
-
-  const setSelectedListId = useStore((state) => state.setSelectedListId)
-  const setListIndex = useStore((state) => state.setListIndex)
-
-
+const DisplayPostInAList = ({ data, id }) => {
+  const setSelectedListId = useStore((state) => state.setSelectedListId);
+  const setListIndex = useStore((state) => state.setListIndex);
 
   const [image, setImage] = useState(
     data.business[0].default_image_url
@@ -188,15 +185,17 @@ const DisplayPostInAList = ({
           <UserMsgWrap>
             <UserMessageContent>
               <ProfileNameHeader>
-                <ProfileThumbBanner>
-                  <img src={image} onError={() => checkError()} alt="" />
-                  <ProfileThumbOverlay />
+                <TitleBarWrap>
+                  <InnerListBanner>
+                    <img src={image} onError={() => checkError()} alt="" />
+                    {/* <ProfileThumbOverlay /> */}
+                  </InnerListBanner>
                   <ProfileName>
                     <div onClick={() => displayBusinessDetail()}>
                       {data.business[0].company_name}
                     </div>
                   </ProfileName>
-                </ProfileThumbBanner>
+                </TitleBarWrap>
               </ProfileNameHeader>
             </UserMessageContent>
           </UserMsgWrap>
