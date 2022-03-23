@@ -33,6 +33,7 @@ const [useStore] = create((set) => ({
     lat: process.env.REACT_APP_LATITUDE,
     lng: process.env.REACT_APP_LONGITUDE,
   },
+  myFeedItems: [],
   Depth1Places: [],
   positionCenter: [0, 0, 0],
   centerHexPosition: [0, 0, 0],
@@ -193,6 +194,11 @@ const [useStore] = create((set) => ({
     set((state) => ({
       ...state,
       draggedLocation,
+    })),
+  setMyFeedItems: (myFeedItems) =>
+    set((state) => ({
+      ...state,
+      myFeedItems,
     })),
   setDepth1Places: (depth1Places) =>
     set((state) => ({

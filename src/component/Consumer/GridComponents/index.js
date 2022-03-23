@@ -64,6 +64,7 @@ const GridContainer = () => {
     const tabSelected = useStore((state) => state.tabSelected)
    
 
+    const myFeedItems = useStore((state) => state.myFeedItems)
 
     const displacedCenterHexPosition = useStore((state) => state.displacedCenterHexPosition)
     const setDisplacedCenterHexPosition = useStore((state) => state.setDisplacedCenterHexPosition)
@@ -74,15 +75,22 @@ const GridContainer = () => {
             console.log("grid " + tabSelected)
             loadData(searchData)
         }
-        if (feedData.length > 0 && tabSelected == 2){
+        // if (feedData.length > 0 && tabSelected == 2){
+        //     console.log("grid " + tabSelected)
+        //     console.log(feedData[0])
+        //     loadData(feedData)
+        // }
+        if (myFeedItems.length > 0 && tabSelected == 2){
             console.log("grid " + tabSelected)
-            loadData(feedData)
+            // console.log(feedData[0])
+            loadData(myFeedItems)
         }
         if (feedData.length > 0 && tabSelected == -1){
             console.log("grid " + tabSelected)
+            // console.log(feedData[0])
             loadData(feedData)
         }
-    }, [feedData, searchData])
+    }, [feedData, searchData, myFeedItems])
 
 
     const loadData = (data) => {

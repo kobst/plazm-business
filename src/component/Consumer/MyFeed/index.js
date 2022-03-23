@@ -123,7 +123,8 @@ const MyFeed = () => {
   const setMyFeedIndex = useStore((state) => state.setMyFeedIndex);
   const draggedLocation = useStore((state) => state.draggedLocation);
   const gridMode = useStore((state) => state.gridMode);
-
+  const setMyFeedItems = useStore((state) => state.setMyFeedItems)
+  const myFeedItems = useStore((state) => state.myFeedItems)
 
   const orderedPlaces = useStore((state) => state.orderedPlaces)
  
@@ -148,12 +149,20 @@ const MyFeed = () => {
       )
 
       const data = await response.json()
-      console.log(data)
+      const dataShort = data[0]
+      // console.log(JSON.stringify(dataShort))
+      setMyFeedItems(data)
+      if (data) {
+        setFlag (false)
+      }
       // const data = await unwrapResult(response);
       // console.log(data)
       // const val = JSON.parse(data);
       // console.log(val)
     }
+    // if (myFeedItems == []){
+    //   getHomeFeed()
+    // }
     getHomeFeed()
   }, []);
 
@@ -161,31 +170,23 @@ const MyFeed = () => {
   /** to fetch data initially */
   useEffect(() => {
  
-
-    let isSubscribed = true;
-    const obj = {
-      id: user._id,
-      value: 0,
-      search: searchData,
-      filters: { closest: filterByClosest, updated: filterByUpdatedAt },
-      latitude: draggedLocation.lat,
-      longitude: draggedLocation.lng,
-    };
-
     const fetchData = async () => {
+      const obj = {
+        id: user._id,
+        value: 0,
+        search: searchData,
+        filters: { closest: filterByClosest, updated: filterByUpdatedAt },
+        latitude: draggedLocation.lat,
+        longitude: draggedLocation.lng,
+      };
       dispatch(clearMyFeedData());
       const res = await dispatch(fetchMyFeedData(obj));
       const data = await unwrapResult(res);
       if (data) setFlag(false);
     };
     
-
-
-    if (isSubscribed) {
       fetchData();
-    }
    
-    return () => (isSubscribed = false)
   }, [
     dispatch,
     user._id,
@@ -273,7 +274,7 @@ const MyFeed = () => {
                     ))
                   ) : !loading ? (
                     <NoData>No Data To Display</NoData>
-                  ) : null}
+                  ) : null} 
                 </BusinessListWrap>
               </InfiniteScroll>
             </div>
