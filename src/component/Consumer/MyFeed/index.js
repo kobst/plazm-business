@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -11,7 +11,7 @@ import DisplayBusinessDetails from "./DisplayBusinessDetails";
 import { unwrapResult } from "@reduxjs/toolkit";
 import SearchBar from "./SearchBar";
 import GridView from "../GridComponents/gridView/gridView";
-
+import { getHomeFeedRest } from "../../../Api";
 import useStore from "../useState";
 import GlobalSearchBox from "../GlobalSearch/GlobalSearchBox";
 
@@ -117,6 +117,7 @@ const MyFeed = () => {
   const [offset, setOffSet] = useState(0);
   const dispatch = useDispatch();
   const [flag, setFlag] = useState(true);
+  const mountedRef = useRef(true)
 
   const setSelectedListId = useStore((state) => state.setSelectedListId);
   const setMyFeedIndex = useStore((state) => state.setMyFeedIndex);
@@ -129,38 +130,62 @@ const MyFeed = () => {
 
   const showSearchBar = useSelector((state) => state.globalSearch.displayBar);
 
+
+
+  
+
   useEffect(() => {
-    console.log(gridMode + "gridMode");
-  }, [gridMode]);
+    const getHomeFeed = async () => {
+      console.log("getting home feed")
+  
+      const response = await fetch(`${process.env.REACT_APP_API_LOCAL}/api/list-home-fetch/${user._id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+
+      const data = await response.json()
+      console.log(data)
+      // const data = await unwrapResult(response);
+      // console.log(data)
+      // const val = JSON.parse(data);
+      // console.log(val)
+    }
+    getHomeFeed()
+  }, []);
+
 
   /** to fetch data initially */
   useEffect(() => {
-    // console.log(draggedLocation.lat + " lat  " + draggedLocation.lng + "lng")
+ 
 
-    // console.log(userLocation.latitude + " lat  " + userLocation.longitude + "lng")
-
-    console.log(
-      process.env.REACT_APP_LATITUDE +
-        " lat  " +
-        process.env.REACT_APP_LONGITUDE +
-        "lng"
-    );
+    let isSubscribed = true;
+    const obj = {
+      id: user._id,
+      value: 0,
+      search: searchData,
+      filters: { closest: filterByClosest, updated: filterByUpdatedAt },
+      latitude: draggedLocation.lat,
+      longitude: draggedLocation.lng,
+    };
 
     const fetchData = async () => {
-      const obj = {
-        id: user._id,
-        value: 0,
-        search: searchData,
-        filters: { closest: filterByClosest, updated: filterByUpdatedAt },
-        latitude: draggedLocation.lat,
-        longitude: draggedLocation.lng,
-      };
       dispatch(clearMyFeedData());
       const res = await dispatch(fetchMyFeedData(obj));
       const data = await unwrapResult(res);
       if (data) setFlag(false);
     };
-    fetchData();
+    
+
+
+    if (isSubscribed) {
+      fetchData();
+    }
+   
+    return () => (isSubscribed = false)
   }, [
     dispatch,
     user._id,
