@@ -9,7 +9,7 @@ import {
 } from "../../../../utilities/checkResizedImage";
 
 import useStore from "../../useState";
-import { InnerListBanner } from "../../FeedContent/styled";
+import { InnerListBanner, RightBuisinessName, BuisinessName } from "../../FeedContent/styled";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -51,6 +51,8 @@ const ProfileNameHeader = styled.div`
   padding: 0 0 5px 0;
   margin: 0;
   width: 100%;
+  margin-left: auto; 
+  margin-right: 0;
 `;
 
 const ProfileThumbBanner = styled.div`
@@ -132,6 +134,8 @@ const DescriptionViewItem = styled.div`
 const TitleBarWrap = styled.div`
   display: flex;
   width: 100%;
+  margin-left: auto; 
+  margin-right: 0;
 `;
 
 /** display business details */
@@ -182,23 +186,31 @@ const DisplayPostInAList = ({ data, id }) => {
         <div
           className={id % 2 === 0 ? "background-active" : "background-inactive"}
         >
-          <UserMsgWrap>
+          {/* <UserMsgWrap>
             <UserMessageContent>
               <ProfileNameHeader>
-                <TitleBarWrap>
-                  <InnerListBanner>
+                <TitleBarWrap> */}
+                  {/* <InnerListBanner>
                     <img src={image} onError={() => checkError()} alt="" />
-                    {/* <ProfileThumbOverlay /> */}
+                    <ProfileThumbOverlay /> 
                   </InnerListBanner>
                   <ProfileName>
                     <div onClick={() => displayBusinessDetail()}>
                       {data.business[0].company_name}
                     </div>
-                  </ProfileName>
+                  </ProfileName>  */}
+                  {/* <RightBuisinessName>
+                          <BuisinessName onClick={() => displayBusinessDetail()}>{data.business[0].company_name}</BuisinessName>
+                        <div className="hex">
+                          <div className="hex-background">
+                          <img src={image} onError={() => checkError()} alt="" />
+                          </div>
+                        </div>
+                  </RightBuisinessName>
                 </TitleBarWrap>
               </ProfileNameHeader>
             </UserMessageContent>
-          </UserMsgWrap>
+          </UserMsgWrap> */}
 
           <UserMessage
             postData={data}

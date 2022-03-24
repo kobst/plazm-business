@@ -30,7 +30,7 @@ import {
   ListNameWrap,
   TopListHeader,
   RightBuisinessName,
-  BuisinessNme,
+  BuisinessName,
   LeftListHeader,
   ShowMoreDiv,
   ImgThumbWrap,
@@ -406,10 +406,12 @@ const UserMessage = ({
             }
           >
             <ProfileNameWrap className="UserMessageViewProfileName">
-              {myFeedView && (
+              {/* {myFeedView && ( */}
                 <>
                   <TopListHeader>
                     <LeftListHeader>
+                    {myFeedView && (
+                      <>
                       <InnerListBanner onClick={() => listNavigate()}>
                         <img
                           src={listImage}
@@ -433,9 +435,10 @@ const UserMessage = ({
                           </ListAuthorName>
                         </ListInfo>
                       </ListNameWrap>
+                      </>)}
                     </LeftListHeader>
                     <RightBuisinessName>
-                      <BuisinessNme>{businessData.company_name}</BuisinessNme>
+                      <BuisinessName>{businessData.company_name}</BuisinessName>
                       <div className="hex">
                         <div className="hex-background">
                           <img src={businessData.default_image_url} />
@@ -444,7 +447,7 @@ const UserMessage = ({
                     </RightBuisinessName>
                   </TopListHeader>
                 </>
-              )}
+              {/* )} */}
               {postData.title && <SubHeading>{postData.title}</SubHeading>}
 
               <ChatInput>

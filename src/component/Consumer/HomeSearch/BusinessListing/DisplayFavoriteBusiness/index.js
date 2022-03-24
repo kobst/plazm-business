@@ -16,7 +16,7 @@ import {
   TopBuisinessBar,
   HeartIcon,
   RightBuisinessImg,
-  BuisinessNme,
+  BuisinessName,
   ShowMoreDiv,
   BottomShowMoreDiv,
   BuisinessThumbImages,
@@ -271,9 +271,9 @@ const DisplayFavoriteBusiness = ({
                   <img src={HeartBorder} />
                 </HeartIcon> */}
                 <RightBuisinessImg>
-                  <BuisinessNme onClick={() => displayBusinessDetail()}>
+                  <BuisinessName onClick={() => displayBusinessDetail()}>
                     {businessInfo.company_name}
-                  </BuisinessNme>
+                  </BuisinessName>
                   <div className="hex">
                     <div className="hex-background">
                       <img
