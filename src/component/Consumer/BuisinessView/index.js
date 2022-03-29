@@ -59,7 +59,7 @@ const BuisinessView = ({
   const businessProfile = useSelector((state) => state.business.business);
   const flag = useSelector((state) => state.business.flag);
   const [displayBusinessProfile, setDisplayBusinessProfile] = useState(false);
-  const setSelectedBusiness = useStore((state) => state.setSelectedPlace);
+  const setSelectedPlace = useStore((state) => state.setSelectedPlace);
   // const businessProfile = useStore((state) => state.businessDetailProfile)
 
   useEffect(() => {
@@ -70,9 +70,18 @@ const BuisinessView = ({
       console.log("XXXX   business view coordinates XXXXX");
       console.log(deepClone);
 
-      setSelectedBusiness(deepClone);
+      setSelectedPlace(deepClone);
     }
   }, [businessProfile]);
+
+  useEffect(() => {
+  
+    return () => setSelectedPlace(null);
+
+  }, []);
+
+
+
 
   const dispatch = useDispatch();
   useEffect(() => {

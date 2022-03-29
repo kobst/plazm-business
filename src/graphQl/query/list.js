@@ -64,6 +64,46 @@ const getUserLists = (ownerId) => {
 };
 
 /*
+@desc: getUserSubscribedLists query
+*/
+const getUserSubscribedLists = (obj) => {
+  const graphQl = {
+    query: `
+          query GetUserSubscribedLists($id: ID!, $value: Int, $limit: Int){
+            getUserSubscribedLists (input: {id: $id, value:$value, limit: $limit}){
+              message
+              success
+              totalLists
+              list {
+                  _id
+                  isPublic
+                  ownerId
+                  subscribers {
+                    _id
+                    name
+                    photo
+                    
+                  }
+                  name
+                  description
+                  type
+                  media {
+                    image
+                  }
+                  createdAt
+                  updatedAt
+                }
+              }
+          }`,
+    variables: {
+      id: obj.id,
+      value: obj.value,
+      limit: obj?.limit || 15,
+    },
+  };
+  return graphQl;
+};
+/*
 @desc: getUserCreatedAndFollowedLists query
 */
 const getUserCreatedAndFollowedLists = (obj) => {
@@ -174,6 +214,9 @@ const GetListDetails = (obj) => {
                 listId {
                   _id
                   name
+                  media {
+                    image
+                  }
                 }
                 totalPosts {
                   totalPosts
@@ -314,6 +357,7 @@ const SearchLists = (obj) => {
 export {
   getAllLists,
   getUserLists,
+  getUserSubscribedLists,
   getUserCreatedAndFollowedLists,
   GetListDetails,
   getMostTrendingLists,

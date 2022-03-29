@@ -32,6 +32,7 @@ import {
 import {
   fetchUserLists,
   fetchUserCreatedAndFollowedList,
+  fetchUserSubscribedList,
   clearListData,
 } from "../../../../reducers/listReducer";
 
@@ -106,6 +107,8 @@ const SideBarTabs = ({
   const filteredListData = useSelector((state) => state.list.filteredList);
   // const totalList = useSelector((state) => state.list.totalList);
   const listData = useSelector((state) => state.list.data);
+
+  const subscribedLists = useSelector((state) => state.list.subscribedLists)
   const totalList = useSelector((state) => state.list.totalList);
   const userLists = useSelector((state) => state.list.userLists);
   const loading = useSelector((state) => state.myFeed.loading);
@@ -116,6 +119,8 @@ const SideBarTabs = ({
     (state) => state.list.loadingUserCreatedAndFollowed
   );
   // new useStore
+  const [userFollowedLists, setUserFollowedLists] = useState([]);
+
   const selectedTab = useStore((state) => state.tabSelected);
   const selectedListId = useStore((state) => state.selectedListId);
   const searchIndex = useStore((state) => state.searchIndex);
@@ -149,6 +154,7 @@ const SideBarTabs = ({
   const setReadMore = useStore((state) => state.setReadMore);
   const draggedLocation = useStore((state) => state.draggedLocation);
   const setSelectedList = useStore((state) => state.setSelectedList);
+  const setSelectedPlace = useStore((state) => state.setSelectedPlace);
   const setOrderedPlaces = useStore((state) => state.setOrderedPlaces);
 
   //old useStore
@@ -171,18 +177,42 @@ const SideBarTabs = ({
           value: page,
           limit: 15,
         };
-        // dispatch(clearListData());
+        dispatch(clearListData());
         const data = await dispatch(fetchUserCreatedAndFollowedList(obj));
+        // const data = await dispatch(fetchUserSubscribedList(obj));
+        // de-duplicate
         const res = await unwrapResult(data);
         if (res) {
           // setFlag(false);
         }
       };
-      if (page > 1) {
+      // if (page > 1) {
+        if (listData.length < 1) {
         fetchListData();
       }
     }
   }, [dispatch, user._id, page]);
+
+
+  useEffect(() => {
+    let _userFollowedLists = []
+    if (listData.length > 0) {
+      // const arrUniq = [...new Map(listData.map(v => [v.id, v])).values()]
+
+      listData.forEach(list => {
+        var arrayLength = list.subscribers.length;
+        for (var i = 0; i < arrayLength; i++) {
+          // console.log(list.subscribers[i]._id)
+          if (list.subscribers[i]._id === user._id) {
+            console.log("Good")
+            _userFollowedLists.push(list)
+            break
+          }
+      }
+      })
+    }  
+    setUserFollowedLists(_userFollowedLists)
+  }, [listData])
 
   /** to clear selected data on tab click */
   const homeSearchFunction = () => {
@@ -190,6 +220,7 @@ const SideBarTabs = ({
     setSelectedList(null);
     setSelectedListId(null);
     setOrderedPlaces([])
+    setSelectedPlace(null)
     if (!loading) {
       history.push("/explore");
     }
@@ -204,6 +235,7 @@ const SideBarTabs = ({
       setSelectedList(null);
       setSelectedListId(null);
       setOrderedPlaces([])
+      setSelectedPlace(null)
       history.push("/home");
       
     // }
@@ -227,6 +259,7 @@ const SideBarTabs = ({
   // };
 
   const listDiscovery = () => {
+    setSelectedPlace(null)
     history.push("/lists");
     setDiscoverBtn(false);
   };
@@ -413,13 +446,14 @@ const SideBarTabs = ({
           </TabList>
         </Tabs>
 
+
         {listData.length > 0 && (
           <SubcriptionHeading>{expanded && "Subscriptions"}</SubcriptionHeading>
         )}
 
         <div className="list-scroll">
-          {listData.length > 0 ? (
-            listData.map((i, key) => (
+          {userFollowedLists.length > 0 ? (
+            userFollowedLists.map((i, key) => (
               <ListTab
                 data={i}
                 key={key}
@@ -430,7 +464,7 @@ const SideBarTabs = ({
           ) : (
             <h6></h6>
           )}
-          {listLoader && (
+          {/* {listLoader && (
             <div className="sidebar-loader">
               <ValueLoader />
             </div>
@@ -444,7 +478,7 @@ const SideBarTabs = ({
             >
               Load
             </button>
-          )}
+          )} */}
         </div>
       </div>
     </div>

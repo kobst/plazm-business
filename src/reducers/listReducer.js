@@ -5,6 +5,7 @@ import {
   addPostToList,
   CreateList,
   getAllLists,
+  getUserSubscribedLists,
   getUserCreatedAndFollowedLists,
   getUserLists,
   DeleteList,
@@ -87,6 +88,20 @@ export const AddEventToList = createAsyncThunk(
     return response;
   }
 );
+
+/*
+ * @desc:  to fetch user created and followed list
+ * @params: userId
+ */
+export const fetchUserSubscribedList = createAsyncThunk(
+  "data/fetchUserSubscribedList",
+  async (obj) => {
+    const graphQl = getUserSubscribedLists(obj);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.getUserSubscribedLists;
+  }
+);
+
 
 /*
  * @desc:  to fetch user created and followed list
@@ -187,9 +202,12 @@ export const slice = createSlice({
     loadingUserLists: false,
     loadingCreateList: false,
     userLists: [],
+    subscribedLists: [],
+    loadingUserSubscribed: false,
     loadingUserCreatedAndFollowed: false,
     data: [],
     totalList: 0,
+    totalSubscribedList: 0,
     loadingSelectedList: false,
     totalPostInList: 0,
     selectedListData: [],
@@ -368,6 +386,27 @@ export const slice = createSlice({
     [createList.rejected]: (state, action) => {
       if (state.loadingCreateList) {
         state.loadingCreateList = false;
+        state.error = action.payload;
+      }
+    },
+    [fetchUserSubscribedList.pending]: (state) => {
+      if (!state.loadingUserCreatedAndFollowed) {
+        state.loadingUserSubscribed = true;
+      }
+    },
+    [fetchUserSubscribedList.fulfilled]: (state, action) => {
+      if (state.loadingUserCreatedAndFollowed) {
+        state.loadingUserCreatedAndFollowed = false;
+        if (action.payload) {
+          state.subscribedLists = action.payload.list;
+          state.totalSubscribedList = action.payload.totalLists;
+
+        }
+      }
+    },
+    [fetchUserSubscribedList.rejected]: (state, action) => {
+      if (state.loadingUserCreatedAndFollowed) {
+        state.loadingUserSubscribed = false;
         state.error = action.payload;
       }
     },

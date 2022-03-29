@@ -22,51 +22,65 @@ import { connect } from "react-redux";
 
 // https://alex3165.github.io/react-mapbox-gl/demos
 
-function distance(lat1, lon1, lat2, lon2) {
-  if (lat1 == lat2 && lon1 == lon2) {
-    return 0;
-  } else {
-    var radlat1 = (Math.PI * lat1) / 180;
-    var radlat2 = (Math.PI * lat2) / 180;
-    var theta = lon1 - lon2;
-    var radtheta = (Math.PI * theta) / 180;
-    var dist =
-      Math.sin(radlat1) * Math.sin(radlat2) +
-      Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-    if (dist > 1) {
-      dist = 1;
+//https://medium.com/critigenopensource/an-approach-to-integrating-mapboxgl-in-react-redux-b50d82bc0ed0
+
+
+const setLinesExt = (dict) => {
+    let centerWhite = dict["0-0-0"]
+    let topRed = dict["0--1-1"]
+    let topRightOrange = dict["1--1-0"]
+    let bottomRightYellow = dict["1-0--1"]
+    let bottomGreen = dict["0-1--1"]
+    let bottomLeftBlue = dict["-1-1-0"]
+    let topLeftViolet = dict["-1-0-1"]
+    let redLine, orangeLine, yellowLine, greenLine, blueLine, violetLine
+
+    if (centerWhite) {
+        if (topRed) {
+            redLine = [centerWhite.businessLocation.coordinates, topRed.businessLocation.coordinates]
+        } else {
+           redLine = null
+        }
+
+        if (topRightOrange) {
+            orangeLine = [centerWhite.businessLocation.coordinates, topRightOrange.businessLocation.coordinates]
+        } else {
+            orangeLine = null
+        }
+
+        if (bottomRightYellow) {
+            yellowLine = [centerWhite.businessLocation.coordinates, bottomRightYellow.businessLocation.coordinates]
+        } else {
+            yellowLine = null
+        }
+
+        if (bottomGreen) {
+            greenLine = [centerWhite.businessLocation.coordinates, bottomGreen.businessLocation.coordinates]
+        } else {
+            greenLine = null
+        }
+
+        if (bottomLeftBlue) {
+            blueLine = [centerWhite.businessLocation.coordinates, bottomLeftBlue.businessLocation.coordinates]
+        } else {
+            blueLine = null
+        }
+
+        if (topLeftViolet) {
+            violetLine = [centerWhite.businessLocation.coordinates, topLeftViolet.businessLocation.coordinates]
+        } else {
+            violetLine = null
+        }
+    } else {
+        redLine = blueLine = yellowLine = greenLine = violetLine = orangeLine = null  
     }
-    dist = Math.acos(dist);
-    dist = (dist * 180) / Math.PI;
-    dist = dist * 60 * 1.1515;
-    // if (unit=="K") { dist = dist * 1.609344 }
-    // if (unit=="N") { dist = dist * 0.8684 }
-    return dist;
-  }
+
+    return {red: redLine, orange: orangeLine, yellow: yellowLine, blue: blueLine, green: greenLine, violet: violetLine}
+
 }
 
 
 
-
-// function orderPlaces(places, selectedPlace, defaultCenter) {
-
-//     let center = {}
-//     if (selectedPlace) {
-//         center.lat = selectedPlace.businessLocation.coordinates[1]
-//         center.lng = selectedPlace.businessLocation.coordinates[0]
-//     } else {
-//         center = defaultCenter
-//     }
-
-//     places.sort(function (a, b) {
-//         let distA = distance(a.businessLocation.coordinates[1], a.businessLocation.coordinates[0], center.lat, center.lng)
-//         let distB = distance(b.businessLocation.coordinates[1], b.businessLocation.coordinates[0], center.lat, center.lng)
-//         return distA - distB
-//     })
-
-//     return places
-
-// }
 
 const setBBox = (_orderedPlaces) => {
     let maxViewable = 10
@@ -142,8 +156,6 @@ const MapView = (props) => {
     const [greenLine, setGreenLine] = useState(null)
     const [blueLine, setBlueLine] = useState(null)
     const [violetLine, setVioletLine] = useState(null)
-   
-    const [tempCenter, setTempCenter] = useState()
     // const [sublocality, setSubLocality] = useState("")
     // const [city, setCity] = useState("")
     const _colorDict = ColorDict()
@@ -162,8 +174,11 @@ const MapView = (props) => {
     const setCity = useStore(state => state.setCity)
 
 
+
     const setDraggedLocation = useStore(state => state.setDraggedLocation)
     const draggedLocation = useStore(state => state.draggedLocation)
+    const userLocation = useStore(state => state.userLocation)
+    const [tempCenter, setTempCenter] = useState([userLocation.lng, userLocation.lat])
 
     const gridContainerStyle = {
         // height: '100vh',
@@ -195,6 +210,12 @@ const MapView = (props) => {
     } else {
       console.log("gridView false");
       setDimensions(mapContainerStyle);
+      setRedLine(null)
+      setYellowLine(null)
+      setOrangeLine(null)
+      setGreenLine(null)
+      setBlueLine(null)
+      setVioletLine(null)
       // Map.resize()
       // ReCenter()
     }
@@ -211,66 +232,14 @@ const MapView = (props) => {
 
 
 
-
-
-
-    const setLines = (dict) => {
-        let centerWhite = dict["0-0-0"]
-        let topRed = dict["0--1-1"]
-        let topRightOrange = dict["1--1-0"]
-        let bottomRightYellow = dict["1-0--1"]
-        let bottomGreen = dict["0-1--1"]
-        let bottomLeftBlue = dict["-1-1-0"]
-        let topLeftViolet = dict["-1-0-1"]
-
-        if (centerWhite) {
-            if (topRed) {
-                setRedLine([centerWhite.businessLocation.coordinates, topRed.businessLocation.coordinates])
-            } else {
-                setRedLine(null)
-            }
-
-            if (topRightOrange) {
-                setOrangeLine([centerWhite.businessLocation.coordinates, topRightOrange.businessLocation.coordinates])
-            } else {
-                setOrangeLine(null)
-            }
-
-            if (bottomRightYellow) {
-                setYellowLine([centerWhite.businessLocation.coordinates, bottomRightYellow.businessLocation.coordinates])
-            } else {
-                setYellowLine(null)
-            }
-
-            if (bottomGreen) {
-                setGreenLine([centerWhite.businessLocation.coordinates, bottomGreen.businessLocation.coordinates])
-            } else {
-                setGreenLine(null)
-            }
-
-            if (bottomLeftBlue) {
-                setBlueLine([centerWhite.businessLocation.coordinates, bottomLeftBlue.businessLocation.coordinates])
-            } else {
-                setBlueLine(null)
-            }
-
-            if (topLeftViolet) {
-                setVioletLine([centerWhite.businessLocation.coordinates, topLeftViolet.businessLocation.coordinates])
-            } else {
-                setVioletLine(null)
-            }
-        } else {
-            setRedLine(null)
-            setOrangeLine(null)
-            setYellowLine(null)
-            setGreenLine(null)
-            setBlueLine(null)
-            setVioletLine(null)
+useEffect(()=> {
+    if (selectedPlace) {
+        if (selectedPlace.businessLocation) {
+            setTempCenter(selectedPlace.businessLocation.coordinates)
         }
-
     }
-
-
+    
+}, [selectedPlace])
 
     useEffect(() => {
         let mounted = true;
@@ -285,14 +254,16 @@ const MapView = (props) => {
     useEffect(() => {
         let mounted = true;
         if (mounted && gridMode) {
-            setLines(slotDict)
+            let lines = setLinesExt(slotDict)
+            setRedLine(lines.red)
+            setYellowLine(lines.yellow)
+            setOrangeLine(lines.orange)
+            setBlueLine(lines.blue)
+            setGreenLine(lines.green)
+            setVioletLine(lines.violet)
         }
         return () => mounted = false;
     }, [slotDict]);
-
-
-
-
 
 
       useEffect(() => {
@@ -313,7 +284,9 @@ const MapView = (props) => {
                 }}}
           })}, [draggedLocation])   
 
-  const clickHandler = (map, event) => {
+  
+  
+const clickHandler = (map, event) => {
     console.log("map clicked");
     // let coordinates = event.lnglat.wrap()
     console.log({ map, event });
@@ -345,11 +318,6 @@ const MapView = (props) => {
   }
 
 
-
-
-
-
-
     return (
         // <div className="circleDiv">
         <div className="map-container">
@@ -363,14 +331,14 @@ const MapView = (props) => {
                 fitBounds={boundBox}
                 onDragEnd={dragHandler}
                 onClick={clickHandler}
+                center={tempCenter}
                 containerStyle={dimensions}>
 
                 <MapContext.Consumer>
                     {(map) => {
                         // use `map` here
                         // console.log("map" + map)
-                        const newPosDict = {}
-
+                        // const newPosDict = {}
                         // orderedPlaces.forEach((place) => {
                         //     // console.log(place.businessLocation.coordinates + "inside map")
                         //     let pix = map.project(place.businessLocation.coordinates)
@@ -380,31 +348,21 @@ const MapView = (props) => {
                         //     // obj._id = place._id
                         //     // obj.mapPos = pix
                         //     newPosDict[place._id] = obj
-
                         // })
-                
-                        map.on('idle', function () {
-                            map.resize()
-                            map.zoom = 15
-                        })
+                        // map.on('idle', function () {
+                        //     map.resize()
+                        //     map.zoom = 15
+                        // })
                     }}
-
                 </MapContext.Consumer>
 
 
                 {orderedPlaces.map(({ ...otherProps }) => {
-                    return <Layer type="circle" id={otherProps._id} paint={{"circle-radius": 10, "circle-color": otherProps.icon_color}}>
+                    {/* return (<Layer type="circle" id={otherProps._id} paint={{"circle-radius": 10, "circle-color": otherProps.icon_color}}> */}
+                    return (<Layer type="circle" id={otherProps._id} paint={{"circle-radius": 10, "circle-color": 'white'}}>
                             <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />
-                            </Layer>
+                            </Layer>)
                 })}
-
-                {/* <GeoJSONLayer  paint={{"line-color": "white", "line-width": 4, "line-opacity": 1}} data={hex} /> */}
-
-
-
-                <Layer type="line" id='violet' paint={{"line-width": 10, "line-color": 'red'}}>
-                     {lineArray ? <Feature key={"line"} coordinates={lineArray} /> : null}
-                 </Layer>
 
                  <Layer type="line" id='red' paint={{"line-width": 10, "line-color": 'red'}}>
                      {redLine ? <Feature key={"line"} coordinates={redLine} /> : null}
@@ -429,8 +387,7 @@ const MapView = (props) => {
                  <Layer type="line" id='violet' paint={{"line-width": 10, "line-color": 'violet'}}>
                      {violetLine ? <Feature key={"line"} coordinates={violetLine} /> : null}
                  </Layer>
-
-
+                    
 
                 {selectedPlace && selectedPlace.businessLocation && <Layer type="circle" id="selectedPlace_id" paint={{
                     "circle-radius": 20,
@@ -463,3 +420,61 @@ const MapView = (props) => {
 
 
 export default MapView
+
+
+
+
+// const setLines = (dict) => {
+//     let centerWhite = dict["0-0-0"]
+//     let topRed = dict["0--1-1"]
+//     let topRightOrange = dict["1--1-0"]
+//     let bottomRightYellow = dict["1-0--1"]
+//     let bottomGreen = dict["0-1--1"]
+//     let bottomLeftBlue = dict["-1-1-0"]
+//     let topLeftViolet = dict["-1-0-1"]
+
+//     if (centerWhite) {
+//         if (topRed) {
+//             setRedLine([centerWhite.businessLocation.coordinates, topRed.businessLocation.coordinates])
+//         } else {
+//             setRedLine(null)
+//         }
+
+//         if (topRightOrange) {
+//             setOrangeLine([centerWhite.businessLocation.coordinates, topRightOrange.businessLocation.coordinates])
+//         } else {
+//             setOrangeLine(null)
+//         }
+
+//         if (bottomRightYellow) {
+//             setYellowLine([centerWhite.businessLocation.coordinates, bottomRightYellow.businessLocation.coordinates])
+//         } else {
+//             setYellowLine(null)
+//         }
+
+//         if (bottomGreen) {
+//             setGreenLine([centerWhite.businessLocation.coordinates, bottomGreen.businessLocation.coordinates])
+//         } else {
+//             setGreenLine(null)
+//         }
+
+//         if (bottomLeftBlue) {
+//             setBlueLine([centerWhite.businessLocation.coordinates, bottomLeftBlue.businessLocation.coordinates])
+//         } else {
+//             setBlueLine(null)
+//         }
+
+//         if (topLeftViolet) {
+//             setVioletLine([centerWhite.businessLocation.coordinates, topLeftViolet.businessLocation.coordinates])
+//         } else {
+//             setVioletLine(null)
+//         }
+//     } else {
+//         setRedLine(null)
+//         setOrangeLine(null)
+//         setYellowLine(null)
+//         setGreenLine(null)
+//         setBlueLine(null)
+//         setVioletLine(null)
+//     }
+// }

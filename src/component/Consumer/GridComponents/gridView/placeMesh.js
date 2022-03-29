@@ -576,12 +576,9 @@ const PlaceMesh = ((props) => {
         if (meshGroup.current) {
             meshGroup.current.scale.set(1, 1, 1)
         }
-        // setSelectedPlace(null)
-        // // props.hover(null)
-        // setHover(false)
-
-        // setHover(left_hover)
+        setSelectedPlace(null)
     }
+
     const handleClick = (place) => {
 
         if (place){
@@ -597,8 +594,6 @@ const PlaceMesh = ((props) => {
             setDisplacedCenterHexPosition([newCoordinateX, newCoordinateY, newCoordinateZ])
 
         }
-
-        
         // need a way to make this center Place?
     }
 

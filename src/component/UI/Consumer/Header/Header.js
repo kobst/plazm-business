@@ -17,7 +17,11 @@ import "./styles.css";
 import GridIcon from "../../../../images/grid_icon_blue.png";
 import ListIcon from "../../../../images/Grid_icon.png";
 import { useHistory, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { Auth } from "aws-amplify";
+import { setGloablLoader } from "../../../../reducers/consumerReducer";
+
+
 
 const Header = () => {
   const [tabTitle, setTabTitle] = useState();
@@ -28,6 +32,7 @@ const Header = () => {
     b: "Business",
     list: "List",
   };
+  const dispatch = useDispatch();
   const prevRoute = useHistory();
   const history = useLocation()
     .pathname.split("/")
@@ -81,6 +86,24 @@ const Header = () => {
     let loc = draggedLocation.lat + " lat " + draggedLocation.lng + " long ";
     setCoords(loc);
   }, [draggedLocation]);
+
+
+    /** for logout functionality redirection */
+    const redirectUserToLoginScreen = () => {
+      dispatch(setGloablLoader(false));
+      history.push("/consumer/login");
+    };
+
+    /** logout consumer */
+    const consumerLogout = async () => {
+      try {
+        dispatch(setGloablLoader(true));
+        await Auth.signOut();
+        setTimeout(() => redirectUserToLoginScreen(), 3000);
+      } catch (error) {
+        dispatch(setGloablLoader(false));
+      }
+    };
 
   const isObjectId = (id) => {
     return id.length === 24 && !isNaN(Number("0x" + id));
@@ -143,6 +166,9 @@ const Header = () => {
           {sublocality + " "}
           {city}
         </LocationWrap>
+
+        <div bgColor="#FF7171" width="200px" onClick={consumerLogout} >Logout</div>
+
 
         <UserImgWrap>
           <UserImg>

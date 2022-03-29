@@ -143,7 +143,7 @@ const MyFeed = () => {
   useEffect(() => {
     const getHomeFeed = async () => {
       console.log("getting home feed")
-  
+      console.log(user.listsFollowed)
       const response = await fetch(`${process.env.REACT_APP_API_LOCAL}/api/list-home-fetch/${user._id}`,
         {
           method: "GET",
@@ -154,20 +154,16 @@ const MyFeed = () => {
       )
 
       const data = await response.json()
-      const dataShort = data[0]
-      // console.log(JSON.stringify(dataShort))
-      setMyFeedItems(data)
+      
       if (data) {
         setFlag (false)
+        setMyFeedItems(data)
       }
       // const data = await unwrapResult(response);
       // console.log(data)
       // const val = JSON.parse(data);
       // console.log(val)
     }
-    // if (myFeedItems == []){
-    //   getHomeFeed()
-    // }
     getHomeFeed()
   }, []);
 

@@ -147,8 +147,8 @@ const ListMenu = (
   const userCreatedLoading = useSelector(
     (state) => state.list.loadingUserLists
   );
-  const userFollowedLists = useSelector((state) => state.list.data);
-
+  
+  const [userFollowedLists, setUserFollowedLists] = useState([]);
   // const [obj, setObj] = useState()
   const [searchError, setSearchError] = useState("");
   const [search, setSearch] = useState("");
@@ -168,6 +168,8 @@ const ListMenu = (
   const setDiscoverBtn = useStore((state) => state.setDiscoverBtn);
   const setReadMore = useStore((state) => state.setReadMore);
 
+  
+
   useEffect(() => {
     // setObj({ subscriberId: user._id })
     const fetchData = async () => {
@@ -184,6 +186,35 @@ const ListMenu = (
     (offset === 0 || offsetPopular === 0) && fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+
+  // only set for user subscribed Lists...
+  useEffect(() => {
+    let _userFollowedLists = []
+    if (listData.length > 0) {
+      listData.forEach(list => {
+        var arrayLength = list.subscribers.length;
+        for (var i = 0; i < arrayLength; i++) {
+          // console.log(list.subscribers[i]._id)
+          if (list.subscribers[i]._id === user._id) {
+            console.log("Good")
+            _userFollowedLists.push(list)
+            break
+          }
+      }
+      })
+    }  
+    setUserFollowedLists(_userFollowedLists)
+    //   const _userFollowedLists = listData.filter(_list => {
+    //     console.log(_list.subscribers)
+    //     console.log({_id: user._id, name: user.name, photo: user.photo})
+    //     // _list.subscribers.includes({_id: user._id, name: user.name, photo: user.photo})
+    //     _list.subscribers.filter(e => e._id === user._id)
+    //   })
+    //   console.log(_userFollowedLists)
+    //   setUserFollowedLists(_userFollowedLists)
+    // }
+  }, [listData])
 
   /** search data */
   const searchListsData = (event) => {
@@ -217,11 +248,9 @@ const ListMenu = (
     useEffect(() => {
       // console.log("search data" + JSON.stringify(obj))
       var obj = {}
-      if (tabIndex != 2) {
-        obj={ subscriberId: user._id }
-      }
-
-      console.log("search data" + JSON.stringify(obj))
+      // if (tabIndex != 2) {
+      //   obj={ subscriberId: user._id }
+      // }
       setSearch(listSearch);
       const searchData = async () => {
         console.log("search data" + obj)
