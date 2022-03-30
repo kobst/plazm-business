@@ -215,6 +215,7 @@ const ListMenu = (
     dispatch(clearListSearchData());
     dispatch(setListSearch(""));
     setTabIndex(index);
+    setSearchError("");
     setSelectedTab(index);
     setListTabSelected(index);
   };

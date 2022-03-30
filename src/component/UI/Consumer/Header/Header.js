@@ -46,7 +46,15 @@ const Header = () => {
     if (gridMode) {
       setGridMode(false);
     }
-    if (!gridMode && (selectedTab === 1 || selectedTab === 2)) {
+    // if (!gridMode) {
+    //   setGridMode(true);
+    // }
+    if (
+      (!gridMode && (selectedTab === 1 || selectedTab === 2)) ||
+      (selectedTab === -1 &&
+        routeObj[history[0]] === routeObj.list &&
+        history.length > 1)
+    ) {
       setGridMode(true);
     }
   };
@@ -72,7 +80,11 @@ const Header = () => {
         setTabTitle((prev) => prev);
         break;
     }
-    if (selectedTab < 1 || selectedTab > 2) {
+    if (
+      (selectedTab < 1 || selectedTab > 2) &&
+      routeObj[history[0]] !== routeObj.list &&
+      history.length <= 1
+    ) {
       setGridMode(false);
     }
   }, [selectedTab]);

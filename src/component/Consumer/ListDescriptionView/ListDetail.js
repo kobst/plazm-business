@@ -307,17 +307,17 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
 
   useEffect(() => {
     // if (!image) {
-      if (selectedList) {
-        if (selectedList.media.length > 0) {
-          setImage(selectedList.media[0].image);
-        }
-      } else {
-        if (selectedListDetails) {
-          if (selectedListDetails.media.length > 0) {
-            setImage(selectedListDetails.media[0].image);
-          }
+    if (selectedList) {
+      if (selectedList.media.length > 0) {
+        setImage(selectedList.media[0].image);
+      }
+    } else {
+      if (selectedListDetails) {
+        if (selectedListDetails.media.length > 0) {
+          setImage(selectedListDetails.media[0].image);
         }
       }
+    }
     // }
   }, [selectedList, selectedListDetails]);
 
@@ -437,7 +437,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
           <ListOptionSection>
             <HeadingWrap>
               <TopHeadingWrap>
-                <ArrowBack onClick={() => console.log("back")}>BACK</ArrowBack>
+                <ArrowBack onClick={history.goBack}>BACK</ArrowBack>
 
                 <ListBannerSection>
                   <img src={image} alt="" onError={() => setImage(BannerImg)} />
