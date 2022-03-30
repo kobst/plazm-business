@@ -93,15 +93,15 @@ const GridContainer = () => {
 
     useEffect(() => {
         if (searchData.length > 0 && tabSelected == 1){
-            console.log("grid " + tabSelected)
+            // console.log("grid " + tabSelected)
             loadData(searchData)
         }
         if (feedData.length > 0 && tabSelected == 2){
-            console.log("grid " + tabSelected)
+            // console.log("grid " + tabSelected)
             loadData(feedData)
         }
         if (feedData.length > 0 && tabSelected == -1){
-            console.log("grid " + tabSelected)
+            // console.log("grid " + tabSelected)
             loadData(feedData)
         }
     }, [feedData, searchData])
@@ -109,7 +109,7 @@ const GridContainer = () => {
 
     const loadData = (data) => {
         let _places = []
-        console.log("getting feed data " + feedData.length)
+        // console.log("getting feed data " + feedData.length)
         data.forEach(element => {
             let deepClone = JSON.parse(JSON.stringify(element));
             if (!deepClone.businessLocation && deepClone.location) {
@@ -128,13 +128,13 @@ const GridContainer = () => {
 
     //on setting places
     useEffect(() => {
-        console.log("initial props places")
+        // console.log("initial props places")
         ReCenter(null)
     }, [places, draggedLocation, gridMode])
     // on shifting centerPlace..
     useEffect(() => {
         if (centerPlace) {
-            console.log("new center " + centerPlace.company_name)
+            // console.log("new center " + centerPlace.company_name)
             // adjustZ(centerPlace)
         }
         let timer1 = setTimeout(() => ReCenter(centerPlace), 2000);
@@ -173,7 +173,7 @@ const GridContainer = () => {
 
     const ReCenter = (place) => {
         //props.selectPlace(place)
-        console.log("Recenter  -   " + place)
+        // console.log("Recenter  -   " + place)
         let limit = 20
         const tilt = 10
         // let _orderedPlaces
@@ -182,7 +182,7 @@ const GridContainer = () => {
 
         let limitedOrderedPlaces
         if (place) {
-            console.log("----place---" + place.company_name)
+            // console.log("----place---" + place.company_name)
             // props.selectPlace(place)
             // all in one
             // const { _orderedPlacesResponse, _slotDictResponse, _multiDictResponse } = AssignMolecularDict(places, props.center, place)
@@ -199,9 +199,9 @@ const GridContainer = () => {
             setCamPos([0, 0, 5])
 
         } else {
-            console.log("no center place")
+            // console.log("no center place")
             if (places.length > 0) {
-                console.log(places.length + " length ---")
+                // console.log(places.length + " length ---")
                 // all in one
                 // const { _orderedPlacesResponse, _slotDictResponse, _multiDictResponse } = AssignMolecularDict(props.places, props.center)
                 const { _orderedPlacesResponse, _slotDictResponse, _multiDictResponse } = AssignHexDict(places, draggedLocation, place)
@@ -219,7 +219,7 @@ const GridContainer = () => {
 
             
             } else {
-                console.log(" nooooo places")
+                // console.log(" nooooo places")
                 setOrderedPlaces([])
                 setMultiDict({})
                 setPlaceCoordDict({})
@@ -231,7 +231,7 @@ const GridContainer = () => {
 
 
     const onScroll = (e) => {
-        console.log(e.deltaX + " e.delta " + e.deltaY)
+        // console.log(e.deltaX + " e.delta " + e.deltaY)
 
 
     }

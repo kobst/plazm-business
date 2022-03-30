@@ -78,7 +78,7 @@ const NewInBuzzItems = ({
 
   /** to open list description view */
   const ReadMore = () => {
-    console.log(" reading more");
+    // console.log(" reading more");
     setDiscoverBtn(false);
     setSelectedListId(data._id);
     setSelectedList(data);

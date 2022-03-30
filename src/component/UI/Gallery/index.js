@@ -30,7 +30,7 @@ const Gallery = (props) => {
 
   useEffect(() => {
     if(props.image){
-      console.log(props.image)
+      // console.log(props.image)
       setImageValue(props.image)
     }
   },[props.image])

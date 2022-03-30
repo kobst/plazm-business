@@ -281,12 +281,12 @@ const LeftBar = ({
       setTimeout(() => redirectUserToLoginScreen(), 3000);
     } catch (error) {
       dispatch(setGloablLoader(false));
-      console.log("error signing out: ", error);
+      // console.log("error signing out: ", error);
     }
   };
 
   const setTab = (index) => {
-    console.log("setting index " + index)
+    // console.log("setting index " + index)
     setTabIndex(index)
 
     // <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>

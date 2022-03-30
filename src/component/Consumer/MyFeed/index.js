@@ -131,7 +131,7 @@ const MyFeed = () => {
   const showSearchBar = useSelector((state) => state.globalSearch.displayBar);
 
   useEffect(() => {
-    console.log(gridMode + "gridMode");
+    // console.log(gridMode + "gridMode");
   }, [gridMode]);
 
   /** to fetch data initially */
@@ -140,12 +140,12 @@ const MyFeed = () => {
 
     // console.log(userLocation.latitude + " lat  " + userLocation.longitude + "lng")
 
-    console.log(
-      process.env.REACT_APP_LATITUDE +
-        " lat  " +
-        process.env.REACT_APP_LONGITUDE +
-        "lng"
-    );
+    // console.log(
+    //   process.env.REACT_APP_LATITUDE +
+    //     " lat  " +
+    //     process.env.REACT_APP_LONGITUDE +
+    //     "lng"
+    // );
     const fetchData = async () => {
       const _gridMode = gridMode;
       if (_gridMode) {

@@ -189,7 +189,7 @@ const ListMenu = (
         dispatch(setListSearch(event.target.value));
         setSearchError("");
         setOffSetSearch(0);
-      } else if (search.length >= 0 && search.length < 4) {
+      } else if (search.length > 0 && search.length < 4) {
         setSearchError(error.SEARCH_ERROR);
       }
     }

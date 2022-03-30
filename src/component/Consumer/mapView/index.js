@@ -131,7 +131,7 @@ const MapView = (props) => {
     if (maxViewable) {
       limit = maxViewable;
     }
-    console.log("ordered places " + orderedPlaces.length);
+    // console.log("ordered places " + orderedPlaces.length);
 
     for (let i = 0; i < limit; i++) {
       // console.log(i)
@@ -175,14 +175,14 @@ const MapView = (props) => {
 
   // only use if not using second map
   useMemo(() => {
-    console.log("map view toggle");
+    // console.log("map view toggle");
     if (gridView) {
-      console.log("gridView true");
+      // console.log("gridView true");
       setDimensions(gridContainerStyle);
       // Map.resize()
       // ReCenter()
     } else {
-      console.log("gridView false");
+      // console.log("gridView false");
       setDimensions(mapContainerStyle);
       // Map.resize()
       // ReCenter()
@@ -190,7 +190,7 @@ const MapView = (props) => {
   }, [gridView]);
 
   useEffect(() => {
-    console.log("reading selected place from mapview");
+    // console.log("reading selected place from mapview");
 
     if (selectedPlace) {
       // console.log(selectedPlace)
@@ -199,11 +199,11 @@ const MapView = (props) => {
   }, [selectedPlace]);
 
   useEffect(() => {
-    console.log(" geocode ");
+    // console.log(" geocode ");
     Geocode.fromLatLng(draggedLocation.lat, draggedLocation.lng).then(
       (response) => {
         const address = response.results[0].formatted_address;
-        console.log(address);
+        // console.log(address);
         // "sublocality" "locality"
         for (
           let i = 0;
@@ -222,13 +222,13 @@ const MapView = (props) => {
               setSubLocality(
                 response.results[0].address_components[i].long_name
               );
-              console.log(response.results[0].address_components[i].long_name);
+              // console.log(response.results[0].address_components[i].long_name);
             }
             if (
               response.results[0].address_components[i].types[j] === "locality"
             ) {
               setCity(response.results[0].address_components[i].long_name);
-              console.log(response.results[0].address_components[i].long_name);
+              // console.log(response.results[0].address_components[i].long_name);
             }
           }
         }
@@ -240,31 +240,31 @@ const MapView = (props) => {
   }, [draggedLocation]);
 
   const clickHandler = (map, event) => {
-    console.log("map clicked");
+    // console.log("map clicked");
     // let coordinates = event.lnglat.wrap()
-    console.log({ map, event });
+    // console.log({ map, event });
     // props.toggle(event)
     if (event.fitboundUpdate) {
-      console.log("Map bounds have been programmatically changed");
-      console.log(map.getCenter());
+      // console.log("Map bounds have been programmatically changed");
+      // console.log(map.getCenter());
     } else {
-      console.log("Map bounds have been changed by user interaction");
+      // console.log("Map bounds have been changed by user interaction");
       let cntr = map.getCenter();
-      console.log(cntr);
+      // console.log(cntr);
       setTempCenter(cntr);
       setDraggedLocation(cntr);
     }
   };
 
   const dragHandler = (map, event) => {
-    console.log({ map, event });
+    // console.log({ map, event });
     if (event.fitboundUpdate) {
-      console.log("Map bounds have been programmatically changed");
-      console.log(map.getCenter());
+      // console.log("Map bounds have been programmatically changed");
+      // console.log(map.getCenter());
     } else {
-      console.log("Map bounds have been changed by user interaction");
+      // console.log("Map bounds have been changed by user interaction");
       let cntr = map.getCenter();
-      console.log(cntr);
+      // console.log(cntr);
       setTempCenter(cntr);
       setDraggedLocation(cntr);
     }
