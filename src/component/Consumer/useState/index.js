@@ -19,6 +19,8 @@ const [useStore] = create((set) => ({
   readMore: false,
   places: [],
   orderedPlaces: [],
+  userSubscribedLists: [],
+  userCreatedLists: [],
   placeCoordDict: { 0: [0, 0, 0] },
   coordPlaceDict: {},
   centerId: null,
@@ -140,6 +142,16 @@ const [useStore] = create((set) => ({
     set((state) => ({
       ...state,
       orderedPlaces,
+    })),
+  setUserSubscribedLists: (userSubscribedLists) =>
+    set((state) => ({
+      ...state,
+      userSubscribedLists,
+    })),
+  setUserCreatedLists: (userCreatedLists) =>
+    set((state) => ({
+      ...state,
+      userCreatedLists,
     })),
   setMaxViewableDepth: (maxViewableDepth) =>
     set((state) => ({

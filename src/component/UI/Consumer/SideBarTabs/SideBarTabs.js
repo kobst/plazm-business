@@ -119,8 +119,11 @@ const SideBarTabs = ({
     (state) => state.list.loadingUserCreatedAndFollowed
   );
   // new useStore
-  const [userFollowedLists, setUserFollowedLists] = useState([]);
+  // const [userFollowedLists, setUserFollowedLists] = useState([]);
 
+  const userSubscribedLists = useStore((state) => state.userSubscribedLists)
+  const setUserSubscribedLists = useStore((state) => state.setUserSubscribedLists)
+  const setUserCreatedLists = useStore((state) => state.setUserCreatedLists)
   const selectedTab = useStore((state) => state.tabSelected);
   const selectedListId = useStore((state) => state.selectedListId);
   const searchIndex = useStore((state) => state.searchIndex);
@@ -191,15 +194,19 @@ const SideBarTabs = ({
         fetchListData();
       }
     }
-  }, [dispatch, user._id, page]);
+  }, [dispatch, user._id]);
+
+  // }, [dispatch, user._id, page]);
 
 
   useEffect(() => {
     let _userFollowedLists = []
-    if (listData.length > 0) {
-      // const arrUniq = [...new Map(listData.map(v => [v.id, v])).values()]
+    let _userCreatedLists = []
+    console.log("new list data incoming " + listData.length)
 
-      listData.forEach(list => {
+    if (listData.length > 0) {
+      const listUnique = [...new Map(listData.map(v => [v._id, v])).values()]
+      listUnique.forEach(list => {
         var arrayLength = list.subscribers.length;
         for (var i = 0; i < arrayLength; i++) {
           // console.log(list.subscribers[i]._id)
@@ -208,10 +215,15 @@ const SideBarTabs = ({
             _userFollowedLists.push(list)
             break
           }
-      }
+        }
+        if (list.ownerId === user._id) {
+          _userCreatedLists.push(list)
+        }
+
       })
     }  
-    setUserFollowedLists(_userFollowedLists)
+    setUserSubscribedLists(_userFollowedLists)
+    setUserCreatedLists(_userCreatedLists)
   }, [listData])
 
   /** to clear selected data on tab click */
@@ -447,13 +459,13 @@ const SideBarTabs = ({
         </Tabs>
 
 
-        {listData.length > 0 && (
+        {userSubscribedLists.length > 0 && (
           <SubcriptionHeading>{expanded && "Subscriptions"}</SubcriptionHeading>
         )}
 
         <div className="list-scroll">
-          {userFollowedLists.length > 0 ? (
-            userFollowedLists.map((i, key) => (
+          {userSubscribedLists.length > 0 ? (
+            userSubscribedLists.map((i, key) => (
               <ListTab
                 data={i}
                 key={key}

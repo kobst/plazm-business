@@ -6,10 +6,11 @@ import ReactMapboxGl, {
   Source,
   Feature,
   MapContext,
+  GeoJSONLayer
 } from "react-mapbox-gl";
 import useStore from "../useState/index";
 import "./styles.css";
-import Geocode from "react-geocode";
+import Geocode, { setRegion } from "react-geocode";
 import GoogleMapReact from "google-map-react";
 import ColorDict from '../GridComponents/functions/colorSlotDict'
 
@@ -85,6 +86,7 @@ const setLinesExt = (dict) => {
 const setBBox = (_orderedPlaces) => {
     let maxViewable = 10
     let coordArray = [];
+    let featureSet = []
     var limit = 10;
     if (_orderedPlaces.length < limit) {
       limit = _orderedPlaces.length - 1;
@@ -98,8 +100,22 @@ const setBBox = (_orderedPlaces) => {
       // console.log(i)
       // console.log(orderedPlaces[i])
       if (_orderedPlaces[i]) {
+
         let coords = _orderedPlaces[i].businessLocation.coordinates;
         coordArray.push(coords);
+
+        let feature =     {
+          type:"Feature",
+          properties:{
+            name:_orderedPlaces[i].company_name,
+            color:_orderedPlaces[i].icon_color
+          },
+          geometry:{
+            type: "Point",
+            coordinates: coords
+          }
+        }
+        featureSet.push(feature)
       }
     }
 
@@ -118,11 +134,16 @@ const setBBox = (_orderedPlaces) => {
       ],
     };
 
+    const geoFeatures = {
+      type: "Features",
+      features: featureSet
+    }
+
     let lngLatBox = turf.bbox(geoJsonFeatures);
     let sw = [lngLatBox[0], lngLatBox[1]];
     let ne = [lngLatBox[2], lngLatBox[3]];
     let fitBoundsObj = [sw, ne];
-    return fitBoundsObj
+    return {box: fitBoundsObj, geo: geoFeatures}
     // setBox(fitboundsObj);
 };
 
@@ -136,7 +157,9 @@ Geocode.setApiKey("AIzaSyAYVZIvAZkQsaxLD3UdFH5EH3DvYmSYG6Q");
 
 const MapView = (props) => {
 
+    const mapRef = useRef()
     const [boundBox, setBox] = useState(null)
+    const [geo, setGeo] = useState(null)
     const [lineArray, setLineArray] = useState([])
     const [hex, setHex] = useState()
     const [features, setFeatures] = useState(null)
@@ -156,6 +179,8 @@ const MapView = (props) => {
     const [greenLine, setGreenLine] = useState(null)
     const [blueLine, setBlueLine] = useState(null)
     const [violetLine, setVioletLine] = useState(null)
+    
+    const [layers, setLayers] = useState([])
     // const [sublocality, setSubLocality] = useState("")
     // const [city, setCity] = useState("")
     const _colorDict = ColorDict()
@@ -243,11 +268,33 @@ useEffect(()=> {
 
     useEffect(() => {
         let mounted = true;
+        // if (mapRef.current) {
+        //   console.log(mapRef)
+        //   layers.forEach(layer => {
+        //     mapRef.removeLayer(layer)
+        //   })
+        // }
         if (orderedPlaces.length > 1 && mounted) {
             let obj = setBBox(orderedPlaces)
-            setBox(obj)
+            setBox(obj.box)
+            setGeo(obj.geo)
+
+          //   let _layers = orderedPlaces.map(({ ...otherProps }) => {
+          //     {/* return (<Layer type="circle" id={otherProps._id} paint={{"circle-radius": 10, "circle-color": otherProps.icon_color}}> */}
+          //    return <Layer type="circle" id={otherProps._id} paint={{"circle-radius": 10, "circle-color": 'white'}}>
+          //         <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />
+          //     </Layer>
+          // })
+
+          // setLayers(_layers)
+        
+        
         }
-        return () => mounted = false;
+
+ 
+
+        return () => {mounted = false};
+
     }, [orderedPlaces, maxViewable]);
 
 
@@ -318,6 +365,9 @@ const clickHandler = (map, event) => {
   }
 
 
+
+
+
     return (
         // <div className="circleDiv">
         <div className="map-container">
@@ -326,6 +376,7 @@ const clickHandler = (map, event) => {
                 // style='mapbox://styles/kobstr/cka78e4mj1aef1io837hkirap'
                 // style ='mapbox://styles/kobstr/cjryb7aiy1xjy1fohrw6z6ow3'
                 // style='mapbox://styles/mapbox/streets-v9'
+                ref={mapRef}
                 style='mapbox://styles/kobstr/ckyank9on08ld14nuzyhrwddi'
                 pitch={[60]}
                 fitBounds={boundBox}
@@ -339,15 +390,11 @@ const clickHandler = (map, event) => {
                         // use `map` here
                         // console.log("map" + map)
                         // const newPosDict = {}
+
                         // orderedPlaces.forEach((place) => {
-                        //     // console.log(place.businessLocation.coordinates + "inside map")
-                        //     let pix = map.project(place.businessLocation.coordinates)
-                        //     // console.log(pix)
-                        //     // console.log("-----------")
-                        //     let obj = { pos: pix, name: place.company_name }
-                        //     // obj._id = place._id
-                        //     // obj.mapPos = pix
-                        //     newPosDict[place._id] = obj
+                      
+                        
+
                         // })
                         // map.on('idle', function () {
                         //     map.resize()
@@ -357,12 +404,38 @@ const clickHandler = (map, event) => {
                 </MapContext.Consumer>
 
 
-                {orderedPlaces.map(({ ...otherProps }) => {
+                {/* {orderedPlaces.map(({ ...otherProps }) => {
                     {/* return (<Layer type="circle" id={otherProps._id} paint={{"circle-radius": 10, "circle-color": otherProps.icon_color}}> */}
-                    return (<Layer type="circle" id={otherProps._id} paint={{"circle-radius": 10, "circle-color": 'white'}}>
+                    {/* return (<Layer type="circle" id={otherProps._id} paint={{"circle-radius": 10, "circle-color": 'white'}}>
                             <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />
                             </Layer>)
-                })}
+                })} */} 
+
+
+                  {/* add colored layers like the lines... */}
+
+                  <Layer type="circle"  paint={{"circle-radius": 10, "circle-color": 'white'}}>
+                        {orderedPlaces.map(({ ...otherProps }) => <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />)}
+                  </Layer>)
+
+
+
+
+                {/* <Source id="places" geoJsonSource={geo}/>
+                <Layer type="circle" id={places} sourceId="places" paint={{"circle-radius": 10, "circle-color": 'white'}}/> */}
+                
+                {/* <GeoJSONLayer
+                  data={geo}
+                  circleLayout={{visibility: 'visible'}}
+                  circlePaint={{'circle-color': 'white'}}
+                  // circleOnClick={this.onClickCircle}
+                  // symbolLayout={symbolLayout}
+                  // symbolPaint={symbolPaint}
+                 /> */}
+
+
+                {/* {layers} */}
+
 
                  <Layer type="line" id='red' paint={{"line-width": 10, "line-color": 'red'}}>
                      {redLine ? <Feature key={"line"} coordinates={redLine} /> : null}

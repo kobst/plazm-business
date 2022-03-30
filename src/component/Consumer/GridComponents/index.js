@@ -90,7 +90,7 @@ const GridContainer = () => {
             // console.log(feedData[0])
             loadData(feedData)
         }
-    }, [feedData, searchData, myFeedItems])  // maybe add tabSelected here to account for myFeedItems, feedData changing before the tab is selected....
+    }, [feedData, searchData, myFeedItems, tabSelected])  // maybe add tabSelected here to account for myFeedItems, feedData changing before the tab is selected....
 
 
     const loadData = (data) => {

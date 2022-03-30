@@ -167,7 +167,7 @@ const Header = () => {
           {city}
         </LocationWrap>
 
-        <div bgColor="#FF7171" width="200px" onClick={consumerLogout} >Logout</div>
+        <div color="#FF7171" width="200px" onClick={consumerLogout} >Logout</div>
 
 
         <UserImgWrap>

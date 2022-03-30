@@ -164,7 +164,10 @@ const MyFeed = () => {
       // const val = JSON.parse(data);
       // console.log(val)
     }
-    getHomeFeed()
+    if (myFeedItems.length < 1) {  // and check again when userSubscribed lists change
+      console.log("getting home feed")
+      getHomeFeed()
+    }
   }, []);
 
 

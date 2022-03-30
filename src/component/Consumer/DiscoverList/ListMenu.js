@@ -143,12 +143,12 @@ const ListMenu = (
 
   const [selectedTab, setSelectedTab] = useState(2);
   const [tabIndex, setTabIndex] = useState();
-  const userCreatedLists = useSelector((state) => state.list.userLists);
+  // const userCreatedLists = useSelector((state) => state.list.userLists);
   const userCreatedLoading = useSelector(
     (state) => state.list.loadingUserLists
   );
   
-  const [userFollowedLists, setUserFollowedLists] = useState([]);
+  // const [userFollowedLists, setUserFollowedLists] = useState([]);
   // const [obj, setObj] = useState()
   const [searchError, setSearchError] = useState("");
   const [search, setSearch] = useState("");
@@ -164,6 +164,8 @@ const ListMenu = (
   );
   const [results, setResults] = useState()
 
+  const userSubscribedLists = useStore((state) => state.userSubscribedLists);
+  const userCreatedLists = useStore((state) => state.userCreatedLists);
   const setSelectedListId = useStore((state) => state.setSelectedListId);
   const setDiscoverBtn = useStore((state) => state.setDiscoverBtn);
   const setReadMore = useStore((state) => state.setReadMore);
@@ -189,32 +191,32 @@ const ListMenu = (
 
 
   // only set for user subscribed Lists...
-  useEffect(() => {
-    let _userFollowedLists = []
-    if (listData.length > 0) {
-      listData.forEach(list => {
-        var arrayLength = list.subscribers.length;
-        for (var i = 0; i < arrayLength; i++) {
-          // console.log(list.subscribers[i]._id)
-          if (list.subscribers[i]._id === user._id) {
-            console.log("Good")
-            _userFollowedLists.push(list)
-            break
-          }
-      }
-      })
-    }  
-    setUserFollowedLists(_userFollowedLists)
-    //   const _userFollowedLists = listData.filter(_list => {
-    //     console.log(_list.subscribers)
-    //     console.log({_id: user._id, name: user.name, photo: user.photo})
-    //     // _list.subscribers.includes({_id: user._id, name: user.name, photo: user.photo})
-    //     _list.subscribers.filter(e => e._id === user._id)
-    //   })
-    //   console.log(_userFollowedLists)
-    //   setUserFollowedLists(_userFollowedLists)
-    // }
-  }, [listData])
+  // useEffect(() => {
+  //   let _userFollowedLists = []
+  //   if (listData.length > 0) {
+  //     listData.forEach(list => {
+  //       var arrayLength = list.subscribers.length;
+  //       for (var i = 0; i < arrayLength; i++) {
+  //         // console.log(list.subscribers[i]._id)
+  //         if (list.subscribers[i]._id === user._id) {
+  //           console.log("Good")
+  //           _userFollowedLists.push(list)
+  //           break
+  //         }
+  //     }
+  //     })
+  //   }  
+  //   setUserFollowedLists(_userFollowedLists)
+  //   //   const _userFollowedLists = listData.filter(_list => {
+  //   //     console.log(_list.subscribers)
+  //   //     console.log({_id: user._id, name: user.name, photo: user.photo})
+  //   //     // _list.subscribers.includes({_id: user._id, name: user.name, photo: user.photo})
+  //   //     _list.subscribers.filter(e => e._id === user._id)
+  //   //   })
+  //   //   console.log(_userFollowedLists)
+  //   //   setUserFollowedLists(_userFollowedLists)
+  //   // }
+  // }, [listData])
 
   /** search data */
   const searchListsData = (event) => {
@@ -333,7 +335,7 @@ const ListMenu = (
             {!listSearch && (
               <SliderSection
                 heading="Subscribed Lists"
-                data={userFollowedLists}
+                data={userSubscribedLists}
                 totalList={totalPopularLists}
                 setSelectedListId={setSelectedListId}
                 setDiscoverBtn={setDiscoverBtn}
