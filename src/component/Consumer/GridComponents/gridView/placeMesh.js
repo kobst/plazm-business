@@ -228,10 +228,10 @@ const Label = ((props) => {
 
     useFrame(() => {
         if (coords.current && textRef.current) {
-            console.log(coords.current[2])
+            // console.log(coords.current[2])
 
             if (coords.current[2] < -5) {
-                console.log(coords.current[2])
+                // console.log(coords.current[2])
                 textRef.current.visible = false
             } else {
                 textRef.current.visible = true
@@ -403,12 +403,12 @@ const PlaceMesh = ((props) => {
 
     useEffect(() => {
 
-        console.log("new center place " + centerPlace)
+        // console.log("new center place " + centerPlace)
         
         if (centerPlace) {
             if (centerPlace._id === props._id) {
 
-                console.log("set preview " + props.placeObject.company_name)
+                // console.log("set preview " + props.placeObject.company_name)
                 setPreviewActive(true)
                 setOuterDepth(false)
                 setDepth1(false)

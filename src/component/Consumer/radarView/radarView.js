@@ -192,7 +192,7 @@ const RadarView = () => {
 
 
     const dotsLimited = useMemo(() => {
-        console.log(orderedPlaces)
+        // console.log(orderedPlaces)
 
         return (
             orderedPlaces.map(({ ...otherProps }, index) => (

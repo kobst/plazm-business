@@ -193,7 +193,7 @@ const CreateEventModal = ({
       const extFile = selectedFile.name
         .substr(idxDot, selectedFile.name.length)
         .toLowerCase();
-      console.log(selectedFile, extFile);
+      // console.log(selectedFile, extFile);
       if (extFile === "jpeg" || extFile === "png" || extFile === "jpg") {
         setImageError("");
         setImageUpload(URL.createObjectURL(e.target.files[0]));

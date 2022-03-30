@@ -58,16 +58,16 @@ const DashboardContainer = (props) => {
     }
 
     if (props.view === "my_feed") {
-      console.log("my feed route");
+      // console.log("my feed route");
       setSelectedTab(2);
     }
 
     if (props.view === "explore") {
-      console.log("my explore route");
+      // console.log("my explore route");
       setSelectedTab(1);
     }
     if (props.view === "list_explore") {
-      console.log("my list explore route");
+      // console.log("my list explore route");
       setSelectedTab(5);
     }
   }, [props.view]);
@@ -147,7 +147,7 @@ const DashboardContainer = (props) => {
           dispatch(setFlagReducer());
           setBusinessDetailProfile(data.place[0]);
           setBusinessExists(true);
-          console.log("business data" + JSON.stringify(data.place));
+          // console.log("business data" + JSON.stringify(data.place));
         } else {
           dispatch(setFlagReducer());
           setBusinessExists(false);

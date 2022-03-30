@@ -78,7 +78,7 @@ const BusinessListing = ({ loader, coords, closestFilter }) => {
     dispatch(clearSearchFeed());
   }, []);
   useEffect(() => {
-    console.log(gridMode + "gridMode");
+    // console.log(gridMode + "gridMode");
   }, [gridMode]);
   /** useEffect called when any side filters are selected */
   useEffect(() => {

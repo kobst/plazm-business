@@ -67,8 +67,8 @@ const BuisinessView = ({
       let deepClone = JSON.parse(JSON.stringify(businessProfile[0]));
       deepClone.businessLocation = deepClone.location;
 
-      console.log("XXXX   business view coordinates XXXXX");
-      console.log(deepClone);
+      // console.log("XXXX   business view coordinates XXXXX");
+      // console.log(deepClone);
 
       setSelectedBusiness(deepClone);
     }

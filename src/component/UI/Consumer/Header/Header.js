@@ -51,7 +51,8 @@ const Header = () => {
     // }
     if (
       (!gridMode && (selectedTab === 1 || selectedTab === 2)) ||
-      (selectedTab === -1 &&
+      (!gridMode &&
+        selectedTab === -1 &&
         routeObj[history[0]] === routeObj.list &&
         history.length > 1)
     ) {

@@ -117,7 +117,7 @@ const _createXYZ = (angle) => {
 
 
 const _OrderDistanceSeperate = (places, defaultCenter, selectedPlace) => {
-  console.log(defaultCenter)
+  // console.log(defaultCenter)
   let center = {}
   if (selectedPlace) {
     center.lat = selectedPlace.businessLocation.coordinates[1]
@@ -165,7 +165,7 @@ const AssignMolecularDict = (_places, defaultCenter, selectedPlace) => {
   // console.log("AssignMolecular", center.lat, selectedPlace)
   let nearestAssignedPlace = newCenter
   const zeroObject = [0, 0, 0]
-  console.log(places.length + " count")
+  // console.log(places.length + " count")
   // console.log(JSON.stringify(newCenter.company_name))
 
   multiDict[newCenter._id] = {

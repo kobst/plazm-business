@@ -484,7 +484,7 @@ const RightSide = (props) => {
     }
   };
   props.ws.onclose = () => {
-    console.log("disconnected");
+    // console.log("disconnected");
   };
   useEffect(() => {
     let updateUser = async (authState) => {

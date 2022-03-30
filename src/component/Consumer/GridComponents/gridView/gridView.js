@@ -45,7 +45,7 @@ function CameraMain(props) {
 
 
     useEffect(() => {
-        console.log(" read cam pos in camera " + camPos)
+        // console.log(" read cam pos in camera " + camPos)
         posCoords.current = camPos
     }, [camPos])
 
@@ -152,25 +152,25 @@ const GridView = (props) => {
         if (placeShiftedTowards) {
 
             setTempCenter(placeShiftedTowards)
-            console.log("position exists " + newCoordinateKey + " name " + placeShiftedTowards.company_name)
+            // console.log("position exists " + newCoordinateKey + " name " + placeShiftedTowards.company_name)
             let obj = multiDict[placeShiftedTowards._id]
 
             if (obj) {
                 setCamPos(obj.posVector)
                 setCenterPlace(placeShiftedTowards)
                 setDisplacedCenterHexPosition([newCoordinateX, newCoordinateY, newCoordinateZ])
-                console.log([cameraPos[0] + obj.posVector[0], cameraPos[1] + obj.posVector[1], 5])
-                console.log("position exists " + newCoordinateKey + " name " + placeShiftedTowards.company_name)
+                // console.log([cameraPos[0] + obj.posVector[0], cameraPos[1] + obj.posVector[1], 5])
+                // console.log("position exists " + newCoordinateKey + " name " + placeShiftedTowards.company_name)
 
 
             } else {
-                console.log("shift camera place not in multDct")
+                // console.log("shift camera place not in multDct")
             }
 
         } else {
-            console.log("place in position does not exist")
+            // console.log("place in position does not exist")
             if (tempCenter) {
-                console.log(tempCenter.company_name)
+                // console.log(tempCenter.company_name)
             }
         }
         // setShifting(false)
@@ -204,7 +204,7 @@ const GridView = (props) => {
                 (angle >= hexItem.rangeMin || angle < hexItem.rangeMax)) ||
                 (angle >= hexItem.rangeMin && angle < hexItem.rangeMax)) {
 
-                console.log(angle + " shift " + i)
+                // console.log(angle + " shift " + i)
                 shiftCamera(i)
                 break
             }
@@ -215,7 +215,7 @@ const GridView = (props) => {
 
 
     const handleScroll = (e) => {
-        console.log(e.deltaX + " e.delta " + e.deltaY)
+        // console.log(e.deltaX + " e.delta " + e.deltaY)
 
         // if (!shifting) {
         // setDeltaX(deltaX + e.deltaX)
@@ -241,7 +241,7 @@ const GridView = (props) => {
             // console.log('stop delta!');
             setDeltaX(0)
             setDeltaY(0)
-            console.log(deltaX + " stopped x " + deltaY + " stopped y ")
+            // console.log(deltaX + " stopped x " + deltaY + " stopped y ")
 
         }, 500);
         // this will clear Timeout when component unmount like in willComponentUnmount
@@ -253,7 +253,7 @@ const GridView = (props) => {
 
 
     const boxesLimited = useMemo(() => {
-        console.log(orderedPlaces)
+        // console.log(orderedPlaces)
 
         let postBusinessAdjustedPlaces = []
         orderedPlaces.forEach(element => {

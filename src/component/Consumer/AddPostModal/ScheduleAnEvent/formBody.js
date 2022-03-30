@@ -163,7 +163,7 @@ const DaysWrap = styled.div`
  *@desc: form body for add event schedule details
  */
 function FormBody({ formik, setStartDateFocus, setEndDateFocus }) {
-  console.log({ values: formik.values });
+  // console.log({ values: formik.values });
   // const [repeat, setRepeat] = useState(false);
   const setFieldFocus = (val) => {
     setStartDateFocus(val);

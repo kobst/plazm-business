@@ -67,7 +67,7 @@ const Dashboard = () => {
   const detailId = useStore((state) => state.detailId);
   useEffect(() => {
     if (gridMode) {
-      console.log("show grid");
+      // console.log("show grid");
     }
   }, [gridMode]);
 
@@ -75,7 +75,7 @@ const Dashboard = () => {
   //maybe not necessary as long as griContainer remains without conditional
 
   useEffect(() => {
-    console.log(view);
+    // console.log(view);
 
     // put all the loading for the views here? use effect on view....
   }, [view]);
