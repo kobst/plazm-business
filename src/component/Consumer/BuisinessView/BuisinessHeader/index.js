@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { IoMdClose } from "react-icons/io";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
@@ -250,16 +250,16 @@ const BuisinessHeader = ({
   );
   const dispatch = useDispatch();
 
-  const listIndex = useStore((state) => state.listIndex)
-  const searchIndex = useStore((state) => state.listIndex)
-  const myFeedIndex = useStore((state) => state.myFeedIndex)
+  const listIndex = useStore((state) => state.listIndex);
+  const searchIndex = useStore((state) => state.listIndex);
+  const myFeedIndex = useStore((state) => state.myFeedIndex);
 
-  const setSearchIndex = useStore((state) => state.setSearchIndex)
-  const setMyFeedIndex = useStore((state) => state.setMyFeedIndex)
-  const setListIndex = useStore((state) => state.setListIndex)
-  const setFavoriteIndex = useStore((state) => state.setFavoriteIndex)
-  const setTabIndex = useStore((state) => state.setTabSelected)
-
+  const setSearchIndex = useStore((state) => state.setSearchIndex);
+  const setMyFeedIndex = useStore((state) => state.setMyFeedIndex);
+  const setListIndex = useStore((state) => state.setListIndex);
+  const setFavoriteIndex = useStore((state) => state.setFavoriteIndex);
+  const setTabIndex = useStore((state) => state.setTabSelected);
+  const [route, setRoute] = useState("");
 
   /*
    * @desc: close tab function to be called on cross icon click
@@ -271,37 +271,43 @@ const BuisinessHeader = ({
       setMyFeedIndex(null);
     }
   };
-
+  useEffect(() => {
+    setRoute(history.location.pathname);
+  }, []);
+  useEffect(() => {
+    if (history.action === "POP" && history.location.pathname === route) {
+      history.goBack();
+    }
+  }, [history.action]);
   /** to return to all business listing */ // redo backbutton here...
   const backBusiness = () => {
     dispatch(clearBusinessData());
     dispatch(clearTopEvent());
     dispatch(clearTopPost());
     if (searchIndex) {
-      history.push("/");
+      history.goBack();
       setTabIndex(1);
       setSearchIndex(null);
     } else if (myFeedIndex) {
-      history.push("/");
+      history.goBack();
       setTabIndex(2);
       setMyFeedIndex(null);
     } else if (listIndex) {
-      history.push("/");
+      history.goBack();
       setTabIndex(5);
       setListIndex(null);
     } else {
+      history.goBack();
       setFavoriteIndex(null);
-      history.push("/");
     }
   };
-
 
   return (
     <>
       <BuisinessHeaderContent
         className={displayBusinessProfile ? "HeaderSpacing" : ""}
       >
-        <ArrowBack onClick={() => backBusiness()}>BACK</ArrowBack>
+        <ArrowBack onClick={history.goBack}>BACK</ArrowBack>
         <CloseDiv>
           <IoMdClose onClick={() => closeTab()} />
         </CloseDiv>
