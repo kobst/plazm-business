@@ -199,6 +199,7 @@ const MapView = (props) => {
     const setCity = useStore(state => state.setCity)
 
 
+    const detailView = useStore(state => state.detailView)
 
     const setDraggedLocation = useStore(state => state.setDraggedLocation)
     const draggedLocation = useStore(state => state.draggedLocation)
@@ -246,25 +247,36 @@ const MapView = (props) => {
     }
   }, [gridMode]);
 
-//   useEffect(() => {
-//     console.log("reading selected place from mapview");
+  // useEffect(() => {
+  //   console.log("reading selected place from mapview");
 
-//     if (selectedPlace) {
-//       // console.log(selectedPlace)
-//     //   setGridView(false);
-//     }
-//   }, [selectedPlace]);
+  //   if (selectedPlace) {
+  //     console.log("selected place exists"  + JSON.stringify(selectedPlace.businessLocation))
+  //   //   setGridView(false);
+  //   }
+  // }, [selectedPlace]);
 
 
+    useEffect(() => {
 
-useEffect(()=> {
-    if (selectedPlace) {
-        if (selectedPlace.businessLocation) {
-            setTempCenter(selectedPlace.businessLocation.coordinates)
-        }
+    if (selectedPlace && selectedPlace.businessLocation && detailView) {
+      console.log("selected place exists"  + JSON.stringify(selectedPlace.businessLocation))
+      setTempCenter(selectedPlace.businessLocation.coordinates)
     }
-    
-}, [selectedPlace])
+  }, [detailView]);
+
+
+
+
+
+// useEffect(()=> {
+//     if (selectedPlace) {
+//       // console.log(selectedPlace.businessLocation)
+//         if (selectedPlace.businessLocation) {
+//             setTempCenter(selectedPlace.businessLocation.coordinates)
+//         }
+//     }
+// }, [selectedPlace])
 
     useEffect(() => {
         let mounted = true;
@@ -365,6 +377,8 @@ const clickHandler = (map, event) => {
   }
 
 
+  
+
 
 
 
@@ -377,7 +391,8 @@ const clickHandler = (map, event) => {
                 // style ='mapbox://styles/kobstr/cjryb7aiy1xjy1fohrw6z6ow3'
                 // style='mapbox://styles/mapbox/streets-v9'
                 ref={mapRef}
-                style='mapbox://styles/kobstr/ckyank9on08ld14nuzyhrwddi'
+                // style='mapbox://styles/kobstr/ckyank9on08ld14nuzyhrwddi'
+                style='mapbox://styles/kobstr/ckyan5qpn0uxk14pe1ah8qatg'
                 pitch={[60]}
                 fitBounds={boundBox}
                 onDragEnd={dragHandler}
@@ -414,7 +429,7 @@ const clickHandler = (map, event) => {
 
                   {/* add colored layers like the lines... */}
 
-                  <Layer type="circle"  paint={{"circle-radius": 10, "circle-color": 'white'}}>
+                  <Layer type="circle"  paint={{"circle-radius": 8, "circle-color": 'white'}}>
                         {orderedPlaces.map(({ ...otherProps }) => <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />)}
                   </Layer>)
 
@@ -462,18 +477,19 @@ const clickHandler = (map, event) => {
                  </Layer>
                     
 
-                {selectedPlace && selectedPlace.businessLocation && <Layer type="circle" id="selectedPlace_id" paint={{
-                    "circle-radius": 20,
-                    "circle-opacity": 0,
-                    "circle-stroke-width": 1,
+                 <Layer type="circle" id="selectedPlace_id" paint={{
+                    "circle-radius": 9,
+                    "circle-opacity": 1,
+                    "circle-color": "#0BDD13",
+                    "circle-stroke-width": 2,
                     "circle-stroke-color": "#ff0000"
                 }}>
-                    <Feature coordinates={selectedPlace.businessLocation.coordinates} />
-                </Layer>}
+                    {selectedPlace && selectedPlace.businessLocation &&<Feature coordinates={selectedPlace.businessLocation.coordinates} />}
+                </Layer>
 
 
                 {draggedLocation && <Layer type="circle" id="draggedLocation" paint={{
-                    "circle-radius": 10,
+                    "circle-radius": 6,
                     "circle-opacity": 1,
                     "circle-stroke-width": 2,
                     "circle-stroke-color": "#ff0000"

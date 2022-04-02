@@ -20,6 +20,7 @@ import {
   setEventId,
 } from "../../../../../reducers/myFeedReducer";
 import { useHistory } from "react-router-dom";
+import useStore from "../../../useState";
 import BigImage from "../../../ListDescriptionView/BigImageContainer";
 import {
   InnerListBanner,
@@ -172,10 +173,13 @@ const UserMessage = ({
   const [description, setDescription] = useState("");
   const [displayCommentInput, setDisplayCommentInput] = useState(false);
   const [flag, setFlag] = useState(false);
+  const [over, setOver] = useState(false)
   const user = useSelector((state) => state.user.user);
   const ws = useSelector((state) => state.user.ws);
   const commentsRef = useRef();
   const history = useHistory();
+  const setSelectedPlace = useStore(state => state.setSelectedPlace)
+  const selectedPlace = useStore(state => state.selectedPlace)
   const selectedPostId = useSelector(
     (state) => state.myFeed.selectedPostIdForComments
   );
@@ -396,9 +400,43 @@ const UserMessage = ({
     history.push(`/u/${postData.ownerId[0]._id}`);
   };
 
+  const handleHover = () => {
+    console.log("hover " + businessData.company_name)
+    setSelectedPlace(postData)
+    setOver(true)
+  }
+
+  const handleLeave = () => {
+    console.log("leave" + businessData.company_name)
+    //delay, if selectedPlace is not the same as postData, then cancel. If it is, then set to null
+    setSelectedPlace(null)
+    setOver(false)
+  }
+
+//   useEffect(() => {
+//     // if (!selectedPlace && over) {
+//     //   setSelectedPlace(postData)
+//     // }
+//     // if (over && selectedPlace && selectedPlace._id !== postData._id) {
+//     //   setSelectedPlace(postData)
+//     // }
+//     let timer1 = setTimeout(() => setSelectedPlace(null), 2000);
+//     return () => {
+//         if (!over && selectedPlace && selectedPlace._id === postData._id) {
+//           clearTimeout(timer1);
+//         }
+//     };
+// }, [over]);
+
+
   return (
     <>
-      <UserMsgWrap>
+      <UserMsgWrap
+        // onMouseOver={handleHover}
+        // onMouseOut={handleLeave}
+        onMouseEnter={handleHover}
+        onMouseLeave={handleLeave}
+      >
         <UserMessageContent>
           <ProfileNameHeader
             className={

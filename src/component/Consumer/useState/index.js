@@ -50,6 +50,7 @@ const [useStore] = create((set) => ({
   orderedPlacesDict: {},
   gridView: true,
   gridMode: false,
+  detailView: false,
   previewMode: false, 
   maxViewable: 10,
   maxViewableDepth: 4,
@@ -173,6 +174,10 @@ const [useStore] = create((set) => ({
       ...state,
       gridMode,
     })),
+  setDetailView: (detailView) => set((state) => ({
+      ...state,
+      detailView
+  })),
   setPreviewMode: (previewMode) => set((state) => ({
         ...state,
         previewMode
