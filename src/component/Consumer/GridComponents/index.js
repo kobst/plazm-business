@@ -69,10 +69,10 @@ const GridContainer = () => {
     const displacedCenterHexPosition = useStore((state) => state.displacedCenterHexPosition)
     const setDisplacedCenterHexPosition = useStore((state) => state.setDisplacedCenterHexPosition)
 
-
+// handle 'back;
     useEffect(() => {
         if (searchData.length > 0 && tabSelected == 1){
-            console.log("grid " + tabSelected)
+            // console.log("grid " + tabSelected)
             loadData(searchData)
         }
         // if (feedData.length > 0 && tabSelected == 2){
@@ -81,12 +81,12 @@ const GridContainer = () => {
         //     loadData(feedData)
         // }
         if (myFeedItems.length > 0 && tabSelected == 2){
-            console.log("grid " + tabSelected)
+            // console.log("grid " + tabSelected)
             // console.log(feedData[0])
             loadData(myFeedItems)
         }
         if (feedData.length > 0 && tabSelected == -1){
-            console.log("grid " + tabSelected)
+            // console.log("grid " + tabSelected)
             // console.log(feedData[0])
             loadData(feedData)
         }

@@ -401,32 +401,15 @@ const UserMessage = ({
   };
 
   const handleHover = () => {
-    console.log("hover " + businessData.company_name)
+    // console.log("hover " + businessData.company_name)
     setSelectedPlace(postData)
-    setOver(true)
   }
 
   const handleLeave = () => {
-    console.log("leave" + businessData.company_name)
+    // console.log("leave" + businessData.company_name)
     //delay, if selectedPlace is not the same as postData, then cancel. If it is, then set to null
     setSelectedPlace(null)
-    setOver(false)
   }
-
-//   useEffect(() => {
-//     // if (!selectedPlace && over) {
-//     //   setSelectedPlace(postData)
-//     // }
-//     // if (over && selectedPlace && selectedPlace._id !== postData._id) {
-//     //   setSelectedPlace(postData)
-//     // }
-//     let timer1 = setTimeout(() => setSelectedPlace(null), 2000);
-//     return () => {
-//         if (!over && selectedPlace && selectedPlace._id === postData._id) {
-//           clearTimeout(timer1);
-//         }
-//     };
-// }, [over]);
 
 
   return (
@@ -533,6 +516,8 @@ const UserMessage = ({
                 <ShowMoreDiv
                  className="ListingShowMore"
                   onClick={() => {
+                    console.log("expand view more")
+                    // set detail true
                     setReadMore((prev) => !prev);
                   }}
                 >
@@ -545,6 +530,8 @@ const UserMessage = ({
                 <>
                   <ShowMoreDiv
                     onClick={() => {
+                      console.log("expand view less")
+                      // set detail false
                       setReadMore((prev) => !prev);
                     }}
                   >

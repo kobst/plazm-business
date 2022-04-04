@@ -60,18 +60,19 @@ const BuisinessView = ({
   const flag = useSelector((state) => state.business.flag);
   const [displayBusinessProfile, setDisplayBusinessProfile] = useState(false);
   const setSelectedPlace = useStore((state) => state.setSelectedPlace);
-  const setDetailView = useStore((state) => state.setSelectedPlace);
+  const setDetailView = useStore((state) => state.setDetailView);
   // const businessProfile = useStore((state) => state.businessDetailProfile)
 
   useEffect(() => {
     if (businessProfile[0]) {
-      setDetailView(true)
+      
       let deepClone = JSON.parse(JSON.stringify(businessProfile[0]));
       deepClone.businessLocation = deepClone.location;
 
-      console.log("XXXX   business view coordinates XXXXX");
-      console.log(deepClone);
+      console.log("XXXX   business view coordinates XXXXX " + deepClone.company_name);
+      // console.log(deepClone);
 
+      setDetailView(true)
       setSelectedPlace(deepClone);
     }
   }, [businessProfile]);
@@ -80,6 +81,7 @@ const BuisinessView = ({
   useEffect(() => {
   
     return () => {
+      console.log(" no business view - unmount")
       setDetailView(false)
       setSelectedPlace(null)};
 

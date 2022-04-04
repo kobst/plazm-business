@@ -259,6 +259,7 @@ const MapView = (props) => {
 
     useEffect(() => {
 
+      console.log("detail View from mapview " + detailView)
     if (selectedPlace && selectedPlace.businessLocation && detailView) {
       console.log("selected place exists"  + JSON.stringify(selectedPlace.businessLocation))
       setTempCenter(selectedPlace.businessLocation.coordinates)
@@ -333,7 +334,7 @@ const MapView = (props) => {
         ).then(
           (response) => {
             const address = response.results[0].formatted_address;
-            console.log(address);
+            // console.log(address);
             // "sublocality" "locality"
             for (let i = 0; i < response.results[0].address_components.length; i++) {
               for (let j = 0; j < response.results[0].address_components[i].types.length; j++) {
@@ -430,7 +431,7 @@ const clickHandler = (map, event) => {
                   {/* add colored layers like the lines... */}
 
                   <Layer type="circle"  paint={{"circle-radius": 8, "circle-color": 'white'}}>
-                        {orderedPlaces.map(({ ...otherProps }) => <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />)}
+                        {!detailView && orderedPlaces.map(({ ...otherProps }) => <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />)}
                   </Layer>)
 
 

@@ -120,7 +120,7 @@ const _createXYZ = (angle) => {
 
 
 const _OrderDistanceSeperate = (places, defaultCenter, selectedPlace) => {
-  console.log(defaultCenter)
+  // console.log(defaultCenter)
   let center = {}
   if (selectedPlace) {
     center.lat = selectedPlace.businessLocation.coordinates[1]

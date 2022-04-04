@@ -179,6 +179,7 @@ const MyFeed = () => {
       if (_gridMode) {
         setGridMode(false);
       }
+      console.log("fetch data home feed")
       const obj = {
         id: user._id,
         value: 0,

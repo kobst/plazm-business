@@ -167,10 +167,10 @@ const Header = () => {
           {city}
         </LocationWrap>
 
-        <div color="#FF7171" width="200px" onClick={consumerLogout} >Logout</div>
+        {/* <div color="#FF7171" width="20px" onClick={consumerLogout} >Logout</div> */}
 
 
-        <UserImgWrap>
+        <UserImgWrap onClick={consumerLogout}>
           <UserImg>
             <img src="https://picsum.photos/id/237/200/300" />
           </UserImg>

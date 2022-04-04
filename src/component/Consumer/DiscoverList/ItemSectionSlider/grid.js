@@ -76,7 +76,7 @@ const NewCollectionSectionGrid = ({
     divRef.current.scrollLeft += evt.deltaY;
   };
   return (
-    <div style={{overflowY: 'scroll', height: '500px'}}>
+    <div style={{overflowY: 'scroll', height: '750px'}}>
     <Grid direction="rows" container spacing={2}> 
         {data.map((i, key) => (
             <Grid item xs={12} sm={4}>

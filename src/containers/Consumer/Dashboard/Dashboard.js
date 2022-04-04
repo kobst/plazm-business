@@ -147,7 +147,7 @@ const DashboardContainer = (props) => {
           dispatch(setFlagReducer());
           setBusinessDetailProfile(data.place[0]);
           setBusinessExists(true);
-          console.log("business data" + JSON.stringify(data.place));
+          // console.log("business data" + JSON.stringify(data.place));
         } else {
           dispatch(setFlagReducer());
           setBusinessExists(false);
