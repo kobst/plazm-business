@@ -124,6 +124,7 @@ const MyFeed = () => {
   const draggedLocation = useStore((state) => state.draggedLocation);
   const setGridMode = useStore((state) => state.setGridMode);
   const gridMode = useStore((state) => state.gridMode);
+  
   const setMyFeedItems = useStore((state) => state.setMyFeedItems)
   const myFeedItems = useStore((state) => state.myFeedItems)
 
@@ -143,7 +144,6 @@ const MyFeed = () => {
   useEffect(() => {
     const getHomeFeed = async () => {
       console.log("getting home feed")
-      console.log(user.listsFollowed)
       const response = await fetch(`${process.env.REACT_APP_API_LOCAL}/api/list-home-fetch/${user._id}`,
         {
           method: "GET",
@@ -172,42 +172,42 @@ const MyFeed = () => {
 
 
   /** to fetch data initially */
-  useEffect(() => {
+  // useEffect(() => {
  
-    const fetchData = async () => {
-      const _gridMode = gridMode;
-      if (_gridMode) {
-        setGridMode(false);
-      }
-      console.log("fetch data home feed")
-      const obj = {
-        id: user._id,
-        value: 0,
-        search: searchData,
-        filters: { closest: filterByClosest, updated: filterByUpdatedAt },
-        latitude: draggedLocation.lat,
-        longitude: draggedLocation.lng,
-      };
-      dispatch(clearMyFeedData());
-      const res = await dispatch(fetchMyFeedData(obj));
-      const data = await unwrapResult(res);
-      if (data) setFlag(false);
-      if (_gridMode) {
-        setGridMode(true);
-      }
-    };
+  //   const fetchData = async () => {
+  //     const _gridMode = gridMode;
+  //     if (_gridMode) {
+  //       setGridMode(false);
+  //     }
+  //     console.log("fetch data home feed")
+  //     const obj = {
+  //       id: user._id,
+  //       value: 0,
+  //       search: searchData,
+  //       filters: { closest: filterByClosest, updated: filterByUpdatedAt },
+  //       latitude: draggedLocation.lat,
+  //       longitude: draggedLocation.lng,
+  //     };
+  //     dispatch(clearMyFeedData());
+  //     const res = await dispatch(fetchMyFeedData(obj));
+  //     const data = await unwrapResult(res);
+  //     if (data) setFlag(false);
+  //     if (_gridMode) {
+  //       setGridMode(true);
+  //     }
+  //   };
     
-      fetchData();
+  //     fetchData();
    
-  }, [
-    dispatch,
-    user._id,
-    filterByClosest,
-    filterByUpdatedAt,
-    userLocation,
-    draggedLocation,
-    searchData,
-  ]);
+  // }, [
+  //   dispatch,
+  //   user._id,
+  //   filterByClosest,
+  //   filterByUpdatedAt,
+  //   userLocation,
+  //   draggedLocation,
+  //   searchData,
+  // ]);
 
   /** to fetch more data by infinite scroll */
   const fetchMoreData = () => {
