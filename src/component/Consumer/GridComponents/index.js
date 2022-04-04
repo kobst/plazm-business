@@ -18,6 +18,8 @@ import useStore from '../useState/index'
 
 import './style.css';
 
+
+
 const GridContainer = () => {
 
     // const dispatch = useDispatch()
@@ -49,7 +51,7 @@ const GridContainer = () => {
     const setCenterPlace = useStore((state) => state.setCenterPlace)
     const centerPlace = useStore((state) => state.centerPlace)
 
-    const multiDict = useStore((state) => state.multiDict)
+    // const multiDict = useStore((state) => state.multiDict)
     const setMultiDict = useStore((state) => state.setMultiDict)
     const orderedPlaces = useStore((state) => state.orderedPlaces)
     const setOrderedPlaces = useStore((state) => state.setOrderedPlaces)
@@ -62,49 +64,33 @@ const GridContainer = () => {
     const tabSelected = useStore((state) => state.tabSelected)
    
 
+    const myFeedItems = useStore((state) => state.myFeedItems)
 
     const displacedCenterHexPosition = useStore((state) => state.displacedCenterHexPosition)
     const setDisplacedCenterHexPosition = useStore((state) => state.setDisplacedCenterHexPosition)
 
-
-// should I put Re-Center Here?
-
-    // useEffect(() => {
-    //     if (feedData.length > 0){
-    //         loadData(feedData)
-    //     }
-    // }, [feedData])
-
-    // useEffect(() => {
-    //     if (searchData.length > 0 && tabSelected == 1){
-    //         console.log("grid " + tabSelected)
-    //         loadData(searchData)
-    //     }
-    //     if (feedData.length > 0 && tabSelected == 2){
-    //         console.log("grid " + tabSelected)
-    //         loadData(feedData)
-    //     }
-    //     if (feedData.length > 0 && tabSelected == -1){
-    //         console.log("grid " + tabSelected)
-    //         loadData(feedData)
-    //     }
-    // }, [feedData, searchData, tabSelected])
-
-
+// handle 'back;
     useEffect(() => {
         if (searchData.length > 0 && tabSelected == 1){
             // console.log("grid " + tabSelected)
             loadData(searchData)
         }
         if (feedData.length > 0 && tabSelected == 2){
-            // console.log("grid " + tabSelected)
+            console.log("grid " + tabSelected)
+            console.log(feedData[0])
             loadData(feedData)
         }
+        // if (myFeedItems.length > 0 && tabSelected == 2){
+        //     // console.log("grid " + tabSelected)
+        //     // console.log(feedData[0])
+        //     loadData(myFeedItems)
+        // }
         if (feedData.length > 0 && tabSelected == -1){
             // console.log("grid " + tabSelected)
+            // console.log(feedData[0])
             loadData(feedData)
         }
-    }, [feedData, searchData])
+    }, [feedData, searchData, myFeedItems, tabSelected])  // maybe add tabSelected here to account for myFeedItems, feedData changing before the tab is selected....
 
 
     const loadData = (data) => {
@@ -120,7 +106,7 @@ const GridContainer = () => {
         });
         setPlacesLoading(false)
         setPlaces(_places)
-        setGridView(true)
+        // setGridView(true)
 
     }
 
@@ -130,7 +116,13 @@ const GridContainer = () => {
     useEffect(() => {
         // console.log("initial props places")
         ReCenter(null)
-    }, [places, draggedLocation, gridMode])
+    }, [places, draggedLocation])
+
+    // useEffect(() => {
+    //     console.log("length " + Object.keys(multiDict).length)
+    
+    // }, [multiDict])
+
     // on shifting centerPlace..
     useEffect(() => {
         if (centerPlace) {
@@ -173,7 +165,6 @@ const GridContainer = () => {
 
     const ReCenter = (place) => {
         //props.selectPlace(place)
-        // console.log("Recenter  -   " + place)
         let limit = 20
         const tilt = 10
         // let _orderedPlaces
@@ -185,15 +176,15 @@ const GridContainer = () => {
             // console.log("----place---" + place.company_name)
             // props.selectPlace(place)
             // all in one
-            // const { _orderedPlacesResponse, _slotDictResponse, _multiDictResponse } = AssignMolecularDict(places, props.center, place)
-            const { _orderedPlacesResponse, _slotDictResponse, _multiDictResponse } = AssignHexDict(places, draggedLocation, place)
+            // const { _orderedPlacesResponse, _slotDictResponse} = AssignMolecularDict(places, draggedLocation, place)
+            const { _orderedPlacesResponse, _slotDictResponse} = AssignHexDict(places, draggedLocation, place)
 
             if (_orderedPlacesResponse.length < limit) {
                 limit = _orderedPlacesResponse.length
             }
             limitedOrderedPlaces = _orderedPlacesResponse.slice(0, limit - 1)
             setOrderedPlaces(limitedOrderedPlaces)
-            setMultiDict(_multiDictResponse)
+            // setMultiDict(_multiDictResponse)
             setPlaceCoordDict(_slotDictResponse)
             setDisplacedCenterHexPosition([0, 0, 0])
             setCamPos([0, 0, 5])
@@ -203,8 +194,8 @@ const GridContainer = () => {
             if (places.length > 0) {
                 // console.log(places.length + " length ---")
                 // all in one
-                // const { _orderedPlacesResponse, _slotDictResponse, _multiDictResponse } = AssignMolecularDict(props.places, props.center)
-                const { _orderedPlacesResponse, _slotDictResponse, _multiDictResponse } = AssignHexDict(places, draggedLocation, place)
+                // const { _orderedPlacesResponse, _slotDictResponse } = AssignMolecularDict(places, draggedLocation, place)
+                const { _orderedPlacesResponse, _slotDictResponse } = AssignHexDict(places, draggedLocation, place)
 
 
                 if (_orderedPlacesResponse.length < limit) {
@@ -212,7 +203,7 @@ const GridContainer = () => {
                 }
                 limitedOrderedPlaces = _orderedPlacesResponse.slice(0, limit)
                 setOrderedPlaces(limitedOrderedPlaces)
-                setMultiDict(_multiDictResponse)
+                // setMultiDict(_multiDictResponse)
                 setPlaceCoordDict(_slotDictResponse)
                 setDisplacedCenterHexPosition([0, 0, 0])
                 setCamPos([0, 0, 5])
@@ -221,7 +212,7 @@ const GridContainer = () => {
             } else {
                 // console.log(" nooooo places")
                 setOrderedPlaces([])
-                setMultiDict({})
+                // setMultiDict({})
                 setPlaceCoordDict({})
                 setDisplacedCenterHexPosition([0, 0, 0])
                 setCamPos([0, 0, 5])
@@ -234,11 +225,16 @@ const GridContainer = () => {
         // console.log(e.deltaX + " e.delta " + e.deltaY)
 
 
+
     }
 
 
     return (
         <div>
+     
+            {/* <h1 >
+                grid view grid view grid view
+            </h1> */}
             {gridMode && <container className="grid-container-left">
                  <GridView center={draggedLocation} places={places} />
             </container>  }
@@ -248,13 +244,3 @@ const GridContainer = () => {
 
 export default GridContainer
 
-
-
-           {/* <div className="radar-container"> */}
-                {/* <RadarView /> */}
-            {/* </div>  */}
-
-            {/* {gridView ? <div className="map-overlay"></div> : <div className="map-overlay-large"></div>} */}
-            {/* <div className="map-container"> */}
-                {/* <MapView /> */}
-            {/* </div>  */}

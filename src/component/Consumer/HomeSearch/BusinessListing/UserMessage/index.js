@@ -20,6 +20,7 @@ import {
   setEventId,
 } from "../../../../../reducers/myFeedReducer";
 import { useHistory } from "react-router-dom";
+import useStore from "../../../useState";
 import BigImage from "../../../ListDescriptionView/BigImageContainer";
 import {
   InnerListBanner,
@@ -30,7 +31,7 @@ import {
   ListNameWrap,
   TopListHeader,
   RightBuisinessName,
-  BuisinessNme,
+  BuisinessName,
   LeftListHeader,
   ShowMoreDiv,
   ImgThumbWrap,
@@ -172,10 +173,13 @@ const UserMessage = ({
   const [description, setDescription] = useState("");
   const [displayCommentInput, setDisplayCommentInput] = useState(false);
   const [flag, setFlag] = useState(false);
+  const [over, setOver] = useState(false)
   const user = useSelector((state) => state.user.user);
   const ws = useSelector((state) => state.user.ws);
   const commentsRef = useRef();
   const history = useHistory();
+  const setSelectedPlace = useStore(state => state.setSelectedPlace)
+  const selectedPlace = useStore(state => state.selectedPlace)
   const selectedPostId = useSelector(
     (state) => state.myFeed.selectedPostIdForComments
   );
@@ -396,9 +400,26 @@ const UserMessage = ({
     history.push(`/u/${postData.ownerId[0]._id}`);
   };
 
+  const handleHover = () => {
+    // console.log("hover " + businessData.company_name)
+    setSelectedPlace(postData)
+  }
+
+  const handleLeave = () => {
+    // console.log("leave" + businessData.company_name)
+    //delay, if selectedPlace is not the same as postData, then cancel. If it is, then set to null
+    setSelectedPlace(null)
+  }
+
+
   return (
     <>
-      <UserMsgWrap>
+      <UserMsgWrap
+        // onMouseOver={handleHover}
+        // onMouseOut={handleLeave}
+        onMouseEnter={handleHover}
+        onMouseLeave={handleLeave}
+      >
         <UserMessageContent>
           <ProfileNameHeader
             className={
@@ -406,10 +427,12 @@ const UserMessage = ({
             }
           >
             <ProfileNameWrap className="UserMessageViewProfileName">
-              {myFeedView && (
+              {/* {myFeedView && ( */}
                 <>
                   <TopListHeader>
                     <LeftListHeader>
+                    {myFeedView && (
+                      <>
                       <InnerListBanner onClick={() => listNavigate()}>
                         <img
                           src={listImage}
@@ -433,9 +456,10 @@ const UserMessage = ({
                           </ListAuthorName>
                         </ListInfo>
                       </ListNameWrap>
+                      </>)}
                     </LeftListHeader>
                     <RightBuisinessName>
-                      <BuisinessNme>{businessData.company_name}</BuisinessNme>
+                      <BuisinessName>{businessData.company_name}</BuisinessName>
                       <div className="hex">
                         <div className="hex-background">
                           <img src={businessData.default_image_url} />
@@ -444,7 +468,7 @@ const UserMessage = ({
                     </RightBuisinessName>
                   </TopListHeader>
                 </>
-              )}
+              {/* )} */}
               {postData.title && <SubHeading>{postData.title}</SubHeading>}
 
               <ChatInput>
@@ -492,6 +516,8 @@ const UserMessage = ({
                 <ShowMoreDiv
                  className="ListingShowMore"
                   onClick={() => {
+                    console.log("expand view more")
+                    // set detail true
                     setReadMore((prev) => !prev);
                   }}
                 >
@@ -504,6 +530,8 @@ const UserMessage = ({
                 <>
                   <ShowMoreDiv
                     onClick={() => {
+                      console.log("expand view less")
+                      // set detail false
                       setReadMore((prev) => !prev);
                     }}
                   >

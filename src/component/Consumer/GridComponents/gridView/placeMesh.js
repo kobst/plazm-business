@@ -4,9 +4,10 @@ import React, { useRef, useState, useEffect, useMemo, Children } from 'react'
 import { Canvas, useFrame, useThree, extend, useLoader, applyProps, stateContext } from '@react-three/fiber'
 import * as THREE from 'three';
 import { OrbitControls, MapControls, MOUSE } from 'three/examples/jsm/controls/OrbitControls'
-import { Polyhedron, Plane, RoundedBox, OrthographicCamera } from '@react-three/drei';
+import { Html, Polyhedron, Plane, RoundedBox, OrthographicCamera } from '@react-three/drei';
 
 import { useSelector } from "react-redux";
+import colorDict from '../functions/colorSlotDict'
 
 import useStore from '../../useState/index'
 
@@ -14,6 +15,8 @@ import { Text } from "troika-three-text";
 import { useSpring, a } from '@react-spring/three'
 
 import fonts from "./fonts";
+
+import BuisinessView from "../../BuisinessView/index"
 
 
 
@@ -24,21 +27,69 @@ extend({ Text });
 
 
 
+const IconButton = (props) => {
 
+    const groupRef = useRef()
+    const loader = new THREE.TextureLoader();
+    const texture = loader.load(props.placeImage);
+    const [active, setActive] = useState(false)
+    // texture.offset.set(xOffset, yOffset);
+    // texture.repeat.set(0.25, 0.25);
+
+
+
+    var geoCircle = new THREE.CircleGeometry( 2, 32 );
+    var geoCircleBack = new THREE.CircleGeometry( 2, 32 );
+    geoCircleBack = geoCircleBack.applyMatrix4(new THREE.Matrix4().makeRotationY(Math.PI))
+
+    const { rotation } = useSpring({
+        rotation: active ? [0, 0, 0] : [0, THREE.Math.degToRad(180), 0],
+        config: { mass: 10, tension: 500, friction: 200, precision: 0.00001 }
+
+    })
+
+    useFrame(() => {
+        if (groupRef.current) {
+            // if (!active) {
+            let ran = Math.floor(Math.random() * 40)
+            if (ran == 3) {
+                setActive(!active)
+            }
+            // hexRef.current.rotation.y = hexRef.current.rotation.y += 0.01
+        }
+
+    })
+
+    return (
+        <a.group
+            position={[0,0,5]}
+            rotation={rotation}
+            ref ={groupRef} >
+             <mesh
+                geometry={geoCircle}>
+                {texture && <meshBasicMaterial attach="material" map={texture} side="THREE.DoubleSide" />}
+            </mesh>
+
+            <mesh
+                geometry={geoCircleBack}>
+                {texture && <meshBasicMaterial attach="material" map={texture} side="THREE.DoubleSide" />}
+            </mesh>
+        </a.group>
+    )
+}
 
 
 const PreviewCard = (props) => {
 
     const hexRef = useRef()
-    const multiDictSub = useStore(state => state.multiDict)
     const centerPlace = useStore(state => state.centerPlace)
     //use spring
     const [active, setActive] = useState(false);
 
     const { _color, pos, rotation, scale, ...propsSpring } = useSpring({
         _color: active ? 'pink' : 'purple',
-        pos: active ? [0, 0, 2] : [0, 0, 0],
-        scale: active ? [3.5, 3.5, 3.5] : [0, 0, 0],
+        pos: active ? [0, 0, 10] : [0, 0, -2],
+        scale: active ? [5, 5, 5] : [0, 0, 0],
         config: { mass: 10, tension: 500, friction: 200, duration: 2000 }
     })
 
@@ -53,6 +104,7 @@ const PreviewCard = (props) => {
     }, [props.previewActive])
 
 
+    
 
 
     // {props.placeObject.itemObjects[0].content}
@@ -72,8 +124,8 @@ const PreviewCard = (props) => {
                 {/* <meshBasicMaterial attach="material" color={'red'} />
             </mesh> */} 
 
-
-                       
+            {/* <LabelHtml position={[0,0,10]} company_name={props.company_name}/> */}
+                        
             <mesh
                 position={[0, 0, 0]}>
                 <boxBufferGeometry args={[2, 2, 2]} />
@@ -100,7 +152,7 @@ const HexTile = (props) => {
     const color1 = new THREE.Color("rgb(225,109,245)")
     const color2 = new THREE.Color("rgb(78,248,231)")
 
-    const multiDictSub = useStore(state => state.multiDict)
+    // const multiDictSub = useStore(state => state.multiDict)
 
     const hexRef = useRef()
 
@@ -185,10 +237,22 @@ const HexTile = (props) => {
             // rotation={rotation}
             // scale={5}
             ref={hexRef}>
+
+            <mesh
+                geometry={geomShape}>
+                <meshBasicMaterial attach="material" color={props.color} side="THREE.DoubleSide" />
+            </mesh> 
+            
+{/*           
             <mesh
                 geometry={geomShape}>
                 {texture && <meshBasicMaterial attach="material" map={texture} side="THREE.DoubleSide" />}
-            </mesh>
+            </mesh> */}
+
+            {/* <mesh
+                geometry={geomShape2}>
+                <meshBasicMaterial attach="material" color={props.color} side="THREE.DoubleSide" />
+            </mesh> */}
 
             {/* <mesh
                 geometry={geomShape2}>
@@ -226,27 +290,27 @@ const Label = ((props) => {
 
 
 
-    useFrame(() => {
-        if (coords.current && textRef.current) {
-            // console.log(coords.current[2])
+    // useFrame(() => {
+    //     if (coords.current && textRef.current) {
+    //         console.log(coords.current[2])
 
-            if (coords.current[2] < -5) {
-                // console.log(coords.current[2])
-                textRef.current.visible = false
-            } else {
-                textRef.current.visible = true
+    //         if (coords.current[2] < -5) {
+    //             console.log(coords.current[2])
+    //             textRef.current.visible = false
+    //         } else {
+    //             textRef.current.visible = true
 
-            }
-        }
-    })
+    //         }
+    //     }
+    // })
 
-    useEffect(() => {
-        // console.log("- - multi effect - - ")
-        let obj = multiDictSub[props._id]
-        if (obj) {
-            coords.current = obj.posVector
-        }
-    }, [multiDictSub])
+    // useEffect(() => {
+    //     // console.log("- - multi effect - - ")
+    //     let obj = multiDictSub[props._id]
+    //     if (obj) {
+    //         coords.current = obj.posVector
+    //     }
+    // }, [multiDictSub])
 
 
     return (
@@ -274,6 +338,57 @@ const Label = ((props) => {
 
 
 
+const LabelHtml = (props) => {
+
+    return (
+        <Html className="content" position={[0, -0.5, 20]} transform occlude>
+        <div>
+          <h4 style={{color:"red"}}>
+              {props.company_name}
+          </h4>
+        </div>
+      </Html>
+    )
+
+}
+
+
+
+const InfoCube = (props) => {    
+    const group = useRef()
+
+    // var geoCircle = new THREE.CircleGeometry( 2, 32 );
+    
+    useFrame((state) => {
+        const t = state.clock.getElapsedTime()
+        group.current.rotation.x = THREE.MathUtils.lerp(group.current.rotation.x, Math.cos(t / 2) / 10 + 0.25, 0.1)
+        group.current.rotation.y = THREE.MathUtils.lerp(group.current.rotation.y, Math.sin(t / 4) / 10, 0.1)
+        group.current.rotation.z = THREE.MathUtils.lerp(group.current.rotation.z, Math.sin(t / 4) / 20, 0.1)
+        group.current.position.y = THREE.MathUtils.lerp(group.current.position.y, (-5 + Math.sin(t)) / 5, 0.1)
+      })
+
+
+    return (
+        <group
+            position={[0, 0, 2]}
+            ref={group}>
+
+            {/* <mesh
+                geometry={geoCircle}>
+                <meshBasicMaterial attach="material" color={"black"} side="THREE.DoubleSide" />
+            </mesh> */}
+            <LabelHtml company_name={props.company_name}/>
+          
+
+        </group>
+    )
+
+
+
+}
+
+
+
 const PlaceMesh = ((props) => {
     // This reference will give us direct access to the mesh
     const mesh = useRef()
@@ -284,19 +399,34 @@ const PlaceMesh = ((props) => {
     const connector = useRef()
     const textRef = useRef()
     const coords = useRef([0, 0, 0])
+    const pos = useRef([0, 0, 0])
+
     const cubes = useRef([])
     const rotation = useRef([0, 0])
     const mapPoint = useRef([0, 0])
+    
 
 
-    const [preview, setPreview] = useState(false)
+    const _colorDict = colorDict()
+
+    // const [preview, setPreview] = useState(false)
     const [depth1, setDepth1] = useState(false)
     const [outerDepth, setOuterDepth] = useState(true)
 
     const [hovered, setHover] = useState(false)
     const [previewActive, setPreviewActive] = useState(false)
     const [startPos, setStartPos] = useState([-50, 50, 0])
-    const [tileColor, setTileColor] = useState("red")
+    const [tileColor, setTileColor] = useState("black")
+    
+
+    const previewMode = useStore((state) => state.previewMode)
+    const setPreviewMode = useStore((state) => state.setPreviewMode)
+    const displacedCenterHexPosition = useStore((state) => state.displacedCenterHexPosition)
+    const setDisplacedCenterHexPosition = useStore((state) => state.setDisplacedCenterHexPosition)
+
+    const setCamPos = useStore((state) => state.setCamPosition)
+    const setCenterPlace = useStore((state) => state.setCenterPlace)
+
     // const [vecCenter] = useState(() => new THREE.Vector3())
 
     const [opts, setOpts] = useState({
@@ -312,7 +442,6 @@ const PlaceMesh = ((props) => {
 
     const multiDictSub = useStore(state => state.multiDict)
     const centerHexPosition = useStore((state) => state.centerHexPosition)
-    const displacedCenterHexPosition = useStore((state) => state.displacedCenterHexPosition)
 
     const placeCoordDict = useStore((state) => state.placeCoordDict)
 
@@ -322,6 +451,7 @@ const PlaceMesh = ((props) => {
     const maxViewableDepth = useStore((state) => state.maxViewableDepth)
 
     const centerPlace = useStore((state) => state.centerPlace)
+    const setSelectedPlace = useStore(state => state.setSelectedPlace)
 
     const [vec] = useState(() => new THREE.Vector3())
 
@@ -333,7 +463,7 @@ const PlaceMesh = ((props) => {
         // color: active ? 'hotpink' : 'white',
         // pos: active ? [0, 0, 2] : [0, 0, 0],
         // rotation: active ? [0, 0, 0] : [0, THREE.Math.degToRad(180), 0],
-        scaleText: preview ? [2, 2, 2] : [1, 1, 1],
+        scaleText: previewActive ? [2, 2, 2] : [1, 1, 1],
         onRest: () => console.log("rest"),
         config: { mass: 10, tension: 500, friction: 200, precision: 0.00001 }
     })
@@ -367,30 +497,19 @@ const PlaceMesh = ((props) => {
     })
 
 
+
+
     useEffect(() => {
+        const previewMarginX = 2
+        const previewMarginY = 2
+        let x, y, z
+        x = previewMode ? props.position[0] * previewMarginX : props.position[0] 
+        y = previewMode ? props.position[1] * previewMarginY : props.position[1]
+        z = props.position[2] 
+        coords.current = [x, y, z]
+        setTileColor(props.color)
 
-        let obj = multiDictSub[props._id]
-        if (obj) {
-            coords.current = obj.posVector
-            cubes.current = obj.cubeCoor
-            rotation.current = [obj.xRotation, obj.yRotation]
-            let depth = Math.max(Math.abs(cubes.current[0]), Math.abs(cubes.current[1]), Math.abs(cubes.current[2]))
-
-            if (depth === 1) {
-                // console.log(props.placeObject.company_name)
-                setPreview(false)
-                setDepth1(true)
-                setOuterDepth(false)
-            } if (depth > 1) {
-                setPreview(false)
-                setDepth1(false)
-                setOuterDepth(true)
-            }
-        }
-        // console.log("coor coord" + coords.current)
-
-    }, [multiDictSub])
-
+    }, [props.position, previewMode])
 
     useEffect(() => {
         let mapPos = mapPosDict[props._id]
@@ -408,7 +527,7 @@ const PlaceMesh = ((props) => {
         if (centerPlace) {
             if (centerPlace._id === props._id) {
 
-                // console.log("set preview " + props.placeObject.company_name)
+                console.log("set preview " + props.placeObject)
                 setPreviewActive(true)
                 setOuterDepth(false)
                 setDepth1(false)
@@ -442,27 +561,40 @@ const PlaceMesh = ((props) => {
 
     const handleHover = (place) => {
         // props.hovering(true)
-        // if (meshGroup.current) {
-        //     meshGroup.current.scale.set(1.25, 1.25, 1.25)
-        // }
+        if (meshGroup.current) {
+            meshGroup.current.scale.set(1.25, 1.25, 1.25)
+        }
+        console.log(place.company_name + " hovering")
+        setSelectedPlace(place)
         // props.hover(place)
         // setHover(true)
     }
 
 
-    const handleLeave = (left_hover) => {
+    const handleLeave = () => {
         // props.hovering(left_hover)
-        // if (meshGroup.current) {
-        //     meshGroup.current.scale.set(1, 1, 1)
-        // }
-        // // props.hover(null)
-        // setHover(false)
-
-        // setHover(left_hover)
+        if (meshGroup.current) {
+            meshGroup.current.scale.set(1, 1, 1)
+        }
+        setSelectedPlace(null)
     }
+
     const handleClick = (place) => {
 
-        // props.click(place)
+        if (place){
+            console.log("handle click " + place.cubeVector)
+            setPreviewMode(!previewMode)
+            setCamPos(place.posVector)
+            setCenterPlace(place)
+
+            let cubeVector = place.cubeVector
+            let newCoordinateX = cubeVector[0] + displacedCenterHexPosition[0]
+            let newCoordinateY = cubeVector[1] + displacedCenterHexPosition[1]
+            let newCoordinateZ = cubeVector[2] + displacedCenterHexPosition[2]
+            setDisplacedCenterHexPosition([newCoordinateX, newCoordinateY, newCoordinateZ])
+
+        }
+        // need a way to make this center Place?
     }
 
 
@@ -473,7 +605,7 @@ const PlaceMesh = ((props) => {
             // {...props}
             userData={props.placeObject}
             ref={meshGroup}
-            position={[0,0,0]}
+            position={[0,0,-5]}
             scale={(1, 1, 1)}
             onClick={() => handleClick(props.placeObject)}
             onPointerOver={() => handleHover(props.placeObject)}
@@ -502,16 +634,27 @@ const PlaceMesh = ((props) => {
                 ) : null}
             </a.text>} */}
 
-             {/* <PreviewCard position={[0, 0, 10]} previewActive={previewActive}/> */}
+             {previewMode? <PreviewCard position={[0, 0, 10]} company_name={props.placeObject.company_name} previewActive={previewActive}/> : null}
 
+
+             <IconButton 
+                _id = {props._id}
+                // position={[0, 0, 10]}
+                placeImage={props.placeObject.default_image_url}>
+           </IconButton>
+
+            
             <HexTile
                 innerRef={hexBackground}
                 color={tileColor}
-                position={[0, 0, 0]}
+                // position={[0, 0, -10]}
                 // listImage={props.placeObject.listImage}
                 placeImage={props.placeObject.default_image_url}
                 _id={props._id}>
             </HexTile>
+
+            {/* <InfoCube company_name={props.placeObject.company_name} /> */}
+            {/* <LabelHtml company_name={props.placeObject.company_name}/> */}
 
             {/* {depth1 && <text
                 ref={textRef}
@@ -537,31 +680,9 @@ const PlaceMesh = ((props) => {
             </SphereIcon>} */}
 
      
-{/*             
-            <mesh
-                scale={active ? [1, 1, 1] : [1, 1, 1]}
-                position={[0, 0, 2]}
-                ref={mesh}>
-                <boxBufferGeometry args={[1, 1, 1]} />
-
-                <meshBasicMaterial attachArray="material" map={texture} />
-                <meshBasicMaterial attachArray="material" map={texture} />
-                <meshBasicMaterial attachArray="material" map={texture} />
-                <meshBasicMaterial attachArray="material" map={texture} />
-                <meshBasicMaterial attachArray="material" map={texture} />
-                <meshBasicMaterial attachArray="material" map={texture} />
-            </mesh> */}
 
 
 
-
-            {/* <Label
-                ref={textRef}
-                id={props.placeObject._id}
-                name={props.placeObject.company_name}>
-            </Label> */}
-            {/* 
-            <SpecialLabel /> */}
 
 
 

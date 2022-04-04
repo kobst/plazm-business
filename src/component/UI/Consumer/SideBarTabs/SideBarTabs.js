@@ -32,6 +32,7 @@ import {
 import {
   fetchUserLists,
   fetchUserCreatedAndFollowedList,
+  fetchUserSubscribedList,
   clearListData,
 } from "../../../../reducers/listReducer";
 
@@ -106,6 +107,8 @@ const SideBarTabs = ({
   const filteredListData = useSelector((state) => state.list.filteredList);
   // const totalList = useSelector((state) => state.list.totalList);
   const listData = useSelector((state) => state.list.data);
+
+  const subscribedLists = useSelector((state) => state.list.subscribedLists)
   const totalList = useSelector((state) => state.list.totalList);
   const userLists = useSelector((state) => state.list.userLists);
   const loading = useSelector((state) => state.myFeed.loading);
@@ -116,6 +119,11 @@ const SideBarTabs = ({
     (state) => state.list.loadingUserCreatedAndFollowed
   );
   // new useStore
+  // const [userFollowedLists, setUserFollowedLists] = useState([]);
+
+  const userSubscribedLists = useStore((state) => state.userSubscribedLists)
+  const setUserSubscribedLists = useStore((state) => state.setUserSubscribedLists)
+  const setUserCreatedLists = useStore((state) => state.setUserCreatedLists)
   const selectedTab = useStore((state) => state.tabSelected);
   const selectedListId = useStore((state) => state.selectedListId);
   const searchIndex = useStore((state) => state.searchIndex);
@@ -149,6 +157,8 @@ const SideBarTabs = ({
   const setReadMore = useStore((state) => state.setReadMore);
   const draggedLocation = useStore((state) => state.draggedLocation);
   const setSelectedList = useStore((state) => state.setSelectedList);
+  const setSelectedPlace = useStore((state) => state.setSelectedPlace);
+  const setOrderedPlaces = useStore((state) => state.setOrderedPlaces);
 
   //old useStore
 
@@ -160,6 +170,7 @@ const SideBarTabs = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
+
   /** to fetch all the user created and subscribed lists */
   useEffect(() => {
     if (user && user._id) {
@@ -169,24 +180,59 @@ const SideBarTabs = ({
           value: page,
           limit: 15,
         };
-        // dispatch(clearListData());
+        dispatch(clearListData());
         const data = await dispatch(fetchUserCreatedAndFollowedList(obj));
+        // const data = await dispatch(fetchUserSubscribedList(obj));
+        // de-duplicate
         const res = await unwrapResult(data);
         if (res) {
           // setFlag(false);
         }
       };
-      if (page > 1) {
+      // if (page > 1) {
+        if (listData.length < 1) {
         fetchListData();
       }
     }
-  }, [dispatch, user._id, page]);
+  }, [dispatch, user._id]);
+
+  // }, [dispatch, user._id, page]);
+
+
+  useEffect(() => {
+    let _userFollowedLists = []
+    let _userCreatedLists = []
+    console.log("new list data incoming " + listData.length)
+
+    if (listData.length > 0) {
+      const listUnique = [...new Map(listData.map(v => [v._id, v])).values()]
+      listUnique.forEach(list => {
+        var arrayLength = list.subscribers.length;
+        for (var i = 0; i < arrayLength; i++) {
+          // console.log(list.subscribers[i]._id)
+          if (list.subscribers[i]._id === user._id) {
+            console.log("Good")
+            _userFollowedLists.push(list)
+            break
+          }
+        }
+        if (list.ownerId === user._id) {
+          _userCreatedLists.push(list)
+        }
+
+      })
+    }  
+    setUserSubscribedLists(_userFollowedLists)
+    setUserCreatedLists(_userCreatedLists)
+  }, [listData])
 
   /** to clear selected data on tab click */
   const homeSearchFunction = () => {
     setFavoriteIndex(null);
     setSelectedList(null);
     setSelectedListId(null);
+    setOrderedPlaces([])
+    setSelectedPlace(null)
     if (!loading) {
       history.push("/explore");
     }
@@ -194,29 +240,38 @@ const SideBarTabs = ({
 
   /** to clear selected data on tab click */
   const myFeedFunction = () => {
-    if (!loading) {
+    // setSelectedList(null);
+    // setSelectedListId(null);
+    // history.push("/home");
+    // if (!loading) {
       setSelectedList(null);
       setSelectedListId(null);
-
+      setOrderedPlaces([])
+      setSelectedPlace(null)
       history.push("/home");
-    }
+      
+    // }
   };
+
+
+ 
 
   /** to clear selected data on tab click */
-  const listView = () => {
-    if (selectedTab !== 5 && !loading) {
-      dispatch(clearMyFeedData());
-      dispatch(clearBusinessData());
-      dispatch(clearTopPost());
-      setSelectedListId(null);
-      setListIndex(null);
-      setUserDataId(null);
-      history.push("/");
-      setDiscoverBtn(false);
-    }
-  };
+  // const listView = () => {
+  //   if (selectedTab !== 5 && !loading) {
+  //     dispatch(clearMyFeedData());
+  //     dispatch(clearBusinessData());
+  //     dispatch(clearTopPost());
+  //     setSelectedListId(null);
+  //     setListIndex(null);
+  //     setUserDataId(null);
+  //     history.push("/");
+  //     setDiscoverBtn(false);
+  //   }
+  // };
 
   const listDiscovery = () => {
+    setSelectedPlace(null)
     history.push("/lists");
     setDiscoverBtn(false);
   };
@@ -403,13 +458,14 @@ const SideBarTabs = ({
           </TabList>
         </Tabs>
 
-        {listData.length > 0 && (
+
+        {userSubscribedLists.length > 0 && (
           <SubcriptionHeading>{expanded && "Subscriptions"}</SubcriptionHeading>
         )}
 
         <div className="list-scroll">
-          {listData.length > 0 ? (
-            listData.map((i, key) => (
+          {userSubscribedLists.length > 0 ? (
+            userSubscribedLists.map((i, key) => (
               <ListTab
                 data={i}
                 key={key}
@@ -420,7 +476,7 @@ const SideBarTabs = ({
           ) : (
             <h6></h6>
           )}
-          {listLoader && (
+          {/* {listLoader && (
             <div className="sidebar-loader">
               <ValueLoader />
             </div>
@@ -434,7 +490,7 @@ const SideBarTabs = ({
             >
               Load
             </button>
-          )}
+          )} */}
         </div>
       </div>
     </div>

@@ -59,27 +59,21 @@ function CameraMain(props) {
             // let zoomLevel = cam.current.zoom
 
             // if (zoomLevel > 50) {
-            //     setGridView(false)
             // } else if (zoomLevel > 40) {
-            //     setGridView(true)
             //     setMaxViewable(6)
             //     setMaxViewableDepth(2)
             // } else if (zoomLevel > 30) {
-            //     setGridView(true)
             //     setMaxViewable(9)
             //     setMaxViewableDepth(3)
             // } else if (zoomLevel > 20) {
-            //     setGridView(true)
             //     setMaxViewable(12)
             //     setMaxViewableDepth(3)
             // } else if (zoomLevel > 10) {
-            //     setGridView(true)
             //     setMaxViewable(15)
             //     setMaxViewableDepth(4)
             // } else {
             //     setMaxViewable(18)
             //     setMaxViewableDepth(4)
-            //     setGridView(true)
             // }
 
         }
