@@ -90,7 +90,7 @@ const GridContainer = () => {
             // console.log(feedData[0])
             loadData(feedData)
         }
-    }, [feedData, searchData, myFeedItems, tabSelected])  // maybe add tabSelected here to account for myFeedItems, feedData changing before the tab is selected....
+    }, [feedData, searchData])  // maybe add tabSelected here to account for myFeedItems, feedData changing before the tab is selected....
 
 
     const loadData = (data) => {
@@ -116,7 +116,8 @@ const GridContainer = () => {
     useEffect(() => {
         // console.log("initial props places")
         ReCenter(null)
-    }, [places, draggedLocation])
+    }, [places])
+    // }, [places, draggedLocation])
 
     // useEffect(() => {
     //     console.log("length " + Object.keys(multiDict).length)

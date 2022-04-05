@@ -211,7 +211,7 @@ const SideBarTabs = ({
         for (var i = 0; i < arrayLength; i++) {
           // console.log(list.subscribers[i]._id)
           if (list.subscribers[i]._id === user._id) {
-            console.log("Good")
+            // console.log("Good")
             _userFollowedLists.push(list)
             break
           }
@@ -221,7 +221,8 @@ const SideBarTabs = ({
         }
 
       })
-    }  
+    }
+
     setUserSubscribedLists(_userFollowedLists)
     setUserCreatedLists(_userCreatedLists)
   }, [listData])
