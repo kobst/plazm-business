@@ -60,11 +60,22 @@ const PanelContentContainer = styled.div`
   /* overflow: auto; */
 `;
 
+const MapCenterOffset = styled.div`
+  width: 10px;
+  height: 10px
+  position: absolute;
+  top: 50%;
+  right: 25%;
+  background: red;
+  z-index: 200
+  transform: translate(-50%, -50%);
+`;
+
 const MapContentContainer = styled.div`
   padding-left: 60px;
   right: 0%;
   width: 100%;
-  position: absolute;
+  position: relative;
   display: flex;
   height: calc(100vh - 70px);
   overflow: hidden;
@@ -155,6 +166,7 @@ const Dashboard = () => {
 
         {view !== "list_explore" && (
           <MapContentContainer>
+            <MapCenterOffset id="map-offset-center"/>
             <MapView />
             <RadarView />
           </MapContentContainer>

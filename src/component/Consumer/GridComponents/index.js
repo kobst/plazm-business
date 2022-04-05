@@ -77,7 +77,7 @@ const GridContainer = () => {
         }
         if (feedData.length > 0 && tabSelected == 2){
             console.log("grid " + tabSelected)
-            console.log(feedData[0])
+            // console.log(feedData[0])
             loadData(feedData)
         }
         // if (myFeedItems.length > 0 && tabSelected == 2){

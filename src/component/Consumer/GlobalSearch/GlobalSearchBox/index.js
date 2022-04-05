@@ -34,6 +34,7 @@ const GlobalSearchInputWrap = styled.div`
   margin: 10px 10px 15px;
   border-radius: 5px;
   overflow: hidden;
+  z-index: 101;
   input {
     width: calc(100% - 38px);
     height: 40px;
@@ -45,6 +46,7 @@ const GlobalSearchInputWrap = styled.div`
     padding: 10px;
     font-size: 14px;
     font-weight: 600;
+    z-index: 101;
   }
   button {
     width: 38px;
@@ -55,6 +57,7 @@ const GlobalSearchInputWrap = styled.div`
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    z-index: 101;
   }
 `;
 
