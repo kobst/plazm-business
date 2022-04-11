@@ -95,7 +95,7 @@ const setLinesExt = (dict) => {
 
 
 const setBBox = (_orderedPlaces) => {
-    let maxViewable = 10
+    let maxViewable = 15
     let coordArray = [];
     let featureSet = []
     var limit = 10;
@@ -273,15 +273,15 @@ const MapView = (props) => {
   // }, [selectedPlace]);
 
 
-  useEffect(() => {
-    // document.getElementById('#map-offset-center')
-    let offsetCenter = document.querySelector(".radar-container")
-    if (offsetCenter) {
-      let position = offsetCenter.position
-      setOffsetCenter(position)
-    }
+  // useEffect(() => {
+  //   // document.getElementById('#map-offset-center')
+  //   let offsetCenter = document.querySelector(".offset-center")
+  //   if (offsetCenter) {
+  //     var rect = offsetCenter.getBoundingClientRect();
+  //     setOffsetCenter(rect.left)
+  //   }
 
-  }, [])
+  // }, [])
 
     useEffect(() => {
 
@@ -371,51 +371,78 @@ const MapView = (props) => {
           })}, [draggedLocation])   
 
   
-  
+const getOffset = (map) => {
+  let cntr = map.getCenter()
+  let _centerCoor = map.project(cntr)
+  console.log(_centerCoor)
+  let offSetCoor = [_centerCoor.x + 350, _centerCoor.y]
+  let offSetLatLng = map.unproject(offSetCoor)
+  setDraggedLocation(offSetLatLng)
+
+  // let _offsetCenter = document.querySelector(".offset-center")
+  // if (_offsetCenter) {
+  //   var rect = _offsetCenter.getBoundingClientRect();
+  //   console.log(rect)
+  //   console.log(rect.top + " " + rect.left)
+  //   let coordinates = [rect.left, rect.top]
+  //   let _latlng = map.unproject(coordinates)
+  //   console.log(_latlng)
+  //   setDraggedLocation(_latlng)
+    // setOffsetCenter()
+    // return coordinates
+  // }
+}
+
 const clickHandler = (map, event) => {
-    console.log("map clicked");
     // let coordinates = event.lnglat.wrap()
     // console.log({ map, event });
     // props.toggle(event)
-    let offsetCenter = document.querySelector(".radar-container")
-    if (offsetCenter) {
-      let position = offsetCenter.position
-      setOffsetCenter(position)
-    }
+
     if (event.fitboundUpdate) {
-      // console.log("Map bounds have been programmatically changed");
+      console.log("Map bounds have been programmatically changed - click");
       // console.log(map.getCenter());
     } else {
       // console.log("Map bounds have been changed by user interaction");
       let cntr = map.getCenter();
       let cntrPixel = map.project(cntr)
+
+
       // console.log(cntr);
       // setTempCenter(cntr);
       // setDraggedLocation(cntr);
-      
-      const coordinate = map.unproject(event.point)
-      const _point = map.project(coordinate)
-      console.log("map pixel" + coordinate + " " + JSON.stringify(_point))
-      console.log(offsetCenter)
-      setTempCenter(coordinate);
-      setDraggedLocation(coordinate);
+
+      // get point 
+      // const clickedXYcoordinate = map.unproject(event.point)
+
+      // get delta between clickedXY
+      //deltaX = clickedXY[0] - offsetCenter[0]
+
+      // use delta to add to map.center xy coordinates 
+      // const _point = map.project(coordinate)
+      // console.log("map pixel" + coordinate + " " + JSON.stringify(_point))
+      // console.log(offsetCenter)
+      // setTempCenter(coordinate);
+      // setDraggedLocation(coordinate);
       
     }
   };
 
   const dragHandler = (map, event) => {
     // console.log({ map, event });
+    // setBox(null)
+    getOffset(map)
+
     if (event.fitboundUpdate) {
-      // console.log("Map bounds have been programmatically changed");
+      console.log("Map bounds have been changed programmatically  - dragged");
       // console.log(map.getCenter());
     } else {
       // console.log("Map bounds have been changed by user interaction");
-      let cntr = map.getCenter();
-      let cntrPixel = map.project(cntr)
-
+      // let cntr = map.getCenter();
+      // let cntrPixel = map.project(cntr)
+      // getOffset(map)
       // console.log(cntr);
-      setTempCenter(cntr);
-      setDraggedLocation(cntr);
+      // setTempCenter(cntr);
+      // setDraggedLocation(cntr);
     }
   }
 
@@ -438,7 +465,9 @@ const clickHandler = (map, event) => {
                 // style='mapbox://styles/kobstr/ckyank9on08ld14nuzyhrwddi'
                 style='mapbox://styles/kobstr/ckyan5qpn0uxk14pe1ah8qatg'
                 pitch={[60]}
-                // fitBounds={boundBox}
+                // fitBounds={(boundBox, {padding: {top:'00', bottom:'0', left: '400', right: '5'}})}
+               
+                  
                 onDragEnd={dragHandler}
                 onClick={clickHandler}
                 center={tempCenter}
@@ -452,10 +481,14 @@ const clickHandler = (map, event) => {
 
                         // orderedPlaces.forEach((place) => {
                       
-                        map.easeTo({
-                          padding: padding,
-                          duration: 1000
-                        })
+                        // map.easeTo({
+                        //   padding: padding,
+                        //   duration: 1000
+                        // })
+
+                        map.fitBounds(boundBox, {
+                          padding: {top: 0, bottom:0, left: 350, right: 150}
+                          })
 
                         // })
                         // map.on('idle', function () {
