@@ -164,6 +164,7 @@
   visibility: hidden;
   display: none;
 }
+
 .loadMore {
   margin: 0 auto 10px;
   border: 0;
@@ -175,6 +176,7 @@
   text-decoration: underline;
   font-weight: 600;
 }
+
 .sidebar-list {
   height: 25px;
   background-color: darkblue;
@@ -211,10 +213,12 @@
   border-color: transparent;
   border-radius: 0;
 }
+
 .Sidebar .react-tabs__tab--selected .sidebar-text,
 .Sidebar .react-tabs__tab--selected .sidebar-icon {
   color: #fff;
 }
+
 .Sidebar .react-tabs__tab:focus {
   box-shadow: none !important;
 }
@@ -222,6 +226,7 @@
 .Sidebar .react-tabs__tab:focus:after {
   display: none;
 }
+
 .RedDot {
   width: 4px;
   height: 4px;
@@ -231,6 +236,7 @@
   right: 10px;
   top: 24px;
 }
+
 .tool-tip {
   background-color: #ffffff !important;
   border: 1px solid #a9a9a9;
@@ -240,9 +246,10 @@
   font-size: 10px;
   line-height: 12px;
   color: #595959 !important;
-  z-index: 1;
+  z-index: 101;
   max-width: 400px;
 }
+
 .NotificationDot {
   width: 5px;
   height: 5px;
@@ -253,9 +260,11 @@
   left: 31px;
   top: 32px;
 }
+
 .sidebar-loader {
   margin: 0 auto 10px;
 }
+
 .sidebar-loader img {
   max-width: 50px;
 }

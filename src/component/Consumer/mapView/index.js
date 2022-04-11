@@ -13,11 +13,22 @@ import "./styles.css";
 import Geocode, { setRegion } from "react-geocode";
 import GoogleMapReact from "google-map-react";
 import ColorDict from '../GridComponents/functions/colorSlotDict'
-
+import styled from "styled-components";
 // import '../../App.css';
 
 import * as turf from "@turf/turf";
 import { connect } from "react-redux";
+
+const MapCenterOffset = styled.div`
+  width: 10px;
+  height: 10px
+  position: absolute;
+  top: 50%;
+  right: 25%;
+  background: red;
+  z-index: 200
+  transform: translate(-50%, -50%);
+`;
 
 // https://github.com/bryik/mapbox-react-examples/blob/basic-hooks/basic/src/index.js
 
@@ -84,7 +95,7 @@ const setLinesExt = (dict) => {
 
 
 const setBBox = (_orderedPlaces) => {
-    let maxViewable = 10
+    let maxViewable = 15
     let coordArray = [];
     let featureSet = []
     var limit = 10;
@@ -205,6 +216,7 @@ const MapView = (props) => {
     const draggedLocation = useStore(state => state.draggedLocation)
     const userLocation = useStore(state => state.userLocation)
     const [tempCenter, setTempCenter] = useState([userLocation.lng, userLocation.lat])
+    const [offsetCenter, setOffsetCenter] = useState(null)
 
     const gridContainerStyle = {
         // height: '100vh',
@@ -223,25 +235,29 @@ const MapView = (props) => {
      borderRadius: "10%",
     };
 
-  const [dimensions, setDimensions] = useState(mapContainerStyle);
+  const [dimensions, setDimensions] = useState(gridContainerStyle);
+  const [padding, setPadding] = useState(500)
 
   // only use if not using second map
   useMemo(() => {
     console.log("map view toggle");
     if (gridMode) {
       console.log("gridView true");
-      setDimensions(gridContainerStyle);
+      // setDimensions(gridContainerStyle);
+      setPadding(0)
+      
       // Map.resize()
       // ReCenter()
     } else {
       // console.log("gridView false");
-      setDimensions(mapContainerStyle);
+      // setDimensions(mapContainerStyle);
       setRedLine(null)
       setYellowLine(null)
       setOrangeLine(null)
       setGreenLine(null)
       setBlueLine(null)
       setVioletLine(null)
+      setPadding(500)
       // Map.resize()
       // ReCenter()
     }
@@ -256,6 +272,16 @@ const MapView = (props) => {
   //   }
   // }, [selectedPlace]);
 
+
+  // useEffect(() => {
+  //   // document.getElementById('#map-offset-center')
+  //   let offsetCenter = document.querySelector(".offset-center")
+  //   if (offsetCenter) {
+  //     var rect = offsetCenter.getBoundingClientRect();
+  //     setOffsetCenter(rect.left)
+  //   }
+
+  // }, [])
 
     useEffect(() => {
 
@@ -345,35 +371,78 @@ const MapView = (props) => {
           })}, [draggedLocation])   
 
   
-  
+const getOffset = (map) => {
+  let cntr = map.getCenter()
+  let _centerCoor = map.project(cntr)
+  console.log(_centerCoor)
+  let offSetCoor = [_centerCoor.x + 350, _centerCoor.y]
+  let offSetLatLng = map.unproject(offSetCoor)
+  setDraggedLocation(offSetLatLng)
+
+  // let _offsetCenter = document.querySelector(".offset-center")
+  // if (_offsetCenter) {
+  //   var rect = _offsetCenter.getBoundingClientRect();
+  //   console.log(rect)
+  //   console.log(rect.top + " " + rect.left)
+  //   let coordinates = [rect.left, rect.top]
+  //   let _latlng = map.unproject(coordinates)
+  //   console.log(_latlng)
+  //   setDraggedLocation(_latlng)
+    // setOffsetCenter()
+    // return coordinates
+  // }
+}
+
 const clickHandler = (map, event) => {
-    console.log("map clicked");
     // let coordinates = event.lnglat.wrap()
     // console.log({ map, event });
     // props.toggle(event)
+
     if (event.fitboundUpdate) {
-      // console.log("Map bounds have been programmatically changed");
+      console.log("Map bounds have been programmatically changed - click");
       // console.log(map.getCenter());
     } else {
       // console.log("Map bounds have been changed by user interaction");
       let cntr = map.getCenter();
+      let cntrPixel = map.project(cntr)
+
+
       // console.log(cntr);
-      setTempCenter(cntr);
-      setDraggedLocation(cntr);
+      // setTempCenter(cntr);
+      // setDraggedLocation(cntr);
+
+      // get point 
+      // const clickedXYcoordinate = map.unproject(event.point)
+
+      // get delta between clickedXY
+      //deltaX = clickedXY[0] - offsetCenter[0]
+
+      // use delta to add to map.center xy coordinates 
+      // const _point = map.project(coordinate)
+      // console.log("map pixel" + coordinate + " " + JSON.stringify(_point))
+      // console.log(offsetCenter)
+      // setTempCenter(coordinate);
+      // setDraggedLocation(coordinate);
+      
     }
   };
 
   const dragHandler = (map, event) => {
     // console.log({ map, event });
+    // setBox(null)
+    getOffset(map)
+
     if (event.fitboundUpdate) {
-      // console.log("Map bounds have been programmatically changed");
+      console.log("Map bounds have been changed programmatically  - dragged");
       // console.log(map.getCenter());
     } else {
       // console.log("Map bounds have been changed by user interaction");
-      let cntr = map.getCenter();
+      // let cntr = map.getCenter();
+      // let cntrPixel = map.project(cntr)
+      // getOffset(map)
       // console.log(cntr);
-      setTempCenter(cntr);
-      setDraggedLocation(cntr);
+      // setTempCenter(cntr);
+      // setDraggedLocation(cntr);
     }
   }
 
@@ -385,7 +454,8 @@ const clickHandler = (map, event) => {
 
     return (
         // <div className="circleDiv">
-        <div className="map-container">
+        <div>
+            <div className="offset-center"></div>
             <Map
                 // style='mapbox://styles/kobstr/cj0itw9ku003l2smnu8wbz94o'
                 // style='mapbox://styles/kobstr/cka78e4mj1aef1io837hkirap'
@@ -395,7 +465,9 @@ const clickHandler = (map, event) => {
                 // style='mapbox://styles/kobstr/ckyank9on08ld14nuzyhrwddi'
                 style='mapbox://styles/kobstr/ckyan5qpn0uxk14pe1ah8qatg'
                 pitch={[60]}
-                fitBounds={boundBox}
+                // fitBounds={(boundBox, {padding: {top:'00', bottom:'0', left: '400', right: '5'}})}
+               
+                  
                 onDragEnd={dragHandler}
                 onClick={clickHandler}
                 center={tempCenter}
@@ -409,7 +481,14 @@ const clickHandler = (map, event) => {
 
                         // orderedPlaces.forEach((place) => {
                       
-                        
+                        // map.easeTo({
+                        //   padding: padding,
+                        //   duration: 1000
+                        // })
+
+                        map.fitBounds(boundBox, {
+                          padding: {top: 0, bottom:0, left: 350, right: 150}
+                          })
 
                         // })
                         // map.on('idle', function () {

@@ -11,3 +11,15 @@
   /* border-radius: 50%;
       box-shadow: 0 0 100px 100px purple; */
 }
+
+
+.offset-center {
+  width: 3px;
+  height: 3px;
+  position: absolute;
+  top: 50%;
+  right: 25%;
+  background: red;
+  z-index: 200;
+  transform: translate(-50%, -50%);
+}

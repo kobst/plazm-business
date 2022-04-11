@@ -171,7 +171,7 @@ export const DisplayItemContent = styled.div`
   border-radius: 2px;
   padding: 15px 15px 20px;
   width: 320px;
-  z-index: 1000;
+  z-index: 10;
   &.InnerModal {
     visibility: hidden;
   }
