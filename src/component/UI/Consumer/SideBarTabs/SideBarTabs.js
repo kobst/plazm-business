@@ -393,7 +393,7 @@ const SideBarTabs = ({
                 <span className="sidebar-text">Home</span>
               </div>
             </Tab>
-            <Tab
+            {/* <Tab
               disabled={loading || selectedTab === 3}
               className={
                 3 === selectedTab - 1
@@ -409,15 +409,15 @@ const SideBarTabs = ({
             >
               <div className="item">
                 {/* <FiBell className="sidebar-icon" /> */}
-                <img
+                {/* <img
                   src={selectedTab === 3 ? BellIconWhite : BellIcon}
                   className="sidebar-icon"
                 />
                 <div className="NotificationDot"></div>
                 <span className="sidebar-text">Notifications</span>
-              </div>
-            </Tab>
-            <Tab
+              </div> 
+            </Tab> */}
+            {/* <Tab
               disabled={loading || selectedTab === 4}
               className={
                 4 === selectedTab - 1
@@ -435,7 +435,7 @@ const SideBarTabs = ({
                 <FiHeart className="sidebar-icon" />
                 <span className="sidebar-text">Favorites</span>
               </div>
-            </Tab>
+            </Tab> */}
             <Tab
               disabled={loading || selectedTab === 5}
               className={

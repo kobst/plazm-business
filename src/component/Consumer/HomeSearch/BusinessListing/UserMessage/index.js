@@ -260,6 +260,16 @@ const UserMessage = ({
     );
   };
 
+
+  useEffect(() => {
+    if (postData) {
+      if (postData.listId) {
+        console.log("post data " + postData._id + " " + JSON.stringify(postData.listId[0].name))
+      } else {
+        console.log(postData)
+      }
+    }
+  }, [postData])
   /** to scroll to bottom of comments */
   useEffect(() => {
     if (
