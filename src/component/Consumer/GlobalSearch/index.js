@@ -12,7 +12,8 @@ const GlobalSearchBtnWrap = styled.div`
   width: 38px;
   height: 38px;
   top: 70px;
-  left: 10px;
+  left: 650px;
+  z-index: 101;
   button {
     width: 100%;
     height: 100%;
@@ -25,11 +26,11 @@ const GlobalSearchBtnWrap = styled.div`
     cursor: pointer;
   }
   @media (max-width: 1279px) {
-    z-index: 101;
-    top: 70px;
+    top: 100px;
+    left: 50vw;
   }
   @media (max-width: 767px) {
-    top: 120px;
+    top: 100px;
     right: -40px;
     left: inherit;
     margin-top: 10px;

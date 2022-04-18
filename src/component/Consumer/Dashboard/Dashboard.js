@@ -56,7 +56,7 @@ const PanelContentContainer = styled.div`
   top: 60px;
   max-width: 620px;
   z-index: 3;
-  background: #221e4500;
+  background: #221e4550;
   /* overflow: auto; */
 `;
 
@@ -73,7 +73,6 @@ const MapCenterOffset = styled.div`
 
 const MapContentContainer = styled.div`
   padding-left: 60px;
-  right: 0%;
   width: 100%;
   position: relative;
   display: flex;
@@ -82,7 +81,7 @@ const MapContentContainer = styled.div`
   top: 60px;
   // max-width: 920px;
   z-index: 2;
-  background: #221e4500;
+  background: #221e45;
   /* overflow: auto; */
 `;
 
