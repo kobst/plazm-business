@@ -217,6 +217,7 @@ const MapView = (props) => {
     const userLocation = useStore(state => state.userLocation)
     const [tempCenter, setTempCenter] = useState([userLocation.lng, userLocation.lat])
     const [offsetCenter, setOffsetCenter] = useState(null)
+    const postsInView = useStore(state => state.postsInView)
 
     const gridContainerStyle = {
         // height: '100vh',
@@ -282,6 +283,13 @@ const MapView = (props) => {
   //   }
 
   // }, [])
+
+  useEffect(()=>{
+    console.log("new in view")
+    postsInView.forEach(elem =>{
+      console.log(elem.business[0].company_name)
+    })
+  }, [postsInView])
 
     useEffect(() => {
 

@@ -9,6 +9,7 @@ import ReplyInput from "./ReplyInput";
 import Comments from "./Comments";
 import BannerImg from "../../../../../images/sliderimg.png";
 import LikesBar from "../LikesBar";
+import useOnScreen from "../../../MyFeed/trackElement";
 import {
   addLikeViaSocket,
   addLikeToCommentViaSocket,
@@ -166,6 +167,10 @@ const UserMessage = ({
   setMyFeedIndex,
 }) => {
   const dispatch = useDispatch();
+  const ref = useRef()
+  const isVisible = useOnScreen(ref)
+
+
   const [displayComments, setDisplayComments] = useState(false);
   const loadingComments = useSelector(
     (state) => state.myFeed.loadingPostComments
@@ -178,6 +183,8 @@ const UserMessage = ({
   const ws = useSelector((state) => state.user.ws);
   const commentsRef = useRef();
   const history = useHistory();
+  const setPostsInView = useStore(state => state.setPostsInView)
+  const postsInView = useStore(state => state.postsInView)
   const setSelectedPlace = useStore(state => state.setSelectedPlace)
   const selectedPlace = useStore(state => state.selectedPlace)
   const selectedPostId = useSelector(
@@ -413,10 +420,28 @@ const UserMessage = ({
     setSelectedPlace(null)
   }
 
+  useEffect(() => {
+    if (isVisible) {
+      console.log("on screen " + businessData.company_name)
+      setPostsInView([...postsInView, postData])
+
+    }
+    if (!isVisible) {
+      console.log("off screen " + businessData.company_name)
+      let _postsInView = postsInView
+      _postsInView = _postsInView.filter(item => {
+        return item._id != postData._id
+      })
+      setPostsInView(_postsInView)
+    }
+
+  }, [isVisible])
+
 
   return (
     <>
       <UserMsgWrap
+        ref={ref}
         // onMouseOver={handleHover}
         // onMouseOut={handleLeave}
         onMouseEnter={handleHover}
