@@ -53,7 +53,7 @@ import { setGloablLoader } from "../../../../reducers/consumerReducer";
 import DiscoverList from "../../../Consumer/DiscoverList";
 
 import ListTab from "./ListTab";
-import PanelContent from "../Panel-Content/PanelContent";
+// import PanelContent from "../Panel-Content/PanelContent";
 
 import ValueLoader from "../../../../utils/loader";
 import CompassIconWhite from "../../../../images/compass-white.png";
@@ -87,6 +87,8 @@ const SubcriptionHeading = styled.h1`
   border-top: 1px dashed #d2d2d2;
   padding: 15px 0 5px 15px;
 `;
+
+
 
 const SideBarTabs = ({
   profile,

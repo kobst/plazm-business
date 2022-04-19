@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import LeftBar from "../../UI/Consumer/LeftBar";
 import SideBarTabs from "../../UI/Consumer/SideBarTabs/SideBarTabs";
-import PanelContent from "../../UI/Consumer/Panel-Content/PanelContent";
+// import PanelContent from "../../UI/Consumer/Panel-Content/PanelContent";
 
 import Header from "../../UI/Consumer/Header/Header";
 import RightBar from "../Dashboard/RightBar";
