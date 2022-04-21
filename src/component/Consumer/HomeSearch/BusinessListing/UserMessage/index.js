@@ -421,19 +421,22 @@ const UserMessage = ({
   }
 
   useEffect(() => {
-    if (isVisible) {
-      console.log("on screen " + businessData.company_name)
-      setPostsInView([...postsInView, postData])
 
-    }
-    if (!isVisible) {
-      console.log("off screen " + businessData.company_name)
+    const removePost = () => {
       let _postsInView = postsInView
       _postsInView = _postsInView.filter(item => {
         return item._id != postData._id
       })
       setPostsInView(_postsInView)
     }
+    if (isVisible) {
+      console.log("on screen " + businessData.company_name)
+      setPostsInView([...postsInView, postData])
+
+    }
+    if (!isVisible) {removePost()}
+
+    return () => {removePost()}
 
   }, [isVisible])
 

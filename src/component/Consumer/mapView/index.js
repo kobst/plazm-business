@@ -169,7 +169,7 @@ Geocode.setApiKey("AIzaSyAYVZIvAZkQsaxLD3UdFH5EH3DvYmSYG6Q");
 const MapView = (props) => {
 
     const mapRef = useRef()
-    const [boundBox, setBox] = useState(null)
+    const [boundBox, setBox] = useState([])
     const [geo, setGeo] = useState(null)
     const [lineArray, setLineArray] = useState([])
     const [hex, setHex] = useState()
@@ -264,35 +264,7 @@ const MapView = (props) => {
     }
   }, [gridMode]);
 
-  // useEffect(() => {
-  //   console.log("reading selected place from mapview");
-
-  //   if (selectedPlace) {
-  //     console.log("selected place exists"  + JSON.stringify(selectedPlace.businessLocation))
-  //   //   setGridView(false);
-  //   }
-  // }, [selectedPlace]);
-
-
-  // useEffect(() => {
-  //   // document.getElementById('#map-offset-center')
-  //   let offsetCenter = document.querySelector(".offset-center")
-  //   if (offsetCenter) {
-  //     var rect = offsetCenter.getBoundingClientRect();
-  //     setOffsetCenter(rect.left)
-  //   }
-
-  // }, [])
-
-  useEffect(()=>{
-    console.log("new in view")
-    postsInView.forEach(elem =>{
-      console.log(elem.business[0].company_name)
-    })
-  }, [postsInView])
-
     useEffect(() => {
-
       console.log("detail View from mapview " + detailView)
     if (selectedPlace && selectedPlace.businessLocation && detailView) {
       console.log("selected place exists"  + JSON.stringify(selectedPlace.businessLocation))
@@ -300,49 +272,37 @@ const MapView = (props) => {
     }
   }, [detailView]);
 
+  useEffect(()=>{
+    let mounted = true;
+    
+    // postsInView.forEach(elem =>{
+    //   // console.log(elem.business[0].company_name)
+    //   console.log(elem)
+
+    // })
+
+    if (postsInView.length > 1 && mounted) {
+      let obj = setBBox(postsInView)
+      setBox(obj.box)
+      setGeo(obj.geo)        
+  }
 
 
+    return () => {mounted = false};
+  }, [postsInView])
 
 
-// useEffect(()=> {
-//     if (selectedPlace) {
-//       // console.log(selectedPlace.businessLocation)
-//         if (selectedPlace.businessLocation) {
-//             setTempCenter(selectedPlace.businessLocation.coordinates)
-//         }
-//     }
-// }, [selectedPlace])
+    // useEffect(() => {
+    //     let mounted = true;
+    //     if (orderedPlaces.length > 1 && mounted) {
+    //         let obj = setBBox(orderedPlaces)
+    //         setBox(obj.box)
+    //         setGeo(obj.geo)        
+    //     }
 
-    useEffect(() => {
-        let mounted = true;
-        // if (mapRef.current) {
-        //   console.log(mapRef)
-        //   layers.forEach(layer => {
-        //     mapRef.removeLayer(layer)
-        //   })
-        // }
-        if (orderedPlaces.length > 1 && mounted) {
-            let obj = setBBox(orderedPlaces)
-            setBox(obj.box)
-            setGeo(obj.geo)
+    //     return () => {mounted = false};
 
-          //   let _layers = orderedPlaces.map(({ ...otherProps }) => {
-          //     {/* return (<Layer type="circle" id={otherProps._id} paint={{"circle-radius": 10, "circle-color": otherProps.icon_color}}> */}
-          //    return <Layer type="circle" id={otherProps._id} paint={{"circle-radius": 10, "circle-color": 'white'}}>
-          //         <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />
-          //     </Layer>
-          // })
-
-          // setLayers(_layers)
-        
-        
-        }
-
- 
-
-        return () => {mounted = false};
-
-    }, [orderedPlaces, maxViewable]);
+    // }, [orderedPlaces, maxViewable]);
 
 
     useEffect(() => {
@@ -387,18 +347,6 @@ const getOffset = (map) => {
   let offSetLatLng = map.unproject(offSetCoor)
   setDraggedLocation(offSetLatLng)
 
-  // let _offsetCenter = document.querySelector(".offset-center")
-  // if (_offsetCenter) {
-  //   var rect = _offsetCenter.getBoundingClientRect();
-  //   console.log(rect)
-  //   console.log(rect.top + " " + rect.left)
-  //   let coordinates = [rect.left, rect.top]
-  //   let _latlng = map.unproject(coordinates)
-  //   console.log(_latlng)
-  //   setDraggedLocation(_latlng)
-    // setOffsetCenter()
-    // return coordinates
-  // }
 }
 
 const clickHandler = (map, event) => {
@@ -494,9 +442,9 @@ const clickHandler = (map, event) => {
                         //   duration: 1000
                         // })
 
-                        map.fitBounds(boundBox, {
-                          padding: {top: 0, bottom:0, left: 350, right: 150}
-                          })
+                        // map.fitBounds(boundBox, {
+                        //   padding: {top: 0, bottom:0, left: 350, right: 150}
+                        //   })
 
                         // })
                         // map.on('idle', function () {
@@ -518,7 +466,7 @@ const clickHandler = (map, event) => {
                   {/* add colored layers like the lines... */}
 
                   <Layer type="circle"  paint={{"circle-radius": 8, "circle-color": 'white'}}>
-                        {!detailView && orderedPlaces.map(({ ...otherProps }) => <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />)}
+                        {!detailView && postsInView.map(({ ...otherProps }) => <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />)}
                   </Layer>)
 
 

@@ -126,8 +126,8 @@ const MyFeed = () => {
   const gridMode = useStore((state) => state.gridMode);
   const setMyFeedItems = useStore((state) => state.setMyFeedItems)
   const myFeedItems = useStore((state) => state.myFeedItems)
-
   const orderedPlaces = useStore((state) => state.orderedPlaces)
+  const setPostsInView = useStore(state => state.setPostsInView)
  
 
   const setSearchIndex = useStore((state) => state.setSearchIndex);
@@ -147,6 +147,7 @@ const MyFeed = () => {
     //     process.env.REACT_APP_LONGITUDE +
     //     "lng"
     // );
+    // setPostsInView([])
     const fetchData = async () => {
       const _gridMode = gridMode;
       if (_gridMode) {

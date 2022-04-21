@@ -57,6 +57,7 @@ const GridContainer = () => {
     const setOrderedPlaces = useStore((state) => state.setOrderedPlaces)
     const placeCoordDict = useStore((state) => state.placeCoordDict)
     const setPlaceCoordDict = useStore((state) => state.setPlaceCoordDict)
+    const setPostsInView = useStore(state => state.setPostsInView)
 
     const draggedLocation = useStore((state) => state.draggedLocation)
     const setDraggedLocation = useStore((state) => state.setDraggedLocation)
@@ -95,7 +96,8 @@ const GridContainer = () => {
 
     const loadData = (data) => {
         let _places = []
-        // console.log("getting feed data " + feedData.length)
+        setPostsInView([])
+        console.log("getting feed data " + feedData.length)
         data.forEach(element => {
             let deepClone = JSON.parse(JSON.stringify(element));
             if (!deepClone.businessLocation && deepClone.location) {
@@ -116,20 +118,12 @@ const GridContainer = () => {
     useEffect(() => {
         // console.log("initial props places")
         ReCenter(null)
-    }, [places])
-    // }, [places, draggedLocation])
-
-    // useEffect(() => {
-    //     console.log("length " + Object.keys(multiDict).length)
-    
-    // }, [multiDict])
+    // }, [places])
+    }, [places, draggedLocation])
 
     // on shifting centerPlace..
     useEffect(() => {
-        if (centerPlace) {
-            // console.log("new center " + centerPlace.company_name)
-            // adjustZ(centerPlace)
-        }
+ 
         let timer1 = setTimeout(() => ReCenter(centerPlace), 2000);
         // this will clear Timeout when component unmount like in willComponentUnmount
         return () => {

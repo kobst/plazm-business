@@ -297,7 +297,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   const setDiscoverBtn = useStore((state) => state.setDiscoverBtn)
   const readMore = useStore((state) => state.readMore)
   const gridMode = useStore((state) => state.gridMode)
-
+const setPostsInView = useStore(state => state.setPostsInView)
   const orderedPlaces = useStore((state) => state.orderedPlaces)
 
 
@@ -309,11 +309,6 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
 
   const history = useHistory();
 
-
-  useEffect(()=> {
-    console.log("ordered places list detail")
-    console.log(orderedPlaces)
-  }, [orderedPlaces])
 
   useEffect(() => {
     // if (!image) {
@@ -340,6 +335,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
 
   /** to clear all the data initially */
   useEffect(() => {
+    // setPostsInView([])
     dispatch(clearMyFeedData());
     setOffSet(0);
     setHasMore(true);
