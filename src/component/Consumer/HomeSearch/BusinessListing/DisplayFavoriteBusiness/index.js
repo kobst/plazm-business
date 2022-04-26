@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import moment from "moment";
@@ -8,7 +8,8 @@ import UserMessage from "../UserMessage";
 import UserMessageEvents from "../Events/UserMessageEvents";
 import DisplayComment from "../DisplayComments";
 import DisplayCommentForEvent from "../DisplayCommentForEvent";
-
+import useOnScreen from "../../../MyFeed/trackElement";
+import useStore from "../../../useState";
 import {
   ProfileNameFeed,
   ProfileThumbBannerFeed,
@@ -197,6 +198,63 @@ const DisplayFavoriteBusiness = ({
   const getUtcMinutes = new Date().getUTCMinutes();
   const currentUtcDay = new Date().getUTCDay();
   const [image, setImage] = useState(businessInfo.default_image_url);
+
+  const ref = useRef()
+  const isVisible = useOnScreen(ref)
+  const setPostsInView = useStore(state => state.setPostsInView)
+  const postsInView = useStore(state => state.postsInView)
+  const setSelectedPlace = useStore(state => state.setSelectedPlace)
+
+  // useEffect(() => {
+  //   if (isVisible) {
+  //     console.log("on screen " + data.company_name)
+      
+  //     let deepClone = JSON.parse(JSON.stringify(data));
+  //     if (!deepClone.businessLocation && deepClone.location) {
+  //         deepClone.businessLocation = deepClone.location
+  //     }
+  //     // console.log(deepClone)
+   
+  //     setPostsInView([...postsInView, deepClone])
+
+  //   }
+  //   if (!isVisible) {
+  //     console.log("off screen " + data.company_name)
+  //     let _postsInView = postsInView
+  //     _postsInView = _postsInView.filter(item => {
+  //       return item._id != data._id
+  //     })
+  //     setPostsInView(_postsInView)
+  //   }
+
+  // }, [isVisible])
+
+  useEffect(() => {
+
+    const removePost = () => {
+      let _postsInView = postsInView
+      _postsInView = _postsInView.filter(item => {
+        return item._id != data._id
+      })
+      setPostsInView(_postsInView)
+    }
+    if (isVisible) {
+      let deepClone = JSON.parse(JSON.stringify(data));
+      if (!deepClone.businessLocation && deepClone.location) {
+          deepClone.businessLocation = deepClone.location
+      }
+      // console.log(deepClone)
+   
+      setPostsInView([...postsInView, deepClone])
+
+    }
+    if (!isVisible) {removePost()}
+
+    return () => {removePost()}
+
+  }, [isVisible])
+
+  
   const history = useHistory();
   const days = [
     "Sunday",
@@ -243,10 +301,27 @@ const DisplayFavoriteBusiness = ({
     history.push(`/b/${businessInfo._id}`);
   };
 
+
+  const handleHover = () => {
+    console.log("hover " + businessInfo.company_name)
+    let deepClone = JSON.parse(JSON.stringify(businessInfo));
+    deepClone.businessLocation = deepClone.location;
+    setSelectedPlace(deepClone);
+  }
+
+  const handleLeave = () => {
+    // console.log("leave" + businessData.company_name)
+    //delay, if selectedPlace is not the same as postData, then cancel. If it is, then set to null
+    setSelectedPlace(null)
+  }
+
   return data ? (
     <>
       {!search && businessInfo.company_name !== null ? (
         <UserMsgWrap
+        onMouseEnter={handleHover}
+        onMouseLeave={handleLeave}
+          ref={ref}
           onClick={() => displayBusinessDetail()}
           className={
             data.eventSchedule !== null ||
@@ -396,6 +471,8 @@ const DisplayFavoriteBusiness = ({
         <DisplayCommentForEvent postData={data} businessData={businessInfo} />
       ) : search && businessInfo.company_name !== null ? (
         <UserMsgWrap
+          handleHover={handleHover}
+          handleLeave={handleLeave}
           className={
             data.eventSchedule !== null ||
             data.data !== null ||

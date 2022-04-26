@@ -63,17 +63,17 @@ const IconButton = (props) => {
     return (
         <a.group
             position={[0,0,5]}
-            rotation={rotation}
+            // rotation={rotation}
             ref ={groupRef} >
              <mesh
                 geometry={geoCircle}>
                 {texture && <meshBasicMaterial attach="material" map={texture} side="THREE.DoubleSide" />}
             </mesh>
-
+{/* 
             <mesh
                 geometry={geoCircleBack}>
                 {texture && <meshBasicMaterial attach="material" map={texture} side="THREE.DoubleSide" />}
-            </mesh>
+            </mesh> */}
         </a.group>
     )
 }
@@ -238,16 +238,16 @@ const HexTile = (props) => {
             // scale={5}
             ref={hexRef}>
 
-            <mesh
+            {/* <mesh
                 geometry={geomShape}>
                 <meshBasicMaterial attach="material" color={props.color} side="THREE.DoubleSide" />
-            </mesh> 
+            </mesh>  */}
             
-{/*           
+      
             <mesh
                 geometry={geomShape}>
                 {texture && <meshBasicMaterial attach="material" map={texture} side="THREE.DoubleSide" />}
-            </mesh> */}
+            </mesh> 
 
             {/* <mesh
                 geometry={geomShape2}>
@@ -637,11 +637,11 @@ const PlaceMesh = ((props) => {
              {previewMode? <PreviewCard position={[0, 0, 10]} company_name={props.placeObject.company_name} previewActive={previewActive}/> : null}
 
 
-             <IconButton 
+             {/* <IconButton 
                 _id = {props._id}
                 // position={[0, 0, 10]}
                 placeImage={props.placeObject.default_image_url}>
-           </IconButton>
+           </IconButton> */}
 
             
             <HexTile
