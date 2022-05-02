@@ -11,6 +11,11 @@ import {
   LocationWrap,
   UserImgWrap,
   UserImg,
+  LogoutSection,
+  LogoutComponent,
+  AlertIcon,
+  LogoutMsg,
+  LogoutBtnWrap,
 } from "./styled";
 import BackBtn from "../../../../images/back-btn.png";
 import "./styles.css";
@@ -18,11 +23,17 @@ import GridIcon from "../../../../images/grid_icon_blue.png";
 import ListIcon from "../../../../images/Grid_icon.png";
 import { useHistory, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
+import ModalComponent from "../../../Consumer/UI/Modal";
+import { FiLogOut, FiAlertOctagon } from "react-icons/fi";
+import ButtonGrey from "../../../Consumer/UI/ButtonGrey";
+import SaveButton from "../../../Consumer/UI/SaveButton";
 
 const Header = () => {
   const [tabTitle, setTabTitle] = useState();
   const [coords, setCoords] = useState();
   const subListTabName = ["Lists Subscribe", "My List", "Discover More"];
+  const [showDiv, setshowDiv] = useState(false);
+  const [showDivModal, setshowDivModal] = useState(false);
   const routeObj = {
     u: "User",
     b: "Business",
@@ -158,10 +169,46 @@ const Header = () => {
         </LocationWrap>
 
         <UserImgWrap>
-          <UserImg>
+          <UserImg
+            onClick={() => {
+              setshowDiv((prev) => !prev);
+            }}
+          >
             <img src="https://picsum.photos/id/237/200/300" />
           </UserImg>
         </UserImgWrap>
+
+        {showDiv && (
+          <LogoutSection>
+            <ul>
+              <li>profile</li>
+              <li
+                onClick={() => {
+                  setshowDivModal((prev) => !prev);
+                }}
+                className="lightGrayBg"
+              >
+                <div className="logoutDiv">
+                  <FiLogOut />
+                  logout
+                </div>
+              </li>
+            </ul>
+          </LogoutSection>
+        )}
+
+        <ModalComponent isOpen={showDivModal}>
+          <LogoutComponent>
+            <AlertIcon>
+              <FiAlertOctagon />
+            </AlertIcon>
+            <LogoutMsg>Are you sure you want to Logout?</LogoutMsg>
+            <LogoutBtnWrap>
+              <ButtonGrey>Cancel</ButtonGrey>
+              <SaveButton>Logout</SaveButton>
+            </LogoutBtnWrap>
+          </LogoutComponent>
+        </ModalComponent>
 
         {/* <div className="title">
                     <h4>{tabTitle}</h4>
