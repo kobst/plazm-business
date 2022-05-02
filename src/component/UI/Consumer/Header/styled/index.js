@@ -208,6 +208,7 @@ export const LogoutComponent = styled.div`
   width: 360px;
   color: #fff;
   flex-direction: column;
+  border-radius: 5px;
   @media (max-width: 767px) {
     padding: 20px 15px;
     width: 100%;

@@ -27,6 +27,7 @@ import ModalComponent from "../../../Consumer/UI/Modal";
 import { FiLogOut, FiAlertOctagon } from "react-icons/fi";
 import ButtonGrey from "../../../Consumer/UI/ButtonGrey";
 import SaveButton from "../../../Consumer/UI/SaveButton";
+import PlazmLogo from "../../../../images/plazmLogo.jpeg";
 
 const Header = () => {
   const [tabTitle, setTabTitle] = useState();
@@ -174,7 +175,7 @@ const Header = () => {
               setshowDiv((prev) => !prev);
             }}
           >
-            <img src="https://picsum.photos/id/237/200/300" />
+            <img src={PlazmLogo} alt="PlazmLogo" />
           </UserImg>
         </UserImgWrap>
 

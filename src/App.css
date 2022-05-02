@@ -202,7 +202,7 @@ button.cancel:hover {
   height: 100%;
 }
 .ReactModalPortal {
-  z-index: 3;
+  z-index: 999;
   position: relative;
 }
 
