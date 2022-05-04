@@ -18,6 +18,11 @@ const ButtonText = styled.button`
     outline: none;
     transition: 0.3s;
   }
+  @media (max-width: 359px) {
+    font-size: 10px;
+    min-width: 70px;
+    height: 28px;
+  }
 `;
 
 const ButtonOrange = (props) => {

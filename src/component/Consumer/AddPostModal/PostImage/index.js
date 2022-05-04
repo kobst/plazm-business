@@ -38,6 +38,7 @@ const CloseList = styled.button`
   svg {
     color: #fff;
     font-size: 20px;
+    display: none;
   }
   :hover,
   :focus {

@@ -26,6 +26,50 @@ const ModalContent = styled.div`
     overflow-y: auto;
     overflow-x: hidden;
   }
+  &.CreateListModal {
+    max-width: 748px;
+    min-width: 748px;
+    @media (max-width: 767px) {
+      padding: 15px;
+      min-width: 90vw;
+      max-width: 300px;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+    .TitleRed {
+      label {
+        color: #ee3840;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 500;
+        font-size: 11px;
+        text-transform: capitalize;
+      }
+      input::placeholder {
+        color: #fac2c4;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 500;
+        font-size: 13px;
+      }
+    }
+    .CustomLabel {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 11px;
+      text-transform: capitalize;
+      color: #7f75bf;
+    }
+    .PL-15 {
+      padding-left: 15px;
+      height: 28px;
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 13px;
+    }
+  }
 `;
 
 const AddPostModal = ({ businessId, closeModal, data }) => {
@@ -62,9 +106,10 @@ const AddPostModal = ({ businessId, closeModal, data }) => {
   useEffect(() => {
     if (userLists.length === 0) dispatch(fetchUserLists(user._id));
   }, [dispatch, user._id, userLists.length]);
+
   return (
     <>
-      <ModalContent>
+      <ModalContent className={displayCreateList && "CreateListModal"}>
         {displayList ? (
           <AllListingsContent
             setDisplayList={setDisplayList}

@@ -35,14 +35,16 @@ const ErrorDiv = styled.div`
 /*
 @desc: formik form input box
 */
-const Input = ({ label,formError, ...props }) => {
+const Input = ({ label, formError, ...props }) => {
   const [field, meta] = useField(props);
   return (
     <>
       <center>
-        <InputText {...field} {...props} className="text-input" />
+        <InputText {...field} {...props} className="text-input PL-15" />
       </center>
-      {meta.error || formError===error.INCORRECT_OLD_PASSWORD ? <ErrorDiv>{meta.error || formError}</ErrorDiv> : null}
+      {meta.error || formError === error.INCORRECT_OLD_PASSWORD ? (
+        <ErrorDiv>{meta.error || formError}</ErrorDiv>
+      ) : null}
     </>
   );
 };
