@@ -22,15 +22,17 @@ import "./styles.css";
 import GridIcon from "../../../../images/grid_icon_blue.png";
 import ListIcon from "../../../../images/Grid_icon.png";
 import { useHistory, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ModalComponent from "../../../Consumer/UI/Modal";
 import { FiLogOut, FiAlertOctagon } from "react-icons/fi";
 import ButtonGrey from "../../../Consumer/UI/ButtonGrey";
 import SaveButton from "../../../Consumer/UI/SaveButton";
 import { Auth } from 'aws-amplify';
+import { setGloablLoader } from "../../../../reducers/consumerReducer";
 
 const Header = () => {
   const routerHistory = useHistory()
+  const dispatch = useDispatch();
   const [tabTitle, setTabTitle] = useState();
   const [coords, setCoords] = useState();
   const subListTabName = ["Lists Subscribe", "My List", "Discover More"];
@@ -111,12 +113,23 @@ const Header = () => {
   const isObjectId = (id) => {
     return id.length === 24 && !isNaN(Number("0x" + id));
   };
-  const logout = () => {
-    Auth.signOut().then((res) => {
-      console.log('logout', res)
-      routerHistory.push("/consumer/login");
-    });
-  }
+
+  /** for logout functionality redirection */
+  const redirectUserToLoginScreen = () => {
+    dispatch(setGloablLoader(false));
+    routerHistory.push("/consumer/login");
+  };
+  /** logout consumer */
+  const consumerLogout = async () => {
+    try {
+      dispatch(setGloablLoader(true));
+      await Auth.signOut();
+      setTimeout(() => redirectUserToLoginScreen(), 3000);
+    } catch (error) {
+      dispatch(setGloablLoader(false));
+    }
+  };
+
   return (
     <HeaderBar>
       <LeftHeaderBar>
@@ -213,7 +226,7 @@ const Header = () => {
             <LogoutMsg>Are you sure you want to Logout?</LogoutMsg>
             <LogoutBtnWrap>
               <ButtonGrey onClick={() => setshowDivModal((prev) => !prev)}>Cancel</ButtonGrey>
-              <SaveButton onClick={() => logout()}>Logout</SaveButton>
+              <SaveButton onClick={() => consumerLogout()}>Logout</SaveButton>
             </LogoutBtnWrap>
           </LogoutComponent>
         </ModalComponent>
