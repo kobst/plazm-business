@@ -27,8 +27,10 @@ import ModalComponent from "../../../Consumer/UI/Modal";
 import { FiLogOut, FiAlertOctagon } from "react-icons/fi";
 import ButtonGrey from "../../../Consumer/UI/ButtonGrey";
 import SaveButton from "../../../Consumer/UI/SaveButton";
+import { Auth } from 'aws-amplify';
 
 const Header = () => {
+  const routerHistory = useHistory()
   const [tabTitle, setTabTitle] = useState();
   const [coords, setCoords] = useState();
   const subListTabName = ["Lists Subscribe", "My List", "Discover More"];
@@ -109,6 +111,12 @@ const Header = () => {
   const isObjectId = (id) => {
     return id.length === 24 && !isNaN(Number("0x" + id));
   };
+  const logout = () => {
+    Auth.signOut().then((res) => {
+      console.log('logout', res)
+      routerHistory.push("/consumer/login");
+    });
+  }
   return (
     <HeaderBar>
       <LeftHeaderBar>
@@ -204,8 +212,8 @@ const Header = () => {
             </AlertIcon>
             <LogoutMsg>Are you sure you want to Logout?</LogoutMsg>
             <LogoutBtnWrap>
-              <ButtonGrey>Cancel</ButtonGrey>
-              <SaveButton>Logout</SaveButton>
+              <ButtonGrey onClick={() => setshowDivModal((prev) => !prev)}>Cancel</ButtonGrey>
+              <SaveButton onClick={() => logout()}>Logout</SaveButton>
             </LogoutBtnWrap>
           </LogoutComponent>
         </ModalComponent>
