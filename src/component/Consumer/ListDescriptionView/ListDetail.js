@@ -27,7 +27,7 @@ import {
   addSubscribedList,
   removeSubscribedList,
 } from "../../../reducers/userReducer";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import ButtonOrange from "../UI/ButtonOrange";
 import useStore from "../useState";
 
@@ -266,6 +266,7 @@ const ArrowBack = styled.div`
 
 const ListDetailView = ({ listOpenedFromBusiness }) => {
   const dispatch = useDispatch();
+  const {id} = useParams();
   const loading = useSelector((state) => state.myFeed.loadingSelectedList);
   const loadingUnSubScribe = useSelector(
     (state) => state.list.loadingUnSubscribe
@@ -288,6 +289,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   const [flag, setFlag] = useState(true);
 
   const selectedList = useStore((state) => state.selectedList);
+  const setSelectedList = useStore((state) => state.setSelectedList);
   const selectedListId = useStore((state) => state.selectedListId);
   const setSelectedListId = useStore((state) => state.setSelectedListId);
   const setSelectedListName = useStore((state) => state.setSelectedListName);
@@ -339,22 +341,23 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   useEffect(() => {
     const fetchListDetails = async () => {
       const result = await dispatch(
-        fetchSelectedListDetails({ id: selectedListId, value: offset })
+        fetchSelectedListDetails({ id: id, value: offset })
       );
       const data = await unwrapResult(result);
+      setSelectedList(data?.listDetails);
       dispatch(setSelectedListDetails(data?.listDetails));
       if (data) {
         setFlag(false);
       }
     };
     offset === 0 && fetchListDetails();
-  }, [dispatch, selectedListId, offset]);
+  }, [dispatch, id, offset]);
 
   const fetchMorePosts = () => {
     if (offset + 20 < totalData) {
       setOffSet(offset + 20);
       dispatch(
-        fetchSelectedListDetails({ id: selectedListId, value: offset + 20 })
+        fetchSelectedListDetails({ id: id, value: offset + 20 })
       );
     } else setHasMore(false);
   };
@@ -398,6 +401,10 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
       );
     }
   };
+
+  useEffect(() => {
+    setSelectedListId(id)
+  },[id])
 
   // /** to delete a list */
   // const deleteList = async () => {
