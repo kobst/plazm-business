@@ -111,6 +111,7 @@ export const RightHeaderBar = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 50%;
+  position: relative;
   @media (max-width: 767px) {
     width: 100%;
     padding-left: 15px;
@@ -146,9 +147,104 @@ export const UserImg = styled.div`
   display: flex;
   align-items: center;
   border: 1px solid #ffffff;
+  cursor: pointer;
   img {
     border-radius: 50%;
     width: 25px;
     height: 25px;
+  }
+`;
+
+export const LogoutSection = styled.div`
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 60px;
+  right: 0;
+  width: 128px;
+  background: #f3f3f3;
+  box-shadow: 0px 10px 8px rgba(44, 39, 56, 0.15);
+  border-top: 1px solid #d6d6d6;
+  padding: 0;
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-align: right;
+    width: 100%;
+    li {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 14px;
+      color: #575757;
+      padding: 8px 12px;
+      text-transform: capitalize;
+      :last-child {
+        color: #ff2730;
+      }
+      .logoutDiv {
+        display: flex;
+        justify-content: space-between;
+        cursor: pointer;
+      }
+      &.lightGrayBg {
+        background: #ededed;
+      }
+    }
+  }
+`;
+
+export const LogoutComponent = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #282352;
+  box-shadow: 0px 32px 70px rgba(0, 0, 0, 0.25);
+  padding: 30px;
+  width: 100%;
+  width: 360px;
+  color: #fff;
+  flex-direction: column;
+  @media (max-width: 767px) {
+    padding: 20px 15px;
+    width: 100%;
+    max-width: 360px;
+  }
+`;
+
+export const AlertIcon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+  font-size: 42px;
+  margin: 0 0 20px;
+`;
+
+export const LogoutMsg = styled.p`
+  display: flex;
+  align-items: center;
+  margin: 0 0 20px;
+  padding: 0;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 17px;
+`;
+
+export const LogoutBtnWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  button {
+    :first-child {
+      margin-right: 10px;
+    }
   }
 `;
