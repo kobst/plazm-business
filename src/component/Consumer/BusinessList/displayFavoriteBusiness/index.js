@@ -1,14 +1,14 @@
-import React from 'react';
-import styled from 'styled-components';
-import { useHistory } from 'react-router';
-import ProfileImg from '../../../../images/profile-img.png';
-import UserMessageEvents from '../../HomeSearch/BusinessListing/Events/UserMessageEvents';
-import UserMessage from '../../HomeSearch/BusinessListing/UserMessage';
+import React from "react";
+import styled from "styled-components";
+import ProfileImg from "../../../../images/profile-img.png";
+import { useHistory } from "react-router";
+import UserMessageEvents from "../../HomeSearch/BusinessListing/Events/UserMessageEvents";
+import UserMessage from "../../HomeSearch/BusinessListing/UserMessage";
 import {
   ProfileName,
   ProfileThumbBanner,
   ProfileThumbOverlay,
-} from '../../FeedContent/styled';
+} from "../../FeedContent/styled";
 
 const UserMsgWrap = styled.div`
   display: flex;
@@ -23,7 +23,7 @@ const UserMsgWrap = styled.div`
 `;
 
 /** display favorite business */
-function DisplayFavoriteBusiness({ data, setFavoriteIndex }) {
+const DisplayFavoriteBusiness = ({ data, setFavoriteIndex }) => {
   const history = useHistory();
 
   /** to display business details page */
@@ -47,8 +47,8 @@ function DisplayFavoriteBusiness({ data, setFavoriteIndex }) {
         <UserMessageEvents
           eventData={data}
           businessInfo={data.business[0]}
-          type="MyFeedEvent"
-          myFeedView
+          type={"MyFeedEvent"}
+          myFeedView={true}
           setSearchIndex={setFavoriteIndex}
         />
       ) : (
@@ -56,13 +56,13 @@ function DisplayFavoriteBusiness({ data, setFavoriteIndex }) {
         <UserMessage
           postData={data}
           businessData={data.business[0]}
-          listView
-          myFeedView
+          listView={true}
+          myFeedView={true}
           setMyFeedIndex={setFavoriteIndex}
         />
       )}
     </>
   );
-}
+};
 
 export default DisplayFavoriteBusiness;

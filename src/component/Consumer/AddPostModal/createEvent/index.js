@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { unwrapResult } from '@reduxjs/toolkit';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
-import { useDispatch, useSelector } from 'react-redux';
-import AddImageImg from '../../../../images/addImage.svg';
-import CalenderImg from '../../../../images/calender_img.png';
-import BackButton from '../../UI/BackButton';
-import SaveButton from '../../UI/SaveButton';
-import FormBody from './formBody';
-import { validate } from './validate';
-import ValueLoader from '../../../../utils/loader';
-import PostImage from '../PostImage';
-import ButtonGrey from '../../UI/ButtonGrey';
-import SelectedListing from '../SelectedListing';
-import PostEvent from '../PostEvent';
-import { addEvent } from '../../../../reducers/eventReducer';
-import error from '../../../../constants';
-import { AddEventToList } from '../../../../reducers/listReducer';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import AddImageImg from "../../../../images/addImage.svg";
+import CalenderImg from "../../../../images/calender_img.png";
+import BackButton from "../../UI/BackButton";
+import SaveButton from "../../UI/SaveButton";
+import FormBody from "./formBody";
+import { validate } from "./validate";
+import ValueLoader from "../../../../utils/loader";
+import PostImage from "../PostImage";
+import ButtonGrey from "../../UI/ButtonGrey";
+import SelectedListing from "../SelectedListing";
+import PostEvent from "../PostEvent";
+import { addEvent } from "../../../../reducers/eventReducer";
+import error from "../../../../constants";
+import { AddEventToList } from "../../../../reducers/listReducer";
 
 const bucket = process.env.REACT_APP_BUCKET;
 
@@ -106,7 +106,7 @@ const AddYourTimeLabel = styled.label`
   margin: 0 0 0 10px;
   max-width: calc(100% - 35px);
   &::after {
-    content: '*';
+    content: "*";
   }
   @media (max-width: 767px) {
     font-size: 12px;
@@ -149,7 +149,7 @@ const BottomBtnWrap = styled.div`
 `;
 
 let myInput;
-function CreateEventModal({
+const CreateEventModal = ({
   setDisplayList,
   selectedListForPost,
   setSelectedListForPost,
@@ -171,12 +171,12 @@ function CreateEventModal({
   setMentionArrayList,
   mentionArrayUser,
   setMentionArrayUser,
-}) {
+}) => {
   const [loader, setLoader] = useState(false);
-  const [imageError, setImageError] = useState('');
-  const [formError, setError] = useState('');
-  const [listError, setListError] = useState('');
-  const [response, setResponse] = useState('');
+  const [imageError, setImageError] = useState("");
+  const [formError, setError] = useState("");
+  const [listError, setListError] = useState("");
+  const [response, setResponse] = useState("");
   const user = useSelector((state) => state.user.user);
   const business = useSelector((state) => state.business.business);
   const ws = useSelector((state) => state.user.ws);
@@ -189,17 +189,17 @@ function CreateEventModal({
   const uploadImage = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
-      const idxDot = selectedFile.name.lastIndexOf('.') + 1;
+      const idxDot = selectedFile.name.lastIndexOf(".") + 1;
       const extFile = selectedFile.name
         .substr(idxDot, selectedFile.name.length)
         .toLowerCase();
       // console.log(selectedFile, extFile);
-      if (extFile === 'jpeg' || extFile === 'png' || extFile === 'jpg') {
-        setImageError('');
+      if (extFile === "jpeg" || extFile === "png" || extFile === "jpg") {
+        setImageError("");
         setImageUpload(URL.createObjectURL(e.target.files[0]));
         setImageFile(selectedFile);
       } else {
-        setImageError('Only jpg/jpeg and png,files are allowed!');
+        setImageError("Only jpg/jpeg and png,files are allowed!");
       }
     }
   };
@@ -221,17 +221,19 @@ function CreateEventModal({
   */
   const folderName = (name, id) => {
     /* to remove all special characters except space */
-    const removeSpecialCharacter = name.replace(/[^a-zA-Z ]/g, '');
+    const removeSpecialCharacter = name.replace(/[^a-zA-Z ]/g, "");
     /* to replace all spaces to underscore */
-    const replacedName = removeSpecialCharacter.split(' ').join('_');
+    const replacedName = removeSpecialCharacter.split(" ").join("_");
     /* return folder name */
-    return `${replacedName}_${id}`;
+    return replacedName + "_" + id;
   };
 
   /*
    * @desc: to change file_name
    */
-  const fileName = (name) => `${Date.now()}-${name}`;
+  const fileName = (name) => {
+    return `${Date.now()}-${name}`;
+  };
 
   /*
   @desc: add a event
@@ -243,8 +245,8 @@ function CreateEventModal({
       if (!selectedListForPost) {
         setListError(error.EVENT_LIST_ERROR);
       } else {
-        setListError('');
-        /* set loader value */
+        setListError("");
+        /*set loader value */
         setLoader(true);
         /* to upload file to s3 bucket */
         let imageUrl = null;
@@ -255,14 +257,14 @@ function CreateEventModal({
           const value = await fetch(
             `${process.env.REACT_APP_API_URL}/api/upload_photo`,
             {
-              method: 'POST',
+              method: "POST",
               headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
               },
               body: JSON.stringify({
                 Key: file_name,
                 ContentType: imageFile.type,
-                folder_name,
+                folder_name: folder_name,
               }),
             }
           );
@@ -270,9 +272,9 @@ function CreateEventModal({
           const Val = JSON.parse(body);
 
           await fetch(Val, {
-            method: 'PUT',
+            method: "PUT",
             headers: {
-              'Content-Type': imageFile.type,
+              "Content-Type": imageFile.type,
             },
             body: imageFile,
           })
@@ -296,13 +298,13 @@ function CreateEventModal({
             end_time: eventDetails.end_time,
           },
           recurring: eventDetails.eventRepeat,
-          listId: selectedListForPost || null,
+          listId: selectedListForPost ? selectedListForPost : null,
           media:
             imageFile !== null ? (imageUrl !== null ? imageUrl : null) : null,
         };
 
         /** add event */
-        const resultAction = await dispatch(addEvent({ obj, user }));
+        const resultAction = await dispatch(addEvent({ obj: obj, user: user }));
         const response = await unwrapResult(resultAction);
         if (response.data.success === true) {
           /** if any list is selected than add event to list */
@@ -317,8 +319,8 @@ function CreateEventModal({
             if (res.data.addEventToList.success === true) {
               closeModal();
               setLoader(false);
-              setEventDescription('');
-              setEventTitle('');
+              setEventDescription("");
+              setEventTitle("");
               setImageUrl(null);
               setImageCopy([]);
               setImageUpload(null);
@@ -326,19 +328,19 @@ function CreateEventModal({
           } else {
             closeModal();
             setLoader(false);
-            setEventDescription('');
-            setEventTitle('');
+            setEventDescription("");
+            setEventTitle("");
             setImageUrl(null);
             setImageCopy([]);
             setImageUpload(null);
           }
           ws.send(
             JSON.stringify({
-              action: 'event',
+              action: "event",
               event: {
                 ...response.event,
-                type: 'addEvent',
-                user,
+                type: "addEvent",
+                user: user,
                 totalComments: 0,
                 likes: [],
                 createdAt: new Date(Date.now()),
@@ -351,25 +353,25 @@ function CreateEventModal({
       if (!selectedListForPost) {
         setListError(error.EVENT_LIST_ERROR);
       } else {
-        setListError('');
+        setListError("");
       }
       setError(error.EVENT_DETAILS_REQUIRED);
     }
   };
 
-  /** cancel button functionality */
+  /**cancel button functionality */
   const cancelButton = (e) => {
     e.preventDefault();
     closeModal();
   };
 
-  /** add to a list button functionality */
+  /**add to a list button functionality */
   const listDisplay = (e) => {
     e.preventDefault();
     setDisplayList(true);
   };
 
-  /** to display calendar component */
+  /**to display calendar component */
   const displayCalendar = (e) => {
     e.preventDefault();
     setDisplayCalendar(true);
@@ -380,17 +382,17 @@ function CreateEventModal({
         <Heading>Create Event</Heading>
       </TopBar>
       <Formik
-        enableReinitialize
+        enableReinitialize={true}
         initialValues={{
           title: eventTitle,
           description: eventDescription,
         }}
-        /* validation schema */
+        /*validation schema */
         validationSchema={Yup.object(validate)}
         validateOnChange={false}
         validateOnBlur={false}
         onSubmit={(values) => {
-          /* update profile function call */
+          /*update profile function call*/
           saveEvent(values);
         }}
       >
@@ -425,7 +427,7 @@ function CreateEventModal({
                 </button>
               </AddYourPostBar>
             )}
-            {formError !== '' ? <ErrorDiv>{formError}</ErrorDiv> : null}
+            {formError !== "" ? <ErrorDiv>{formError}</ErrorDiv> : null}
             {!imageUpload && (
               <AddYourPostBar>
                 <AddYourPostLabel>Add a Picture</AddYourPostLabel>
@@ -437,7 +439,7 @@ function CreateEventModal({
                     type="file"
                     accept=".png, .jpg, .jpeg"
                     ref={(ref) => (myInput = ref)}
-                    style={{ display: 'none' }}
+                    style={{ display: "none" }}
                     disabled={loader}
                   />
                   <img
@@ -465,12 +467,12 @@ function CreateEventModal({
               setSelectedListForPost={setSelectedListForPost}
             />
             {/* to display list error */}
-            {listError !== '' ? <ErrorDiv>{listError}</ErrorDiv> : null}
+            {listError !== "" ? <ErrorDiv>{listError}</ErrorDiv> : null}
             {/* for displaying image error if any */}
-            {imageError !== '' ? <ErrorDiv>{imageError}</ErrorDiv> : null}
+            {imageError !== "" ? <ErrorDiv>{imageError}</ErrorDiv> : null}
 
             {/* for displaying the response of add list */}
-            {response !== '' ? <ErrorDiv>{response}</ErrorDiv> : <></>}
+            {response !== "" ? <ErrorDiv>{response}</ErrorDiv> : <></>}
             {/* bottom buttons bar */}
             <BottomButtonsBar>
               <BackButton disabled={loader} onClick={(e) => listDisplay(e)}>
@@ -485,7 +487,7 @@ function CreateEventModal({
                   Cancel
                 </ButtonGrey>
                 {loader && (
-                  <div style={{ marginTop: '3px' }}>
+                  <div style={{ marginTop: "3px" }}>
                     <ValueLoader />
                   </div>
                 )}
@@ -501,6 +503,6 @@ function CreateEventModal({
       </Formik>
     </PostContent>
   );
-}
+};
 
 export default CreateEventModal;

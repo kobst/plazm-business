@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { FiSearch } from 'react-icons/fi';
-import { MdCheck } from 'react-icons/md';
-import { Scrollbars } from 'react-custom-scrollbars';
-import { useDispatch, useSelector } from 'react-redux';
-import BottomButtons from '../BottomButtons';
-import Input from '../../UI/Input/Input';
-import { fetchUserLists } from '../../../../reducers/listReducer';
-import ValueLoader from '../../../../utils/loader';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import Input from "../../UI/Input/Input";
+import { FiSearch } from "react-icons/fi";
+import { MdCheck } from "react-icons/md";
+import { Scrollbars } from "react-custom-scrollbars";
+import BottomButtons from "../BottomButtons";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserLists } from "../../../../reducers/listReducer";
+import ValueLoader from "../../../../utils/loader";
 
 const AllListingsContent = styled.div`
   width: 100%;
@@ -163,7 +163,7 @@ const NoListMessage = styled.div`
   color: #fff;
 `;
 
-function AllListings({
+const AllListings = ({
   setDisplayList,
   setSelectedListForPost,
   selectedListForPost,
@@ -174,19 +174,19 @@ function AllListings({
   mentionArrayUser,
   setMentionArrayUser,
   setDisplayCreateList,
-}) {
+}) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const userListsFromStore = useSelector((state) => state.list.userLists);
   const [userListsFiltered, setUserListsFiltered] = useState([]);
   const loadingUserLists = useSelector((state) => state.list.loadingUserLists);
   const [selectedList, setSelectedList] = useState(null);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   const userLists =
     userListsFiltered.length > 0 ? userListsFiltered : userListsFromStore;
 
-  /** fetch user list */
+  /**fetch user list */
   useEffect(() => {
     if (userLists.length === 0) dispatch(fetchUserLists(user._id));
   }, [dispatch, user._id, userLists.length]);
@@ -220,78 +220,80 @@ function AllListings({
     setSearch(e.target.value);
   };
   return (
-    <AllListingsContent>
-      <SearchWrap>
-        <Input onChange={(e) => searchList(e)} />
-        <SearchIconDiv>
-          <FiSearch />
-        </SearchIconDiv>
-      </SearchWrap>
-      <AllListingHead>
-        <AllListingHeading>All lists</AllListingHeading>
-        <SelectedListed>
-          {selectedList === null ? '0' : '1'} list selected
-        </SelectedListed>
-      </AllListingHead>
-      <Scrollbars
-        autoHeight
-        autoHeightMin={0}
-        autoHeightMax={220}
-        thumbMinSize={30}
-        renderThumbVertical={(props) => (
-          <div {...props} className="thumb-vertical" />
-        )}
-        renderTrackVertical={(props) => (
-          <div {...props} className="track-vertical" />
-        )}
-        className="ScrollListing"
-      >
-        <ListingWrap>
-          {loadingUserLists ? (
-            <LoaderWrap>
-              <ValueLoader />
-            </LoaderWrap>
-          ) : userLists.length === 0 ? (
-            <NoListMessage>
-              <center>No User lists to display</center>
-            </NoListMessage>
-          ) : (
-            userLists.map((i, key) => (
-              <ListingList
-                key={key}
-                onClick={() => selectList(i._id)}
-                className={selectedList === i._id ? 'selectedList' : ''}
-              >
-                {i.name}
-                <RightTick
-                  className={
-                    selectedList === i._id
-                      ? 'RightTickImgSelected'
-                      : 'RightTickImg'
-                  }
-                >
-                  <MdCheck />
-                </RightTick>
-              </ListingList>
-            ))
+    <>
+      <AllListingsContent>
+        <SearchWrap>
+          <Input onChange={(e) => searchList(e)} />
+          <SearchIconDiv>
+            <FiSearch />
+          </SearchIconDiv>
+        </SearchWrap>
+        <AllListingHead>
+          <AllListingHeading>All lists</AllListingHeading>
+          <SelectedListed>
+            {selectedList === null ? "0" : "1"} list selected
+          </SelectedListed>
+        </AllListingHead>
+        <Scrollbars
+          autoHeight
+          autoHeightMin={0}
+          autoHeightMax={220}
+          thumbMinSize={30}
+          renderThumbVertical={(props) => (
+            <div {...props} className="thumb-vertical" />
           )}
-        </ListingWrap>
-      </Scrollbars>
-      <BottomButtons
-        type="list"
-        selectedList={selectedList}
-        setDisplayList={setDisplayList}
-        setSelectedListForPost={setSelectedListForPost}
-        setDescription={setDescription}
-        description={description}
-        mentionArrayList={mentionArrayList}
-        setMentionArrayList={setMentionArrayList}
-        mentionArrayUser={mentionArrayUser}
-        setMentionArrayUser={setMentionArrayUser}
-        setDisplayCreateList={setDisplayCreateList}
-      />
-    </AllListingsContent>
+          renderTrackVertical={(props) => (
+            <div {...props} className="track-vertical" />
+          )}
+          className="ScrollListing"
+        >
+          <ListingWrap>
+            {loadingUserLists ? (
+              <LoaderWrap>
+                <ValueLoader />
+              </LoaderWrap>
+            ) : userLists.length === 0 ? (
+              <NoListMessage><center>No User lists to display</center></NoListMessage>
+            ) : (
+              userLists.map((i, key) => {
+                return (
+                  <ListingList
+                    key={key}
+                    onClick={() => selectList(i._id)}
+                    className={selectedList === i._id ? "selectedList" : ""}
+                  >
+                    {i.name}
+                    <RightTick
+                      className={
+                        selectedList === i._id
+                          ? "RightTickImgSelected"
+                          : "RightTickImg"
+                      }
+                    >
+                      <MdCheck />
+                    </RightTick>
+                  </ListingList>
+                );
+              })
+            )}
+          </ListingWrap>
+        </Scrollbars>
+        <BottomButtons
+          type="list"
+          selectedList={selectedList}
+          setDisplayList={setDisplayList}
+          setSelectedListForPost={setSelectedListForPost}
+          setDescription={setDescription}
+          description={description}
+          mentionArrayList={mentionArrayList}
+          setMentionArrayList={setMentionArrayList}
+          mentionArrayUser={mentionArrayUser}
+          setMentionArrayUser={setMentionArrayUser}
+          setDisplayCreateList={setDisplayCreateList}
+        />
+      </AllListingsContent>
+    </>
   );
-}
+};
 
 export default AllListings;

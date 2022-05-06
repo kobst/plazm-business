@@ -1,7 +1,7 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import styled from 'styled-components';
-import Frame from '../../../images/Frame.png';
+import React from "react";
+import { useSelector } from "react-redux";
+import styled from "styled-components";
+import Frame from "../../../images/Frame.png";
 
 const ProfileLockOuter = styled.div`
   width: 100%;
@@ -27,21 +27,19 @@ const ProfileImg = styled.div`
   margin-bottom: 21px;
 `;
 
-function ProfileLock() {
-  const userProfile = useSelector((state) => state.user.selectedUser);
+const ProfileLock = () => {
+    const userProfile = useSelector((state) => state.user.selectedUser);
   return (
     <ProfileLockOuter>
       <ProfileImg>
         <img src={Frame} alt={Frame} />
       </ProfileImg>
-      <ProfileLockHeading>
-        {userProfile.name} locked Her Profile
-      </ProfileLockHeading>
+      <ProfileLockHeading>{userProfile.name} locked Her Profile</ProfileLockHeading>
       <ProfileLockContent>
         Only her friends can see what she shares on her timeline.
       </ProfileLockContent>
     </ProfileLockOuter>
   );
-}
+};
 
 export default ProfileLock;

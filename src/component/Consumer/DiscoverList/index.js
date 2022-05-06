@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { MdChevronLeft } from 'react-icons/md';
-import { useDispatch, useSelector } from 'react-redux';
-import { unwrapResult } from '@reduxjs/toolkit';
+import React, { useEffect, useState } from "react";
+import { MdChevronLeft } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { unwrapResult } from "@reduxjs/toolkit";
 import {
   clearListSearchData,
   FetchMostPopularLists,
   FetchTrendingLists,
   setListSearch,
-} from '../../../reducers/listReducer';
-import ValueLoader from '../../../utils/loader';
-import Input from '../../UI/Input/Input';
-import SearchSection from './SearchSection';
-import SliderSection from './SliderSection';
-import error from '../../../constants';
+} from "../../../reducers/listReducer";
+import ValueLoader from "../../../utils/loader";
+import Input from "../../UI/Input/Input";
+import SearchSection from "./SearchSection";
+import SliderSection from "./SliderSection";
+import error from "../../../constants";
 
-import useStore from '../useState';
+import useStore from "../useState";
 
 import {
   TopSectionWrap,
@@ -24,16 +24,16 @@ import {
   ErrorDiv,
   LoaderWrap,
   ListWraper,
-} from './styled.js';
-import ListMenu from './ListMenu';
+} from "./styled.js";
+import ListMenu from "./ListMenu";
 
-function DiscoverList(
+const DiscoverList = (
   {
     // setDiscoverBtn,
     // setSelectedListId,
     // setReadMore
   }
-) {
+) => {
   // const dispatch = useDispatch();
   // const loadindTrending = useSelector(
   //   (state) => state.list.loadingTrendingLists
@@ -203,6 +203,6 @@ function DiscoverList(
   //     <ValueLoader />
   //   </LoaderWrap>
   // );
-}
+};
 
 export default DiscoverList;

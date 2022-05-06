@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { useHistory } from 'react-router';
-import ProfileImg from '../../../../images/profile-img.png';
-import UserMessage from '../../HomeSearch/BusinessListing/UserMessage';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import ProfileImg from "../../../../images/profile-img.png";
+import UserMessage from "../../HomeSearch/BusinessListing/UserMessage";
+import { useHistory } from "react-router";
 import {
   checkMime,
   replaceBucket,
-} from '../../../../utilities/checkResizedImage';
+} from "../../../../utilities/checkResizedImage";
 
-import useStore from '../../useState';
-import { InnerListBanner } from '../../FeedContent/styled';
+import useStore from "../../useState";
+import { InnerListBanner } from "../../FeedContent/styled";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -34,7 +34,7 @@ const UserMsgWrap = styled.div`
   padding: 15px 12px 0 12px;
   position: relative;
   &:after {
-    content: '';
+    content: "";
     position: absolute;
     width: 1px;
     height: calc(100% - 20px);
@@ -135,7 +135,7 @@ const TitleBarWrap = styled.div`
 `;
 
 /** display business details */
-function DisplayPostInAList({ data, id }) {
+const DisplayPostInAList = ({ data, id }) => {
   const setSelectedListId = useStore((state) => state.setSelectedListId);
   const setListIndex = useStore((state) => state.setListIndex);
 
@@ -177,39 +177,41 @@ function DisplayPostInAList({ data, id }) {
   };
 
   return data ? (
-    <DescriptionViewItem>
-      <div
-        className={id % 2 === 0 ? 'background-active' : 'background-inactive'}
-      >
-        <UserMsgWrap>
-          <UserMessageContent>
-            <ProfileNameHeader>
-              <TitleBarWrap>
-                <InnerListBanner>
-                  <img src={image} onError={() => checkError()} alt="" />
-                  {/* <ProfileThumbOverlay /> */}
-                </InnerListBanner>
-                <ProfileName>
-                  <div onClick={() => displayBusinessDetail()}>
-                    {data.business[0].company_name}
-                  </div>
-                </ProfileName>
-              </TitleBarWrap>
-            </ProfileNameHeader>
-          </UserMessageContent>
-        </UserMsgWrap>
+    <>
+      <DescriptionViewItem>
+        <div
+          className={id % 2 === 0 ? "background-active" : "background-inactive"}
+        >
+          <UserMsgWrap>
+            <UserMessageContent>
+              <ProfileNameHeader>
+                <TitleBarWrap>
+                  <InnerListBanner>
+                    <img src={image} onError={() => checkError()} alt="" />
+                    {/* <ProfileThumbOverlay /> */}
+                  </InnerListBanner>
+                  <ProfileName>
+                    <div onClick={() => displayBusinessDetail()}>
+                      {data.business[0].company_name}
+                    </div>
+                  </ProfileName>
+                </TitleBarWrap>
+              </ProfileNameHeader>
+            </UserMessageContent>
+          </UserMsgWrap>
 
-        <UserMessage
-          postData={data}
-          businessData={data.business[0]}
-          listView
-          setSelectedListId={setSelectedListId}
-          listDescriptionView
-          setListIndex={setListIndex}
-        />
-      </div>
-    </DescriptionViewItem>
+          <UserMessage
+            postData={data}
+            businessData={data.business[0]}
+            listView={true}
+            setSelectedListId={setSelectedListId}
+            listDescriptionView={true}
+            setListIndex={setListIndex}
+          />
+        </div>
+      </DescriptionViewItem>
+    </>
   ) : null;
-}
+};
 
 export default DisplayPostInAList;

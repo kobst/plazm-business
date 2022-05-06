@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { useHistory } from 'react-router-dom';
-import { Scrollbars } from 'react-custom-scrollbars';
-import { useSelector } from 'react-redux';
-import ProfileImg from '../../../../../../images/profile-img.png';
-import ReplyInput from './ReplyInput';
-import LikesBar from '../LikeBar';
-import ValueLoader from '../../../../../../utils/loader';
-import ScrollToBottom1 from './ScrollToBottom1';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { useHistory } from "react-router-dom";
+import ProfileImg from "../../../../../../images/profile-img.png";
+import ReplyInput from "./ReplyInput";
+import LikesBar from "../LikeBar";
+import { Scrollbars } from "react-custom-scrollbars";
+import { useSelector } from "react-redux";
+import ValueLoader from "../../../../../../utils/loader";
+import ScrollToBottom1 from "./ScrollToBottom1";
 import {
   checkMime,
   replaceBucket,
-} from '../../../../../../utilities/checkResizedImage';
-import ReplyImage from '../../UserMessage/replyImage';
+} from "../../../../../../utilities/checkResizedImage";
+import ReplyImage from "../../UserMessage/replyImage";
 
-const reactStringReplace = require('react-string-replace');
+const reactStringReplace = require("react-string-replace");
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -110,10 +110,17 @@ const LoaderWrap = styled.div`
   align-items: center;
   margin: 30px 0 10px;
 `;
-function Comments({ i, eventData, displayComments, setFlag, flag, business }) {
+const Comments = ({
+  i,
+  eventData,
+  displayComments,
+  setFlag,
+  flag,
+  business,
+}) => {
   const [displayReply, setDisplayReply] = useState(false);
   const [displayReplyInput, setDisplayReplyInput] = useState(false);
-  const [replyDescription, setReplyDescription] = useState('');
+  const [replyDescription, setReplyDescription] = useState("");
   const [image, setImage] = useState(null);
   const ws = useSelector((state) => state.user.ws);
   const loadingReplies = useSelector(
@@ -130,34 +137,34 @@ function Comments({ i, eventData, displayComments, setFlag, flag, business }) {
       setImage(ProfileImg);
     }
   }, [i]);
-
+  
   const history = useHistory();
 
   /** to add reply function */
   const addReply = async (obj) => {
     ws.send(
       JSON.stringify({
-        action: 'message',
-        commentId: obj._id, // commentId
-        userId: obj.userId, // userId
-        comment: `${obj.replyUser} ${obj.body}`,
+        action: "message",
+        commentId: obj._id, //commentId
+        userId: obj.userId, //userId
+        comment: obj.replyUser + " " + obj.body,
         postId: obj.postId,
         businessId: business._id,
         taggedUsers: obj.taggedUsers,
-        type: 'Event',
+        type: "Event",
       })
     );
-    setReplyDescription('');
+    setReplyDescription("");
   };
 
   /** to highlight the user mentions mentioned in post description */
   const findDesc = (value, mentions) => {
     if (mentions.length > 0) {
       for (let i = 0; i < mentions.length; i++) {
-        if (value.search(new RegExp(mentions[i].name, 'g') !== -1)) {
+        if (value.search(new RegExp(mentions[i].name, "g") !== -1)) {
           return (
             <div>
-              {reactStringReplace(value, `@${mentions[i].name}`, (match, j) => (
+              {reactStringReplace(value, "@" + mentions[i].name, (match, j) => (
                 <span
                   className="mentionData"
                   onClick={() => history.push(`/u/${mentions[i]._id}`)}
@@ -167,8 +174,9 @@ function Comments({ i, eventData, displayComments, setFlag, flag, business }) {
               ))}
             </div>
           );
+        } else {
+          return <div>{value}</div>;
         }
-        return <div>{value}</div>;
       }
     } else {
       return value;
@@ -191,11 +199,11 @@ function Comments({ i, eventData, displayComments, setFlag, flag, business }) {
         </ProfileThumb>
         <ProfileNameWrap>
           <ProfileName onClick={() => history.push(`/u/${i.userId._id}`)}>
-            {i.userId.name}{' '}
+            {i.userId.name}{" "}
           </ProfileName>
           <ChatInput>
-            {' '}
-            <p style={{ cursor: 'default' }}>
+            {" "}
+            <p style={{ cursor: "default" }}>
               {findDesc(i.body, i.taggedUsers)}
             </p>
           </ChatInput>
@@ -236,18 +244,18 @@ function Comments({ i, eventData, displayComments, setFlag, flag, business }) {
                           </ProfileThumb>
                           <ProfileNameWrap>
                             <ProfileName>
-                              <span style={{ cursor: 'default' }}>by</span>
+                              <span style={{ cursor: "default" }}>by</span>
                               <span
                                 onClick={() =>
-                                  window.open(`/u/${j.userId._id}`, '_self')
+                                  window.open(`/u/${j.userId._id}`, "_self")
                                 }
-                                style={{ color: '#ff2e9a' }}
+                                style={{ color: "#ff2e9a" }}
                               >
                                 {j.userId.name}
-                              </span>{' '}
+                              </span>{" "}
                             </ProfileName>
                             <ChatInput>
-                              {' '}
+                              {" "}
                               {findDesc(j.body, j.taggedUsers)}
                             </ChatInput>
                             <LikesBar
@@ -269,21 +277,23 @@ function Comments({ i, eventData, displayComments, setFlag, flag, business }) {
             </ReplyWrap>
           </Scrollbars>
           {displayReply || displayReplyInput ? (
-            <ReplyInput
-              type="reply"
-              eventId={eventData._id}
-              displayComments={displayComments}
-              replyDescription={replyDescription}
-              setReplyDescription={setReplyDescription}
-              commentId={i._id}
-              addReply={addReply}
-              name={i.userId.name}
-            />
+            <>
+              <ReplyInput
+                type="reply"
+                eventId={eventData._id}
+                displayComments={displayComments}
+                replyDescription={replyDescription}
+                setReplyDescription={setReplyDescription}
+                commentId={i._id}
+                addReply={addReply}
+                name={i.userId.name}
+              />
+            </>
           ) : null}
         </ProfileNameWrap>
       </ProfileNameHeader>
     </UserMessageContent>
   );
-}
+};
 
 export default Comments;

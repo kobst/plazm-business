@@ -1,20 +1,19 @@
-import React, { useState, useRef, useEffect } from 'react';
-import styled from 'styled-components';
-import { MdNotificationsActive, MdMessage } from 'react-icons/md';
-import { CgLock } from 'react-icons/cg';
-import { BsThreeDotsVertical } from 'react-icons/bs';
-import { useDispatch, useSelector } from 'react-redux';
-import UploadImg from '../../../../images/upload-img.jpg';
-import DropdwonArrowTop from '../../../../images/top_arrow.png';
+import React, { useState, useRef, useEffect } from "react";
+import styled from "styled-components";
+import { MdNotificationsActive, MdMessage } from "react-icons/md";
+import UploadImg from "../../../../images/upload-img.jpg";
+import DropdwonArrowTop from "../../../../images/top_arrow.png";
 // import { FaSort } from "react-icons/fa";
-import FollwersImg from '../../../../images/profile-img.png';
-import CheckboxSquare from '../../UI/CheckboxSquare';
-import { deleteUserCreatedList } from '../../../../reducers/listReducer';
+import { CgLock } from "react-icons/cg";
+import FollwersImg from "../../../../images/profile-img.png";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import CheckboxSquare from "../../UI/CheckboxSquare";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteUserCreatedList } from "../../../../reducers/listReducer";
 import {
   checkMime,
   replaceBucket,
-} from '../../../../utilities/checkResizedImage';
-
+} from "../../../../utilities/checkResizedImage";
 const ListSection = styled.div`
   width: 100%;
   position: relative;
@@ -291,7 +290,7 @@ const DropdownContent = styled.div`
     background: url(${DropdwonArrowTop}) no-repeat top center;
     width: 15px;
     height: 15px;
-    content: ' ';
+    content: " ";
     top: 23px;
     position: relative;
     margin: 0 auto;
@@ -324,12 +323,12 @@ const DropdownContent = styled.div`
   }
 `;
 const CustomCheckSquare = styled.div``;
-function DisplayListSection({
+const DisplayListSection = ({
   data,
   setSelectedListId,
   selectedList,
   setSelectedList,
-}) {
+}) => {
   const user = useSelector((state) => state.user.user);
   const [uploadMenu, setUploadMenu] = useState(false);
   const menuRef = useRef(null);
@@ -346,9 +345,9 @@ function DisplayListSection({
   }, [data]);
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -380,94 +379,98 @@ function DisplayListSection({
   };
 
   return (
-    <ListSection
-      onClick={() => setSelectedListId(data._id)}
-      className={selectedList === data._id ? 'SelectedListItem' : ''}
-    >
-      <ListImageWrap>
-        <img src={image} alt="" onError={() => errorFunction()} />
-      </ListImageWrap>
-      <ListDetailWrap>
-        <ListHeadingWrap>
-          <ListHeading>{data.name}</ListHeading>
-          <DotsDiv ref={menuRef}>
-            <BsThreeDotsVertical onClick={toggleUploadMenu} />
-            {uploadMenu && (
-              <DropdownContent>
-                <ul>
-                  <li onClick={() => setSelectedListId(data._id)}>View</li>
+    <>
+      <ListSection
+        onClick={() => setSelectedListId(data._id)}
+        className={selectedList === data._id ? "SelectedListItem" : ""}
+      >
+        <ListImageWrap>
+          <img src={image} alt="" onError={() => errorFunction()} />
+        </ListImageWrap>
+        <ListDetailWrap>
+          <ListHeadingWrap>
+            <ListHeading>{data.name}</ListHeading>
+            <DotsDiv ref={menuRef}>
+              <BsThreeDotsVertical onClick={toggleUploadMenu} />
+              {uploadMenu && (
+                <DropdownContent>
+                  <ul>
+                    <li onClick={() => setSelectedListId(data._id)}>View</li>
 
-                  <li>Detailed View</li>
-                  <li>Make Public</li>
-                  {data.ownerId === user._id ? (
-                    <li onClick={() => deleteList()}>Delete</li>
-                  ) : null}
-                </ul>
-              </DropdownContent>
-            )}
-          </DotsDiv>
-        </ListHeadingWrap>
+                    <li>Detailed View</li>
+                    <li>Make Public</li>
+                    {data.ownerId === user._id ? (
+                      <li onClick={() => deleteList()}>Delete</li>
+                    ) : null}
+                  </ul>
+                </DropdownContent>
+              )}
+            </DotsDiv>
+          </ListHeadingWrap>
 
-        <FollowedSection>
-          {data.subscribers.length > 0 ? (
-            <FollowedHeading>Followed by</FollowedHeading>
-          ) : null}
-          <FollowedListingWrap>
-            <FollowersListing>
-              {data.subscribers.length > 0
-                ? data.subscribers.slice(0, 8).map((i, key) => (
-                    <FollowersList key={key}>
-                      <img
-                        src={
-                          i.userId && i.userId.photo
-                            ? i.userId.photo
-                            : FollwersImg
-                        }
-                        alt=""
-                      />
-                    </FollowersList>
-                  ))
-                : null}
-            </FollowersListing>
-            {data.subscribers.length > 7 ? (
-              <MoreSection>+{data.subscribers.length - 7} more</MoreSection>
+          <FollowedSection>
+            {data.subscribers.length > 0 ? (
+              <FollowedHeading>Followed by</FollowedHeading>
             ) : null}
-          </FollowedListingWrap>
-        </FollowedSection>
+            <FollowedListingWrap>
+              <FollowersListing>
+                {data.subscribers.length > 0
+                  ? data.subscribers.slice(0, 8).map((i, key) => {
+                      return (
+                        <FollowersList key={key}>
+                          <img
+                            src={
+                              i.userId && i.userId.photo
+                                ? i.userId.photo
+                                : FollwersImg
+                            }
+                            alt=""
+                          />
+                        </FollowersList>
+                      );
+                    })
+                  : null}
+              </FollowersListing>
+              {data.subscribers.length > 7 ? (
+                <MoreSection>+{data.subscribers.length - 7} more</MoreSection>
+              ) : null}
+            </FollowedListingWrap>
+          </FollowedSection>
 
-        <BottomMoreSections>
-          <LeftDiv>
-            <FirstDiv>
-              <span>0</span>
-              <MdNotificationsActive />
-            </FirstDiv>
-            <FirstDiv>
-              <span>0</span>
-              <MdMessage />
-            </FirstDiv>
-          </LeftDiv>
+          <BottomMoreSections>
+            <LeftDiv>
+              <FirstDiv>
+                <span>0</span>
+                <MdNotificationsActive />
+              </FirstDiv>
+              <FirstDiv>
+                <span>0</span>
+                <MdMessage />
+              </FirstDiv>
+            </LeftDiv>
 
-          <LastDiv>
-            {!data.isPublic && (
-              <LockDiv>
-                <CgLock />
-              </LockDiv>
-            )}
+            <LastDiv>
+              {!data.isPublic && (
+                <LockDiv>
+                  <CgLock />
+                </LockDiv>
+              )}
 
-            {data.ownerId === user._id ? (
-              <MyListBtn> My lists</MyListBtn>
-            ) : (
-              <SubscribedBtn>Subscribed</SubscribedBtn>
-            )}
+              {data.ownerId === user._id ? (
+                <MyListBtn> My lists</MyListBtn>
+              ) : (
+                <SubscribedBtn>Subscribed</SubscribedBtn>
+              )}
 
-            <CustomCheckSquare>
-              <CheckboxSquare />
-            </CustomCheckSquare>
-          </LastDiv>
-        </BottomMoreSections>
-      </ListDetailWrap>
-    </ListSection>
+              <CustomCheckSquare>
+                <CheckboxSquare />
+              </CustomCheckSquare>
+            </LastDiv>
+          </BottomMoreSections>
+        </ListDetailWrap>
+      </ListSection>
+    </>
   );
-}
+};
 
 export default DisplayListSection;

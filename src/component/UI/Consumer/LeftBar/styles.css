@@ -78,7 +78,7 @@
   /* Opera */
 }
 
-.MainTabs [role='tabpanel'] {
+.MainTabs [role="tabpanel"] {
   display: none;
   width: 544px;
   position: absolute;
@@ -141,6 +141,7 @@
 }
 
 @-moz-keyframes fadein {
+
   /* Firefox */
   from {
     opacity: 0;
@@ -152,6 +153,7 @@
 }
 
 @-webkit-keyframes fadein {
+
   /* Safari and Chrome */
   from {
     opacity: 0;
@@ -163,6 +165,7 @@
 }
 
 @-o-keyframes fadein {
+
   /* Opera */
   from {
     opacity: 0;
@@ -177,11 +180,9 @@
   display: block;
 }
 
-.MainTabs .react-tabs__tab {
-}
+.MainTabs .react-tabs__tab {}
 
-.MainTabs .react-tabs__tab--selected {
-}
+.MainTabs .react-tabs__tab--selected {}
 
 .MainTabs #react-tabs-1 {
   display: none;
@@ -251,8 +252,9 @@
 }
 
 @media (max-width: 767px) {
+
   .MainTabs .react-tabs__tab-panel,
-  .MainTabs [role='tabpanel'] {
+  .MainTabs [role="tabpanel"] {
     left: 50px;
     width: 300px;
     height: 100%;

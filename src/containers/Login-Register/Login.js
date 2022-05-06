@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import './style.css';
-import { Auth } from 'aws-amplify';
-import { getMessage } from '../../config';
-import ValueLoader from '../../utils/loader';
-import history from '../../utils/history';
-import Wrapper from '../../component/Login-Register/Wrapper';
-import LoginForm from '../../component/Login-Register/Form-Components/Login-Form';
+import React, { useState, useEffect } from "react";
+import "./style.css";
+import { Auth } from "aws-amplify";
+import { getMessage } from "../../config";
+import ValueLoader from "../../utils/loader";
+import history from "../../utils/history";
+import Wrapper from "../../component/Login-Register/Wrapper";
+import LoginForm from "../../component/Login-Register/Form-Components/Login-Form";
 
 const renderMessage = getMessage();
 
@@ -25,7 +25,7 @@ const Login = (props) => {
     let updateUser = async (authState) => {
       try {
         await Auth.currentAuthenticatedUser();
-        history.push('/business');
+        history.push("/business");
         window.location.reload();
       } catch {
         setLoginValue(true);
@@ -42,15 +42,14 @@ const Login = (props) => {
     })
       // eslint-disable-next-line no-sequences
       .then((data) => {
-        if (data.attributes['custom:type'] === 'business')
-          history.push('/business');
+        if (data.attributes["custom:type"] === "business") history.push("/business");
         else if (
-          data.attributes['custom:type'] === 'curator' ||
-          data.attributes['custom:type'] === 'customer' ||
-          data.attributes['custom:type'] === 'consumer'
+          data.attributes["custom:type"] === "curator" ||
+          data.attributes["custom:type"] === "customer" ||
+          data.attributes["custom:type"] === "consumer"
         )
-          history.push('/');
-        else history.push('/business/login');
+          history.push("/");
+        else history.push("/business/login");
         window.location.reload();
       })
       .catch((err) => {
@@ -62,8 +61,7 @@ const Login = (props) => {
 
   function validateEmail(user) {
     // eslint-disable-next-line no-useless-escape
-    const re =
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(user).toLowerCase());
   }
 
@@ -104,9 +102,9 @@ const Login = (props) => {
     setLoader(false);
     setuserError(false);
     setPasswordError(false);
-    if (e.target.id === 'username') {
+    if (e.target.id === "username") {
       setUser(e.target.value.trim());
-    } else if (e.target.id === 'password') {
+    } else if (e.target.id === "password") {
       setPassword(e.target.value);
     }
   };
@@ -119,7 +117,7 @@ const Login = (props) => {
           page="login"
           heading={renderMessage.Welcome}
           welcomeMessage={
-            type.includes('business')
+            type.includes("business")
               ? renderMessage.Login_Mess
               : renderMessage.Login_Mess_Consumer
           }
@@ -137,7 +135,7 @@ const Login = (props) => {
           />
         </Wrapper>
       ) : (
-        <div style={{ textAlign: 'center', margin: ' 40px auto 0' }}>
+        <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
           <ValueLoader />
         </div>
       )}

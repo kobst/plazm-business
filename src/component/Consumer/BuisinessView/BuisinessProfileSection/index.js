@@ -1,12 +1,12 @@
-import React from 'react';
-import styled from 'styled-components';
-import { useSelector } from 'react-redux';
-import { MdKeyboardArrowUp } from 'react-icons/md';
-import ProfileImg from '../../../../images/profile-img.png';
-import FacebookImg from '../../../../images/Facebook-new.svg';
-import TwitterImg from '../../../../images/Twitter-new.svg';
-import LinkedInImg from '../../../../images/Linkedin-new.svg';
-import InstagramImg from '../../../../images/Instagram-new.svg';
+import React from "react";
+import styled from "styled-components";
+import ProfileImg from "../../../../images/profile-img.png";
+import FacebookImg from "../../../../images/Facebook-new.svg";
+import TwitterImg from "../../../../images/Twitter-new.svg";
+import LinkedInImg from "../../../../images/Linkedin-new.svg";
+import InstagramImg from "../../../../images/Instagram-new.svg";
+import { useSelector } from "react-redux";
+import { MdKeyboardArrowUp } from "react-icons/md";
 
 const ArrowDown = styled.div`
   background: #ff2e9a;
@@ -125,84 +125,88 @@ const SocialIcon = styled.div`
   cursor: pointer;
 `;
 
-function BuisinessProfileSection({ setDisplayBusinessProfile }) {
+const BuisinessProfileSection = ({ setDisplayBusinessProfile }) => {
   const businessProfile = useSelector((state) => state.business.business)[0];
 
   return (
-    <BuisinessViewContent>
-      <LeftSide>
-        <LeftHeader>
-          <BusinessIcon>
-            <img
-              src={
-                businessProfile.default_image_url
-                  ? businessProfile.default_image_url
-                  : ProfileImg
-              }
-              alt=""
-            />
-          </BusinessIcon>
-          <BusinessNameWrap>
-            <BusinessName>
-              <span>{businessProfile.company_name}</span>
-            </BusinessName>
-            <SocialIconsWrap>
-              {businessProfile.handles.instagram ? (
-                <a
-                  href={businessProfile.handles.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <SocialIcon>
-                    <img src={InstagramImg} alt="" />
-                  </SocialIcon>
-                </a>
-              ) : null}
-              {businessProfile.handles.twitter ? (
-                <a
-                  href={businessProfile.handles.twitter}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <SocialIcon>
-                    <img src={TwitterImg} alt="" />
-                  </SocialIcon>
-                </a>
-              ) : null}
-              {businessProfile.handles.linkedin ? (
-                <a
-                  href={businessProfile.handles.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <SocialIcon>
-                    <img src={LinkedInImg} alt="" />
-                  </SocialIcon>
-                </a>
-              ) : null}
-              {businessProfile.handles.facebook ? (
-                <a
-                  href={businessProfile.handles.facebook}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <SocialIcon>
-                    <img src={FacebookImg} alt="" />
-                  </SocialIcon>
-                </a>
-              ) : null}
-            </SocialIconsWrap>
-          </BusinessNameWrap>
-        </LeftHeader>
-      </LeftSide>
+    <>
+      <BuisinessViewContent>
+        <LeftSide>
+          <LeftHeader>
+            <BusinessIcon>
+              <img
+                src={
+                  businessProfile.default_image_url
+                    ? businessProfile.default_image_url
+                    : ProfileImg
+                }
+                alt=""
+              />
+            </BusinessIcon>
+            <BusinessNameWrap>
+              <BusinessName>
+                <span>{businessProfile.company_name}</span>
+              </BusinessName>
+              <SocialIconsWrap>
+                {businessProfile.handles.instagram ? (
+                  <a
+                    href={businessProfile.handles.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <SocialIcon>
+                      <img src={InstagramImg} alt="" />
+                    </SocialIcon>
+                  </a>
+                ) : null}
+                {businessProfile.handles.twitter ? (
+                  <a
+                    href={businessProfile.handles.twitter}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <SocialIcon>
+                      <img src={TwitterImg} alt="" />
+                    </SocialIcon>
+                  </a>
+                ) : null}
+                {businessProfile.handles.linkedin ? (
+                  <a
+                    href={businessProfile.handles.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <SocialIcon>
+                      <img src={LinkedInImg} alt="" />
+                    </SocialIcon>
+                  </a>
+                ) : null}
+                {businessProfile.handles.facebook ? (
+                  <a
+                    href={businessProfile.handles.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <SocialIcon>
+                      <img src={FacebookImg} alt="" />
+                    </SocialIcon>
+                  </a>
+                ) : null}
+              </SocialIconsWrap>
+            </BusinessNameWrap>
+          </LeftHeader>
+        </LeftSide>
 
-      {businessProfile.userSub === null ? (
-        <ArrowDown>
-          <MdKeyboardArrowUp onClick={() => setDisplayBusinessProfile(false)} />
-        </ArrowDown>
-      ) : null}
-    </BuisinessViewContent>
+        {businessProfile.userSub === null ? (
+          <ArrowDown>
+            <MdKeyboardArrowUp
+              onClick={() => setDisplayBusinessProfile(false)}
+            />
+          </ArrowDown>
+        ) : null}
+      </BuisinessViewContent>
+    </>
   );
-}
+};
 
 export default BuisinessProfileSection;

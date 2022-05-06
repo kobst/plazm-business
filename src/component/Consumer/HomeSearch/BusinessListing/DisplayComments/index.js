@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import ReactTooltip from 'react-tooltip';
-import { RiArrowDropRightFill } from 'react-icons/ri';
-import { useHistory } from 'react-router-dom';
-import Comments from '../UserMessage/Comments';
-import ProfileImg from '../../../../../images/profile-img.png';
-import LikesBar from '../LikesBar';
+import React, { useState } from "react";
+import styled from "styled-components";
+import ReactTooltip from "react-tooltip";
+import { RiArrowDropRightFill } from "react-icons/ri";
+import Comments from "../UserMessage/Comments";
+import ProfileImg from "../../../../../images/profile-img.png";
+import LikesBar from "../LikesBar";
+import { useHistory } from "react-router-dom";
 
-const reactStringReplace = require('react-string-replace');
+const reactStringReplace = require("react-string-replace");
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -38,7 +38,7 @@ const ProfileNameHeader = styled.div`
   margin: 15px 0;
   padding-left: 40px;
   &:before {
-    content: '';
+    content: "";
     position: absolute;
     left: 26px;
     background: #878787;
@@ -150,39 +150,39 @@ const DescriptionBox = styled.div`
   }
 `;
 
-function DisplayComment({ postData, businessData, setSelectedListId }) {
+const DisplayComment = ({ postData, businessData, setSelectedListId }) => {
   const [displayComments, setDisplayComments] = useState(false);
   const [displayCommentInput, setDisplayCommentInput] = useState(false);
   const [flag, setFlag] = useState(false);
-  const history = useHistory();
+  const history = useHistory()
 
   /** to highlight the user mentions mentioned in post description */
   const findDesc = (value, mentions, mentionsList) => {
     let divContent = value;
     if (mentions.length > 0 && mentionsList.length > 0) {
-      const arr = [];
-      let data;
+      let arr = [],
+        data;
       for (let i = 0; i < mentions.length; i++) {
-        if (value.includes(`@${mentions[i].name}`)) {
+        if (value.includes("@" + mentions[i].name)) {
           arr.push({
-            name: `@${mentions[i].name}`,
+            name: "@" + mentions[i].name,
             id: mentions[i]._id,
-            type: 'name',
+            type: "name",
           });
         }
       }
       for (let i = 0; i < mentionsList.length; i++) {
-        if (value.includes(`@${mentionsList[i].name}`)) {
+        if (value.includes("@" + mentionsList[i].name)) {
           arr.push({
-            name: `@${mentionsList[i].name}`,
+            name: "@" + mentionsList[i].name,
             id: mentionsList[i]._id,
-            type: 'list',
+            type: "list",
           });
         }
       }
       for (let i = 0; i < arr.length; i++) {
         if (i === 0) {
-          if (arr[i].type === 'list') {
+          if (arr[i].type === "list")
             data = reactStringReplace(value, arr[i].name, (match, j) => (
               <span
                 key={j}
@@ -192,7 +192,7 @@ function DisplayComment({ postData, businessData, setSelectedListId }) {
                 {match}
               </span>
             ));
-          } else {
+          else
             data = reactStringReplace(value, arr[i].name, (match, j) => (
               <span
                 key={j}
@@ -202,37 +202,36 @@ function DisplayComment({ postData, businessData, setSelectedListId }) {
                 {match}
               </span>
             ));
-          }
-        } else if (arr[i].type === 'list') {
-          data = reactStringReplace(data, arr[i].name, (match, j) => (
-            <span
-              key={j}
-              className="mentionData"
-              onClick={() => setSelectedListId(arr[i].id)}
-            >
-              {match}
-            </span>
-          ));
         } else {
-          data = reactStringReplace(data, arr[i].name, (match, j) => (
-            <span
-              key={j}
-              className="mentionData"
-              onClick={() => history.push(`/u/${arr[i].id}`)}
-            >
-              {match}
-            </span>
-          ));
+          if (arr[i].type === "list")
+            data = reactStringReplace(data, arr[i].name, (match, j) => (
+              <span
+                key={j}
+                className="mentionData"
+                onClick={() => setSelectedListId(arr[i].id)}
+              >
+                {match}
+              </span>
+            ));
+          else
+            data = reactStringReplace(data, arr[i].name, (match, j) => (
+              <span
+                key={j}
+                className="mentionData"
+                onClick={() => history.push(`/u/${arr[i].id}`)}
+              >
+                {match}
+              </span>
+            ));
         }
       }
       return data;
-    }
-    if (mentions.length > 0) {
+    } else if (mentions.length > 0) {
       for (let i = 0; i < mentions.length; i++) {
-        if (value.search(new RegExp(`@${mentions[i].name}`, 'g') !== -1)) {
+        if (value.search(new RegExp("@" + mentions[i].name, "g") !== -1)) {
           return (
             <div>
-              {reactStringReplace(value, `@${mentions[i].name}`, (match, j) => (
+              {reactStringReplace(value, "@" + mentions[i].name, (match, j) => (
                 <span
                   className="mentionData"
                   onClick={() => history.push(`/u/${mentions[i]._id}`)}
@@ -242,114 +241,122 @@ function DisplayComment({ postData, businessData, setSelectedListId }) {
               ))}
             </div>
           );
+        } else {
+          return <div>{value}</div>;
         }
-        return <div>{value}</div>;
       }
     } else if (mentionsList.length > 0) {
       mentionsList.map((v) => {
-        const re = new RegExp(`@${v.name}`, 'g');
+        let re = new RegExp("@" + v.name, "g");
         divContent = divContent.replace(
           re,
-          `<span className='mentionData'> ${`@${v.name}`}  </span>`
+          `<span className='mentionData'> ${"@" + v.name}  </span>`
         );
         return divContent;
       });
       if (mentionsList.length !== 0) {
-        return <div dangerouslySetInnerHTML={{ __html: divContent }} />;
+        return (
+          <>
+            <div dangerouslySetInnerHTML={{ __html: divContent }}></div>
+          </>
+        );
+      } else {
+        return value;
       }
-      return value;
     } else {
       return value;
     }
   };
   return (
-    <UserMsgWrap>
-      <UserMessageContent>
-        <ProfileNameHeader>
-          <ProfileThumb>
-            <img
-              src={
-                postData.itemId.ownerId === null ||
-                postData.itemId.ownerId.length === 0
-                  ? businessData.default_image_url
-                  : postData.itemId.ownerId[0].photo !== '' &&
-                    postData.itemId.ownerId[0].photo !== null
-                  ? postData.itemId.ownerId[0].photo
-                  : ProfileImg
-              }
-              alt=""
-            />
-          </ProfileThumb>
-          <ProfileNameWrap>
-            <ProfileName>
-              {postData.userId === null || postData.userId.length === 0
-                ? businessData.company_name
-                : postData.userId[0].name}{' '}
-              {postData.listId !== null && postData.listId.length !== 0 ? (
-                <RightArrowSec>
-                  <ArrowRight>
-                    <RiArrowDropRightFill />
-                  </ArrowRight>
-                  <DescriptionBox>
-                    <div
-                      data-for="custom-class"
-                      data-tip={postData.listId[0].name}
-                    >
-                      <span>{postData.listId[0].name}</span>
-                    </div>
-                    <ReactTooltip
-                      id="custom-class"
-                      className="extraClass"
-                      effect="solid"
-                      backgroundColor="#ff2e9a"
-                      textColor="white"
-                    />
-                  </DescriptionBox>
-                </RightArrowSec>
-              ) : null}
-            </ProfileName>
-            <ChatInput>
-              {findDesc(
-                postData.itemId.data,
-                postData.itemId.taggedUsers,
-                postData.itemId.taggedLists
-              )}
-            </ChatInput>
-            <LikesBar
-              type="disabled"
-              totalLikes={postData.itemId.likes.length}
-              totalComments={
-                postData.totalComments.length > 0
-                  ? postData.totalComments[0].totalCount
-                  : 0
-              }
-              date={new Date(postData.itemId.createdAt)}
-              setDisplayComments={setDisplayComments}
-              displayComments={displayComments}
-              postId={postData._id}
-              postLikes={postData.itemId.likes}
-              displayCommentInput={displayCommentInput}
-              setDisplayCommentInput={setDisplayCommentInput}
-              setFlag={setFlag}
-              flag={flag}
-              business={businessData}
-            />
-          </ProfileNameWrap>
-        </ProfileNameHeader>
-      </UserMessageContent>
+    <>
+      <UserMsgWrap>
+        <UserMessageContent>
+          <ProfileNameHeader>
+            <ProfileThumb>
+              <img
+                src={
+                  postData.itemId.ownerId === null ||
+                  postData.itemId.ownerId.length === 0
+                    ? businessData.default_image_url
+                    : postData.itemId.ownerId[0].photo !== "" &&
+                      postData.itemId.ownerId[0].photo !== null
+                    ? postData.itemId.ownerId[0].photo
+                    : ProfileImg
+                }
+                alt=""
+              />
+            </ProfileThumb>
+            <ProfileNameWrap>
+              <ProfileName>
+                {postData.userId === null || postData.userId.length === 0
+                  ? businessData.company_name
+                  : postData.userId[0].name}{" "}
+                {postData.listId !== null && postData.listId.length !== 0 ? (
+                  <RightArrowSec>
+                    <ArrowRight>
+                      <RiArrowDropRightFill />
+                    </ArrowRight>
+                    <DescriptionBox>
+                      <div
+                        data-for="custom-class"
+                        data-tip={postData.listId[0].name}
+                      >
+                        <span>{postData.listId[0].name}</span>
+                      </div>
+                      <ReactTooltip
+                        id="custom-class"
+                        className="extraClass"
+                        effect="solid"
+                        backgroundColor="#ff2e9a"
+                        textColor="white"
+                      />
+                    </DescriptionBox>
+                  </RightArrowSec>
+                ) : null}
+              </ProfileName>
+              <ChatInput>
+                {findDesc(
+                  postData.itemId.data,
+                  postData.itemId.taggedUsers,
+                  postData.itemId.taggedLists
+                )}
+              </ChatInput>
+              <LikesBar
+                type="disabled"
+                totalLikes={postData.itemId.likes.length}
+                totalComments={
+                  postData.totalComments.length > 0
+                    ? postData.totalComments[0].totalCount
+                    : 0
+                }
+                date={new Date(postData.itemId.createdAt)}
+                setDisplayComments={setDisplayComments}
+                displayComments={displayComments}
+                postId={postData._id}
+                postLikes={postData.itemId.likes}
+                displayCommentInput={displayCommentInput}
+                setDisplayCommentInput={setDisplayCommentInput}
+                setFlag={setFlag}
+                flag={flag}
+                business={businessData}
+              />
+            </ProfileNameWrap>
+          </ProfileNameHeader>
+        </UserMessageContent>
 
-      <ReplyWrap>
-        <Comments
-          i={postData}
-          postData={postData}
-          displayComments={displayComments}
-          setFlag={setFlag}
-          flag={flag}
-          business={businessData}
-        />
-      </ReplyWrap>
-    </UserMsgWrap>
+        <ReplyWrap>
+          <Comments
+            i={postData}
+            postData={postData}
+            displayComments={displayComments}
+            setFlag={setFlag}
+            flag={flag}
+            business={businessData}
+          />
+        </ReplyWrap>
+      </UserMsgWrap>
+    </>
   );
-}
+};
 
 export default DisplayComment;

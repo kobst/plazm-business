@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
-import SearchIcon from '../../../images/search-icon.png';
-import { setDisplayBar } from '../../../reducers/globalSearchReducer';
-import error from '../../../constants';
-import { setSearchData } from '../../../reducers/myFeedReducer';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import SearchIcon from "../../../images/search-icon.png";
+import { useDispatch, useSelector } from "react-redux";
+import { setDisplayBar } from "../../../reducers/globalSearchReducer";
+import error from "../../../constants";
+import { setSearchData } from "../../../reducers/myFeedReducer";
 
 const GlobalSearchBtnWrap = styled.div`
   position: relative;
@@ -36,7 +36,7 @@ const GlobalSearchBtnWrap = styled.div`
   }
 `;
 
-function GlobalSearch() {
+const GlobalSearch = () => {
   const dispatch = useDispatch();
   const currentStatus = useSelector((state) => state.globalSearch.displayBar);
   const loading = useSelector((state) => state.myFeed.loading);
@@ -55,6 +55,6 @@ function GlobalSearch() {
       )}
     </>
   );
-}
+};
 
 export default GlobalSearch;

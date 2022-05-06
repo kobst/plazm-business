@@ -1,10 +1,42 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import './styles.css';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { unwrapResult } from '@reduxjs/toolkit';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import "./styles.css";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import Notifications from "../../../../images/notifications-new.png";
+import BuisinessView from "../../../Consumer/BuisinessView";
+import BusinessList from "../../../Consumer/BusinessList";
+import { useDispatch, useSelector } from "react-redux";
+import ListOptionView from "../../../Consumer/ListOptionView";
+import ListDescriptionView from "../../../Consumer/ListDescriptionView";
+import ListDetail from "../../../Consumer/ListDescriptionView/ListDetail";
+
+import MyFeed from "../../../Consumer/MyFeed";
+import {
+  clearMyFeedData,
+  setSearchData,
+  fetchMyFeedData,
+  setSideFiltersHomeSearch,
+} from "../../../../reducers/myFeedReducer";
+import Profile from "../../../Consumer/Profile";
+import ChangePassword from "../../../Consumer/ChangePassword";
+import ProfileSettings from "../../../Consumer/ProfileSettings";
+import HomeSearchComponent from "../../../Consumer/HomeSearch";
+import { useHistory } from "react-router-dom";
+import { unwrapResult } from "@reduxjs/toolkit";
+
+import {
+  clearBusinessData,
+  clearTopPost,
+} from "../../../../reducers/businessReducer";
+
+import {
+  fetchUserLists,
+  fetchUserCreatedAndFollowedList,
+  clearListData,
+} from "../../../../reducers/listReducer";
+
+import useStore from "../../../Consumer/useState/index";
+
 import {
   FiSearch,
   FiHome,
@@ -12,55 +44,24 @@ import {
   FiHeart,
   FiBell,
   FiList,
-} from 'react-icons/fi';
-import { BsListUl, BsThreeDots, BsGrid } from 'react-icons/bs';
-import { Auth } from 'aws-amplify';
-import Notifications from '../../../../images/notifications-new.png';
-import BuisinessView from '../../../Consumer/BuisinessView';
-import BusinessList from '../../../Consumer/BusinessList';
-import ListOptionView from '../../../Consumer/ListOptionView';
-import ListDescriptionView from '../../../Consumer/ListDescriptionView';
-import ListDetail from '../../../Consumer/ListDescriptionView/ListDetail';
+} from "react-icons/fi";
+import { BsListUl, BsThreeDots } from "react-icons/bs";
+import PolygonArrow from "../../../../images/Polygon.png";
+import { Auth } from "aws-amplify";
+import { setGloablLoader } from "../../../../reducers/consumerReducer";
+import DiscoverList from "../../../Consumer/DiscoverList";
 
-import MyFeed from '../../../Consumer/MyFeed';
-import {
-  clearMyFeedData,
-  setSearchData,
-  fetchMyFeedData,
-  setSideFiltersHomeSearch,
-} from '../../../../reducers/myFeedReducer';
-import Profile from '../../../Consumer/Profile';
-import ChangePassword from '../../../Consumer/ChangePassword';
-import ProfileSettings from '../../../Consumer/ProfileSettings';
-import HomeSearchComponent from '../../../Consumer/HomeSearch';
+import ListTab from "./ListTab";
+import PanelContent from "../Panel-Content/PanelContent";
 
-import {
-  clearBusinessData,
-  clearTopPost,
-} from '../../../../reducers/businessReducer';
-
-import {
-  fetchUserLists,
-  fetchUserCreatedAndFollowedList,
-  clearListData,
-} from '../../../../reducers/listReducer';
-
-import useStore from '../../../Consumer/useState/index';
-
-import PolygonArrow from '../../../../images/Polygon.png';
-import { setGloablLoader } from '../../../../reducers/consumerReducer';
-import DiscoverList from '../../../Consumer/DiscoverList';
-
-import ListTab from './ListTab';
-import PanelContent from '../Panel-Content/PanelContent';
-
-import ValueLoader from '../../../../utils/loader';
-import CompassIconWhite from '../../../../images/compass-white.png';
-import CompassIcon from '../../../../images/compass.svg';
-import HomeIconWhite from '../../../../images/home-white.png';
-import HomeIcon from '../../../../images/home.svg';
-import BellIconWhite from '../../../../images/bell-white.png';
-import BellIcon from '../../../../images/bell.svg';
+import ValueLoader from "../../../../utils/loader";
+import CompassIconWhite from "../../../../images/compass-white.png";
+import CompassIcon from "../../../../images/compass.svg";
+import HomeIconWhite from "../../../../images/home-white.png";
+import HomeIcon from "../../../../images/home.svg";
+import BellIconWhite from "../../../../images/bell-white.png";
+import BellIcon from "../../../../images/bell.svg";
+import { BsGrid } from "react-icons/bs";
 
 const TabIcon = styled.div`
   width: 36px;
@@ -86,7 +87,7 @@ const SubcriptionHeading = styled.h1`
   padding: 15px 0 5px 15px;
 `;
 
-function SideBarTabs({
+const SideBarTabs = ({
   profile,
   setFlag,
   isBusinessOpen,
@@ -96,7 +97,7 @@ function SideBarTabs({
   isUserOpen,
   userId,
   view,
-}) {
+}) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -149,7 +150,7 @@ function SideBarTabs({
   const draggedLocation = useStore((state) => state.draggedLocation);
   const setSelectedList = useStore((state) => state.setSelectedList);
 
-  // old useStore
+  //old useStore
 
   const [expanded, setExpanded] = useState(false);
   const [page, setPage] = useState(1);
@@ -187,7 +188,7 @@ function SideBarTabs({
     setSelectedList(null);
     setSelectedListId(null);
     if (!loading) {
-      history.push('/explore');
+      history.push("/explore");
     }
   };
 
@@ -197,7 +198,7 @@ function SideBarTabs({
       setSelectedList(null);
       setSelectedListId(null);
 
-      history.push('/home');
+      history.push("/home");
     }
   };
 
@@ -210,13 +211,13 @@ function SideBarTabs({
       setSelectedListId(null);
       setListIndex(null);
       setUserDataId(null);
-      history.push('/');
+      history.push("/");
       setDiscoverBtn(false);
     }
   };
 
   const listDiscovery = () => {
-    history.push('/lists');
+    history.push("/lists");
     setDiscoverBtn(false);
   };
 
@@ -231,7 +232,7 @@ function SideBarTabs({
   const setTab = (index) => {
     setTabIndex(index);
     setSelectedTab(index);
-    dispatch(setSearchData(''));
+    dispatch(setSearchData(""));
   };
 
   const handleListTabClick = (data) => {
@@ -248,7 +249,7 @@ function SideBarTabs({
   /** for logout functionality redirection */
   const redirectUserToLoginScreen = () => {
     dispatch(setGloablLoader(false));
-    history.push('/consumer/login');
+    history.push("/consumer/login");
   };
   /** logout consumer */
   const consumerLogout = async () => {
@@ -264,24 +265,24 @@ function SideBarTabs({
   return (
     <div>
       <div
-        className={expanded ? 'Sidebar expanded' : 'Sidebar'}
+        className={expanded ? "Sidebar expanded" : "Sidebar"}
         onMouseEnter={handleHover}
         onMouseLeave={handleLeave}
       >
         <Tabs selectedIndex={selectedTab} onSelect={setTab}>
-          <TabList className="tablist">
+          <TabList className={"tablist"}>
             <Tab
               disabled={loading || selectedTab === 0}
               className={
-                selectedTab - 1 === 0
+                0 === selectedTab - 1
                   ? selectedTab === 1
-                    ? 'react-tabs__tab LIBefore removeBorder'
-                    : 'react-tabs__tab LIBefore'
+                    ? "react-tabs__tab LIBefore removeBorder"
+                    : "react-tabs__tab LIBefore"
                   : selectedTab + 1 === 0
-                  ? 'react-tabs__tab LIAFter'
+                  ? "react-tabs__tab LIAFter"
                   : selectedTab === 0
-                  ? 'react-tabs__tab react-tabs__tab--selected'
-                  : 'react-tabs__tab'
+                  ? "react-tabs__tab react-tabs__tab--selected"
+                  : "react-tabs__tab"
               }
             >
               <div className="sidebar-header">
@@ -291,15 +292,15 @@ function SideBarTabs({
             <Tab
               disabled={loading || selectedTab === 1}
               className={
-                selectedTab - 1 === 1
+                1 === selectedTab - 1
                   ? selectedTab === 2
-                    ? 'react-tabs__tab LIBefore removeBorder'
-                    : 'react-tabs__tab LIBefore'
+                    ? "react-tabs__tab LIBefore removeBorder"
+                    : "react-tabs__tab LIBefore"
                   : selectedTab + 1 === 1
-                  ? 'react-tabs__tab'
+                  ? "react-tabs__tab"
                   : selectedTab === 1
-                  ? 'react-tabs__tab react-tabs__tab--selected removeBorder'
-                  : 'react-tabs__tab'
+                  ? "react-tabs__tab react-tabs__tab--selected removeBorder"
+                  : "react-tabs__tab"
               }
               onClick={() => homeSearchFunction()}
             >
@@ -315,15 +316,15 @@ function SideBarTabs({
             <Tab
               disabled={loading || selectedTab === 2}
               className={
-                selectedTab - 1 === 2
+                2 === selectedTab - 1
                   ? selectedTab === 3
-                    ? 'react-tabs__tab LIBefore removeBorder'
-                    : 'react-tabs__tab LIBefore'
+                    ? "react-tabs__tab LIBefore removeBorder"
+                    : "react-tabs__tab LIBefore"
                   : selectedTab + 1 === 2
-                  ? 'react-tabs__tab'
+                  ? "react-tabs__tab"
                   : selectedTab === 2
-                  ? 'react-tabs__tab react-tabs__tab--selected removeBorder'
-                  : 'react-tabs__tab'
+                  ? "react-tabs__tab react-tabs__tab--selected removeBorder"
+                  : "react-tabs__tab"
               }
               onClick={() => myFeedFunction()}
             >
@@ -339,15 +340,15 @@ function SideBarTabs({
             <Tab
               disabled={loading || selectedTab === 3}
               className={
-                selectedTab - 1 === 3
+                3 === selectedTab - 1
                   ? selectedTab === 4
-                    ? 'react-tabs__tab LIBefore removeBorder'
-                    : 'react-tabs__tab LIBefore'
+                    ? "react-tabs__tab LIBefore removeBorder"
+                    : "react-tabs__tab LIBefore"
                   : selectedTab + 1 === 3
-                  ? 'react-tabs__tab'
+                  ? "react-tabs__tab"
                   : selectedTab === 3
-                  ? 'react-tabs__tab react-tabs__tab--selected removeBorder'
-                  : 'react-tabs__tab'
+                  ? "react-tabs__tab react-tabs__tab--selected removeBorder"
+                  : "react-tabs__tab"
               }
             >
               <div className="item">
@@ -356,22 +357,22 @@ function SideBarTabs({
                   src={selectedTab === 3 ? BellIconWhite : BellIcon}
                   className="sidebar-icon"
                 />
-                <div className="NotificationDot" />
+                <div className="NotificationDot"></div>
                 <span className="sidebar-text">Notifications</span>
               </div>
             </Tab>
             <Tab
               disabled={loading || selectedTab === 4}
               className={
-                selectedTab - 1 === 4
+                4 === selectedTab - 1
                   ? selectedTab === 5
-                    ? 'react-tabs__tab LIBefore removeBorder'
-                    : 'react-tabs__tab LIBefore'
+                    ? "react-tabs__tab LIBefore removeBorder"
+                    : "react-tabs__tab LIBefore"
                   : selectedTab + 1 === 4
-                  ? 'react-tabs__tab'
+                  ? "react-tabs__tab"
                   : selectedTab === 4
-                  ? 'react-tabs__tab react-tabs__tab--selected removeBorder'
-                  : 'react-tabs__tab'
+                  ? "react-tabs__tab react-tabs__tab--selected removeBorder"
+                  : "react-tabs__tab"
               }
             >
               <div className="item">
@@ -382,15 +383,15 @@ function SideBarTabs({
             <Tab
               disabled={loading || selectedTab === 5}
               className={
-                selectedTab - 1 === 5
+                5 === selectedTab - 1
                   ? selectedTab === 6
-                    ? 'react-tabs__tab LIBefore removeBorder'
-                    : 'react-tabs__tab LIBefore'
+                    ? "react-tabs__tab LIBefore removeBorder"
+                    : "react-tabs__tab LIBefore"
                   : selectedTab + 1 === 5
-                  ? 'react-tabs__tab'
+                  ? "react-tabs__tab"
                   : selectedTab === 5
-                  ? 'react-tabs__tab react-tabs__tab--selected removeBorder'
-                  : 'react-tabs__tab'
+                  ? "react-tabs__tab react-tabs__tab--selected removeBorder"
+                  : "react-tabs__tab"
               }
               onClick={() => listDiscovery()}
             >
@@ -403,7 +404,7 @@ function SideBarTabs({
         </Tabs>
 
         {listData.length > 0 && (
-          <SubcriptionHeading>{expanded && 'Subscriptions'}</SubcriptionHeading>
+          <SubcriptionHeading>{expanded && "Subscriptions"}</SubcriptionHeading>
         )}
 
         <div className="list-scroll">
@@ -417,7 +418,7 @@ function SideBarTabs({
               />
             ))
           ) : (
-            <h6 />
+            <h6></h6>
           )}
           {listLoader && (
             <div className="sidebar-loader">
@@ -438,6 +439,6 @@ function SideBarTabs({
       </div>
     </div>
   );
-}
+};
 
 export default SideBarTabs;

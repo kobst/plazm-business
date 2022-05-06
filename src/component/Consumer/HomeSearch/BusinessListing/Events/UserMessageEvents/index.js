@@ -1,18 +1,17 @@
-import React, { useRef, useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { FaCaretRight } from 'react-icons/fa';
-import moment from 'moment';
-import { useSelector } from 'react-redux';
-import { Scrollbars } from 'react-custom-scrollbars';
-import { useHistory } from 'react-router';
-import BannerImg from '../../../../../../images/sliderimg.png';
-import LikeBar from '../LikeBar';
-import DateBar from '../DateBar';
-import TimeBar from '../TimeBar';
-import ImageComment from '../ImageComment';
-import ValueLoader from '../../../../../../utils/loader';
-import ReplyInput from './ReplyInput';
-import Comments from './comments';
+import React, { useRef, useState, useEffect } from "react";
+import styled from "styled-components";
+import { FaCaretRight } from "react-icons/fa";
+import moment from "moment";
+import BannerImg from "../../../../../../images/sliderimg.png";
+import LikeBar from "../LikeBar";
+import DateBar from "../DateBar";
+import TimeBar from "../TimeBar";
+import ImageComment from "../ImageComment";
+import { useSelector } from "react-redux";
+import { Scrollbars } from "react-custom-scrollbars";
+import ValueLoader from "../../../../../../utils/loader";
+import ReplyInput from "./ReplyInput";
+import Comments from "./comments";
 import {
   EventBigImage,
   ImgThumbWrap,
@@ -23,13 +22,14 @@ import {
   ListName,
   ListNameWrap,
   ShowMoreDiv,
-} from '../../../../FeedContent/styled';
-import DaysBar from '../../../../BuisinessView/TabsSection/EventsSection/PostChat/DaysBar';
-import ArrowSm from '../../../../../../images/arrow-sm-up.png';
-import ArrowSmDown from '../../../../../../images/arrow-sm.png';
-import ImageSlider from '../../UserMessage/imageslider';
+} from "../../../../FeedContent/styled";
+import { useHistory } from "react-router";
+import DaysBar from "../../../../BuisinessView/TabsSection/EventsSection/PostChat/DaysBar";
+import ArrowSm from "../../../../../../images/arrow-sm-up.png";
+import ArrowSmDown from "../../../../../../images/arrow-sm.png";
+import ImageSlider from "../../UserMessage/imageslider";
 
-const reactStringReplace = require('react-string-replace');
+const reactStringReplace = require("react-string-replace");
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -54,7 +54,7 @@ const ProfileNameHeader = styled.div`
   margin: 15px 0;
   &.line-active {
     &:before {
-      content: '';
+      content: "";
       position: absolute;
       left: 26px;
       background: #878787;
@@ -117,19 +117,19 @@ const LoaderWrap = styled.div`
   margin: 30px 0 10px;
 `;
 
-function UserMessageEvents({
+const UserMessageEvents = ({
   eventData,
   businessInfo,
   type,
   setSearchIndex,
   myFeedView,
   setSelectedListId,
-}) {
+}) => {
   const [displayEventComments, setDisplayEventComments] = useState(false);
   const [flag, setFlag] = useState(false);
   const [displayEventCommentInput, setDisplayEventCommentInput] =
     useState(false);
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState("");
   const [listImage, setListImage] = useState(
     eventData.listId.length > 0 && eventData.listId[0].media.length > 0
       ? eventData.listId[0].media[0].image
@@ -157,8 +157,8 @@ function UserMessageEvents({
       (commentAdded && eventData._id === selectedEventId)
     ) {
       commentsRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
+        behavior: "smooth",
+        block: "center",
       });
     }
   }, [
@@ -172,40 +172,40 @@ function UserMessageEvents({
   const addComment = async (obj) => {
     ws.send(
       JSON.stringify({
-        action: 'comment',
+        action: "comment",
         postId: obj.itemId,
-        type: 'Events',
+        type: "Events",
         comment: obj.body,
         userId: obj.userId,
         businessId: businessInfo._id,
         taggedUsers: obj.taggedUsers,
       })
     );
-    setDescription('');
+    setDescription("");
   };
 
   const days = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
   ];
 
   /** to highlight the user mentions mentioned in post description */
   const findDesc = (value, mentions, mentionsList) => {
-    const divContent = value;
+    let divContent = value;
     if (mentions.length > 0 && mentionsList.length > 0) {
-      const arr = [];
-      let data;
+      let arr = [],
+        data;
       for (let i = 0; i < mentions.length; i++) {
         if (value.includes(mentions[i].name)) {
           arr.push({
             name: mentions[i].name,
             id: mentions[i]._id,
-            type: 'name',
+            type: "name",
           });
         }
       }
@@ -214,13 +214,13 @@ function UserMessageEvents({
           arr.push({
             name: mentionsList[i].name,
             id: mentionsList[i]._id,
-            type: 'list',
+            type: "list",
           });
         }
       }
       for (let i = 0; i < arr.length; i++) {
         if (i === 0) {
-          if (arr[i].type === 'list') {
+          if (arr[i].type === "list")
             data = reactStringReplace(value, arr[i].name, (match, j) => (
               <span
                 key={j}
@@ -230,7 +230,7 @@ function UserMessageEvents({
                 {match}
               </span>
             ));
-          } else {
+          else
             data = reactStringReplace(value, arr[i].name, (match, j) => (
               <span
                 key={j}
@@ -240,47 +240,46 @@ function UserMessageEvents({
                 {match}
               </span>
             ));
-          }
-        } else if (arr[i].type === 'list') {
-          data = reactStringReplace(data, arr[i].name, (match, j) => (
-            <span
-              key={j}
-              className="mentionData"
-              onClick={() => setSelectedListId(arr[i].id)}
-            >
-              {match}
-            </span>
-          ));
         } else {
-          data = reactStringReplace(data, arr[i].name, (match, j) => (
-            <span
-              key={j}
-              className="mentionData"
-              onClick={() => history.push(`/u/${arr[i].id}`)}
-            >
-              {match}
-            </span>
-          ));
+          if (arr[i].type === "list")
+            data = reactStringReplace(data, arr[i].name, (match, j) => (
+              <span
+                key={j}
+                className="mentionData"
+                onClick={() => setSelectedListId(arr[i].id)}
+              >
+                {match}
+              </span>
+            ));
+          else
+            data = reactStringReplace(data, arr[i].name, (match, j) => (
+              <span
+                key={j}
+                className="mentionData"
+                onClick={() => history.push(`/u/${arr[i].id}`)}
+              >
+                {match}
+              </span>
+            ));
         }
       }
       return data;
-    }
-    if (mentions.length > 0) {
-      const arr = [];
-      let data;
+    } else if (mentions.length > 0) {
+      let arr = [],
+        data;
       for (let i = 0; i < mentions.length; i++) {
         if (value.includes(mentions[i].name)) {
           arr.push({
             name: mentions[i].name,
             id: mentions[i]._id,
-            type: 'name',
+            type: "name",
           });
         }
       }
 
       for (let i = 0; i < arr.length; i++) {
         if (i === 0) {
-          if (arr[i].type !== 'list') {
+          if (arr[i].type !== "list")
             data = reactStringReplace(value, arr[i].name, (match, j) => (
               <span
                 key={j}
@@ -290,24 +289,23 @@ function UserMessageEvents({
                 {match}
               </span>
             ));
-          }
-        } else if (arr[i].type !== 'list') {
-          data = reactStringReplace(data, arr[i].name, (match, j) => (
-            <span
-              key={j}
-              className="mentionData"
-              onClick={() => history.push(`/u/${arr[i].id}`)}
-            >
-              {match}
-            </span>
-          ));
+        } else {
+          if (arr[i].type !== "list")
+            data = reactStringReplace(data, arr[i].name, (match, j) => (
+              <span
+                key={j}
+                className="mentionData"
+                onClick={() => history.push(`/u/${arr[i].id}`)}
+              >
+                {match}
+              </span>
+            ));
         }
       }
       return data;
-    }
-    if (mentionsList.length > 0) {
+    } else if (mentionsList.length > 0) {
       for (let i = 0; i < mentionsList.length; i++) {
-        if (value.search(new RegExp(mentionsList[i].name, 'g') !== -1)) {
+        if (value.search(new RegExp(mentionsList[i].name, "g") !== -1)) {
           return (
             <div>
               {reactStringReplace(value, mentionsList[i].name, (match, j) => (
@@ -320,15 +318,22 @@ function UserMessageEvents({
               ))}
             </div>
           );
+        } else {
+          return <div>{value}</div>;
         }
-        return <div>{value}</div>;
       }
       if (mentionsList.length !== 0) {
-        return <div dangerouslySetInnerHTML={{ __html: divContent }} />;
+        return (
+          <>
+            <div dangerouslySetInnerHTML={{ __html: divContent }}></div>
+          </>
+        );
+      } else {
+        return value;
       }
-      return value;
+    } else {
+      return <div className="postData">{value}</div>;
     }
-    return <div className="postData">{value}</div>;
   };
 
   /** to display user details */
@@ -340,12 +345,12 @@ function UserMessageEvents({
       <UserMessageContent>
         <ProfileNameHeader
           className={
-            type !== 'MyFeedEvent' &&
-            ((eventData.body !== null && eventData.type === 'Post') ||
+            type !== "MyFeedEvent" &&
+            ((eventData.body !== null && eventData.type === "Post") ||
               eventData.data !== null ||
               !search)
-              ? 'line-active'
-              : 'line-inactive'
+              ? "line-active"
+              : "line-inactive"
           }
         >
           <ProfileNameWrap>
@@ -367,9 +372,9 @@ function UserMessageEvents({
                   )}
                   <span>|</span>
                   <ListAuthorName>
-                    Added on{' '}
-                    {moment(eventData.createdAt).format('MMM DD, YYYY, hh:MMa')}{' '}
-                    EDT{' '}
+                    Added on{" "}
+                    {moment(eventData.createdAt).format("MMM DD, YYYY, hh:MMa")}{" "}
+                    EDT{" "}
                   </ListAuthorName>
                 </ListInfo>
               </ListNameWrap>
@@ -483,16 +488,18 @@ function UserMessageEvents({
           !loadingComments &&
           eventData.comments.length > 0 ? (
             <>
-              {eventData.comments.map((i, key) => (
-                <Comments
-                  key={key}
-                  i={i}
-                  eventData={eventData}
-                  flag={flag}
-                  setFlag={setFlag}
-                  business={businessInfo}
-                />
-              ))}
+              {eventData.comments.map((i, key) => {
+                return (
+                  <Comments
+                    key={key}
+                    i={i}
+                    eventData={eventData}
+                    flag={flag}
+                    setFlag={setFlag}
+                    business={businessInfo}
+                  />
+                );
+              })}
               {/* {flag === false ? <ScrollToBottom /> : null} */}
             </>
           ) : displayEventComments && loadingComments ? (
@@ -500,7 +507,7 @@ function UserMessageEvents({
               <ValueLoader />
             </LoaderWrap>
           ) : null}
-          <div ref={commentsRef} />
+          <div ref={commentsRef}></div>
         </ReplyWrap>
       </Scrollbars>
       {displayEventComments ? (
@@ -518,6 +525,6 @@ function UserMessageEvents({
       ) : null}
     </>
   );
-}
+};
 
 export default UserMessageEvents;

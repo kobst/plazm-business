@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { IoMdClose } from 'react-icons/io';
-import Select from 'react-select';
-import { useDispatch, useSelector } from 'react-redux';
-import { unwrapResult } from '@reduxjs/toolkit';
-import Input from '../../UI/Input/Input';
-import SearchIcon from '../../../images/subscriptionSearchIcon.svg';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { IoMdClose } from "react-icons/io";
+import Input from "../../UI/Input/Input";
+import Select from "react-select";
+import SearchIcon from "../../../images/subscriptionSearchIcon.svg";
+import { useDispatch, useSelector } from "react-redux";
 import {
   fetchUserCreatedAndFollowedList,
   clearListData,
@@ -13,9 +12,10 @@ import {
   filterUserCreatedLists,
   filterByAll,
   clearDiscoverPageData,
-} from '../../../reducers/listReducer';
-import ValueLoader from '../../../utils/loader';
-import DisplayListSection from './DisplayListSection';
+} from "../../../reducers/listReducer";
+import ValueLoader from "../../../utils/loader";
+import DisplayListSection from "./DisplayListSection";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const ListOptionSection = styled.div`
   width: 100%;
@@ -111,7 +111,7 @@ const Heading = styled.h1`
   font-size: 18px;
   margin: 0 0 0 20px;
   padding: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   width: calc(100% - 350px);
   @media (max-width: 767px) {
     margin: 0 auto 10px;
@@ -177,12 +177,12 @@ const DiscoverBtn = styled.button`
 /*
  * @desc: to display all business lists
  */
-function ListOptionView({
+const ListOptionView = ({
   setDisplayTab,
   setSelectedListId,
   setDiscoverBtn,
   selectedListId,
-}) {
+}) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const loading = useSelector(
@@ -192,24 +192,24 @@ function ListOptionView({
   const listData = useSelector((state) => state.list.data);
 
   const filteredListData = useSelector((state) => state.list.filteredList);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [filteredList, setFilteredList] = useState([]);
-  const [selectedFilter, setSelectedFilter] = useState('All');
+  const [selectedFilter, setSelectedFilter] = useState("All");
   const [selectedList, setSelectedList] = useState(null);
   const [flag, setFlag] = useState(true);
   const list =
     filteredList.length > 0
       ? filteredList
-      : filteredListData.length > 0 && search === ''
+      : filteredListData.length > 0 && search === ""
       ? filteredListData
-      : search === ''
+      : search === ""
       ? listData
       : [];
   const userLists = listData.filter((i) => i.ownerId === user._id);
 
   const options = [
     {
-      value: 'All',
+      value: "All",
       label: (
         <>
           All
@@ -221,7 +221,7 @@ function ListOptionView({
       ),
     },
     {
-      value: 'My Lists',
+      value: "My Lists",
       label: (
         <>
           My Lists
@@ -233,7 +233,7 @@ function ListOptionView({
       ),
     },
     {
-      value: 'Subscribed Lists',
+      value: "Subscribed Lists",
       label: (
         <>
           Subscribed Lists
@@ -248,9 +248,9 @@ function ListOptionView({
 
   /** to filter data based on top filters */
   useEffect(() => {
-    if (selectedFilter === 'Subscribed Lists') {
+    if (selectedFilter === "Subscribed Lists") {
       dispatch(filterSubscribedLists(user._id));
-    } else if (selectedFilter === 'My Lists') {
+    } else if (selectedFilter === "My Lists") {
       dispatch(filterUserCreatedLists(user._id));
     } else dispatch(filterByAll());
   }, [selectedFilter, dispatch, user._id]);
@@ -275,8 +275,8 @@ function ListOptionView({
   /** lists search functionality implemented (to search based on title or description) */
   useEffect(() => {
     if (
-      selectedFilter === 'Subscribed Lists' ||
-      selectedFilter === 'My Lists'
+      selectedFilter === "Subscribed Lists" ||
+      selectedFilter === "My Lists"
     ) {
       setFilteredList(
         filteredListData.filter(
@@ -299,7 +299,7 @@ function ListOptionView({
   /** on top filter change */
   const selectChange = (obj) => {
     setSelectedFilter(obj.value);
-    setSearch('');
+    setSearch("");
   };
 
   /** to display discover page */
@@ -312,175 +312,179 @@ function ListOptionView({
       <ValueLoader />
     </LoaderWrap>
   ) : (
-    <ListOptionSection>
-      <SearchWrap>
-        <Heading>Lists</Heading>
-        <RightSearchWrap>
-          <Input
-            value={search}
-            className="SearchSubscriptionsInput"
-            placeholder="Search Lists"
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </RightSearchWrap>
-        <CloseDiv>
-          <IoMdClose onClick={() => setDisplayTab(false)} />
-        </CloseDiv>
-      </SearchWrap>
-      <HeadingWrap>
-        <SortingSelect>
-          <Select
-            value={{
-              value: selectedFilter,
-              label: (
-                <>
-                  {selectedFilter}
-                  <span
-                    className="dropdown-count"
-                    dangerouslySetInnerHTML={{
-                      __html:
-                        selectedFilter === 'All'
-                          ? `(${totalList})`
-                          : selectedFilter === 'My Lists'
-                          ? `(${userLists.length})`
-                          : `(${parseInt(totalList - userLists.length)})`,
-                    }}
-                  />
-                </>
-              ),
-            }}
-            isSearchable={false}
-            onChange={(val) => selectChange(val)}
-            options={options}
-            styles={{
-              control: (provided) => ({
-                ...provided,
-                flexGrow: 1,
-                paddingLeft: '0',
-                height: '100%',
-                boxShadow: 'none',
-                border: '1px solid #221E45',
-                backgroundColor: '#221E45',
-                color: '#fff',
-                width: '230px',
-                fontSize: '20px',
-                fontWeight: '500',
-                fontFamily: 'Roboto',
-                ':hover': {
-                  border: '1px solid #221E45',
-                },
-                '@media only screen and (min-width: 320px) and (max-width: 768px)':
-                  {
-                    fontSize: '12px',
+    <>
+      <ListOptionSection>
+        <SearchWrap>
+          <Heading>Lists</Heading>
+          <RightSearchWrap>
+            <Input
+              value={search}
+              className="SearchSubscriptionsInput"
+              placeholder="Search Lists"
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </RightSearchWrap>
+          <CloseDiv>
+            <IoMdClose onClick={() => setDisplayTab(false)} />
+          </CloseDiv>
+        </SearchWrap>
+        <HeadingWrap>
+          <SortingSelect>
+            <Select
+              value={{
+                value: selectedFilter,
+                label: (
+                  <>
+                    {selectedFilter}
+                    <span
+                      className="dropdown-count"
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          selectedFilter === "All"
+                            ? "(" + totalList + ")"
+                            : selectedFilter === "My Lists"
+                            ? "(" + userLists.length + ")"
+                            : "(" +
+                              parseInt(totalList - userLists.length) +
+                              ")",
+                      }}
+                    />
+                  </>
+                ),
+              }}
+              isSearchable={false}
+              onChange={(val) => selectChange(val)}
+              options={options}
+              styles={{
+                control: (provided) => ({
+                  ...provided,
+                  flexGrow: 1,
+                  paddingLeft: "0",
+                  height: "100%",
+                  boxShadow: "none",
+                  border: "1px solid #221E45",
+                  backgroundColor: "#221E45",
+                  color: "#fff",
+                  width: "230px",
+                  fontSize: "20px",
+                  fontWeight: "500",
+                  fontFamily: "Roboto",
+                  ":hover": {
+                    border: "1px solid #221E45",
                   },
-              }),
-              container: (provided) => ({
-                ...provided,
-                height: '40px',
-              }),
-              indicatorsContainer: () => ({
-                color: '#fff',
-                '@media only screen and (min-width: 1025px) and (max-width: 1399px)':
-                  {
-                    padding: '0 5px',
-                  },
-                svg: {
-                  color: '#fff',
-                },
-                div: {
-                  '@media only screen and (min-width: 1025px) and (max-width: 1399px)':
+                  "@media only screen and (min-width: 320px) and (max-width: 768px)":
                     {
-                      padding: '8px 0',
+                      fontSize: "12px",
                     },
-                },
-              }),
-              placeholder: () => ({
-                color: '#1D264F',
-                fontSize: '20px',
-                fontWeight: '500',
-                fontFamily: 'Roboto',
-                '@media only screen and (min-width: 320px) and (max-width: 768px)':
-                  {
-                    fontSize: '12px',
+                }),
+                container: (provided) => ({
+                  ...provided,
+                  height: "40px",
+                }),
+                indicatorsContainer: () => ({
+                  color: "#fff",
+                  "@media only screen and (min-width: 1025px) and (max-width: 1399px)":
+                    {
+                      padding: "0 5px",
+                    },
+                  svg: {
+                    color: "#fff",
                   },
-              }),
-              singleValue: () => ({
-                fontSize: '20px',
-                fontWeight: '500',
-                fontFamily: 'Roboto',
-                '@media only screen and (min-width: 320px) and (max-width: 768px)':
-                  {
-                    fontSize: '12px',
+                  div: {
+                    "@media only screen and (min-width: 1025px) and (max-width: 1399px)":
+                      {
+                        padding: "8px 0",
+                      },
                   },
-              }),
-              valueContainer: () => ({
-                display: 'flex',
-                alignItems: 'center',
-                fontFamily: 'Roboto',
-                '@media only screen and (min-width: 1025px) and (max-width: 1399px)':
-                  {
-                    padding: '2px 3px',
+                }),
+                placeholder: () => ({
+                  color: "#1D264F",
+                  fontSize: "20px",
+                  fontWeight: "500",
+                  fontFamily: "Roboto",
+                  "@media only screen and (min-width: 320px) and (max-width: 768px)":
+                    {
+                      fontSize: "12px",
+                    },
+                }),
+                singleValue: () => ({
+                  fontSize: "20px",
+                  fontWeight: "500",
+                  fontFamily: "Roboto",
+                  "@media only screen and (min-width: 320px) and (max-width: 768px)":
+                    {
+                      fontSize: "12px",
+                    },
+                }),
+                valueContainer: () => ({
+                  display: "flex",
+                  alignItems: "center",
+                  fontFamily: "Roboto",
+                  "@media only screen and (min-width: 1025px) and (max-width: 1399px)":
+                    {
+                      padding: "2px 3px",
+                    },
+                }),
+                IndicatorContainer: () => ({
+                  "@media only screen and (min-width: 1025px) and (max-width: 1399px)":
+                    {
+                      padding: "8px 0",
+                    },
+                }),
+                menu: (styles) => ({
+                  ...styles,
+                  backgroundColor: "#221E45",
+                  border: "1px solid #221E45",
+                  cursor: "pointer",
+                  fontSize: "13px",
+                }),
+                option: (styles, { isFocused, isSelected }) => ({
+                  ...styles,
+                  padding: "5px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  width: "100%",
+                  backgroundColor: isSelected
+                    ? "#FF2E9A"
+                    : isFocused
+                    ? "#FF2E9A"
+                    : "#221E45",
+                  ":active": {
+                    ...styles[":active"],
+                    backgroundColor: isSelected ? "#FF2E9A" : "#221E45",
                   },
-              }),
-              IndicatorContainer: () => ({
-                '@media only screen and (min-width: 1025px) and (max-width: 1399px)':
-                  {
-                    padding: '8px 0',
-                  },
-              }),
-              menu: (styles) => ({
-                ...styles,
-                backgroundColor: '#221E45',
-                border: '1px solid #221E45',
-                cursor: 'pointer',
-                fontSize: '13px',
-              }),
-              option: (styles, { isFocused, isSelected }) => ({
-                ...styles,
-                padding: '5px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                width: '100%',
-                backgroundColor: isSelected
-                  ? '#FF2E9A'
-                  : isFocused
-                  ? '#FF2E9A'
-                  : '#221E45',
-                ':active': {
-                  ...styles[':active'],
-                  backgroundColor: isSelected ? '#FF2E9A' : '#221E45',
-                },
-              }),
-            }}
-          />
-        </SortingSelect>
-        <DiscoverBtn onClick={() => displayDicoverPage()}>
-          Discover More
-        </DiscoverBtn>
-      </HeadingWrap>
-      <div
-        id="scrollableDiv"
-        style={{ height: 'calc(100vh - 115px)', overflow: 'auto' }}
-      >
-        <ListingOptionWrap>
-          {list.length > 0 ? (
-            list.map((i, key) => (
-              <DisplayListSection
-                data={i}
-                key={key}
-                setSelectedListId={setSelectedListId}
-                selectedList={selectedList}
-                setSelectedList={setSelectedList}
-              />
-            ))
-          ) : (
-            <NoData>No Lists To Display</NoData>
-          )}
-        </ListingOptionWrap>
-      </div>
-    </ListOptionSection>
+                }),
+              }}
+            ></Select>
+          </SortingSelect>
+          <DiscoverBtn onClick={() => displayDicoverPage()}>
+            Discover More
+          </DiscoverBtn>
+        </HeadingWrap>
+        <div
+          id="scrollableDiv"
+          style={{ height: "calc(100vh - 115px)", overflow: "auto" }}
+        >
+          <ListingOptionWrap>
+            {list.length > 0 ? (
+              list.map((i, key) => (
+                <DisplayListSection
+                  data={i}
+                  key={key}
+                  setSelectedListId={setSelectedListId}
+                  selectedList={selectedList}
+                  setSelectedList={setSelectedList}
+                />
+              ))
+            ) : (
+              <NoData>No Lists To Display</NoData>
+            )}
+          </ListingOptionWrap>
+        </div>
+      </ListOptionSection>
+    </>
   );
-}
+};
 
 export default ListOptionView;

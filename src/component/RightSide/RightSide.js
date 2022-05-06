@@ -1,31 +1,27 @@
 /* eslint-disable eqeqeq */
 /* eslint-disable no-sequences */
 
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { Auth } from 'aws-amplify';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
-import moment from 'moment';
-import { RRule } from 'rrule';
-import Button from '@material-ui/core/Button';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import { MentionsInput, Mention } from 'react-mentions';
-import Tabs from '../UI/Tabs/Tabs';
-import Card from '../UI/Card/Card';
-import AddModalBox from '../Add-Event/index';
-import { callPlace, fetchPosts, fetchEvents, fetchUsers } from '../../Api';
-import ValueLoader from '../../utils/loader';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-import SubHeading from '../UI/SubHeading';
-import ButtonSmall from '../UI/ButtonSmall';
-import CrossIcon from '../../images/cross-icon.svg';
-import UserIcon from '../../images/user.svg';
-import CommentIcon from '../../images/comment.svg';
-import UploadIocn from '../../images/upload.svg';
-import Watermark from '../../images/watermark.png';
-import EventSkeleton from '../UI/Skeleton/EventsSkeleton';
-import PostSkeleton from '../UI/Skeleton/PostSkeleton';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import Tabs from "../UI/Tabs/Tabs";
+import Card from "../UI/Card/Card";
+import { Auth } from "aws-amplify";
+import AddModalBox from "../Add-Event/index";
+import { Calendar, momentLocalizer } from "react-big-calendar";
+import moment from "moment";
+import { callPlace, fetchPosts, fetchEvents, fetchUsers } from "../../Api";
+import ValueLoader from "../../utils/loader";
+import { RRule } from "rrule";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import SubHeading from "../UI/SubHeading";
+import ButtonSmall from "../UI/ButtonSmall";
+import CrossIcon from "../../images/cross-icon.svg";
+import UserIcon from "../../images/user.svg";
+import CommentIcon from "../../images/comment.svg";
+import UploadIocn from "../../images/upload.svg";
+import Watermark from "../../images/watermark.png";
+import EventSkeleton from "../UI/Skeleton/EventsSkeleton";
+import PostSkeleton from "../UI/Skeleton/PostSkeleton";
 // import EventImg from '../../images/eventimg.png'
 // import Search from '../UI/Search/Search'
 // import UserImage from '../../images/user-img.png'
@@ -37,11 +33,15 @@ import PostSkeleton from '../UI/Skeleton/PostSkeleton';
 // import CommentGrey from '../../images/comment-grey.svg'
 // import Mention from 'react-textarea-mention';
 // import reactS3 from 'react-s3'
-import EditModalBox from '../Edit-Post';
-import DeleteModalBox from '../Delete-Post';
-import PostModalBox from '../Post-Modal';
-import { Scrollbars } from 'react-custom-scrollbars';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import EditModalBox from "../Edit-Post";
+import DeleteModalBox from "../Delete-Post";
+import PostModalBox from "../Post-Modal";
+import Button from "@material-ui/core/Button";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import { MentionsInput, Mention } from "react-mentions";
+import { Scrollbars } from "react-custom-scrollbars";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const RightSection = styled.div``;
 const Row = styled.div`
@@ -79,7 +79,7 @@ const EventLeft = styled.div`
     width: 100%;
     left: 0px;
     bottom: 10px;
-    content: '';
+    content: "";
     height: 92px;
   }
   @media (max-width: 767px) {
@@ -114,7 +114,7 @@ const EventRight = styled.div`
     width: 100%;
     left: 0px;
     bottom: 10px;
-    content: '';
+    content: "";
     height: 92px;
   }
   @media (max-width: 767px) {
@@ -402,7 +402,7 @@ const UploadImage = styled.div`
   }
   :hover {
     :after {
-      content: '';
+      content: "";
       position: absolute;
       background: rgba(0, 0, 0, 0.7) url(${CrossIcon});
       width: 31px;
@@ -430,12 +430,12 @@ const UploadOuter = styled.div`
 // margin-top:15px;
 // `
 
-moment.locale('en-GB');
+moment.locale("en-GB");
 const localizer = momentLocalizer(moment);
 const bucket = process.env.REACT_APP_BUCKET;
 
 let myInput;
-function RightSide(props) {
+const RightSide = (props) => {
   // const { loading } = props;
   const [isOpen, setIsOpen] = useState(false);
   const [place, setPlace] = useState({});
@@ -447,7 +447,7 @@ function RightSide(props) {
   const [posts, setPosts] = useState();
   const [mentions, setMention] = useState();
   const [allFeed, setAllFeed] = useState();
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState("");
   const [saveDisable, setSaveDisable] = useState(false);
   // const [showTag, setShowTag] = useState(false)
   const [consumers, setConsumers] = useState([]);
@@ -459,7 +459,7 @@ function RightSide(props) {
   const [isModelOpen, setIsModelOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [content, setContent] = useState();
-  const [viewState, setViewState] = useState('day');
+  const [viewState, setViewState] = useState("day");
   const [eventCopy, setEventCopy] = useState([]);
   const [upComingEvents, setUpcomingEvents] = useState();
   const [postOpen, setPostOpen] = useState(false);
@@ -487,30 +487,32 @@ function RightSide(props) {
     // console.log("disconnected");
   };
   useEffect(() => {
-    const updateUser = async (authState) => {
+    let updateUser = async (authState) => {
       try {
         const value = await Auth.currentAuthenticatedUser();
         const place = await callPlace(value.attributes.sub);
         const users = await fetchUsers();
         if (users) {
           const userVal = [];
-          users.map((v) => userVal.push({ _id: v._id, name: `@${v.name}` }));
+          users.map((v) => {
+            return userVal.push({ _id: v._id, name: "@"+v.name });
+          });
           // const val = userVal.sort(dynamicSort("name"))
           setConsumers(userVal);
         }
         setPlace(place[0]);
         if (place && place.length !== 0) {
           let val = await fetchPosts(place[0]._id);
-          val = val.sort(
-            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-          );
+          val = val.sort((a, b) => {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+          });
           const events = await fetchEvents(place[0]._id);
           const upEvent = events.filter(
             (v) => new Date(v.eventSchedule.start_time) >= new Date()
           );
           setUpcomingEvents(upEvent);
           setEvent();
-          setMention('Public');
+          setMention("Public");
           setActivePublic(true);
           setPosts(val);
           setEventList(events.reverse());
@@ -522,7 +524,7 @@ function RightSide(props) {
           setSaveDisable(false);
           setDetails();
         } else {
-          const eventArr = [];
+          let eventArr = [];
           setEvent(eventArr);
         }
       } catch (err) {
@@ -537,11 +539,11 @@ function RightSide(props) {
 
   useEffect(() => {
     const checkMentions = () => {
-      if (mentions === 'Public') {
+      if (mentions === "Public") {
         setAllFeed(feed);
         setActiveMess(false);
         setActivePublic(true);
-      } else if (mentions === 'All Mentions') {
+      } else if (mentions === "All Mentions") {
         setAllFeed(allMentions);
         setActiveMess(false);
         setActivePublic(false);
@@ -558,7 +560,7 @@ function RightSide(props) {
 
   useEffect(() => {
     const updateWebpost = async () => {
-      if (typeof webPost !== 'undefined') {
+      if (typeof webPost !== "undefined") {
         const val = await fetchPosts(place._id);
         setAllFeed(val);
       }
@@ -572,16 +574,16 @@ function RightSide(props) {
   }
   const formats = {
     dayFormat: (date, culture, localizer) =>
-      localizer.format(date, 'Do dddd', culture),
+      localizer.format(date, "Do dddd", culture),
   };
 
   const eventManage = (sol) => {
-    const eventArr = [];
+    let eventArr = [];
     setEvent(eventArr);
-    if (viewState !== 'month') {
+    if (viewState !== "month") {
       // eslint-disable-next-line array-callback-return
       sol.map((v) => {
-        if (v.recurring === 'weekly' || v.recurring === 'Weekly') {
+        if (v.recurring === "weekly" || v.recurring === "Weekly") {
           const weeklyStartRule = new RRule({
             freq: RRule.WEEKLY,
             dtstart: new Date(v.eventSchedule.start_time),
@@ -608,7 +610,7 @@ function RightSide(props) {
             });
           setEvent(eventArr);
           setEventCopy(eventArr);
-        } else if (v.recurring === 'daily' || v.recurring === 'Daily') {
+        } else if (v.recurring === "daily" || v.recurring === "Daily") {
           const dailyStartRule = new RRule({
             freq: RRule.DAILY,
             dtstart: new Date(v.eventSchedule.start_time),
@@ -636,8 +638,8 @@ function RightSide(props) {
           setEventCopy(eventArr);
           setEvent(eventArr);
         } else if (
-          v.recurring === 'mondayFriday' ||
-          v.recurring === 'Monday-Friday'
+          v.recurring === "mondayFriday" ||
+          v.recurring === "Monday-Friday"
         ) {
           const weekDayStartRule = new RRule({
             freq: RRule.WEEKLY,
@@ -683,7 +685,9 @@ function RightSide(props) {
     }
   };
 
-  const ConvertNumberToTwoDigitString = (n) => (n > 9 ? `${n}` : `0${n}`);
+  const ConvertNumberToTwoDigitString = (n) => {
+    return n > 9 ? "" + n : "0" + n;
+  };
   // const dynamicSort = (property) => {
   //   var sortOrder = 1;
 
@@ -712,8 +716,8 @@ function RightSide(props) {
   };
 
   const returnTodayDate = () => {
-    const today = new Date();
-    const dateArr = today.toLocaleDateString('en-US', options).split(',');
+    let today = new Date();
+    const dateArr = today.toLocaleDateString("en-US", options).split(",");
     return (
       <>
         <h4>{dateArr[0]}</h4>
@@ -724,18 +728,18 @@ function RightSide(props) {
   };
 
   const returnMonth = () => {
-    const today = new Date();
-    return today.toLocaleString('default', { month: 'long' });
+    let today = new Date();
+    return today.toLocaleString("default", { month: "long" });
   };
   const goToDateFromMonthView = (date) => {
     if (!toolbarRef) return false;
     toolbarRef.date.setMonth(date.getMonth());
     toolbarRef.date.setYear(date.getFullYear());
     toolbarRef.date.setDate(date.getDate());
-    toolbarRef.onView('day');
-    setViewState('day');
+    toolbarRef.onView("day");
+    setViewState("day");
     setEvent(eventCopy);
-    toolbarRef.onNavigate('current', date);
+    toolbarRef.onNavigate("current", date);
   };
 
   const getCustomToolbar = (toolbar) => {
@@ -743,13 +747,13 @@ function RightSide(props) {
     const now = new Date();
     const goToDayView = () => {
       setEvent(eventCopy);
-      toolbar.onView('day');
-      setViewState('day');
+      toolbar.onView("day");
+      setViewState("day");
     };
     const goToWeekView = () => {
       setEvent(eventCopy);
-      toolbar.onView('week');
-      setViewState('week');
+      toolbar.onView("week");
+      setViewState("week");
     };
     const goToMonthView = () => {
       setEvent([]);
@@ -757,26 +761,26 @@ function RightSide(props) {
         toolbar.date.setMonth(now.getMonth());
         toolbar.date.setYear(now.getFullYear());
         toolbar.date.setDate(now.getDate());
-        toolbar.onNavigate('current');
+        toolbar.onNavigate("current");
       }
-      toolbar.onView('month');
-      setViewState('month');
+      toolbar.onView("month");
+      setViewState("month");
       setToolbarRef(toolbar);
     };
     const goToBack = () => {
-      const view = viewState;
-      const mDate = toolbar.date;
+      let view = viewState;
+      let mDate = toolbar.date;
       let newDate;
-      if (view === 'month') {
+      if (view === "month") {
         if (mDate.getMonth() - 1 === now.getMonth()) {
           toolbar.date.setMonth(now.getMonth());
           toolbar.date.setYear(now.getFullYear());
           toolbar.date.setDate(now.getDate());
-          toolbar.onNavigate('current');
+          toolbar.onNavigate("current");
         } else {
           newDate = new Date(mDate.getFullYear(), mDate.getMonth() - 1, 1);
         }
-      } else if (view === 'week') {
+      } else if (view === "week") {
         newDate = new Date(
           mDate.getFullYear(),
           mDate.getMonth(),
@@ -791,22 +795,22 @@ function RightSide(props) {
           1
         );
       }
-      toolbar.onNavigate('prev', newDate);
+      toolbar.onNavigate("prev", newDate);
     };
     const goToNext = () => {
-      const view = viewState;
-      const mDate = toolbar.date;
+      let view = viewState;
+      let mDate = toolbar.date;
       let newDate;
-      if (view === 'month') {
+      if (view === "month") {
         if (mDate.getMonth() + 1 === now.getMonth()) {
           toolbar.date.setMonth(now.getMonth());
           toolbar.date.setYear(now.getFullYear());
           toolbar.date.setDate(now.getDate());
-          toolbar.onNavigate('current');
+          toolbar.onNavigate("current");
         } else {
           newDate = new Date(mDate.getFullYear(), mDate.getMonth() + 1, 1);
         }
-      } else if (view === 'week') {
+      } else if (view === "week") {
         newDate = new Date(
           mDate.getFullYear(),
           mDate.getMonth(),
@@ -821,7 +825,7 @@ function RightSide(props) {
           1
         );
       }
-      toolbar.onNavigate('next', newDate);
+      toolbar.onNavigate("next", newDate);
     };
 
     const goToToday = () => {
@@ -829,28 +833,28 @@ function RightSide(props) {
       toolbar.date.setMonth(now.getMonth());
       toolbar.date.setYear(now.getFullYear());
       toolbar.date.setDate(now.getDate());
-      toolbar.onNavigate('current');
+      toolbar.onNavigate("current");
     };
 
     const month = () => {
       const date = moment(toolbar.date);
-      const month = date.format('MMMM');
+      let month = date.format("MMMM");
 
       return <span className="rbc-toolbar-label">{month}</span>;
     };
     const year = () => {
       const date = moment(toolbar.date);
-      const year = date.format('YYYY');
+      let year = date.format("YYYY");
 
       return <span className="rbc-toolbar-label">{year}</span>;
     };
 
     const day = () => {
-      const view = viewState;
+      let view = viewState;
       const date = moment(toolbar.date);
       let day;
-      if (view === 'day' || view === 'week') {
-        day = date.format('Do');
+      if (view === "day" || view === "week") {
+        day = date.format("Do");
       }
       return <span className="rbc-toolbar-label">{day}</span>;
     };
@@ -874,19 +878,19 @@ function RightSide(props) {
         </div>
         <span className="rbc-btn-group">
           <button
-            className={viewState === 'day' ? 'rbc-active' : null}
+            className={viewState === "day" ? "rbc-active" : null}
             onClick={goToDayView}
           >
             <span className="label-filter-off">Day</span>
           </button>
           <button
-            className={viewState === 'week' ? 'rbc-active' : null}
+            className={viewState === "week" ? "rbc-active" : null}
             onClick={goToWeekView}
           >
             <span className="label-filter-off">Week</span>
           </button>
           <button
-            className={viewState === 'month' ? 'rbc-active' : null}
+            className={viewState === "month" ? "rbc-active" : null}
             onClick={goToMonthView}
           >
             <span className="label-filter-off">Month</span>
@@ -898,29 +902,33 @@ function RightSide(props) {
 
   const getDate = (value) => {
     const date = new Date(value);
-    const time = `${ConvertNumberToTwoDigitString(
-      date.getHours()
-    )}:${ConvertNumberToTwoDigitString(date.getMinutes())}, ${date
-      .toLocaleString()
-      .substring(0, new Date(date).toLocaleString().indexOf(','))
-      .replace(/\//g, ' - ')}`;
+    const time =
+      ConvertNumberToTwoDigitString(date.getHours()) +
+      ":" +
+      ConvertNumberToTwoDigitString(date.getMinutes()) +
+      ", " +
+      date
+        .toLocaleString()
+        .substring(0, new Date(date).toLocaleString().indexOf(","))
+        .replace(/\//g, " - ");
     return time;
   };
   const setMentions = (val) => {
-    if (val === 'Public') {
-      setMention('Public');
-    } else if (val === 'All Mentions') {
-      setMention('All Mentions');
+    if (val === "Public") {
+      setMention("Public");
+    } else if (val === "All Mentions") {
+      setMention("All Mentions");
     } else {
-      setMention('Messages');
+      setMention("Messages");
     }
   };
 
   const Validation = () => {
     if (!description.trim()) {
       return false;
+    } else {
+      return true;
     }
-    return true;
   };
 
   const addPost = async () => {
@@ -929,9 +937,9 @@ function RightSide(props) {
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}/api/posts`,
         {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             business: place._id,
@@ -945,15 +953,10 @@ function RightSide(props) {
       const val = JSON.parse(body);
       props.ws.send(
         JSON.stringify({
-          action: 'post',
+          action: "post",
           post: {
             postId: val.post._id,
-            postDetails: {
-              ...val.post,
-              ownerId: null,
-              createdAt: new Date(),
-              type: 'Business',
-            },
+            postDetails: {...val.post,ownerId: null, createdAt: new Date(), type:"Business"},
             totalComments: 0,
             totalLikes: 0,
             comments: [],
@@ -986,7 +989,7 @@ function RightSide(props) {
   };
 
   const CancelPost = () => {
-    setDescription('');
+    setDescription("");
     setImageUrl([]);
     setImageUpload([]);
     setImageUploadCopy([]);
@@ -1001,19 +1004,24 @@ function RightSide(props) {
     let divContent = value;
     //  eslint-disable-next-line array-callback-return
     mentions.map((v) => {
-      const re = new RegExp(`@${v.name}`, 'g');
-      divContent = divContent.replace(re, `<h2>@${v.name}</h2>`);
+      let re = new RegExp("@"+v.name, "g");
+      divContent = divContent.replace(re, "<h2>@"+ v.name + "</h2>");
     });
     if (mentions.length !== 0) {
-      return <div dangerouslySetInnerHTML={{ __html: divContent }} />;
+      return (
+        <>
+          <div dangerouslySetInnerHTML={{ __html: divContent }}></div>
+        </>
+      );
+    } else {
+      return value;
     }
-    return value;
   };
   const options = {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   };
   // const options = [{name: 'John Watson', id: 1},{name: 'Marie Curie', id: 2}]
 
@@ -1029,7 +1037,9 @@ function RightSide(props) {
     }, 4000);
   };
 
-  const editName = (name) => `${place.company_name}-${name}`;
+  const editName = (name) => {
+    return `${place.company_name}-${name}`;
+  };
 
   const upload = async (e) => {
     const imageArr = imageCopy;
@@ -1041,9 +1051,9 @@ function RightSide(props) {
       const value = await fetch(
         `${process.env.REACT_APP_API_URL}/api/upload_photo`,
         {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             Key: newName,
@@ -1055,9 +1065,9 @@ function RightSide(props) {
       const Val = JSON.parse(body);
 
       await fetch(Val, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': file.type,
+          "Content-Type": file.type,
         },
         body: file,
       })
@@ -1137,14 +1147,11 @@ function RightSide(props) {
                 closeModal={() => (setEdit(false), setIsOpen(false))}
               />
               <CalenderSection>
-                <div className={calenderView === 'month' ? 'monthView' : null}>
-                  {calenderView === 'month' && typeof event !== 'undefined' ? (
+                <div className={calenderView === "month" ? "monthView" : null}>
+                  {calenderView === "month" && typeof event !== "undefined" ? (
                     <EventMenu>
                       <div className="dateWrap">{returnTodayDate()}</div>
-                      <h4>
-                        Upcoming Events in
-                        {returnMonth()}
-                      </h4>
+                      <h4>Upcoming Events in {returnMonth()}</h4>
                       {upComingEvents
                         ? upComingEvents.map((v) => (
                             <>
@@ -1161,7 +1168,7 @@ function RightSide(props) {
                         : null}
                     </EventMenu>
                   ) : null}
-                  {typeof event !== 'undefined' ? (
+                  {typeof event !== "undefined" ? (
                     <Calendar
                       className="CalenderSec"
                       formats={formats}
@@ -1177,19 +1184,19 @@ function RightSide(props) {
                         toolbar: getCustomToolbar,
                         month: {
                           dateHeader: (props) => {
-                            const highlightDate =
+                            let highlightDate =
                               eventCopy.find(
                                 (event) =>
                                   moment(props.date).isBetween(
                                     moment(event.start),
                                     moment(event.end),
                                     null,
-                                    '[]'
+                                    "[]"
                                   ) ||
-                                  moment(props.date).format('YYYY-MM-DD') ===
-                                    moment(event.start).format('YYYY-MM-DD') ||
-                                  moment(props.date).format('YYYY-MM-DD') ===
-                                    moment(event.end).format('YYYY-MM-DD')
+                                  moment(props.date).format("YYYY-MM-DD") ===
+                                    moment(event.start).format("YYYY-MM-DD") ||
+                                  moment(props.date).format("YYYY-MM-DD") ===
+                                    moment(event.end).format("YYYY-MM-DD")
                               ) != undefined;
                             return (
                               <div
@@ -1201,8 +1208,8 @@ function RightSide(props) {
                                 style={
                                   highlightDate
                                     ? {
-                                        backgroundColor: '#f9a9d1',
-                                        color: '#fff',
+                                        backgroundColor: "#f9a9d1",
+                                        color: "#fff",
                                       }
                                     : null
                                 }
@@ -1216,15 +1223,15 @@ function RightSide(props) {
                       defaultView={viewState}
                       step={60}
                       onView={(e) => (setCalenderView(e), setViewState(e))}
-                      views={['day', 'week', 'month']}
-                      style={{ height: 463, width: '100%' }}
+                      views={["day", "week", "month"]}
+                      style={{ height: 463, width: "100%" }}
                     />
                   ) : (
                     <div
                       className="loader"
-                      style={{ textAlign: 'center', margin: ' 40px auto 0' }}
+                      style={{ textAlign: "center", margin: " 40px auto 0" }}
                     >
-                      {' '}
+                      {" "}
                       <ValueLoader height="70" width="70" />
                     </div>
                   )}
@@ -1241,16 +1248,16 @@ function RightSide(props) {
                     <InfiniteScroll
                       dataLength={eventPosition}
                       next={fetchMoreEvents}
-                      hasMore
+                      hasMore={true}
                       loader={
                         eventList && eventPosition <= eventList.length ? (
                           <div
                             style={{
-                              textAlign: 'center',
-                              margin: ' 40px auto 0',
+                              textAlign: "center",
+                              margin: " 40px auto 0",
                             }}
                           >
-                            {' '}
+                            {" "}
                             <ValueLoader height="40" width="40" />
                           </div>
                         ) : null
@@ -1318,13 +1325,13 @@ function RightSide(props) {
                 </MentionsInput>
 
                 <div className="mt-10">
-                  <FlexRow style={{ padding: '0px' }}>
+                  <FlexRow style={{ padding: "0px" }}>
                     <input
                       id="myInput"
                       onChange={(e) => upload(e)}
                       type="file"
                       ref={(ref) => (myInput = ref)}
-                      style={{ display: 'none' }}
+                      style={{ display: "none" }}
                     />
                     <ButtonSmall
                       className="btnhover"
@@ -1347,13 +1354,13 @@ function RightSide(props) {
                       <ButtonSmall
                         maxWidth="34px"
                         bgColor="#FF7171"
-                        style={{ marginLeft: 'auto', marginRight: '9px' }}
+                        style={{ marginLeft: "auto", marginRight: "9px" }}
                         onClick={() => CancelPost()}
                       >
                         <img
                           src={CrossIcon}
                           alt="Cross Icon"
-                          style={{ marginRight: '0px' }}
+                          style={{ marginRight: "0px" }}
                         />
                       </ButtonSmall>
                     ) : null}
@@ -1361,13 +1368,13 @@ function RightSide(props) {
                       disabled={saveDisable}
                       onClick={() => addPost()}
                     >
-                      {saveDisable !== true ? 'Publish' : <ValueLoader />}
+                      {saveDisable !== true ? "Publish" : <ValueLoader />}
                     </ButtonSmall>
                   </FlexRow>
                 </div>
               </div>
             </Card>
-            <Card style={{ minHeight: '897px' }}>
+            <Card style={{ minHeight: "897px" }}>
               <FlexRow>
                 <SubHeading name="Feed" />
                 <TabsOuter>
@@ -1387,10 +1394,11 @@ function RightSide(props) {
                 </TabsOuter>
               </FlexRow>
 
-              {mentions === 'Public' ? (
-                <div className="mt-25">
-                  <Scrollbars autoHeight autoHeightMax={736} style={{}}>
-                    {/* <FeedListing onClick={() => setIsOpen(true)}>
+              {mentions === "Public" ? (
+                <>
+                  <div className="mt-25">
+                    <Scrollbars autoHeight autoHeightMax={736} style={{}}>
+                      {/* <FeedListing onClick={() => setIsOpen(true)}>
                       <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
                       <EventText>
                         <span>08:35 AM, 12 - 08 - 12</span>
@@ -1416,94 +1424,96 @@ function RightSide(props) {
                         </Icon>
                       </EventText>
                     </FeedListing> */}
-                    <PostModalBox
-                      newComment={webComment}
-                      isOpen={postOpen}
-                      closeModal={() => setPostOpen(false)}
-                      value={content}
-                      place={place}
-                    />
-                    <EditModalBox
-                      message={props.ws}
-                      user={place}
-                      setIsOpen={setIsModelOpen}
-                      isOpen={isModelOpen}
-                      closeModal={() => setIsModelOpen(false)}
-                      users={userMentionData}
-                      value={content}
-                    />
-                    <DeleteModalBox
-                      message={props.ws}
-                      userId={place._id}
-                      setDeleteOpen={setDeleteOpen}
-                      postId={id}
-                      isOpen={deleteOpen}
-                      closeModal={() => setDeleteOpen(false)}
-                    />
-                    <InfiniteScroll
-                      dataLength={arrPositon}
-                      next={fetchMoreData}
-                      hasMore
-                      loader={
-                        allFeed && arrPositon <= allFeed.length ? (
-                          <div
-                            style={{
-                              textAlign: 'center',
-                              margin: ' 40px auto 0',
-                            }}
-                          >
-                            {' '}
-                            <ValueLoader height="40" width="40" />
-                          </div>
-                        ) : null
-                      }
-                    >
-                      {typeof allFeed !== 'undefined'
-                        ? allFeed.slice(0, arrPositon).map((v) => (
-                            <FeedListing>
-                              <FeedImage>
-                                <img
-                                  src={
-                                    place.default_image_url
-                                      ? place.default_image_url
-                                      : Watermark
-                                  }
-                                  alt="Event"
-                                />
-                              </FeedImage>
-                              <EventText>
-                                <span>{getDate(v.updatedAt)}</span>
-                                <h3 onClick={() => postOpenFunc(v)}>
-                                  {v.name ? v.name : place.company_name}
-                                </h3>
-                                <p>{findDesc(v.data, v.taggedUsers)}</p>
-                                <Icon>
-                                  <EditRomve>
-                                    <Button
-                                      aria-controls="simple-menu"
-                                      aria-haspopup="true"
-                                      onClick={(e) => handleClick(e, v)}
-                                    >
-                                      ...
-                                    </Button>
+                      <PostModalBox
+                        newComment={webComment}
+                        isOpen={postOpen}
+                        closeModal={() => setPostOpen(false)}
+                        value={content}
+                        place={place}
+                      />
+                      <EditModalBox
+                        message={props.ws}
+                        user={place}
+                        setIsOpen={setIsModelOpen}
+                        isOpen={isModelOpen}
+                        closeModal={() => setIsModelOpen(false)}
+                        users={userMentionData}
+                        value={content}
+                      />
+                      <DeleteModalBox
+                        message={props.ws}
+                        userId={place._id}
+                        setDeleteOpen={setDeleteOpen}
+                        postId={id}
+                        isOpen={deleteOpen}
+                        closeModal={() => setDeleteOpen(false)}
+                      />
+                      <InfiniteScroll
+                        dataLength={arrPositon}
+                        next={fetchMoreData}
+                        hasMore={true}
+                        loader={
+                          allFeed && arrPositon <= allFeed.length ? (
+                            <div
+                              style={{
+                                textAlign: "center",
+                                margin: " 40px auto 0",
+                              }}
+                            >
+                              {" "}
+                              <ValueLoader height="40" width="40" />
+                            </div>
+                          ) : null
+                        }
+                      >
+                        {typeof allFeed !== "undefined"
+                          ? allFeed.slice(0, arrPositon).map((v) => (
+                              <FeedListing>
+                                <FeedImage>
+                                  <img
+                                    src={
+                                      place.default_image_url
+                                        ? place.default_image_url
+                                        : Watermark
+                                    }
+                                    alt="Event"
+                                  />
+                                </FeedImage>
+                                <EventText>
+                                  <span>{getDate(v.updatedAt)}</span>
+                                  <h3 onClick={() => postOpenFunc(v)}>
+                                    {v.name ? v.name : place.company_name}
+                                  </h3>
+                                  <p>{findDesc(v.data, v.taggedUsers)}</p>
+                                  <Icon>
+                                    <EditRomve>
+                                      <Button
+                                        aria-controls="simple-menu"
+                                        aria-haspopup="true"
+                                        onClick={(e) => handleClick(e, v)}
+                                      >
+                                        ...
+                                      </Button>
 
-                                    <Menu
-                                      id={v._id}
-                                      anchorEl={anchorEl}
-                                      keepMounted
-                                      open={Boolean(anchorEl)}
-                                      onClose={handleClose}
-                                    >
-                                      <MenuItem onClick={() => handleEdit()}>
-                                        Edit
-                                      </MenuItem>
-                                      <MenuItem onClick={() => handleDelete()}>
-                                        Delete
-                                      </MenuItem>
-                                    </Menu>
-                                  </EditRomve>
+                                      <Menu
+                                        id={v._id}
+                                        anchorEl={anchorEl}
+                                        keepMounted
+                                        open={Boolean(anchorEl)}
+                                        onClose={handleClose}
+                                      >
+                                        <MenuItem onClick={() => handleEdit()}>
+                                          Edit
+                                        </MenuItem>
+                                        <MenuItem
+                                          onClick={() => handleDelete()}
+                                        >
+                                          Delete
+                                        </MenuItem>
+                                      </Menu>
+                                    </EditRomve>
 
-                                  {/* <EditRomve>
+                                    {/* <EditRomve>
                                 <img onClick={() => setToggle(v._id)} src={MoreIcon} alt="More" />
                                 {toggle && id === v._id ?
                                   <Tooltip>
@@ -1516,16 +1526,17 @@ function RightSide(props) {
                                 }
                               </EditRomve> */}
 
-                                  {/* <WishlistImg><img src={WishlistGrey} alt="" /><sup>3</sup></WishlistImg>
+                                    {/* <WishlistImg><img src={WishlistGrey} alt="" /><sup>3</sup></WishlistImg>
                               <CommentImg><img src={CommentGrey} alt="" /><sup>3</sup></CommentImg> */}
-                                </Icon>
-                              </EventText>
-                            </FeedListing>
-                          ))
-                        : null}
-                    </InfiniteScroll>
-                  </Scrollbars>
-                </div>
+                                  </Icon>
+                                </EventText>
+                              </FeedListing>
+                            ))
+                          : null}
+                      </InfiniteScroll>
+                    </Scrollbars>
+                  </div>
+                </>
               ) : (
                 <>
                   <PostSkeleton />
@@ -1730,12 +1741,12 @@ function RightSide(props) {
           <Search />
 
           <Messages />
-
+    
           <ChatBox />
         </Card>
       </Row> */}
     </RightSection>
   );
-}
+};
 
 export default RightSide;

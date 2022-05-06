@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
-import SearchIcon from '../../../../images/search-icon.png';
-import { setDisplayBar } from '../../../../reducers/globalSearchReducer';
-import error from '../../../../constants';
+import React, { useState, useEffect } from "react";
+import SearchIcon from "../../../../images/search-icon.png";
+import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { setDisplayBar } from "../../../../reducers/globalSearchReducer";
+import error from "../../../../constants";
+import { setSearchData } from "../../../../reducers/myFeedReducer";
+import useStore from "../../useState";
 import {
-  setSearchData,
   HomeSearch,
   clearSearchFeed,
   setSideFiltersHomeSearch,
   setEnterClicked,
-} from '../../../../reducers/myFeedReducer';
-import useStore from '../../useState';
-import { checkBusiness } from '../../../../reducers/businessReducer';
+} from "../../../../reducers/myFeedReducer";
+import { checkBusiness } from "../../../../reducers/businessReducer";
+import { useLocation } from "react-router-dom";
 
 const ErrorDiv = styled.div`
   color: #ff0000;
@@ -58,15 +58,15 @@ const GlobalSearchInputWrap = styled.div`
   }
 `;
 
-function GlobalSearchBox({ setOffset, type }) {
+const GlobalSearchBox = ({ setOffset, type }) => {
   const dispatch = useDispatch();
 
   const history = useLocation()
-    .pathname.split('/')
+    .pathname.split("/")
     .filter((item) => item);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const loader = useSelector((state) => state.myFeed.loading);
-  const [searchError, setSearchError] = useState('');
+  const [searchError, setSearchError] = useState("");
   // const [uploadMenu, setUploadMenu] = useState(false);
   const searchData = useSelector((state) => state.myFeed.searchData);
   const filterClosest = useSelector((state) => state.myFeed.filterByClosest);
@@ -79,32 +79,31 @@ function GlobalSearchBox({ setOffset, type }) {
     (state) => state.myFeed.filterByUpdatedAt
   );
   const draggedLocation = useStore((state) => state.draggedLocation);
-  useEffect(
-    () => () => {
-      dispatch(setSearchData(''));
+  useEffect(() => {
+    return () => {
+      dispatch(setSearchData(""));
       dispatch(setDisplayBar(false));
-      setSearch('');
-    },
-    []
-  );
+      setSearch("");
+    };
+  }, []);
   useEffect(() => {
     setSearch(searchData);
   }, [searchData]);
 
   /** on key press handler for search */
   const searchList = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       event.preventDefault();
-      if (search !== '' && search.length >= 4 && !search.trim() === false) {
+      if (search !== "" && search.length >= 4 && !search.trim() === false) {
         setOffset(0);
-        setSearchError('');
+        setSearchError("");
         dispatch(setSearchData(search));
         switch (type) {
-          case 'Explore':
+          case "Explore":
             dispatch(clearSearchFeed());
             dispatch(setSideFiltersHomeSearch());
             const obj = {
-              search,
+              search: search,
               value: 0,
               filters: { closest: filterClosest, updated: updatedAtFilter },
               latitude: draggedLocation.lat,
@@ -113,19 +112,19 @@ function GlobalSearchBox({ setOffset, type }) {
             dispatch(setEnterClicked(true));
             dispatch(HomeSearch(obj));
             break;
-          case 'Business Search':
+          case "Business Search":
             dispatch(
               checkBusiness({
                 businessId: history.at(-1),
                 filters: {
                   PostsByMe: filters.PostsByMe
                     ? filters.PostsByMe
-                    : !!(
-                        !filters.Business &&
-                        !filters.PostsByMe &&
-                        !filters.MySubscriptions &&
-                        !filters.Others
-                      ),
+                    : !filters.Business &&
+                      !filters.PostsByMe &&
+                      !filters.MySubscriptions &&
+                      !filters.Others
+                    ? true
+                    : false,
                   Business: false,
                   MySubscriptions: filters.MySubscriptions
                     ? filters.MySubscriptions
@@ -135,7 +134,7 @@ function GlobalSearchBox({ setOffset, type }) {
                 value: 0,
                 ownerId: user ? user._id : null,
                 sideFilters: { likes: sideFilterForLikes },
-                search,
+                search: search,
               })
             );
             break;
@@ -164,9 +163,9 @@ function GlobalSearchBox({ setOffset, type }) {
           <img src={SearchIcon} />
         </button>
       </GlobalSearchInputWrap>
-      {searchError !== '' ? <ErrorDiv>{searchError}</ErrorDiv> : null}
+      {searchError !== "" ? <ErrorDiv>{searchError}</ErrorDiv> : null}
     </>
   );
-}
+};
 
 export default GlobalSearchBox;
