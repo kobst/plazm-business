@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
-import InfiniteScroll from "react-infinite-scroll-component";
-import ValueLoader from "../../../utils/loader";
-import DisplayFavoriteBusiness from "./displayFavoriteBusiness";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { unwrapResult } from '@reduxjs/toolkit';
+import ValueLoader from '../../../utils/loader';
+import DisplayFavoriteBusiness from './displayFavoriteBusiness';
 import {
   clearUserFavorites,
   fetchUserFavoritesBusiness,
-} from "../../../reducers/userReducer";
-import { unwrapResult } from "@reduxjs/toolkit";
-import SearchBar from "./SearchBar";
-import useStore from "../useState";
-
+} from '../../../reducers/userReducer';
+import SearchBar from './SearchBar';
+import useStore from '../useState';
 
 const LoaderWrap = styled.div`
   width: 100%;
@@ -102,7 +101,7 @@ const NoMorePost = styled.p`
 /*
  * @desc: to display all business lists
  */
-const BusinessList = ({ setDisplayTab, setFavoriteIndex }) => {
+function BusinessList({ setDisplayTab, setFavoriteIndex }) {
   const [offset, setOffSet] = useState(0);
   const totalFavorites = useSelector((state) => state.user.totalFavorites);
   const [hasMore, setHasMore] = useState(true);
@@ -117,14 +116,14 @@ const BusinessList = ({ setDisplayTab, setFavoriteIndex }) => {
     (state) => state.myFeed.filterByUpdatedAt
   );
   const [flag, setFlag] = useState(true);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [filteredData, setFilteredData] = useState([]);
 
-  const draggedLocation = useStore((state) => state.draggedLocation)
+  const draggedLocation = useStore((state) => state.draggedLocation);
   const dispatch = useDispatch();
 
   const userFavorites =
-    search !== "" && !search.trim() === false
+    search !== '' && !search.trim() === false
       ? filteredData.length > 0
         ? filteredData
         : []
@@ -181,7 +180,7 @@ const BusinessList = ({ setDisplayTab, setFavoriteIndex }) => {
 
   /** to filter based on search */
   useEffect(() => {
-    if (search !== "" && !search.trim() === false) {
+    if (search !== '' && !search.trim() === false) {
       setFilteredData(
         favoriteBusiness.filter(
           (entry) =>
@@ -209,7 +208,7 @@ const BusinessList = ({ setDisplayTab, setFavoriteIndex }) => {
           />
           <div
             id="scrollableDiv"
-            style={{ height: "calc(100vh - 44px)", overflow: "auto" }}
+            style={{ height: 'calc(100vh - 44px)', overflow: 'auto' }}
           >
             <InfiniteScroll
               dataLength={userFavorites ? userFavorites.length : 0}
@@ -217,8 +216,8 @@ const BusinessList = ({ setDisplayTab, setFavoriteIndex }) => {
               hasMore={hasMore}
               loader={
                 offset < totalFavorites && loadingFavoriteBusiness ? (
-                  <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
-                    {" "}
+                  <div style={{ textAlign: 'center', margin: ' 40px auto 0' }}>
+                    {' '}
                     <ValueLoader height="40" width="40" />
                   </div>
                 ) : null
@@ -253,6 +252,6 @@ const BusinessList = ({ setDisplayTab, setFavoriteIndex }) => {
       )}
     </>
   );
-};
+}
 
 export default BusinessList;

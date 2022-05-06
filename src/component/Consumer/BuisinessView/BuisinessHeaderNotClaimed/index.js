@@ -1,24 +1,22 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { IoMdClose } from "react-icons/io";
-import { MdKeyboardArrowDown, MdKeyboardArrowLeft } from "react-icons/md";
-import ProfileImg from "../../../../images/profile-img.png";
-import FacebookImg from "../../../../images/Facebook-new.svg";
-import TwitterImg from "../../../../images/Twitter-new.svg";
-import LinkedInImg from "../../../../images/Linkedin-new.svg";
-import InstagramImg from "../../../../images/Instagram-new.svg";
-import { useSelector, useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
-import FavoritesIcon from "../../../../images/favorites.png";
-import FavoritesIconFilled from "../../../../images/favorites-filled.png";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { IoMdClose } from 'react-icons/io';
+import { MdKeyboardArrowDown, MdKeyboardArrowLeft } from 'react-icons/md';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import ProfileImg from '../../../../images/profile-img.png';
+import FacebookImg from '../../../../images/Facebook-new.svg';
+import TwitterImg from '../../../../images/Twitter-new.svg';
+import LinkedInImg from '../../../../images/Linkedin-new.svg';
+import InstagramImg from '../../../../images/Instagram-new.svg';
+import FavoritesIcon from '../../../../images/favorites.png';
+import FavoritesIconFilled from '../../../../images/favorites-filled.png';
 import {
   AddBusinessFavorite,
   RemoveBusinessFavorite,
-} from "../../../../reducers/userReducer";
-import { clearBusinessData } from "../../../../reducers/businessReducer";
-import useStore from "../../useState";
-
-
+} from '../../../../reducers/userReducer';
+import { clearBusinessData } from '../../../../reducers/businessReducer';
+import useStore from '../../useState';
 
 const BuisinessHeaderContent = styled.div`
   width: 100%;
@@ -197,7 +195,7 @@ const ArrowBack = styled.div`
     height: 24px;
   }
 `;
-const BuisinessHeaderNotClaimed = ({
+function BuisinessHeaderNotClaimed({
   setDisplayTab,
   setDisplayBusinessProfile,
   isProfile,
@@ -209,7 +207,7 @@ const BuisinessHeaderNotClaimed = ({
   // setFavoriteIndex,
   // listIndex,
   // setListIndex
-}) => {
+}) {
   const [favoriteBusiness, setFavoriteBusiness] = useState(false);
   const businessProfile = useSelector((state) => state.business.business);
   const [image, setImage] = useState(
@@ -217,23 +215,18 @@ const BuisinessHeaderNotClaimed = ({
   );
   const user = useSelector((state) => state.user.user);
 
-  const listIndex = useStore((state) => state.listIndex)
-  const searchIndex = useStore((state) => state.listIndex)
-  const myFeedIndex = useStore((state) => state.myFeedIndex)
+  const listIndex = useStore((state) => state.listIndex);
+  const searchIndex = useStore((state) => state.listIndex);
+  const myFeedIndex = useStore((state) => state.myFeedIndex);
 
-  const setSearchIndex = useStore((state) => state.setSearchIndex)
-  const setMyFeedIndex = useStore((state) => state.setMyFeedIndex)
-  const setListIndex = useStore((state) => state.setListIndex)
-  const setFavoriteIndex = useStore((state) => state.setFavoriteIndex)
-  const setTabIndex = useStore((state) => state.setTabSelected)
-
-
+  const setSearchIndex = useStore((state) => state.setSearchIndex);
+  const setMyFeedIndex = useStore((state) => state.setMyFeedIndex);
+  const setListIndex = useStore((state) => state.setListIndex);
+  const setFavoriteIndex = useStore((state) => state.setFavoriteIndex);
+  const setTabIndex = useStore((state) => state.setTabSelected);
 
   const dispatch = useDispatch();
   const history = useHistory();
-
-
-
 
   useEffect(() => {
     if (businessProfile && businessProfile.length > 0) {
@@ -249,7 +242,7 @@ const BuisinessHeaderNotClaimed = ({
    */
   const closeTab = () => {
     setDisplayTab(false);
-    history.push("/");
+    history.push('/');
   };
 
   /** to add a business to user favorites */
@@ -274,125 +267,115 @@ const BuisinessHeaderNotClaimed = ({
   const backBusiness = () => {
     dispatch(clearBusinessData());
     if (searchIndex) {
-      history.push("/");
+      history.push('/');
       setTabIndex(1);
       setSearchIndex(null);
     } else if (myFeedIndex) {
-      history.push("/");
+      history.push('/');
       setTabIndex(2);
       setMyFeedIndex(null);
     } else if (listIndex) {
-      history.push("/");
+      history.push('/');
       setTabIndex(5);
       setListIndex(null);
     } else {
-      setFavoriteIndex(null)
-      history.push("/");
+      setFavoriteIndex(null);
+      history.push('/');
     }
   };
-  return (
-    businessProfile.length>0? <>
-      <BuisinessHeaderContent
-        className={
-          isProfile && businessProfile && businessProfile[0].userSub === null
-            ? "NotSlider"
-            : ""
-        }
-      >
-        <ArrowBack>
-          <MdKeyboardArrowLeft onClick={() => backBusiness()} />
-        </ArrowBack>
-        <CloseDiv>
-          <IoMdClose onClick={() => closeTab()} />
-        </CloseDiv>
-        <BottomBar className={isProfile ? "ProfileHeaderNam" : ""}>
-          <LeftHeader>
-            {!isProfile ? (
-              <BusinessIcon>
+  return businessProfile.length > 0 ? (
+    <BuisinessHeaderContent
+      className={
+        isProfile && businessProfile && businessProfile[0].userSub === null
+          ? 'NotSlider'
+          : ''
+      }
+    >
+      <ArrowBack>
+        <MdKeyboardArrowLeft onClick={() => backBusiness()} />
+      </ArrowBack>
+      <CloseDiv>
+        <IoMdClose onClick={() => closeTab()} />
+      </CloseDiv>
+      <BottomBar className={isProfile ? 'ProfileHeaderNam' : ''}>
+        <LeftHeader>
+          {!isProfile ? (
+            <BusinessIcon>
+              <img
+                src={businessProfile && image ? image : ProfileImg}
+                onError={() => setImage(ProfileImg)}
+                alt=""
+              />
+            </BusinessIcon>
+          ) : null}
+        </LeftHeader>
+        {!isProfile ? (
+          <BusinessNameWrap>
+            <BusinessName>
+              <span>{businessProfile && businessProfile[0].company_name}</span>{' '}
+              {/* business favorite toggle */}
+              {favoriteBusiness ? (
                 <img
-                  src={businessProfile && image ? image : ProfileImg}
-                  onError={() => setImage(ProfileImg)}
+                  src={FavoritesIconFilled}
+                  onClick={() => removeFavorite()}
+                  className="favoriteBusiness"
                   alt=""
                 />
-              </BusinessIcon>
-            ) : null}
-          </LeftHeader>
-          {!isProfile ? (
-            <BusinessNameWrap>
-              <BusinessName>
-                <span>
-                  {businessProfile && businessProfile[0].company_name}
-                </span>{" "}
-                {/* business favorite toggle */}
-                {favoriteBusiness ? (
-                  <img
-                    src={FavoritesIconFilled}
-                    onClick={() => removeFavorite()}
-                    className="favoriteBusiness"
-                    alt=""
-                  />
-                ) : (
-                  <img
-                    src={FavoritesIcon}
-                    onClick={() => addFavorite()}
-                    className="favoriteBusinessBorder"
-                    alt=""
-                  />
-                )}
-              </BusinessName>
-              <SocialIconsWrap>
-                {businessProfile && businessProfile[0].handles.instagram ? (
-                  <a
-                    href={
-                      businessProfile && businessProfile[0].handles.instagram
-                    }
-                  >
-                    <SocialIcon>
-                      <img src={InstagramImg} alt="" />
-                    </SocialIcon>
-                  </a>
-                ) : null}
-                {businessProfile && businessProfile[0].handles.twitter ? (
-                  <a
-                    href={businessProfile && businessProfile[0].handles.twitter}
-                  >
-                    <SocialIcon>
-                      <img src={TwitterImg} alt="" />
-                    </SocialIcon>
-                  </a>
-                ) : null}
-                {businessProfile && businessProfile[0].handles.linkedin ? (
-                  <a
-                    href={
-                      businessProfile && businessProfile[0].handles.linkedin
-                    }
-                  >
-                    <SocialIcon>
-                      <img src={LinkedInImg} alt="" />
-                    </SocialIcon>
-                  </a>
-                ) : null}
-                {businessProfile && businessProfile[0].handles.facebook ? (
-                  <a href={businessProfile[0].handles.facebook}>
-                    <SocialIcon>
-                      <img src={FacebookImg} alt="" />
-                    </SocialIcon>
-                  </a>
-                ) : null}
-              </SocialIconsWrap>
-            </BusinessNameWrap>
-          ) : null}
-          {!isProfile ? (
-            <ArrowDown>
-              <MdKeyboardArrowDown
-                onClick={() => setDisplayBusinessProfile(true)}
-              />
-            </ArrowDown>
-          ) : null}
-        </BottomBar>
-      </BuisinessHeaderContent>
-    </>:null
-  );
-};
+              ) : (
+                <img
+                  src={FavoritesIcon}
+                  onClick={() => addFavorite()}
+                  className="favoriteBusinessBorder"
+                  alt=""
+                />
+              )}
+            </BusinessName>
+            <SocialIconsWrap>
+              {businessProfile && businessProfile[0].handles.instagram ? (
+                <a
+                  href={businessProfile && businessProfile[0].handles.instagram}
+                >
+                  <SocialIcon>
+                    <img src={InstagramImg} alt="" />
+                  </SocialIcon>
+                </a>
+              ) : null}
+              {businessProfile && businessProfile[0].handles.twitter ? (
+                <a href={businessProfile && businessProfile[0].handles.twitter}>
+                  <SocialIcon>
+                    <img src={TwitterImg} alt="" />
+                  </SocialIcon>
+                </a>
+              ) : null}
+              {businessProfile && businessProfile[0].handles.linkedin ? (
+                <a
+                  href={businessProfile && businessProfile[0].handles.linkedin}
+                >
+                  <SocialIcon>
+                    <img src={LinkedInImg} alt="" />
+                  </SocialIcon>
+                </a>
+              ) : null}
+              {businessProfile && businessProfile[0].handles.facebook ? (
+                <a href={businessProfile[0].handles.facebook}>
+                  <SocialIcon>
+                    <img src={FacebookImg} alt="" />
+                  </SocialIcon>
+                </a>
+              ) : null}
+            </SocialIconsWrap>
+          </BusinessNameWrap>
+        ) : null}
+        {!isProfile ? (
+          <ArrowDown>
+            <MdKeyboardArrowDown
+              onClick={() => setDisplayBusinessProfile(true)}
+            />
+          </ArrowDown>
+        ) : null}
+      </BottomBar>
+    </BuisinessHeaderContent>
+  ) : null;
+}
 
 export default BuisinessHeaderNotClaimed;

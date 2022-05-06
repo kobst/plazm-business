@@ -1,6 +1,6 @@
-import React from 'react'
-import Modal from 'react-modal'
-import PropTypes from 'prop-types'
+import React from 'react';
+import Modal from 'react-modal';
+import PropTypes from 'prop-types';
 
 const customStyles = {
   content: {
@@ -21,12 +21,12 @@ const customStyles = {
   overlay: {
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
   },
-}
+};
 
-Modal.setAppElement('#root')
+Modal.setAppElement('#root');
 
-const ModalComponent = (props) => (
-  <>
+function ModalComponent(props) {
+  return (
     <Modal
       isOpen={props.isOpen}
       onRequestClose={props.closeModal}
@@ -35,14 +35,14 @@ const ModalComponent = (props) => (
     >
       {props.children}
     </Modal>
-  </>
-)
+  );
+}
 
 ModalComponent.propTypes = {
   closeModal: PropTypes.func,
   isOpen: PropTypes.bool,
   closeOnOutsideClick: PropTypes.bool,
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
-}
+};
 
-export default ModalComponent
+export default ModalComponent;

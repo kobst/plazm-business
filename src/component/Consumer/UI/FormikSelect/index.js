@@ -1,6 +1,6 @@
-import {useField } from 'formik';
-import React from 'react';      
-import styled from "styled-components";
+import { useField } from 'formik';
+import React from 'react';
+import styled from 'styled-components';
 
 const InputText = styled.select`
   border: 0;
@@ -36,15 +36,13 @@ const ErrorDiv = styled.div`
   margin: 0;
 `;
 
-const FormikSelect = ({ label, ...props }) => {
-    const [field, meta] = useField(props);
-    return (
-      <>
-        <InputText {...field} {...props} className="text-input" />
-        {meta.touched && meta.error ? (
-          <ErrorDiv>{meta.error}</ErrorDiv>
-        ) : null}
-      </>
-    );
-  };
+function FormikSelect({ label, ...props }) {
+  const [field, meta] = useField(props);
+  return (
+    <>
+      <InputText {...field} {...props} className="text-input" />
+      {meta.touched && meta.error ? <ErrorDiv>{meta.error}</ErrorDiv> : null}
+    </>
+  );
+}
 export default FormikSelect;

@@ -1,35 +1,35 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import "./styles.css";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import Notifications from "../../../../images/notifications-new.png";
-import BuisinessView from "../../../Consumer/BuisinessView";
-import BusinessList from "../../../Consumer/BusinessList";
-import { useDispatch, useSelector } from "react-redux";
-import ListOptionView from "../../../Consumer/ListOptionView";
-import ListDescriptionView from "../../../Consumer/ListDescriptionView";
-import MyFeed from "../../../Consumer/MyFeed";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import './styles.css';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { FiSearch, FiHome, FiHeart } from 'react-icons/fi';
+import { BsListUl, BsThreeDots } from 'react-icons/bs';
+import { Auth } from 'aws-amplify';
+import Notifications from '../../../../images/notifications-new.png';
+import BuisinessView from '../../../Consumer/BuisinessView';
+import BusinessList from '../../../Consumer/BusinessList';
+import ListOptionView from '../../../Consumer/ListOptionView';
+import ListDescriptionView from '../../../Consumer/ListDescriptionView';
+import MyFeed from '../../../Consumer/MyFeed';
 import {
   clearMyFeedData,
   setSearchData,
   fetchMyFeedData,
   setSideFiltersHomeSearch,
-} from "../../../../reducers/myFeedReducer";
-import Profile from "../../../Consumer/Profile";
-import ChangePassword from "../../../Consumer/ChangePassword";
-import ProfileSettings from "../../../Consumer/ProfileSettings";
-import HomeSearchComponent from "../../../Consumer/HomeSearch";
-import { useHistory } from "react-router-dom";
+} from '../../../../reducers/myFeedReducer';
+import Profile from '../../../Consumer/Profile';
+import ChangePassword from '../../../Consumer/ChangePassword';
+import ProfileSettings from '../../../Consumer/ProfileSettings';
+import HomeSearchComponent from '../../../Consumer/HomeSearch';
 import {
   clearBusinessData,
   clearTopPost,
-} from "../../../../reducers/businessReducer";
-import { FiSearch, FiHome, FiHeart } from "react-icons/fi";
-import { BsListUl, BsThreeDots } from "react-icons/bs";
-import PolygonArrow from "../../../../images/Polygon.png";
-import { Auth } from "aws-amplify";
-import { setGloablLoader } from "../../../../reducers/consumerReducer";
-import DiscoverList from "../../../Consumer/DiscoverList";
+} from '../../../../reducers/businessReducer';
+import PolygonArrow from '../../../../images/Polygon.png';
+import { setGloablLoader } from '../../../../reducers/consumerReducer';
+import DiscoverList from '../../../Consumer/DiscoverList';
 
 const LeftBarContent = styled.div`
   width: 100px;
@@ -81,7 +81,7 @@ const BottomSettingsWrap = styled.div`
       position: absolute;
       top: -8px;
       background: url(${PolygonArrow}) no-repeat top center;
-      content: "";
+      content: '';
     }
     .BottomSettings {
       visibility: visible;
@@ -134,7 +134,7 @@ const BottomSettingsWrap = styled.div`
   }
 `;
 
-const LeftBar = ({
+function LeftBar({
   profile,
   setFlag,
   isBusinessOpen,
@@ -142,7 +142,7 @@ const LeftBar = ({
   businessId,
   isUserOpen,
   userId,
-}) => {
+}) {
   const [displayChangePassword, setDisplayChangePassword] = useState(false);
   const [tabIndex, setTabIndex] = useState(
     isBusinessOpen ? 4 : isUserOpen ? 1 : 0
@@ -173,13 +173,13 @@ const LeftBar = ({
       history.push(`/b/${businessId}`);
       setProfileClosed(false);
     } else if (profileClosed && tabIndex === 4) {
-      history.push("/");
+      history.push('/');
       setProfileClosed(false);
     } else if (
       profileClosed &&
       (tabIndex === 5 || tabIndex === 2 || tabIndex === 1)
     ) {
-      history.push("/");
+      history.push('/');
       setProfileClosed(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -194,7 +194,7 @@ const LeftBar = ({
       setSelectedListId(null);
       setListIndex(null);
       setUserDataId(null);
-      history.push("/");
+      history.push('/');
       setDiscoverBtn(false);
     }
   };
@@ -212,12 +212,12 @@ const LeftBar = ({
         longitude: userLocation
           ? userLocation.longitude
           : process.env.REACT_APP_LONGITUDE,
-        search: "",
+        search: '',
       };
-      dispatch(setSearchData(""));
+      dispatch(setSearchData(''));
       setUserDataId(null);
       setSelectedListId(null);
-      history.push("/");
+      history.push('/');
       dispatch(setSideFiltersHomeSearch());
       dispatch(clearMyFeedData());
       dispatch(fetchMyFeedData(obj));
@@ -231,12 +231,12 @@ const LeftBar = ({
     dispatch(setSideFiltersHomeSearch());
     dispatch(clearBusinessData());
     dispatch(clearTopPost());
-    dispatch(setSearchData(""));
+    dispatch(setSearchData(''));
     setFavoriteIndex(null);
     setSelectedListId(null);
     setUserDataId(null);
     setSelectedListId(null);
-    history.push("/");
+    history.push('/');
   };
 
   /** to clear selected data on tab click */
@@ -250,7 +250,7 @@ const LeftBar = ({
       //   latitude: process.env.REACT_APP_LATITUDE,
       //   longitude: process.env.REACT_APP_LONGITUDE,
       // };
-      dispatch(setSearchData(""));
+      dispatch(setSearchData(''));
       dispatch(clearMyFeedData());
       dispatch(setSideFiltersHomeSearch());
       // dispatch(HomeSearch(obj));
@@ -259,7 +259,7 @@ const LeftBar = ({
       dispatch(clearBusinessData());
       dispatch(clearTopPost());
       setSearchIndex(null);
-      history.push("/");
+      history.push('/');
     }
   };
 
@@ -271,7 +271,7 @@ const LeftBar = ({
   /** for logout functionality redirection */
   const redirectUserToLoginScreen = () => {
     dispatch(setGloablLoader(false));
-    history.push("/consumer/login");
+    history.push('/consumer/login');
   };
   /** logout consumer */
   const consumerLogout = async () => {
@@ -287,384 +287,379 @@ const LeftBar = ({
 
   const setTab = (index) => {
     // console.log("setting index " + index)
-    setTabIndex(index)
+    setTabIndex(index);
 
     // <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
-
-  }
+  };
 
   return (
-    <>
-      <LeftBarContent className="MainTabs">
-        <Tabs selectedIndex={tabIndex} onSelect={setTab}>
-          <TabList>
-            <Tab
-              disabled={loading || tabIndex === 0}
-              className={
-                0 === tabIndex - 1
-                  ? tabIndex === 1
-                  ? "react-tabs__tab LIBefore removeBorder"
-                  : "react-tabs__tab LIBefore"
-                  : tabIndex + 1 === 0
-                  ? "react-tabs__tab LIAFter"
-                  : tabIndex === 0
-                  ? "react-tabs__tab react-tabs__tab--selected"
-                  : "react-tabs__tab"
-              }
-            ></Tab>
-            <Tab
-              disabled={loading || tabIndex === 1}
-              className={
-                1 === tabIndex - 1
-                  ? tabIndex === 2
-                    ? "react-tabs__tab LIBefore removeBorder"
-                    : "react-tabs__tab LIBefore"
-                  : tabIndex + 1 === 1
-                  ? "react-tabs__tab"
-                  : tabIndex === 1
-                  ? "react-tabs__tab react-tabs__tab--selected removeBorder"
-                  : "react-tabs__tab"
-              }
-              onClick={() => homeSearchFunction()}
-            >
-              <SearchIcon>
-                <FiSearch />
-              </SearchIcon>
-            </Tab>
-            <Tab
-              disabled={loading || tabIndex === 2}
-              className={
-                2 === tabIndex - 1
-                  ? "react-tabs__tab LIBefore"
-                  : tabIndex + 1 === 2
-                  ? "react-tabs__tab LIAFter"
-                  : tabIndex === 2
-                  ? "react-tabs__tab react-tabs__tab--selected"
-                  : "react-tabs__tab"
-              }
-              onClick={() => myFeedFunction()}
-            >
-              <SearchIcon>
-                <FiHome />
-              </SearchIcon>
-            </Tab>
-            <Tab
-              disabled={loading || tabIndex === 3}
-              className={
-                3 === tabIndex - 1
-                  ? "react-tabs__tab LIBefore"
-                  : tabIndex + 1 === 3
-                  ? "react-tabs__tab LIAFter"
-                  : tabIndex === 3
-                  ? "react-tabs__tab react-tabs__tab--selected"
-                  : "react-tabs__tab"
-              }
-            >
-              <img src={Notifications} alt="" />
-            </Tab>
-            <Tab
-              disabled={loading || tabIndex === 4}
-              onClick={() => favoriteFunction()}
-              className={
-                4 === tabIndex - 1
-                  ? "react-tabs__tab LIBefore"
-                  : tabIndex + 1 === 4
-                  ? "react-tabs__tab LIAFter"
-                  : tabIndex === 4
-                  ? "react-tabs__tab react-tabs__tab--selected"
-                  : "react-tabs__tab"
-              }
-            >
-              <SearchIcon>
-                <FiHeart />
-              </SearchIcon>
-            </Tab>
-            <Tab
-              disabled={loading || tabIndex === 5}
-              className={
-                5 === tabIndex - 1
-                  ? "react-tabs__tab"
-                  : tabIndex + 1 === 5
-                  ? "react-tabs__tab LIAFter"
-                  : tabIndex === 5
-                  ? "react-tabs__tab react-tabs__tab--selected"
-                  : "react-tabs__tab"
-              }
-              onClick={() => listView()}
-            >
-              <SearchIcon>
-                <BsListUl />
-              </SearchIcon>
-            </Tab>
-            <Tab
-              disabled={true}
-              className={
-                tabIndex === 5
-                  ? "react-tabs__tab LIAFter"
-                  : tabIndex !== 6
-                  ? "react-tabs__tab--disabled"
-                  : "react-tabs__tab LiDisable"
-              }
-              style={{ backgroundColor: "#f3f3f3" }}
-            ></Tab>
+    <LeftBarContent className="MainTabs">
+      <Tabs selectedIndex={tabIndex} onSelect={setTab}>
+        <TabList>
+          <Tab
+            disabled={loading || tabIndex === 0}
+            className={
+              tabIndex - 1 === 0
+                ? tabIndex === 1
+                  ? 'react-tabs__tab LIBefore removeBorder'
+                  : 'react-tabs__tab LIBefore'
+                : tabIndex + 1 === 0
+                ? 'react-tabs__tab LIAFter'
+                : tabIndex === 0
+                ? 'react-tabs__tab react-tabs__tab--selected'
+                : 'react-tabs__tab'
+            }
+          />
+          <Tab
+            disabled={loading || tabIndex === 1}
+            className={
+              tabIndex - 1 === 1
+                ? tabIndex === 2
+                  ? 'react-tabs__tab LIBefore removeBorder'
+                  : 'react-tabs__tab LIBefore'
+                : tabIndex + 1 === 1
+                ? 'react-tabs__tab'
+                : tabIndex === 1
+                ? 'react-tabs__tab react-tabs__tab--selected removeBorder'
+                : 'react-tabs__tab'
+            }
+            onClick={() => homeSearchFunction()}
+          >
+            <SearchIcon>
+              <FiSearch />
+            </SearchIcon>
+          </Tab>
+          <Tab
+            disabled={loading || tabIndex === 2}
+            className={
+              tabIndex - 1 === 2
+                ? 'react-tabs__tab LIBefore'
+                : tabIndex + 1 === 2
+                ? 'react-tabs__tab LIAFter'
+                : tabIndex === 2
+                ? 'react-tabs__tab react-tabs__tab--selected'
+                : 'react-tabs__tab'
+            }
+            onClick={() => myFeedFunction()}
+          >
+            <SearchIcon>
+              <FiHome />
+            </SearchIcon>
+          </Tab>
+          <Tab
+            disabled={loading || tabIndex === 3}
+            className={
+              tabIndex - 1 === 3
+                ? 'react-tabs__tab LIBefore'
+                : tabIndex + 1 === 3
+                ? 'react-tabs__tab LIAFter'
+                : tabIndex === 3
+                ? 'react-tabs__tab react-tabs__tab--selected'
+                : 'react-tabs__tab'
+            }
+          >
+            <img src={Notifications} alt="" />
+          </Tab>
+          <Tab
+            disabled={loading || tabIndex === 4}
+            onClick={() => favoriteFunction()}
+            className={
+              tabIndex - 1 === 4
+                ? 'react-tabs__tab LIBefore'
+                : tabIndex + 1 === 4
+                ? 'react-tabs__tab LIAFter'
+                : tabIndex === 4
+                ? 'react-tabs__tab react-tabs__tab--selected'
+                : 'react-tabs__tab'
+            }
+          >
+            <SearchIcon>
+              <FiHeart />
+            </SearchIcon>
+          </Tab>
+          <Tab
+            disabled={loading || tabIndex === 5}
+            className={
+              tabIndex - 1 === 5
+                ? 'react-tabs__tab'
+                : tabIndex + 1 === 5
+                ? 'react-tabs__tab LIAFter'
+                : tabIndex === 5
+                ? 'react-tabs__tab react-tabs__tab--selected'
+                : 'react-tabs__tab'
+            }
+            onClick={() => listView()}
+          >
+            <SearchIcon>
+              <BsListUl />
+            </SearchIcon>
+          </Tab>
+          <Tab
+            disabled
+            className={
+              tabIndex === 5
+                ? 'react-tabs__tab LIAFter'
+                : tabIndex !== 6
+                ? 'react-tabs__tab--disabled'
+                : 'react-tabs__tab LiDisable'
+            }
+            style={{ backgroundColor: '#f3f3f3' }}
+          />
 
-            <Tab
-              disabled={loading}
-              className={tabIndex === 6 ? "test" : "test1"}
-              style={{ backgroundColor: "#f3f3f3" }}
-            >
-              &nbsp;
-            </Tab>
-            <Tab
-              disabled={loading}
-              className={
-                8 === tabIndex - 1
-                  ? "react-tabs__tab LIBefore"
-                  : tabIndex + 1 === 8
-                  ? "react-tabs__tab LIAFter"
-                  : tabIndex === 8
-                  ? "react-tabs__tab react-tabs__tab--selected"
-                  : "react-tabs__tab"
-              }
-            >
-              &nbsp;
-            </Tab>
-          </TabList>
+          <Tab
+            disabled={loading}
+            className={tabIndex === 6 ? 'test' : 'test1'}
+            style={{ backgroundColor: '#f3f3f3' }}
+          >
+            &nbsp;
+          </Tab>
+          <Tab
+            disabled={loading}
+            className={
+              tabIndex - 1 === 8
+                ? 'react-tabs__tab LIBefore'
+                : tabIndex + 1 === 8
+                ? 'react-tabs__tab LIAFter'
+                : tabIndex === 8
+                ? 'react-tabs__tab react-tabs__tab--selected'
+                : 'react-tabs__tab'
+            }
+          >
+            &nbsp;
+          </Tab>
+        </TabList>
 
-          <TabPanel></TabPanel>
-          <TabPanel>
-            <div className="panel-content">
-              {isUserOpen && !selectedListId ? (
-                <Profile
-                  setDisplayTab={() => setTabIndex(0)}
-                  userId={userDataId}
-                  setProfileClosed={setProfileClosed}
-                />
-              ) : selectedListId ? (
-                <ListDescriptionView
-                  setDisplayTab={() => setTabIndex(0)}
-                  setSelectedListId={setSelectedListId}
-                  selectedListId={selectedListId}
-                  listClickedFromSearch={listClickedFromSearch}
-                  setListClickedFromSearch={setListClickedFromSearch}
-                  setListIndex={setListIndex}
-                />
-              ) : !searchIndex ? (
-                <HomeSearchComponent
-                  setDisplayTab={() => setTabIndex(0)}
-                  setSelectedListId={setSelectedListId}
-                  setListClickedFromSearch={setListClickedFromSearch}
-                  setSearchIndex={setSearchIndex}
-                />
-              ) : userDataId ? (
-                <Profile
-                  setDisplayTab={() => setTabIndex(0)}
-                  userId={userDataId}
-                  setProfileClosed={setProfileClosed}
-                />
-              ) : (
-                <BuisinessView
-                  setDisplayTab={() => setTabIndex(0)}
-                  profile={profile}
-                  businessExists={businessExists}
-                  businessId={businessId}
-                  searchIndex={searchIndex}
-                  setTabIndex={setTabIndex}
-                  setSearchIndex={setSearchIndex}
-                  myFeedIndex={myFeedIndex}
-                  setMyFeedIndex={setMyFeedIndex}
-                  setListIndex={setListIndex}
-                  listIndex={listIndex}
-                  favoriteIndex={favoriteIndex}
-                  setFavoriteIndex={setFavoriteIndex}
-                />
-              )}
-            </div>
-          </TabPanel>
-          <TabPanel>
-            <div className="panel-content">
-              {!myFeedIndex && !userDataId && !selectedListId ? (
-                <MyFeed
-                  setDisplayTab={() => setTabIndex(0)}
-                  setMyFeedIndex={setMyFeedIndex}
-                  setSelectedListId={setSelectedListId}
-                />
-              ) : userDataId && !selectedListId ? (
-                <Profile
-                  setDisplayTab={() => setTabIndex(0)}
-                  userId={userDataId}
-                  setProfileClosed={setProfileClosed}
-                />
-              ) : selectedListId ? (
-                <ListDescriptionView
-                  listOpenedFromBusiness={true}
-                  setDisplayTab={() => setTabIndex(0)}
-                  setSelectedListId={setSelectedListId}
-                  selectedListId={selectedListId}
-                  listClickedFromSearch={listClickedFromSearch}
-                  setListClickedFromSearch={setListClickedFromSearch}
-                  setListIndex={setListIndex}
-                />
-              ) : (
-                <BuisinessView
-                  setDisplayTab={() => setTabIndex(0)}
-                  profile={profile}
-                  businessExists={businessExists}
-                  businessId={businessId}
-                  searchIndex={searchIndex}
-                  setTabIndex={setTabIndex}
-                  setSearchIndex={setSearchIndex}
-                  myFeedIndex={myFeedIndex}
-                  setMyFeedIndex={setMyFeedIndex}
-                  setListIndex={setListIndex}
-                  listIndex={listIndex}
-                  favoriteIndex={favoriteIndex}
-                  setFavoriteIndex={setFavoriteIndex}
-                />
-              )}
-            </div>
-          </TabPanel>
-          <TabPanel>
-            <div className="panel-content">
-              <h2>Any content 6</h2>
-              {/* <FeedDataContent /> */}
-            </div>
-          </TabPanel>
-          <TabPanel>
-            <div className="panel-content">
-              {(favoriteIndex || businessId) &&
-              !userDataId &&
-              !selectedListId ? (
-                <BuisinessView
-                  setDisplayTab={() => setTabIndex(0)}
-                  profile={profile}
-                  businessExists={businessExists}
-                  businessId={businessId}
-                  searchIndex={searchIndex}
-                  setTabIndex={setTabIndex}
-                  setSearchIndex={setSearchIndex}
-                  myFeedIndex={myFeedIndex}
-                  setMyFeedIndex={setMyFeedIndex}
-                  setListIndex={setListIndex}
-                  listIndex={listIndex}
-                  favoriteIndex={favoriteIndex}
-                  setFavoriteIndex={setFavoriteIndex}
-                  setSelectedListId={setSelectedListId}
-                />
-              ) : userDataId && !profileClosed ? (
-                <Profile
-                  setDisplayTab={() => setTabIndex(0)}
-                  userId={userDataId}
-                  setProfileClosed={setProfileClosed}
-                />
-              ) : selectedListId ? (
-                <ListDescriptionView
-                  listOpenedFromBusiness={true}
-                  setDisplayTab={() => setTabIndex(0)}
-                  setSelectedListId={setSelectedListId}
-                  selectedListId={selectedListId}
-                  listClickedFromSearch={listClickedFromSearch}
-                  setListClickedFromSearch={setListClickedFromSearch}
-                  setListIndex={setListIndex}
-                />
-              ) : (
-                <BusinessList
-                  setDisplayTab={() => setTabIndex(0)}
-                  setFavoriteIndex={setFavoriteIndex}
-                />
-              )}
-            </div>
-          </TabPanel>
-          <TabPanel className={discoverBtn ? "DiscoverWrapper" : ""}>
-            <div className="panel-content">
-              {!selectedListId && !userDataId && !discoverBtn ? (
-                <ListOptionView
-                  setDisplayTab={() => setTabIndex(0)}
-                  setSelectedListId={setSelectedListId}
-                  selectedListId={selectedListId}
-                  setDiscoverBtn={setDiscoverBtn}
-                />
-              ) : !listIndex && !userDataId && !discoverBtn ? (
-                <ListDescriptionView
-                  listOpenedFromBusiness={true}
-                  setDisplayTab={() => setTabIndex(0)}
-                  setSelectedListId={setSelectedListId}
-                  selectedListId={selectedListId}
-                  listClickedFromSearch={listClickedFromSearch}
-                  setListClickedFromSearch={setListClickedFromSearch}
-                  setListIndex={setListIndex}
-                  readMore={readMore}
-                  setDiscoverBtn={setDiscoverBtn}
-                />
-              ) : userDataId && !discoverBtn ? (
-                <Profile
-                  setDisplayTab={() => setTabIndex(0)}
-                  userId={userDataId}
-                  setProfileClosed={setProfileClosed}
-                />
-              ) : discoverBtn && !selectedListId ? (
-                <DiscoverList
-                  setDiscoverBtn={setDiscoverBtn}
-                  setSelectedListId={setSelectedListId}
-                  setReadMore={setReadMore}
-                />
-              ) : (
-                <BuisinessView
-                  setDisplayTab={() => setTabIndex(0)}
-                  profile={profile}
-                  businessExists={businessExists}
-                  businessId={businessId}
-                  searchIndex={searchIndex}
-                  setTabIndex={setTabIndex}
-                  setSearchIndex={setSearchIndex}
-                  myFeedIndex={myFeedIndex}
-                  setMyFeedIndex={setMyFeedIndex}
-                  setListIndex={setListIndex}
-                  listIndex={listIndex}
-                  favoriteIndex={favoriteIndex}
-                  setFavoriteIndex={setFavoriteIndex}
-                />
-              )}
-            </div>
-          </TabPanel>
-
-          <TabPanel>
-            <div className="panel-content">
-              {displayChangePassword === true ? (
-                <ChangePassword
-                  setDisplayChangePassword={setDisplayChangePassword}
-                  setDisplayTab={() => setTabIndex(0)}
-                />
-              ) : (
-                <ProfileSettings
-                  setDisplayChangePassword={setDisplayChangePassword}
-                  setDisplayTab={() => setTabIndex(0)}
-                  profile={profile}
-                  setFlag={setFlag}
-                />
-              )}
-            </div>
-          </TabPanel>
-
-          <TabPanel></TabPanel>
-          <TabPanel></TabPanel>
-        </Tabs>
-        <BottomSettingsWrap>
-          <BsThreeDots />
-          <div className="BottomSettings">
-            <ul>
-              <li>
-                <button onClick={() => consumerLogout()} disabled={loader}>
-                  Logout
-                </button>
-              </li>
-              <li onClick={() => showUserProfile()}>Profile</li>
-            </ul>
+        <TabPanel />
+        <TabPanel>
+          <div className="panel-content">
+            {isUserOpen && !selectedListId ? (
+              <Profile
+                setDisplayTab={() => setTabIndex(0)}
+                userId={userDataId}
+                setProfileClosed={setProfileClosed}
+              />
+            ) : selectedListId ? (
+              <ListDescriptionView
+                setDisplayTab={() => setTabIndex(0)}
+                setSelectedListId={setSelectedListId}
+                selectedListId={selectedListId}
+                listClickedFromSearch={listClickedFromSearch}
+                setListClickedFromSearch={setListClickedFromSearch}
+                setListIndex={setListIndex}
+              />
+            ) : !searchIndex ? (
+              <HomeSearchComponent
+                setDisplayTab={() => setTabIndex(0)}
+                setSelectedListId={setSelectedListId}
+                setListClickedFromSearch={setListClickedFromSearch}
+                setSearchIndex={setSearchIndex}
+              />
+            ) : userDataId ? (
+              <Profile
+                setDisplayTab={() => setTabIndex(0)}
+                userId={userDataId}
+                setProfileClosed={setProfileClosed}
+              />
+            ) : (
+              <BuisinessView
+                setDisplayTab={() => setTabIndex(0)}
+                profile={profile}
+                businessExists={businessExists}
+                businessId={businessId}
+                searchIndex={searchIndex}
+                setTabIndex={setTabIndex}
+                setSearchIndex={setSearchIndex}
+                myFeedIndex={myFeedIndex}
+                setMyFeedIndex={setMyFeedIndex}
+                setListIndex={setListIndex}
+                listIndex={listIndex}
+                favoriteIndex={favoriteIndex}
+                setFavoriteIndex={setFavoriteIndex}
+              />
+            )}
           </div>
-        </BottomSettingsWrap>
-      </LeftBarContent>
-    </>
+        </TabPanel>
+        <TabPanel>
+          <div className="panel-content">
+            {!myFeedIndex && !userDataId && !selectedListId ? (
+              <MyFeed
+                setDisplayTab={() => setTabIndex(0)}
+                setMyFeedIndex={setMyFeedIndex}
+                setSelectedListId={setSelectedListId}
+              />
+            ) : userDataId && !selectedListId ? (
+              <Profile
+                setDisplayTab={() => setTabIndex(0)}
+                userId={userDataId}
+                setProfileClosed={setProfileClosed}
+              />
+            ) : selectedListId ? (
+              <ListDescriptionView
+                listOpenedFromBusiness
+                setDisplayTab={() => setTabIndex(0)}
+                setSelectedListId={setSelectedListId}
+                selectedListId={selectedListId}
+                listClickedFromSearch={listClickedFromSearch}
+                setListClickedFromSearch={setListClickedFromSearch}
+                setListIndex={setListIndex}
+              />
+            ) : (
+              <BuisinessView
+                setDisplayTab={() => setTabIndex(0)}
+                profile={profile}
+                businessExists={businessExists}
+                businessId={businessId}
+                searchIndex={searchIndex}
+                setTabIndex={setTabIndex}
+                setSearchIndex={setSearchIndex}
+                myFeedIndex={myFeedIndex}
+                setMyFeedIndex={setMyFeedIndex}
+                setListIndex={setListIndex}
+                listIndex={listIndex}
+                favoriteIndex={favoriteIndex}
+                setFavoriteIndex={setFavoriteIndex}
+              />
+            )}
+          </div>
+        </TabPanel>
+        <TabPanel>
+          <div className="panel-content">
+            <h2>Any content 6</h2>
+            {/* <FeedDataContent /> */}
+          </div>
+        </TabPanel>
+        <TabPanel>
+          <div className="panel-content">
+            {(favoriteIndex || businessId) && !userDataId && !selectedListId ? (
+              <BuisinessView
+                setDisplayTab={() => setTabIndex(0)}
+                profile={profile}
+                businessExists={businessExists}
+                businessId={businessId}
+                searchIndex={searchIndex}
+                setTabIndex={setTabIndex}
+                setSearchIndex={setSearchIndex}
+                myFeedIndex={myFeedIndex}
+                setMyFeedIndex={setMyFeedIndex}
+                setListIndex={setListIndex}
+                listIndex={listIndex}
+                favoriteIndex={favoriteIndex}
+                setFavoriteIndex={setFavoriteIndex}
+                setSelectedListId={setSelectedListId}
+              />
+            ) : userDataId && !profileClosed ? (
+              <Profile
+                setDisplayTab={() => setTabIndex(0)}
+                userId={userDataId}
+                setProfileClosed={setProfileClosed}
+              />
+            ) : selectedListId ? (
+              <ListDescriptionView
+                listOpenedFromBusiness
+                setDisplayTab={() => setTabIndex(0)}
+                setSelectedListId={setSelectedListId}
+                selectedListId={selectedListId}
+                listClickedFromSearch={listClickedFromSearch}
+                setListClickedFromSearch={setListClickedFromSearch}
+                setListIndex={setListIndex}
+              />
+            ) : (
+              <BusinessList
+                setDisplayTab={() => setTabIndex(0)}
+                setFavoriteIndex={setFavoriteIndex}
+              />
+            )}
+          </div>
+        </TabPanel>
+        <TabPanel className={discoverBtn ? 'DiscoverWrapper' : ''}>
+          <div className="panel-content">
+            {!selectedListId && !userDataId && !discoverBtn ? (
+              <ListOptionView
+                setDisplayTab={() => setTabIndex(0)}
+                setSelectedListId={setSelectedListId}
+                selectedListId={selectedListId}
+                setDiscoverBtn={setDiscoverBtn}
+              />
+            ) : !listIndex && !userDataId && !discoverBtn ? (
+              <ListDescriptionView
+                listOpenedFromBusiness
+                setDisplayTab={() => setTabIndex(0)}
+                setSelectedListId={setSelectedListId}
+                selectedListId={selectedListId}
+                listClickedFromSearch={listClickedFromSearch}
+                setListClickedFromSearch={setListClickedFromSearch}
+                setListIndex={setListIndex}
+                readMore={readMore}
+                setDiscoverBtn={setDiscoverBtn}
+              />
+            ) : userDataId && !discoverBtn ? (
+              <Profile
+                setDisplayTab={() => setTabIndex(0)}
+                userId={userDataId}
+                setProfileClosed={setProfileClosed}
+              />
+            ) : discoverBtn && !selectedListId ? (
+              <DiscoverList
+                setDiscoverBtn={setDiscoverBtn}
+                setSelectedListId={setSelectedListId}
+                setReadMore={setReadMore}
+              />
+            ) : (
+              <BuisinessView
+                setDisplayTab={() => setTabIndex(0)}
+                profile={profile}
+                businessExists={businessExists}
+                businessId={businessId}
+                searchIndex={searchIndex}
+                setTabIndex={setTabIndex}
+                setSearchIndex={setSearchIndex}
+                myFeedIndex={myFeedIndex}
+                setMyFeedIndex={setMyFeedIndex}
+                setListIndex={setListIndex}
+                listIndex={listIndex}
+                favoriteIndex={favoriteIndex}
+                setFavoriteIndex={setFavoriteIndex}
+              />
+            )}
+          </div>
+        </TabPanel>
+
+        <TabPanel>
+          <div className="panel-content">
+            {displayChangePassword === true ? (
+              <ChangePassword
+                setDisplayChangePassword={setDisplayChangePassword}
+                setDisplayTab={() => setTabIndex(0)}
+              />
+            ) : (
+              <ProfileSettings
+                setDisplayChangePassword={setDisplayChangePassword}
+                setDisplayTab={() => setTabIndex(0)}
+                profile={profile}
+                setFlag={setFlag}
+              />
+            )}
+          </div>
+        </TabPanel>
+
+        <TabPanel />
+        <TabPanel />
+      </Tabs>
+      <BottomSettingsWrap>
+        <BsThreeDots />
+        <div className="BottomSettings">
+          <ul>
+            <li>
+              <button onClick={() => consumerLogout()} disabled={loader}>
+                Logout
+              </button>
+            </li>
+            <li onClick={() => showUserProfile()}>Profile</li>
+          </ul>
+        </div>
+      </BottomSettingsWrap>
+    </LeftBarContent>
   );
-};
+}
 
 export default LeftBar;

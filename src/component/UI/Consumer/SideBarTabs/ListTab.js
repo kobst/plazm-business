@@ -1,20 +1,19 @@
-import { FaDivide } from "react-icons/fa";
-import React, { useEffect, useState, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import useStore from "../../../Consumer/useState";
+import { FaDivide } from 'react-icons/fa';
+import React, { useEffect, useState, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import useStore from '../../../Consumer/useState';
 
-import { useHistory } from "react-router-dom";
-
-import UploadImg from "../../../../images/upload-img.jpg";
-import "./styles.css";
+import UploadImg from '../../../../images/upload-img.jpg';
+import './styles.css';
 
 import {
   checkMime,
   replaceBucket,
-} from "../../../../utilities/checkResizedImage";
-import ReactTooltip from "react-tooltip";
+} from '../../../../utilities/checkResizedImage';
+import ReactTooltip from 'react-tooltip';
 
-const ListTab = ({
+function ListTab({
   data,
   handleListTabClick,
   // setSelectedListId,
@@ -22,7 +21,7 @@ const ListTab = ({
   // setListTab,
   // selectedList,
   // setSelectedList,
-}) => {
+}) {
   const history = useHistory();
 
   const user = useSelector((state) => state.user.user);
@@ -73,29 +72,27 @@ const ListTab = ({
     setHover(false);
   };
   return (
-    <>
-      <div
-        onClick={() => handleClick(data._id)}
-        className={selected ? "listTab-item selected" : "listTab-item"}
-        onMouseOver={handelHover}
-        onMouseLeave={handelLeave}
-        data-tip={`${data.name}`}
-      >
-        <ReactTooltip className="tool-tip" arrowColor="#fff" place="right" />
-        {/* {hover && <div className="tool-tip">{data.name}</div>} */}
-        <img
-          src={image}
-          className="listTab-icon"
-          alt=""
-          onError={() => errorFunction()}
-        />
-        <span className="sidebar-text">
-          <span className="subscription-text">{data.name}</span>
-          <div className="RedDot"></div>
-        </span>
-      </div>
-    </>
+    <div
+      onClick={() => handleClick(data._id)}
+      className={selected ? 'listTab-item selected' : 'listTab-item'}
+      onMouseOver={handelHover}
+      onMouseLeave={handelLeave}
+      data-tip={`${data.name}`}
+    >
+      <ReactTooltip className="tool-tip" arrowColor="#fff" place="right" />
+      {/* {hover && <div className="tool-tip">{data.name}</div>} */}
+      <img
+        src={image}
+        className="listTab-icon"
+        alt=""
+        onError={() => errorFunction()}
+      />
+      <span className="sidebar-text">
+        <span className="subscription-text">{data.name}</span>
+        <div className="RedDot" />
+      </span>
+    </div>
   );
-};
+}
 
 export default ListTab;

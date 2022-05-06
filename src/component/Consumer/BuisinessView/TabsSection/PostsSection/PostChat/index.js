@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import UserMessage from "./UserMessage";
-import { useSelector, useDispatch } from "react-redux";
-import InfiniteScroll from "react-infinite-scroll-component";
-import ValueLoader from "../../../../../../utils/loader";
-import { addFilteredPosts } from "../../../../../../reducers/businessReducer";
-import useStore from "../../../../useState";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import UserMessage from './UserMessage';
+import ValueLoader from '../../../../../../utils/loader';
+import { addFilteredPosts } from '../../../../../../reducers/businessReducer';
+import useStore from '../../../../useState';
+
 const ChatContent = styled.div`
   width: 100%;
   position: relative;
@@ -39,7 +40,7 @@ const LoaderWrap = styled.div`
   }
 `;
 
-const PostChat = () => {
+function PostChat() {
   const posts = useSelector((state) => state.business.posts);
   const business = useSelector((state) => state.business.business);
   const user = useSelector((state) => state.user.user);
@@ -74,8 +75,8 @@ const PostChat = () => {
       setOffSet(offset + 20);
       dispatch(
         addFilteredPosts({
-          businessId: business && business[0] ? business[0]._id : "",
-          filters: filters,
+          businessId: business && business[0] ? business[0]._id : '',
+          filters,
           value: offset + 20,
           ownerId: user._id,
           sideFilters: { likes: sideFilterForLikes },
@@ -84,78 +85,71 @@ const PostChat = () => {
     } else setHasMore(false);
   };
   return (
-    <>
-      <div
-        id="scrollableDiv"
-        style={{ height: "calc(100vh - 465px)", overflow: "auto" }}
+    <div
+      id="scrollableDiv"
+      style={{ height: 'calc(100vh - 465px)', overflow: 'auto' }}
+    >
+      {/* to display Top Post If any */}
+      {topPost && <UserMessage postData={topPostId} />}
+      {topPost && <hr />}
+      <InfiniteScroll
+        dataLength={posts ? posts.length : 0}
+        next={fetchMorePosts}
+        hasMore={hasMore}
+        loader={
+          posts &&
+          posts.length > 20 &&
+          offset + 20 < totalPosts &&
+          !loadingFilterData ? (
+            <div style={{ textAlign: 'center', margin: ' 40px auto 0' }}>
+              {' '}
+              <ValueLoader height="40" width="40" />
+            </div>
+          ) : null
+        }
+        scrollableTarget="scrollableDiv"
+        endMessage={
+          posts.length > 20 && !loadingFilterData ? (
+            <center>
+              <NoMorePost className="noMorePost">
+                No more posts to show
+              </NoMorePost>
+            </center>
+          ) : null
+        }
       >
-        {/* to display Top Post If any */}
-        {topPost && (
-          <UserMessage
-            postData={topPostId}
-            // setSelectedListId={setSelectedListId}
-          />
-        )}
-        {topPost && <hr />}
-        <InfiniteScroll
-          dataLength={posts ? posts.length : 0}
-          next={fetchMorePosts}
-          hasMore={hasMore}
-          loader={
-            posts &&
-            posts.length > 20 &&
-            offset + 20 < totalPosts &&
-            !loadingFilterData ? (
-              <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
-                {" "}
-                <ValueLoader height="40" width="40" />
-              </div>
-            ) : null
-          }
-          scrollableTarget="scrollableDiv"
-          endMessage={
-            posts.length > 20 && !loadingFilterData ? (
-              <center>
-                <NoMorePost className="noMorePost">
-                  No more posts to show
-                </NoMorePost>
-              </center>
-            ) : null
-          }
-        >
-          <ChatContent>
-            {!loadingFilterData && posts.length > 0 ? (
-              posts.map((i, key) => {
-                return topPostId ? (
-                  i.postDetails._id !== topPostId.postId && (
-                    <UserMessage
-                      postData={i}
-                      key={key}
-                      setSelectedListId={setSelectedListId}
-                    />
-                  )
-                ) : (
+        <ChatContent>
+          {!loadingFilterData && posts.length > 0 ? (
+            posts.map((i, key) =>
+              topPostId ? (
+                i.postDetails._id !== topPostId.postId && (
                   <UserMessage
                     postData={i}
                     key={key}
                     setSelectedListId={setSelectedListId}
                   />
-                );
-              })
-            ) : loadingFilterData ? (
-              <LoaderWrap>
-                <ValueLoader />
-              </LoaderWrap>
-            ) : (
-              <center>
-                <NoMorePost>No posts to display</NoMorePost>
-              </center>
-            )}
-          </ChatContent>
-        </InfiniteScroll>
-      </div>
-    </>
+                )
+              ) : (
+                <UserMessage
+                  postData={i}
+                  key={key}
+                  setSelectedListId={setSelectedListId}
+                />
+              )
+            )
+          ) : loadingFilterData ? (
+            <LoaderWrap>
+              <ValueLoader />
+            </LoaderWrap>
+          ) : (
+            <center>
+              <NoMorePost>No posts to display</NoMorePost>
+            </center>
+          )}
+        </ChatContent>
+      </InfiniteScroll>
+    </div>
   );
-};
+}
 
 export default PostChat;

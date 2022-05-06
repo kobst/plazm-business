@@ -1,5 +1,5 @@
-import * as Yup from "yup";
-import error from "../../../../constants";
+import * as Yup from 'yup';
+import error from '../../../../constants';
 
 /*
  * @desc: validation schema for add event

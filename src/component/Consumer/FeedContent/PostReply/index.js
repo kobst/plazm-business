@@ -1,7 +1,7 @@
-import React from "react";
-import styled from "styled-components";
-import ProfileImg from "../../../../images/profile-img.png";
-import BottomBarLikesContent from "../BottomBarLikes";
+import React from 'react';
+import styled from 'styled-components';
+import ProfileImg from '../../../../images/profile-img.png';
+import BottomBarLikesContent from '../BottomBarLikes';
 
 const PostReplyWrap = styled.div`
   display: flex;
@@ -80,37 +80,35 @@ const PostCommentDateInfo = styled.div`
   color: #ff2e9a;
 `;
 
-const PostReplyContent = () => {
+function PostReplyContent() {
   return (
-    <>
-      <PostReplyWrap>
-        <UserThumbImg>
-          <img src={ProfileImg} alt="" />
-        </UserThumbImg>
-        <PostReplyContentDiv>
-          <PostUserName>Brooklyn Simmons</PostUserName>
-          <SbHeading>Marriage Anniversary Lunch</SbHeading>
-          <PostCommentDescription>
-            Hi Edward Han Janet fraser Davidblaine Brendon Fraser . It’s an
-            excellent place.. Great pizzza. Let plan a lunch together...
-            Partners offers a full range of speciality coffee drinks, baked
-            goods, and heftier meal options for breakfast and lunch. At the
-            company’s Long Island City location, a selection of pastries is
-            available all day while the kitchen is open from 9 a.m. to 2:45 p.m.
-          </PostCommentDescription>
-          <PostCommentInfo>
-            <PostCommentDate>Date -</PostCommentDate>
-            <PostCommentDateInfo>Monday to Tuesday</PostCommentDateInfo>
-          </PostCommentInfo>
-          <PostCommentInfo>
-            <PostCommentDate>Hours -</PostCommentDate>
-            <PostCommentDateInfo>04:00 PM - 8:00 PM </PostCommentDateInfo>
-          </PostCommentInfo>
-          <BottomBarLikesContent />
-        </PostReplyContentDiv>
-      </PostReplyWrap>
-    </>
+    <PostReplyWrap>
+      <UserThumbImg>
+        <img src={ProfileImg} alt="" />
+      </UserThumbImg>
+      <PostReplyContentDiv>
+        <PostUserName>Brooklyn Simmons</PostUserName>
+        <SbHeading>Marriage Anniversary Lunch</SbHeading>
+        <PostCommentDescription>
+          Hi Edward Han Janet fraser Davidblaine Brendon Fraser . It’s an
+          excellent place.. Great pizzza. Let plan a lunch together... Partners
+          offers a full range of speciality coffee drinks, baked goods, and
+          heftier meal options for breakfast and lunch. At the company’s Long
+          Island City location, a selection of pastries is available all day
+          while the kitchen is open from 9 a.m. to 2:45 p.m.
+        </PostCommentDescription>
+        <PostCommentInfo>
+          <PostCommentDate>Date -</PostCommentDate>
+          <PostCommentDateInfo>Monday to Tuesday</PostCommentDateInfo>
+        </PostCommentInfo>
+        <PostCommentInfo>
+          <PostCommentDate>Hours -</PostCommentDate>
+          <PostCommentDateInfo>04:00 PM - 8:00 PM </PostCommentDateInfo>
+        </PostCommentInfo>
+        <BottomBarLikesContent />
+      </PostReplyContentDiv>
+    </PostReplyWrap>
   );
-};
+}
 
 export default PostReplyContent;

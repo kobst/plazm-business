@@ -1,31 +1,31 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { IoMdClose } from "react-icons/io";
-import moment from "moment";
-import InfiniteScroll from "react-infinite-scroll-component";
-import BannerImg from "../../../images/sliderimg.png";
-import styled from "styled-components";
-import { CgLock } from "react-icons/cg";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { IoMdClose } from 'react-icons/io';
+import moment from 'moment';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import styled from 'styled-components';
+import { CgLock } from 'react-icons/cg';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { useHistory } from 'react-router-dom';
+import BannerImg from '../../../images/sliderimg.png';
 
 import {
   UnSubscribeToAList,
   SubscribeToAListAction,
   fetchUserLists,
   clearListSearchData,
-} from "../../../reducers/listReducer";
+} from '../../../reducers/listReducer';
 import {
   fetchSelectedListDetails,
   clearMyFeedData,
-} from "../../../reducers/myFeedReducer";
-import ValueLoader from "../../../utils/loader";
-import DisplayPostInAList from "./DisplayPostsInAList";
-import { unwrapResult } from "@reduxjs/toolkit";
+} from '../../../reducers/myFeedReducer';
+import ValueLoader from '../../../utils/loader';
+import DisplayPostInAList from './DisplayPostsInAList';
 import {
   addSubscribedList,
   removeSubscribedList,
-} from "../../../reducers/userReducer";
-import { useHistory } from "react-router-dom";
-import ButtonOrange from "../UI/ButtonOrange";
+} from '../../../reducers/userReducer';
+import ButtonOrange from '../UI/ButtonOrange';
 
 const ListOptionSection = styled.div`
   width: 100%;
@@ -260,8 +260,7 @@ const ArrowBack = styled.div`
   }
 `;
 
-
-const ListDescriptionView = ({
+function ListDescriptionView({
   setDisplayTab,
   setSelectedListId,
   selectedListId,
@@ -270,7 +269,7 @@ const ListDescriptionView = ({
   setFavoriteIndex,
   readMore,
   setDiscoverBtn,
-}) => {
+}) {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.myFeed.loadingSelectedList);
   const loadingUnSubScribe = useSelector(
@@ -398,7 +397,7 @@ const ListDescriptionView = ({
         <ListOptionSection>
           <HeadingWrap>
             <TopHeadingWrap>
-            <ArrowBack onClick={() => console.log("back")}>BACK</ArrowBack>
+              <ArrowBack onClick={() => console.log('back')}>BACK</ArrowBack>
 
               <ListBannerSection>
                 <img src={image} alt="" onError={() => setImage(BannerImg)} />
@@ -406,7 +405,7 @@ const ListDescriptionView = ({
                 <p>{selectedList.description}</p>
                 <div className="BannerWrapBtn">
                   <h5>
-                    by{" "}
+                    by{' '}
                     <strong>
                       <span
                         onClick={() =>
@@ -415,12 +414,12 @@ const ListDescriptionView = ({
                       >
                         {selectedList.ownerId.name}
                       </span>
-                    </strong>{" "}
-                    Updated{" "}
+                    </strong>{' '}
+                    Updated{' '}
                     {moment(selectedList.updatedAt).format(
-                      "MMM DD,YYYY, hh:MM a"
-                    )}{" "}
-                    EST{" "}
+                      'MMM DD,YYYY, hh:MM a'
+                    )}{' '}
+                    EST{' '}
                     {!selectedList.isPublic && (
                       <LockDiv>
                         <CgLock />
@@ -431,9 +430,8 @@ const ListDescriptionView = ({
                   {selectedList &&
                   selectedList.ownerId &&
                   selectedList.ownerId._id === user._id ? (
-                    <>
-                      <ButtonOuterDiv>
-                        {/* <button className="PinkColor">Make Public</button>
+                    <ButtonOuterDiv>
+                      {/* <button className="PinkColor">Make Public</button>
                         <button className="PinkColor">Invite</button>
                         <button
                           className="OrangeColor"
@@ -441,8 +439,7 @@ const ListDescriptionView = ({
                         >
                           Delete
                         </button> */}
-                      </ButtonOuterDiv>
-                    </>
+                    </ButtonOuterDiv>
                   ) : !user.listFollowed.includes(selectedList._id) ? (
                     <ButtonOrange
                       className="subscribe"
@@ -467,7 +464,7 @@ const ListDescriptionView = ({
           </HeadingWrap>
           <div
             id="scrollableDiv"
-            style={{ height: "calc(100vh - 211px)", overflow: "auto" }}
+            style={{ height: 'calc(100vh - 211px)', overflow: 'auto' }}
             className="ScrollDivInner"
           >
             <InfiniteScroll
@@ -476,8 +473,8 @@ const ListDescriptionView = ({
               hasMore={hasMore}
               loader={
                 offset < totalData && loading ? (
-                  <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
-                    {" "}
+                  <div style={{ textAlign: 'center', margin: ' 40px auto 0' }}>
+                    {' '}
                     <ValueLoader height="40" width="40" />
                   </div>
                 ) : null
@@ -515,6 +512,6 @@ const ListDescriptionView = ({
       ) : null}
     </>
   );
-};
+}
 
 export default ListDescriptionView;

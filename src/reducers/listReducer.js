@@ -1,5 +1,5 @@
-import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
-import { graphQlEndPoint } from "../Api/graphQl";
+import { createSlice, createAsyncThunk, current } from '@reduxjs/toolkit';
+import { graphQlEndPoint } from '../Api/graphQl';
 import {
   addEventToList,
   addPostToList,
@@ -14,13 +14,13 @@ import {
   getMostTrendingLists,
   getMostPopularLists,
   SearchLists,
-} from "../graphQl";
+} from '../graphQl';
 
 /*
  * @desc:  to check if business exists or not
  * @params: businessId
  */
-export const findAllLists = createAsyncThunk("data/findAllLists", async () => {
+export const findAllLists = createAsyncThunk('data/findAllLists', async () => {
   const graphQl = getAllLists();
   const response = await graphQlEndPoint(graphQl);
   return response.data.getLists.list;
@@ -30,7 +30,7 @@ export const findAllLists = createAsyncThunk("data/findAllLists", async () => {
  * @desc:  to create a list
  * @params: businessId
  */
-export const createList = createAsyncThunk("data/createList", async (obj) => {
+export const createList = createAsyncThunk('data/createList', async (obj) => {
   const graphQl = CreateList(obj);
   const response = await graphQlEndPoint(graphQl);
   return response;
@@ -41,7 +41,7 @@ export const createList = createAsyncThunk("data/createList", async (obj) => {
  * @params: ownerId
  */
 export const fetchUserLists = createAsyncThunk(
-  "data/fetchUserLists",
+  'data/fetchUserLists',
   async (obj) => {
     const graphQl = getUserLists(obj);
     const response = await graphQlEndPoint(graphQl);
@@ -54,7 +54,7 @@ export const fetchUserLists = createAsyncThunk(
  * @params: listId, postId
  */
 export const AddPostToList = createAsyncThunk(
-  "data/AddPostToList",
+  'data/AddPostToList',
   async (obj) => {
     const graphQl = addPostToList(obj);
     const response = await graphQlEndPoint(graphQl);
@@ -67,7 +67,7 @@ export const AddPostToList = createAsyncThunk(
  * @params: listId, postId
  */
 export const RemovePostFromAList = createAsyncThunk(
-  "data/RemovePostFromAList",
+  'data/RemovePostFromAList',
   async (obj) => {
     const graphQl = DeletePostFromAList(obj);
     const response = await graphQlEndPoint(graphQl);
@@ -80,7 +80,7 @@ export const RemovePostFromAList = createAsyncThunk(
  * @params: listId, eventId
  */
 export const AddEventToList = createAsyncThunk(
-  "data/AddEventToList",
+  'data/AddEventToList',
   async (obj) => {
     const graphQl = addEventToList(obj);
     const response = await graphQlEndPoint(graphQl);
@@ -93,7 +93,7 @@ export const AddEventToList = createAsyncThunk(
  * @params: userId
  */
 export const fetchUserCreatedAndFollowedList = createAsyncThunk(
-  "data/fetchUserCreatedAndFollowedList",
+  'data/fetchUserCreatedAndFollowedList',
   async (obj) => {
     const graphQl = getUserCreatedAndFollowedLists(obj);
     const response = await graphQlEndPoint(graphQl);
@@ -106,7 +106,7 @@ export const fetchUserCreatedAndFollowedList = createAsyncThunk(
  * @params: userId, listId
  */
 export const deleteUserCreatedList = createAsyncThunk(
-  "data/deleteUserCreatedList",
+  'data/deleteUserCreatedList',
   async (obj) => {
     const graphQl = DeleteList(obj);
     const response = await graphQlEndPoint(graphQl);
@@ -119,7 +119,7 @@ export const deleteUserCreatedList = createAsyncThunk(
  * @params: businessId
  */
 export const UnSubscribeToAList = createAsyncThunk(
-  "data/UnSubscribeToAList",
+  'data/UnSubscribeToAList',
   async (obj) => {
     const graphQl = UnsubscribeToAList(obj);
     const response = await graphQlEndPoint(graphQl);
@@ -132,7 +132,7 @@ export const UnSubscribeToAList = createAsyncThunk(
  * @params: businessId
  */
 export const SubscribeToAListAction = createAsyncThunk(
-  "data/SubscribeToAList",
+  'data/SubscribeToAList',
   async (obj) => {
     const graphQl = SubscribeToAList(obj);
     const response = await graphQlEndPoint(graphQl);
@@ -145,7 +145,7 @@ export const SubscribeToAListAction = createAsyncThunk(
  * @params: value
  */
 export const FetchTrendingLists = createAsyncThunk(
-  "data/FetchTrendingLists",
+  'data/FetchTrendingLists',
   async (value) => {
     const graphQl = getMostTrendingLists(value);
     const response = await graphQlEndPoint(graphQl);
@@ -158,7 +158,7 @@ export const FetchTrendingLists = createAsyncThunk(
  * @params: value
  */
 export const FetchMostPopularLists = createAsyncThunk(
-  "data/FetchMostPopularLists",
+  'data/FetchMostPopularLists',
   async (value) => {
     const graphQl = getMostPopularLists(value);
     const response = await graphQlEndPoint(graphQl);
@@ -171,7 +171,7 @@ export const FetchMostPopularLists = createAsyncThunk(
  * @params: value
  */
 export const SearchListApi = createAsyncThunk(
-  "data/SearchListApi",
+  'data/SearchListApi',
   async (value) => {
     const graphQl = SearchLists(value);
     const response = await graphQlEndPoint(graphQl);
@@ -180,7 +180,7 @@ export const SearchListApi = createAsyncThunk(
 );
 
 export const slice = createSlice({
-  name: "list",
+  name: 'list',
   initialState: {
     loading: false,
     lists: [],
@@ -203,7 +203,7 @@ export const slice = createSlice({
     loadingPopularLists: false,
     popularLists: [],
     totalPopularLists: 0,
-    listSearch: "",
+    listSearch: '',
     loadingSearchList: false,
     searchList: [],
     totalSearchList: 0,
@@ -250,26 +250,26 @@ export const slice = createSlice({
       let listName;
       let findList;
       switch (action.payload.type) {
-        case "Trending":
-          listName = "trendingLists";
+        case 'Trending':
+          listName = 'trendingLists';
           findList = state[listName].find(
             (i) => i._id === action.payload.listId
           );
           break;
-        case "Most Popular":
-          listName = "popularLists";
+        case 'Most Popular':
+          listName = 'popularLists';
           findList = state[listName].find(
             (i) => i._id === action.payload.listId
           );
           break;
-        case "Selected":
-          listName = "selectedListDetails";
+        case 'Selected':
+          listName = 'selectedListDetails';
           findList = state.selectedListDetails;
           break;
       }
       if (findList) {
         findList.subscribers =
-          listName !== "selectedListDetails" &&
+          listName !== 'selectedListDetails' &&
           findList.subscribers.concat({
             _id: action.payload.user._id,
           });
@@ -281,29 +281,29 @@ export const slice = createSlice({
       let listName;
       let findList;
       switch (action.payload.type) {
-        case "Trending":
-          listName = "trendingLists";
+        case 'Trending':
+          listName = 'trendingLists';
           findList = state[listName].find(
             (i) => i._id === action.payload.listId
           );
           break;
-        case "Most Popular":
-          listName = "popularLists";
+        case 'Most Popular':
+          listName = 'popularLists';
           findList = state[listName].find(
             (i) => i._id === action.payload.listId
           );
           break;
-        case "Selected":
-          listName = "selectedListDetails";
+        case 'Selected':
+          listName = 'selectedListDetails';
           findList = state.selectedListDetails;
           break;
       }
-      if (findList && listName !== "selectedListDetails") {
+      if (findList && listName !== 'selectedListDetails') {
         findList.subscribers = findList.subscribers.filter(
           (i) => i._id !== action.payload.user._id
         );
       }
-      if (findList && listName === "selectedListDetails") {
+      if (findList && listName === 'selectedListDetails') {
         state.data = state.data.filter(
           (i) => i._id !== state.selectedListDetails._id
         );
@@ -464,7 +464,7 @@ export const slice = createSlice({
     [SearchListApi.pending]: (state) => {
       if (!state.loadingSearchList) {
         state.loadingSearchList = true;
-        if (state.listSearch === "") {
+        if (state.listSearch === '') {
           state.searchList = [];
           state.totalList = 0;
         }

@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
-import Input from "../../UI/Input/Input";
-import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
-import useStore from '../useState/index'
+import React, { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+import Input from '../../UI/Input/Input';
+import useStore from '../useState/index';
 
 const SearchWrap = styled.div`
   height: 40px;
@@ -22,7 +22,7 @@ const SearchWrap = styled.div`
     box-shadow: none;
     background: #fff;
     color: #000;
-    font-family: "Roboto", sans-serif;
+    font-family: 'Roboto', sans-serif;
     ::placeholder {
       color: #bdbdbd;
     }
@@ -52,7 +52,7 @@ const Heading = styled.h1`
   font-size: 18px;
   margin: 0 0 0 20px;
   padding: 0;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   width: calc(100% - 350px);
   @media (max-width: 767px) {
     margin: 0 auto 10px;
@@ -65,7 +65,7 @@ const Heading = styled.h1`
 const FilterBox = styled.div`
   margin: 0px;
   padding: 0;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   width: 40px;
   display: flex;
   align-items: center;
@@ -125,7 +125,7 @@ const DropdownContent = styled.div`
     background: url(${DropdwonArrowTop}) no-repeat top center;
     width: 13px;
     height: 12px;
-    content: " ";
+    content: ' ';
     top: -11px;
     position: absolute;
     margin: 0 auto;
@@ -176,12 +176,12 @@ const DropdownContent = styled.div`
   }
 `;
 
-const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
+function SearchBar({ setOffset, setFilterSelected, setDisplayTab }) {
   const menuRef = useRef(null);
-  const [search, setSearch] = useState("");
-  const [searchError, setSearchError] = useState("");
+  const [search, setSearch] = useState('');
+  const [searchError, setSearchError] = useState('');
   const [uploadMenu, setUploadMenu] = useState(false);
-  const draggedLocation = useStore((state) => state.draggedLocation)
+  const draggedLocation = useStore((state) => state.draggedLocation);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -193,9 +193,7 @@ const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
     setUploadMenu(!uploadMenu);
   };
 
-
   /** on key press handler for search */
-
 
   /** on change handler for search */
   const onChangeSearch = (e) => {
@@ -214,9 +212,9 @@ const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
           />
         </RightSearchWrap>
       </SearchWrap>
-      {searchError !== "" ? <ErrorDiv>{searchError}</ErrorDiv> : null}
+      {searchError !== '' ? <ErrorDiv>{searchError}</ErrorDiv> : null}
     </>
   );
-};
+}
 
 export default SearchBar;

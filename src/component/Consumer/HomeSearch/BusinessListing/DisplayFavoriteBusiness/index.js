@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { useHistory } from "react-router";
-import moment from "moment";
-import styled from "styled-components";
-import ProfileImg from "../../../../../images/profile-img.png";
-import UserMessage from "../UserMessage";
-import UserMessageEvents from "../Events/UserMessageEvents";
-import DisplayComment from "../DisplayComments";
-import DisplayCommentForEvent from "../DisplayCommentForEvent";
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
+import moment from 'moment';
+import styled from 'styled-components';
+import ProfileImg from '../../../../../images/profile-img.png';
+import UserMessage from '../UserMessage';
+import UserMessageEvents from '../Events/UserMessageEvents';
+import DisplayComment from '../DisplayComments';
+import DisplayCommentForEvent from '../DisplayCommentForEvent';
 
 import {
   ProfileNameFeed,
@@ -23,11 +23,12 @@ import {
   BuisinessThumbImg,
   HastagWrap,
   HastagDiv,
-} from "../../../FeedContent/styled";
+} from '../../../FeedContent/styled';
 
-import HeartBorder from "../../../../../images/heart-border.png";
-import ArrowSm from "../../../../../images/arrow-sm.png";
-import ArrowSmUP from "../../../../../images/arrow-sm-up.png";
+import HeartBorder from '../../../../../images/heart-border.png';
+import ArrowSm from '../../../../../images/arrow-sm.png';
+import ArrowSmUP from '../../../../../images/arrow-sm-up.png';
+
 const UserMessageContent = styled.div`
   width: 100%;
   position: relative;
@@ -90,7 +91,7 @@ const ProfileThumbBanner = styled.div`
   }
 `;
 //   object-fit: cover;
-//height: 204px;
+// height: 204px;
 
 //    width: 100%;
 // max-height: 204px;
@@ -183,12 +184,12 @@ const ChatInput = styled.div`
 `;
 
 /** display favorite business */
-const DisplayFavoriteBusiness = ({
+function DisplayFavoriteBusiness({
   data,
   setSelectedListId,
   setListClickedFromSearch,
   setSearchIndex,
-}) => {
+}) {
   const businessInfo =
     data.business && data.business.length > 0 ? data.business[0] : data;
 
@@ -199,13 +200,13 @@ const DisplayFavoriteBusiness = ({
   const [image, setImage] = useState(businessInfo.default_image_url);
   const history = useHistory();
   const days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
   ];
   const [showDiv, setShowDiv] = useState(false);
   /** to check if business is open/close */
@@ -217,20 +218,18 @@ const DisplayFavoriteBusiness = ({
         );
         const endDayIndex = days.indexOf(businessInfo.hours_format[i].EndDay);
         if (currentUtcDay >= startDayIndex && currentUtcDay <= endDayIndex) {
-          const time = moment(getUtcHour + ":" + getUtcMinutes, "HH:mm");
+          const time = moment(`${getUtcHour}:${getUtcMinutes}`, 'HH:mm');
           const beforeTime = moment(
             businessInfo.hours_format[i].Start,
-            "HH:mm"
+            'HH:mm'
           );
-          const afterTime = moment(businessInfo.hours_format[i].End, "HH:mm");
+          const afterTime = moment(businessInfo.hours_format[i].End, 'HH:mm');
           if (time.isBetween(beforeTime, afterTime)) {
             return true;
-          } else {
-            return false;
           }
-        } else {
           return false;
         }
+        return false;
       }
     } else {
       return false;
@@ -251,10 +250,10 @@ const DisplayFavoriteBusiness = ({
           className={
             data.eventSchedule !== null ||
             data.data !== null ||
-            (data.body !== null && data.type === "Post") ||
-            (data.body !== null && data.type === "Events")
-              ? "search-active"
-              : ""
+            (data.body !== null && data.type === 'Post') ||
+            (data.body !== null && data.type === 'Events')
+              ? 'search-active'
+              : ''
           }
         >
           <UserMessageContent>
@@ -335,7 +334,7 @@ const DisplayFavoriteBusiness = ({
                           {data.totalPosts && data.totalPosts.length > 0
                             ? data.totalPosts[0].totalPosts
                             : 0}
-                        </span>{" "}
+                        </span>{' '}
                         Posts
                       </p>
                     </ChatInput>
@@ -351,7 +350,7 @@ const DisplayFavoriteBusiness = ({
             </ProfileNameHeader>
           </UserMessageContent>
         </UserMsgWrap>
-      ) : (data.body !== null && data.type === "Post" && search) ||
+      ) : (data.body !== null && data.type === 'Post' && search) ||
         (data.data !== null && search) ? (
         <ProfileThumbBannerFeed>
           <img
@@ -371,7 +370,7 @@ const DisplayFavoriteBusiness = ({
           eventData={data}
           businessInfo={businessInfo}
           setSearchIndex={setSearchIndex}
-          myFeedView={true}
+          myFeedView
           setMyFeedIndex={setSearchIndex}
           setSelectedListId={setSelectedListId}
         />
@@ -379,30 +378,30 @@ const DisplayFavoriteBusiness = ({
         <UserMessage
           postData={data}
           businessData={businessInfo}
-          listView={true}
+          listView
           setSelectedListId={setSelectedListId}
           setListClickedFromSearch={setListClickedFromSearch}
           type="search"
-          myFeedView={true}
+          myFeedView
           setMyFeedIndex={setSearchIndex}
         />
-      ) : data.body !== null && data.type === "Post" ? (
+      ) : data.body !== null && data.type === 'Post' ? (
         <DisplayComment
           postData={data}
           businessData={businessInfo}
           setSelectedListId={setSelectedListId}
         />
-      ) : data.body !== null && data.type === "Events" ? (
+      ) : data.body !== null && data.type === 'Events' ? (
         <DisplayCommentForEvent postData={data} businessData={businessInfo} />
       ) : search && businessInfo.company_name !== null ? (
         <UserMsgWrap
           className={
             data.eventSchedule !== null ||
             data.data !== null ||
-            (data.body !== null && data.type === "Post") ||
-            (data.body !== null && data.type === "Events")
-              ? "search-active"
-              : ""
+            (data.body !== null && data.type === 'Post') ||
+            (data.body !== null && data.type === 'Events')
+              ? 'search-active'
+              : ''
           }
         >
           <UserMessageContent>
@@ -435,7 +434,7 @@ const DisplayFavoriteBusiness = ({
                         {data.totalPosts && data.totalPosts.length > 0
                           ? data.totalPosts[0].totalPosts
                           : 0}
-                      </span>{" "}
+                      </span>{' '}
                       Posts
                     </p>
                   </ChatInput>
@@ -447,6 +446,6 @@ const DisplayFavoriteBusiness = ({
       ) : null}
     </>
   ) : null;
-};
+}
 
 export default DisplayFavoriteBusiness;

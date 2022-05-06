@@ -1,8 +1,8 @@
-import React from "react";
-import NewInBuzzSectionSlider from "../ItemSectionSlider";
-import { FeatureWrapper, FeatureContainer, MainHeading } from "../styled";
+import React from 'react';
+import NewInBuzzSectionSlider from '../ItemSectionSlider';
+import { FeatureWrapper, FeatureContainer, MainHeading } from '../styled';
 
-const SliderSection = ({
+function SliderSection({
   heading,
   data,
   totalList,
@@ -19,34 +19,32 @@ const SliderSection = ({
   setSelectedId,
   setTotalLists,
   totalLists,
-}) => {
+}) {
   return (
-    <>
-      <FeatureWrapper>
-        <FeatureContainer>
-          <MainHeading>{heading}</MainHeading>
-          <NewInBuzzSectionSlider
-            data={data}
-            totalList={totalList}
-            heading={heading}
-            setSelectedListId={setSelectedListId}
-            setDiscoverBtn={setDiscoverBtn}
-            setReadMore={setReadMore}
-            offset={offset}
-            setOffSet={setOffSet}
-            loader={loader}
-            setLoader={setLoader}
-            modal={modal}
-            setModal={setModal}
-            setSelectedId={setSelectedId}
-            selectedId={selectedId}
-            setTotalLists={setTotalLists}
-            totalLists={totalLists}
-          />
-        </FeatureContainer>
-      </FeatureWrapper>
-    </>
+    <FeatureWrapper>
+      <FeatureContainer>
+        <MainHeading>{heading}</MainHeading>
+        <NewInBuzzSectionSlider
+          data={data}
+          totalList={totalList}
+          heading={heading}
+          setSelectedListId={setSelectedListId}
+          setDiscoverBtn={setDiscoverBtn}
+          setReadMore={setReadMore}
+          offset={offset}
+          setOffSet={setOffSet}
+          loader={loader}
+          setLoader={setLoader}
+          modal={modal}
+          setModal={setModal}
+          setSelectedId={setSelectedId}
+          selectedId={selectedId}
+          setTotalLists={setTotalLists}
+          totalLists={totalLists}
+        />
+      </FeatureContainer>
+    </FeatureWrapper>
   );
-};
+}
 
 export default SliderSection;

@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 const HashtagsWrap = styled.div`
   display: flex;
@@ -18,19 +18,17 @@ const Hashtags = styled.div`
   box-sizing: border-box;
   border-radius: 28px;
   padding: 4px 7px;
-  cursor:default;
+  cursor: default;
 `;
 /** display favorite business hash tags */
-const BusinessHashTags = ({ data }) => {
+function BusinessHashTags({ data }) {
   return (
-    <>
-      <HashtagsWrap>
-        {data.length > 0
-          ? data.map((i, key) => <Hashtags key={key}>#{i}</Hashtags>)
-          : null}
-      </HashtagsWrap>
-    </>
+    <HashtagsWrap>
+      {data.length > 0
+        ? data.map((i, key) => <Hashtags key={key}>#{i}</Hashtags>)
+        : null}
+    </HashtagsWrap>
   );
-};
+}
 
 export default BusinessHashTags;

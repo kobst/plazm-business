@@ -1,11 +1,11 @@
-import React from "react";
-import styled from "styled-components";
-import { useSelector } from "react-redux";
-import { Scrollbars } from "react-custom-scrollbars";
-import BuisinessHeader from "../BuisinessHeader";
-import BuisinessProfileSection from "../BuisinessProfileSection";
-import BuisinessProfileDescription from "../BuisinessProfileDescription";
-import BuisinessHeaderNotClaimed from "../BuisinessHeaderNotClaimed";
+import React from 'react';
+import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import { Scrollbars } from 'react-custom-scrollbars';
+import BuisinessHeader from '../BuisinessHeader';
+import BuisinessProfileSection from '../BuisinessProfileSection';
+import BuisinessProfileDescription from '../BuisinessProfileDescription';
+import BuisinessHeaderNotClaimed from '../BuisinessHeaderNotClaimed';
 
 const BuisinessViewContent = styled.div`
   width: 100%;
@@ -24,7 +24,7 @@ const BottomContent = styled.div`
   }
 `;
 
-const BuisinessProfileDetails = ({
+function BuisinessProfileDetails({
   setDisplayBusinessProfile,
   setDisplayTab,
   displayBusinessProfile,
@@ -37,60 +37,40 @@ const BuisinessProfileDetails = ({
   // setListIndex,
   // favoriteIndex,
   // setFavoriteIndex,
-}) => {
+}) {
   const businessProfile = useSelector((state) => state.business.business)[0];
   return (
-    <>
-      <BuisinessViewContent>
-        {businessProfile.userSub !== null ? (
-          <BuisinessHeader
-            displayBusinessProfile={displayBusinessProfile}
-            isProfile={true}
+    <BuisinessViewContent>
+      {businessProfile.userSub !== null ? (
+        <BuisinessHeader
+          displayBusinessProfile={displayBusinessProfile}
+          isProfile
+          setDisplayBusinessProfile={setDisplayBusinessProfile}
+          setDisplayTab={setDisplayTab}
+        />
+      ) : (
+        <BuisinessHeaderNotClaimed
+          isProfile
+          setDisplayBusinessProfile={setDisplayBusinessProfile}
+          setDisplayTab={setDisplayTab}
+        />
+      )}
+      <Scrollbars
+        autoHeight
+        autoHeightMin={0}
+        autoHeightMax="calc(100vh - 300px)"
+        thumbMinSize={30}
+        className="InnerScroll"
+      >
+        <BottomContent>
+          <BuisinessProfileSection
             setDisplayBusinessProfile={setDisplayBusinessProfile}
-            setDisplayTab={setDisplayTab}
-            // searchIndex={searchIndex}
-            // setTabIndex={setTabIndex}
-            // setSearchIndex={setSearchIndex}
-            // myFeedIndex={myFeedIndex}
-            // setMyFeedIndex={setMyFeedIndex}
-            // favoriteIndex={favoriteIndex}
-            // setFavoriteIndex={setFavoriteIndex}
-            // listIndex={listIndex}
-            // setListIndex={setListIndex}
           />
-        ) : (
-          <BuisinessHeaderNotClaimed
-            isProfile={true}
-            setDisplayBusinessProfile={setDisplayBusinessProfile}
-            setDisplayTab={setDisplayTab}
-            // searchIndex={searchIndex}
-            // setTabIndex={setTabIndex}
-            // setSearchIndex={setSearchIndex}
-            // myFeedIndex={myFeedIndex}
-            // setMyFeedIndex={setMyFeedIndex}
-            // favoriteIndex={favoriteIndex}
-            // setFavoriteIndex={setFavoriteIndex}
-            // listIndex={listIndex}
-            // setListIndex={setListIndex}
-          />
-        )}
-        <Scrollbars
-          autoHeight
-          autoHeightMin={0}
-          autoHeightMax={'calc(100vh - 300px)'}
-          thumbMinSize={30}
-          className="InnerScroll"
-        >
-          <BottomContent>
-            <BuisinessProfileSection
-              setDisplayBusinessProfile={setDisplayBusinessProfile}
-            />
-            <BuisinessProfileDescription />
-          </BottomContent>
-        </Scrollbars>
-      </BuisinessViewContent>
-    </>
+          <BuisinessProfileDescription />
+        </BottomContent>
+      </Scrollbars>
+    </BuisinessViewContent>
   );
-};
+}
 
 export default BuisinessProfileDetails;

@@ -45,9 +45,9 @@ const getUser = (userSub, value, limit = 15) => {
             }
           }`,
     variables: {
-      userSub: userSub,
-      value: value,
-      limit: limit,
+      userSub,
+      value,
+      limit,
     },
   };
   return graphQl;
@@ -156,9 +156,9 @@ const getUserFavorites = ({ id, value, filters, longitude, latitude }) => {
               }
           }`,
     variables: {
-      id: id,
-      value: value,
-      filters: filters,
+      id,
+      value,
+      filters,
       longitude: parseFloat(longitude),
       latitude: parseFloat(latitude),
     },
@@ -277,7 +277,7 @@ const GetUserProfileData = (id) => {
             }
           }`,
     variables: {
-      id: id,
+      id,
     },
   };
   return graphQl;

@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import AddPostSection from "./AddPostSection";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import AddPostSection from './AddPostSection';
 // import PostFilter from "./PostFilter";
-import PostChat from "./PostChat";
-import PostFilterButton from "./PostFilterButtons";
-import useStore from "../../../useState";
+import PostChat from './PostChat';
+import PostFilterButton from './PostFilterButtons';
+import useStore from '../../../useState';
 
 const PostsSectionContent = styled.div`
   width: 100%;
@@ -13,24 +13,23 @@ const PostsSectionContent = styled.div`
   flex-direction: column;
 `;
 
-const PostsSection = ({ profile, businessId}) => {
+function PostsSection({ profile, businessId }) {
   const [filterArr, setFilterArr] = useState([]);
   return (
-    <>
-      <PostsSectionContent>
-        <AddPostSection 
-        // profile={profile} 
-        businessId={businessId} />
-        {/* <PostFilter setFilterArr={setFilterArr} /> */}
-        <PostFilterButton setFilterArr={setFilterArr} />
-        <PostChat
-          // setSelectedListId={setSelectedListId}
-          filterArr={filterArr}
-          setFilterArr={setFilterArr}
-        />
-      </PostsSectionContent>
-    </>
+    <PostsSectionContent>
+      <AddPostSection
+        // profile={profile}
+        businessId={businessId}
+      />
+      {/* <PostFilter setFilterArr={setFilterArr} /> */}
+      <PostFilterButton setFilterArr={setFilterArr} />
+      <PostChat
+        // setSelectedListId={setSelectedListId}
+        filterArr={filterArr}
+        setFilterArr={setFilterArr}
+      />
+    </PostsSectionContent>
   );
-};
+}
 
 export default PostsSection;

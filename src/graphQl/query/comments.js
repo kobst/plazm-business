@@ -48,7 +48,7 @@ const findPostComments = (id) => {
               }
             }`,
     variables: {
-      id: id,
+      id,
     },
   };
   return graphQl;
@@ -83,9 +83,9 @@ const findCommentReplies = (id) => {
             }
           }`,
     variables: {
-      id: id,
+      id,
     },
   };
   return graphQl;
 };
-export { findPostComments ,findCommentReplies};
+export { findPostComments, findCommentReplies };

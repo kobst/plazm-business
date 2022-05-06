@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { useHistory } from "react-router-dom";
-import ProfileImg from "../../../../../../../images/profile-img.png";
-import ReplyInput from "./ReplyInput";
-import LikesBar from "../LikesBar";
-import { Scrollbars } from "react-custom-scrollbars";
-import { useSelector } from "react-redux";
-import ValueLoader from "../../../../../../../utils/loader";
-import ScrollToBottom1 from "./ScrollToBottom1";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { useHistory } from 'react-router-dom';
+import { Scrollbars } from 'react-custom-scrollbars';
+import { useSelector } from 'react-redux';
+import ProfileImg from '../../../../../../../images/profile-img.png';
+import ReplyInput from './ReplyInput';
+import LikesBar from '../LikesBar';
+import ValueLoader from '../../../../../../../utils/loader';
+import ScrollToBottom1 from './ScrollToBottom1';
 import {
   checkMime,
   replaceBucket,
-} from "../../../../../../../utilities/checkResizedImage";
-import ReplyImage from "../../../../../HomeSearch/BusinessListing/UserMessage/replyImage";
+} from '../../../../../../../utilities/checkResizedImage';
+import ReplyImage from '../../../../../HomeSearch/BusinessListing/UserMessage/replyImage';
 
-const reactStringReplace = require("react-string-replace");
+const reactStringReplace = require('react-string-replace');
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -112,10 +112,10 @@ const LoaderWrap = styled.div`
   align-items: center;
   margin: 30px 0 20px;
 `;
-const Comments = ({ i, eventData, displayComments, setFlag, flag }) => {
+function Comments({ i, eventData, displayComments, setFlag, flag }) {
   const [displayReply, setDisplayReply] = useState(false);
   const [displayReplyInput, setDisplayReplyInput] = useState(false);
-  const [replyDescription, setReplyDescription] = useState("");
+  const [replyDescription, setReplyDescription] = useState('');
   const [image, setImage] = useState(null);
   const business = useSelector((state) => state.business.business)[0];
   const ws = useSelector((state) => state.user.ws);
@@ -137,24 +137,24 @@ const Comments = ({ i, eventData, displayComments, setFlag, flag }) => {
   const addReply = async (obj) => {
     ws.send(
       JSON.stringify({
-        action: "message",
-        commentId: obj._id, //commentId
-        userId: obj.userId, //userId
-        comment: obj.replyUser + " " + obj.body,
+        action: 'message',
+        commentId: obj._id, // commentId
+        userId: obj.userId, // userId
+        comment: `${obj.replyUser} ${obj.body}`,
         postId: obj.postId,
         businessId: business._id,
         taggedUsers: obj.taggedUsers,
-        type: "Event",
+        type: 'Event',
       })
     );
-    setReplyDescription("");
+    setReplyDescription('');
   };
 
   /** to highlight the user mentions mentioned in post description */
   const findDesc = (value, mentions) => {
     if (mentions && mentions.length > 0) {
       for (let i = 0; i < mentions.length; i++) {
-        if (value.search(new RegExp(mentions[i].name, "g") !== -1)) {
+        if (value.search(new RegExp(mentions[i].name, 'g') !== -1)) {
           return (
             <div>
               {reactStringReplace(value, mentions[i].name, (match, j) => (
@@ -167,9 +167,8 @@ const Comments = ({ i, eventData, displayComments, setFlag, flag }) => {
               ))}
             </div>
           );
-        } else {
-          return <div>{value}</div>;
         }
+        return <div>{value}</div>;
       }
     } else {
       return value;
@@ -193,13 +192,13 @@ const Comments = ({ i, eventData, displayComments, setFlag, flag }) => {
         </ProfileThumb>
         <ProfileNameWrap>
           <ProfileName
-            style={{ cursor: "pointer" }}
+            style={{ cursor: 'pointer' }}
             onClick={() => history.push(`/u/${i.userId._id}`)}
           >
-            {i.userId.name}{" "}
+            {i.userId.name}{' '}
           </ProfileName>
           <ChatInput>
-            {" "}
+            {' '}
             <p>{findDesc(i.body, i.taggedUsers)}</p>
           </ChatInput>
           <LikesBar
@@ -229,34 +228,32 @@ const Comments = ({ i, eventData, displayComments, setFlag, flag }) => {
               i.replies.length > 0 &&
               !loadingReplies ? (
                 i.replies.map((j, key) => (
-                  <>
-                    <UserMessageContent className="UserReplyContent" key={key}>
-                      <ProfileNameHeader>
-                        <ProfileThumb>
-                          <ReplyImage j={j} />
-                        </ProfileThumb>
-                        <ProfileNameWrap>
-                          <ProfileName>
-                            <span>by</span>
-                            <span
-                              onClick={() => history.push(`/u/${j.userId._id}`)}
-                              style={{ color: "#ff2e9a", cursor: "pointer" }}
-                            >
-                              {j.userId.name}
-                            </span>{" "}
-                          </ProfileName>
-                          <ChatInput>
-                            {" "}
-                            {findDesc(j.body, j.taggedUsers)}
-                          </ChatInput>
-                          <LikesBar
-                            date={new Date(j.created_on)}
-                            type="commentReply"
-                          />
-                        </ProfileNameWrap>
-                      </ProfileNameHeader>
-                    </UserMessageContent>
-                  </>
+                  <UserMessageContent className="UserReplyContent" key={key}>
+                    <ProfileNameHeader>
+                      <ProfileThumb>
+                        <ReplyImage j={j} />
+                      </ProfileThumb>
+                      <ProfileNameWrap>
+                        <ProfileName>
+                          <span>by</span>
+                          <span
+                            onClick={() => history.push(`/u/${j.userId._id}`)}
+                            style={{ color: '#ff2e9a', cursor: 'pointer' }}
+                          >
+                            {j.userId.name}
+                          </span>{' '}
+                        </ProfileName>
+                        <ChatInput>
+                          {' '}
+                          {findDesc(j.body, j.taggedUsers)}
+                        </ChatInput>
+                        <LikesBar
+                          date={new Date(j.created_on)}
+                          type="commentReply"
+                        />
+                      </ProfileNameWrap>
+                    </ProfileNameHeader>
+                  </UserMessageContent>
                 ))
               ) : (displayReply || displayReplyInput) && loadingReplies ? (
                 <LoaderWrap>
@@ -284,6 +281,6 @@ const Comments = ({ i, eventData, displayComments, setFlag, flag }) => {
       </ProfileNameHeader>
     </UserMessageContent>
   );
-};
+}
 
 export default Comments;

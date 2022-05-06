@@ -1,15 +1,15 @@
-import React, { useState, useRef, useEffect } from "react";
-import styled from "styled-components";
-import Checkbox from "../../../../UI/Checkbox/checkbox";
-import DropdwonArrowTop from "../../../../../../images/top_arrow.png";
-import { FaSort } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState, useRef, useEffect } from 'react';
+import styled from 'styled-components';
+import { FaSort } from 'react-icons/fa';
+import { useDispatch, useSelector } from 'react-redux';
+import Checkbox from '../../../../UI/Checkbox/checkbox';
+import DropdwonArrowTop from '../../../../../../images/top_arrow.png';
 import {
   filterData,
   setFilters,
   setSideFiltersByMostLiked,
   setSideFiltersByMostRecent,
-} from "../../../../../../reducers/businessReducer";
+} from '../../../../../../reducers/businessReducer';
 
 const PostFilterContent = styled.div`
   width: 100%;
@@ -70,7 +70,7 @@ const DropdownContent = styled.div`
     background: url(${DropdwonArrowTop}) no-repeat top center;
     width: 15px;
     height: 15px;
-    content: " ";
+    content: ' ';
     top: -12px;
     position: relative;
     margin: 0 auto;
@@ -105,7 +105,7 @@ const DropdownContent = styled.div`
   }
 `;
 
-const PostFilter = ({setFilterArr}) => {
+function PostFilter({ setFilterArr }) {
   const [uploadMenu, setUploadMenu] = useState(false);
   const menuRef = useRef(null);
   const dispatch = useDispatch();
@@ -125,8 +125,8 @@ const PostFilter = ({setFilterArr}) => {
     if (flag === true) {
       dispatch(
         filterData({
-          businessId: business && business[0] ? business[0]._id : "",
-          filters: filters,
+          businessId: business && business[0] ? business[0]._id : '',
+          filters,
           value: 0,
           ownerId: user._id,
         })
@@ -139,8 +139,8 @@ const PostFilter = ({setFilterArr}) => {
     if (sideFilterFlag === true) {
       dispatch(
         filterData({
-          businessId: business && business[0] ? business[0]._id : "",
-          filters: filters,
+          businessId: business && business[0] ? business[0]._id : '',
+          filters,
           value: 0,
           ownerId: user._id,
           sideFilters: { likes: filterByLiked },
@@ -151,9 +151,9 @@ const PostFilter = ({setFilterArr}) => {
   }, [sideFilterFlag, business, dispatch, filterByLiked, filters, user._id]);
 
   useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
@@ -193,59 +193,57 @@ const PostFilter = ({setFilterArr}) => {
     setUploadMenu(false);
   };
   return (
-    <>
-      <PostFilterContent>
-        <CheckboxWrap>
-          <Checkbox
-            checked={filters["Business"]}
-            onChange={(e) => handleChange(e, "Business")}
-            name="filter"
-            disabled={loadingFilterData}
-          />
-          Business
-        </CheckboxWrap>
-        <CheckboxWrap>
-          <Checkbox
-            onChange={(e) => handleChange(e, "PostsByMe")}
-            name="filter"
-            checked={filters["PostsByMe"]}
-            disabled={loadingFilterData}
-          />
-          Posts By Me
-        </CheckboxWrap>
-        <CheckboxWrap>
-          <Checkbox
-            onChange={(e) => handleChange(e, "MySubscriptions")}
-            name="filter"
-            checked={filters["MySubscriptions"]}
-            disabled={loadingFilterData}
-          />
-          My Subscriptions
-        </CheckboxWrap>
-        <CheckboxWrap>
-          <Checkbox
-            onChange={(e) => handleChange(e, "Others")}
-            checked={filters["Others"]}
-            name="filter"
-            disabled={loadingFilterData}
-          />
-          Others
-        </CheckboxWrap>
-        <CheckboxWrap ref={menuRef}>
-          <FaSort onClick={toggleUploadMenu} />
-          {uploadMenu && (
-            <DropdownContent>
-              <ul>
-                <li onClick={() => setMostLiked()}>Most Liked</li>
+    <PostFilterContent>
+      <CheckboxWrap>
+        <Checkbox
+          checked={filters.Business}
+          onChange={(e) => handleChange(e, 'Business')}
+          name="filter"
+          disabled={loadingFilterData}
+        />
+        Business
+      </CheckboxWrap>
+      <CheckboxWrap>
+        <Checkbox
+          onChange={(e) => handleChange(e, 'PostsByMe')}
+          name="filter"
+          checked={filters.PostsByMe}
+          disabled={loadingFilterData}
+        />
+        Posts By Me
+      </CheckboxWrap>
+      <CheckboxWrap>
+        <Checkbox
+          onChange={(e) => handleChange(e, 'MySubscriptions')}
+          name="filter"
+          checked={filters.MySubscriptions}
+          disabled={loadingFilterData}
+        />
+        My Subscriptions
+      </CheckboxWrap>
+      <CheckboxWrap>
+        <Checkbox
+          onChange={(e) => handleChange(e, 'Others')}
+          checked={filters.Others}
+          name="filter"
+          disabled={loadingFilterData}
+        />
+        Others
+      </CheckboxWrap>
+      <CheckboxWrap ref={menuRef}>
+        <FaSort onClick={toggleUploadMenu} />
+        {uploadMenu && (
+          <DropdownContent>
+            <ul>
+              <li onClick={() => setMostLiked()}>Most Liked</li>
 
-                <li onClick={() => setMostRecent()}>Most recent</li>
-              </ul>
-            </DropdownContent>
-          )}
-        </CheckboxWrap>
-      </PostFilterContent>
-    </>
+              <li onClick={() => setMostRecent()}>Most recent</li>
+            </ul>
+          </DropdownContent>
+        )}
+      </CheckboxWrap>
+    </PostFilterContent>
   );
-};
+}
 
 export default PostFilter;

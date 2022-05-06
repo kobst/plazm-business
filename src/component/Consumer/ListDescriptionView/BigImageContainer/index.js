@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 const BigImageContainer = styled.div`
   height: 230px;
@@ -17,7 +17,7 @@ const BigImageContainer = styled.div`
   }
 `;
 
-const BigImage = ({ image }) => {
+function BigImage({ image }) {
   return (
     image &&
     image.length > 0 && (
@@ -26,6 +26,6 @@ const BigImage = ({ image }) => {
       </BigImageContainer>
     )
   );
-};
+}
 
 export default BigImage;

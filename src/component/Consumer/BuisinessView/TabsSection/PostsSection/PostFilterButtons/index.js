@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
 import {
   filterData,
   setFilters,
   setSideFiltersByMostLiked,
   setSideFiltersByMostRecent,
-} from "../../../../../../reducers/businessReducer";
+} from '../../../../../../reducers/businessReducer';
 
 const PostFilterButtonContent = styled.div`
   width: 100%;
@@ -84,7 +84,7 @@ const BorderButtons = styled.button`
       width: 100%;
       height: 2px;
       background: #00e0ff;
-      content: "";
+      content: '';
       position: absolute;
       bottom: -12px;
     }
@@ -95,7 +95,7 @@ const BorderButtons = styled.button`
       width: 100%;
       height: 2px;
       background: #00e0ff;
-      content: "";
+      content: '';
       position: absolute;
       bottom: -12px;
     }
@@ -105,7 +105,7 @@ const BorderButtons = styled.button`
   }
 `;
 
-const PostFilterButton = ({ setFilterArr }) => {
+function PostFilterButton({ setFilterArr }) {
   const dispatch = useDispatch();
   const [flag, setFlag] = useState(false);
   const [sideFilterFlag, setSideFilterFlag] = useState(false);
@@ -124,8 +124,8 @@ const PostFilterButton = ({ setFilterArr }) => {
     if (flag === true) {
       dispatch(
         filterData({
-          businessId: business && business[0] ? business[0]._id : "",
-          filters: filters,
+          businessId: business && business[0] ? business[0]._id : '',
+          filters,
           value: 0,
           ownerId: user._id,
         })
@@ -139,8 +139,8 @@ const PostFilterButton = ({ setFilterArr }) => {
     if (sideFilterFlag === true) {
       dispatch(
         filterData({
-          businessId: business && business[0] ? business[0]._id : "",
-          filters: filters,
+          businessId: business && business[0] ? business[0]._id : '',
+          filters,
           value: 0,
           ownerId: user._id,
           sideFilters: { likes: filterByLiked },
@@ -199,44 +199,42 @@ const PostFilterButton = ({ setFilterArr }) => {
   };
 
   return (
-    <>
-      <PostFilterButtonContent>
-        <RoundButtonsWrap>
-          <RoundButton
-            onClick={() => FilterByPostsByMe()}
-            disabled={filters["PostsByMe"] || loadingFilterData}
-            className={filters["PostsByMe"] ? "selected" : ""}
-          >
-            For Me
-          </RoundButton>
-          <RoundButton
-            onClick={() => FilterByPostsByOthers()}
-            disabled={filters["Others"] || loadingFilterData}
-            className={filters["Others"] ? "selected" : ""}
-          >
-            Others
-          </RoundButton>
-        </RoundButtonsWrap>
+    <PostFilterButtonContent>
+      <RoundButtonsWrap>
+        <RoundButton
+          onClick={() => FilterByPostsByMe()}
+          disabled={filters.PostsByMe || loadingFilterData}
+          className={filters.PostsByMe ? 'selected' : ''}
+        >
+          For Me
+        </RoundButton>
+        <RoundButton
+          onClick={() => FilterByPostsByOthers()}
+          disabled={filters.Others || loadingFilterData}
+          className={filters.Others ? 'selected' : ''}
+        >
+          Others
+        </RoundButton>
+      </RoundButtonsWrap>
 
-        <BorderButtonsWrap>
-          <BorderButtons
-            onClick={() => setMostLiked()}
-            disabled={filterByLiked}
-            className={filterByLiked ? "selected" : ""}
-          >
-            Most Liked
-          </BorderButtons>
-          <BorderButtons
-            onClick={() => setMostRecent()}
-            disabled={!filterByLiked}
-            className={!filterByLiked ? "selected" : ""}
-          >
-            Newest
-          </BorderButtons>
-        </BorderButtonsWrap>
-      </PostFilterButtonContent>
-    </>
+      <BorderButtonsWrap>
+        <BorderButtons
+          onClick={() => setMostLiked()}
+          disabled={filterByLiked}
+          className={filterByLiked ? 'selected' : ''}
+        >
+          Most Liked
+        </BorderButtons>
+        <BorderButtons
+          onClick={() => setMostRecent()}
+          disabled={!filterByLiked}
+          className={!filterByLiked ? 'selected' : ''}
+        >
+          Newest
+        </BorderButtons>
+      </BorderButtonsWrap>
+    </PostFilterButtonContent>
   );
-};
+}
 
 export default PostFilterButton;

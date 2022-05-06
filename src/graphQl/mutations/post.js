@@ -110,7 +110,7 @@ const deletePost = (id) => {
             }
           }`,
     variables: {
-      id: id,
+      id,
     },
   };
   return graphQl;

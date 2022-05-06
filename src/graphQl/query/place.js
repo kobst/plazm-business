@@ -121,7 +121,7 @@ const getPlace = (obj) => {
       filters: obj.filters,
       ownerId: obj.ownerId || null,
       sideFilters: obj.sideFilters || { likes: false, recent: true },
-      search: obj?.search || "",
+      search: obj?.search || '',
     },
   };
   return graphQl;

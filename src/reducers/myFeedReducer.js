@@ -1,5 +1,5 @@
-import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
-import { graphQlEndPoint } from "../Api/graphQl";
+import { createSlice, createAsyncThunk, current } from '@reduxjs/toolkit';
+import { graphQlEndPoint } from '../Api/graphQl';
 import {
   GetMyFeedData,
   findPostComments,
@@ -8,14 +8,14 @@ import {
   GetListDetails,
   deletePost,
   updatePost,
-} from "../graphQl";
+} from '../graphQl';
 
 /*
  * @desc:  to fetch my feed data
  * @params: userId, value
  */
 export const fetchMyFeedData = createAsyncThunk(
-  "data/fetchMyFeedData",
+  'data/fetchMyFeedData',
   async (obj) => {
     const graphQl = GetMyFeedData(obj);
     const response = await graphQlEndPoint(graphQl);
@@ -28,11 +28,11 @@ export const fetchMyFeedData = createAsyncThunk(
  * @params: postId
  */
 export const fetchSearchPostComments = createAsyncThunk(
-  "data/fetchFeedPostComments",
+  'data/fetchFeedPostComments',
   async ({ postId, businessId }) => {
     const graphQl = findPostComments(postId);
     const response = await graphQlEndPoint(graphQl);
-    return { data: response.data.getComment, businessId: businessId };
+    return { data: response.data.getComment, businessId };
   }
 );
 
@@ -41,11 +41,11 @@ export const fetchSearchPostComments = createAsyncThunk(
  * @params: postId
  */
 export const fetchSearchCommentReplies = createAsyncThunk(
-  "data/fetchFeedCommentReplies",
+  'data/fetchFeedCommentReplies',
   async ({ businessId, commentId }) => {
     const graphQl = findCommentReplies(commentId);
     const response = await graphQlEndPoint(graphQl);
-    return { data: response.data.getReplies, businessId: businessId };
+    return { data: response.data.getReplies, businessId };
   }
 );
 
@@ -54,10 +54,8 @@ export const fetchSearchCommentReplies = createAsyncThunk(
  * @params: obj
  */
 export const addCommentToPost = createAsyncThunk(
-  "data/addFeedCommentToPost",
-  async (obj) => {
-    return obj;
-  }
+  'data/addFeedCommentToPost',
+  async (obj) => obj
 );
 
 /*
@@ -65,10 +63,8 @@ export const addCommentToPost = createAsyncThunk(
  * @params: obj
  */
 export const addReplyToComment = createAsyncThunk(
-  "data/addFeedReplyToComment",
-  async (obj) => {
-    return obj;
-  }
+  'data/addFeedReplyToComment',
+  async (obj) => obj
 );
 
 /*
@@ -76,10 +72,8 @@ export const addReplyToComment = createAsyncThunk(
  * @params: obj
  */
 export const addLikeToCommentViaSocket = createAsyncThunk(
-  "data/addFeedLikeToCommentViaSocket",
-  async (obj) => {
-    return obj;
-  }
+  'data/addFeedLikeToCommentViaSocket',
+  async (obj) => obj
 );
 
 /*
@@ -87,10 +81,8 @@ export const addLikeToCommentViaSocket = createAsyncThunk(
  * @params: obj
  */
 export const addLikeViaSocket = createAsyncThunk(
-  "data/addFeedLikeViaSocket",
-  async (obj) => {
-    return obj;
-  }
+  'data/addFeedLikeViaSocket',
+  async (obj) => obj
 );
 
 /*
@@ -98,14 +90,14 @@ export const addLikeViaSocket = createAsyncThunk(
  * @params: eventId
  */
 export const fetchEventComments = createAsyncThunk(
-  "data/fetchFeedEventComments",
+  'data/fetchFeedEventComments',
   async ({ eventId, businessId }) => {
     const graphQl = findPostComments(eventId);
     const response = await graphQlEndPoint(graphQl);
     return {
       data: response.data.getComment,
-      eventId: eventId,
-      businessId: businessId,
+      eventId,
+      businessId,
     };
   }
 );
@@ -115,11 +107,11 @@ export const fetchEventComments = createAsyncThunk(
  * @params: postId
  */
 export const fetchEventCommentReplies = createAsyncThunk(
-  "data/fetchFeedEventCommentReplies",
+  'data/fetchFeedEventCommentReplies',
   async ({ businessId, commentId }) => {
     const graphQl = findCommentReplies(commentId);
     const response = await graphQlEndPoint(graphQl);
-    return { data: response.data.getReplies, businessId: businessId };
+    return { data: response.data.getReplies, businessId };
   }
 );
 
@@ -128,10 +120,8 @@ export const fetchEventCommentReplies = createAsyncThunk(
  * @params: obj
  */
 export const addPostViaSocket = createAsyncThunk(
-  "data/addUserPostViaSocket",
-  async (obj) => {
-    return obj;
-  }
+  'data/addUserPostViaSocket',
+  async (obj) => obj
 );
 
 /*
@@ -139,7 +129,7 @@ export const addPostViaSocket = createAsyncThunk(
  * @params: listId, value
  */
 export const fetchSelectedListDetails = createAsyncThunk(
-  "data/fetchSelectedListDetails",
+  'data/fetchSelectedListDetails',
   async (obj) => {
     const graphQl = GetListDetails(obj);
     const response = await graphQlEndPoint(graphQl);
@@ -151,7 +141,7 @@ export const fetchSelectedListDetails = createAsyncThunk(
  * @desc:  home search
  * @params: search data
  */
-export const HomeSearch = createAsyncThunk("data/HomeSearch", async (obj) => {
+export const HomeSearch = createAsyncThunk('data/HomeSearch', async (obj) => {
   const graphQl = homeSearch(obj);
   const response = await graphQlEndPoint(graphQl);
   return response.data.homeSearch;
@@ -162,7 +152,7 @@ export const HomeSearch = createAsyncThunk("data/HomeSearch", async (obj) => {
  * @params: search data
  */
 export const HomeSearchInitial = createAsyncThunk(
-  "data/HomeSearchInitial",
+  'data/HomeSearchInitial',
   async (obj) => {
     const graphQl = homeSearch(obj);
     const response = await graphQlEndPoint(graphQl);
@@ -175,11 +165,11 @@ export const HomeSearchInitial = createAsyncThunk(
  * @params: id
  */
 export const deleteUserPost = createAsyncThunk(
-  "data/deleteUserPost",
+  'data/deleteUserPost',
   async (id) => {
     const graphQl = deletePost(id);
     const response = await graphQlEndPoint(graphQl);
-    return { res: response.data.deletePost, id: id };
+    return { res: response.data.deletePost, id };
   }
 );
 
@@ -188,7 +178,7 @@ export const deleteUserPost = createAsyncThunk(
  * @params: obj
  */
 export const updatePostToBusiness = createAsyncThunk(
-  "data/updatePostToBusiness",
+  'data/updatePostToBusiness',
   async (obj) => {
     const graphQl = updatePost(obj);
     const response = await graphQlEndPoint(graphQl);
@@ -197,7 +187,7 @@ export const updatePostToBusiness = createAsyncThunk(
 );
 
 export const slice = createSlice({
-  name: "myFeed",
+  name: 'myFeed',
   initialState: {
     loading: false,
     searchFeed: [],
@@ -207,7 +197,7 @@ export const slice = createSlice({
     loadingReplies: false,
     loadingEventComments: false,
     loadingEventReplies: false,
-    searchData: "",
+    searchData: '',
     filterByUpdatedAt: false,
     filterByClosest: true,
     selectedListDetails: null,
@@ -262,9 +252,9 @@ export const slice = createSlice({
       state.searchFeed = [];
     },
     updatePostInMyFeed: (state, action) => {
-      state.myFeed = state.myFeed.map((x) => {
-        return action.payload._id === x._id ? action.payload : x;
-      });
+      state.myFeed = state.myFeed.map((x) =>
+        action.payload._id === x._id ? action.payload : x
+      );
     },
     deletePostInMyFeed: (state, action) => {
       state.myFeed = state.myFeed.filter((i) => i._id !== action.payload);
@@ -305,15 +295,15 @@ export const slice = createSlice({
         state.loadingPostComments = false;
         if (action.payload) {
           if (action.payload.data.post.length > 0) {
-            let posts = current(state.myFeed).filter(
+            const posts = current(state.myFeed).filter(
               (i) => i._id !== action.payload.data.post[0].comment.itemId
             );
 
-            let posts1 = current(state.myFeed).filter(
+            const posts1 = current(state.myFeed).filter(
               (i) => i._id === action.payload.data.post[0].comment.itemId
             )[0];
 
-            let arr = action.payload.data.post.map((obj) => ({
+            const arr = action.payload.data.post.map((obj) => ({
               ...obj.comment,
               totalReplies: obj.totalReplies,
               replies: [],
@@ -322,9 +312,9 @@ export const slice = createSlice({
               ...posts1,
               comments: arr || [],
             });
-            state.myFeed = filterPost1.sort((a, b) => {
-              return new Date(b.createdAt) - new Date(a.createdAt);
-            });
+            state.myFeed = filterPost1.sort(
+              (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+            );
           }
         }
       }
@@ -348,15 +338,15 @@ export const slice = createSlice({
             (i) => i._id !== action.payload.data.postId
           );
 
-          let posts1 = current(state.myFeed).filter(
+          const posts1 = current(state.myFeed).filter(
             (i) => i._id === action.payload.data.postId
           )[0];
 
           if (posts1.comments.length > 0) {
-            let findComment = posts1.comments.filter(
+            const findComment = posts1.comments.filter(
               (i) => i._id === action.payload.data.commentId
             );
-            let findComment1 = posts1.comments.filter(
+            const findComment1 = posts1.comments.filter(
               (i) => i._id !== action.payload.data.commentId
             );
             let newArr = [];
@@ -365,18 +355,18 @@ export const slice = createSlice({
               replies: action.payload.data.replies,
             });
             newArr = newArr.concat(findComment1);
-            newArr = newArr.sort((a, b) => {
-              return new Date(a.createdAt) - new Date(b.createdAt);
-            });
+            newArr = newArr.sort(
+              (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+            );
 
             posts = posts.concat({
               ...posts1,
               comments: newArr,
             });
 
-            state.myFeed = posts.sort((a, b) => {
-              return new Date(b.createdAt) - new Date(a.createdAt);
-            });
+            state.myFeed = posts.sort(
+              (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+            );
           }
         }
       }
@@ -396,15 +386,15 @@ export const slice = createSlice({
       if (state.loadingEventComments) {
         state.loadingEventComments = false;
         if (action.payload) {
-          let posts = current(state.myFeed).filter(
+          const posts = current(state.myFeed).filter(
             (i) => i._id !== action.payload.eventId
           );
 
-          let posts1 = current(state.myFeed).filter(
+          const posts1 = current(state.myFeed).filter(
             (i) => i._id === action.payload.eventId
           )[0];
 
-          let arr = action.payload.data.post.map((obj) => ({
+          const arr = action.payload.data.post.map((obj) => ({
             ...obj.comment,
             totalReplies: obj.totalReplies,
             replies: [],
@@ -415,9 +405,9 @@ export const slice = createSlice({
             comments: arr,
           });
 
-          state.myFeed = filterPost1.sort((a, b) => {
-            return new Date(b.createdAt) - new Date(a.createdAt);
-          });
+          state.myFeed = filterPost1.sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          );
         }
       }
     },
@@ -440,15 +430,15 @@ export const slice = createSlice({
             (i) => i._id !== action.payload.data.postId
           );
 
-          let posts1 = current(state.myFeed).filter(
+          const posts1 = current(state.myFeed).filter(
             (i) => i._id === action.payload.data.postId
           )[0];
 
           if (posts1.comments.length > 0) {
-            let findComment = posts1.comments.filter(
+            const findComment = posts1.comments.filter(
               (i) => i._id === action.payload.data.commentId
             );
-            let findComment1 = posts1.comments.filter(
+            const findComment1 = posts1.comments.filter(
               (i) => i._id !== action.payload.data.commentId
             );
             let newArr = [];
@@ -457,18 +447,18 @@ export const slice = createSlice({
               replies: action.payload.data.replies,
             });
             newArr = newArr.concat(findComment1);
-            newArr = newArr.sort((a, b) => {
-              return new Date(a.createdAt) - new Date(b.createdAt);
-            });
+            newArr = newArr.sort(
+              (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+            );
 
             posts = posts.concat({
               ...posts1,
               comments: newArr,
             });
 
-            state.myFeed = posts.sort((a, b) => {
-              return new Date(b.createdAt) - new Date(a.createdAt);
-            });
+            state.myFeed = posts.sort(
+              (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+            );
           }
         }
       }
@@ -485,18 +475,20 @@ export const slice = createSlice({
           (i) => i._id !== action.payload.postId
         );
 
-        let findBusinessPost = current(state.myFeed).filter(
+        const findBusinessPost = current(state.myFeed).filter(
           (i) => i._id === action.payload.postId
         );
         if (findBusinessPost && findBusinessPost.length > 0) {
-          let likes = findBusinessPost[0].likes.concat(action.payload.like._id);
+          const likes = findBusinessPost[0].likes.concat(
+            action.payload.like._id
+          );
           findBusinessPost1 = findBusinessPost1.concat({
             ...findBusinessPost[0],
-            likes: likes,
+            likes,
           });
-          state.myFeed = findBusinessPost1.sort((a, b) => {
-            return new Date(b.createdAt) - new Date(a.createdAt);
-          });
+          state.myFeed = findBusinessPost1.sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          );
         }
       }
     },
@@ -506,7 +498,7 @@ export const slice = createSlice({
           (i) => i._id !== action.payload.postId
         );
 
-        let findBusinessPost = current(state.myFeed).filter(
+        const findBusinessPost = current(state.myFeed).filter(
           (i) => i._id === action.payload.postId
         );
         if (
@@ -514,29 +506,27 @@ export const slice = createSlice({
           findBusinessPost.length > 0 &&
           findBusinessPost[0].comments.length > 0
         ) {
-          let findComment = findBusinessPost[0].comments.filter(
+          const findComment = findBusinessPost[0].comments.filter(
             (i) => i._id === action.payload.commentId
           );
-          let findComment1 = findBusinessPost[0].comments.filter(
+          const findComment1 = findBusinessPost[0].comments.filter(
             (i) => i._id !== action.payload.commentId
           );
           if (findComment && findComment.length > 0) {
-            let likes = findComment[0].likes.concat(action.payload.like);
+            const likes = findComment[0].likes.concat(action.payload.like);
 
-            let commentsSort = findComment1
-              .concat({ ...findComment[0], likes: likes })
-              .sort((a, b) => {
-                return new Date(a.createdAt) - new Date(b.createdAt);
-              });
+            const commentsSort = findComment1
+              .concat({ ...findComment[0], likes })
+              .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 
             findBusinessPost1 = findBusinessPost1.concat({
               ...findBusinessPost[0],
               comments: commentsSort,
             });
 
-            state.myFeed = findBusinessPost1.sort((a, b) => {
-              return new Date(b.createdAt) - new Date(a.createdAt);
-            });
+            state.myFeed = findBusinessPost1.sort(
+              (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+            );
           }
         }
       }
@@ -547,12 +537,12 @@ export const slice = createSlice({
           (i) => i._id !== action.payload.commentInfo.itemId
         );
 
-        let findBusinessPost = current(state.myFeed).filter(
+        const findBusinessPost = current(state.myFeed).filter(
           (i) => i._id === action.payload.commentInfo.itemId
         );
 
         if (findBusinessPost && findBusinessPost.length > 0) {
-          let comments = findBusinessPost[0].comments.concat({
+          const comments = findBusinessPost[0].comments.concat({
             ...action.payload.commentInfo,
             totalReplies: 0,
             userId: action.payload.userDetails,
@@ -561,7 +551,7 @@ export const slice = createSlice({
 
           findBusinessPost1 = findBusinessPost1.concat({
             ...findBusinessPost[0],
-            comments: comments,
+            comments,
             totalComments: [
               {
                 totalCount:
@@ -571,9 +561,9 @@ export const slice = createSlice({
               },
             ],
           });
-          state.myFeed = findBusinessPost1.sort((a, b) => {
-            return new Date(b.createdAt) - new Date(a.createdAt);
-          });
+          state.myFeed = findBusinessPost1.sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          );
           state.commentAdded = true;
         }
       }
@@ -584,7 +574,7 @@ export const slice = createSlice({
           (i) => i._id !== action.payload.postId
         );
 
-        let findBusinessPost = current(state.myFeed).filter(
+        const findBusinessPost = current(state.myFeed).filter(
           (i) => i._id === action.payload.postId
         );
 
@@ -593,14 +583,14 @@ export const slice = createSlice({
           findBusinessPost.length > 0 &&
           findBusinessPost[0].comments.length > 0
         ) {
-          let findComment = findBusinessPost[0].comments.filter(
+          const findComment = findBusinessPost[0].comments.filter(
             (i) => i._id === action.payload.commentId
           );
-          let findComment1 = findBusinessPost[0].comments.filter(
+          const findComment1 = findBusinessPost[0].comments.filter(
             (i) => i._id !== action.payload.commentId
           );
           if (findComment && findComment.length > 0) {
-            let replies = findComment[0].replies.concat({
+            const replies = findComment[0].replies.concat({
               ...action.payload.reply,
               userId: {
                 _id: action.payload.userId,
@@ -608,24 +598,22 @@ export const slice = createSlice({
                 photo: action.payload.photo,
               },
             });
-            let commentsSort = findComment1
+            const commentsSort = findComment1
               .concat({
                 ...findComment[0],
-                replies: replies,
+                replies,
                 totalReplies: findComment[0].totalReplies + 1,
               })
-              .sort((a, b) => {
-                return new Date(a.createdAt) - new Date(b.createdAt);
-              });
+              .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 
             findBusinessPost1 = findBusinessPost1.concat({
               ...findBusinessPost[0],
               comments: commentsSort,
             });
 
-            state.myFeed = findBusinessPost1.sort((a, b) => {
-              return new Date(b.createdAt) - new Date(a.createdAt);
-            });
+            state.myFeed = findBusinessPost1.sort(
+              (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+            );
           }
         }
       }
@@ -645,9 +633,9 @@ export const slice = createSlice({
         eventSchedule: null,
       };
 
-      state.myFeed = state.myFeed.concat(obj).sort((a, b) => {
-        return new Date(b.createdAt) - new Date(a.createdAt);
-      });
+      state.myFeed = state.myFeed
+        .concat(obj)
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     },
     [HomeSearch.pending]: (state) => {
       if (!state.loading) {
@@ -749,7 +737,7 @@ export const slice = createSlice({
       if (state.loadingDeletePost) {
         state.loadingDeletePost = false;
         if (action.payload && action.payload.res.success === true) {
-          state.totalData = state.totalData - 1;
+          state.totalData -= 1;
           state.myFeed = state.myFeed.filter(
             (i) => i._id !== action.payload.id
           );

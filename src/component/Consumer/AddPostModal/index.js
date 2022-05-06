@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import ModalPostContent from "./ModalPostContent";
-import AllListingsContent from "../AddPostModal/AllListings";
-import CreateListModel from "./createList";
-import { fetchUserLists } from "../../../reducers/listReducer";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+import ModalPostContent from './ModalPostContent';
+import AllListingsContent from './AllListings';
+import CreateListModel from './createList';
+import { fetchUserLists } from '../../../reducers/listReducer';
 
 const ModalContent = styled.div`
   width: 100%;
@@ -26,16 +26,60 @@ const ModalContent = styled.div`
     overflow-y: auto;
     overflow-x: hidden;
   }
+  &.CreateListModal {
+    max-width: 748px;
+    min-width: 748px;
+    @media (max-width: 767px) {
+      padding: 15px;
+      min-width: 90vw;
+      max-width: 300px;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+    .TitleRed {
+      label {
+        color: #ee3840;
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 11px;
+        text-transform: capitalize;
+      }
+      input::placeholder {
+        color: #fac2c4;
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 13px;
+      }
+    }
+    .CustomLabel {
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 500;
+      font-size: 11px;
+      text-transform: capitalize;
+      color: #7f75bf;
+    }
+    .PL-15 {
+      padding-left: 15px;
+      height: 28px;
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 500;
+      font-size: 13px;
+    }
+  }
 `;
 
-const AddPostModal = ({ businessId, closeModal, data }) => {
+function AddPostModal({ businessId, closeModal, data }) {
   const dispatch = useDispatch();
   const [displayList, setDisplayList] = useState(false);
   const [displayCreateList, setDisplayCreateList] = useState(false);
   const [selectedListForPost, setSelectedListForPost] = useState(
     data && data.listId.length > 0 ? data.listId[0]._id : null
   );
-  const [description, setDescription] = useState(data ? data.data : "");
+  const [description, setDescription] = useState(data ? data.data : '');
   const [mentionArrayList, setMentionArrayList] = useState([]);
   const [mentionArrayUser, setMentionArrayUser] = useState([]);
   const [imageUpload, setImageUpload] = useState(
@@ -47,66 +91,65 @@ const AddPostModal = ({ businessId, closeModal, data }) => {
 
   useEffect(() => {
     if (data && data.taggedLists) {
-      let arr = [];
+      const arr = [];
       data.taggedLists.map((i) => arr.push(i._id));
       setMentionArrayList(arr);
     }
     if (data && data.taggedUsers) {
-      let arr = [];
+      const arr = [];
       data.taggedUsers.map((i) => arr.push(i._id));
       setMentionArrayUser(arr);
     }
   }, [data]);
 
-  /**fetch user list */
+  /** fetch user list */
   useEffect(() => {
     if (userLists.length === 0) dispatch(fetchUserLists(user._id));
   }, [dispatch, user._id, userLists.length]);
+
   return (
-    <>
-      <ModalContent>
-        {displayList ? (
-          <AllListingsContent
-            setDisplayList={setDisplayList}
-            setSelectedListForPost={setSelectedListForPost}
-            selectedListForPost={selectedListForPost}
-            setDescription={setDescription}
-            description={description}
-            mentionArrayList={mentionArrayList}
-            setMentionArrayList={setMentionArrayList}
-            mentionArrayUser={mentionArrayUser}
-            setMentionArrayUser={setMentionArrayUser}
-            setDisplayCreateList={setDisplayCreateList}
-          />
-        ) : displayCreateList ? (
-          <CreateListModel
-            setSelectedListForPost={setSelectedListForPost}
-            setDisplayList={setDisplayList}
-            setDisplayCreateList={setDisplayCreateList}
-          />
-        ) : (data && userLists.length > 0) || !data ? (
-          <ModalPostContent
-            closeModal={closeModal}
-            businessId={businessId}
-            setDisplayList={setDisplayList}
-            selectedListForPost={selectedListForPost}
-            setSelectedListForPost={setSelectedListForPost}
-            description={description}
-            setDescription={setDescription}
-            mentionArrayList={mentionArrayList}
-            setMentionArrayList={setMentionArrayList}
-            mentionArrayUser={mentionArrayUser}
-            setMentionArrayUser={setMentionArrayUser}
-            imageUpload={imageUpload}
-            setImageUpload={setImageUpload}
-            businessData={data}
-            imageFile={imageFile}
-            setImageFile={setImageFile}
-          />
-        ) : null}
-      </ModalContent>
-    </>
+    <ModalContent className={displayCreateList && 'CreateListModal'}>
+      {displayList ? (
+        <AllListingsContent
+          setDisplayList={setDisplayList}
+          setSelectedListForPost={setSelectedListForPost}
+          selectedListForPost={selectedListForPost}
+          setDescription={setDescription}
+          description={description}
+          mentionArrayList={mentionArrayList}
+          setMentionArrayList={setMentionArrayList}
+          mentionArrayUser={mentionArrayUser}
+          setMentionArrayUser={setMentionArrayUser}
+          setDisplayCreateList={setDisplayCreateList}
+        />
+      ) : displayCreateList ? (
+        <CreateListModel
+          setSelectedListForPost={setSelectedListForPost}
+          setDisplayList={setDisplayList}
+          setDisplayCreateList={setDisplayCreateList}
+        />
+      ) : (data && userLists.length > 0) || !data ? (
+        <ModalPostContent
+          closeModal={closeModal}
+          businessId={businessId}
+          setDisplayList={setDisplayList}
+          selectedListForPost={selectedListForPost}
+          setSelectedListForPost={setSelectedListForPost}
+          description={description}
+          setDescription={setDescription}
+          mentionArrayList={mentionArrayList}
+          setMentionArrayList={setMentionArrayList}
+          mentionArrayUser={mentionArrayUser}
+          setMentionArrayUser={setMentionArrayUser}
+          imageUpload={imageUpload}
+          setImageUpload={setImageUpload}
+          businessData={data}
+          imageFile={imageFile}
+          setImageFile={setImageFile}
+        />
+      ) : null}
+    </ModalContent>
   );
-};
+}
 
 export default AddPostModal;

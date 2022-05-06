@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const HeaderBar = styled.div`
   height: 60px;
@@ -70,7 +70,7 @@ export const BreadcrumbsText = styled.div`
   letter-spacing: 0.02em;
   color: #656565;
   margin: 0 0 0 12px;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   span {
     color: #261f55;
     margin: 0 0 0 5px;
@@ -208,6 +208,7 @@ export const LogoutComponent = styled.div`
   width: 360px;
   color: #fff;
   flex-direction: column;
+  border-radius: 5px;
   @media (max-width: 767px) {
     padding: 20px 15px;
     width: 100%;
@@ -230,7 +231,7 @@ export const LogoutMsg = styled.p`
   align-items: center;
   margin: 0 0 20px;
   padding: 0;
-  font-family: "Montserrat";
+  font-family: 'Montserrat';
   font-style: normal;
   font-weight: 700;
   font-size: 14px;

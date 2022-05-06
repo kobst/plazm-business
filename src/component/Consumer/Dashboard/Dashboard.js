@@ -1,26 +1,26 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import LeftBar from "../../UI/Consumer/LeftBar";
-import SideBarTabs from "../../UI/Consumer/SideBarTabs/SideBarTabs";
-import PanelContent from "../../UI/Consumer/Panel-Content/PanelContent";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import LeftBar from '../../UI/Consumer/LeftBar';
+import SideBarTabs from '../../UI/Consumer/SideBarTabs/SideBarTabs';
+import PanelContent from '../../UI/Consumer/Panel-Content/PanelContent';
 
-import Header from "../../UI/Consumer/Header/Header";
-import RightBar from "../Dashboard/RightBar";
+import Header from '../../UI/Consumer/Header/Header';
+import RightBar from './RightBar';
 
-import HomeSearch from "../HomeSearch";
-import MyFeed from "../MyFeed";
-import BuisinessView from "../BuisinessView";
-import DiscoverList from "../DiscoverList";
-import ListDetail from "../ListDescriptionView/ListDetail";
-import Profile from "../Profile";
+import HomeSearch from '../HomeSearch';
+import MyFeed from '../MyFeed';
+import BuisinessView from '../BuisinessView';
+import DiscoverList from '../DiscoverList';
+import ListDetail from '../ListDescriptionView/ListDetail';
+import Profile from '../Profile';
 
-import GridContainer from "../GridComponents/index";
-import MapView from "../mapView/index";
-import RadarView from "../radarView/radarView";
-import useStore from "../useState";
-import GlobalSearch from "../GlobalSearch";
-import GlobalSearchBox from "../GlobalSearch/GlobalSearchBox";
-import { useSelector } from "react-redux";
+import GridContainer from '../GridComponents/index';
+import MapView from '../mapView/index';
+import RadarView from '../radarView/radarView';
+import useStore from '../useState';
+import GlobalSearch from '../GlobalSearch';
+import GlobalSearchBox from '../GlobalSearch/GlobalSearchBox';
 
 const DashboardContent = styled.div`
   width: 100%;
@@ -61,7 +61,7 @@ const PanelContentContainer = styled.div`
 `;
 // const Dashboard = ({view}) => {
 
-const Dashboard = () => {
+function Dashboard() {
   const gridMode = useStore((state) => state.gridMode);
   const view = useStore((state) => state.view);
   const detailId = useStore((state) => state.detailId);
@@ -72,73 +72,70 @@ const Dashboard = () => {
   }, [gridMode]);
 
   // put all the grid logic here?  for the map and radar ....
-  //maybe not necessary as long as griContainer remains without conditional
+  // maybe not necessary as long as griContainer remains without conditional
 
   useEffect(() => {
     // console.log(view);
-
     // put all the loading for the views here? use effect on view....
   }, [view]);
   return (
-    <>
-      <DashboardContent>
-        <SideBarTabs />
-        <GridContainer />
-        {view === "explore" && (
-          <PanelContentContainer>
-            <HomeSearch />
-          </PanelContentContainer>
-        )}
+    <DashboardContent>
+      <SideBarTabs />
+      <GridContainer />
+      {view === 'explore' && (
+        <PanelContentContainer>
+          <HomeSearch />
+        </PanelContentContainer>
+      )}
 
-        {view == "my_feed" && (
-          <PanelContentContainer>
-            <MyFeed />
-          </PanelContentContainer>
-        )}
+      {view == 'my_feed' && (
+        <PanelContentContainer>
+          <MyFeed />
+        </PanelContentContainer>
+      )}
 
-        {view === "business_detail" && (
-          <PanelContentContainer>
-            <BuisinessView businessId={detailId} />
-          </PanelContentContainer>
-        )}
+      {view === 'business_detail' && (
+        <PanelContentContainer>
+          <BuisinessView businessId={detailId} />
+        </PanelContentContainer>
+      )}
 
-        {view === "user_detail" && (
-          <PanelContentContainer>
-            <Profile userId={detailId} />
-          </PanelContentContainer>
-        )}
-        {view === "list_detail" && (
-          <PanelContentContainer>
-            <ListDetail />
-          </PanelContentContainer>
-        )}
-        {view === "list_explore" && <DiscoverList />}
-        {(view === "explore" ||
-          view === "my_feed" ||
-          view === "business_detail") && <GlobalSearch />}
+      {view === 'user_detail' && (
+        <PanelContentContainer>
+          <Profile userId={detailId} />
+        </PanelContentContainer>
+      )}
+      {view === 'list_detail' && (
+        <PanelContentContainer>
+          <ListDetail />
+        </PanelContentContainer>
+      )}
+      {view === 'list_explore' && <DiscoverList />}
+      {(view === 'explore' ||
+        view === 'my_feed' ||
+        view === 'business_detail') && <GlobalSearch />}
 
-        {view !== "list_explore" && (
-          <>
-            <MapView />
-            <RadarView />
-          </>
-        )}
+      {view !== 'list_explore' && (
+        <>
+          <MapView />
+          <RadarView />
+        </>
+      )}
 
-        {/* // works  */}
-        {/* <PanelContent/> */}
+      {/* // works  */}
+      {/* <PanelContent/> */}
 
-        {/* {view !== "list_explore" && <>
+      {/* {view !== "list_explore" && <>
           <GridContainer />
           <MapView/>
           <RadarView/>
 
       </>} */}
 
-        <Header />
-      </DashboardContent>
-    </>
+      <Header />
+    </DashboardContent>
   );
-};
+}
 
 export default Dashboard;
 

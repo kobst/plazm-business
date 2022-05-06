@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import BuisinessHeader from "./BuisinessHeader";
-import TabsSection from "./TabsSection";
-import BuisinessHeaderNotClaimed from "./BuisinessHeaderNotClaimed";
-import { useDispatch, useSelector } from "react-redux";
-import BuisinessProfileDetails from "./BuisinessProfileDetails";
-import ValueLoader from "../../../utils/loader";
-import { setSideFilters } from "../../../reducers/businessReducer";
-import useStore from "../useState/index";
-import GlobalSearchBox from "../GlobalSearch/GlobalSearchBox";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+import BuisinessHeader from './BuisinessHeader';
+import TabsSection from './TabsSection';
+import BuisinessHeaderNotClaimed from './BuisinessHeaderNotClaimed';
+import BuisinessProfileDetails from './BuisinessProfileDetails';
+import ValueLoader from '../../../utils/loader';
+import { setSideFilters } from '../../../reducers/businessReducer';
+import useStore from '../useState/index';
+import GlobalSearchBox from '../GlobalSearch/GlobalSearchBox';
 
 const BuisinessViewContent = styled.div`
   width: 100%;
@@ -38,7 +38,7 @@ const BusinessWrap = styled.div`
   width: 100%;
 `;
 
-const BuisinessView = ({
+function BuisinessView({
   setDisplayTab,
   // profile,
   // businessExists,
@@ -53,7 +53,7 @@ const BuisinessView = ({
   // favoriteIndex,
   // setFavoriteIndex,
   // setSelectedListId,
-}) => {
+}) {
   const loading = useSelector((state) => state.business.loading);
   const showSearchBar = useSelector((state) => state.globalSearch.displayBar);
   const businessProfile = useSelector((state) => state.business.business);
@@ -64,7 +64,7 @@ const BuisinessView = ({
 
   useEffect(() => {
     if (businessProfile[0]) {
-      let deepClone = JSON.parse(JSON.stringify(businessProfile[0]));
+      const deepClone = JSON.parse(JSON.stringify(businessProfile[0]));
       deepClone.businessLocation = deepClone.location;
 
       // console.log("XXXX   business view coordinates XXXXX");
@@ -91,12 +91,12 @@ const BuisinessView = ({
         </LoaderWrap>
       ) : (
         <BusinessWrap>
-          <div style={{ width: "100%" }}>
+          <div style={{ width: '100%' }}>
             {showSearchBar && (
-              <GlobalSearchBox setOffset={() => {}} type={"Business Search"} />
+              <GlobalSearchBox setOffset={() => {}} type="Business Search" />
             )}
           </div>
-          <div style={{ width: "100%" }}>
+          <div style={{ width: '100%' }}>
             <BuisinessViewContent>
               {businessProfile &&
                 businessProfile.length > 0 &&
@@ -146,6 +146,6 @@ const BuisinessView = ({
       )}
     </>
   );
-};
+}
 
 export default BuisinessView;

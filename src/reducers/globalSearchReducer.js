@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 export const slice = createSlice({
-  name: "globalSearch",
+  name: 'globalSearch',
   initialState: {
     displayBar: false,
   },

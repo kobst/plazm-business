@@ -1,37 +1,41 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
-body, html{
-    font-family: 'Montserrat', sans-serif; 
-    height: 100%; 
-    overflow-x: hidden;
-    background: #221E45;
+body,
+html {
+  font-family: 'Montserrat', sans-serif;
+  height: 100%;
+  overflow-x: hidden;
+  background: #221e45;
 }
-input, button, select, option{
-    font-family: 'Montserrat', sans-serif; 
+input,
+button,
+select,
+option {
+  font-family: 'Montserrat', sans-serif;
 }
-img{
-    max-width: 100%;
-}
-
-@media (max-width: 991px) and (orientation: landscape){
-    body, html{
-       height: auto;
-    }
+img {
+  max-width: 100%;
 }
 
-.imgSlide_onTabOpen{
-    
+@media (max-width: 991px) and (orientation: landscape) {
+  body,
+  html {
+    height: auto;
+  }
+}
+
+.imgSlide_onTabOpen {
 }
 
 .MuiDialogActions-root {
-    margin: 0 0 10px;
+  margin: 0 0 10px;
 }
 
 .MuiButtonBase-root.MuiButton-root.MuiButton-text {
-    margin: 0;
+  margin: 0;
 }
 .MuiButtonBase-root.MuiButton-root.MuiButton-text span.MuiButton-label {
-    font-size: 18px !important;
-    justify-content: center !important;
-    color: #3f51b5 !important;
+  font-size: 18px !important;
+  justify-content: center !important;
+  color: #3f51b5 !important;
 }

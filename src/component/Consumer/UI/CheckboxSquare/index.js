@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-import "./checkboxSquare-style.css";
+import React from 'react';
+import styled from 'styled-components';
+import './checkboxSquare-style.css';
 
 const DivText = styled.label`
   border: 0;
@@ -15,8 +15,8 @@ const DivText = styled.label`
   }
 `;
 
-const CheckboxSquare = () => (
-  <>
+function CheckboxSquare() {
+  return (
     <DivText className="checkbox-button">
       <input
         type="checkbox"
@@ -24,9 +24,9 @@ const CheckboxSquare = () => (
         id="choice1-1"
         name="choice1"
       />
-      <span className="checkbox-button__control"></span>
+      <span className="checkbox-button__control" />
     </DivText>
-  </>
-);
+  );
+}
 
 export default CheckboxSquare;

@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { IoMdClose } from "react-icons/io";
-import SaveButton from "../UI/SaveButton";
-import BackButton from "../UI/BackButton";
-import { FaSort } from "react-icons/fa";
-import { HiPlus } from "react-icons/hi";
-import { IoMdCloseCircle } from "react-icons/io";
-import { Formik } from "formik";
-import * as Yup from "yup";
-import FormBody from "./formBody";
-import { validate } from "./validate";
-import ValueLoader from "../../../utils/loader";
-import { updateProfileApi } from "../../../Api";
-import { checkMime, replaceBucket } from "../../../utilities/checkResizedImage";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { IoMdClose, IoMdCloseCircle } from 'react-icons/io';
+import { FaSort } from 'react-icons/fa';
+import { HiPlus } from 'react-icons/hi';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import BackButton from '../UI/BackButton';
+import SaveButton from '../UI/SaveButton';
+import FormBody from './formBody';
+import { validate } from './validate';
+import ValueLoader from '../../../utils/loader';
+import { updateProfileApi } from '../../../Api';
+import { checkMime, replaceBucket } from '../../../utilities/checkResizedImage';
 
 const bucket = process.env.REACT_APP_BUCKET;
 
@@ -161,18 +160,18 @@ const ProfileImage = styled.img`
 @params: setDisplayChangePassword (to display change password or profile settings)
 */
 let myInput;
-const ProfileSettings = ({
+function ProfileSettings({
   setDisplayChangePassword,
   setDisplayTab,
   profile,
   setFlag,
-}) => {
+}) {
   const [loader, setLoader] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
-  const [imageError, setImageError] = useState("");
+  const [imageError, setImageError] = useState('');
   const [imageFile, setImageFile] = useState(null);
-  const [error, setError] = useState("");
-  const [response, setResponse] = useState("");
+  const [error, setError] = useState('');
+  const [response, setResponse] = useState('');
 
   useEffect(() => {
     if (profile.photo) {
@@ -188,16 +187,16 @@ const ProfileSettings = ({
   */
   const uploadImage = (e) => {
     const selectedFile = e.target.files[0];
-    const idxDot = selectedFile.name.lastIndexOf(".") + 1;
+    const idxDot = selectedFile.name.lastIndexOf('.') + 1;
     const extFile = selectedFile.name
       .substr(idxDot, selectedFile.name.length)
       .toLowerCase();
-    if (extFile === "jpeg" || extFile === "png" || extFile === "jpg") {
-      setImageError("");
+    if (extFile === 'jpeg' || extFile === 'png' || extFile === 'jpg') {
+      setImageError('');
       setProfileImage(URL.createObjectURL(e.target.files[0]));
       setImageFile(selectedFile);
     } else {
-      setImageError("Only jpg/jpeg and png,files are allowed!");
+      setImageError('Only jpg/jpeg and png,files are allowed!');
     }
   };
 
@@ -207,11 +206,11 @@ const ProfileSettings = ({
   */
   const folderName = (name, id) => {
     /* to remove all special characters except space */
-    const removeSpecialCharacter = name.replace(/[^a-zA-Z ]/g, "");
+    const removeSpecialCharacter = name.replace(/[^a-zA-Z ]/g, '');
     /* to replace all spaces to underscore */
-    const replacedName = removeSpecialCharacter.split(" ").join("_");
+    const replacedName = removeSpecialCharacter.split(' ').join('_');
     /* return folder name */
-    return replacedName + "_" + id;
+    return `${replacedName}_${id}`;
   };
 
   /*
@@ -219,7 +218,7 @@ const ProfileSettings = ({
   @params: form values
   */
   const updateProfile = async (values) => {
-    /*set loader value */
+    /* set loader value */
     setLoader(true);
     const folder_name = folderName(values.name, profile._id);
     /* to upload file to s3 bucket on save of profile button */
@@ -229,14 +228,14 @@ const ProfileSettings = ({
       const value = await fetch(
         `${process.env.REACT_APP_API_URL}/api/upload_photo`,
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             Key: imageFile.name,
             ContentType: imageFile.type,
-            folder_name: folder_name,
+            folder_name,
           }),
         }
       );
@@ -244,9 +243,9 @@ const ProfileSettings = ({
       const Val = JSON.parse(body);
 
       await fetch(Val, {
-        method: "PUT",
+        method: 'PUT',
         headers: {
-          "Content-Type": imageFile.type,
+          'Content-Type': imageFile.type,
         },
         body: imageFile,
       })
@@ -263,122 +262,118 @@ const ProfileSettings = ({
       phoneNumber: values.phoneNumber,
       userSub: profile.userSub,
       lockProfile: values.lockMyProfile === true ? 1 : 0,
-      photo: imageFile !== null ? (imageUrl !== null ? imageUrl : "") : "",
+      photo: imageFile !== null ? (imageUrl !== null ? imageUrl : '') : '',
     };
     /* update profile api */
     const res = await updateProfileApi(obj);
     if (res && res.data.updateProfile.success === true) {
-      setResponse("Profile updated successfully.");
-      setError("");
+      setResponse('Profile updated successfully.');
+      setError('');
       setFlag(true);
       setLoader(false);
     } else if (res && res.data.updateProfile.success === false) {
       setLoader(false);
-      setResponse("");
-      setError("Could not update profile");
+      setResponse('');
+      setError('Could not update profile');
     }
   };
 
-  /**to toggle to change password screen */
+  /** to toggle to change password screen */
   const changePasswordFunc = (e) => {
     e.preventDefault();
     setDisplayChangePassword(true);
   };
   return (
-    <>
-      <ChangePasswordContent>
-        <CloseDiv>
-          <IoMdClose onClick={() => setDisplayTab(false)} />
-        </CloseDiv>
-        <MainHeading>
-          Profile Settings <FaSort />
-        </MainHeading>
-        <UploadImageContainer>
-          <UploadImage>
-            {profileImage !== null ? (
-              <ProfileImage
-                src={profileImage}
-                onError={() => setProfileImage(profile.photo)}
+    <ChangePasswordContent>
+      <CloseDiv>
+        <IoMdClose onClick={() => setDisplayTab(false)} />
+      </CloseDiv>
+      <MainHeading>
+        Profile Settings <FaSort />
+      </MainHeading>
+      <UploadImageContainer>
+        <UploadImage>
+          {profileImage !== null ? (
+            <ProfileImage
+              src={profileImage}
+              onError={() => setProfileImage(profile.photo)}
+            />
+          ) : (
+            <>
+              <input
+                id="myInput"
+                onChange={(e) => uploadImage(e)}
+                type="file"
+                accept=".png, .jpg, .jpeg"
+                ref={(ref) => (myInput = ref)}
+                style={{ display: 'none' }}
               />
-            ) : (
-              <>
-                <input
-                  id="myInput"
-                  onChange={(e) => uploadImage(e)}
-                  type="file"
-                  accept=".png, .jpg, .jpeg"
-                  ref={(ref) => (myInput = ref)}
-                  style={{ display: "none" }}
-                />
-                <p onClick={(e) => myInput.click()}>
-                  <HiPlus />
-                </p>
-              </>
-            )}
-            {/* for displaying cross icon when an image is uploaded */}
-            {profileImage !== null ? (
-              <div className="hide" onClick={() => setProfileImage(null)}>
-                <IoMdCloseCircle />
-              </div>
-            ) : null}
-          </UploadImage>
-          <UploadImageText>
-            Any message regarding profile picture uploading dimensions and file
-            sizes goes here
-            <ErrorDiv>{imageError}</ErrorDiv>
-          </UploadImageText>
-        </UploadImageContainer>
+              <p onClick={(e) => myInput.click()}>
+                <HiPlus />
+              </p>
+            </>
+          )}
+          {/* for displaying cross icon when an image is uploaded */}
+          {profileImage !== null ? (
+            <div className="hide" onClick={() => setProfileImage(null)}>
+              <IoMdCloseCircle />
+            </div>
+          ) : null}
+        </UploadImage>
+        <UploadImageText>
+          Any message regarding profile picture uploading dimensions and file
+          sizes goes here
+          <ErrorDiv>{imageError}</ErrorDiv>
+        </UploadImageText>
+      </UploadImageContainer>
 
-        <FormContainer>
-          <Formik
-            enableReinitialize={true}
-            initialValues={{
-              name: profile.name ? profile.name : "",
-              email: profile.email ? profile.email : "",
-              phoneNumber: profile.phoneNumber ? profile.phoneNumber : "",
-              lockMyProfile: profile.lockProfile
-                ? profile.lockProfile === 1
-                  ? true
-                  : false
-                : false,
-            }}
-            /*validation schema */
-            validationSchema={Yup.object(validate)}
-            validateOnChange={false}
-            validateOnBlur={false}
-            onSubmit={(values) => {
-              /*update profile function call*/
-              updateProfile(values);
-            }}
-          >
-            {(formik) => (
-              <form onSubmit={formik.handleSubmit} method="POST">
-                <FormBody loader={loader} setResponse={setResponse} />
-                {error !== "" ? (
-                  <ErrorDiv>{error}</ErrorDiv>
-                ) : response !== "" ? (
-                  <ErrorDiv>{response}</ErrorDiv>
-                ) : (
-                  <></>
-                )}
-                <BottomBtns>
-                  <BackButton
-                    disabled={loader}
-                    onClick={(e) => changePasswordFunc(e)}
-                  >
-                    Change Password
-                  </BackButton>
-                  <SaveButton type="submit" disabled={loader}>
-                    {loader ? <ValueLoader /> : "Save"}
-                  </SaveButton>
-                </BottomBtns>
-              </form>
-            )}
-          </Formik>
-        </FormContainer>
-      </ChangePasswordContent>
-    </>
+      <FormContainer>
+        <Formik
+          enableReinitialize
+          initialValues={{
+            name: profile.name ? profile.name : '',
+            email: profile.email ? profile.email : '',
+            phoneNumber: profile.phoneNumber ? profile.phoneNumber : '',
+            lockMyProfile: profile.lockProfile
+              ? profile.lockProfile === 1
+              : false,
+          }}
+          /* validation schema */
+          validationSchema={Yup.object(validate)}
+          validateOnChange={false}
+          validateOnBlur={false}
+          onSubmit={(values) => {
+            /* update profile function call */
+            updateProfile(values);
+          }}
+        >
+          {(formik) => (
+            <form onSubmit={formik.handleSubmit} method="POST">
+              <FormBody loader={loader} setResponse={setResponse} />
+              {error !== '' ? (
+                <ErrorDiv>{error}</ErrorDiv>
+              ) : response !== '' ? (
+                <ErrorDiv>{response}</ErrorDiv>
+              ) : (
+                <></>
+              )}
+              <BottomBtns>
+                <BackButton
+                  disabled={loader}
+                  onClick={(e) => changePasswordFunc(e)}
+                >
+                  Change Password
+                </BackButton>
+                <SaveButton type="submit" disabled={loader}>
+                  {loader ? <ValueLoader /> : 'Save'}
+                </SaveButton>
+              </BottomBtns>
+            </form>
+          )}
+        </Formik>
+      </FormContainer>
+    </ChangePasswordContent>
   );
-};
+}
 
 export default ProfileSettings;

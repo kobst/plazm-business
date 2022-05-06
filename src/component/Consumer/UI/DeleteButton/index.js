@@ -2,31 +2,31 @@ import React from 'react';
 import styled from 'styled-components';
 
 const ButtonText = styled.button`
-  background: #ff6067;
-  border-radius: 2px;
-  height: 22px;
-  font-size: 9px;
+  background: #ff4848;
+  height: 34px;
+  font-size: 12px;
   cursor: pointer;
   border: none;
   color: #fff;
   font-weight: bold;
-  min-width: 80px;
+  min-width: 100px;
   max-width: ${(props) => (props.maxWidth ? props.maxWidth : 'inherit')};
+  border-radius: 5px;
   border: 0;
-  :hover {
+  :hover,
+  :focus {
     opacity: 0.6;
     outline: none;
     transition: 0.3s;
   }
   @media (max-width: 359px) {
     font-size: 10px;
-    min-width: 70px;
-    height: 28px;
+    min-width: 80px;
   }
 `;
 
-function ButtonOrange(props) {
+function DeleteButton(props) {
   return <ButtonText ref={props.refs} {...props} />;
 }
 
-export default ButtonOrange;
+export default DeleteButton;

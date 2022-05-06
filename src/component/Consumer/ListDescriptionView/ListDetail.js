@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { IoMdClose } from "react-icons/io";
-import moment from "moment";
-import InfiniteScroll from "react-infinite-scroll-component";
-import BannerImg from "../../../images/sliderimg.png";
-import styled from "styled-components";
-import { CgLock } from "react-icons/cg";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { IoMdClose } from 'react-icons/io';
+import moment from 'moment';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import BannerImg from '../../../images/sliderimg.png';
+import styled from 'styled-components';
+import { CgLock } from 'react-icons/cg';
 
 import {
   UnSubscribeToAList,
@@ -15,21 +15,21 @@ import {
   userSubscribeToAList,
   userUnSubscribeToAList,
   setSelectedListDetails,
-} from "../../../reducers/listReducer";
+} from '../../../reducers/listReducer';
 import {
   fetchSelectedListDetails,
   clearMyFeedData,
-} from "../../../reducers/myFeedReducer";
-import ValueLoader from "../../../utils/loader";
-import DisplayPostInAList from "./DisplayPostsInAList";
-import { unwrapResult } from "@reduxjs/toolkit";
+} from '../../../reducers/myFeedReducer';
+import ValueLoader from '../../../utils/loader';
+import DisplayPostInAList from './DisplayPostsInAList';
+import { unwrapResult } from '@reduxjs/toolkit';
 import {
   addSubscribedList,
   removeSubscribedList,
-} from "../../../reducers/userReducer";
-import { useHistory } from "react-router-dom";
-import ButtonOrange from "../UI/ButtonOrange";
-import useStore from "../useState";
+} from '../../../reducers/userReducer';
+import { useHistory, useParams } from 'react-router-dom';
+import ButtonOrange from '../UI/ButtonOrange';
+import useStore from '../useState';
 
 const ListOptionSection = styled.div`
   width: 100%;
@@ -266,6 +266,7 @@ const ArrowBack = styled.div`
 
 const ListDetailView = ({ listOpenedFromBusiness }) => {
   const dispatch = useDispatch();
+  const { id } = useParams();
   const loading = useSelector((state) => state.myFeed.loadingSelectedList);
   const loadingUnSubScribe = useSelector(
     (state) => state.list.loadingUnSubscribe
@@ -288,6 +289,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   const [flag, setFlag] = useState(true);
 
   const selectedList = useStore((state) => state.selectedList);
+  const setSelectedList = useStore((state) => state.setSelectedList);
   const selectedListId = useStore((state) => state.selectedListId);
   const setSelectedListId = useStore((state) => state.setSelectedListId);
   const setSelectedListName = useStore((state) => state.setSelectedListName);
@@ -339,23 +341,22 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   useEffect(() => {
     const fetchListDetails = async () => {
       const result = await dispatch(
-        fetchSelectedListDetails({ id: selectedListId, value: offset })
+        fetchSelectedListDetails({ id: id, value: offset })
       );
       const data = await unwrapResult(result);
+      setSelectedList(data?.listDetails);
       dispatch(setSelectedListDetails(data?.listDetails));
       if (data) {
         setFlag(false);
       }
     };
     offset === 0 && fetchListDetails();
-  }, [dispatch, selectedListId, offset]);
+  }, [dispatch, id, offset]);
 
   const fetchMorePosts = () => {
     if (offset + 20 < totalData) {
       setOffSet(offset + 20);
-      dispatch(
-        fetchSelectedListDetails({ id: selectedListId, value: offset + 20 })
-      );
+      dispatch(fetchSelectedListDetails({ id: id, value: offset + 20 }));
     } else setHasMore(false);
   };
 
@@ -371,7 +372,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
       dispatch(removeSubscribedList(response.listId));
       dispatch(
         userUnSubscribeToAList({
-          type: "Selected",
+          type: 'Selected',
           listId: selectedList._id,
           user: user,
         })
@@ -391,13 +392,17 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
       dispatch(addSubscribedList(response.listId));
       dispatch(
         userSubscribeToAList({
-          type: "Selected",
+          type: 'Selected',
           listId: response.listId,
           user: user,
         })
       );
     }
   };
+
+  useEffect(() => {
+    setSelectedListId(id);
+  }, [id]);
 
   // /** to delete a list */
   // const deleteList = async () => {
@@ -445,7 +450,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
                   <p>{selectedList.description}</p>
                   <div className="BannerWrapBtn">
                     <h5>
-                      by{" "}
+                      by{' '}
                       <strong>
                         <span
                           onClick={() =>
@@ -454,12 +459,12 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
                         >
                           {selectedList.ownerId.name}
                         </span>
-                      </strong>{" "}
-                      Updated{" "}
+                      </strong>{' '}
+                      Updated{' '}
                       {moment(selectedList.updatedAt).format(
-                        "MMM DD,YYYY, hh:MMa"
-                      )}{" "}
-                      EST{" "}
+                        'MMM DD,YYYY, hh:MMa'
+                      )}{' '}
+                      EST{' '}
                       {!selectedList.isPublic && (
                         <LockDiv>
                           <CgLock />
@@ -507,7 +512,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
 
             <div
               id="scrollableDiv"
-              style={{ height: "110vh", overflow: "auto" }}
+              style={{ height: '110vh', overflow: 'auto' }}
               className="ScrollDivInner"
             >
               <InfiniteScroll
@@ -517,9 +522,9 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
                 loader={
                   offset < totalData && loading ? (
                     <div
-                      style={{ textAlign: "center", margin: " 40px auto 0" }}
+                      style={{ textAlign: 'center', margin: ' 40px auto 0' }}
                     >
-                      {" "}
+                      {' '}
                       <ValueLoader height="40" width="40" />
                     </div>
                   ) : null

@@ -1,18 +1,18 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   DatePicker,
   MuiPickersUtilsProvider,
   TimePicker,
-} from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
-import styled from "styled-components";
-import moment from "moment";
-import MomentUtils from "@date-io/moment";
+} from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
+import styled from 'styled-components';
+import moment from 'moment';
+import MomentUtils from '@date-io/moment';
 
-moment.updateLocale("en", {
+moment.updateLocale('en', {
   week: {
-    dow: 1
-  }
+    dow: 1,
+  },
 });
 
 const CalendarWrap = styled.div`
@@ -34,7 +34,7 @@ const CalendarWrap = styled.div`
     overflow: hidden;
     white-space: nowrap;
     margin-right: 22px;
-    width:16px;
+    width: 16px;
   }
   .MuiPickersCalendarHeader-daysHeader span:nth-child(5) {
     position: relative;
@@ -54,12 +54,12 @@ const CalendarWrap = styled.div`
     left: 5px;
   }
   .MuiPickersCalendarHeader-daysHeader span:nth-child(1) {
-    width:20px;
+    width: 20px;
     position: relative;
-    left:8px;
+    left: 8px;
   }
   .MuiPickersCalendarHeader-daysHeader span:nth-child(6) {
-    width:16px;
+    width: 16px;
     position: relative;
     left: 5px;
   }
@@ -84,39 +84,39 @@ const CalendarWrap = styled.div`
     font-weight: bold;
   }
   .MuiFormControl-root {
-    display: none
+    display: none;
   }
   @media only screen and (max-width: 767px) {
-  .MuiPickersCalendarHeader-daysHeader span:nth-child(1) {
+    .MuiPickersCalendarHeader-daysHeader span:nth-child(1) {
       width: 27px;
       left: 3px;
-  }
-  .MuiPickersCalendarHeader-daysHeader span:nth-child(2) {
+    }
+    .MuiPickersCalendarHeader-daysHeader span:nth-child(2) {
       left: 0px;
       width: 23px;
-  }
-  .MuiPickersCalendarHeader-daysHeader span:nth-child(3) {
+    }
+    .MuiPickersCalendarHeader-daysHeader span:nth-child(3) {
       left: 0px;
       width: 25px;
-  }
-  .MuiPickersCalendarHeader-daysHeader span:nth-child(4) {
+    }
+    .MuiPickersCalendarHeader-daysHeader span:nth-child(4) {
       left: -1px;
       width: 23px;
-  }
-  .MuiPickersCalendarHeader-daysHeader span:nth-child(5) {
+    }
+    .MuiPickersCalendarHeader-daysHeader span:nth-child(5) {
       left: -3px;
       width: 20px;
       margin-right: 14px;
-  }  
-  .MuiPickersCalendarHeader-daysHeader span:nth-child(6) {
+    }
+    .MuiPickersCalendarHeader-daysHeader span:nth-child(6) {
       width: 21px;
       left: 4px;
       margin-right: 13px;
-  }  
-  .MuiPickersCalendarHeader-dayLabel:last-child {
+    }
+    .MuiPickersCalendarHeader-dayLabel:last-child {
       left: 13px;
       width: 22px;
-  }  
+    }
   }
 `;
 
@@ -132,9 +132,9 @@ function Calendar({ date, changeDate }) {
   };
 
   const onChangeTime = (value) => {
-    const time = moment(value).format("HH:mm:ss");
-    const date1 = moment(date).format("YYYY-MM-DD");
-    changeDate(moment(date1+' '+time));
+    const time = moment(value).format('HH:mm:ss');
+    const date1 = moment(date).format('YYYY-MM-DD');
+    changeDate(moment(`${date1} ${time}`));
   };
   return (
     <CalendarWrap>

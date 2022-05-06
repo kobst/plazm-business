@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { FaRegSmile } from "react-icons/fa";
-import ProfileImg from "../../../../../../../images/profile-img.png";
-import { useDispatch, useSelector } from "react-redux";
-import { MentionsInput, Mention } from "react-mentions";
-import Picker from "emoji-picker-react";
-import { findSelectedUsers } from "../../../../../../../reducers/consumerReducer";
-import { unwrapResult } from "@reduxjs/toolkit";
-import { checkMime, replaceBucket } from "../../../../../../../utilities/checkResizedImage";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { FaRegSmile } from 'react-icons/fa';
+import { useDispatch, useSelector } from 'react-redux';
+import { MentionsInput, Mention } from 'react-mentions';
+import Picker from 'emoji-picker-react';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { findSelectedUsers } from '../../../../../../../reducers/consumerReducer';
+import ProfileImg from '../../../../../../../images/profile-img.png';
+import {
+  checkMime,
+  replaceBucket,
+} from '../../../../../../../utilities/checkResizedImage';
 
 const ChatContent = styled.div`
   width: 100%;
@@ -161,7 +164,7 @@ const MentionsImage = styled.div`
     margin-right: 5px;
   }
 `;
-const ReplyInput = ({
+function ReplyInput({
   eventId,
   type,
   name,
@@ -172,7 +175,7 @@ const ReplyInput = ({
   setReplyDescription,
   commentId,
   addReply,
-}) => {
+}) {
   const user = useSelector((state) => state.user.user);
   const [mentionArrayUser, setMentionArrayUser] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -209,22 +212,22 @@ const ReplyInput = ({
         setMentionArrayUser(valueArr);
       }
     }
-    if (type === "comment") setDescription(newPlainTextValue);
-    else if (type === "reply") setReplyDescription(newPlainTextValue);
+    if (type === 'comment') setDescription(newPlainTextValue);
+    else if (type === 'reply') setReplyDescription(newPlainTextValue);
   };
 
   /** to add emoji in input */
   const onEmojiClick = (event, emojiObject) => {
-    if (type === "comment") setDescription(description + emojiObject.emoji);
-    else if (type === "reply")
+    if (type === 'comment') setDescription(description + emojiObject.emoji);
+    else if (type === 'reply')
       setReplyDescription(replyDescription + emojiObject.emoji);
   };
 
   /** to add comment on post or comment */
   const addCommentToPost = async () => {
     if (
-      type === "comment" &&
-      description !== "" &&
+      type === 'comment' &&
+      description !== '' &&
       !description.trim() === false
     ) {
       const obj = {
@@ -236,8 +239,8 @@ const ReplyInput = ({
       };
       addComment(obj);
     } else if (
-      type === "reply" &&
-      replyDescription !== "" &&
+      type === 'reply' &&
+      replyDescription !== '' &&
       !replyDescription.trim() === false
     ) {
       const obj = {
@@ -246,40 +249,38 @@ const ReplyInput = ({
         userId: user._id,
         body: replyDescription,
         taggedUsers: mentionArrayUser,
-        replyUser: "@" + name,
+        replyUser: `@${name}`,
       };
       addReply(obj);
     }
   };
   /** on adding comment keyPress function */
   const commentAddKeyPress = (event) => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       event.preventDefault();
-      addCommentToPost(type === "reply" ? replyDescription : description);
-      if (type === "reply") setReplyDescription("");
-      else setDescription("");
+      addCommentToPost(type === 'reply' ? replyDescription : description);
+      if (type === 'reply') setReplyDescription('');
+      else setDescription('');
     }
   };
 
   /** custom render suggestion with images */
-  const customRenderSuggestion = (entry) => {
-    return (
-      <MentionsImage>
-        <img
-          src={
-            entry.image !== null
-              ? entry.image !== "" && entry.image !== "sample"
-                ? entry.image
-                : ProfileImg
+  const customRenderSuggestion = (entry) => (
+    <MentionsImage>
+      <img
+        src={
+          entry.image !== null
+            ? entry.image !== '' && entry.image !== 'sample'
+              ? entry.image
               : ProfileImg
-          }
-          alt=""
-          className="mentionsImageImg"
-        />
-        {entry.display}
-      </MentionsImage>
-    );
-  };
+            : ProfileImg
+        }
+        alt=""
+        className="mentionsImageImg"
+      />
+      {entry.display}
+    </MentionsImage>
+  );
 
   /** to search users for mentions */
   const fetchUsers = async (query, callback) => {
@@ -287,76 +288,66 @@ const ReplyInput = ({
     const data = await dispatch(findSelectedUsers(query));
     const res = await unwrapResult(data);
     if (res) {
-      let x = res.map((myUser) => ({
+      const x = res.map((myUser) => ({
         id: myUser._id,
         display: `${myUser.name}`,
-        image: myUser.photo ? myUser.photo : "",
+        image: myUser.photo ? myUser.photo : '',
       }));
       setSelectedUsers(res);
       return callback(x);
     }
   };
   return (
-    <>
-      <ChatContent className={type === "reply" ? "InnerReply" : ""}>
-        <ProfileNameHeader>
-          <ProfileThumb>
-            <img src={image} onError={() => checkError()} alt="" />
-          </ProfileThumb>
-          <ProfileNameWrap>
-            <InputWrap>
-              {type === "reply" ? (
-                <div className="taggedUserInput">{"@" + name}</div>
-              ) : null}
-              {type === "comment" ? (
-                <MentionsInput
-                  markup="@(__id__)[__display__]"
-                  value={type === "reply" ? replyDescription : description}
-                  onChange={handleChange}
-                  placeholder={type === "reply" ? "Add Reply" : "Add Comment"}
-                  className="replyInput"
-                  onKeyPress={(event) => commentAddKeyPress(event)}
-                  autoFocus={
-                    type === "reply"
-                      ? selectedEventId === eventId
-                        ? true
-                        : false
-                      : true
-                  }
-                >
-                  <Mention
-                    type="user"
-                    trigger="@"
-                    data={fetchUsers}
-                    appendSpaceOnAdd={true}
-                    renderSuggestion={customRenderSuggestion}
-                  />
-                </MentionsInput>
-              ) : (
-                <input
-                  value={replyDescription}
-                  placeholder="Add Reply"
-                  onChange={(e) => setReplyDescription(e.target.value)}
-                  onKeyPress={(event) => commentAddKeyPress(event)}
-                  autoFocus={
-                    type === "reply"
-                      ? selectedEventId === eventId
-                        ? true
-                        : false
-                      : true
-                  }
+    <ChatContent className={type === 'reply' ? 'InnerReply' : ''}>
+      <ProfileNameHeader>
+        <ProfileThumb>
+          <img src={image} onError={() => checkError()} alt="" />
+        </ProfileThumb>
+        <ProfileNameWrap>
+          <InputWrap>
+            {type === 'reply' ? (
+              <div className="taggedUserInput">{`@${name}`}</div>
+            ) : null}
+            {type === 'comment' ? (
+              <MentionsInput
+                markup="@(__id__)[__display__]"
+                value={type === 'reply' ? replyDescription : description}
+                onChange={handleChange}
+                placeholder={type === 'reply' ? 'Add Reply' : 'Add Comment'}
+                className="replyInput"
+                onKeyPress={(event) => commentAddKeyPress(event)}
+                autoFocus={
+                  type === 'reply' ? selectedEventId === eventId : true
+                }
+              >
+                <Mention
+                  type="user"
+                  trigger="@"
+                  data={fetchUsers}
+                  appendSpaceOnAdd
+                  renderSuggestion={customRenderSuggestion}
                 />
-              )}
-              <EmojiWrap>
-                <FaRegSmile onClick={() => setDisplayEmoji(!displayEmoji)} />
-                {displayEmoji ? <Picker onEmojiClick={onEmojiClick} /> : null}
-              </EmojiWrap>
-            </InputWrap>
-          </ProfileNameWrap>
-        </ProfileNameHeader>
-      </ChatContent>
-    </>
+              </MentionsInput>
+            ) : (
+              <input
+                value={replyDescription}
+                placeholder="Add Reply"
+                onChange={(e) => setReplyDescription(e.target.value)}
+                onKeyPress={(event) => commentAddKeyPress(event)}
+                autoFocus={
+                  type === 'reply' ? selectedEventId === eventId : true
+                }
+              />
+            )}
+            <EmojiWrap>
+              <FaRegSmile onClick={() => setDisplayEmoji(!displayEmoji)} />
+              {displayEmoji ? <Picker onEmojiClick={onEmojiClick} /> : null}
+            </EmojiWrap>
+          </InputWrap>
+        </ProfileNameWrap>
+      </ProfileNameHeader>
+    </ChatContent>
   );
-};
+}
 
 export default ReplyInput;

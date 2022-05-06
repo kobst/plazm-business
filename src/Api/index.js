@@ -1,13 +1,13 @@
-import { AddUser, getUser, updateUserProfile } from "../graphQl";
-import { graphQlEndPoint } from "./graphQl";
+import { AddUser, getUser, updateUserProfile } from '../graphQl';
+import { graphQlEndPoint } from './graphQl';
 
 export const callPlace = async (userSub) => {
   const response = await fetch(
     `${process.env.REACT_APP_API_URL}/api/place-fetch/${userSub}`,
     {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     }
   );
@@ -19,9 +19,9 @@ export const fetchPosts = async (id) => {
   const response = await fetch(
     `${process.env.REACT_APP_API_URL}/api/posts/${id}`,
     {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     }
   );
@@ -34,9 +34,9 @@ export const fetchComments = async (id) => {
   const response = await fetch(
     `${process.env.REACT_APP_API_URL}/api/comments/${id}`,
     {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     }
   );
@@ -48,9 +48,9 @@ export const fetchEvents = async (id) => {
   const response = await fetch(
     `${process.env.REACT_APP_API_URL}/api/events/${id}`,
     {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     }
   );
@@ -60,9 +60,9 @@ export const fetchEvents = async (id) => {
 };
 export const fetchUsers = async (id) => {
   const response = await fetch(`${process.env.REACT_APP_API_URL}/api/user`, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   });
   const body = await response.text();
@@ -74,9 +74,9 @@ export const callApi = async (name) => {
   const response = await fetch(
     `${process.env.REACT_APP_API_URL}/api/place/${name}`,
     {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     }
   );
@@ -86,9 +86,9 @@ export const callApi = async (name) => {
 
 export const addBusiness = async (userSub, businessInfo) => {
   const response = await fetch(`${process.env.REACT_APP_API_URL}/api/place`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       status: businessInfo.business_status,
@@ -99,7 +99,7 @@ export const addBusiness = async (userSub, businessInfo) => {
       mapLink: businessInfo.url,
       rating: businessInfo.rating,
       website: businessInfo.website,
-      userSub: userSub,
+      userSub,
       latitude: businessInfo.geometry.location.lat(),
       longitude: businessInfo.geometry.location.lng(),
     }),
@@ -109,9 +109,9 @@ export const addBusiness = async (userSub, businessInfo) => {
 };
 export const updateBusiness = async (value, userSub) => {
   const response = await fetch(`${process.env.REACT_APP_API_URL}/api/place`, {
-    method: "PUT",
+    method: 'PUT',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       _id: value._id,
@@ -124,7 +124,7 @@ export const updateBusiness = async (value, userSub) => {
       type: value.type,
       rating: value.rating,
       website: value.web_site,
-      userSub: userSub,
+      userSub,
       latitude: value.latitude,
       longitude: value.longitude,
       city: value.city,

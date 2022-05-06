@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { IoMdClose } from "react-icons/io";
-import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
-import ProfileImg from "../../../../images/profile-img.png";
-import FacebookImg from "../../../../images/Facebook-new.svg";
-import TwitterImg from "../../../../images/Twitter-new.svg";
-import LinkedInImg from "../../../../images/Linkedin-new.svg";
-import InstagramImg from "../../../../images/Instagram-new.svg";
-import { useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { IoMdClose } from 'react-icons/io';
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
+import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import ProfileImg from '../../../../images/profile-img.png';
+import FacebookImg from '../../../../images/Facebook-new.svg';
+import TwitterImg from '../../../../images/Twitter-new.svg';
+import LinkedInImg from '../../../../images/Linkedin-new.svg';
+import InstagramImg from '../../../../images/Instagram-new.svg';
 import {
   clearBusinessData,
   clearTopPost,
-} from "../../../../reducers/businessReducer";
-import { clearTopEvent } from "../../../../reducers/eventReducer";
+} from '../../../../reducers/businessReducer';
+import { clearTopEvent } from '../../../../reducers/eventReducer';
 
-import useStore from "../../useState";
+import useStore from '../../useState';
 
 const BuisinessHeaderContent = styled.div`
   width: 100%;
@@ -225,7 +225,7 @@ const SocialIcon = styled.div`
   cursor: pointer;
 `;
 
-const BuisinessHeader = ({
+function BuisinessHeader({
   setDisplayTab,
   setDisplayBusinessProfile,
   isProfile,
@@ -240,7 +240,7 @@ const BuisinessHeader = ({
   // setListIndex,
   // favoriteIndex,
   // setFavoriteIndex,
-}) => {
+}) {
   const history = useHistory();
   const businessProfile = useSelector((state) => state.business.business)[0];
   const [image, setImage] = useState(
@@ -259,14 +259,14 @@ const BuisinessHeader = ({
   const setListIndex = useStore((state) => state.setListIndex);
   const setFavoriteIndex = useStore((state) => state.setFavoriteIndex);
   const setTabIndex = useStore((state) => state.setTabSelected);
-  const [route, setRoute] = useState("");
+  const [route, setRoute] = useState('');
 
   /*
    * @desc: close tab function to be called on cross icon click
    */
   const closeTab = () => {
     setDisplayTab(false);
-    history.push("/");
+    history.push('/');
     if (myFeedIndex) {
       setMyFeedIndex(null);
     }
@@ -275,7 +275,7 @@ const BuisinessHeader = ({
     setRoute(history.location.pathname);
   }, []);
   useEffect(() => {
-    if (history.action === "POP" && history.location.pathname === route) {
+    if (history.action === 'POP' && history.location.pathname === route) {
       history.goBack();
     }
   }, [history.action]);
@@ -303,95 +303,93 @@ const BuisinessHeader = ({
   };
 
   return (
-    <>
-      <BuisinessHeaderContent
-        className={displayBusinessProfile ? "HeaderSpacing" : ""}
-      >
-        <ArrowBack onClick={history.goBack}>BACK</ArrowBack>
-        <CloseDiv>
-          <IoMdClose onClick={() => closeTab()} />
-        </CloseDiv>
-        <BusinessHeaderOverlay />
+    <BuisinessHeaderContent
+      className={displayBusinessProfile ? 'HeaderSpacing' : ''}
+    >
+      <ArrowBack onClick={history.goBack}>BACK</ArrowBack>
+      <CloseDiv>
+        <IoMdClose onClick={() => closeTab()} />
+      </CloseDiv>
+      <BusinessHeaderOverlay />
 
-        <BusinessIcon>
-          <img
-            src={image ? image : ProfileImg}
-            alt=""
-            onError={() => setImage(ProfileImg)}
-          />
-        </BusinessIcon>
+      <BusinessIcon>
+        <img
+          src={image || ProfileImg}
+          alt=""
+          onError={() => setImage(ProfileImg)}
+        />
+      </BusinessIcon>
 
-        <BottomBar className={isProfile ? "ProfileHeaderNam" : ""}>
-          <LeftHeader>
-            {!isProfile ? (
-              <BusinessNameWrap>
-                <BusinessName>
-                  <span>{businessProfile.company_name}</span>{" "}
-                </BusinessName>
-                <SocialIconsWrap>
-                  {businessProfile.handles.instagram ? (
-                    <a
-                      href={businessProfile.handles.instagram}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <SocialIcon>
-                        <img src={InstagramImg} alt="" />
-                      </SocialIcon>
-                    </a>
-                  ) : null}
-                  {businessProfile.handles.twitter ? (
-                    <a
-                      href={businessProfile.handles.twitter}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <SocialIcon>
-                        <img src={TwitterImg} alt="" />
-                      </SocialIcon>
-                    </a>
-                  ) : null}
-                  {businessProfile.handles.linkedin ? (
-                    <a
-                      href={businessProfile.handles.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <SocialIcon>
-                        <img src={LinkedInImg} alt="" />
-                      </SocialIcon>
-                    </a>
-                  ) : null}
-                  {businessProfile.handles.facebook ? (
-                    <a
-                      href={businessProfile.handles.facebook}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <SocialIcon>
-                        <img src={FacebookImg} alt="" />
-                      </SocialIcon>
-                    </a>
-                  ) : null}
-                </SocialIconsWrap>
-              </BusinessNameWrap>
-            ) : null}
-          </LeftHeader>
-          <ArrowDown>
-            {isProfile ? (
-              <MdKeyboardArrowUp
-                onClick={() => setDisplayBusinessProfile(false)}
-              />
-            ) : (
-              <MdKeyboardArrowDown
-                onClick={() => setDisplayBusinessProfile(true)}
-              />
-            )}
-          </ArrowDown>
-        </BottomBar>
-      </BuisinessHeaderContent>
-    </>
+      <BottomBar className={isProfile ? 'ProfileHeaderNam' : ''}>
+        <LeftHeader>
+          {!isProfile ? (
+            <BusinessNameWrap>
+              <BusinessName>
+                <span>{businessProfile.company_name}</span>{' '}
+              </BusinessName>
+              <SocialIconsWrap>
+                {businessProfile.handles.instagram ? (
+                  <a
+                    href={businessProfile.handles.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <SocialIcon>
+                      <img src={InstagramImg} alt="" />
+                    </SocialIcon>
+                  </a>
+                ) : null}
+                {businessProfile.handles.twitter ? (
+                  <a
+                    href={businessProfile.handles.twitter}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <SocialIcon>
+                      <img src={TwitterImg} alt="" />
+                    </SocialIcon>
+                  </a>
+                ) : null}
+                {businessProfile.handles.linkedin ? (
+                  <a
+                    href={businessProfile.handles.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <SocialIcon>
+                      <img src={LinkedInImg} alt="" />
+                    </SocialIcon>
+                  </a>
+                ) : null}
+                {businessProfile.handles.facebook ? (
+                  <a
+                    href={businessProfile.handles.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <SocialIcon>
+                      <img src={FacebookImg} alt="" />
+                    </SocialIcon>
+                  </a>
+                ) : null}
+              </SocialIconsWrap>
+            </BusinessNameWrap>
+          ) : null}
+        </LeftHeader>
+        <ArrowDown>
+          {isProfile ? (
+            <MdKeyboardArrowUp
+              onClick={() => setDisplayBusinessProfile(false)}
+            />
+          ) : (
+            <MdKeyboardArrowDown
+              onClick={() => setDisplayBusinessProfile(true)}
+            />
+          )}
+        </ArrowDown>
+      </BottomBar>
+    </BuisinessHeaderContent>
   );
-};
+}
 
 export default BuisinessHeader;

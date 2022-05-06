@@ -1,7 +1,7 @@
-import React from "react";
-import { useField } from "formik";
-import styled from "styled-components";
-import error from "../../../../constants";
+import React from 'react';
+import { useField } from 'formik';
+import styled from 'styled-components';
+import error from '../../../../constants';
 
 const InputText = styled.textarea`
   min-height: 100px;
@@ -29,6 +29,20 @@ const InputText = styled.textarea`
   @media (max-width: 767px) {
     font-size: 14px;
   }
+  &.CustomDesp {
+    min-height: 28px;
+    height: 28px;
+    font-size: 13px;
+    overflow: hidden;
+    color: #261f55;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    @media (max-width: 767px) {
+      font-size: 13px;
+    }
+  }
 `;
 const ErrorDiv = styled.div`
   color: #ff0000;
@@ -39,18 +53,22 @@ const ErrorDiv = styled.div`
 /*
 @desc: formik form input box
 */
-const TextArea = ({ label, formError, ...props }) => {
+function TextArea({ label, formError, ...props }) {
   const [field, meta] = useField(props);
   return (
     <>
       <center>
-        <InputText {...field} {...props} className="text-input" />
+        <InputText
+          {...field}
+          {...props}
+          className="text-input PL-15 CustomDesp"
+        />
       </center>
       {meta.error || formError === error.INCORRECT_OLD_PASSWORD ? (
         <ErrorDiv>{meta.error || formError}</ErrorDiv>
       ) : null}
     </>
   );
-};
+}
 
 export default TextArea;

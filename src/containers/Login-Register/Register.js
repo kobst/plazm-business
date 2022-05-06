@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
-import "./style.css";
-import { Auth } from "aws-amplify";
-import history from "../../utils/history";
-import Wrapper from "../../component/Login-Register/Wrapper";
-import RegisterForm from "../../component/Login-Register/Form-Components/Register-Form";
-import { getMessage } from "../../config";
-import ValueLoader from "../../utils/loader";
+import React, { useState, useEffect } from 'react';
+import './style.css';
+import { Auth } from 'aws-amplify';
+import history from '../../utils/history';
+import Wrapper from '../../component/Login-Register/Wrapper';
+import RegisterForm from '../../component/Login-Register/Form-Components/Register-Form';
+import { getMessage } from '../../config';
+import ValueLoader from '../../utils/loader';
 import {
   callApi,
   addBusiness,
   updateBusiness,
   addUserProfile,
-} from "../../Api";
+} from '../../Api';
 
 const renderMessage = getMessage();
 
@@ -49,7 +49,7 @@ const Register = (props) => {
     let updateUser = async (authState) => {
       try {
         await Auth.currentAuthenticatedUser();
-        history.push("/");
+        history.push('/');
         window.location.reload();
       } catch {
         setLoginValue(true);
@@ -67,12 +67,12 @@ const Register = (props) => {
         email: email,
         phone_number: phone_number,
         name: username,
-        "custom:type": userType,
+        'custom:type': userType,
       },
     })
       .then(async (res) => {
         if (res.userSub) {
-          if (type.includes("consumer")) {
+          if (type.includes('consumer')) {
             const obj = {
               name: username,
               email: email,
@@ -87,7 +87,7 @@ const Register = (props) => {
               setLoader(false);
             }
           }
-          if (type.includes("business") && (await checkUser(res.userSub))) {
+          if (type.includes('business') && (await checkUser(res.userSub))) {
             form.reset();
             setVerified(true);
             setError(false);
@@ -96,7 +96,7 @@ const Register = (props) => {
         }
       })
       .catch((err) => {
-        if (err.message.includes("phone")) {
+        if (err.message.includes('phone')) {
           return (
             setMessage(renderMessage.phone_Err),
             setError(true),
@@ -116,7 +116,7 @@ const Register = (props) => {
           password: password,
         })
           // eslint-disable-next-line no-sequences
-          .then(() => (history.push("/"), window.location.reload()))
+          .then(() => (history.push('/'), window.location.reload()))
           .catch((err) => console.log(err));
       })
       .catch((err) => setCodeError(true));
@@ -145,7 +145,7 @@ const Register = (props) => {
         setFirstError(true);
       }
     }
-    if (!loc && type.includes("business")) {
+    if (!loc && type.includes('business')) {
       setLocError(true);
     }
     if (loc) {
@@ -182,7 +182,7 @@ const Register = (props) => {
       }
     }
     if (
-      type.includes("business") &&
+      type.includes('business') &&
       username &&
       loc &&
       username.length > 3 &&
@@ -198,7 +198,7 @@ const Register = (props) => {
       return true;
     }
     if (
-      type.includes("consumer") &&
+      type.includes('consumer') &&
       username &&
       username.length > 3 &&
       phone_number &&
@@ -269,19 +269,19 @@ const Register = (props) => {
     setPhoneLong(false);
     setPhoneShort(false);
     setPhoneOnlyNumbers(false);
-    if (e.target.id === "username") {
+    if (e.target.id === 'username') {
       setUser(e.target.value);
-    } else if (e.target.id === "password") {
+    } else if (e.target.id === 'password') {
       setPassword(e.target.value);
-    } else if (e.target.id === "phone_number") {
+    } else if (e.target.id === 'phone_number') {
       setPhoneNumber(e.target.value);
-    } else if (e.target.id === "email") {
+    } else if (e.target.id === 'email') {
       setEmail(e.target.value.trim());
-    } else if (e.target.id === "confirmationCode") {
+    } else if (e.target.id === 'confirmationCode') {
       setconfirmationCode(e.target.value);
-    } else if (e.target.id === "location") {
-      setName("");
-      setBusinessInfo("");
+    } else if (e.target.id === 'location') {
+      setName('');
+      setBusinessInfo('');
       setLoc(e.target.value);
     }
   };
@@ -293,7 +293,7 @@ const Register = (props) => {
           type={type}
           page="register"
           welcomeMessage={
-            type.includes("business")
+            type.includes('business')
               ? renderMessage.New_Reg
               : renderMessage.New_Reg_Consumer
           }
@@ -326,7 +326,7 @@ const Register = (props) => {
           />
         </Wrapper>
       ) : (
-        <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
+        <div style={{ textAlign: 'center', margin: ' 40px auto 0' }}>
           <ValueLoader />
         </div>
       )}

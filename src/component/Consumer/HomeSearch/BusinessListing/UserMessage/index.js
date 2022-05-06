@@ -1,14 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import moment from "moment";
-import { FaCaretRight } from "react-icons/fa";
-import { useSelector, useDispatch } from "react-redux";
-import { Scrollbars } from "react-custom-scrollbars";
-import ValueLoader from "../../../../../utils/loader";
-import ReplyInput from "./ReplyInput";
-import Comments from "./Comments";
-import BannerImg from "../../../../../images/sliderimg.png";
-import LikesBar from "../LikesBar";
+import React, { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
+import moment from 'moment';
+import { FaCaretRight } from 'react-icons/fa';
+import { useSelector, useDispatch } from 'react-redux';
+import { Scrollbars } from 'react-custom-scrollbars';
+import { useHistory } from 'react-router-dom';
+import ValueLoader from '../../../../../utils/loader';
+import ReplyInput from './ReplyInput';
+import Comments from './Comments';
+import BannerImg from '../../../../../images/sliderimg.png';
+import LikesBar from '../LikesBar';
 import {
   addLikeViaSocket,
   addLikeToCommentViaSocket,
@@ -18,9 +19,8 @@ import {
   setCommentAdded,
   setPostId,
   setEventId,
-} from "../../../../../reducers/myFeedReducer";
-import { useHistory } from "react-router-dom";
-import BigImage from "../../../ListDescriptionView/BigImageContainer";
+} from '../../../../../reducers/myFeedReducer';
+import BigImage from '../../../ListDescriptionView/BigImageContainer';
 import {
   InnerListBanner,
   InnerOverlay,
@@ -34,14 +34,14 @@ import {
   LeftListHeader,
   ShowMoreDiv,
   ImgThumbWrap,
-} from "../../../FeedContent/styled";
-import DateBar from "../../../BuisinessView/TabsSection/EventsSection/PostChat/DateBar/index.js";
-import TimeBar from "../../../BuisinessView/TabsSection/EventsSection/PostChat/TimeBar/index.js";
-import ArrowSm from "../../../../../images/arrow-sm-up.png";
-import ArrowSmDown from "../../../../../images/arrow-sm.png";
-import ImageSlider from "./imageslider";
+} from '../../../FeedContent/styled';
+import DateBar from '../../../BuisinessView/TabsSection/EventsSection/PostChat/DateBar/index.js';
+import TimeBar from '../../../BuisinessView/TabsSection/EventsSection/PostChat/TimeBar/index.js';
+import ArrowSm from '../../../../../images/arrow-sm-up.png';
+import ArrowSmDown from '../../../../../images/arrow-sm.png';
+import ImageSlider from './imageslider';
 
-const reactStringReplace = require("react-string-replace");
+const reactStringReplace = require('react-string-replace');
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -80,7 +80,7 @@ const ProfileNameHeader = styled.div`
   &.UserMessageView {
     padding-left: 15px;
     width: 100%;
-    font-family: "Roboto", sans-serif;
+    font-family: 'Roboto', sans-serif;
   }
 `;
 
@@ -143,16 +143,16 @@ const SubHeading = styled.div`
 `;
 
 const days = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
 ];
 
-const UserMessage = ({
+function UserMessage({
   postData,
   businessData,
   listView,
@@ -163,13 +163,13 @@ const UserMessage = ({
   setListIndex,
   myFeedView,
   setMyFeedIndex,
-}) => {
+}) {
   const dispatch = useDispatch();
   const [displayComments, setDisplayComments] = useState(false);
   const loadingComments = useSelector(
     (state) => state.myFeed.loadingPostComments
   );
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState('');
   const [displayCommentInput, setDisplayCommentInput] = useState(false);
   const [flag, setFlag] = useState(false);
   const user = useSelector((state) => state.user.user);
@@ -190,7 +190,7 @@ const UserMessage = ({
   );
   const [readMore, setReadMore] = useState(false);
   const listNavigate = () => {
-    if (type === "search") {
+    if (type === 'search') {
       setSelectedListId(postData.listId[0]._id);
       setListClickedFromSearch(true);
     }
@@ -199,37 +199,37 @@ const UserMessage = ({
     const message = JSON.parse(evt.data);
     dispatch(setCommentAdded());
     /** to add reply via socket */
-    if (message.comment && message.commentId && message.type === "Post") {
+    if (message.comment && message.commentId && message.type === 'Post') {
       dispatch(addReplyToComment(message));
-    } else if (message.commentInfo && message.commentType === "Post") {
+    } else if (message.commentInfo && message.commentType === 'Post') {
       /** to add comment via socket */
-      setDescription("");
+      setDescription('');
       dispatch(addCommentToPost(message));
       dispatch(setPostId(message.commentInfo.itemId));
     } else if (message.like && message.commentId) {
       /** to add comment like via socket */
       dispatch(addLikeToCommentViaSocket(message));
-    } else if (message.like && message.type === "Post") {
+    } else if (message.like && message.type === 'Post') {
       /** to add post like via socket */
       if (message.like._id !== user._id) {
         dispatch(addLikeViaSocket(message));
       }
-    } else if (message.like && message.commentId && message.type === "Event") {
+    } else if (message.like && message.commentId && message.type === 'Event') {
       /** to add event comment like via socket */
       dispatch(addLikeToCommentViaSocket(message));
-    } else if (message.like && message.type === "Event") {
+    } else if (message.like && message.type === 'Event') {
       /** to add event like via socket */
       if (message.like._id !== user._id) {
         dispatch(addLikeViaSocket(message));
       }
-    } else if (message.commentInfo && message.commentType === "Events") {
+    } else if (message.commentInfo && message.commentType === 'Events') {
       /** to add event comment via socket */
       dispatch(setEventId(message.commentInfo.itemId));
       dispatch(addCommentToPost(message));
     } else if (
       message.comment &&
       message.commentId &&
-      message.type === "Event"
+      message.type === 'Event'
     ) {
       /** to add event reply via socket */
       dispatch(addReplyToComment(message));
@@ -245,9 +245,9 @@ const UserMessage = ({
   const addComment = async (obj) => {
     ws.send(
       JSON.stringify({
-        action: "comment",
+        action: 'comment',
         postId: obj.itemId,
-        type: "Post",
+        type: 'Post',
         comment: obj.body,
         userId: obj.userId,
         businessId: businessData._id,
@@ -265,8 +265,8 @@ const UserMessage = ({
       (commentAdded && postData._id === selectedPostId)
     ) {
       commentsRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
+        behavior: 'smooth',
+        block: 'center',
       });
     }
   }, [
@@ -282,110 +282,105 @@ const UserMessage = ({
   const findDesc = (value, mentions, mentionsList) => {
     let divContent = value;
     if (mentions.length > 0 && mentionsList.length > 0) {
-      let arr = [],
-        data;
+      const arr = [];
+      let data;
       for (let i = 0; i < mentions.length; i++) {
-        if (value.includes("@" + mentions[i].name)) {
+        if (value.includes(`@${mentions[i].name}`)) {
           arr.push({
-            name: "@" + mentions[i].name,
+            name: `@${mentions[i].name}`,
             id: mentions[i]._id,
-            type: "name",
+            type: 'name',
           });
         }
       }
       for (let i = 0; i < mentionsList.length; i++) {
-        if (value.includes("@" + mentionsList[i].name)) {
+        if (value.includes(`@${mentionsList[i].name}`)) {
           arr.push({
-            name: "@" + mentionsList[i].name,
+            name: `@${mentionsList[i].name}`,
             id: mentionsList[i]._id,
-            type: "list",
+            type: 'list',
           });
         }
       }
       for (let i = 0; i < arr.length; i++) {
         if (i === 0) {
-          if (arr[i].type === "list")
+          if (arr[i].type === 'list') {
             data = reactStringReplace(value, arr[i].name, (match, j) => (
               <span
-                key={"key1" + j}
+                key={`key1${j}`}
                 className="mentionData"
                 onClick={() => setSelectedListId(arr[i].id)}
               >
                 {match}
               </span>
             ));
-          else
+          } else {
             data = reactStringReplace(value, arr[i].name, (match, j) => (
               <span
-                key={"key2" + j}
+                key={`key2${j}`}
                 className="mentionData"
                 onClick={() => history.push(`/u/${arr[i].id}`)}
               >
                 {match}
               </span>
             ));
+          }
+        } else if (arr[i].type === 'list') {
+          data = reactStringReplace(data, arr[i].name, (match, j) => (
+            <span
+              key={`key3${j}`}
+              className="mentionData"
+              onClick={() => setSelectedListId(arr[i].id)}
+            >
+              {match}
+            </span>
+          ));
         } else {
-          if (arr[i].type === "list")
-            data = reactStringReplace(data, arr[i].name, (match, j) => (
-              <span
-                key={"key3" + j}
-                className="mentionData"
-                onClick={() => setSelectedListId(arr[i].id)}
-              >
-                {match}
-              </span>
-            ));
-          else
-            data = reactStringReplace(data, arr[i].name, (match, j) => (
-              <span
-                key={j}
-                className="mentionData"
-                onClick={() => history.push(`/u/${arr[i].id}`)}
-              >
-                {match}
-              </span>
-            ));
+          data = reactStringReplace(data, arr[i].name, (match, j) => (
+            <span
+              key={j}
+              className="mentionData"
+              onClick={() => history.push(`/u/${arr[i].id}`)}
+            >
+              {match}
+            </span>
+          ));
         }
       }
       return data;
-    } else if (mentions.length > 0) {
+    }
+    if (mentions.length > 0) {
       for (let i = 0; i < mentions.length; i++) {
-        if (value.search(new RegExp("@" + mentions[i].name, "g") !== -1)) {
+        if (value.search(new RegExp(`@${mentions[i].name}`, 'g') !== -1)) {
           return (
             <div>
-              {reactStringReplace(value, "@" + mentions[i].name, (match, j) => (
+              {reactStringReplace(value, `@${mentions[i].name}`, (match, j) => (
                 <span
                   className="mentionData"
                   onClick={() => history.push(`/u/${mentions[i]._id}`)}
-                  key={"mentions" + j}
+                  key={`mentions${j}`}
                 >
                   {match}
                 </span>
               ))}
             </div>
           );
-        } else {
-          return <div>{value}</div>;
         }
+        return <div>{value}</div>;
       }
     } else if (mentionsList.length > 0) {
       mentionsList.map((v) => {
-        let re = new RegExp("@" + v.name, "g");
+        const re = new RegExp(`@${v.name}`, 'g');
         divContent = divContent.replace(
           re,
-          `<span className='mentionData'> ${"@" + v.name}  </span>`
+          `<span className='mentionData'> ${`@${v.name}`}  </span>`
         );
         return divContent;
       });
       if (mentionsList.length !== 0) {
-        return (
-          <>
-            <div dangerouslySetInnerHTML={{ __html: divContent }}></div>
-          </>
-        );
-      } else {
-        return value;
+        return <div dangerouslySetInnerHTML={{ __html: divContent }} />;
       }
+      return value;
     } else {
       return value;
     }
@@ -397,209 +392,199 @@ const UserMessage = ({
   };
 
   return (
-    <>
-      <UserMsgWrap>
-        <UserMessageContent>
-          <ProfileNameHeader
-            className={
-              listDescriptionView || myFeedView ? "UserMessageView" : ""
-            }
-          >
-            <ProfileNameWrap className="UserMessageViewProfileName">
-              {myFeedView && (
-                <>
-                  <TopListHeader>
-                    <LeftListHeader>
-                      <InnerListBanner onClick={() => listNavigate()}>
-                        <img
-                          src={listImage}
-                          alt=""
-                          onError={() => setListImage(BannerImg)}
-                        />
-                      </InnerListBanner>
-                      <ListNameWrap>
-                        <ListName>{postData.listId[0].name}</ListName>
-                        <ListInfo>
-                          <FaCaretRight />
-                          <ListAuthorName onClick={() => displayUserDetails()}>
-                            {postData.ownerId[0].name}
-                          </ListAuthorName>
-                          <span>|</span>
-                          <ListAuthorName>
-                            {moment(postData.createdAt).format(
-                              "MMM DD, YYYY, hh:MMa"
-                            )}{" "}
-                            EDT{" "}
-                          </ListAuthorName>
-                        </ListInfo>
-                      </ListNameWrap>
-                    </LeftListHeader>
-                    <RightBuisinessName>
-                      <BuisinessNme>{businessData.company_name}</BuisinessNme>
-                      <div className="hex">
-                        <div className="hex-background">
-                          <img src={businessData.default_image_url} />
-                        </div>
-                      </div>
-                    </RightBuisinessName>
-                  </TopListHeader>
-                </>
-              )}
-              {postData.title && <SubHeading>{postData.title}</SubHeading>}
+    <UserMsgWrap>
+      <UserMessageContent>
+        <ProfileNameHeader
+          className={listDescriptionView || myFeedView ? 'UserMessageView' : ''}
+        >
+          <ProfileNameWrap className="UserMessageViewProfileName">
+            {myFeedView && (
+              <TopListHeader>
+                <LeftListHeader>
+                  <InnerListBanner onClick={() => listNavigate()}>
+                    <img
+                      src={listImage}
+                      alt=""
+                      onError={() => setListImage(BannerImg)}
+                    />
+                  </InnerListBanner>
+                  <ListNameWrap>
+                    <ListName>{postData.listId[0].name}</ListName>
+                    <ListInfo>
+                      <FaCaretRight />
+                      <ListAuthorName onClick={() => displayUserDetails()}>
+                        {postData.ownerId[0].name}
+                      </ListAuthorName>
+                      <span>|</span>
+                      <ListAuthorName>
+                        {moment(postData.createdAt).format(
+                          'MMM DD, YYYY, hh:MMa'
+                        )}{' '}
+                        EDT{' '}
+                      </ListAuthorName>
+                    </ListInfo>
+                  </ListNameWrap>
+                </LeftListHeader>
+                <RightBuisinessName>
+                  <BuisinessNme>{businessData.company_name}</BuisinessNme>
+                  <div className="hex">
+                    <div className="hex-background">
+                      <img src={businessData.default_image_url} />
+                    </div>
+                  </div>
+                </RightBuisinessName>
+              </TopListHeader>
+            )}
+            {postData.title && <SubHeading>{postData.title}</SubHeading>}
 
-              <ChatInput>
-                {findDesc(
-                  postData.data.length > 225 && !readMore
-                    ? postData.data.substring(0, 225)
-                    : postData.data,
-                  postData.taggedUsers || [],
-                  postData.taggedLists || []
-                )}
-                {!readMore && postData.data.length > 225 && <b>...</b>}
-              </ChatInput>
-              {postData.eventSchedule && (
-                <>
-                  {" "}
-                  <DateBar
-                    startDay={
-                      days[new Date(postData.eventSchedule.start_time).getDay()]
-                    }
-                    endDay={
-                      days[new Date(postData.eventSchedule.end_time).getDay()]
-                    }
-                  />
-                  <TimeBar
-                    startTime={new Date(postData.eventSchedule.start_time)}
-                    endTime={new Date(postData.eventSchedule.end_time)}
-                  />
-                </>
+            <ChatInput>
+              {findDesc(
+                postData.data.length > 225 && !readMore
+                  ? postData.data.substring(0, 225)
+                  : postData.data,
+                postData.taggedUsers || [],
+                postData.taggedLists || []
+              )}
+              {!readMore && postData.data.length > 225 && <b>...</b>}
+            </ChatInput>
+            {postData.eventSchedule && (
+              <>
+                {' '}
+                <DateBar
+                  startDay={
+                    days[new Date(postData.eventSchedule.start_time).getDay()]
+                  }
+                  endDay={
+                    days[new Date(postData.eventSchedule.end_time).getDay()]
+                  }
+                />
+                <TimeBar
+                  startTime={new Date(postData.eventSchedule.start_time)}
+                  endTime={new Date(postData.eventSchedule.end_time)}
+                />
+              </>
+            )}
+
+            {!readMore && (
+              <ImgThumbWrap>
+                {postData.media.map((src) => (
+                  <img src={src} />
+                ))}
+              </ImgThumbWrap>
+            )}
+            {(listDescriptionView || myFeedView) &&
+              readMore &&
+              postData.media.length >= 1 && (
+                <ImageSlider imgSources={postData.media} />
               )}
 
-              {!readMore && (
-                <ImgThumbWrap>
-                  {postData.media.map((src) => (
-                    <img src={src} />
-                  ))}
-                </ImgThumbWrap>
-              )}
-              {(listDescriptionView || myFeedView) &&
-                readMore &&
-                postData.media.length >= 1 && (
-                  <ImageSlider imgSources={postData.media} />
-                )}
-
-              {!readMore && (
+            {!readMore && (
+              <ShowMoreDiv
+                className="ListingShowMore"
+                onClick={() => {
+                  setReadMore((prev) => !prev);
+                }}
+              >
+                <span>
+                  Show More <img src={ArrowSmDown} className="ArrowSm" />
+                </span>
+              </ShowMoreDiv>
+            )}
+            {readMore && (
+              <>
                 <ShowMoreDiv
-                 className="ListingShowMore"
                   onClick={() => {
                     setReadMore((prev) => !prev);
                   }}
                 >
                   <span>
-                    Show More <img src={ArrowSmDown} className="ArrowSm" />
+                    Show Less <img src={ArrowSm} className="ArrowSm" />
                   </span>
                 </ShowMoreDiv>
-              )}
-              {readMore && (
-                <>
-                  <ShowMoreDiv
-                    onClick={() => {
-                      setReadMore((prev) => !prev);
-                    }}
-                  >
-                    <span>
-                      Show Less <img src={ArrowSm} className="ArrowSm" />
-                    </span>
-                  </ShowMoreDiv>
-                  <LikesBar
-                    type="comment"
-                    totalLikes={postData.likes ? postData.likes.length : 0}
-                    totalComments={
-                      postData.totalComments.length > 0
-                        ? postData.totalComments[0].totalCount
-                        : 0
-                    }
-                    date={new Date(postData.createdAt)}
-                    setDisplayComments={setDisplayComments}
-                    displayComments={displayComments}
-                    postId={postData._id}
-                    postLikes={postData.likes}
-                    displayCommentInput={displayCommentInput}
-                    setDisplayCommentInput={setDisplayCommentInput}
-                    setFlag={setFlag}
-                    flag={flag}
-                    business={businessData}
-                    commentsRef={commentsRef}
-                    listDescriptionView={listDescriptionView}
-                    listData={postData}
-                    setListIndex={setListIndex}
-                    myFeedView={myFeedView}
-                    setMyFeedIndex={setMyFeedIndex}
-                  />
-                </>
-              )}
+                <LikesBar
+                  type="comment"
+                  totalLikes={postData.likes ? postData.likes.length : 0}
+                  totalComments={
+                    postData.totalComments.length > 0
+                      ? postData.totalComments[0].totalCount
+                      : 0
+                  }
+                  date={new Date(postData.createdAt)}
+                  setDisplayComments={setDisplayComments}
+                  displayComments={displayComments}
+                  postId={postData._id}
+                  postLikes={postData.likes}
+                  displayCommentInput={displayCommentInput}
+                  setDisplayCommentInput={setDisplayCommentInput}
+                  setFlag={setFlag}
+                  flag={flag}
+                  business={businessData}
+                  commentsRef={commentsRef}
+                  listDescriptionView={listDescriptionView}
+                  listData={postData}
+                  setListIndex={setListIndex}
+                  myFeedView={myFeedView}
+                  setMyFeedIndex={setMyFeedIndex}
+                />
+              </>
+            )}
 
-              {/* {(listDescriptionView || myFeedView) &&
+            {/* {(listDescriptionView || myFeedView) &&
               readMore &&
               postData.media.length === 1 ? (
                 <BigImage image={postData.media} />
               ) : null} */}
-            </ProfileNameWrap>
-          </ProfileNameHeader>
-        </UserMessageContent>
-        <Scrollbars
-          autoHeight
-          autoHeightMin={0}
-          autoHeightMax={300}
-          thumbMinSize={30}
-          className="InnerScroll"
-        >
-          <ReplyWrap>
-            {(displayComments || displayCommentInput) &&
-            !loadingComments &&
-            postData.comments.length > 0 ? (
-              <>
-                {postData.comments.map((i, key) => {
-                  return (
-                    <Comments
-                      i={i}
-                      key={key}
-                      postData={postData}
-                      displayComments={displayComments}
-                      setFlag={setFlag}
-                      flag={flag}
-                      business={businessData}
-                      listView={listView}
-                    />
-                  );
-                })}
+          </ProfileNameWrap>
+        </ProfileNameHeader>
+      </UserMessageContent>
+      <Scrollbars
+        autoHeight
+        autoHeightMin={0}
+        autoHeightMax={300}
+        thumbMinSize={30}
+        className="InnerScroll"
+      >
+        <ReplyWrap>
+          {(displayComments || displayCommentInput) &&
+          !loadingComments &&
+          postData.comments.length > 0 ? (
+            <>
+              {postData.comments.map((i, key) => (
+                <Comments
+                  i={i}
+                  key={key}
+                  postData={postData}
+                  displayComments={displayComments}
+                  setFlag={setFlag}
+                  flag={flag}
+                  business={businessData}
+                  listView={listView}
+                />
+              ))}
 
-                {/* {flag === false ? <ScrollToBottom /> : null} */}
-              </>
-            ) : (displayComments || displayCommentInput) && loadingComments ? (
-              <LoaderWrap>
-                <ValueLoader />
-              </LoaderWrap>
-            ) : null}
-            <div ref={commentsRef}></div>
-          </ReplyWrap>
-        </Scrollbars>
-        {displayComments || displayCommentInput ? (
-          <>
-            <ReplyInput
-              type="comment"
-              postId={postData._id}
-              displayComments={displayComments}
-              description={description}
-              setDescription={setDescription}
-              addComment={addComment}
-              commentsRef={commentsRef}
-            />
-          </>
-        ) : null}
-      </UserMsgWrap>
-    </>
+              {/* {flag === false ? <ScrollToBottom /> : null} */}
+            </>
+          ) : (displayComments || displayCommentInput) && loadingComments ? (
+            <LoaderWrap>
+              <ValueLoader />
+            </LoaderWrap>
+          ) : null}
+          <div ref={commentsRef} />
+        </ReplyWrap>
+      </Scrollbars>
+      {displayComments || displayCommentInput ? (
+        <ReplyInput
+          type="comment"
+          postId={postData._id}
+          displayComments={displayComments}
+          description={description}
+          setDescription={setDescription}
+          addComment={addComment}
+          commentsRef={commentsRef}
+        />
+      ) : null}
+    </UserMsgWrap>
   );
-};
+}
 
 export default UserMessage;

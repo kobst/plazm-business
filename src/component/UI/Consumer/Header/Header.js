@@ -1,57 +1,58 @@
-import React, { Fragment, useEffect, useState } from "react";
-import useStore from "../../../Consumer/useState/index";
+import { Auth } from 'aws-amplify';
+import React, { Fragment, useEffect, useState } from 'react';
+import { FiAlertOctagon, FiLogOut } from 'react-icons/fi';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
+import BackBtn from '../../../../images/back-btn.png';
+import ListIcon from '../../../../images/Grid_icon.png';
+import GridIcon from '../../../../images/grid_icon_blue.png';
+import PlazmLogo from '../../../../images/plazmLogo.jpeg';
+import { setGlobalLoader } from '../../../../reducers/consumerReducer';
+import ButtonGrey from '../../../Consumer/UI/ButtonGrey';
+import ModalComponent from '../../../Consumer/UI/Modal';
+import SaveButton from '../../../Consumer/UI/SaveButton';
+import useStore from '../../../Consumer/useState/index';
 import {
+  AlertIcon,
+  BackArrow,
+  BreadcrumbsDiv,
+  BreadcrumbsText,
   HeaderBar,
   LeftHeaderBar,
-  UserNameCircle,
-  BreadcrumbsDiv,
-  BackArrow,
-  BreadcrumbsText,
-  RightHeaderBar,
   LocationWrap,
-  UserImgWrap,
-  UserImg,
-  LogoutSection,
-  LogoutComponent,
-  AlertIcon,
-  LogoutMsg,
   LogoutBtnWrap,
-} from "./styled";
-import BackBtn from "../../../../images/back-btn.png";
-import "./styles.css";
-import GridIcon from "../../../../images/grid_icon_blue.png";
-import ListIcon from "../../../../images/Grid_icon.png";
-import { useHistory, useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import ModalComponent from "../../../Consumer/UI/Modal";
-import { FiLogOut, FiAlertOctagon } from "react-icons/fi";
-import ButtonGrey from "../../../Consumer/UI/ButtonGrey";
-import SaveButton from "../../../Consumer/UI/SaveButton";
-import { Auth } from 'aws-amplify';
-import { setGloablLoader } from "../../../../reducers/consumerReducer";
+  LogoutComponent,
+  LogoutMsg,
+  LogoutSection,
+  RightHeaderBar,
+  UserImg,
+  UserImgWrap,
+  UserNameCircle,
+} from './styled';
+import './styles.css';
 
 const Header = () => {
-  const routerHistory = useHistory()
+  const routerHistory = useHistory();
   const dispatch = useDispatch();
   const [tabTitle, setTabTitle] = useState();
   const [coords, setCoords] = useState();
-  const subListTabName = ["Lists Subscribe", "My List", "Discover More"];
-  const [showDiv, setshowDiv] = useState(false);
-  const [showDivModal, setshowDivModal] = useState(false);
+  const subListTabName = ['Lists Subscribe', 'My List', 'Discover More'];
+  const [showDiv, setShowDiv] = useState(false);
+  const [showDivModal, setShowDivModal] = useState(false);
   const routeObj = {
-    u: "User",
-    b: "Business",
-    list: "List",
+    u: 'User',
+    b: 'Business',
+    list: 'List',
   };
   const prevRoute = useHistory();
   const history = useLocation()
-    .pathname.split("/")
+    .pathname.split('/')
     .filter((item) => item);
   const selectedTab = useStore((state) => state.tabSelected);
   const listTabSelected = useStore((state) => state.listTabSelected);
   const selectedList = useStore((state) => state.selectedList);
   const draggedLocation = useStore((state) => state.draggedLocation);
-  const sublocality = useStore((state) => state.sublocality);
+  const subLocality = useStore((state) => state.subLocality);
   const city = useStore((state) => state.city);
   const selectedUser = useSelector((state) => state.user);
   const selectedBusiness = useSelector((state) => state.business);
@@ -78,19 +79,19 @@ const Header = () => {
   useEffect(() => {
     switch (selectedTab) {
       case 1:
-        setTabTitle("Explore");
+        setTabTitle('Explore');
         break;
       case 2:
-        setTabTitle("Home");
+        setTabTitle('Home');
         break;
       case 3:
-        setTabTitle("Notifications");
+        setTabTitle('Notifications');
         break;
       case 4:
-        setTabTitle("Favorites");
+        setTabTitle('Favorites');
         break;
       case 5:
-        setTabTitle("Lists");
+        setTabTitle('Lists');
         break;
       case -1:
         setTabTitle((prev) => prev);
@@ -106,27 +107,27 @@ const Header = () => {
   }, [selectedTab]);
 
   useEffect(() => {
-    let loc = draggedLocation.lat + " lat " + draggedLocation.lng + " long ";
+    let loc = draggedLocation.lat + ' lat ' + draggedLocation.lng + ' long ';
     setCoords(loc);
   }, [draggedLocation]);
 
   const isObjectId = (id) => {
-    return id.length === 24 && !isNaN(Number("0x" + id));
+    return id.length === 24 && !isNaN(Number('0x' + id));
   };
 
   /** for logout functionality redirection */
   const redirectUserToLoginScreen = () => {
-    dispatch(setGloablLoader(false));
-    routerHistory.push("/consumer/login");
+    dispatch(setGlobalLoader(false));
+    routerHistory.push('/consumer/login');
   };
   /** logout consumer */
   const consumerLogout = async () => {
     try {
-      dispatch(setGloablLoader(true));
+      dispatch(setGlobalLoader(true));
       await Auth.signOut();
       setTimeout(() => redirectUserToLoginScreen(), 3000);
     } catch (error) {
-      dispatch(setGloablLoader(false));
+      dispatch(setGlobalLoader(false));
     }
   };
 
@@ -143,35 +144,35 @@ const Header = () => {
               <span className="crumb-text">{tabTitle}</span>
             ) : (
               <div className="crumb-text">{tabTitle}</div>
-            )}{" "}
+            )}{' '}
             {routeObj[history[0]] && history.length > 1 && (
-              <div className="crumb-text">{"/ " + routeObj[history[0]]}</div>
-            )}{" "}
+              <div className="crumb-text">{'/ ' + routeObj[history[0]]}</div>
+            )}{' '}
             {routeObj[history[0]] && history.length === 1 && (
-              <span className="crumb-text">{"/ " + routeObj[history[0]]}</span>
+              <span className="crumb-text">{'/ ' + routeObj[history[0]]}</span>
             )}
             {history.length > 1 && isObjectId(history[1]) && (
               <Fragment>
                 {routeObj[history[0]] === routeObj.u &&
                   selectedUser?.selectedUser?.name && (
                     <span className="crumb-text">
-                      {"/ " + selectedUser.selectedUser.name}
+                      {'/ ' + selectedUser.selectedUser.name}
                     </span>
                   )}
                 {routeObj[history[0]] === routeObj.b &&
                   selectedBusiness.business[0]?.company_name && (
                     <span className="crumb-text">
-                      {"/ " + selectedBusiness.business[0]?.company_name}
+                      {'/ ' + selectedBusiness.business[0]?.company_name}
                     </span>
                   )}
                 {routeObj[history[0]] === routeObj.list && selectedList && (
-                  <span className="crumb-text">{"/ " + selectedList.name}</span>
+                  <span className="crumb-text">{'/ ' + selectedList.name}</span>
                 )}
               </Fragment>
             )}
             {selectedTab === 5 && (
               <span className="crumb-text">
-                {"/ " + subListTabName[listTabSelected]}
+                {'/ ' + subListTabName[listTabSelected]}
               </span>
             )}
           </BreadcrumbsText>
@@ -180,22 +181,22 @@ const Header = () => {
 
       <RightHeaderBar>
         <button className="toggle ChangeMode" onClick={handleToggle}>
-          {gridMode ? "List" : "Grid"}
+          {gridMode ? 'List' : 'Grid'}
           {gridMode ? <img src={ListIcon} /> : <img src={GridIcon} />}
         </button>
 
         <LocationWrap>
-          {sublocality + " "}
+          {subLocality + ' '}
           {city}
         </LocationWrap>
 
         <UserImgWrap>
           <UserImg
             onClick={() => {
-              setshowDiv((prev) => !prev);
+              setShowDiv((prev) => !prev);
             }}
           >
-            <img src="https://picsum.photos/id/237/200/300" />
+            <img src={PlazmLogo} alt="PlazmLogo" />
           </UserImg>
         </UserImgWrap>
 
@@ -205,7 +206,7 @@ const Header = () => {
               <li>profile</li>
               <li
                 onClick={() => {
-                  setshowDivModal((prev) => !prev);
+                  setShowDivModal((prev) => !prev);
                 }}
                 className="lightGrayBg"
               >
@@ -225,7 +226,9 @@ const Header = () => {
             </AlertIcon>
             <LogoutMsg>Are you sure you want to Logout?</LogoutMsg>
             <LogoutBtnWrap>
-              <ButtonGrey onClick={() => setshowDivModal((prev) => !prev)}>Cancel</ButtonGrey>
+              <ButtonGrey onClick={() => setShowDivModal((prev) => !prev)}>
+                Cancel
+              </ButtonGrey>
               <SaveButton onClick={() => consumerLogout()}>Logout</SaveButton>
             </LogoutBtnWrap>
           </LogoutComponent>

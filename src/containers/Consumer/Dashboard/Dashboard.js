@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import Dashboard from "../../../component/Consumer/Dashboard/Dashboard";
-import "./style.css";
-import { Auth } from "aws-amplify";
-import history from "../../../utils/history";
-import ValueLoader from "../../../utils/loader";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from 'react';
+import Dashboard from '../../../component/Consumer/Dashboard/Dashboard';
+import './style.css';
+import { Auth } from 'aws-amplify';
+import history from '../../../utils/history';
+import ValueLoader from '../../../utils/loader';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   checkBusiness,
   setFlagReducer,
-} from "../../../reducers/businessReducer";
-import { unwrapResult } from "@reduxjs/toolkit";
-import { fetchUserDetails, setWs } from "../../../reducers/userReducer";
-import useStore from "../../../component/Consumer/useState";
-import { setListData } from "../../../reducers/listReducer";
+} from '../../../reducers/businessReducer';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { fetchUserDetails, setWs } from '../../../reducers/userReducer';
+import useStore from '../../../component/Consumer/useState';
+import { setListData } from '../../../reducers/listReducer';
 
 const DashboardContainer = (props) => {
   const [businessExists, setBusinessExists] = useState(false);
@@ -25,7 +25,7 @@ const DashboardContainer = (props) => {
   const globalLoader = useSelector((state) => state.consumer.globalLoader);
 
   const dispatch = useDispatch();
-  const [businessId, setBusinessId] = useState("");
+  const [businessId, setBusinessId] = useState('');
 
   const businessDetailProfile = useStore(
     (state) => state.businessDetailProfile
@@ -47,26 +47,26 @@ const DashboardContainer = (props) => {
   useEffect(() => {
     setView(props.view);
 
-    if (props.view === "business_detail" || props.view === "user_detail") {
-      setDetailId(props.match.params.id ? props.match.params.id : "");
+    if (props.view === 'business_detail' || props.view === 'user_detail') {
+      setDetailId(props.match.params.id ? props.match.params.id : '');
       setSelectedTab(-1);
     }
 
-    if (props.view === "list_detail") {
-      setSelectedListId(props.match.params.id ? props.match.params.id : "");
+    if (props.view === 'list_detail') {
+      setSelectedListId(props.match.params.id ? props.match.params.id : '');
       setSelectedTab(-1);
     }
 
-    if (props.view === "my_feed") {
+    if (props.view === 'my_feed') {
       // console.log("my feed route");
       setSelectedTab(2);
     }
 
-    if (props.view === "explore") {
+    if (props.view === 'explore') {
       // console.log("my explore route");
       setSelectedTab(1);
     }
-    if (props.view === "list_explore") {
+    if (props.view === 'list_explore') {
       // console.log("my list explore route");
       setSelectedTab(5);
     }
@@ -78,9 +78,9 @@ const DashboardContainer = (props) => {
       try {
         const value = await Auth.currentAuthenticatedUser();
         if (
-          value.attributes["custom:type"] === "curator" ||
-          value.attributes["custom:type"] === "customer" ||
-          value.attributes["custom:type"] === "consumer"
+          value.attributes['custom:type'] === 'curator' ||
+          value.attributes['custom:type'] === 'customer' ||
+          value.attributes['custom:type'] === 'consumer'
         ) {
           const data = await dispatch(fetchUserDetails(value.attributes.sub));
           const res = await unwrapResult(data);
@@ -100,12 +100,12 @@ const DashboardContainer = (props) => {
             );
           }
         } else {
-          history.push("/business");
+          history.push('/business');
           window.location.reload();
         }
       } catch {
         /* if not authenticated then redirect to login consumer page */
-        history.push("/consumer/login");
+        history.push('/consumer/login');
         window.location.reload();
       }
     };
@@ -116,7 +116,7 @@ const DashboardContainer = (props) => {
   useEffect(() => {
     /** find business function */
     let findBusiness = async (view) => {
-      if (view === "business_detail") {
+      if (view === 'business_detail') {
         /** to check if business exists or not */
         const response = await dispatch(
           checkBusiness({
@@ -164,12 +164,12 @@ const DashboardContainer = (props) => {
   ) : (
     <div
       style={{
-        textAlign: "center",
-        margin: " 40px auto 0",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100%",
+        textAlign: 'center',
+        margin: ' 40px auto 0',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
       }}
     >
       <ValueLoader />
