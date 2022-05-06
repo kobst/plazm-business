@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { MentionsInput, Mention } from 'react-mentions';
-import { useSelector } from 'react-redux';
-import './style.css';
-import defaultMentionStyle from './style';
-import ModalComponent from '../../../../UI/Modal';
-import AddPostModal from '../../../../AddPostModal';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { MentionsInput, Mention } from "react-mentions";
+import { useSelector } from "react-redux";
+import "./style.css";
+import defaultMentionStyle from "./style";
+import ModalComponent from '../../../../UI/Modal'
+import AddPostModal from '../../../../AddPostModal'
 
 const AddPostSectionContent = styled.div`
   width: 100%;
@@ -67,16 +67,17 @@ const TextAreaWrap = styled.div`
   }
 `;
 
-function AddPostSection({ businessId }) {
+
+const AddPostSection = ({  businessId }) => {
   const [addPostModal, setAddPostModal] = useState(false);
   const users = useSelector((state) => state.consumer.users);
   const lists = useSelector((state) => state.list.lists);
-  const allData = [...users, ...lists];
-  const data = allData.sort((a, b) =>
-    a.name.toLowerCase().localeCompare(b.name.toLowerCase())
-  );
+  let allData = [...users, ...lists];
+  let data = allData.sort(function (a, b) {
+    return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+  });
 
-  const userMentionData = data.map((myUser) => ({
+  let userMentionData = data.map((myUser) => ({
     id: myUser._id,
     display: `@${myUser.name}`,
   }));
@@ -84,14 +85,11 @@ function AddPostSection({ businessId }) {
     <>
       {addPostModal && (
         <ModalComponent
-          closeOnOutsideClick
+          closeOnOutsideClick={true}
           isOpen={addPostModal}
           closeModal={() => setAddPostModal(false)}
         >
-          <AddPostModal
-            businessId={businessId}
-            closeModal={() => setAddPostModal(false)}
-          />
+          <AddPostModal businessId={businessId} closeModal={() => setAddPostModal(false)}/>
         </ModalComponent>
       )}
       <AddPostSectionContent>
@@ -115,6 +113,6 @@ function AddPostSection({ businessId }) {
       </AddPostSectionContent>
     </>
   );
-}
+};
 
 export default AddPostSection;

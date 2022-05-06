@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
-import { MdChatBubbleOutline, MdFavoriteBorder } from 'react-icons/md';
-import SaveButton from '../../UI/SaveButton';
+import React from "react";
+import styled from "styled-components";
+import { MdChatBubbleOutline, MdFavoriteBorder } from "react-icons/md";
+import SaveButton from "../../UI/SaveButton";
 
 export const BottomBarLikes = styled.div`
   display: flex;
@@ -52,24 +52,26 @@ export const RightDiv = styled.div`
   }
 `;
 
-function BottomBarLikesContent() {
+const BottomBarLikesContent = () => {
   return (
-    <BottomBarLikes>
-      <LikesBtnWrap>
-        <RightDiv>
-          <MdFavoriteBorder />5
-        </RightDiv>
-        <RightDiv>
-          <button>
-            <MdChatBubbleOutline />
-          </button>
-          5
-        </RightDiv>
-      </LikesBtnWrap>
+    <>
+      <BottomBarLikes>
+        <LikesBtnWrap>
+          <RightDiv>
+            <MdFavoriteBorder />5
+          </RightDiv>
+          <RightDiv>
+            <button>
+              <MdChatBubbleOutline />
+            </button>
+            5
+          </RightDiv>
+        </LikesBtnWrap>
 
-      <SaveButton>VISIT</SaveButton>
-    </BottomBarLikes>
+        <SaveButton>VISIT</SaveButton>
+      </BottomBarLikes>
+    </>
   );
-}
+};
 
 export default BottomBarLikesContent;

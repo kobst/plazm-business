@@ -1,21 +1,21 @@
-import React, { Component, useState, useEffect, useMemo, useRef } from 'react';
-import ReactDOM from 'react-dom';
-import mapboxgl, { MapMouseEvent } from 'mapbox-gl';
+import React, { Component, useState, useEffect, useMemo, useRef } from "react";
+import ReactDOM from "react-dom";
+import mapboxgl, { MapMouseEvent } from "mapbox-gl";
 import ReactMapboxGl, {
   Layer,
   Source,
   Feature,
   MapContext,
-} from 'react-mapbox-gl';
-import useStore from '../useState/index';
-import './styles.css';
-import Geocode from 'react-geocode';
-import GoogleMapReact from 'google-map-react';
+} from "react-mapbox-gl";
+import useStore from "../useState/index";
+import "./styles.css";
+import Geocode from "react-geocode";
+import GoogleMapReact from "google-map-react";
 
 // import '../../App.css';
 
-import * as turf from '@turf/turf';
-import { connect } from 'react-redux';
+import * as turf from "@turf/turf";
+import { connect } from "react-redux";
 
 // https://github.com/bryik/mapbox-react-examples/blob/basic-hooks/basic/src/index.js
 
@@ -24,23 +24,24 @@ import { connect } from 'react-redux';
 function distance(lat1, lon1, lat2, lon2) {
   if (lat1 == lat2 && lon1 == lon2) {
     return 0;
+  } else {
+    var radlat1 = (Math.PI * lat1) / 180;
+    var radlat2 = (Math.PI * lat2) / 180;
+    var theta = lon1 - lon2;
+    var radtheta = (Math.PI * theta) / 180;
+    var dist =
+      Math.sin(radlat1) * Math.sin(radlat2) +
+      Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+    if (dist > 1) {
+      dist = 1;
+    }
+    dist = Math.acos(dist);
+    dist = (dist * 180) / Math.PI;
+    dist = dist * 60 * 1.1515;
+    // if (unit=="K") { dist = dist * 1.609344 }
+    // if (unit=="N") { dist = dist * 0.8684 }
+    return dist;
   }
-  const radlat1 = (Math.PI * lat1) / 180;
-  const radlat2 = (Math.PI * lat2) / 180;
-  const theta = lon1 - lon2;
-  const radtheta = (Math.PI * theta) / 180;
-  let dist =
-    Math.sin(radlat1) * Math.sin(radlat2) +
-    Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-  if (dist > 1) {
-    dist = 1;
-  }
-  dist = Math.acos(dist);
-  dist = (dist * 180) / Math.PI;
-  dist = dist * 60 * 1.1515;
-  // if (unit=="K") { dist = dist * 1.609344 }
-  // if (unit=="N") { dist = dist * 0.8684 }
-  return dist;
 }
 
 function orderPlaces(places, selectedPlace, defaultCenter) {
@@ -52,14 +53,14 @@ function orderPlaces(places, selectedPlace, defaultCenter) {
     center = defaultCenter;
   }
 
-  places.sort((a, b) => {
-    const distA = distance(
+  places.sort(function (a, b) {
+    let distA = distance(
       a.businessLocation.coordinates[1],
       a.businessLocation.coordinates[0],
       center.lat,
       center.lng
     );
-    const distB = distance(
+    let distB = distance(
       b.businessLocation.coordinates[1],
       b.businessLocation.coordinates[0],
       center.lat,
@@ -76,9 +77,9 @@ const Map = ReactMapboxGl({
   interactive: true,
 });
 
-Geocode.setApiKey('AIzaSyAYVZIvAZkQsaxLD3UdFH5EH3DvYmSYG6Q');
+Geocode.setApiKey("AIzaSyAYVZIvAZkQsaxLD3UdFH5EH3DvYmSYG6Q");
 
-function MapView(props) {
+const MapView = (props) => {
   const [boundBox, setBox] = useState(null);
   const [features, setFeatures] = useState(null);
   const [places_center, setPlaces_center] = useState([]);
@@ -97,7 +98,7 @@ function MapView(props) {
   const setPosDict = useStore((state) => state.setMapPosDict);
   const gridView = useStore((state) => state.gridView);
   const setGridView = useStore((state) => state.setGridView);
-  const setSubLocality = useStore((state) => state.setSubLocality);
+  const setSubLocality = useStore((state) => state.setSublocality);
   const setCity = useStore((state) => state.setCity);
 
   const setDraggedLocation = useStore((state) => state.setDraggedLocation);
@@ -106,24 +107,24 @@ function MapView(props) {
   const gridContainerStyle = {
     // height: '100vh',
     // width: '100%'
-    height: '100vh',
-    width: '50vw',
-    borderRadius: '10%',
+    height: "100vh",
+    width: "50vw",
+    borderRadius: "10%",
   };
 
   const mapContainerStyle = {
     // height: '100vh',
     // width: '100%',
-    height: '80vh',
-    width: '40vw',
-    borderRadius: '10%',
+    height: "80vh",
+    width: "40vw",
+    borderRadius: "10%",
   };
 
   const [dimensions, setDimensions] = useState(gridContainerStyle);
 
   const setBBox = () => {
-    const coordArray = [];
-    let limit = 10;
+    let coordArray = [];
+    var limit = 10;
     if (orderedPlaces.length < limit) {
       limit = orderedPlaces.length - 1;
     }
@@ -136,31 +137,31 @@ function MapView(props) {
       // console.log(i)
       // console.log(orderedPlaces[i])
       if (orderedPlaces[i]) {
-        const coords = orderedPlaces[i].businessLocation.coordinates;
+        let coords = orderedPlaces[i].businessLocation.coordinates;
         coordArray.push(coords);
       }
     }
 
     // console.log("coord array  " + coordArray)
     const geoJsonFeatures = {
-      type: 'FeatureCollection',
+      type: "FeatureCollection",
       features: [
         {
-          type: 'Feature',
+          type: "Feature",
           properties: {},
           geometry: {
-            type: 'Polygon',
+            type: "Polygon",
             coordinates: [coordArray],
           },
         },
       ],
     };
 
-    const lngLatBox = turf.bbox(geoJsonFeatures);
+    let lngLatBox = turf.bbox(geoJsonFeatures);
     // console.log('lngLatBox', lngLatBox)
-    const sw = [lngLatBox[0], lngLatBox[1]];
-    const ne = [lngLatBox[2], lngLatBox[3]];
-    const fitboundsObj = [sw, ne];
+    let sw = [lngLatBox[0], lngLatBox[1]];
+    let ne = [lngLatBox[2], lngLatBox[3]];
+    let fitboundsObj = [sw, ne];
     setBox(fitboundsObj);
   };
 
@@ -216,7 +217,7 @@ function MapView(props) {
           ) {
             if (
               response.results[0].address_components[i].types[j] ===
-              'sublocality'
+              "sublocality"
             ) {
               setSubLocality(
                 response.results[0].address_components[i].long_name
@@ -224,7 +225,7 @@ function MapView(props) {
               // console.log(response.results[0].address_components[i].long_name);
             }
             if (
-              response.results[0].address_components[i].types[j] === 'locality'
+              response.results[0].address_components[i].types[j] === "locality"
             ) {
               setCity(response.results[0].address_components[i].long_name);
               // console.log(response.results[0].address_components[i].long_name);
@@ -248,7 +249,7 @@ function MapView(props) {
       // console.log(map.getCenter());
     } else {
       // console.log("Map bounds have been changed by user interaction");
-      const cntr = map.getCenter();
+      let cntr = map.getCenter();
       // console.log(cntr);
       setTempCenter(cntr);
       setDraggedLocation(cntr);
@@ -262,7 +263,7 @@ function MapView(props) {
       // console.log(map.getCenter());
     } else {
       // console.log("Map bounds have been changed by user interaction");
-      const cntr = map.getCenter();
+      let cntr = map.getCenter();
       // console.log(cntr);
       setTempCenter(cntr);
       setDraggedLocation(cntr);
@@ -282,14 +283,14 @@ function MapView(props) {
   useEffect(() => {
     // console.log("- - multi effect - - ")
     let mounted = true;
-    const places_0 = [];
-    const places_1 = [];
-    const places_2 = [];
-    const places_center = [];
+    let places_0 = [];
+    let places_1 = [];
+    let places_2 = [];
+    let places_center = [];
     places.forEach((element) => {
-      const obj = multiDictSub[element._id];
+      let obj = multiDictSub[element._id];
       if (obj) {
-        const posVector = obj.posVector[2];
+        let posVector = obj.posVector[2];
         if (posVector < -2) {
           places_2.push(element);
         } else if (posVector < -1) {
@@ -330,16 +331,16 @@ function MapView(props) {
 
             orderedPlaces.forEach((place) => {
               // console.log(place.businessLocation.coordinates + "inside map")
-              const pix = map.project(place.businessLocation.coordinates);
+              let pix = map.project(place.businessLocation.coordinates);
               // console.log(pix)
               // console.log("-----------")
-              const obj = { pos: pix, name: place.company_name };
+              let obj = { pos: pix, name: place.company_name };
               // obj._id = place._id
               // obj.mapPos = pix
               newPosDict[place._id] = obj;
             });
 
-            map.on('idle', () => {
+            map.on("idle", function () {
               map.resize();
               map.zoom = 15;
             });
@@ -352,61 +353,69 @@ function MapView(props) {
               type="circle"
               id="layer_id_0"
               paint={{
-                'circle-radius': 10,
-                'circle-color': 'yellow',
+                "circle-radius": 10,
+                "circle-color": "yellow",
               }}
             >
-              {places_0.map(({ ...otherProps }) => (
-                <Feature
-                  key={otherProps._id}
-                  coordinates={otherProps.businessLocation.coordinates}
-                />
-              ))}
+              {places_0.map(({ ...otherProps }) => {
+                return (
+                  <Feature
+                    key={otherProps._id}
+                    coordinates={otherProps.businessLocation.coordinates}
+                  />
+                );
+              })}
             </Layer>
             <Layer
               type="circle"
               id="layer_id_1"
               paint={{
-                'circle-radius': 10,
-                'circle-color': 'magenta',
+                "circle-radius": 10,
+                "circle-color": "magenta",
               }}
             >
-              {places_1.map(({ ...otherProps }) => (
-                <Feature
-                  key={otherProps._id}
-                  coordinates={otherProps.businessLocation.coordinates}
-                />
-              ))}
+              {places_1.map(({ ...otherProps }) => {
+                return (
+                  <Feature
+                    key={otherProps._id}
+                    coordinates={otherProps.businessLocation.coordinates}
+                  />
+                );
+              })}
             </Layer>
             <Layer
               type="circle"
               id="layer_id_2"
               paint={{
-                'circle-radius': 10,
-                'circle-color': 'blue',
+                "circle-radius": 10,
+                "circle-color": "blue",
               }}
             >
-              {places_2.map(({ ...otherProps }) => (
-                <Feature
-                  key={otherProps._id}
-                  coordinates={otherProps.businessLocation.coordinates}
-                />
-              ))}
+              {places_2.map(({ ...otherProps }) => {
+                return (
+                  <Feature
+                    key={otherProps._id}
+                    coordinates={otherProps.businessLocation.coordinates}
+                  />
+                );
+              })}
             </Layer>
             <Layer
               type="circle"
               id="layer_id_3"
               paint={{
-                'circle-radius': 10,
-                'circle-color': 'red',
+                "circle-radius": 10,
+                "circle-color": "red",
               }}
             >
-              {places_center.map(({ ...otherProps }) => (
-                <Feature
-                  key={otherProps._id}
-                  coordinates={otherProps.businessLocation.coordinates}
-                />
-              ))}
+              {places_center.map(({ ...otherProps }) => {
+                return (
+                  <Feature
+                    key={otherProps._id}
+                    coordinates={otherProps.businessLocation.coordinates}
+                  />
+                );
+              })}
             </Layer>
           </>
         )}
@@ -425,10 +434,10 @@ function MapView(props) {
             type="circle"
             id="selectedPlace_id"
             paint={{
-              'circle-radius': 20,
-              'circle-opacity': 0,
-              'circle-stroke-width': 1,
-              'circle-stroke-color': '#ff0000',
+              "circle-radius": 20,
+              "circle-opacity": 0,
+              "circle-stroke-width": 1,
+              "circle-stroke-color": "#ff0000",
             }}
           >
             <Feature coordinates={selectedPlace.businessLocation.coordinates} />
@@ -440,10 +449,10 @@ function MapView(props) {
             type="circle"
             id="draggedLocation"
             paint={{
-              'circle-radius': 10,
-              'circle-opacity': 1,
-              'circle-stroke-width': 2,
-              'circle-stroke-color': '#ff0000',
+              "circle-radius": 10,
+              "circle-opacity": 1,
+              "circle-stroke-width": 2,
+              "circle-stroke-color": "#ff0000",
             }}
           >
             <Feature coordinates={[draggedLocation.lng, draggedLocation.lat]} />
@@ -452,6 +461,6 @@ function MapView(props) {
       </Map>
     </div>
   );
-}
+};
 
 export default MapView;

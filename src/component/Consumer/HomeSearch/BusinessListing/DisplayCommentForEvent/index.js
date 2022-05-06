@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import Comments from '../UserMessage/Comments';
-import ProfileImg from '../../../../../images/profile-img.png';
-import LikesBar from '../LikesBar';
-import DateBar from '../Events/DateBar';
-import TimeBar from '../Events/TimeBar';
-import ImageComment from '../Events/ImageComment';
+import React, { useState } from "react";
+import styled from "styled-components";
+import Comments from "../UserMessage/Comments";
+import ProfileImg from "../../../../../images/profile-img.png";
+import LikesBar from "../LikesBar";
+import DateBar from "../Events/DateBar";
+import TimeBar from "../Events/TimeBar";
+import ImageComment from "../Events/ImageComment";
+import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -45,7 +45,7 @@ const ProfileNameHeader = styled.div`
   padding-left: 40px;
   &.line-active {
     &:before {
-      content: '';
+      content: "";
       position: absolute;
       left: 26px;
       background: #878787;
@@ -125,111 +125,119 @@ const SubHeading = styled.div`
   font-weight: 700;
   color: #00c2ff;
 `;
-function DisplayCommentForEvent({ postData, businessData }) {
+const DisplayCommentForEvent = ({ postData, businessData }) => {
   const [displayComments, setDisplayComments] = useState(false);
   const [displayCommentInput, setDisplayCommentInput] = useState(false);
   const search = useSelector((state) => state.myFeed.enterClicked);
   const [flag, setFlag] = useState(false);
-  const history = useHistory();
+  const history = useHistory()
 
   const days = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
   ];
 
   return (
-    <UserMsgWrap>
-      <UserMessageContent>
-        <ProfileNameHeader
-          className={
-            (postData.body !== null && postData.type === 'Post') ||
-            postData.data !== null ||
-            !search
-              ? 'line-active'
-              : 'line-inactive'
-          }
-        >
-          <ProfileThumb>
-            <img
-              src={
-                postData.itemId.ownerId === null ||
-                postData.itemId.ownerId.length === 0
-                  ? businessData.default_image_url
-                  : postData.itemId.ownerId[0].photo !== '' &&
-                    postData.itemId.ownerId[0].photo !== null
-                  ? postData.itemId.ownerId[0].photo
-                  : ProfileImg
-              }
-              alt=""
-            />
-          </ProfileThumb>
-          <ProfileNameWrap>
-            <ProfileName onClick={() => history.push(`/b/${businessData._id}`)}>
-              {businessData.company_name}
-            </ProfileName>
-            <SubHeading>{postData.itemId.title}</SubHeading>
-            <ChatInput>{postData.itemId.data}</ChatInput>
-            <DateBar
-              startDay={
-                days[
-                  new Date(postData.itemId.eventSchedule.start_time).getDay()
-                ]
-              }
-              endDay={
-                days[new Date(postData.itemId.eventSchedule.end_time).getDay()]
-              }
-            />
-            <TimeBar
-              startTime={new Date(postData.itemId.eventSchedule.start_time)}
-              endTime={new Date(postData.itemId.eventSchedule.end_time)}
-            />
-            <LikesBar
-              type="disabled"
-              totalLikes={postData.itemId.likes.length}
-              totalComments={
-                postData.totalComments.length > 0
-                  ? postData.totalComments[0].totalCount
-                  : 0
-              }
-              date={new Date(postData.itemId.createdAt)}
-              setDisplayComments={setDisplayComments}
-              displayComments={displayComments}
-              postId={postData._id}
-              postLikes={postData.itemId.likes}
-              displayCommentInput={displayCommentInput}
-              setDisplayCommentInput={setDisplayCommentInput}
-              setFlag={setFlag}
-              flag={flag}
-              business={businessData}
-            />
-          </ProfileNameWrap>
-        </ProfileNameHeader>
-        <ImageComment
-          image={
-            postData.itemId.media.length > 0
-              ? postData.itemId.media[0].image
-              : ''
-          }
-        />
-      </UserMessageContent>
+    <>
+      <UserMsgWrap>
+        <UserMessageContent>
+          <ProfileNameHeader
+            className={
+              (postData.body !== null && postData.type === "Post") ||
+              postData.data !== null ||
+              !search
+                ? "line-active"
+                : "line-inactive"
+            }
+          >
+            <ProfileThumb>
+              <img
+                src={
+                  postData.itemId.ownerId === null ||
+                  postData.itemId.ownerId.length === 0
+                    ? businessData.default_image_url
+                    : postData.itemId.ownerId[0].photo !== "" &&
+                      postData.itemId.ownerId[0].photo !== null
+                    ? postData.itemId.ownerId[0].photo
+                    : ProfileImg
+                }
+                alt=""
+              />
+            </ProfileThumb>
+            <ProfileNameWrap>
+              <ProfileName
+                onClick={() =>
+                  history.push(`/b/${businessData._id}`)
+                }
+              >
+                {businessData.company_name}
+              </ProfileName>
+              <SubHeading>{postData.itemId.title}</SubHeading>
+              <ChatInput>{postData.itemId.data}</ChatInput>
+              <DateBar
+                startDay={
+                  days[
+                    new Date(postData.itemId.eventSchedule.start_time).getDay()
+                  ]
+                }
+                endDay={
+                  days[
+                    new Date(postData.itemId.eventSchedule.end_time).getDay()
+                  ]
+                }
+              />
+              <TimeBar
+                startTime={new Date(postData.itemId.eventSchedule.start_time)}
+                endTime={new Date(postData.itemId.eventSchedule.end_time)}
+              />
+              <LikesBar
+                type="disabled"
+                totalLikes={postData.itemId.likes.length}
+                totalComments={
+                  postData.totalComments.length > 0
+                    ? postData.totalComments[0].totalCount
+                    : 0
+                }
+                date={new Date(postData.itemId.createdAt)}
+                setDisplayComments={setDisplayComments}
+                displayComments={displayComments}
+                postId={postData._id}
+                postLikes={postData.itemId.likes}
+                displayCommentInput={displayCommentInput}
+                setDisplayCommentInput={setDisplayCommentInput}
+                setFlag={setFlag}
+                flag={flag}
+                business={businessData}
+              />
+            </ProfileNameWrap>
+          </ProfileNameHeader>
+          <ImageComment
+            image={
+              postData.itemId.media.length > 0
+                ? postData.itemId.media[0].image
+                : ""
+            }
+          />
+        </UserMessageContent>
 
-      <ReplyWrap>
-        <Comments
-          i={postData}
-          postData={postData}
-          displayComments={displayComments}
-          setFlag={setFlag}
-          flag={flag}
-          business={businessData}
-        />
-      </ReplyWrap>
-    </UserMsgWrap>
+        <ReplyWrap>
+          <Comments
+            i={postData}
+            postData={postData}
+            displayComments={displayComments}
+            setFlag={setFlag}
+            flag={flag}
+            business={businessData}
+          />
+        </ReplyWrap>
+      </UserMsgWrap>
+    </>
   );
-}
+};
 
 export default DisplayCommentForEvent;

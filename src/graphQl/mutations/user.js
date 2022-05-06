@@ -53,8 +53,8 @@ const updateUserProfile = (values) => {
       email: values.email,
       phoneNumber: values.phoneNumber,
       userSub: values.userSub,
-      photo: values.photo ? values.photo : '',
-      lockProfile: values.lockProfile,
+      photo: values.photo? values.photo:"",
+      lockProfile: values.lockProfile
     },
   };
   return graphQl;
@@ -83,7 +83,7 @@ const getSelectedUser = (search) => {
             }
           }`,
     variables: {
-      search,
+      search: search
     },
   };
   return graphQl;
@@ -108,11 +108,12 @@ const addFavoriteBusiness = (obj) => {
           }`,
     variables: {
       userId: obj.userId,
-      businessId: obj.businessId,
+      businessId: obj.businessId
     },
   };
   return graphQl;
 };
+
 
 /*
 @desc: to remove favorites to a business
@@ -133,15 +134,9 @@ const removeFavoriteBusiness = (obj) => {
           }`,
     variables: {
       userId: obj.userId,
-      businessId: obj.businessId,
+      businessId: obj.businessId
     },
   };
   return graphQl;
 };
-export {
-  AddUser,
-  updateUserProfile,
-  getSelectedUser,
-  addFavoriteBusiness,
-  removeFavoriteBusiness,
-};
+export { AddUser, updateUserProfile, getSelectedUser, addFavoriteBusiness, removeFavoriteBusiness };

@@ -1,14 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
-import { FaFilter } from 'react-icons/fa';
-import { IoMdClose } from 'react-icons/io';
+import React, { useEffect, useRef, useState } from "react";
+import Input from "../../UI/Input/Input";
+import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setSideFiltersByClosest,
   setSideFiltersByUpdatedAt,
-} from '../../../../reducers/myFeedReducer';
-import DropdwonArrowTop from '../../../../images/top_arrow_polygon.png';
-import Input from '../../UI/Input/Input';
+} from "../../../../reducers/myFeedReducer";
+import DropdwonArrowTop from "../../../../images/top_arrow_polygon.png";
+import { FaFilter } from "react-icons/fa";
+import { IoMdClose } from "react-icons/io";
 
 const SearchWrap = styled.div`
   height: 40px;
@@ -28,7 +28,7 @@ const SearchWrap = styled.div`
     box-shadow: none;
     background: #fff;
     color: #000;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     ::placeholder {
       color: #bdbdbd;
     }
@@ -49,7 +49,7 @@ const Heading = styled.h1`
   font-size: 18px;
   margin: 0 0 0 20px;
   padding: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   width: calc(100% - 350px);
   @media (max-width: 767px) {
     margin: 0 auto 10px;
@@ -62,7 +62,7 @@ const Heading = styled.h1`
 const FilterBox = styled.div`
   margin: 0px;
   padding: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   width: 40px;
   display: flex;
   align-items: center;
@@ -122,7 +122,7 @@ const DropdownContent = styled.div`
     background: url(${DropdwonArrowTop}) no-repeat top center;
     width: 13px;
     height: 12px;
-    content: ' ';
+    content: " ";
     top: -11px;
     position: absolute;
     margin: 0 auto;
@@ -173,7 +173,7 @@ const DropdownContent = styled.div`
   }
 `;
 
-function SearchBar({ setOffset, setDisplayTab, search, setSearch }) {
+const SearchBar = ({ setOffset, setDisplayTab, search, setSearch }) => {
   const menuRef = useRef(null);
   const loader = useSelector((state) => state.myFeed.loading);
   const [uploadMenu, setUploadMenu] = useState(false);
@@ -213,49 +213,51 @@ function SearchBar({ setOffset, setDisplayTab, search, setSearch }) {
     setSearch(e.target.value);
   };
   return (
-    <SearchWrap>
-      <Heading>Favourites</Heading>
-      <RightSearchWrap>
-        <Input
-          placeholder="Search Favourite"
-          value={search}
-          onChange={(e) => onChangeSearch(e)}
-          disabled={loader}
-        />
-        <FilterBox ref={menuRef}>
-          <FaFilter onClick={toggleUploadMenu} />
-          {uploadMenu && (
-            <DropdownContent>
-              <ul>
-                <li>
-                  {' '}
-                  <button
-                    onClick={() => closestFilter()}
-                    disabled={filterByClosest}
-                  >
-                    Closest
-                  </button>
-                </li>
+    <>
+      <SearchWrap>
+        <Heading>Favourites</Heading>
+        <RightSearchWrap>
+          <Input
+            placeholder="Search Favourite"
+            value={search}
+            onChange={(e) => onChangeSearch(e)}
+            disabled={loader}
+          />
+          <FilterBox ref={menuRef}>
+            <FaFilter onClick={toggleUploadMenu} />
+            {uploadMenu && (
+              <DropdownContent>
+                <ul>
+                  <li>
+                    {" "}
+                    <button
+                      onClick={() => closestFilter()}
+                      disabled={filterByClosest}
+                    >
+                      Closest
+                    </button>
+                  </li>
 
-                <li>
-                  <button
-                    onClick={() => recentlyUpdatedFilter()}
-                    disabled={filterByUpdatedAt}
-                  >
-                    {' '}
-                    Recently Updated
-                  </button>
-                </li>
-              </ul>
-            </DropdownContent>
-          )}
-        </FilterBox>
-      </RightSearchWrap>
-      <CloseDiv>
-        <IoMdClose onClick={() => setDisplayTab()} />
-      </CloseDiv>
-    </SearchWrap>
+                  <li>
+                    <button
+                      onClick={() => recentlyUpdatedFilter()}
+                      disabled={filterByUpdatedAt}
+                    >
+                      {" "}
+                      Recently Updated
+                    </button>
+                  </li>
+                </ul>
+              </DropdownContent>
+            )}
+          </FilterBox>
+        </RightSearchWrap>
+        <CloseDiv>
+          <IoMdClose onClick={() => setDisplayTab()} />
+        </CloseDiv>
+      </SearchWrap>
+    </>
   );
-}
+};
 
 export default SearchBar;

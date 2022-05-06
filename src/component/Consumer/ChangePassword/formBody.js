@@ -1,9 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
-import Input from '../UI/FormikInput';
+import React from "react";
+import styled from "styled-components";
+import Input from "../UI/FormikInput";
 
 const InputContainer = styled.div`
-  border: 1px solid ${(props) => (props.usererror ? '#FF7171' : '#ffffff')};
+  border: 1px solid ${(props) => (props.usererror ? "#FF7171" : "#ffffff")};
   min-height: 60px;
   font-size: 16px;
   line-height: 21px;
@@ -25,33 +25,20 @@ const LabelText = styled.label`
   line-height: normal;
 `;
 // form body to change Password
-function FormBody({ formError, setResponse }) {
+function FormBody({formError,setResponse}) {
   return (
     <>
       <InputContainer>
         <LabelText>Old Password</LabelText>
-        <Input
-          type="password"
-          name="oldPassword"
-          formError={formError}
-          onFocus={() => setResponse('')}
-        />
+        <Input type="password" name="oldPassword" formError={formError} onFocus={()=>setResponse("")}/>
       </InputContainer>
       <InputContainer>
         <LabelText>New Password</LabelText>
-        <Input
-          type="password"
-          name="newPassword"
-          onFocus={() => setResponse('')}
-        />
+        <Input type="password" name="newPassword" onFocus={()=>setResponse("")}/>
       </InputContainer>
       <InputContainer>
         <LabelText>Re-Type New Password</LabelText>
-        <Input
-          type="password"
-          name="confirmPassword"
-          onFocus={() => setResponse('')}
-        />
+        <Input type="password" name="confirmPassword" onFocus={()=>setResponse("")} />
       </InputContainer>
     </>
   );

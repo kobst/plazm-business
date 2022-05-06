@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import ProfileImg from '../../../../../../images/profile-img.png';
+import React, { useEffect, useState } from "react";
+import ProfileImg from "../../../../../../images/profile-img.png";
 import {
   checkMime,
   replaceBucket,
-} from '../../../../../../utilities/checkResizedImage';
+} from "../../../../../../utilities/checkResizedImage";
 
-function ReplyImage({ j }) {
+const ReplyImage = ({ j }) => {
   const [image, setImage] = useState(null);
   useEffect(() => {
     if (j.userId.photo) {
@@ -22,5 +22,5 @@ function ReplyImage({ j }) {
     } else setImage(ProfileImg);
   };
   return <img src={image} onError={() => checkError()} alt="" />;
-}
+};
 export default ReplyImage;

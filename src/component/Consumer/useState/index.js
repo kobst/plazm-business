@@ -1,4 +1,4 @@
-import create from 'zustand';
+import create from "zustand";
 
 const [useStore] = create((set) => ({
   profile: null,
@@ -6,7 +6,7 @@ const [useStore] = create((set) => ({
   detailId: null,
   tabSelected: -1,
   listTabSelected: 2,
-  view: '',
+  view: "",
   selectedList: null,
   selectedListId: null,
   searchIndex: null,
@@ -23,8 +23,8 @@ const [useStore] = create((set) => ({
   coordPlaceDict: {},
   centerId: null,
   centerPlace: null,
-  subLocality: '',
-  city: '',
+  sublocality: "",
+  city: "",
   userLocation: {
     lat: process.env.REACT_APP_LATITUDE,
     lng: process.env.REACT_APP_LONGITUDE,
@@ -169,10 +169,10 @@ const [useStore] = create((set) => ({
       ...state,
       centerPlace,
     })),
-  setSubLocality: (subLocality) =>
+  setSublocality: (sublocality) =>
     set((state) => ({
       ...state,
-      subLocality,
+      sublocality,
     })),
   setCity: (city) =>
     set((state) => ({

@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
-import { IoMdCloseCircle } from 'react-icons/io';
-import CrossIcon from '../../../../images/cross-icon.svg';
+import React from "react";
+import styled from "styled-components";
+import { IoMdCloseCircle } from "react-icons/io";
+import CrossIcon from "../../../../images/cross-icon.svg";
 
 const AllListingsContent = styled.div`
   width: 100%;
@@ -38,7 +38,6 @@ const CloseList = styled.button`
   svg {
     color: #fff;
     font-size: 20px;
-    display: none;
   }
   :hover,
   :focus {
@@ -62,7 +61,7 @@ const UploadImage = styled.div`
   }
   :hover {
     :after {
-      content: '';
+      content: "";
       position: absolute;
       background: rgba(0, 0, 0, 0.7) url(${CrossIcon});
       width: 45px;
@@ -79,7 +78,7 @@ const WrapperDiv = styled.div`
   display: flex;
 `;
 
-function PostImage({
+const PostImage = ({
   image,
   setImageUpload,
   loader,
@@ -88,33 +87,35 @@ function PostImage({
   deleteImage,
   clearImages,
   setImageFile,
-}) {
+}) => {
   const removeImages = () => {
     setImageUpload(null);
     setImageFile(null);
   };
   return (
-    <AllListingsContent>
-      {type === 'eventImages' ? (
-        <WrapperDiv>
-          <UploadImage disabled={loader} onClick={() => deleteImage()}>
-            <img src={imageUrl} alt="Upload" />
-          </UploadImage>
+    <>
+      <AllListingsContent>
+        {type === "eventImages" ? (
+          <WrapperDiv>
+            <UploadImage disabled={loader} onClick={() => deleteImage()}>
+              <img src={imageUrl} alt="Upload" />
+            </UploadImage>
 
-          <CloseList disabled={loader} onClick={() => clearImages()}>
-            <IoMdCloseCircle />
-          </CloseList>
-        </WrapperDiv>
-      ) : (
-        <PostImageDiv>
-          <img src={image} alt="" />
-          <CloseList disabled={loader} onClick={() => removeImages()}>
-            <IoMdCloseCircle />
-          </CloseList>
-        </PostImageDiv>
-      )}
-    </AllListingsContent>
+            <CloseList disabled={loader} onClick={() => clearImages()}>
+              <IoMdCloseCircle />
+            </CloseList>
+          </WrapperDiv>
+        ) : (
+          <PostImageDiv>
+            <img src={image} alt="" />
+            <CloseList disabled={loader} onClick={() => removeImages()}>
+              <IoMdCloseCircle />
+            </CloseList>
+          </PostImageDiv>
+        )}
+      </AllListingsContent>
+    </>
   );
-}
+};
 
 export default PostImage;

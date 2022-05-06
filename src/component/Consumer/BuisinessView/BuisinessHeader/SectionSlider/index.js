@@ -1,9 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
-import { useSelector } from 'react-redux';
-import SliderItems from './SliderItems';
+import React from 'react'
+import styled from 'styled-components'
+import Carousel from 'react-multi-carousel'
+import 'react-multi-carousel/lib/styles.css'
+import SliderItems from './SliderItems'
+import {useSelector} from 'react-redux'
 
 const SectionSliderWrapper = styled.div`
   position: relative;
@@ -12,13 +12,13 @@ const SectionSliderWrapper = styled.div`
   width: 100%;
   height: 294px;
   flex-direction: column;
-  @media (max-width: 767px) {
+  @media (max-width:767px){ 
     height: 142px;
   }
-`;
+`
 
-function SectionSlider() {
-  const images = useSelector((state) => state.business.images);
+const SectionSlider = () => {
+  const images = useSelector(state => state.business.images);
   const responsive = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
@@ -50,30 +50,30 @@ function SectionSlider() {
       items: 1,
       slidesToSlide: 1, // optional, default to 1.
     },
-  };
+  }
   return (
-    <SectionSliderWrapper>
-      <Carousel
-        swipeable
-        draggable={false}
-        showDots={false}
-        responsive={responsive}
-        infinite={false}
-        keyBoardControl={false}
-        containerClass="carousel-container"
-        dotListClass="custom-dot-list-style"
-        itemClass="carousel-item-padding-40-px"
-        autoPlay={false}
-        autoPlaySpeed={2000}
-      >
-        {images.map((i, key) => (
-          <div key={key}>
-            <SliderItems image={i} />
-          </div>
-        ))}
-      </Carousel>
-    </SectionSliderWrapper>
-  );
+    <>
+      <SectionSliderWrapper>
+        <Carousel
+          swipeable={true}
+          draggable={false}
+          showDots={false}
+          responsive={responsive}
+          infinite={false}
+          keyBoardControl={false}
+          containerClass="carousel-container"
+          dotListClass="custom-dot-list-style"
+          itemClass="carousel-item-padding-40-px"
+          autoPlay={false}
+          autoPlaySpeed={2000}
+        >
+          {images.map((i,key)=><div key={key}>
+            <SliderItems image={i}/>
+          </div>)}
+        </Carousel>
+      </SectionSliderWrapper>
+    </>
+  )
 }
 
-export default SectionSlider;
+export default SectionSlider

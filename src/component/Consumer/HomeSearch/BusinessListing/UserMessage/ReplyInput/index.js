@@ -1,16 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { FaRegSmile } from 'react-icons/fa';
-import { useDispatch, useSelector } from 'react-redux';
-import { MentionsInput, Mention } from 'react-mentions';
-import Picker from 'emoji-picker-react';
-import { unwrapResult } from '@reduxjs/toolkit';
-import { findSelectedUsers } from '../../../../../../reducers/consumerReducer';
-import ProfileImg from '../../../../../../images/profile-img.png';
-import {
-  checkMime,
-  replaceBucket,
-} from '../../../../../../utilities/checkResizedImage';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { FaRegSmile } from "react-icons/fa";
+import ProfileImg from "../../../../../../images/profile-img.png";
+import { useDispatch, useSelector } from "react-redux";
+import { MentionsInput, Mention } from "react-mentions";
+import Picker from "emoji-picker-react";
+import { findSelectedUsers } from "../../../../../../reducers/consumerReducer";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { checkMime, replaceBucket } from "../../../../../../utilities/checkResizedImage";
 
 const ChatContent = styled.div`
   width: 100%;
@@ -162,7 +159,7 @@ const MentionsImage = styled.div`
     margin-right: 5px;
   }
 `;
-function ReplyInput({
+const ReplyInput = ({
   postId,
   type,
   name,
@@ -173,7 +170,7 @@ function ReplyInput({
   setReplyDescription,
   commentId,
   addReply,
-}) {
+}) => {
   const user = useSelector((state) => state.user.user);
   const [mentionArrayUser, setMentionArrayUser] = useState([]);
   const [displayEmoji, setDisplayEmoji] = useState(false);
@@ -200,8 +197,8 @@ function ReplyInput({
 
   /** on select of emoji */
   const onEmojiClick = (event, emojiObject) => {
-    if (type === 'comment') setDescription(description + emojiObject.emoji);
-    else if (type === 'reply')
+    if (type === "comment") setDescription(description + emojiObject.emoji);
+    else if (type === "reply")
       setReplyDescription(replyDescription + emojiObject.emoji);
   };
 
@@ -219,13 +216,13 @@ function ReplyInput({
         setMentionArrayUser(valueArr);
       }
     }
-    if (type === 'comment') setDescription(newPlainTextValue);
-    else if (type === 'reply') setReplyDescription(newPlainTextValue);
+    if (type === "comment") setDescription(newPlainTextValue);
+    else if (type === "reply") setReplyDescription(newPlainTextValue);
   };
 
   /** to add comment on post */
   const addCommentToPost = async (desc) => {
-    if (type === 'comment' && desc !== '' && !desc.trim() === false) {
+    if (type === "comment" && desc !== "" && !desc.trim() === false) {
       const obj = {
         itemId: postId,
         userId: user._id,
@@ -235,9 +232,9 @@ function ReplyInput({
         userDetails: user,
       };
       addComment(obj);
-    } else if (type === 'reply' && desc !== '' && !desc.trim() === false) {
+    } else if (type === "reply" && desc !== "" && !desc.trim() === false) {
       const obj = {
-        postId,
+        postId: postId,
         _id: commentId,
         userId: user._id,
         body: desc,
@@ -249,30 +246,32 @@ function ReplyInput({
 
   /** on adding comment keyPress function */
   const commentAddKeyPress = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       event.preventDefault();
-      addCommentToPost(type === 'reply' ? replyDescription : description);
-      if (type === 'reply') setReplyDescription('');
-      else setDescription('');
+      addCommentToPost(type === "reply" ? replyDescription : description);
+      if (type === "reply") setReplyDescription("");
+      else setDescription("");
     }
   };
   /** custom render suggestion with images */
-  const customRenderSuggestion = (entry) => (
-    <MentionsImage>
-      <img
-        src={
-          entry.image !== null
-            ? entry.image !== '' && entry.image !== 'sample'
-              ? entry.image
+  const customRenderSuggestion = (entry) => {
+    return (
+      <MentionsImage>
+        <img
+          src={
+            entry.image !== null
+              ? entry.image !== "" && entry.image !== "sample"
+                ? entry.image
+                : ProfileImg
               : ProfileImg
-            : ProfileImg
-        }
-        alt=""
-        className="mentionsImageImg"
-      />
-      {entry.display}
-    </MentionsImage>
-  );
+          }
+          alt=""
+          className="mentionsImageImg"
+        />
+        {entry.display}
+      </MentionsImage>
+    );
+  };
 
   /** to search users for mentions */
   const fetchUsers = async (query, callback) => {
@@ -280,52 +279,60 @@ function ReplyInput({
     const data = await dispatch(findSelectedUsers(query));
     const res = await unwrapResult(data);
     if (res) {
-      const x = res.map((myUser) => ({
+      let x = res.map((myUser) => ({
         id: myUser._id,
         display: `@${myUser.name}`,
-        image: myUser.photo ? myUser.photo : '',
+        image: myUser.photo ? myUser.photo : "",
       }));
       setSelectedUsers(res);
       return callback(x);
     }
   };
   return (
-    <ChatContent className={type === 'reply' ? 'InnerReply' : ''}>
-      <ProfileNameHeader>
-        <ProfileThumb>
-          <img src={image} onError={() => checkError()} alt="" />
-        </ProfileThumb>
-        <ProfileNameWrap>
-          <InputWrap>
-            {type === 'reply' ? (
-              <div className="taggedUserInput">{`@${name}`}</div>
-            ) : null}
-            <MentionsInput
-              markup="@(__id__)[__display__]"
-              value={type === 'reply' ? replyDescription : description}
-              onChange={handleChange}
-              placeholder={type === 'reply' ? 'Add Reply' : 'Add Comment'}
-              className="replyInput"
-              onKeyPress={(event) => commentAddKeyPress(event)}
-              autoFocus={type === 'reply' ? selectedPostId === postId : true}
-            >
-              <Mention
-                type="user"
-                trigger="@"
-                data={fetchUsers}
-                appendSpaceOnAdd
-                renderSuggestion={customRenderSuggestion}
-              />
-            </MentionsInput>
-            <EmojiWrap>
-              <FaRegSmile onClick={() => setDisplayEmoji(!displayEmoji)} />
-              {displayEmoji ? <Picker onEmojiClick={onEmojiClick} /> : null}
-            </EmojiWrap>
-          </InputWrap>
-        </ProfileNameWrap>
-      </ProfileNameHeader>
-    </ChatContent>
+    <>
+      <ChatContent className={type === "reply" ? "InnerReply" : ""}>
+        <ProfileNameHeader>
+          <ProfileThumb>
+            <img src={image} onError={() => checkError()} alt="" />
+          </ProfileThumb>
+          <ProfileNameWrap>
+            <InputWrap>
+              {type === "reply" ? (
+                <div className="taggedUserInput">{"@" + name}</div>
+              ) : null}
+              <MentionsInput
+                markup="@(__id__)[__display__]"
+                value={type === "reply" ? replyDescription : description}
+                onChange={handleChange}
+                placeholder={type === "reply" ? "Add Reply" : "Add Comment"}
+                className="replyInput"
+                onKeyPress={(event) => commentAddKeyPress(event)}
+                autoFocus={
+                  type === "reply"
+                    ? selectedPostId === postId
+                      ? true
+                      : false
+                    : true
+                }
+              >
+                <Mention
+                  type="user"
+                  trigger="@"
+                  data={fetchUsers}
+                  appendSpaceOnAdd={true}
+                  renderSuggestion={customRenderSuggestion}
+                />
+              </MentionsInput>
+              <EmojiWrap>
+                <FaRegSmile onClick={() => setDisplayEmoji(!displayEmoji)} />
+                {displayEmoji ? <Picker onEmojiClick={onEmojiClick} /> : null}
+              </EmojiWrap>
+            </InputWrap>
+          </ProfileNameWrap>
+        </ProfileNameHeader>
+      </ChatContent>
+    </>
   );
-}
+};
 
 export default ReplyInput;

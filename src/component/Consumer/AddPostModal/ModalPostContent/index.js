@@ -1,26 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { MdClose } from 'react-icons/md';
-import { MentionsInput, Mention } from 'react-mentions';
-import { useDispatch, useSelector } from 'react-redux';
-import { unwrapResult } from '@reduxjs/toolkit';
-import { findAllUsers } from '../../../../reducers/consumerReducer';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { MdClose } from "react-icons/md";
+import { MentionsInput, Mention } from "react-mentions";
+import { useDispatch, useSelector } from "react-redux";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { findAllUsers } from "../../../../reducers/consumerReducer";
 import {
   AddPostToList,
   findAllLists,
   RemovePostFromAList,
-} from '../../../../reducers/listReducer';
-import { addPostToBusiness } from '../../../../reducers/businessReducer';
+} from "../../../../reducers/listReducer";
+import { addPostToBusiness } from "../../../../reducers/businessReducer";
 import {
   updatePostInMyFeed,
   updatePostToBusiness,
   deletePostInMyFeed,
-} from '../../../../reducers/myFeedReducer';
-import BottomButtons from '../BottomButtons';
-import AddImageImg from '../../../../images/addImage.svg';
-import SelectedListing from '../SelectedListing';
-import PostImage from '../PostImage';
-import error from '../../../../constants';
+} from "../../../../reducers/myFeedReducer";
+import BottomButtons from "../BottomButtons";
+import AddImageImg from "../../../../images/addImage.svg";
+import SelectedListing from "../SelectedListing";
+import PostImage from "../PostImage";
+import error from "../../../../constants";
 
 const bucket = process.env.REACT_APP_BUCKET;
 
@@ -167,7 +167,7 @@ const ErrorDiv = styled.div`
 `;
 
 const InputContainer = styled.div`
-  border: 1px solid ${(props) => (props.usererror ? '#FF7171' : '#ffffff')};
+  border: 1px solid ${(props) => (props.usererror ? "#FF7171" : "#ffffff")};
   min-height: 60px;
   font-size: 16px;
   line-height: 21px;
@@ -181,7 +181,7 @@ const InputContainer = styled.div`
   flex-direction: column;
 `;
 let myInput;
-function ModalPostContent({
+const ModalPostContent = ({
   setDisplayList,
   selectedListForPost,
   setSelectedListForPost,
@@ -198,22 +198,22 @@ function ModalPostContent({
   businessData,
   imageFile,
   setImageFile,
-}) {
+}) => {
   const [loader, setLoader] = useState(false);
   const users = useSelector((state) => state.consumer.users);
   const lists = useSelector((state) => state.list.lists);
-  const [imageError, setImageError] = useState('');
+  const [imageError, setImageError] = useState("");
   const ws = useSelector((state) => state.user.ws);
   const user = useSelector((state) => state.user.user);
   const business = useSelector((state) => state.business.business);
-  const [descriptionError, setDescriptionError] = useState('');
-  const [listError, setListError] = useState('');
-  const allData = [...users, ...lists];
-  const data = allData.sort((a, b) =>
-    a.name.toLowerCase().localeCompare(b.name.toLowerCase())
-  );
+  const [descriptionError, setDescriptionError] = useState("");
+  const [listError, setListError] = useState("");
+  let allData = [...users, ...lists];
+  let data = allData.sort(function (a, b) {
+    return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+  });
   const dispatch = useDispatch();
-  const userMentionData = data.map((myUser) => ({
+  let userMentionData = data.map((myUser) => ({
     id: myUser._id,
     display: `@${myUser.name}`,
   }));
@@ -256,16 +256,16 @@ function ModalPostContent({
   const uploadImage = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
-      const idxDot = selectedFile.name.lastIndexOf('.') + 1;
+      const idxDot = selectedFile.name.lastIndexOf(".") + 1;
       const extFile = selectedFile.name
         .substr(idxDot, selectedFile.name.length)
         .toLowerCase();
-      if (extFile === 'jpeg' || extFile === 'png' || extFile === 'jpg') {
-        setImageError('');
+      if (extFile === "jpeg" || extFile === "png" || extFile === "jpg") {
+        setImageError("");
         setImageUpload(URL.createObjectURL(e.target.files[0]));
         setImageFile(selectedFile);
       } else {
-        setImageError('Only jpg/jpeg and png,files are allowed!');
+        setImageError("Only jpg/jpeg and png,files are allowed!");
       }
     }
   };
@@ -274,41 +274,43 @@ function ModalPostContent({
    */
   const folderName = () => {
     /* to remove all special characters except space */
-    const removeSpecialCharacter = user.name.replace(/[^a-zA-Z ]/g, '');
+    const removeSpecialCharacter = user.name.replace(/[^a-zA-Z ]/g, "");
     /* to replace all spaces to underscore */
-    const replacedName = removeSpecialCharacter.split(' ').join('_');
+    const replacedName = removeSpecialCharacter.split(" ").join("_");
     /* return folder name */
-    return `${replacedName}_${user._id}`;
+    return replacedName + "_" + user._id;
   };
 
   /*
    * @desc: to change file_name
    */
-  const fileName = (name) => `${Date.now()}-${name}`;
+  const fileName = (name) => {
+    return `${Date.now()}-${name}`;
+  };
 
   /*
    * @desc: add a post
    */
   const savePost = async () => {
-    if (description === '' || !description.trim() === true) {
+    if (description === "" || !description.trim() === true) {
       setDescriptionError(error.REQUIRED);
       if (!selectedListForPost) {
         setListError(error.POST_LIST_ERROR);
       } else {
-        setListError('');
+        setListError("");
       }
     } else if (!selectedListForPost) {
       setListError(error.POST_LIST_ERROR);
-      if (description === '' || !description.trim() === true) {
+      if (description === "" || !description.trim() === true) {
         setDescriptionError(error.REQUIRED);
       } else {
-        setDescriptionError('');
+        setDescriptionError("");
       }
     } else {
-      /* set loader value */
+      /*set loader value */
       setLoader(true);
-      setListError('');
-      setDescriptionError('');
+      setListError("");
+      setDescriptionError("");
       /* to upload file to s3 bucket on save of profile button */
       let imageUrl = null;
       if (imageFile !== null) {
@@ -318,14 +320,14 @@ function ModalPostContent({
         const value = await fetch(
           `${process.env.REACT_APP_API_URL}/api/upload_photo`,
           {
-            method: 'POST',
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
             body: JSON.stringify({
               Key: file_name,
               ContentType: imageFile.type,
-              folder_name,
+              folder_name: folder_name,
             }),
           }
         );
@@ -333,9 +335,9 @@ function ModalPostContent({
         const Val = JSON.parse(body);
 
         await fetch(Val, {
-          method: 'PUT',
+          method: "PUT",
           headers: {
-            'Content-Type': imageFile.type,
+            "Content-Type": imageFile.type,
           },
           body: imageFile,
         })
@@ -353,7 +355,7 @@ function ModalPostContent({
         taggedUsers: mentionArrayUser,
         taggedLists: mentionArrayList,
         ownerId: user._id,
-        listId: selectedListForPost || null,
+        listId: selectedListForPost ? selectedListForPost : null,
         media: imageFile !== null ? (imageUrl !== null ? imageUrl : []) : [],
       };
 
@@ -367,7 +369,9 @@ function ModalPostContent({
               ? imageUrl !== null
                 ? imageUrl
                 : []
-              : imageUpload || [],
+              : imageUpload
+              ? imageUpload
+              : [],
         };
         const updatePost = await dispatch(updatePostToBusiness(obj));
         const response = await unwrapResult(updatePost);
@@ -376,7 +380,7 @@ function ModalPostContent({
             businessData.listId.length > 0 &&
             businessData.listId[0]._id === selectedListForPost
           ) {
-            // edit post in redux for the same list
+            //edit post in redux for the same list
             const updatedPost = {
               ...response.post,
               business: businessData.business,
@@ -407,13 +411,13 @@ function ModalPostContent({
                 dispatch(deletePostInMyFeed(response.post._id));
                 closeModal();
                 setLoader(false);
-                setDescription('');
+                setDescription("");
               }
             }
           }
           closeModal();
           setLoader(false);
-          setDescription('');
+          setDescription("");
         }
       } else {
         /* create a post api */
@@ -431,17 +435,17 @@ function ModalPostContent({
             if (res.data.addPostToList.success === true) {
               closeModal();
               setLoader(false);
-              setDescription('');
+              setDescription("");
             }
           } else {
             closeModal();
             setLoader(false);
-            setDescription('');
+            setDescription("");
           }
           ws.send(
             JSON.stringify({
-              action: 'post',
-              businessId,
+              action: "post",
+              businessId: businessId,
               post: {
                 postId: response.post._id,
                 postDetails: {
@@ -467,73 +471,75 @@ function ModalPostContent({
     }
   };
   return (
-    <PostContent>
-      <TopBar>
-        <Heading>What’s Happening?</Heading>
-        <CloseModal onClick={() => closeModal()} disabled={loader}>
-          <MdClose />
-        </CloseModal>
-      </TopBar>
-      <InputContainer>
-        <MentionsInput
-          markup="@(__id__)[__display__]"
-          value={description}
-          onChange={handleChange}
-          className="postInput_model"
-          placeholder=""
-          disabled={loader}
-        >
-          <Mention
-            type="user"
-            trigger="@"
-            data={userMentionData}
-            className="mentions__mention"
-            appendSpaceOnAdd
-          />
-        </MentionsInput>
-        {descriptionError !== '' ? (
-          <ErrorDiv>{descriptionError}</ErrorDiv>
-        ) : null}
-      </InputContainer>
-      {imageUpload !== null ? (
-        <PostImage
-          image={imageUpload}
-          setImageUpload={setImageUpload}
-          setImageFile={setImageFile}
-        />
-      ) : (
-        <AddYourPostBar>
-          <AddYourPostLabel>Add to your Post</AddYourPostLabel>
-          <AddImageDiv>
-            <input
-              id="myInput"
-              onChange={(e) => uploadImage(e)}
-              type="file"
-              accept=".png, .jpg, .jpeg"
-              ref={(ref) => (myInput = ref)}
-              style={{ display: 'none' }}
-              disabled={loader}
+    <>
+      <PostContent>
+        <TopBar>
+          <Heading>What’s Happening?</Heading>
+          <CloseModal onClick={() => closeModal()} disabled={loader}>
+            <MdClose />
+          </CloseModal>
+        </TopBar>
+        <InputContainer>
+          <MentionsInput
+            markup="@(__id__)[__display__]"
+            value={description}
+            onChange={handleChange}
+            className="postInput_model"
+            placeholder=""
+            disabled={loader}
+          >
+            <Mention
+              type="user"
+              trigger="@"
+              data={userMentionData}
+              className="mentions__mention"
+              appendSpaceOnAdd={true}
             />
-            <img src={AddImageImg} alt="" onClick={(e) => myInput.click()} />
-          </AddImageDiv>
-        </AddYourPostBar>
-      )}
-      {imageError !== '' ? <ErrorDiv>{imageError}</ErrorDiv> : null}
-      <SelectedListing
-        selectedListForPost={selectedListForPost}
-        setSelectedListForPost={setSelectedListForPost}
-      />
-      {listError !== '' ? <ErrorDiv>{listError}</ErrorDiv> : null}
-      <BottomButtons
-        type={businessData ? 'editPost' : 'post'}
-        setDisplayList={setDisplayList}
-        loader={loader}
-        description={description}
-        setDescription={setDescription}
-        savePost={savePost}
-      />
-    </PostContent>
+          </MentionsInput>
+          {descriptionError !== "" ? (
+            <ErrorDiv>{descriptionError}</ErrorDiv>
+          ) : null}
+        </InputContainer>
+        {imageUpload !== null ? (
+          <PostImage
+            image={imageUpload}
+            setImageUpload={setImageUpload}
+            setImageFile={setImageFile}
+          />
+        ) : (
+          <AddYourPostBar>
+            <AddYourPostLabel>Add to your Post</AddYourPostLabel>
+            <AddImageDiv>
+              <input
+                id="myInput"
+                onChange={(e) => uploadImage(e)}
+                type="file"
+                accept=".png, .jpg, .jpeg"
+                ref={(ref) => (myInput = ref)}
+                style={{ display: "none" }}
+                disabled={loader}
+              />
+              <img src={AddImageImg} alt="" onClick={(e) => myInput.click()} />
+            </AddImageDiv>
+          </AddYourPostBar>
+        )}
+        {imageError !== "" ? <ErrorDiv>{imageError}</ErrorDiv> : null}
+        <SelectedListing
+          selectedListForPost={selectedListForPost}
+          setSelectedListForPost={setSelectedListForPost}
+        />
+        {listError !== "" ? <ErrorDiv>{listError}</ErrorDiv> : null}
+        <BottomButtons
+          type={businessData ? "editPost" : "post"}
+          setDisplayList={setDisplayList}
+          loader={loader}
+          description={description}
+          setDescription={setDescription}
+          savePost={savePost}
+        />
+      </PostContent>
+    </>
   );
-}
+};
 
 export default ModalPostContent;

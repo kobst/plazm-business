@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
-import PropTypes from 'prop-types';
-import selectarrow from '../../../../images/SelectArrow.svg';
+import React from 'react'
+import styled from 'styled-components'
+import PropTypes from 'prop-types'
+import selectarrow from '../../../../images/SelectArrow.svg'
 
 const SelectStyled = styled.select`
   border: 0;
@@ -12,7 +12,7 @@ const SelectStyled = styled.select`
   margin: 0 0 10px;
   padding: 0 10px;
   width: 100%;
-  background: url(${selectarrow}) no-repeat right 10px center #fcfcfc;
+  background: url(${selectarrow}) no-repeat right 10px center #FCFCFC;
   appearance: none;
   border-radius: 2px;
   font-family: Montserrat;
@@ -24,14 +24,12 @@ const SelectStyled = styled.select`
     color: #666;
     font-weight: 400;
   }
-`;
+`
 
-function Select(props) {
-  return <SelectStyled {...props}>{props.children}</SelectStyled>;
-}
+const Select = (props) => <SelectStyled {...props}>{props.children}</SelectStyled>
 
 Select.propTypes = {
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.string]).isRequired,
-};
+}
 
-export default Select;
+export default Select

@@ -1,10 +1,10 @@
-import React, { useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { unwrapResult } from '@reduxjs/toolkit';
-import moment from 'moment';
-import EventImg from '../../../../../images/eventimg.png';
-import LockImage from '../../../../../images/lock.png';
-import FollwersImg from '../../../../../images/profile-img.png';
+import React, { useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { unwrapResult } from "@reduxjs/toolkit";
+import moment from "moment";
+import EventImg from "../../../../../images/eventimg.png";
+import LockImage from "../../../../../images/lock.png";
+import FollwersImg from "../../../../../images/profile-img.png";
 import {
   ItemsWrapper,
   CoverImg,
@@ -20,22 +20,22 @@ import {
   FollowedByListUl,
   InnerDescriptionPara,
   SubscribeBtn,
-} from '../../styled';
+} from "../../styled";
 import {
   SubscribeToAListAction,
   UnSubscribeToAList,
   userSubscribeToAList,
   userUnSubscribeToAList,
-} from '../../../../../reducers/listReducer';
+} from "../../../../../reducers/listReducer";
 import {
   removeSubscribedList,
   addSubscribedList,
-} from '../../../../../reducers/userReducer';
+} from "../../../../../reducers/userReducer";
 
-import useStore from '../../../useState';
-import ValueLoader from '../../../../../utils/loader';
+import useStore from "../../../useState";
+import ValueLoader from "../../../../../utils/loader";
 
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 
 const NewInBuzzItems = ({
   data,
@@ -175,17 +175,17 @@ const NewInBuzzItems = ({
                     </InnerItemsDescription>
                   </InnerCoverImg>
                   <AuthorInfo>
-                    by{' '}
+                    by{" "}
                     <strong>
                       {data.ownerId && data.ownerId.length > 0
                         ? data.ownerId[0].name
                         : data.ownerId && data.ownerId.name}
                     </strong>
                     <br />
-                    Last Updated{' '}
+                    Last Updated{" "}
                     {moment(data.updatedAt).format(
-                      'MMM DD,YYYY, hh:MM a'
-                    )} EST{' '}
+                      "MMM DD,YYYY, hh:MM a"
+                    )} EST{" "}
                   </AuthorInfo>
                   <FollowedBy>
                     {data?.subscribers?.length > 0 && <h2>Followed by</h2>}
@@ -196,7 +196,7 @@ const NewInBuzzItems = ({
                             <li key={key}>
                               <img
                                 src={
-                                  i.photo && i.photo !== ''
+                                  i.photo && i.photo !== ""
                                     ? i.photo
                                     : FollwersImg
                                 }
@@ -222,14 +222,14 @@ const NewInBuzzItems = ({
                       onClick={() => listSubscribe()}
                       disabled={loader}
                     >
-                      {loader ? <ValueLoader /> : 'Subscribe'}
+                      {loader ? <ValueLoader /> : "Subscribe"}
                     </SubscribeBtn>
                   ) : (
                     <SubscribeBtn
                       onClick={() => listUnSubscribe()}
                       disabled={loader}
                     >
-                      {loader ? <ValueLoader /> : 'UnSubscribe'}
+                      {loader ? <ValueLoader /> : "UnSubscribe"}
                     </SubscribeBtn>
                   )}
                 </DisplayItemContent>

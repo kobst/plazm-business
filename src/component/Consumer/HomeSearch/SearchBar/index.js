@@ -1,10 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
-import { FaFilter } from 'react-icons/fa';
-import { IoMdClose } from 'react-icons/io';
-import Input from '../../UI/Input/Input';
-import error from '../../../../constants';
+import React, { useEffect, useRef, useState } from "react";
+import Input from "../../UI/Input/Input";
+import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import error from "../../../../constants";
 import {
   HomeSearch,
   clearSearchFeed,
@@ -13,10 +11,12 @@ import {
   setEnterClicked,
   setSideFiltersByClosest,
   setSideFiltersByUpdatedAt,
-} from '../../../../reducers/myFeedReducer';
+} from "../../../../reducers/myFeedReducer";
 
-import useStore from '../../useState';
-import DropdwonArrowTop from '../../../../images/top_arrow_polygon.png';
+import useStore from "../../useState";
+import DropdwonArrowTop from "../../../../images/top_arrow_polygon.png";
+import { FaFilter } from "react-icons/fa";
+import { IoMdClose } from "react-icons/io";
 
 const SearchWrap = styled.div`
   height: 40px;
@@ -36,7 +36,7 @@ const SearchWrap = styled.div`
     box-shadow: none;
     background: #fff;
     color: #000;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     ::placeholder {
       color: #bdbdbd;
     }
@@ -66,7 +66,7 @@ const Heading = styled.h1`
   font-size: 18px;
   margin: 0 0 0 20px;
   padding: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   width: calc(100% - 350px);
   @media (max-width: 767px) {
     margin: 0 auto 10px;
@@ -79,7 +79,7 @@ const Heading = styled.h1`
 const FilterBox = styled.div`
   margin: 0px;
   padding: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   width: 40px;
   display: flex;
   align-items: center;
@@ -139,7 +139,7 @@ const DropdownContent = styled.div`
     background: url(${DropdwonArrowTop}) no-repeat top center;
     width: 13px;
     height: 12px;
-    content: ' ';
+    content: " ";
     top: -11px;
     position: absolute;
     margin: 0 auto;
@@ -190,11 +190,11 @@ const DropdownContent = styled.div`
   }
 `;
 
-function SearchBar({ setOffset, setFilterSelected, setDisplayTab }) {
+const SearchBar = ({ setOffset, setFilterSelected, setDisplayTab }) => {
   const menuRef = useRef(null);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const loader = useSelector((state) => state.myFeed.loading);
-  const [searchError, setSearchError] = useState('');
+  const [searchError, setSearchError] = useState("");
   // const [uploadMenu, setUploadMenu] = useState(false);
   // const userLocation = useSelector((state) => state.business.userLocation);
   const filterClosest = useSelector((state) => state.myFeed.filterByClosest);
@@ -203,7 +203,7 @@ function SearchBar({ setOffset, setFilterSelected, setDisplayTab }) {
   );
   const searchData = useSelector((state) => state.myFeed.searchData);
 
-  const draggedLocation = useStore((state) => state.draggedLocation);
+  const draggedLocation = useStore((state) => state.draggedLocation)
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -233,14 +233,14 @@ function SearchBar({ setOffset, setFilterSelected, setDisplayTab }) {
 
   /** on key press handler for search */
   const searchList = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       event.preventDefault();
-      if (search !== '' && search.length >= 4 && !search.trim() === false) {
+      if (search !== "" && search.length >= 4 && !search.trim() === false) {
         setOffset(0);
         dispatch(clearSearchFeed());
         dispatch(setSideFiltersHomeSearch());
         const obj = {
-          search,
+          search: search,
           value: 0,
           filters: { closest: filterClosest, updated: updatedAtFilter },
           latitude: draggedLocation.lat,
@@ -248,7 +248,7 @@ function SearchBar({ setOffset, setFilterSelected, setDisplayTab }) {
         };
         dispatch(setEnterClicked(true));
         dispatch(HomeSearch(obj));
-        setSearchError('');
+        setSearchError("");
       } else if (search.length >= 0 && search.length < 4) {
         setSearchError(error.SEARCH_ERROR);
       }
@@ -283,7 +283,7 @@ function SearchBar({ setOffset, setFilterSelected, setDisplayTab }) {
                       onClick={() => closestFilter()}
                       disabled={filterClosest}
                     >
-                      Closest
+                      Closest 
                     </button>
                   </li>
 
@@ -305,9 +305,9 @@ function SearchBar({ setOffset, setFilterSelected, setDisplayTab }) {
           <IoMdClose onClick={() => setDisplayTab()} />
         </CloseDiv> */}
       </SearchWrap>
-      {searchError !== '' ? <ErrorDiv>{searchError}</ErrorDiv> : null}
+      {searchError !== "" ? <ErrorDiv>{searchError}</ErrorDiv> : null}
     </>
   );
-}
+};
 
 export default SearchBar;

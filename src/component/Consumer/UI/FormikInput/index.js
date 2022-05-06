@@ -1,7 +1,7 @@
-import React from 'react';
-import { useField } from 'formik';
-import styled from 'styled-components';
-import error from '../../../../constants';
+import React from "react";
+import { useField } from "formik";
+import styled from "styled-components";
+import error from "../../../../constants";
 
 const InputText = styled.input`
   border: 0;
@@ -35,18 +35,16 @@ const ErrorDiv = styled.div`
 /*
 @desc: formik form input box
 */
-function Input({ label, formError, ...props }) {
+const Input = ({ label,formError, ...props }) => {
   const [field, meta] = useField(props);
   return (
     <>
       <center>
-        <InputText {...field} {...props} className="text-input PL-15" />
+        <InputText {...field} {...props} className="text-input" />
       </center>
-      {meta.error || formError === error.INCORRECT_OLD_PASSWORD ? (
-        <ErrorDiv>{meta.error || formError}</ErrorDiv>
-      ) : null}
+      {meta.error || formError===error.INCORRECT_OLD_PASSWORD ? <ErrorDiv>{meta.error || formError}</ErrorDiv> : null}
     </>
   );
-}
+};
 
 export default Input;

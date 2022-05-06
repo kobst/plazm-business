@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
 import {
   MdFavoriteBorder,
   MdChatBubbleOutline,
   MdFavorite,
-} from 'react-icons/md';
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
-import SaveButton from '../../../../UI/SaveButton';
-import { setTopEvent } from '../../../../../../reducers/eventReducer';
+} from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import SaveButton from "../../../../UI/SaveButton";
+import { useHistory } from "react-router";
+import { setTopEvent } from "../../../../../../reducers/eventReducer";
 
 export const BottomBarLikes = styled.div`
   display: flex;
@@ -73,7 +73,7 @@ export const RightDiv = styled.div`
     display: flex;
   }
 `;
-function LikesBar({
+const LikesBar = ({
   date,
   type,
   totalLikes,
@@ -83,7 +83,7 @@ function LikesBar({
   setSearchIndex,
   myFeedView,
   eventData,
-}) {
+}) => {
   const user = useSelector((state) => state.user.user);
   const [userLikedEvent, setUserLikedEvent] = useState(false);
   const [userLikedComment, setUserLikedComment] = useState(false);
@@ -99,14 +99,14 @@ function LikesBar({
     setUserLikedComment(false);
     setUserLikedEvent(false);
 
-    if (type === 'comment') {
+    if (type === "comment") {
       if (postLikes.length > 0) {
         const findUser = postLikes.find((i) => i === user._id);
         if (findUser) {
           setUserLikedEvent(true);
         }
       }
-    } else if (type === 'reply') {
+    } else if (type === "reply") {
       if (commentLikes.length > 0) {
         const findUser = commentLikes.find((i) => i._id === user._id);
         if (findUser) {
@@ -126,42 +126,44 @@ function LikesBar({
   };
 
   return (
-    <BottomBarLikes
-      className={
-        type === 'reply'
-          ? 'replyBar'
-          : type !== 'commentReply'
-          ? 'replyBarComment'
-          : ''
-      }
-    >
-      <LikesBtnWrap>
-        {type !== 'commentReply' && (
-          <RightDiv>
-            {userLikedEvent || userLikedComment ? (
-              <MdFavorite style={{ color: 'red' }} />
-            ) : (
-              <MdFavoriteBorder />
-            )}{' '}
-            {likeCount === 0
-              ? likeCountForComment === 0
-                ? totalLikes
-                : likeCountForComment
-              : likeCount}
-          </RightDiv>
-        )}
-        {type !== 'commentReply' && (
-          <RightDiv>
-            <button>
-              <MdChatBubbleOutline />
-            </button>
-            {totalComments}
-          </RightDiv>
-        )}
-      </LikesBtnWrap>
-      <SaveButton onClick={() => displayBusinessDetail()}>VISIT</SaveButton>
-    </BottomBarLikes>
+    <>
+      <BottomBarLikes
+        className={
+          type === "reply"
+            ? "replyBar"
+            : type !== "commentReply"
+            ? "replyBarComment"
+            : ""
+        }
+      >
+        <LikesBtnWrap>
+          {type !== "commentReply" && (
+            <RightDiv>
+              {userLikedEvent || userLikedComment ? (
+                <MdFavorite style={{ color: "red" }} />
+              ) : (
+                <MdFavoriteBorder />
+              )}{" "}
+              {likeCount === 0
+                ? likeCountForComment === 0
+                  ? totalLikes
+                  : likeCountForComment
+                : likeCount}
+            </RightDiv>
+          )}
+          {type !== "commentReply" && (
+            <RightDiv>
+              <button>
+                <MdChatBubbleOutline />
+              </button>
+              {totalComments}
+            </RightDiv>
+          )}
+        </LikesBtnWrap>
+        <SaveButton onClick={() => displayBusinessDetail()}>VISIT</SaveButton>
+      </BottomBarLikes>
+    </>
   );
-}
+};
 
 export default LikesBar;

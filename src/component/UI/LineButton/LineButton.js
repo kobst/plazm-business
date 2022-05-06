@@ -1,36 +1,36 @@
-import React from 'react';
-import styled from 'styled-components';
+
+import React from 'react'
+import styled from 'styled-components'
 // import DownArrow from '../../../Public/images/down-arrow.svg'
 
 const ButtonText = styled.button`
-  height: 37px;
-  border: 1px solid #a8a8a8;
-  border-radius: 5px;
-  font-size: 12px;
-  color: #848484;
-  font-family: 'Roboto', sans-serif;
-  display: inline-flex;
-  font-weight: 500;
-  align-items: center;
-  justify-content: center;
-  padding: 0 10px;
-  max-width: 83px;
-  line-height: 37px;
-  width: 100%;
-  cursor: pointer;
-  :hover,
-  :focus {
-    outline: none;
-  }
-  img {
-    margin-left: 6px;
-  }
-`;
+height: 37px;
+border:1px solid #A8A8A8;
+border-radius: 5px;
+font-size: 12px;
+color: #848484;
+font-family: 'Roboto',sans-serif;
+display: inline-flex;
+font-weight:500;
+align-items: center;
+justify-content: center;
+padding: 0 10px;
+max-width:83px;
+line-height: 37px;
+width:100%;
+cursor:pointer;
+:hover,:focus{
+  outline:none;
+}
+img{
+  margin-left:6px;
+}
+`
 
-function LineButton(props) {
-  return (
-    <ButtonText onClick={() => props.setShowTag(true)}>{props.name}</ButtonText>
-  );
+const LineButton = props => {
+    return(
+      <ButtonText onClick={()=>props.setShowTag(true)}>{props.name}</ButtonText>
+    )
 }
 
-export default LineButton;
+export default LineButton

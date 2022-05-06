@@ -1,6 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
-import { IoMdClose } from 'react-icons/io';
+import React from "react";
+import styled from "styled-components";
+import { IoMdClose } from "react-icons/io";
 import {
   FaTwitter,
   FaFacebookF,
@@ -8,8 +8,8 @@ import {
   FaLinkedinIn,
   FaBehance,
   FaDeviantart,
-} from 'react-icons/fa';
-import { useSelector } from 'react-redux';
+} from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const BuisinessViewContent = styled.div`
   width: 100%;
@@ -156,136 +156,139 @@ const FirstDiv = styled.div`
   align-items: center;
 `;
 
-function BuisinessProfileDescription({ setDisplayTab }) {
+const BuisinessProfileDescription = ({ setDisplayTab }) => {
   const businessProfile = useSelector((state) => state.business.business)[0];
   return (
-    <BuisinessViewContent>
-      <BuisinessShortDesp />
-      <CommonWrap>
-        <HeadingDesp>Address</HeadingDesp>
-        <Address>{businessProfile.address}</Address>
-        <PhoneNumberDiv>
-          {businessProfile.telephone}
-          {/* <CircleDot />(480) 555-0103<CircleDot />(704) 555-0127 */}
-        </PhoneNumberDiv>
-      </CommonWrap>
-      <CommonWrap>
-        <HeadingDesp>Hours</HeadingDesp>
+    <>
+      <BuisinessViewContent>
+        <BuisinessShortDesp></BuisinessShortDesp>
+        <CommonWrap>
+          <HeadingDesp>Address</HeadingDesp>
+          <Address>{businessProfile.address}</Address>
+          <PhoneNumberDiv>
+            {businessProfile.telephone}
+            {/* <CircleDot />(480) 555-0103<CircleDot />(704) 555-0127 */}
+          </PhoneNumberDiv>
+        </CommonWrap>
+        <CommonWrap>
+          <HeadingDesp>Hours</HeadingDesp>
 
-        {businessProfile.hours_format.length > 0
-          ? businessProfile.hours_format.map((i) => (
-              <>
-                {i.StartDay !== null || i.EndDay !== null ? (
-                  <WeekDays>
-                    <span>
-                      {i.StartDay.slice(0, 3)} to
-                      {i.EndDay.slice(0, 3)}
-                    </span>
-                    <br />
-                    {i.Start} Hours -{i.End} Hours
-                  </WeekDays>
-                ) : null}
-              </>
-            ))
-          : null}
-      </CommonWrap>
-      <CommonWrap>
-        <HeadingDesp>Hashtags</HeadingDesp>
-        <HastagsWrap>
-          {businessProfile.filter_tags.length > 0
-            ? businessProfile.filter_tags.map((i, key) => (
-                <Hastags key={key}>#{i}</Hastags>
-              ))
+          {businessProfile.hours_format.length > 0
+            ? businessProfile.hours_format.map((i) => {
+                return (
+                  <>
+                    {i.StartDay !== null || i.EndDay !== null ? (
+                      <WeekDays>
+                        <span>
+                          {i.StartDay.slice(0, 3)} to {i.EndDay.slice(0, 3)}
+                        </span>
+                        <br></br>
+                        {i.Start} Hours - {i.End} Hours
+                      </WeekDays>
+                    ) : null}
+                  </>
+                );
+              })
             : null}
-        </HastagsWrap>
-      </CommonWrap>
-      <CommonWrap>
-        <HeadingDesp>Links</HeadingDesp>
-        <SocialDivWrap>
-          {businessProfile.handles.twitter ? (
-            <SocialInput>
-              <a
-                href={businessProfile.handles.twitter}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FirstDiv>
-                  <FaTwitter /> Twitter
-                </FirstDiv>
-              </a>
-              <CloseDiv>
-                <IoMdClose />
-              </CloseDiv>
-            </SocialInput>
-          ) : null}
+        </CommonWrap>
+        <CommonWrap>
+          <HeadingDesp>Hashtags</HeadingDesp>
+          <HastagsWrap>
+            {businessProfile.filter_tags.length > 0
+              ? businessProfile.filter_tags.map((i, key) => (
+                  <Hastags key={key}>#{i}</Hastags>
+                ))
+              : null}
+          </HastagsWrap>
+        </CommonWrap>
+        <CommonWrap>
+          <HeadingDesp>Links</HeadingDesp>
+          <SocialDivWrap>
+            {businessProfile.handles.twitter ? (
+              <SocialInput>
+                <a
+                  href={businessProfile.handles.twitter}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FirstDiv>
+                    <FaTwitter /> Twitter
+                  </FirstDiv>
+                </a>
+                <CloseDiv>
+                  <IoMdClose />
+                </CloseDiv>
+              </SocialInput>
+            ) : null}
 
-          {businessProfile.handles.facebook ? (
-            <SocialInput>
-              <a
-                href={businessProfile.handles.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {' '}
-                <FirstDiv>
-                  <FaFacebookF /> Facebook
-                </FirstDiv>
-              </a>
-              <CloseDiv>
-                <IoMdClose />
-              </CloseDiv>
-            </SocialInput>
-          ) : null}
+            {businessProfile.handles.facebook ? (
+              <SocialInput>
+                <a
+                  href={businessProfile.handles.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {" "}
+                  <FirstDiv>
+                    <FaFacebookF /> Facebook
+                  </FirstDiv>
+                </a>
+                <CloseDiv>
+                  <IoMdClose />
+                </CloseDiv>
+              </SocialInput>
+            ) : null}
 
-          {businessProfile.handles.instagram ? (
-            <SocialInput>
-              <a
-                href={businessProfile.handles.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {' '}
-                <FirstDiv>
-                  <FaInstagramSquare /> Instagram
-                </FirstDiv>
-              </a>
-              <CloseDiv>
-                <IoMdClose />
-              </CloseDiv>
-            </SocialInput>
-          ) : null}
+            {businessProfile.handles.instagram ? (
+              <SocialInput>
+                <a
+                  href={businessProfile.handles.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {" "}
+                  <FirstDiv>
+                    <FaInstagramSquare /> Instagram
+                  </FirstDiv>
+                </a>
+                <CloseDiv>
+                  <IoMdClose />
+                </CloseDiv>
+              </SocialInput>
+            ) : null}
 
-          {businessProfile.handles.linkedin ? (
-            <SocialInput>
-              <a
-                href={businessProfile.handles.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FirstDiv>
-                  <FaLinkedinIn /> LinkedIn
-                </FirstDiv>
-              </a>
-              <CloseDiv>
-                <IoMdClose />
-              </CloseDiv>
-            </SocialInput>
-          ) : null}
+            {businessProfile.handles.linkedin ? (
+              <SocialInput>
+                <a
+                  href={businessProfile.handles.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FirstDiv>
+                    <FaLinkedinIn /> LinkedIn
+                  </FirstDiv>
+                </a>
+                <CloseDiv>
+                  <IoMdClose />
+                </CloseDiv>
+              </SocialInput>
+            ) : null}
 
-          <SocialInput className="Disabled">
-            <FirstDiv>
-              <FaBehance /> Behance
-            </FirstDiv>
-          </SocialInput>
-          <SocialInput className="Disabled">
-            <FirstDiv>
-              <FaDeviantart /> Deviantart
-            </FirstDiv>
-          </SocialInput>
-        </SocialDivWrap>
-      </CommonWrap>
-    </BuisinessViewContent>
+            <SocialInput className="Disabled">
+              <FirstDiv>
+                <FaBehance /> Behance
+              </FirstDiv>
+            </SocialInput>
+            <SocialInput className="Disabled">
+              <FirstDiv>
+                <FaDeviantart /> Deviantart
+              </FirstDiv>
+            </SocialInput>
+          </SocialDivWrap>
+        </CommonWrap>
+      </BuisinessViewContent>
+    </>
   );
-}
+};
 
 export default BuisinessProfileDescription;

@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
-import { unwrapResult } from '@reduxjs/toolkit';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import DisplayFavoriteBusiness from './DisplayFavoriteBusiness';
-import ValueLoader from '../../../../utils/loader';
-import SearchBar from '../SearchBar';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import DisplayFavoriteBusiness from "./DisplayFavoriteBusiness";
+import styled from "styled-components";
+import { unwrapResult } from "@reduxjs/toolkit";
+import InfiniteScroll from "react-infinite-scroll-component";
+import ValueLoader from "../../../../utils/loader";
+import SearchBar from "../SearchBar";
 import {
   clearSearchFeed,
   HomeSearch,
   HomeSearchInitial,
   setEnterClicked,
-} from '../../../../reducers/myFeedReducer';
-import error from '../../../../constants';
+} from "../../../../reducers/myFeedReducer";
+import error from "../../../../constants";
 
-import GlobalSearchBox from '../../GlobalSearch/GlobalSearchBox';
-import useStore from '../../useState';
+import GlobalSearchBox from "../../GlobalSearch/GlobalSearchBox";
+import useStore from "../../useState";
 
 const BusinessListWrap = styled.div`
   width: 100%;
@@ -48,7 +48,7 @@ const NoMorePost = styled.p`
   color: #fff;
 `;
 
-function BusinessListing({ loader, coords, closestFilter }) {
+const BusinessListing = ({ loader, coords, closestFilter }) => {
   const businessData = useSelector((state) => state.myFeed.searchFeed);
   const loading = useSelector((state) => state.myFeed.loading);
   const [offset, setOffset] = useState(0);
@@ -88,7 +88,7 @@ function BusinessListing({ loader, coords, closestFilter }) {
         setGridMode(false);
       }
       const obj = {
-        search,
+        search: search,
         value: 0,
         filters: {
           closest:
@@ -125,7 +125,7 @@ function BusinessListing({ loader, coords, closestFilter }) {
     if (offset + 20 < totalPlaces) {
       setOffset(offset + 20);
       const obj = {
-        search,
+        search: search,
         value: offset + 20,
         filters: { closest: filterClosest, updated: updatedAtFilter },
         latitude: draggedLocation.lat,
@@ -145,7 +145,7 @@ function BusinessListing({ loader, coords, closestFilter }) {
       /> */}
 
       {showSearchBar && (
-        <GlobalSearchBox setOffset={setOffset} type="Explore" />
+        <GlobalSearchBox setOffset={setOffset} type={"Explore"} />
       )}
       {(loading && offset === 0) || flag ? (
         <LoaderWrap>
@@ -155,7 +155,7 @@ function BusinessListing({ loader, coords, closestFilter }) {
         !gridMode && (
           <div
             id="scrollableDiv"
-            style={{ height: 'calc(100vh - 44px)', overflow: 'auto' }}
+            style={{ height: "calc(100vh - 44px)", overflow: "auto" }}
           >
             <InfiniteScroll
               dataLength={businessData ? businessData.length : 0}
@@ -163,8 +163,8 @@ function BusinessListing({ loader, coords, closestFilter }) {
               hasMore={hasMore}
               loader={
                 offset < totalPlaces && loading ? (
-                  <div style={{ textAlign: 'center', margin: ' 40px auto 0' }}>
-                    {' '}
+                  <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
+                    {" "}
                     <ValueLoader height="40" width="40" />
                   </div>
                 ) : null
@@ -205,6 +205,6 @@ function BusinessListing({ loader, coords, closestFilter }) {
       )}
     </>
   );
-}
+};
 
 export default BusinessListing;

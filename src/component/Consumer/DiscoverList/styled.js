@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import SearchIcon from '../../../images/zoom-out.png';
+import styled from "styled-components";
+import SearchIcon from "../../../images/zoom-out.png";
 
 export const TopSectionWrap = styled.div`
   display: flex;
@@ -403,7 +403,7 @@ export const SubscribeBtn = styled.button`
   color: #fff;
   font-weight: 700;
   width: 90%;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   :hover,
   :focus {
     opacity: 0.8;

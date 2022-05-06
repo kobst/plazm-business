@@ -1,15 +1,15 @@
-import React, { useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import NewInBuzzItems from './SliderItems';
-import { LoaderWrap, NewInBuzzSliderWrapper, NoMorePost } from '../styled';
+import React, { useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import NewInBuzzItems from "./SliderItems";
+import { LoaderWrap, NewInBuzzSliderWrapper, NoMorePost } from "../styled";
 import {
   FetchMostPopularLists,
   FetchTrendingLists,
   fetchUserCreatedAndFollowedList,
-} from '../../../../reducers/listReducer';
-import ValueLoader from '../../../../utils/loader';
+} from "../../../../reducers/listReducer";
+import ValueLoader from "../../../../utils/loader";
 
-function NewCollectionSectionSlider({
+const NewCollectionSectionSlider = ({
   data,
   totalList,
   heading,
@@ -26,7 +26,7 @@ function NewCollectionSectionSlider({
   setSelectedId,
   setTotalLists,
   totalLists,
-}) {
+}) => {
   const [displayModal, setDisplayModal] = useState(null);
   const dispatch = useDispatch();
   const trendingLists = useSelector((state) => state.list.trendingLists);
@@ -41,18 +41,18 @@ function NewCollectionSectionSlider({
         event.target.scrollWidth &&
       offset <= totalList
     ) {
-      if (heading === 'Trending' && trendingLists.length === offset + 12) {
+      if (heading === "Trending" && trendingLists.length === offset + 12) {
         setLoader({ value: true, heading });
         setOffSet(offset + 12);
         dispatch(FetchTrendingLists(offset + 12));
       } else if (
-        heading === 'Most Popular' &&
+        heading === "Most Popular" &&
         popularLists.length === offset + 12
       ) {
         setLoader({ value: true, heading });
         setOffSet(offset + 12);
         dispatch(FetchMostPopularLists(offset + 12));
-      } else if (heading === 'Subscribed Lists') {
+      } else if (heading === "Subscribed Lists") {
         setLoader({ value: true, heading });
         setOffSet(offset + 12);
         const obj = {
@@ -60,7 +60,7 @@ function NewCollectionSectionSlider({
           value: offset,
         };
         dispatch(fetchUserCreatedAndFollowedList(obj));
-      } else if (heading === 'My Lists') {
+      } else if (heading === "My Lists") {
         setLoader({ value: true, heading });
         setOffSet(offset + 12);
       }
@@ -111,5 +111,5 @@ function NewCollectionSectionSlider({
       </NewInBuzzSliderWrapper>
     </div>
   );
-}
+};
 export default NewCollectionSectionSlider;

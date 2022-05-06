@@ -1,16 +1,16 @@
-import React from 'react';
-import styled from 'styled-components';
-import Input from '../../UI/FormikInput';
-import TextArea from '../../UI/formikTextArea';
+import React from "react";
+import styled from "styled-components";
+import Input from "../../UI/FormikInput";
+import TextArea from "../../UI/formikTextArea";
 
 const InputContainer = styled.div`
-  border: 1px solid ${(props) => (props.usererror ? '#FF7171' : '#ffffff')};
-  min-height: 55px;
+  border: 1px solid ${(props) => (props.usererror ? "#FF7171" : "#ffffff")};
+  min-height: 60px;
   font-size: 16px;
   line-height: 21px;
   width: 100%;
   padding: 6px 8px;
-  margin: 0 0 5px;
+  margin: 0 0 20px;
   background: #ffffff;
   box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
   border-radius: 0px;
@@ -32,24 +32,22 @@ const LabelText = styled.label`
 function FormBody({ loader, setResponse }) {
   return (
     <>
-      <InputContainer className="TitleRed">
+      <InputContainer>
         <LabelText>Add Title</LabelText>
         <Input
           type="text"
           name="title"
           disabled={loader}
-          onFocus={() => setResponse('')}
-          placeholder="Please Enter The List Title"
+          onFocus={() => setResponse("")}
         />
       </InputContainer>
       <InputContainer>
-        <LabelText className="CustomLabel">Add Description</LabelText>
+        <LabelText>Add Description</LabelText>
         <TextArea
-          className="PL-15"
           type="text"
           name="description"
           disabled={loader}
-          onFocus={() => setResponse('')}
+          onFocus={() => setResponse("")}
         />
       </InputContainer>
     </>

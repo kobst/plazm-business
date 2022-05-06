@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import { unwrapResult } from '@reduxjs/toolkit';
-import ValueLoader from '../../../utils/loader';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
+import InfiniteScroll from "react-infinite-scroll-component";
+import ValueLoader from "../../../utils/loader";
 import {
   clearMyFeedData,
   fetchMyFeedData,
-} from '../../../reducers/myFeedReducer';
-import DisplayBusinessDetails from './DisplayBusinessDetails';
-import SearchBar from './SearchBar';
-import GridView from '../GridComponents/gridView/gridView';
+} from "../../../reducers/myFeedReducer";
+import DisplayBusinessDetails from "./DisplayBusinessDetails";
+import { unwrapResult } from "@reduxjs/toolkit";
+import SearchBar from "./SearchBar";
+import GridView from "../GridComponents/gridView/gridView";
 
-import useStore from '../useState';
-import GlobalSearchBox from '../GlobalSearch/GlobalSearchBox';
+import useStore from "../useState";
+import GlobalSearchBox from "../GlobalSearch/GlobalSearchBox";
 
 const LoaderWrap = styled.div`
   width: 100%;
@@ -102,7 +102,7 @@ const NoMorePost = styled.p`
   color: #fff;
 `;
 
-function MyFeed() {
+const MyFeed = () => {
   const user = useSelector((state) => state.user.user);
   const loading = useSelector((state) => state.myFeed.loading);
   const feedData = useSelector((state) => state.myFeed.myFeed);
@@ -210,12 +210,12 @@ function MyFeed() {
               setFlag={setFlag}
             /> */}
             {showSearchBar && (
-              <GlobalSearchBox setOffset={setOffSet} type="Search Feed" />
+              <GlobalSearchBox setOffset={setOffSet} type={"Search Feed"} />
             )}
 
             <div
               id="scrollableDiv"
-              style={{ height: 'calc(100vh - 44px)', overflow: 'auto' }}
+              style={{ height: "calc(100vh - 44px)", overflow: "auto" }}
             >
               <InfiniteScroll
                 dataLength={feedData ? feedData.length : 0}
@@ -224,9 +224,9 @@ function MyFeed() {
                 loader={
                   offset < totalData && loading ? (
                     <div
-                      style={{ textAlign: 'center', margin: ' 40px auto 0' }}
+                      style={{ textAlign: "center", margin: " 40px auto 0" }}
                     >
-                      {' '}
+                      {" "}
                       <ValueLoader height="40" width="40" />
                     </div>
                   ) : null
@@ -264,6 +264,6 @@ function MyFeed() {
       )}
     </>
   );
-}
+};
 
 export default MyFeed;

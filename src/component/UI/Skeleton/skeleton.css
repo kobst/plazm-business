@@ -1,90 +1,56 @@
-.skelton .imgSec,
-.skelton .title {
-  display: block;
+.skelton .imgSec,.skelton .title{display:block}.skelton .imgSec{padding:0 25px}.skelton .imgSec span{border-radius:0px}.skelton .imgSec>span{display:flex;align-items:center;min-height:219px}.Line{margin-top:12px}.LineHeading{border:1px solid #f0f0f0;border-radius:8px;margin:15px 0;padding:13px 20px 20px}.LineHeading .title{border:none;padding:0px;margin-bottom:12px;width:70%}
+.eventImage{border-radius: 9px;
+  overflow:hidden; max-width: 172px; max-height:117px;}
+  .eventskelton{
+    padding: 15px;
+    background: #FAFDFF;
+    border: 1px solid #E2F1F8;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 4px rgba(0,0,0,0.03);
+    border-radius: 16px;
+    margin-top: 10px;
+  }
+
+  .eventText {
+    width: calc(100% - 172px);
+    float: left;
 }
-.skelton .imgSec {
-  padding: 0 25px;
-}
-.skelton .imgSec span {
-  border-radius: 0px;
-}
-.skelton .imgSec > span {
-  display: flex;
-  align-items: center;
-  min-height: 219px;
-}
-.Line {
-  margin-top: 12px;
-}
-.LineHeading {
-  border: 1px solid #f0f0f0;
-  border-radius: 8px;
-  margin: 15px 0;
-  padding: 13px 20px 20px;
-}
-.LineHeading .title {
-  border: none;
-  padding: 0px;
-  margin-bottom: 12px;
-  width: 70%;
-}
-.eventImage {
-  border-radius: 9px;
-  overflow: hidden;
-  max-width: 172px;
-  max-height: 117px;
-}
-.eventskelton {
-  padding: 15px;
-  background: #fafdff;
-  border: 1px solid #e2f1f8;
-  box-sizing: border-box;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.03);
-  border-radius: 16px;
-  margin-top: 10px;
+.title{
+  margin-bottom:5px;
 }
 
-.eventText {
-  width: calc(100% - 172px);
-  float: left;
-}
-.title {
-  margin-bottom: 5px;
-}
-
-.postskelton {
-  padding: 15px 15px 0;
-  background: #fafdff;
-  border: 1px solid #e2f1f8;
+.postskelton{padding: 15px 15px 0;
+  background: #FAFDFF;
+  border: 1px solid #E2F1F8;
   box-sizing: border-box;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.03);
+  box-shadow: 0px 4px 4px rgba(0,0,0,0.03);
   border-radius: 16px;
   margin-top: 10px;
   display: flex;
-  height: 140px;
+  height:140px;
 }
 
-.postskelton .eventImage {
-  width: 53px;
+.postskelton .eventImage{width: 53px;
   height: 47px;
   border-radius: 100%;
-  float: left;
+  float:left;
 }
-.postskelton .eventImage span {
+.postskelton .eventImage span{
   position: relative;
-  top: -4px;
+    top: -4px;
 }
-.postskelton .eventskelton {
-  padding: 15px;
-  background: #fafdff;
-  border: 1px solid #e2f1f8;
-  box-sizing: border-box;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.03);
-  border-radius: 16px;
-  margin-top: 10px;
-}
+ .postskelton .eventskelton{
+    padding: 15px;
+    background: #FAFDFF;
+    border: 1px solid #E2F1F8;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 4px rgba(0,0,0,0.03);
+    border-radius: 16px;
+    margin-top: 10px;
 
-.postskelton .eventText {
+  }
+
+ .postskelton .eventText {
   width: calc(100% - 53px);
   float: left;
   margin-left: 11px;

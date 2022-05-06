@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const UserMessageContent = styled.div`
   width: 100%;
@@ -206,7 +206,7 @@ export const ListNameWrap = styled.div`
   flex-direction: column;
   align-items: flex-start;
   width: calc(100% - 30px);
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
 `;
 
 export const ListName = styled.div`
@@ -220,9 +220,6 @@ export const ListName = styled.div`
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  &:hover {
-    cursor: pointer;
-  }
 `;
 
 export const ListInfo = styled.div`

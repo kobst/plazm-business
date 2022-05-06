@@ -4,16 +4,16 @@ import {
   getSelectedUser,
   addFavoriteBusiness,
   removeFavoriteBusiness,
-} from './mutations/user';
+} from "./mutations/user";
 import {
   getUser,
   getAllUsers,
   getUserFavorites,
   GetMyFeedData,
   GetUserProfileData,
-} from './query/user';
+} from "./query/user";
 
-import { getPlace, searchAllPlaces, homeSearch } from './query/place';
+import { getPlace, searchAllPlaces, homeSearch } from "./query/place";
 
 import {
   getAllLists,
@@ -23,25 +23,25 @@ import {
   getMostTrendingLists,
   getMostPopularLists,
   SearchLists,
-} from './query/list';
+} from "./query/list";
 
 import {
   createPost,
   addLikeToPost,
   updatePost,
   deletePost,
-} from './mutations/post';
+} from "./mutations/post";
 
-import { fetchEvent, fetchEventForAWeek } from './query/event';
+import { fetchEvent, fetchEventForAWeek } from "./query/event";
 
 import {
   AddComment,
   CreateReply,
   AddLikeToComment,
-} from './mutations/comments';
-import { findPostComments, findCommentReplies } from './query/comments';
+} from "./mutations/comments";
+import { findPostComments, findCommentReplies } from "./query/comments";
 
-import { addLikeToEvents, createEvent } from './mutations/event';
+import { addLikeToEvents, createEvent } from "./mutations/event";
 
 import {
   CreateList,
@@ -51,9 +51,9 @@ import {
   DeleteList,
   UnsubscribeToAList,
   SubscribeToAList,
-} from './mutations/list';
+} from "./mutations/list";
 
-import { findBusinessPhotos } from './query/post';
+import { findBusinessPhotos } from "./query/post";
 
 export {
   GetListDetails,

@@ -1,19 +1,19 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { graphQlEndPoint } from '../Api/graphQl';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { graphQlEndPoint } from "../Api/graphQl";
 import {
   addFavoriteBusiness,
   getUser,
   getUserFavorites,
   GetUserProfileData,
   removeFavoriteBusiness,
-} from '../graphQl';
+} from "../graphQl";
 
 /*
  * @desc:  get User Profile of the signIn consumer
  * @params: userSub
  */
 export const fetchUserDetails = createAsyncThunk(
-  'data/fetchUserDetails',
+  "data/fetchUserDetails",
   async (userSub) => {
     const graphQl = getUser(userSub, 0, 15);
     const response = graphQlEndPoint(graphQl);
@@ -26,7 +26,7 @@ export const fetchUserDetails = createAsyncThunk(
  * @params: userId
  */
 export const fetchUserProfileData = createAsyncThunk(
-  'data/fetchUserProfileData',
+  "data/fetchUserProfileData",
   async (id) => {
     const graphQl = GetUserProfileData(id);
     const response = graphQlEndPoint(graphQl);
@@ -39,7 +39,7 @@ export const fetchUserProfileData = createAsyncThunk(
  * @params: businessId, userId
  */
 export const AddBusinessFavorite = createAsyncThunk(
-  'data/AddBusinessFavorite',
+  "data/AddBusinessFavorite",
   async (obj) => {
     const graphQl = addFavoriteBusiness(obj);
     const response = await graphQlEndPoint(graphQl);
@@ -52,7 +52,7 @@ export const AddBusinessFavorite = createAsyncThunk(
  * @params: businessId, userId
  */
 export const RemoveBusinessFavorite = createAsyncThunk(
-  'data/RemoveBusinessFavorite',
+  "data/RemoveBusinessFavorite",
   async (obj) => {
     const graphQl = removeFavoriteBusiness(obj);
     const response = await graphQlEndPoint(graphQl);
@@ -65,14 +65,14 @@ export const RemoveBusinessFavorite = createAsyncThunk(
  * @params:  userId
  */
 export const fetchUserFavoritesBusiness = createAsyncThunk(
-  'data/fetchUserFavoritesBusiness',
+  "data/fetchUserFavoritesBusiness",
   async ({ id, value, filters, latitude, longitude }) => {
     const graphQl = getUserFavorites({
-      id,
-      value,
-      filters,
-      latitude,
-      longitude,
+      id: id,
+      value: value,
+      filters: filters,
+      latitude: latitude,
+      longitude: longitude,
     });
     const response = await graphQlEndPoint(graphQl);
     return {
@@ -87,7 +87,7 @@ export const fetchUserFavoritesBusiness = createAsyncThunk(
  * @params: businessId, userId
  */
 export const RemoveUserBusinessFavorite = createAsyncThunk(
-  'data/RemoveUserBusinessFavorite',
+  "data/RemoveUserBusinessFavorite",
   async (obj) => {
     const graphQl = removeFavoriteBusiness(obj);
     const response = await graphQlEndPoint(graphQl);
@@ -95,7 +95,7 @@ export const RemoveUserBusinessFavorite = createAsyncThunk(
   }
 );
 export const slice = createSlice({
-  name: 'user',
+  name: "user",
   initialState: {
     loading: false,
     loadingProfile: false,
@@ -159,11 +159,8 @@ export const slice = createSlice({
       if (state.loadingRemoveFavorite) {
         state.loadingRemoveFavorite = false;
         if (action.payload) {
-          const favorites = [
-            ...state.user.favorites,
-            action.payload.businessId,
-          ];
-          state.user = { ...state.user, favorites };
+          let favorites = [...state.user.favorites, action.payload.businessId];
+          state.user = { ...state.user, favorites: favorites };
         }
       }
     },
@@ -182,10 +179,10 @@ export const slice = createSlice({
       if (state.loadingAddFavorite) {
         state.loadingAddFavorite = false;
         if (action.payload) {
-          const favorites = state.user.favorites.filter(
+          let favorites = state.user.favorites.filter(
             (i) => i !== action.payload.businessId
           );
-          state.user = { ...state.user, favorites };
+          state.user = { ...state.user, favorites: favorites };
         }
       }
     },
