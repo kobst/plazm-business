@@ -72,6 +72,7 @@ const GridContainer = () => {
 
 // handle 'back;
     useEffect(() => {
+        console.log("feed data changed")
         if (searchData.length > 0 && tabSelected == 1){
             // console.log("grid " + tabSelected)
             loadData(searchData)

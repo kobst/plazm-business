@@ -95,31 +95,40 @@ const setLinesExt = (dict) => {
 
 
 const setBBox = (_orderedPlaces) => {
-    let maxViewable = 15
+    let maxViewable = 100
     let coordArray = [];
     let featureSet = []
     var limit = 10;
-    if (_orderedPlaces.length < limit) {
-      limit = _orderedPlaces.length - 1;
-    }
-    if (maxViewable) {
-      limit = maxViewable;
-    }
-    console.log("ordered places " + _orderedPlaces.length);
+    var lastPlaces = []
+    
+    // if (_orderedPlaces.length < limit) {
+    //   limit = orderedPlaces.lastIndexOf()
+    // }
+    // if (maxViewable) {
+    //   limit = maxViewable;
+    // }
+  let length = _orderedPlaces.lastIndexOf()
+  if (length < 10) {
+    lastPlaces = _orderedPlaces.slice(-10)
+  } else {
+    lastPlaces = _orderedPlaces
+  }
 
-    for (let i = 0; i < limit; i++) {
+    console.log("ordered places " + _orderedPlaces.lastIndexOf());
+
+    for (let i = 0; i < 9; i++) {
       // console.log(i)
       // console.log(orderedPlaces[i])
-      if (_orderedPlaces[i]) {
+      if (lastPlaces[i]) {
 
-        let coords = _orderedPlaces[i].businessLocation.coordinates;
+        let coords = lastPlaces[i].businessLocation.coordinates;
         coordArray.push(coords);
 
         let feature =     {
           type:"Feature",
           properties:{
-            name:_orderedPlaces[i].company_name,
-            color:_orderedPlaces[i].icon_color
+            name:lastPlaces[i].company_name,
+            color:lastPlaces[i].icon_color
           },
           geometry:{
             type: "Point",
@@ -272,37 +281,40 @@ const MapView = (props) => {
     }
   }, [detailView]);
 
-  useEffect(()=>{
-    let mounted = true;
+
+
+  // useEffect(()=>{
+  //   let mounted = true;
     
-    // postsInView.forEach(elem =>{
-    //   // console.log(elem.business[0].company_name)
-    //   console.log(elem)
+  //   // postsInView.forEach(elem =>{
+  //   //   // console.log(elem.business[0].company_name)
+  //   //   console.log(elem)
 
-    // })
+  //   // })
 
-    if (postsInView.length > 1 && mounted) {
-      let obj = setBBox(postsInView)
-      setBox(obj.box)
-      setGeo(obj.geo)        
-  }
-
-
-    return () => {mounted = false};
-  }, [postsInView])
+  //   if (postsInView.length > 1 && mounted) {
+  //     let obj = setBBox(postsInView)
+  //     setBox(obj.box)
+  //     setGeo(obj.geo)        
+  // }
 
 
-    // useEffect(() => {
-    //     let mounted = true;
-    //     if (orderedPlaces.length > 1 && mounted) {
-    //         let obj = setBBox(orderedPlaces)
-    //         setBox(obj.box)
-    //         setGeo(obj.geo)        
-    //     }
+  //   return () => {mounted = false};
+  // }, [postsInView])
 
-    //     return () => {mounted = false};
 
-    // }, [orderedPlaces, maxViewable]);
+    useEffect(() => {
+        let mounted = true;
+        if (places.length > 1 && mounted) {
+            console.log(places.length + " places")
+            let obj = setBBox(places)
+            setBox(obj.box)
+            setGeo(obj.geo)        
+        }
+
+        return () => {mounted = false};
+
+    }, [places, maxViewable]);
 
 
     useEffect(() => {
@@ -386,12 +398,13 @@ const clickHandler = (map, event) => {
   const dragHandler = (map, event) => {
     // console.log({ map, event });
     // setBox(null)
-    getOffset(map)
+    
 
     if (event.fitboundUpdate) {
       console.log("Map bounds have been changed programmatically  - dragged");
       // console.log(map.getCenter());
     } else {
+      getOffset(map)
       // console.log("Map bounds have been changed by user interaction");
       // let cntr = map.getCenter();
       // let cntrPixel = map.project(cntr)
@@ -442,9 +455,10 @@ const clickHandler = (map, event) => {
                         //   duration: 1000
                         // })
 
-                        // map.fitBounds(boundBox, {
-                        //   padding: {top: 0, bottom:0, left: 350, right: 150}
-                        //   })
+
+                        map.fitBounds(boundBox, {
+                          padding: {top: 0, bottom:0, left: 350, right: 150}
+                          })
 
                         // })
                         // map.on('idle', function () {
@@ -467,6 +481,10 @@ const clickHandler = (map, event) => {
 
                   <Layer type="circle"  paint={{"circle-radius": 8, "circle-color": 'white'}}>
                         {!detailView && postsInView.map(({ ...otherProps }) => <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />)}
+                  </Layer>)
+
+                  <Layer type="circle"  paint={{"circle-radius": 4, "circle-color": 'red'}}>
+                        {!detailView && places.map(({ ...otherProps }) => <Feature key={otherProps._id} coordinates={otherProps.businessLocation.coordinates} />)}
                   </Layer>)
 
 
