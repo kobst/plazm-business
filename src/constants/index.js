@@ -41,3 +41,7 @@ export default {
     7: "Sat",
   },
 };
+
+// Image Type
+export const PROFILE_IMAGE = 'PROFILE';
+export const COVER_IMAGE = 'COVER';
