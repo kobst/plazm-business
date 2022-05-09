@@ -60,25 +60,25 @@ const PanelContentContainer = styled.div`
   /* overflow: auto; */
 `;
 
-const MapCenterOffset = styled.div`
-  width: 10px;
-  height: 10px
-  position: absolute;
-  top: 50%;
-  right: 25%;
-  background: red;
-  z-index: 200
-  transform: translate(-50%, -50%);
-`;
+// const MapCenterOffset = styled.div`
+//   width: 10px;
+//   height: 10px
+//   position: absolute;
+//   top: 50%;
+//   right: 25%;
+//   background: red;
+//   z-index: 200
+//   transform: translate(-50%, -50%);
+// `;
 
 const MapContentContainer = styled.div`
-  padding-left: 60px;
-  width: 100%;
+  width: 60%;
   position: relative;
   display: flex;
   height: calc(100vh - 70px);
   overflow: hidden;
   top: 60px;
+  right: 0;
   // max-width: 920px;
   z-index: 2;
   background: #221e45;
@@ -164,11 +164,13 @@ const Dashboard = () => {
 
 
         {view !== "list_explore" && (
-          <MapContentContainer>
-            <MapCenterOffset id="map-offset-center"/>
-            <MapView />
+          // <MapContentContainer>
+          <>
+             <MapView/>
             <RadarView />
-          </MapContentContainer>
+          </>
+
+          // </MapContentContainer>
         )}
 
         <Header />
@@ -179,24 +181,3 @@ const Dashboard = () => {
 
 export default Dashboard;
 
-// const Dashboard = ({
-//   // profile,
-//   // setFlag,
-//   // isBusinessOpen,
-//   // businessExists,
-//   // businessId,
-//   // isUserOpen,
-//   // userId,
-//   view,
-//   // detailId
-// }) => {
-
-{
-  /* <SideBarTabs
-            // displayTab={displayTab}
-            // setDisplayTab={setDisplayTab}
-            // setFlag={setFlag}
-            // view={view}
-            // detailId={detailId}
-          />  */
-}

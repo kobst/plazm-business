@@ -107,10 +107,12 @@ const setBBox = (_orderedPlaces) => {
     // if (maxViewable) {
     //   limit = maxViewable;
     // }
-  let length = _orderedPlaces.lastIndexOf()
-  if (length < 10) {
+  let length = _orderedPlaces.length
+  if (length > 10) {
+    console.log(length)
     lastPlaces = _orderedPlaces.slice(-10)
   } else {
+    console.log("last places")
     lastPlaces = _orderedPlaces
   }
 
@@ -232,7 +234,7 @@ const MapView = (props) => {
         // height: '100vh',
         // width: '100%'
         height: '100vh',
-        width: '100vw',
+        width: '130vw',
         borderRadius: '5%'
     }
 
@@ -282,34 +284,18 @@ const MapView = (props) => {
   }, [detailView]);
 
 
-
-  // useEffect(()=>{
-  //   let mounted = true;
-    
-  //   // postsInView.forEach(elem =>{
-  //   //   // console.log(elem.business[0].company_name)
-  //   //   console.log(elem)
-
-  //   // })
-
-  //   if (postsInView.length > 1 && mounted) {
-  //     let obj = setBBox(postsInView)
-  //     setBox(obj.box)
-  //     setGeo(obj.geo)        
-  // }
-
-
-  //   return () => {mounted = false};
-  // }, [postsInView])
+  
 
 
     useEffect(() => {
+      // can also use postsinView
         let mounted = true;
         if (places.length > 1 && mounted) {
             console.log(places.length + " places")
             let obj = setBBox(places)
             setBox(obj.box)
-            setGeo(obj.geo)        
+            setGeo(obj.geo) 
+
         }
 
         return () => {mounted = false};
@@ -353,11 +339,11 @@ const MapView = (props) => {
   
 const getOffset = (map) => {
   let cntr = map.getCenter()
-  let _centerCoor = map.project(cntr)
-  console.log(_centerCoor)
-  let offSetCoor = [_centerCoor.x + 350, _centerCoor.y]
-  let offSetLatLng = map.unproject(offSetCoor)
-  setDraggedLocation(offSetLatLng)
+  // let _centerCoor = map.project(cntr)
+  // console.log(_centerCoor)
+  // let offSetCoor = [_centerCoor.x + 350, _centerCoor.y]
+  // let offSetLatLng = map.unproject(offSetCoor)
+  setDraggedLocation(cntr)
 
 }
 
@@ -372,7 +358,9 @@ const clickHandler = (map, event) => {
     } else {
       // console.log("Map bounds have been changed by user interaction");
       let cntr = map.getCenter();
-      let cntrPixel = map.project(cntr)
+      setDraggedLocation(cntr)
+      
+      // let cntrPixel = map.project(cntr)
 
 
       // console.log(cntr);
@@ -400,12 +388,14 @@ const clickHandler = (map, event) => {
     // setBox(null)
     
 
+
     if (event.fitboundUpdate) {
       console.log("Map bounds have been changed programmatically  - dragged");
       // console.log(map.getCenter());
     } else {
-      getOffset(map)
-      // console.log("Map bounds have been changed by user interaction");
+      console.log("Map bounds have been changed by user interaction");
+      let cntr = map.getCenter();
+      setDraggedLocation(cntr)
       // let cntr = map.getCenter();
       // let cntrPixel = map.project(cntr)
       // getOffset(map)
@@ -423,7 +413,7 @@ const clickHandler = (map, event) => {
 
     return (
         // <div className="circleDiv">
-        <div>
+        <div className="map-container">
             <div className="offset-center"></div>
             <Map
                 // style='mapbox://styles/kobstr/cj0itw9ku003l2smnu8wbz94o'
@@ -433,7 +423,8 @@ const clickHandler = (map, event) => {
                 ref={mapRef}
                 // style='mapbox://styles/kobstr/ckyank9on08ld14nuzyhrwddi'
                 style='mapbox://styles/kobstr/ckyan5qpn0uxk14pe1ah8qatg'
-                pitch={[60]}
+                pitch={[30]}
+                // zoom={[15]}
                 // fitBounds={(boundBox, {padding: {top:'00', bottom:'0', left: '400', right: '5'}})}
                
                   
@@ -444,11 +435,17 @@ const clickHandler = (map, event) => {
 
                 <MapContext.Consumer>
                     {(map) => {
+
                         // use `map` here
+              
                         // console.log("map" + map)
                         // const newPosDict = {}
 
-                        // orderedPlaces.forEach((place) => {
+                        if (places.length > 0) {
+                              map.fitBounds(boundBox, {
+                            padding: {top: 0, bottom:0, left: 200, right: 200}
+                            })
+                        }
                       
                         // map.easeTo({
                         //   padding: padding,
@@ -456,9 +453,16 @@ const clickHandler = (map, event) => {
                         // })
 
 
-                        map.fitBounds(boundBox, {
-                          padding: {top: 0, bottom:0, left: 350, right: 150}
-                          })
+                        
+                        // map.fitBounds(boundBox, {
+                        //   padding: {top: 0, bottom:0, left: 350, right: 150}
+                        //   })
+
+                          // map.fitBounds(boundBox, {
+                          //   padding: {top: 0, bottom:0, left: 0, right: 0}
+                          //   })
+  
+
 
                         // })
                         // map.on('idle', function () {
