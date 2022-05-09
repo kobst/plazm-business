@@ -22,14 +22,17 @@ import "./styles.css";
 import GridIcon from "../../../../images/grid_icon_blue.png";
 import ListIcon from "../../../../images/Grid_icon.png";
 import { useHistory, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ModalComponent from "../../../Consumer/UI/Modal";
 import { FiLogOut, FiAlertOctagon } from "react-icons/fi";
 import ButtonGrey from "../../../Consumer/UI/ButtonGrey";
 import SaveButton from "../../../Consumer/UI/SaveButton";
-import PlazmLogo from "../../../../images/plazmLogo.jpeg";
+import { Auth } from 'aws-amplify';
+import { setGloablLoader } from "../../../../reducers/consumerReducer";
 
 const Header = () => {
+  const routerHistory = useHistory()
+  const dispatch = useDispatch();
   const [tabTitle, setTabTitle] = useState();
   const [coords, setCoords] = useState();
   const subListTabName = ["Lists Subscribe", "My List", "Discover More"];
@@ -110,6 +113,23 @@ const Header = () => {
   const isObjectId = (id) => {
     return id.length === 24 && !isNaN(Number("0x" + id));
   };
+
+  /** for logout functionality redirection */
+  const redirectUserToLoginScreen = () => {
+    dispatch(setGloablLoader(false));
+    routerHistory.push("/consumer/login");
+  };
+  /** logout consumer */
+  const consumerLogout = async () => {
+    try {
+      dispatch(setGloablLoader(true));
+      await Auth.signOut();
+      setTimeout(() => redirectUserToLoginScreen(), 3000);
+    } catch (error) {
+      dispatch(setGloablLoader(false));
+    }
+  };
+
   return (
     <HeaderBar>
       <LeftHeaderBar>
@@ -175,7 +195,7 @@ const Header = () => {
               setshowDiv((prev) => !prev);
             }}
           >
-            <img src={PlazmLogo} alt="PlazmLogo" />
+            <img src="https://picsum.photos/id/237/200/300" />
           </UserImg>
         </UserImgWrap>
 
@@ -205,8 +225,8 @@ const Header = () => {
             </AlertIcon>
             <LogoutMsg>Are you sure you want to Logout?</LogoutMsg>
             <LogoutBtnWrap>
-              <ButtonGrey>Cancel</ButtonGrey>
-              <SaveButton>Logout</SaveButton>
+              <ButtonGrey onClick={() => setshowDivModal((prev) => !prev)}>Cancel</ButtonGrey>
+              <SaveButton onClick={() => consumerLogout()}>Logout</SaveButton>
             </LogoutBtnWrap>
           </LogoutComponent>
         </ModalComponent>

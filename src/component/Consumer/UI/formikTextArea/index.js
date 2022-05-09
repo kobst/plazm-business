@@ -29,20 +29,6 @@ const InputText = styled.textarea`
   @media (max-width: 767px) {
     font-size: 14px;
   }
-  &.CustomDesp {
-    min-height: 28px;
-    height: 28px;
-    font-size: 13px;
-    overflow: hidden;
-    color: #261f55;
-    font-family: "Roboto";
-    font-style: normal;
-    font-weight: 500;
-    font-size: 13px;
-    @media (max-width: 767px) {
-      font-size: 13px;
-    }
-  }
 `;
 const ErrorDiv = styled.div`
   color: #ff0000;
@@ -58,11 +44,7 @@ const TextArea = ({ label, formError, ...props }) => {
   return (
     <>
       <center>
-        <InputText
-          {...field}
-          {...props}
-          className="text-input PL-15 CustomDesp"
-        />
+        <InputText {...field} {...props} className="text-input" />
       </center>
       {meta.error || formError === error.INCORRECT_OLD_PASSWORD ? (
         <ErrorDiv>{meta.error || formError}</ErrorDiv>
