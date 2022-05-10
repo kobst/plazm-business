@@ -1,40 +1,37 @@
+import { Auth } from "aws-amplify";
 import React, { Fragment, useEffect, useState } from "react";
+import { FiAlertOctagon, FiLogOut } from "react-icons/fi";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useLocation } from "react-router-dom";
+import BackBtn from "../../../../images/back-btn.png";
+import ListIcon from "../../../../images/Grid_icon.png";
+import GridIcon from "../../../../images/grid_icon_blue.png";
+import { setGloablLoader } from "../../../../reducers/consumerReducer";
+import ButtonGrey from "../../../Consumer/UI/ButtonGrey";
+import ModalComponent from "../../../Consumer/UI/Modal";
+import SaveButton from "../../../Consumer/UI/SaveButton";
 import useStore from "../../../Consumer/useState/index";
 import {
+  AlertIcon,
+  BackArrow,
+  BreadcrumbsDiv,
+  BreadcrumbsText,
   HeaderBar,
   LeftHeaderBar,
-  UserNameCircle,
-  BreadcrumbsDiv,
-  BackArrow,
-  BreadcrumbsText,
-  RightHeaderBar,
   LocationWrap,
-  UserImgWrap,
-  UserImg,
-  LogoutSection,
-  LogoutComponent,
-  AlertIcon,
-  LogoutMsg,
   LogoutBtnWrap,
+  LogoutComponent,
+  LogoutMsg,
+  LogoutSection,
+  RightHeaderBar,
+  UserImg,
+  UserImgWrap,
+  UserNameCircle,
 } from "./styled";
-import BackBtn from "../../../../images/back-btn.png";
 import "./styles.css";
-import GridIcon from "../../../../images/grid_icon_blue.png";
-import ListIcon from "../../../../images/Grid_icon.png";
-import { useHistory, useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import ModalComponent from "../../../Consumer/UI/Modal";
-import { FiLogOut, FiAlertOctagon } from "react-icons/fi";
-import ButtonGrey from "../../../Consumer/UI/ButtonGrey";
-import SaveButton from "../../../Consumer/UI/SaveButton";
-import { Auth } from "aws-amplify";
-import { setGloablLoader } from "../../../../reducers/consumerReducer";
-import { useSelector, useDispatch } from "react-redux";
-import { Auth } from "aws-amplify";
 
 const Header = () => {
   const routerHistory = useHistory();
-  const dispatch = useDispatch();
   const [tabTitle, setTabTitle] = useState();
   const [coords, setCoords] = useState();
   const subListTabName = ["Lists Subscribe", "My List", "Discover More"];
@@ -128,22 +125,6 @@ const Header = () => {
 
   const isObjectId = (id) => {
     return id.length === 24 && !isNaN(Number("0x" + id));
-  };
-
-  /** for logout functionality redirection */
-  const redirectUserToLoginScreen = () => {
-    dispatch(setGloablLoader(false));
-    routerHistory.push("/consumer/login");
-  };
-  /** logout consumer */
-  const consumerLogout = async () => {
-    try {
-      dispatch(setGloablLoader(true));
-      await Auth.signOut();
-      setTimeout(() => redirectUserToLoginScreen(), 3000);
-    } catch (error) {
-      dispatch(setGloablLoader(false));
-    }
   };
 
   return (
