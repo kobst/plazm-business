@@ -72,6 +72,7 @@ const GridContainer = () => {
 
 // handle 'back;
     useEffect(() => {
+        console.log("feed data changed")
         if (searchData.length > 0 && tabSelected == 1){
             // console.log("grid " + tabSelected)
             loadData(searchData)
@@ -119,12 +120,21 @@ const GridContainer = () => {
         // console.log("initial props places")
         ReCenter(null)
     // }, [places])
-    }, [places, draggedLocation])
+    }, [places])
+
+
+    useEffect(() => {
+        let timer1 = setTimeout(() => ReCenter(null), 2500);
+        // this will clear Timeout when component unmount like in willComponentUnmount
+        return () => {
+            clearTimeout(timer1);
+        };
+    }, [draggedLocation])
 
     // on shifting centerPlace..
     useEffect(() => {
  
-        let timer1 = setTimeout(() => ReCenter(centerPlace), 2000);
+        let timer1 = setTimeout(() => ReCenter(centerPlace), 2500);
         // this will clear Timeout when component unmount like in willComponentUnmount
         return () => {
             clearTimeout(timer1);

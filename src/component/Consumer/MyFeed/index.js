@@ -141,13 +141,7 @@ const MyFeed = () => {
   
 
   useEffect(() => {
-    // console.log(
-    //   process.env.REACT_APP_LATITUDE +
-    //     " lat  " +
-    //     process.env.REACT_APP_LONGITUDE +
-    //     "lng"
-    // );
-    // setPostsInView([])
+
     const fetchData = async () => {
       const _gridMode = gridMode;
       if (_gridMode) {
