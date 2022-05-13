@@ -1,38 +1,37 @@
+import { Auth } from "aws-amplify";
 import React, { Fragment, useEffect, useState } from "react";
+import { FiAlertOctagon, FiLogOut } from "react-icons/fi";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useLocation } from "react-router-dom";
+import BackBtn from "../../../../images/back-btn.png";
+import ListIcon from "../../../../images/Grid_icon.png";
+import GridIcon from "../../../../images/grid_icon_blue.png";
+import { setGloablLoader } from "../../../../reducers/consumerReducer";
+import ButtonGrey from "../../../Consumer/UI/ButtonGrey";
+import ModalComponent from "../../../Consumer/UI/Modal";
+import SaveButton from "../../../Consumer/UI/SaveButton";
 import useStore from "../../../Consumer/useState/index";
 import {
+  AlertIcon,
+  BackArrow,
+  BreadcrumbsDiv,
+  BreadcrumbsText,
   HeaderBar,
   LeftHeaderBar,
-  UserNameCircle,
-  BreadcrumbsDiv,
-  BackArrow,
-  BreadcrumbsText,
-  RightHeaderBar,
   LocationWrap,
-  UserImgWrap,
-  UserImg,
-  LogoutSection,
-  LogoutComponent,
-  AlertIcon,
-  LogoutMsg,
   LogoutBtnWrap,
+  LogoutComponent,
+  LogoutMsg,
+  LogoutSection,
+  RightHeaderBar,
+  UserImg,
+  UserImgWrap,
+  UserNameCircle,
 } from "./styled";
-import BackBtn from "../../../../images/back-btn.png";
 import "./styles.css";
-import GridIcon from "../../../../images/grid_icon_blue.png";
-import ListIcon from "../../../../images/Grid_icon.png";
-import { useHistory, useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import ModalComponent from "../../../Consumer/UI/Modal";
-import { FiLogOut, FiAlertOctagon } from "react-icons/fi";
-import ButtonGrey from "../../../Consumer/UI/ButtonGrey";
-import SaveButton from "../../../Consumer/UI/SaveButton";
-import { Auth } from 'aws-amplify';
-import { setGloablLoader } from "../../../../reducers/consumerReducer";
 
 const Header = () => {
-  const routerHistory = useHistory()
-  const dispatch = useDispatch();
+  const routerHistory = useHistory();
   const [tabTitle, setTabTitle] = useState();
   const [coords, setCoords] = useState();
   const subListTabName = ["Lists Subscribe", "My List", "Discover More"];
@@ -43,6 +42,7 @@ const Header = () => {
     b: "Business",
     list: "List",
   };
+  const dispatch = useDispatch();
   const prevRoute = useHistory();
   const history = useLocation()
     .pathname.split("/")
@@ -96,13 +96,9 @@ const Header = () => {
         setTabTitle((prev) => prev);
         break;
     }
-    if (
-      (selectedTab < 1 || selectedTab > 2) &&
-      routeObj[history[0]] !== routeObj.list &&
-      history.length <= 1
-    ) {
-      setGridMode(false);
-    }
+    // if (selectedTab !== 1) {
+    //   setGridMode(false);
+    // }
   }, [selectedTab]);
 
   useEffect(() => {
@@ -110,15 +106,12 @@ const Header = () => {
     setCoords(loc);
   }, [draggedLocation]);
 
-  const isObjectId = (id) => {
-    return id.length === 24 && !isNaN(Number("0x" + id));
-  };
-
   /** for logout functionality redirection */
   const redirectUserToLoginScreen = () => {
     dispatch(setGloablLoader(false));
-    routerHistory.push("/consumer/login");
+    history.push("/consumer/login");
   };
+
   /** logout consumer */
   const consumerLogout = async () => {
     try {
@@ -128,6 +121,10 @@ const Header = () => {
     } catch (error) {
       dispatch(setGloablLoader(false));
     }
+  };
+
+  const isObjectId = (id) => {
+    return id.length === 24 && !isNaN(Number("0x" + id));
   };
 
   return (
@@ -189,7 +186,9 @@ const Header = () => {
           {city}
         </LocationWrap>
 
-        <UserImgWrap>
+        {/* <div color="#FF7171" width="20px" onClick={consumerLogout} >Logout</div> */}
+
+        <UserImgWrap onClick={consumerLogout}>
           <UserImg
             onClick={() => {
               setshowDiv((prev) => !prev);
@@ -225,7 +224,9 @@ const Header = () => {
             </AlertIcon>
             <LogoutMsg>Are you sure you want to Logout?</LogoutMsg>
             <LogoutBtnWrap>
-              <ButtonGrey onClick={() => setshowDivModal((prev) => !prev)}>Cancel</ButtonGrey>
+              <ButtonGrey onClick={() => setshowDivModal((prev) => !prev)}>
+                Cancel
+              </ButtonGrey>
               <SaveButton onClick={() => consumerLogout()}>Logout</SaveButton>
             </LogoutBtnWrap>
           </LogoutComponent>

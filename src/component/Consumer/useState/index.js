@@ -19,6 +19,8 @@ const [useStore] = create((set) => ({
   readMore: false,
   places: [],
   orderedPlaces: [],
+  userSubscribedLists: [],
+  userCreatedLists: [],
   placeCoordDict: { 0: [0, 0, 0] },
   coordPlaceDict: {},
   centerId: null,
@@ -33,6 +35,8 @@ const [useStore] = create((set) => ({
     lat: process.env.REACT_APP_LATITUDE,
     lng: process.env.REACT_APP_LONGITUDE,
   },
+  myFeedItems: [],
+  postsInView: [],
   Depth1Places: [],
   positionCenter: [0, 0, 0],
   centerHexPosition: [0, 0, 0],
@@ -47,6 +51,8 @@ const [useStore] = create((set) => ({
   orderedPlacesDict: {},
   gridView: true,
   gridMode: false,
+  detailView: false,
+  previewMode: false, 
   maxViewable: 10,
   maxViewableDepth: 4,
   setProfile: (profile) =>
@@ -139,6 +145,16 @@ const [useStore] = create((set) => ({
       ...state,
       orderedPlaces,
     })),
+  setUserSubscribedLists: (userSubscribedLists) =>
+    set((state) => ({
+      ...state,
+      userSubscribedLists,
+    })),
+  setUserCreatedLists: (userCreatedLists) =>
+    set((state) => ({
+      ...state,
+      userCreatedLists,
+    })),
   setMaxViewableDepth: (maxViewableDepth) =>
     set((state) => ({
       ...state,
@@ -158,6 +174,14 @@ const [useStore] = create((set) => ({
     set((state) => ({
       ...state,
       gridMode,
+    })),
+  setDetailView: (detailView) => set((state) => ({
+      ...state,
+      detailView
+  })),
+  setPreviewMode: (previewMode) => set((state) => ({
+        ...state,
+        previewMode
     })),
   setHovering: (hovering) =>
     set((state) => ({
@@ -188,6 +212,16 @@ const [useStore] = create((set) => ({
     set((state) => ({
       ...state,
       draggedLocation,
+    })),
+  setPostsInView: (postsInView) =>
+    set((state) => ({
+      ...state,
+      postsInView,
+    })),
+  setMyFeedItems: (myFeedItems) =>
+    set((state) => ({
+      ...state,
+      myFeedItems,
     })),
   setDepth1Places: (depth1Places) =>
     set((state) => ({
@@ -257,4 +291,6 @@ const [useStore] = create((set) => ({
   removeAllCoor: () => set({ places: { 0: [0, 0, 0] } }),
 }));
 
-export default useStore;
+
+export default useStore
+

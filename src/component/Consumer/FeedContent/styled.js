@@ -382,7 +382,7 @@ export const RightBuisinessName = styled.div`
   }
 `;
 
-export const BuisinessNme = styled.div`
+export const BuisinessName = styled.div`
   font-weight: bold;
   font-size: 13px;
   text-align: right;

@@ -1,6 +1,24 @@
 import { AddUser, getUser, updateUserProfile } from "../graphQl";
 import { graphQlEndPoint } from "./graphQl";
 
+/* get home feed for user */
+export const getHomeFeedRest = async (userId ) => {
+  const response = await fetch(
+    `${process.env.REACT_APP_API_LOCAL}/api/list-home-fetch/${userId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return response.body.json
+  // const body = await response.text();
+  // const val = JSON.parse(body);
+  // return val;
+
+};
+
 export const callPlace = async (userSub) => {
   const response = await fetch(
     `${process.env.REACT_APP_API_URL}/api/place-fetch/${userSub}`,
@@ -171,3 +189,5 @@ export const updateProfileApi = async (obj) => {
   const response = graphQlEndPoint(graphQl);
   return response;
 };
+
+
