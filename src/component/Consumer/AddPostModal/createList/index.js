@@ -12,7 +12,6 @@ import SaveButton from "../../UI/SaveButton";
 import { createList } from "../../../../reducers/listReducer";
 import PostImage from "../PostImage";
 import { unwrapResult } from "@reduxjs/toolkit";
-import BackButton from "../../UI/BackButton";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import ImageHandler from "./image-handler";
 import { FcCheckmark } from "react-icons/fc";
@@ -41,94 +40,6 @@ import {
 import { COVER_IMAGE, PROFILE_IMAGE } from "../../../../constants";
 const bucket = process.env.REACT_APP_BUCKET;
 
-const BottomButtonsBar = styled.div`
-  width: 100%;
-  color: #fff;
-  display: flex;
-  justify-content: space-between;
-  textarea {
-    min-height: 100px;
-    font-weight: 500;
-    color: #000;
-    margin: 0 0 14px;
-  }
-  @media (max-width: 991px) and (orientation: landscape) {
-    padding: 0 0 15px;
-  }
-`;
-
-const PostContent = styled.div`
-  width: 100%;
-  color: #fff;
-`;
-
-const TopBar = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  margin: 0 0 15px;
-`;
-
-const Heading = styled.h1`
-  font-style: normal;
-  font-weight: bold;
-  font-size: 16px;
-  line-height: 20px;
-  @media (max-width: 767px) {
-    font-size: 14px;
-    line-height: normal;
-  }
-`;
-
-const AddYourPostBar = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin: 0 0 14px;
-  border: 1px dashed #ffffff;
-  align-items: center;
-  padding: 13px;
-  @media (max-width: 767px) {
-    padding: 7px;
-  }
-`;
-
-const AddYourPostLabel = styled.label`
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 17px;
-  margin: 0 0 0 10px;
-  max-width: calc(100% - 35px);
-  @media (max-width: 767px) {
-    font-size: 12px;
-    margin: 0;
-  }
-`;
-
-const AddImageDiv = styled.div`
-  background: #ff2e9a;
-  border-radius: 3px;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1;
-  cursor: pointer;
-  svg {
-    font-size: 34px;
-    color: #fff;
-  }
-`;
-
-const ErrorDiv = styled.div`
-  color: #ff0000;
-  font-weight: 600;
-  font-size: 12px;
-  margin: 0;
-  margin-bottom: 10px;
-`;
-
-let myInput;
 const CreateListModel = ({
   setDisplayList,
   setSelectedListForPost,

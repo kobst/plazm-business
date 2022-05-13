@@ -19,6 +19,7 @@ export const BottomButtonsBar = styled.div`
   }
 `;
 
+
 export const PostContent = styled.div`
   width: 100%;
   color: #fff;
@@ -31,11 +32,22 @@ export const TopBar = styled.div`
   margin: 0 0 15px;
 `;
 
+// export const Heading = styled.h1`
+//   font-family: "Roboto";
+//   font-style: normal;
+//   font-weight: 800;
+//   font-size: 18px;
+//   @media (max-width: 767px) {
+//     font-size: 14px;
+//     line-height: normal;
+//   }
+// `;
+
 export const Heading = styled.h1`
-  font-family: "Roboto";
   font-style: normal;
-  font-weight: 800;
-  font-size: 18px;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 20px;
   @media (max-width: 767px) {
     font-size: 14px;
     line-height: normal;
