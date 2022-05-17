@@ -19,7 +19,6 @@
     "@turf/turf": "^6.5.0",
     "aws-amplify": "^3.0.16",
     "aws-sdk": "^2.771.0",
-    "croppie": "^2.6.5",
     "date-fns": "^2.0.0-beta.5",
     "emoji-picker-react": "^3.4.2",
     "formik": "^2.2.6",

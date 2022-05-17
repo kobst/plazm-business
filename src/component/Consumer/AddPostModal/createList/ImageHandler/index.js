@@ -1,11 +1,12 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import ReactCrop, {centerCrop, makeAspectCrop,} from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
 import { FiPlus } from "react-icons/fi";
 import { Croppie } from "croppie";
-import { ContentTabPanel, PlusIcon, ClickText, ClickTextBottom, CroppedFinalImgSec, FinalImgdesp } from './styles'
-import { dataUrlToFile, getCroppedImg } from "../../../../utils/image";
+import { ContentTabPanel, PlusIcon, ClickText, ClickTextBottom, CroppedFinalImgSec, FinalImgdesp } from '../styles'
+import { dataUrlToFile, getCroppedImg } from "../../../../../utils/image";
+import { imgPreview } from './ImgPreview'
 
 function centerAspectCrop(
   mediaWidth,
@@ -28,12 +29,14 @@ function centerAspectCrop(
 }
 
 const ImageHandler = ({croppedImage, setCroppedImage, imagePreview, setImagePreview}) => {
-  const [image, setImage] = useState();
+  const [imgSrc, setImgSrc] = useState();
   const [imageFile, setImageFile] = useState();
   // const [croppedImage, setCroppedImage] = useState();
-  const [crop, setCrop] = useState();
-  const [cropped, setCropped] = useState();
-  const [aspect, setAspect] = useState(16 / 9)
+  const previewCanvasRef = useRef(null)
+  const imgRef = useRef(null)
+  const [crop, setCrop] = useState({unit: '%'});
+  const [completedCrop, setCompletedCrop] = useState();
+  const [aspect, setAspect] = useState()
   const { getRootProps, getInputProps } = useDropzone({
     accept:{
       'image/*': ['.jpeg', '.jpg', '.png']
@@ -43,7 +46,7 @@ const ImageHandler = ({croppedImage, setCroppedImage, imagePreview, setImagePrev
         setImageFile(files[0])
         const reader = new FileReader();
         reader.addEventListener('load', () =>
-        setImage(reader.result),
+        setImgSrc(reader.result),
         );
         reader.readAsDataURL(files[0]);
       }
@@ -51,23 +54,38 @@ const ImageHandler = ({croppedImage, setCroppedImage, imagePreview, setImagePrev
   });
 
   const showCroppedImage = async () => {
+    const { width, height } = imgRef.current
+    console.log(imgRef.current, 'imgRef.current', width, height);
     try {
-      console.log(image);
+      console.log(imgSrc);
       const img = await getCroppedImg(
-        image,
-        cropped,
+        imgSrc,
+        completedCrop,
         0,
         imageFile.type
       )
-      console.log('donee', { img })
+      // console.log('donee', { img })
+      // setImagePreview(img)
+      // const ip = await imgPreview(imgRef.current, crop)
       setImagePreview(img)
-      setCropped(null)
-      setImage(null)
+      // console.log('===================ip=================');
+      // console.log(ip);
+      // console.log('====================================');
+      // canvasPreview(
+      //   imgRef.current,
+      //   previewCanvasRef.current,
+      //   completedCrop,
+      //   undefined,
+      //   1,
+      // )
+      setCompletedCrop(null)
+      setImgSrc(null)
       const file = await dataUrlToFile(img, imageFile.name, imageFile.type)
       setCroppedImage(file);
     } catch (e) {
       console.error(e)
     }
+
   }
 
   function onImageLoad(e) {
@@ -78,13 +96,13 @@ const ImageHandler = ({croppedImage, setCroppedImage, imagePreview, setImagePrev
   }
 
   const cropAgain = () => {
-    setImage(imagePreview)
+    setImgSrc(imagePreview)
     setCroppedImage(null);
     setImagePreview(null);
   }
 
   return (
-    <>{!image && !imagePreview && (
+    <>{!imgSrc && !imagePreview && (
       <ContentTabPanel {...getRootProps({ className: "dropzone" })}>
         <input {...getInputProps()}  />
         <PlusIcon>
@@ -97,14 +115,23 @@ const ImageHandler = ({croppedImage, setCroppedImage, imagePreview, setImagePrev
         </ClickTextBottom>
       </ContentTabPanel>)}
       {!imagePreview && <ContentTabPanel>
-        <ReactCrop  aspect={aspect} crop={crop} onComplete={(p) => setCropped(p)} onChange={(_, percentCrop) => setCrop(percentCrop)}>
-          <img src={image} onLoad={onImageLoad} />
+        <ReactCrop  aspect={aspect} crop={crop} onComplete={(p) => setCompletedCrop(p)} onChange={(_, percentCrop) => setCrop(percentCrop)}>
+          <img ref={imgRef} src={imgSrc} onLoad={onImageLoad} />
         </ReactCrop>
       </ContentTabPanel>}
-      {cropped && <button onClick={() => showCroppedImage()}>Confirm</button>}
+      {completedCrop && <button onClick={() => showCroppedImage()}>Confirm</button>}
       {imagePreview &&
       <>
           <img src={imagePreview} />
+          {/* <canvas
+            ref={previewCanvasRef}
+            style={{
+              border: '1px solid black',
+              objectFit: 'contain',
+              width: completedCrop.width,
+              height: completedCrop.height,
+            }}
+          /> */}
           <button onClick={() => cropAgain()}>Crop Again</button>
         </>
       }

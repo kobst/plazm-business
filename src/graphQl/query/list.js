@@ -165,6 +165,7 @@ const GetListDetails = (obj) => {
                 }
                 media {
                   image
+                  image_type
                 }
                 updatedAt
               }

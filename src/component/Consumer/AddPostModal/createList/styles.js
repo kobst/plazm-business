@@ -196,6 +196,7 @@ export const ContentTabPanel = styled.div`
   justify-content: center;
   flex-direction: column;
   position: relative;
+  ${props => props.hide && 'display: none'}
 `;
 
 export const PlusIcon = styled.div`
