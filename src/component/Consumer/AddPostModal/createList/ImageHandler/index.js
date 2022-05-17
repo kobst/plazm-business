@@ -3,10 +3,9 @@ import { useDropzone } from "react-dropzone";
 import ReactCrop, {centerCrop, makeAspectCrop,} from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
 import { FiPlus } from "react-icons/fi";
-import { Croppie } from "croppie";
 import { ContentTabPanel, PlusIcon, ClickText, ClickTextBottom, CroppedFinalImgSec, FinalImgdesp } from '../styles'
 import { dataUrlToFile, getCroppedImg } from "../../../../../utils/image";
-import { imgPreview } from './ImgPreview'
+// import { imgPreview } from './ImgPreview'
 
 function centerAspectCrop(
   mediaWidth,

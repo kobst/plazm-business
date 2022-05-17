@@ -40,8 +40,9 @@ const ListTab = ({
   /** to check if list view size image exists in bucket */
   useEffect(() => {
     if (data.media.length > 0) {
-      const findMime = checkMime(data.media[0].image);
-      const image = replaceBucket(data.media[0].image, findMime, 45, 35);
+      const media = data.media.find(({image_type}) => image_type === 'PROFILE') || data.media[0]
+      const findMime = checkMime(media.image);
+      const image = replaceBucket(media.image, findMime, 45, 35);
       setImage(image);
     } else setImage(UploadImg);
   }, [data]);
@@ -56,9 +57,16 @@ const ListTab = ({
   }, [selectedListId]);
 
   const errorFunction = () => {
-    if (data.media.length && image !== data.media[0].image)
-      setImage(data.media[0].image);
-    else setImage(UploadImg);
+    if (data.media.length) {
+      const media = data.media.find(({image_type}) => image_type === 'PROFILE') || data.media[0]
+      if(image !== media.image) {
+        setImage(media.image);
+      } else {
+        setImage(UploadImg);
+      }
+    } else { 
+      setImage(UploadImg);
+    }
   };
 
   const handleClick = () => {

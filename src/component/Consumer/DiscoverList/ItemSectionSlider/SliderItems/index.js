@@ -37,6 +37,16 @@ import ValueLoader from "../../../../../utils/loader";
 
 import { useHistory } from "react-router-dom";
 
+const getImage = (selectedList) => {
+  if(selectedList && selectedList.media && selectedList.media.length > 0) {
+    const img = selectedList.media.find(({image_type}) => image_type === 'COVER') || selectedList.media[0]
+    console.log(img, 'img');
+    return img['image']
+  }
+  return EventImg
+}
+
+
 const NewInBuzzItems = ({
   data,
   // setSelectedListId,
@@ -54,9 +64,7 @@ const NewInBuzzItems = ({
   const [offsetLeft, setOffsetLeft] = useState(0);
   const [offsetTop, setOffsetTop] = useState(0);
   const [loader, setLoader] = useState(false);
-  const [image, setImage] = useState(
-    data && data.media && data.media.length > 0 ? data.media[0].image : EventImg
-  );
+  const [image, setImage] = useState(() => getImage(data));
 
   const setSelectedListId = useStore((state) => state.setSelectedListId);
   const setSelectedList = useStore((state) => state.setSelectedList);

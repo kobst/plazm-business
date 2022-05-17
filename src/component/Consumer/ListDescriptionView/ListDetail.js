@@ -264,6 +264,15 @@ const ArrowBack = styled.div`
   }
 `;
 
+const getImage = (selectedList) => {
+  if(selectedList && selectedList.media && selectedList.media.length > 0) {
+    const img = selectedList.media.find(({image_type}) => image_type === 'COVER') || selectedList.media[0]
+    console.log(img, 'img');
+    return img['image']
+  }
+  return BannerImg
+}
+
 const ListDetailView = ({ listOpenedFromBusiness }) => {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.myFeed.loadingSelectedList);
@@ -301,11 +310,11 @@ const setPostsInView = useStore(state => state.setPostsInView)
   const orderedPlaces = useStore((state) => state.orderedPlaces)
 
 
-  const [image, setImage] = useState(
-    selectedList && selectedList.media.length > 0
-      ? selectedList.media[0].image
-      : BannerImg
-  );
+  const [image, setImage] = useState(() => getImage(selectedList))
+  //   selectedList && selectedList.media.length > 0
+  //     ? selectedList.media.find(({image_type}) => image_type === 'PROFILE') || selectedList.media[0].image
+  //     : BannerImg
+  // );
 
   const history = useHistory();
 
@@ -314,12 +323,14 @@ const setPostsInView = useStore(state => state.setPostsInView)
     // if (!image) {
     if (selectedList) {
       if (selectedList.media.length > 0) {
-        setImage(selectedList.media[0].image);
+        const img = selectedList.media.find(({image_type}) => image_type === 'COVER') || selectedList.media[0]
+        setImage(img.image);
       }
     } else {
       if (selectedListDetails) {
         if (selectedListDetails.media.length > 0) {
-          setImage(selectedListDetails.media[0].image);
+          const img = selectedListDetails.media.find(({image_type}) => image_type === 'COVER') || selectedListDetails.media[0]
+          setImage(img.image);
         }
       }
     }
