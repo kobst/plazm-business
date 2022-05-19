@@ -82,7 +82,14 @@ const NewCollectionSectionGrid = ({
   };
   return (
     <GridWrapper>
-      <Grid direction="rows" container spacing={2} className="GridContainer">
+      <Grid ref={divRef}
+        onScroll={(e) => fetchMoreLists(e)}
+        onWheel={(e) => onWheel(e)} 
+        direction="row" 
+        container 
+        spacing={2} 
+        className="GridContainer"
+      >
         {data.map((i, key) => (
           <Grid className="GridBox">
             <NewInBuzzItems

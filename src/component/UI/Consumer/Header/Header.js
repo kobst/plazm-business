@@ -188,7 +188,7 @@ const Header = () => {
 
         {/* <div color="#FF7171" width="20px" onClick={consumerLogout} >Logout</div> */}
 
-        <UserImgWrap onClick={consumerLogout}>
+        <UserImgWrap>
           <UserImg
             onClick={() => {
               setshowDiv((prev) => !prev);
