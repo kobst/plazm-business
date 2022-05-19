@@ -512,3 +512,43 @@ export const ListWraper = styled.div`
   background: #141414;
   padding-left: 60px;
 `;
+
+export const GridWrapper = styled.div`
+  position: relative;
+  width: 100%;
+
+  .GridContainer {
+    position: relative;
+    margin: 0 0 35px;
+    padding: 0 0 10px;
+    width: 100%;
+    display: flex;
+    overflow-x: scroll;
+    flex-wrap: nowrap;
+    /* width */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 5px;
+      cursor: pointer;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      border-radius: 10px;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: #fff;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 8px;
+      height: 5px;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: #fff;
+    }
+  }
+`;

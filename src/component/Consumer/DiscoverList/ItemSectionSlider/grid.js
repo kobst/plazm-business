@@ -1,8 +1,13 @@
 import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import NewInBuzzItems from "./SliderItems";
-import { Grid } from '@material-ui/core';
-import { LoaderWrap, NewInBuzzSliderWrapper, NoMorePost } from "../styled";
+import { Grid } from "@material-ui/core";
+import {
+  LoaderWrap,
+  NewInBuzzSliderWrapper,
+  NoMorePost,
+  GridWrapper,
+} from "../styled";
 import {
   FetchMostPopularLists,
   FetchTrendingLists,
@@ -76,27 +81,27 @@ const NewCollectionSectionGrid = ({
     divRef.current.scrollLeft += evt.deltaY;
   };
   return (
-    <div style={{overflowY: 'scroll', height: '750px'}}>
-    <Grid direction="rows" container spacing={2}> 
+    <GridWrapper>
+      <Grid direction="rows" container spacing={2} className="GridContainer">
         {data.map((i, key) => (
-            <Grid item xs={12} sm={4}>
+          <Grid className="GridBox">
             <NewInBuzzItems
-                data={i}
-                key={key}
-                heading={heading}
-                setSelectedListId={setSelectedListId}
-                setDiscoverBtn={setDiscoverBtn}
-                displayModal={displayModal}
-                setDisplayModal={setDisplayModal}
-                setReadMore={setReadMore}
-                modal={modal}
-                setModal={setModal}
-                setSelectedId={setSelectedId}
-                selectedId={selectedId}
-                setTotalLists={setTotalLists}
-                totalLists={totalLists}
+              data={i}
+              key={key}
+              heading={heading}
+              setSelectedListId={setSelectedListId}
+              setDiscoverBtn={setDiscoverBtn}
+              displayModal={displayModal}
+              setDisplayModal={setDisplayModal}
+              setReadMore={setReadMore}
+              modal={modal}
+              setModal={setModal}
+              setSelectedId={setSelectedId}
+              selectedId={selectedId}
+              setTotalLists={setTotalLists}
+              totalLists={totalLists}
             />
-           </Grid>
+          </Grid>
         ))}
         {loader && (
           <LoaderWrap>
@@ -106,8 +111,8 @@ const NewCollectionSectionGrid = ({
         {loader && !loader.value && loader.heading === heading && (
           <NoMorePost>No More Lists To Display</NoMorePost>
         )}
-    </Grid>
-    </div>
+      </Grid>
+    </GridWrapper>
   );
 };
 export default NewCollectionSectionGrid;
