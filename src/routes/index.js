@@ -36,6 +36,7 @@ const Routes = () => (
 
       <Redirect exact from="/" to="/home" /> 
       <Route path="/home" exact render={(props) => <ConsumerDashboard view={"my_feed"} {...props} />} />
+      <Route path="/user-profile" exact render={(props) => <ConsumerDashboard view={"user_profile"} {...props} />} />
       <Route path="/explore" exact render={(props) => <ConsumerDashboard view={"explore"} {...props} />} />
       <Route path="/lists" exact render={(props) => <ConsumerDashboard view={"list_explore"} {...props} />} />
      
@@ -48,6 +49,7 @@ const Routes = () => (
 
       <Route path="/edit-profile" component={EditProfile} />
       <Redirect exact from="/*" to="/business/login" />
+    
     </Switch>
   </Router>
 );
