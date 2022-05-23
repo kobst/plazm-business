@@ -2,7 +2,7 @@ import { Auth } from "aws-amplify";
 import React, { Fragment, useEffect, useState } from "react";
 import { FiAlertOctagon, FiLogOut } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory, useLocation, useRouteMatch } from "react-router-dom";
 import BackBtn from "../../../../images/back-btn.png";
 import ListIcon from "../../../../images/Grid_icon.png";
 import GridIcon from "../../../../images/grid_icon_blue.png";
@@ -44,6 +44,7 @@ const Header = () => {
   };
   const dispatch = useDispatch();
   const prevRoute = useHistory();
+  const route = useRouteMatch()
   const history = useLocation()
     .pathname.split("/")
     .filter((item) => item);
@@ -169,6 +170,11 @@ const Header = () => {
             {selectedTab === 5 && (
               <span className="crumb-text">
                 {"/ " + subListTabName[listTabSelected]}
+              </span>
+            )}
+            {route?.url === '/user-profile'  && (
+              <span className="crumb-text">
+                {selectedUser.user.name}
               </span>
             )}
           </BreadcrumbsText>

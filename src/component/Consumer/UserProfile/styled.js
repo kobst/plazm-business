@@ -160,6 +160,11 @@ export const ListButtons = styled.div`
     background: #292549;
     border-radius: 5px;
   }
+  &.active {
+    color: #ff2e9a;
+    background: #292549;
+    border-radius: 5px;
+  }
 `;
 
 export const RightPanel = styled.div`
