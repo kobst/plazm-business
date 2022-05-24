@@ -19,7 +19,6 @@ export const BottomButtonsBar = styled.div`
   }
 `;
 
-
 export const PostContent = styled.div`
   width: 100%;
   color: #fff;
@@ -177,6 +176,53 @@ export const TabsSectionContent = styled.div`
       border: 1px dashed #b1abea;
       border-radius: 5px;
       height: 210px;
+      position: relative;
+      .ConfirmImgBtn {
+        position: absolute;
+        bottom: 0;
+        right: 3px;
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+      }
+      .PreviewImg {
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+      .CropAgainContainer {
+        background: rgba(0, 0, 0, 0.6);
+        width: 100%;
+        height: 43px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        bottom: 0;
+        overflow: hidden;
+      }
+      .CropAgainBtn {
+        background: #0094ff;
+        border-radius: 2px;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 700;
+        font-size: 9px;
+        line-height: 11px;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        color: #ffffff;
+        border: 0;
+        padding: 6px 33px;
+        cursor: pointer;
+      }
+      .CloseCropCross {
+        position: absolute;
+        cursor: pointer;
+        top: 2px;
+        right: 2px;
+      }
     }
     .react-tabs__tab:focus {
       box-shadow: none;
@@ -187,7 +233,6 @@ export const TabsSectionContent = styled.div`
   }
 `;
 
-
 export const ContentTabPanel = styled.div`
   display: flex;
   width: 100%;
@@ -196,7 +241,7 @@ export const ContentTabPanel = styled.div`
   justify-content: center;
   flex-direction: column;
   position: relative;
-  ${props => props.hide && 'display: none'}
+  ${(props) => props.hide && "display: none"}
 `;
 
 export const PlusIcon = styled.div`
