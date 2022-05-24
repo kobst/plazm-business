@@ -1,35 +1,33 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { IoMdClose } from "react-icons/io";
+import { unwrapResult } from "@reduxjs/toolkit";
 import moment from "moment";
-import InfiniteScroll from "react-infinite-scroll-component";
-import BannerImg from "../../../images/sliderimg.png";
-import styled from "styled-components";
+import React, { useEffect, useState } from "react";
 import { CgLock } from "react-icons/cg";
-
+import { IoMdClose } from "react-icons/io";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useParams } from "react-router-dom";
+import styled from "styled-components";
+import BannerImg from "../../../images/sliderimg.png";
 import {
-  UnSubscribeToAList,
-  SubscribeToAListAction,
-  fetchUserLists,
   clearListSearchData,
+  setSelectedListDetails,
+  SubscribeToAListAction,
+  UnSubscribeToAList,
   userSubscribeToAList,
   userUnSubscribeToAList,
-  setSelectedListDetails,
 } from "../../../reducers/listReducer";
 import {
-  fetchSelectedListDetails,
   clearMyFeedData,
+  fetchSelectedListDetails,
 } from "../../../reducers/myFeedReducer";
-import ValueLoader from "../../../utils/loader";
-import DisplayPostInAList from "./DisplayPostsInAList";
-import { unwrapResult } from "@reduxjs/toolkit";
 import {
   addSubscribedList,
   removeSubscribedList,
 } from "../../../reducers/userReducer";
-import { useHistory } from "react-router-dom";
+import ValueLoader from "../../../utils/loader";
 import ButtonOrange from "../UI/ButtonOrange";
 import useStore from "../useState";
+import DisplayPostInAList from "./DisplayPostsInAList";
 
 const ListOptionSection = styled.div`
   width: 100%;
@@ -266,6 +264,7 @@ const ArrowBack = styled.div`
 
 const ListDetailView = ({ listOpenedFromBusiness }) => {
   const dispatch = useDispatch();
+  const { id } = useParams();
   const loading = useSelector((state) => state.myFeed.loadingSelectedList);
   const loadingUnSubScribe = useSelector(
     (state) => state.list.loadingUnSubscribe
@@ -287,19 +286,18 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   const [offset, setOffSet] = useState(0);
   const [flag, setFlag] = useState(true);
 
+  const orderedPlaces = useStore((state) => state.orderedPlaces);
 
-  const selectedList = useStore((state) => state.selectedList)
-  const selectedListId = useStore((state) => state.selectedListId)
-  const setSelectedListId = useStore((state) => state.setSelectedListId)
-  const setSelectedListName = useStore((state) => state.setSelectedListName)
-  const setListIndex = useStore((state) => state.setListIndex)
-  const setFavoriteIndex = useStore((state) => state.setFavoriteIndex)
-  const setDiscoverBtn = useStore((state) => state.setDiscoverBtn)
-  const readMore = useStore((state) => state.readMore)
-  const gridMode = useStore((state) => state.gridMode)
-const setPostsInView = useStore(state => state.setPostsInView)
-  const orderedPlaces = useStore((state) => state.orderedPlaces)
-
+  const selectedList = useStore((state) => state.selectedList);
+  const setSelectedList = useStore((state) => state.setSelectedList);
+  const selectedListId = useStore((state) => state.selectedListId);
+  const setSelectedListId = useStore((state) => state.setSelectedListId);
+  const setSelectedListName = useStore((state) => state.setSelectedListName);
+  const setListIndex = useStore((state) => state.setListIndex);
+  const setFavoriteIndex = useStore((state) => state.setFavoriteIndex);
+  const setDiscoverBtn = useStore((state) => state.setDiscoverBtn);
+  const readMore = useStore((state) => state.readMore);
+  const gridMode = useStore((state) => state.gridMode);
 
   const [image, setImage] = useState(
     selectedList && selectedList.media.length > 0
@@ -308,7 +306,6 @@ const setPostsInView = useStore(state => state.setPostsInView)
   );
 
   const history = useHistory();
-
 
   useEffect(() => {
     // if (!image) {
@@ -345,23 +342,22 @@ const setPostsInView = useStore(state => state.setPostsInView)
   useEffect(() => {
     const fetchListDetails = async () => {
       const result = await dispatch(
-        fetchSelectedListDetails({ id: selectedListId, value: offset })
+        fetchSelectedListDetails({ id: id, value: offset })
       );
       const data = await unwrapResult(result);
+      setSelectedList(data?.listDetails);
       dispatch(setSelectedListDetails(data?.listDetails));
       if (data) {
         setFlag(false);
       }
     };
     offset === 0 && fetchListDetails();
-  }, [dispatch, selectedListId, offset]);
+  }, [dispatch, id, offset]);
 
   const fetchMorePosts = () => {
     if (offset + 20 < totalData) {
       setOffSet(offset + 20);
-      dispatch(
-        fetchSelectedListDetails({ id: selectedListId, value: offset + 20 })
-      );
+      dispatch(fetchSelectedListDetails({ id: id, value: offset + 20 }));
     } else setHasMore(false);
   };
 
@@ -404,6 +400,10 @@ const setPostsInView = useStore(state => state.setPostsInView)
       );
     }
   };
+
+  useEffect(() => {
+    setSelectedListId(id);
+  }, [id]);
 
   // /** to delete a list */
   // const deleteList = async () => {
@@ -556,7 +556,6 @@ const setPostsInView = useStore(state => state.setPostsInView)
                   ) : (
                     <NoData>No Posts In A List To Display</NoData>
                   )}
-
                 </ListingOptionWrap>
               </InfiniteScroll>
             </div>

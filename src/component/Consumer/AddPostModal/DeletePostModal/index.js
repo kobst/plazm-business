@@ -2,7 +2,7 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { deleteUserPost } from "../../../../reducers/myFeedReducer";
+import { deleteUserPost, deletePostInMyFeed } from "../../../../reducers/myFeedReducer";
 import ValueLoader from "../../../../utils/loader";
 import BackButton from "../../UI/BackButton";
 import SaveButton from "../../UI/SaveButton";
@@ -65,6 +65,7 @@ const DeletePostModal = ({ closeModal, id }) => {
     const response = await dispatch(deleteUserPost(id));
     const data = await unwrapResult(response);
     if (data.res && data.res.success) {
+      dispatch(deletePostInMyFeed(id));
       closeModal();
     }
   };
