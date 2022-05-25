@@ -120,7 +120,7 @@ const NewCollectionSectionGrid = ({
         )}
     </Grid>
       <div style={{height: '350px'}} />
-    </div>
+    </GridWrapper>
 
   );
 };
