@@ -82,10 +82,13 @@ const BusinessListing = ({ loader, coords, closestFilter }) => {
   useEffect(() => {
     // console.log(gridMode + "gridMode");
   }, [gridMode]);
+
+
   /** useEffect called when any side filters are selected */
   useEffect(() => {
     const fetchSearchData = async () => {
       // setPostsInView([])
+      console.log("fetching explore data")
       const _gridMode = gridMode;
       if (_gridMode) {
         setGridMode(false);
@@ -111,7 +114,8 @@ const BusinessListing = ({ loader, coords, closestFilter }) => {
       }
       // setFilterSelected(false);
     };
-    if (loader === false && offset === 0) fetchSearchData();
+    // if (loader === false && offset === 0) fetchSearchData();
+    fetchSearchData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     dispatch,

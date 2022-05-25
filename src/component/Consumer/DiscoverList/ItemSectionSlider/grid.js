@@ -118,8 +118,10 @@ const NewCollectionSectionGrid = ({
         {loader && !loader.value && loader.heading === heading && (
           <NoMorePost>No More Lists To Display</NoMorePost>
         )}
-      </Grid>
-    </GridWrapper>
+    </Grid>
+      <div style={{height: '350px'}} />
+    </div>
+
   );
 };
 export default NewCollectionSectionGrid;
