@@ -442,9 +442,12 @@ const clickHandler = (map, event) => {
                         // const newPosDict = {}
 
                         if (places.length > 0) {
+                            if (boundBox) {
                               map.fitBounds(boundBox, {
-                            padding: {top: 0, bottom:0, left: 200, right: 200}
-                            })
+                                padding: {top: 0, bottom:0, left: 200, right: 200}
+                                })
+                            }
+
                         }
                       
                         // map.easeTo({

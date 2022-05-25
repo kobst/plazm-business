@@ -107,6 +107,7 @@ const NewCollectionSectionGrid = ({
           <NoMorePost>No More Lists To Display</NoMorePost>
         )}
     </Grid>
+      <div style={{height: '350px'}} />
     </div>
   );
 };
