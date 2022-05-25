@@ -103,6 +103,56 @@ const getUserSubscribedLists = (obj) => {
   };
   return graphQl;
 };
+
+
+/*
+@desc: getUserSubscribedLists query
+*/
+
+
+const filterUserLists = (obj) => {
+  const graphQl = {
+    query: `
+          query FetchUserLists($input: userFetchInput!){
+            fetchUserLists(input: $input){
+              message
+              success
+              totalLists
+              type
+              list {
+                  _id
+                  isPublic
+                  ownerId
+                  subscribers {
+                    _id
+                    name
+                    photo
+                    
+                  }
+                  name
+                  description
+                  type
+                  media {
+                    image
+                  }
+                  createdAt
+                  updatedAt
+                }
+              }
+          }`,
+    variables:{
+      input : {
+        id: obj.id,
+        page: obj.page || 1,
+        limit: obj?.limit || 12,
+        created: obj.created || false,
+        subscribed: obj?.subscribed || false,
+      }
+    },
+  };
+  return graphQl;
+};
+
 /*
 @desc: getUserCreatedAndFollowedLists query
 */
@@ -358,6 +408,7 @@ export {
   getAllLists,
   getUserLists,
   getUserSubscribedLists,
+  filterUserLists,
   getUserCreatedAndFollowedLists,
   GetListDetails,
   getMostTrendingLists,

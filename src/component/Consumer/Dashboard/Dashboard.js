@@ -21,6 +21,7 @@ import useStore from "../useState";
 import GlobalSearch from "../GlobalSearch";
 import GlobalSearchBox from "../GlobalSearch/GlobalSearchBox";
 import { useSelector } from "react-redux";
+import UserProfile from "../UserProfile";
 
 const DashboardContent = styled.div`
   width: 100%;
@@ -100,7 +101,6 @@ const GridContentContainer = styled.div`
 // const Dashboard = ({view}) => {
 //background: #221e45;
 
-
 const Dashboard = () => {
   const gridMode = useStore((state) => state.gridMode);
   const view = useStore((state) => state.view);
@@ -116,7 +116,6 @@ const Dashboard = () => {
 
   useEffect(() => {
     // console.log(view);
-
     // put all the loading for the views here? use effect on view....
   }, [view]);
   return (
@@ -154,11 +153,10 @@ const Dashboard = () => {
         )}
 
         {view === "list_explore" && <DiscoverList />}
-        
+
         {(view === "explore" ||
           view === "my_feed" ||
           view === "business_detail") && <GlobalSearch />}
-
 
         <GridContainer />
 
@@ -172,6 +170,8 @@ const Dashboard = () => {
 
           // </MapContentContainer>
         )}
+
+        {view == "user_profile" && <UserProfile />}
 
         <Header />
       </DashboardContent>
