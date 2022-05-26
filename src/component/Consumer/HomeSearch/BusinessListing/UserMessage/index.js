@@ -430,7 +430,7 @@ const UserMessage = ({
       setPostsInView(_postsInView)
     }
     if (isVisible) {
-      console.log("on screen " + businessData.company_name)
+      // console.log("on screen " + businessData.company_name)
       setPostsInView([...postsInView, postData])
 
     }
