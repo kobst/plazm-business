@@ -29,6 +29,8 @@ const ImageSliderWrap = styled.div`
     img {
       width: 100%;
       max-height: 260px;
+      max-height: 300px;
+      margin: 0 auto;
     }
   }
 `;

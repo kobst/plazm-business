@@ -29,6 +29,7 @@ import {
   UserNameCircle,
 } from "./styled";
 import "./styles.css";
+import PlazmLogo from '../../../../images/plazmLogo.jpeg';
 
 const Header = () => {
   const routerHistory = useHistory();
@@ -200,7 +201,7 @@ const Header = () => {
               setshowDiv((prev) => !prev);
             }}
           >
-            <img src="https://picsum.photos/id/237/200/300" />
+            <img src={PlazmLogo} alt="PlazmLogo" />
           </UserImg>
         </UserImgWrap>
 
