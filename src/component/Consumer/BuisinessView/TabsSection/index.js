@@ -21,7 +21,6 @@ const TabsSection = ({ profile, businessId }) => {
   const topEvent = useSelector((state) => state.event.topEvent);
   const [selectedIndex, setSelectedIndex] = useState(topEvent ? 1 : 0);
 
-
   /** to fetch current date events on tab change */
   const eventTabChange = async () => {
     dispatch(setCurrentDate());

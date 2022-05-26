@@ -18,6 +18,28 @@ import PostEvent from "../PostEvent";
 import { addEvent } from "../../../../reducers/eventReducer";
 import error from "../../../../constants";
 import { AddEventToList } from "../../../../reducers/listReducer";
+import { FaRegClock } from "react-icons/fa";
+import { IoMdArrowDropdown, IoMdClose } from "react-icons/io";
+import { BsGrid } from "react-icons/bs";
+import GalleryIcon from "../../../../images/GalleryIcon.png";
+import { MdCheck } from "react-icons/md";
+import {
+  FirstRow,
+  ClockIcon,
+  DatePickerInput,
+  DateRow,
+  DateDiv,
+  DateText,
+  DateDropdown,
+  Hyphen,
+  DropDownSection,
+  AddImagesLabel,
+  ImagesRow,
+  ImagesNameSec,
+  ImagesCross,
+  DropDownList,
+  RightTick,
+} from "./styled.js";
 
 const bucket = process.env.REACT_APP_BUCKET;
 
@@ -409,7 +431,7 @@ const CreateEventModal = ({
               mentionArrayUser={mentionArrayUser}
               setMentionArrayUser={setMentionArrayUser}
             />
-            {eventDetails !== null ? (
+            {/* {eventDetails !== null ? (
               <AddYourPostBar>
                 <PostEvent
                   eventDetails={eventDetails}
@@ -426,8 +448,8 @@ const CreateEventModal = ({
                   </AddImageDiv>
                 </button>
               </AddYourPostBar>
-            )}
-            {formError !== "" ? <ErrorDiv>{formError}</ErrorDiv> : null}
+            )} */}
+            {/* {formError !== "" ? <ErrorDiv>{formError}</ErrorDiv> : null}
             {!imageUpload && (
               <AddYourPostBar>
                 <AddYourPostLabel>Add a Picture</AddYourPostLabel>
@@ -466,13 +488,119 @@ const CreateEventModal = ({
               selectedListForPost={selectedListForPost}
               setSelectedListForPost={setSelectedListForPost}
             />
-            {/* to display list error */}
+            
             {listError !== "" ? <ErrorDiv>{listError}</ErrorDiv> : null}
-            {/* for displaying image error if any */}
+            
             {imageError !== "" ? <ErrorDiv>{imageError}</ErrorDiv> : null}
 
-            {/* for displaying the response of add list */}
-            {response !== "" ? <ErrorDiv>{response}</ErrorDiv> : <></>}
+            
+            {response !== "" ? <ErrorDiv>{response}</ErrorDiv> : <></>} */}
+
+            <FirstRow>
+              <ClockIcon>
+                <FaRegClock />
+              </ClockIcon>
+              <DatePickerInput>
+                <input type="text" />
+              </DatePickerInput>
+              <DateRow>
+                <DateDiv>
+                  <DateText>
+                    3:00 am
+                    <DateDropdown>
+                      <IoMdArrowDropdown />
+                    </DateDropdown>
+                    <DropDownSection>
+                      <ul>
+                        <li>4:15 pm ( 15 mins)</li>
+                        <li>4:15 pm ( 15 mins)</li>
+                        <li>4:15 pm ( 15 mins)</li>
+                        <li>4:15 pm ( 15 mins)</li>
+                        <li>4:15 pm ( 15 mins)</li>
+                        <li>4:15 pm ( 15 mins)</li>
+                        <li>4:15 pm ( 15 mins)</li>
+                        <li>4:15 pm ( 15 mins)</li>
+                        <li>4:15 pm ( 15 mins)</li>
+                        <li>4:15 pm ( 15 mins)</li>
+                      </ul>
+                    </DropDownSection>
+                  </DateText>
+                  <Hyphen>-</Hyphen>
+                  <DateText>
+                    4:00 pm
+                    <DateDropdown>
+                      <IoMdArrowDropdown />
+                    </DateDropdown>
+                  </DateText>
+                </DateDiv>
+              </DateRow>
+            </FirstRow>
+
+            <FirstRow className="PL-20">
+              <DateText>
+                Repeat on
+                <DateDropdown>
+                  <IoMdArrowDropdown />
+                </DateDropdown>
+              </DateText>
+            </FirstRow>
+
+            <FirstRow>
+              <ClockIcon>
+                <img src={GalleryIcon} />
+              </ClockIcon>
+              <AddImagesLabel>Add Images</AddImagesLabel>
+              <ImagesRow>
+                <ImagesNameSec>
+                  Photo.jpg
+                  <ImagesCross>
+                    <IoMdClose />
+                  </ImagesCross>
+                </ImagesNameSec>
+                <ImagesNameSec>
+                  Photo.jpg
+                  <ImagesCross>
+                    <IoMdClose />
+                  </ImagesCross>
+                </ImagesNameSec>
+                <ImagesNameSec>
+                  Photo.jpg
+                  <ImagesCross>
+                    <IoMdClose />
+                  </ImagesCross>
+                </ImagesNameSec>
+              </ImagesRow>
+            </FirstRow>
+            <FirstRow>
+              <ClockIcon>
+                <BsGrid />
+              </ClockIcon>
+              <DateText>
+                Select List
+                <DateDropdown>
+                  <IoMdArrowDropdown />
+                </DateDropdown>
+                <DropDownList>
+                  <ul>
+                    <li>
+                      <div className="ListName">Best 10 Gyms in New York</div>
+                      <span>
+                        <RightTick>
+                          <MdCheck />
+                        </RightTick>
+                      </span>
+                    </li>
+                    <li>
+                      <div className="ListName">Best 10 Gyms in New York</div>
+                    </li>
+                    <li>
+                      <div className="ListName">Best 10 Gyms in New York</div>
+                    </li>
+                  </ul>
+                </DropDownList>
+              </DateText>
+            </FirstRow>
+
             {/* bottom buttons bar */}
             <BottomButtonsBar>
               <BackButton disabled={loader} onClick={(e) => listDisplay(e)}>
