@@ -50,6 +50,7 @@ const getUserLists = (ownerId) => {
                   type
                   media {
                     image
+                    image_type
                   }
                   createdAt
                   updatedAt
@@ -89,6 +90,7 @@ const getUserSubscribedLists = (obj) => {
                   type
                   media {
                     image
+                    image_type
                   }
                   createdAt
                   updatedAt
@@ -172,13 +174,13 @@ const getUserCreatedAndFollowedLists = (obj) => {
                     _id
                     name
                     photo
-                    
                   }
                   name
                   description
                   type
                   media {
                     image
+                    image_type
                   }
                   createdAt
                   updatedAt
@@ -215,6 +217,7 @@ const GetListDetails = (obj) => {
                 }
                 media {
                   image
+                  image_type
                 }
                 updatedAt
               }
@@ -305,6 +308,7 @@ const getMostTrendingLists = (value) => {
                 isPublic
                 media {
                   image
+                  image_type
                 }
                 ownerId {
                   _id
@@ -344,6 +348,7 @@ const getMostPopularLists = (value) => {
                 isPublic
                 media {
                   image
+                  image_type
                 }
                 ownerId {
                   _id
