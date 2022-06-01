@@ -193,7 +193,7 @@ export const ImagesCross = styled.div`
 `;
 
 export const DropDownList = styled.div`
-  display: flex;
+  display: ${props => props.isOpen ? 'flex': 'none'};
   align-items: flex-start;
   background: #272631;
   box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.2);
@@ -265,4 +265,12 @@ export const RightTick = styled.div`
     color: #ff2e9a;
     font-size: 16px;
   }
+`;
+
+export const ErrorDiv = styled.div`
+  color: #ff0000;
+  font-weight: 600;
+  font-size: 11px;
+  margin: 0;
+  margin-bottom: 10px;
 `;

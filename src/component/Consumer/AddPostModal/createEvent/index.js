@@ -51,6 +51,7 @@ import {
   TimePicker,
 } from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
+import moment from "moment";
 
 const bucket = process.env.REACT_APP_BUCKET;
 
@@ -217,28 +218,6 @@ const CreateEventModal = ({
   const dispatch = useDispatch();
 
   const [selectedDate, handleDateChange] = useState("2018-01-01T00:00:00.000Z");
-
-  /*
-  @desc: to check input file format and throw error if invalid image is input
-  @params: input file
-  */
-  const uploadImage = (e) => {
-    const selectedFile = e.target.files[0];
-    if (selectedFile) {
-      const idxDot = selectedFile.name.lastIndexOf(".") + 1;
-      const extFile = selectedFile.name
-        .substr(idxDot, selectedFile.name.length)
-        .toLowerCase();
-      // console.log(selectedFile, extFile);
-      if (extFile === "jpeg" || extFile === "png" || extFile === "jpg") {
-        setImageError("");
-        setImageUpload(URL.createObjectURL(e.target.files[0]));
-        setImageFile(selectedFile);
-      } else {
-        setImageError("Only jpg/jpeg and png,files are allowed!");
-      }
-    }
-  };
   /*
    * @desc: to delete an image
    * @params: image id
@@ -271,56 +250,104 @@ const CreateEventModal = ({
     return `${Date.now()}-${name}`;
   };
 
+
+   /*
+  @desc: to check input file format and throw error if invalid image is input
+  @params: input file
+  */
+  const uploadImage = async (imageFile) => {
+    // const selectedFile = e.target.files[0];
+    // if (selectedFile) {
+    //   const idxDot = selectedFile.name.lastIndexOf(".") + 1;
+    //   const extFile = selectedFile.name
+    //     .substr(idxDot, selectedFile.name.length)
+    //     .toLowerCase();
+    //   // console.log(selectedFile, extFile);
+    //   if (extFile === "jpeg" || extFile === "png" || extFile === "jpg") {
+    //     setImageError("");
+    //     setImageUpload(URL.createObjectURL(e.target.files[0]));
+    //     setImageFile(selectedFile);
+    //   } else {
+    //     setImageError("Only jpg/jpeg and png,files are allowed!");
+    //   }
+    // }
+    if (imageFile !== null) {
+      const folder_name = folderName(user.name, user._id);
+      const file_name = fileName(imageFile.name);
+      const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${file_name}`;
+      const value = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/upload_photo`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            Key: file_name,
+            ContentType: imageFile.type,
+            folder_name: folder_name,
+          }),
+        }
+      );
+      const body = await value.text();
+      const Val = JSON.parse(body);
+
+      return fetch(Val, {
+        method: "PUT",
+        headers: {
+          "Content-Type": imageFile.type,
+        },
+        body: imageFile,
+      })
+        .then(() => {
+          return baseUrl;
+        })
+        .catch(
+          (error) => {
+            console.log(error) // Handle the error response object
+            return
+          });
+    }
+  };
+
   /*
   @desc: add a event
   @params: form values
   */
   const saveEvent = async (values) => {
+    // start_time: date.getHours() + ':' + date.getMinutes(),
+    // end_time: date.getHours() + ':' + (parseInt(date.getMinutes())+15),
+    const start_time = moment(values.date).minutes(parseInt(values.start_time?.split(':')[1]))
+    start_time.hours(parseInt(values.start_time?.split(':')[0]))
+    const end_time = moment(values.date).minutes(parseInt(values.end_time?.split(':')[1]))
+    end_time.hours(parseInt(values.end_time?.split(':')[0]))
+    if(start_time < moment()) {
+      console.log(error.START_DATE_GREATER_THAN_CURRENT);
+    }
+    if(start_time > end_time) {
+      console.log(error.START_DATE_ERROR);
+    }
+    console.log(start_time.utc().valueOf(), end_time.utc().valueOf());
+    const imagePromises = values.images.map(img => uploadImage(img))
+    let images = []
+    try {
+      images = await Promise.all(imagePromises)  
+      console.log(images, 'images');
+    } catch (error) {
+      console.log(error);
+    }
+    
     /** if event details are not added */
-    if (eventDetails !== null) {
-      if (!selectedListForPost) {
-        setListError(error.EVENT_LIST_ERROR);
-      } else {
+    // if (eventDetails !== null) {
+      // if (!selectedListForPost) {
+      //   setListError(error.EVENT_LIST_ERROR);
+      // } else {
         setListError("");
         /*set loader value */
         setLoader(true);
         /* to upload file to s3 bucket */
         let imageUrl = null;
-        if (imageFile !== null) {
-          const folder_name = folderName(user.name, user._id);
-          const file_name = fileName(imageFile.name);
-          const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${file_name}`;
-          const value = await fetch(
-            `${process.env.REACT_APP_API_URL}/api/upload_photo`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                Key: file_name,
-                ContentType: imageFile.type,
-                folder_name: folder_name,
-              }),
-            }
-          );
-          const body = await value.text();
-          const Val = JSON.parse(body);
-
-          await fetch(Val, {
-            method: "PUT",
-            headers: {
-              "Content-Type": imageFile.type,
-            },
-            body: imageFile,
-          })
-            .then(() => {
-              imageUrl = baseUrl;
-            })
-            .catch(
-              (error) => console.log(error) // Handle the error response object
-            );
-        }
+        
 
         const obj = {
           user: user._id,
@@ -330,13 +357,12 @@ const CreateEventModal = ({
           taggedUsers: mentionArrayUser,
           taggedLists: mentionArrayList,
           eventSchedule: {
-            start_time: eventDetails.start_time,
-            end_time: eventDetails.end_time,
+            start_time: start_time.format(),
+            end_time: end_time.format(),
           },
-          recurring: eventDetails.eventRepeat,
-          listId: selectedListForPost ? selectedListForPost : null,
-          media:
-            imageFile !== null ? (imageUrl !== null ? imageUrl : null) : null,
+          recurring: values.repeat,
+          listId: values.lists[0],
+          media: images,
         };
 
         /** add event */
@@ -344,13 +370,22 @@ const CreateEventModal = ({
         const response = await unwrapResult(resultAction);
         if (response.data.success === true) {
           /** if any list is selected than add event to list */
-          if (selectedListForPost) {
-            const addToList = await dispatch(
-              AddEventToList({
-                eventId: response.data.event._id,
-                listId: selectedListForPost,
-              })
-            );
+          if (values.lists) {
+            const listPromises =  values.lists.map(list => {
+              return dispatch(
+                AddEventToList({
+                  eventId: response.data.event._id,
+                  listId: list,
+                })
+              )
+            })
+            const addToList = await Promise.race(listPromises);
+            // const addToList = await dispatch(
+            //   AddEventToList({
+            //     eventId: response.data.event._id,
+            //     listId: selectedListForPost,
+            //   })
+            // );
             const res = await unwrapResult(addToList);
             if (res.data.addEventToList.success === true) {
               closeModal();
@@ -385,15 +420,15 @@ const CreateEventModal = ({
           );
         }
       }
-    } else {
-      if (!selectedListForPost) {
-        setListError(error.EVENT_LIST_ERROR);
-      } else {
-        setListError("");
-      }
-      setError(error.EVENT_DETAILS_REQUIRED);
-    }
-  };
+    // } else {
+    //   if (!selectedListForPost) {
+    //     setListError(error.EVENT_LIST_ERROR);
+    //   } else {
+    //     setListError("");
+    //   }
+    //   setError(error.EVENT_DETAILS_REQUIRED);
+    // }
+   // };
 
   /**cancel button functionality */
   const cancelButton = (e) => {
@@ -419,7 +454,7 @@ const CreateEventModal = ({
         <Heading>Create Event</Heading>
       </TopBar>
       <Formik
-        enableReinitialize={true}
+        // enableReinitialize={true}
         initialValues={{
           title: eventTitle,
           description: eventDescription,
@@ -428,6 +463,7 @@ const CreateEventModal = ({
           start_time: date.getHours() + ':' + date.getMinutes(),
           end_time: date.getHours() + ':' + (parseInt(date.getMinutes())+15),
           images: [],
+          lists: [],
         }}
         /*validation schema */
         validationSchema={Yup.object(validate)}
@@ -435,6 +471,7 @@ const CreateEventModal = ({
         validateOnBlur={false}
         onSubmit={(values) => {
           /*update profile function call*/
+          console.log(values);
           saveEvent(values);
         }}
       >
@@ -508,139 +545,24 @@ const CreateEventModal = ({
               selectedListForPost={selectedListForPost}
               setSelectedListForPost={setSelectedListForPost}
             />
+            */}
             
             {listError !== "" ? <ErrorDiv>{listError}</ErrorDiv> : null}
             
             {imageError !== "" ? <ErrorDiv>{imageError}</ErrorDiv> : null}
 
             
-            {response !== "" ? <ErrorDiv>{response}</ErrorDiv> : <></>} */}
+            {response !== "" ? <ErrorDiv>{response}</ErrorDiv> : <></>} 
 
             <EventSchedule formik={formik} setEventDetails={() => null} />
-
-            {/* <FirstRow>
-              <ClockIcon>
-                <FaRegClock />
-              </ClockIcon>
-              <DatePickerInput>
-              <MuiPickersUtilsProvider utils={MomentUtils}>
-               <input disabled={loader} type="text" />
-              <DatePicker
-                  autoOk
-                  orientation="landscape"
-                  variant="static"
-                  openTo="date"
-                  value={date}
-                  onChange={onChange}
-                />
-              </MuiPickersUtilsProvider>
-              </DatePickerInput>
-              <DateRow>
-                <DateDiv>
-                  <DateText>
-                    3:00 am
-                    <DateDropdown>
-                      <IoMdArrowDropdown />
-                    </DateDropdown>
-                    <DropDownSection>
-                      <ul>
-                        <li>4:15 pm ( 15 mins)</li>
-                        <li>4:15 pm ( 15 mins)</li>
-                        <li>4:15 pm ( 15 mins)</li>
-                        <li>4:15 pm ( 15 mins)</li>
-                        <li>4:15 pm ( 15 mins)</li>
-                        <li>4:15 pm ( 15 mins)</li>
-                        <li>4:15 pm ( 15 mins)</li>
-                        <li>4:15 pm ( 15 mins)</li>
-                        <li>4:15 pm ( 15 mins)</li>
-                        <li>4:15 pm ( 15 mins)</li>
-                      </ul>
-                    </DropDownSection>
-                  </DateText>
-                  <Hyphen>-</Hyphen>
-                  <DateText>
-                    4:00 pm
-                    <DateDropdown>
-                      <IoMdArrowDropdown />
-                    </DateDropdown>
-                  </DateText>
-                </DateDiv>
-              </DateRow>
-            </FirstRow>
-
-            <FirstRow className="PL-20">
-              <DateText>
-                Repeat on
-                <DateDropdown>
-                  <IoMdArrowDropdown />
-                </DateDropdown>
-              </DateText>
-            </FirstRow> */}
-
             <AddImages formik={formik} />
-
-            {/* <FirstRow>
-              <ClockIcon>
-                <img src={GalleryIcon} />
-              </ClockIcon>
-              <AddImagesLabel>Add Images</AddImagesLabel>
-              <ImagesRow>
-                <ImagesNameSec>
-                  Photo.jpg
-                  <ImagesCross>
-                    <IoMdClose />
-                  </ImagesCross>
-                </ImagesNameSec>
-                <ImagesNameSec>
-                  Photo.jpg
-                  <ImagesCross>
-                    <IoMdClose />
-                  </ImagesCross>
-                </ImagesNameSec>
-                <ImagesNameSec>
-                  Photo.jpg
-                  <ImagesCross>
-                    <IoMdClose />
-                  </ImagesCross>
-                </ImagesNameSec>
-              </ImagesRow>
-            </FirstRow> */}
             <SelectedListing formik={formik} />
-            {/* <FirstRow>
-              <ClockIcon>
-                <BsGrid />
-              </ClockIcon>
-              <DateText>
-                Select List
-                <DateDropdown>
-                  <IoMdArrowDropdown />
-                </DateDropdown>
-                <DropDownList>
-                  <ul>
-                    <li>
-                      <div className="ListName">Best 10 Gyms in New York</div>
-                      <span>
-                        <RightTick>
-                          <MdCheck />
-                        </RightTick>
-                      </span>
-                    </li>
-                    <li>
-                      <div className="ListName">Best 10 Gyms in New York</div>
-                    </li>
-                    <li>
-                      <div className="ListName">Best 10 Gyms in New York</div>
-                    </li>
-                  </ul>
-                </DropDownList>
-              </DateText>
-            </FirstRow> */}
 
             {/* bottom buttons bar */}
             <BottomButtonsBar>
-              <BackButton disabled={loader} onClick={(e) => listDisplay(e)}>
+              {/* <BackButton disabled={loader} onClick={(e) => listDisplay(e)}>
                 Add to List
-              </BackButton>
+              </BackButton> */}
               <BottomBtnWrap>
                 <ButtonGrey
                   className="MR-15"

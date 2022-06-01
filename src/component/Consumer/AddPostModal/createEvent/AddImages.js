@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import { IoMdArrowDropdown, IoMdClose } from "react-icons/io";
+import React, { useRef } from "react";
+import { IoMdClose } from "react-icons/io";
 import {
   FirstRow,
   ClockIcon,
@@ -7,6 +7,7 @@ import {
   ImagesRow,
   ImagesNameSec,
   ImagesCross,
+  ErrorDiv,
 } from "./styled.js";
 import GalleryIcon from "../../../../images/GalleryIcon.png";
 
@@ -22,49 +23,47 @@ const AddImages = ({ formik }) => {
   };
 
   const removeImage = (index) => {
-    formik.setFieldValue("images", formik.values.images.filter((_, idx) => idx !== index));
-  }
+    formik.setFieldValue(
+      "images",
+      formik.values.images.filter((_, idx) => idx !== index)
+    );
+  };
 
   return (
-    <FirstRow>
-      <ClockIcon>
-        <img src={GalleryIcon} />
-      </ClockIcon>
-      <input
-        id="myInput"
-        onChange={(e) => uploadImage(e)}
-        ref={ref}
-        type="file"
-        accept=".png, .jpg, .jpeg"
-        multiple
-        style={{ display: "none" }}
-      />
-      <AddImagesLabel onClick={() => ref.current.click()}>
-        Add Images
-      </AddImagesLabel>
-      <ImagesRow>
-        {formik.values.images.map((img, idx) => (
-          <ImagesNameSec key={img?.lastModified}>
-            {img.name}
-            <ImagesCross>
-              <IoMdClose onClick={() => removeImage(idx)} />
-            </ImagesCross>
-          </ImagesNameSec>
-        ))}
-        {/* <ImagesNameSec>
-          Photo.jpg
-          <ImagesCross>
-            <IoMdClose />
-          </ImagesCross>
-        </ImagesNameSec>
-        <ImagesNameSec>
-          Photo.jpg
-          <ImagesCross>
-            <IoMdClose />
-          </ImagesCross>
-        </ImagesNameSec> */}
-      </ImagesRow>
-    </FirstRow>
+    <>
+      <FirstRow>
+        <ClockIcon>
+          <img src={GalleryIcon} />
+        </ClockIcon>
+        <input
+          id="myInput"
+          onChange={(e) => uploadImage(e)}
+          ref={ref}
+          type="file"
+          accept=".png, .jpg, .jpeg"
+          multiple
+          style={{ display: "none" }}
+        />
+        <AddImagesLabel onClick={() => ref.current.click()}>
+          Add Images
+        </AddImagesLabel>
+        <ImagesRow>
+          {formik.values.images.map((img, idx) => (
+            <ImagesNameSec key={img?.lastModified}>
+              {img.name}
+              <ImagesCross>
+                <IoMdClose onClick={() => removeImage(idx)} />
+              </ImagesCross>
+            </ImagesNameSec>
+          ))}
+        </ImagesRow>
+      </FirstRow>
+      {formik.errors && formik.errors.images ? (
+        <FirstRow>
+          <ErrorDiv>{formik.errors.images}</ErrorDiv>
+        </FirstRow>
+      ) : null}
+    </>
   );
 };
 

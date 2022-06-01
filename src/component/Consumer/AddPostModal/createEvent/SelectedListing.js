@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { MdCheck } from "react-icons/md";
 import { IoMdArrowDropdown } from "react-icons/io";
@@ -6,59 +6,81 @@ import { BsGrid } from "react-icons/bs";
 import {
   FirstRow,
   ClockIcon,
-  DatePickerInput,
-  DateRow,
-  DateDiv,
   DateText,
   DateDropdown,
-  Hyphen,
-  DropDownSection,
-  AddImagesLabel,
-  ImagesRow,
-  ImagesNameSec,
-  ImagesCross,
   DropDownList,
   RightTick,
+  ErrorDiv,
 } from "./styled.js";
 
-const SelectedListing = ({ formik }) => {
-  const userLists = useSelector((state) => state.list.userLists);
-  const [listName, setListName] = useState("");
+const getText = (length) => (length < 2 ? " List Selected" : " Lists Selected");
 
-  console.log('==================userLists==================');
-  console.log(userLists);
-  console.log('====================================');
+const SelectedListing = ({ formik }) => {
+  const ref = useRef();
+  const userLists = useSelector((state) => state.list.userLists);
+  const [open, setOpen] = useState();
+
+  const handleClickOutside = (e) => {
+    if (!ref.current.contains(e.target) && open) {
+      setOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  });
+
+  const toggleList = (list, index) => {
+    const lists = formik.values.lists;
+    if (lists?.includes(list)) {
+      formik.setFieldValue(
+        "lists",
+        formik.values.lists.filter((_, idx) => idx !== index)
+      );
+    } else {
+      formik.setFieldValue("lists", [...lists, list]);
+    }
+  };
+  const lists = formik.values.lists;
 
   return (
-    <FirstRow>
-      <ClockIcon>
-        <BsGrid />
-      </ClockIcon>
-      <DateText>
-        Select List
-        <DateDropdown>
-          <IoMdArrowDropdown />
-        </DateDropdown>
-        <DropDownList>
-          <ul>
-            <li>
-              <div className="ListName">Best 10 Gyms in New York</div>
-              <span>
-                <RightTick>
-                  <MdCheck />
-                </RightTick>
-              </span>
-            </li>
-            <li>
-              <div className="ListName">Best 10 Gyms in New York</div>
-            </li>
-            <li>
-              <div className="ListName">Best 10 Gyms in New York</div>
-            </li>
-          </ul>
-        </DropDownList>
-      </DateText>
-    </FirstRow>
+    <>
+      <FirstRow>
+        <ClockIcon>
+          <BsGrid />
+        </ClockIcon>
+        <DateText ref={ref}>
+          {lists?.length
+            ? lists?.length + getText(lists?.length)
+            : "Select List"}
+          <DateDropdown onClick={() => setOpen((v) => !v)}>
+            <IoMdArrowDropdown />
+          </DateDropdown>
+          <DropDownList isOpen={open}>
+            <ul>
+              {userLists.map((list, idx) => (
+                <li key={list._id} onClick={() => toggleList(list._id, idx)}>
+                  <div className="ListName">{list.name}</div>
+                  {lists?.includes(list._id) && (
+                    <span>
+                      <RightTick>
+                        <MdCheck />
+                      </RightTick>
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </DropDownList>
+        </DateText>
+      </FirstRow>
+      {formik.errors && formik.errors.lists ? (
+        <FirstRow>
+          <ErrorDiv>{formik.errors.lists}</ErrorDiv>
+        </FirstRow>
+      ) : null}
+    </>
   );
 };
 

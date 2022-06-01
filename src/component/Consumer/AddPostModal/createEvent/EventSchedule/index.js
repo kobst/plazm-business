@@ -20,7 +20,7 @@ import {
   DateText,
   DateDropdown,
   Hyphen,
-  DropDownSection,
+  ErrorDiv,
 } from "../styled.js";
 import { DaysWrap } from './styled'
 import TimePicker from "./TimePicker";
@@ -210,6 +210,11 @@ const ScheduleAnEvent = ({ formik }) => {
         )}
       </DaysWrap>
       </FirstRow>
+      {formik.errors && formik.errors.repeat ? (
+        <FirstRow>
+          <ErrorDiv>{formik.errors.repeat}</ErrorDiv>
+        </FirstRow>
+      ) : null}
     </>
   );
 };
