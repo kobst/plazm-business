@@ -111,7 +111,7 @@ const Header = () => {
   /** for logout functionality redirection */
   const redirectUserToLoginScreen = () => {
     dispatch(setGloablLoader(false));
-    history.push("/consumer/login");
+    routerHistory.push("/consumer/login");
   };
 
   /** logout consumer */

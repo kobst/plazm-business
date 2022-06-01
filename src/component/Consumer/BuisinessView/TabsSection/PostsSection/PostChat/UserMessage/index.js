@@ -153,6 +153,13 @@ const UserMessage = ({ postData }) => {
 
   const setSelectedListId = useStore((state) => state.setSelectedListId);
 
+  const goToList = (list) => {
+    // setSelectedList(list);
+    setSelectedListId(list._id);
+    history.push(`/list/${list._id}`)
+  }
+
+
   ws.onmessage = (evt) => {
     const message = JSON.parse(evt.data);
     /** to add reply via socket */
@@ -396,7 +403,7 @@ const UserMessage = ({ postData }) => {
                   </InnerListBanner>
 
                   <ListNameWrap>
-                    <ListName>{postData.postDetails.list.name}</ListName>
+                    <ListName onClick={() => goToList(postData.postDetails.list)}>{postData.postDetails.list.name}</ListName>
                     <ListInfo>
                       <FaCaretRight />
                       <ListAuthorName onClick={() => displayUserDetails()}>
