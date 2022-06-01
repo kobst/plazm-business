@@ -13,7 +13,7 @@ import { validate } from "./validate";
 import ValueLoader from "../../../../utils/loader";
 import PostImage from "../PostImage";
 import ButtonGrey from "../../UI/ButtonGrey";
-import SelectedListing from "../SelectedListing";
+// import SelectedListing from "../SelectedListing";
 import PostEvent from "../PostEvent";
 import { addEvent } from "../../../../reducers/eventReducer";
 import error from "../../../../constants";
@@ -40,6 +40,17 @@ import {
   DropDownList,
   RightTick,
 } from "./styled.js";
+
+import EventSchedule from './EventSchedule'
+import AddImages from './AddImages'
+import SelectedListing from './SelectedListing'
+
+import {
+  DatePicker,
+  MuiPickersUtilsProvider,
+  TimePicker,
+} from "@material-ui/pickers";
+import MomentUtils from "@date-io/moment";
 
 const bucket = process.env.REACT_APP_BUCKET;
 
@@ -171,6 +182,7 @@ const BottomBtnWrap = styled.div`
 `;
 
 let myInput;
+const date = new Date(Math.round(Date.now() / (30 * 60 * 1000)) * (30 * 60 * 1000))
 const CreateEventModal = ({
   setDisplayList,
   selectedListForPost,
@@ -203,6 +215,8 @@ const CreateEventModal = ({
   const business = useSelector((state) => state.business.business);
   const ws = useSelector((state) => state.user.ws);
   const dispatch = useDispatch();
+
+  const [selectedDate, handleDateChange] = useState("2018-01-01T00:00:00.000Z");
 
   /*
   @desc: to check input file format and throw error if invalid image is input
@@ -398,6 +412,7 @@ const CreateEventModal = ({
     e.preventDefault();
     setDisplayCalendar(true);
   };
+
   return (
     <PostContent>
       <TopBar>
@@ -408,6 +423,11 @@ const CreateEventModal = ({
         initialValues={{
           title: eventTitle,
           description: eventDescription,
+          repeat: [8],
+          date: new Date(Date.now()),
+          start_time: date.getHours() + ':' + date.getMinutes(),
+          end_time: date.getHours() + ':' + (parseInt(date.getMinutes())+15),
+          images: [],
         }}
         /*validation schema */
         validationSchema={Yup.object(validate)}
@@ -496,12 +516,24 @@ const CreateEventModal = ({
             
             {response !== "" ? <ErrorDiv>{response}</ErrorDiv> : <></>} */}
 
-            <FirstRow>
+            <EventSchedule formik={formik} setEventDetails={() => null} />
+
+            {/* <FirstRow>
               <ClockIcon>
                 <FaRegClock />
               </ClockIcon>
               <DatePickerInput>
-                <input type="text" />
+              <MuiPickersUtilsProvider utils={MomentUtils}>
+               <input disabled={loader} type="text" />
+              <DatePicker
+                  autoOk
+                  orientation="landscape"
+                  variant="static"
+                  openTo="date"
+                  value={date}
+                  onChange={onChange}
+                />
+              </MuiPickersUtilsProvider>
               </DatePickerInput>
               <DateRow>
                 <DateDiv>
@@ -543,9 +575,11 @@ const CreateEventModal = ({
                   <IoMdArrowDropdown />
                 </DateDropdown>
               </DateText>
-            </FirstRow>
+            </FirstRow> */}
 
-            <FirstRow>
+            <AddImages formik={formik} />
+
+            {/* <FirstRow>
               <ClockIcon>
                 <img src={GalleryIcon} />
               </ClockIcon>
@@ -570,8 +604,9 @@ const CreateEventModal = ({
                   </ImagesCross>
                 </ImagesNameSec>
               </ImagesRow>
-            </FirstRow>
-            <FirstRow>
+            </FirstRow> */}
+            <SelectedListing formik={formik} />
+            {/* <FirstRow>
               <ClockIcon>
                 <BsGrid />
               </ClockIcon>
@@ -599,7 +634,7 @@ const CreateEventModal = ({
                   </ul>
                 </DropDownList>
               </DateText>
-            </FirstRow>
+            </FirstRow> */}
 
             {/* bottom buttons bar */}
             <BottomButtonsBar>

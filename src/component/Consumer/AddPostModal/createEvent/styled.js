@@ -104,7 +104,7 @@ export const DropDownSection = styled.div`
   top: 25px;
   padding: 5px 0px;
   overflow-x: hidden;
-  display: none;
+  display: ${props => props.isOpen ? 'block': 'none'};
   ::-webkit-scrollbar {
     width: 4px;
     height: 5px;
