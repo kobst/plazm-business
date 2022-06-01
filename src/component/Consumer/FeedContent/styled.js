@@ -220,6 +220,9 @@ export const ListName = styled.div`
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const ListInfo = styled.div`
