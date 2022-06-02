@@ -44,9 +44,9 @@ const AddImages = ({ formik }) => {
           multiple
           style={{ display: "none" }}
         />
-        <AddImagesLabel onClick={() => ref.current.click()}>
+        {formik.values.images.length === 0 ? (<AddImagesLabel onClick={() => ref.current.click()}>
           Add Images
-        </AddImagesLabel>
+        </AddImagesLabel>) : null}
         <ImagesRow>
           {formik.values.images.map((img, idx) => (
             <ImagesNameSec key={img?.lastModified}>
