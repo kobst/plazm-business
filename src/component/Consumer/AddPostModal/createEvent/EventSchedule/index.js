@@ -128,10 +128,6 @@ const toMinutes = (hms) => {
 }
 
 const ScheduleAnEvent = ({ formik }) => {
-  const [date, changeDate] = useState(new Date(Date.now()));
-  const [start, setStart] = useState(new Date(Date.now()));
-  const [startDateFocus, setStartDateFocus] = useState(false);
-  const [endDateFocus, setEndDateFocus] = useState(false);
 
   const handleRepetition = (value) => {
     const date = new Date(Math.round(Date.now() / (30 * 60 * 1000)) * (30 * 60 * 1000));
@@ -164,7 +160,7 @@ const ScheduleAnEvent = ({ formik }) => {
           <FaRegClock />
         </ClockIcon>
         <DatePickerInput>
-          <Calendar date={date} changeDate={changeDate} minDate={null} />
+          <Calendar date={formik.values.date} changeDate={(val) => formik.setFieldValue('date', val)} minDate={null} />
         </DatePickerInput>
         <DateRow>
           <DateDiv>
@@ -209,6 +205,14 @@ const ScheduleAnEvent = ({ formik }) => {
           </>
         )}
       </DaysWrap>
+
+      {formik.values.repeat != 8 && <DropDown 
+          options={['1 Week', '2 Week', '3 Week', '4 Week', '5 Week']}
+          onChange={(value) => formik.setFieldValue("for", value)}
+          value={formik.values.for}
+        />
+        }
+
       </FirstRow>
       {formik.errors && formik.errors.repeat ? (
         <FirstRow>

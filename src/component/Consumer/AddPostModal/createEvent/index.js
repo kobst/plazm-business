@@ -182,6 +182,10 @@ const BottomBtnWrap = styled.div`
   }
 `;
 
+const weekDays = {
+  '1 Week': 7, '2 Week': 14, '3 Week': 21, '4 Week': 28, '5 Week': 35
+} 
+
 let myInput;
 const date = new Date(Math.round(Date.now() / (30 * 60 * 1000)) * (30 * 60 * 1000))
 const CreateEventModal = ({
@@ -210,6 +214,7 @@ const CreateEventModal = ({
   const [loader, setLoader] = useState(false);
   const [imageError, setImageError] = useState("");
   const [formError, setError] = useState("");
+  const [dateError, setDateError] = useState("")
   const [listError, setListError] = useState("");
   const [response, setResponse] = useState("");
   const user = useSelector((state) => state.user.user);
@@ -321,18 +326,23 @@ const CreateEventModal = ({
     start_time.hours(parseInt(values.start_time?.split(':')[0]))
     const end_time = moment(values.date).minutes(parseInt(values.end_time?.split(':')[1]))
     end_time.hours(parseInt(values.end_time?.split(':')[0]))
+    if(values.repeat !== 8) {
+      end_time.add(weekDays[values.for], 'days');
+    }
     if(start_time < moment()) {
-      console.log(error.START_DATE_GREATER_THAN_CURRENT);
+      setDateError(error.START_DATE_GREATER_THAN_CURRENT);
+      return;
     }
     if(start_time > end_time) {
-      console.log(error.START_DATE_ERROR);
+      setDateError(error.START_DATE_ERROR);
+      return;
     }
-    console.log(start_time.utc().valueOf(), end_time.utc().valueOf());
+    /*set loader value */
+    setLoader(true);
     const imagePromises = values.images.map(img => uploadImage(img))
     let images = []
     try {
       images = await Promise.all(imagePromises)  
-      console.log(images, 'images');
     } catch (error) {
       console.log(error);
     }
@@ -343,8 +353,6 @@ const CreateEventModal = ({
       //   setListError(error.EVENT_LIST_ERROR);
       // } else {
         setListError("");
-        /*set loader value */
-        setLoader(true);
         /* to upload file to s3 bucket */
         let imageUrl = null;
         
@@ -464,6 +472,7 @@ const CreateEventModal = ({
           end_time: date.getHours() + ':' + (parseInt(date.getMinutes())+15),
           images: [],
           lists: [],
+          for: '2 Week',
         }}
         /*validation schema */
         validationSchema={Yup.object(validate)}
@@ -471,7 +480,7 @@ const CreateEventModal = ({
         validateOnBlur={false}
         onSubmit={(values) => {
           /*update profile function call*/
-          console.log(values);
+          setDateError(null);
           saveEvent(values);
         }}
       >
@@ -555,6 +564,11 @@ const CreateEventModal = ({
             {response !== "" ? <ErrorDiv>{response}</ErrorDiv> : <></>} 
 
             <EventSchedule formik={formik} setEventDetails={() => null} />
+            {dateError ? (
+              <FirstRow>
+                <ErrorDiv>{dateError}</ErrorDiv>
+              </FirstRow>
+            ) : null}
             <AddImages formik={formik} />
             <SelectedListing formik={formik} />
 
