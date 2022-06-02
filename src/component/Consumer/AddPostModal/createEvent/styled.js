@@ -7,6 +7,12 @@ export const FirstRow = styled.div`
   margin: 0 0 20px;
   &.PL-20 {
     padding-left: 35px;
+    @media (max-width: 767px) {
+      padding-left: 0px;
+    }
+  }
+  .IconOne {
+    margin: -6px 0 0;
   }
 `;
 
@@ -30,7 +36,7 @@ export const DatePickerInput = styled.div`
   input {
     width: 100%;
     border: 0;
-    border-bottom: 1px solid #fff;
+    border-bottom: 2px solid #fff;
     font-family: "Roboto";
     font-style: normal;
     font-weight: 700;
@@ -55,6 +61,9 @@ export const DateRow = styled.div`
 export const DateDiv = styled.div`
   display: flex;
   align-items: center;
+  @media (max-width: 767px) {
+    margin: 10px 0 0;
+  }
 `;
 
 export const DateText = styled.div`
@@ -104,7 +113,7 @@ export const DropDownSection = styled.div`
   top: 25px;
   padding: 5px 0px;
   overflow-x: hidden;
-  display: ${props => props.isOpen ? 'block': 'none'};
+  display: ${(props) => (props.isOpen ? "block" : "none")};
   ::-webkit-scrollbar {
     width: 4px;
     height: 5px;
@@ -193,7 +202,7 @@ export const ImagesCross = styled.div`
 `;
 
 export const DropDownList = styled.div`
-  display: ${props => props.isOpen ? 'flex': 'none'};
+  display: ${(props) => (props.isOpen ? "flex" : "none")};
   align-items: flex-start;
   background: #272631;
   box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.2);
@@ -241,6 +250,7 @@ export const DropDownList = styled.div`
       display: flex;
       justify-content: space-between;
       align-items: center;
+      min-height: 22px;
       cursor: pointer;
       &:hover {
       }
@@ -273,4 +283,16 @@ export const ErrorDiv = styled.div`
   font-size: 11px;
   margin: 0;
   margin-bottom: 10px;
+`;
+
+export const ForText = styled.div`
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 14px;
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+  margin: 0 10px;
 `;

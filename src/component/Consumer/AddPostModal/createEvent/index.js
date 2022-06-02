@@ -41,9 +41,9 @@ import {
   RightTick,
 } from "./styled.js";
 
-import EventSchedule from './EventSchedule'
-import AddImages from './AddImages'
-import SelectedListing from './SelectedListing'
+import EventSchedule from "./EventSchedule";
+import AddImages from "./AddImages";
+import SelectedListing from "./SelectedListing";
 
 import {
   DatePicker,
@@ -59,7 +59,7 @@ const BottomButtonsBar = styled.div`
   width: 100%;
   color: #fff;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   textarea {
     min-height: 100px;
     font-weight: 500;
@@ -183,7 +183,9 @@ const BottomBtnWrap = styled.div`
 `;
 
 let myInput;
-const date = new Date(Math.round(Date.now() / (30 * 60 * 1000)) * (30 * 60 * 1000))
+const date = new Date(
+  Math.round(Date.now() / (30 * 60 * 1000)) * (30 * 60 * 1000)
+);
 const CreateEventModal = ({
   setDisplayList,
   selectedListForPost,
@@ -250,8 +252,7 @@ const CreateEventModal = ({
     return `${Date.now()}-${name}`;
   };
 
-
-   /*
+  /*
   @desc: to check input file format and throw error if invalid image is input
   @params: input file
   */
@@ -302,11 +303,10 @@ const CreateEventModal = ({
         .then(() => {
           return baseUrl;
         })
-        .catch(
-          (error) => {
-            console.log(error) // Handle the error response object
-            return
-          });
+        .catch((error) => {
+          console.log(error); // Handle the error response object
+          return;
+        });
     }
   };
 
@@ -317,118 +317,112 @@ const CreateEventModal = ({
   const saveEvent = async (values) => {
     // start_time: date.getHours() + ':' + date.getMinutes(),
     // end_time: date.getHours() + ':' + (parseInt(date.getMinutes())+15),
-    const start_time = moment(values.date).minutes(parseInt(values.start_time?.split(':')[1]))
-    start_time.hours(parseInt(values.start_time?.split(':')[0]))
-    const end_time = moment(values.date).minutes(parseInt(values.end_time?.split(':')[1]))
-    end_time.hours(parseInt(values.end_time?.split(':')[0]))
-    if(start_time < moment()) {
+    const start_time = moment(values.date).minutes(
+      parseInt(values.start_time?.split(":")[1])
+    );
+    start_time.hours(parseInt(values.start_time?.split(":")[0]));
+    const end_time = moment(values.date).minutes(
+      parseInt(values.end_time?.split(":")[1])
+    );
+    end_time.hours(parseInt(values.end_time?.split(":")[0]));
+    if (start_time < moment()) {
       console.log(error.START_DATE_GREATER_THAN_CURRENT);
     }
-    if(start_time > end_time) {
+    if (start_time > end_time) {
       console.log(error.START_DATE_ERROR);
     }
     console.log(start_time.utc().valueOf(), end_time.utc().valueOf());
-    const imagePromises = values.images.map(img => uploadImage(img))
-    let images = []
+    const imagePromises = values.images.map((img) => uploadImage(img));
+    let images = [];
     try {
-      images = await Promise.all(imagePromises)  
-      console.log(images, 'images');
+      images = await Promise.all(imagePromises);
+      console.log(images, "images");
     } catch (error) {
       console.log(error);
     }
-    
+
     /** if event details are not added */
     // if (eventDetails !== null) {
-      // if (!selectedListForPost) {
-      //   setListError(error.EVENT_LIST_ERROR);
-      // } else {
-        setListError("");
-        /*set loader value */
-        setLoader(true);
-        /* to upload file to s3 bucket */
-        let imageUrl = null;
-        
+    // if (!selectedListForPost) {
+    //   setListError(error.EVENT_LIST_ERROR);
+    // } else {
+    setListError("");
+    /*set loader value */
+    setLoader(true);
+    /* to upload file to s3 bucket */
+    let imageUrl = null;
 
-        const obj = {
-          user: user._id,
-          business: business[0]._id,
-          title: values.title,
-          description: values.description,
-          taggedUsers: mentionArrayUser,
-          taggedLists: mentionArrayList,
-          eventSchedule: {
-            start_time: start_time.format(),
-            end_time: end_time.format(),
-          },
-          recurring: values.repeat,
-          listId: values.lists[0],
-          media: images,
-        };
+    const obj = {
+      user: user._id,
+      business: business[0]._id,
+      title: values.title,
+      description: values.description,
+      taggedUsers: mentionArrayUser,
+      taggedLists: mentionArrayList,
+      eventSchedule: {
+        start_time: start_time.format(),
+        end_time: end_time.format(),
+      },
+      recurring: values.repeat,
+      listId: values.lists[0],
+      media: images,
+    };
 
-        /** add event */
-        const resultAction = await dispatch(addEvent({ obj: obj, user: user }));
-        const response = await unwrapResult(resultAction);
-        if (response.data.success === true) {
-          /** if any list is selected than add event to list */
-          if (values.lists) {
-            const listPromises =  values.lists.map(list => {
-              return dispatch(
-                AddEventToList({
-                  eventId: response.data.event._id,
-                  listId: list,
-                })
-              )
-            })
-            const addToList = await Promise.race(listPromises);
-            // const addToList = await dispatch(
-            //   AddEventToList({
-            //     eventId: response.data.event._id,
-            //     listId: selectedListForPost,
-            //   })
-            // );
-            const res = await unwrapResult(addToList);
-            if (res.data.addEventToList.success === true) {
-              closeModal();
-              setLoader(false);
-              setEventDescription("");
-              setEventTitle("");
-              setImageUrl(null);
-              setImageCopy([]);
-              setImageUpload(null);
-            }
-          } else {
-            closeModal();
-            setLoader(false);
-            setEventDescription("");
-            setEventTitle("");
-            setImageUrl(null);
-            setImageCopy([]);
-            setImageUpload(null);
-          }
-          ws.send(
-            JSON.stringify({
-              action: "event",
-              event: {
-                ...response.event,
-                type: "addEvent",
-                user: user,
-                totalComments: 0,
-                likes: [],
-                createdAt: new Date(Date.now()),
-              },
+    /** add event */
+    const resultAction = await dispatch(addEvent({ obj: obj, user: user }));
+    const response = await unwrapResult(resultAction);
+    if (response.data.success === true) {
+      /** if any list is selected than add event to list */
+      if (values.lists) {
+        const listPromises = values.lists.map((list) => {
+          return dispatch(
+            AddEventToList({
+              eventId: response.data.event._id,
+              listId: list,
             })
           );
+        });
+        const addToList = await Promise.race(listPromises);
+        // const addToList = await dispatch(
+        //   AddEventToList({
+        //     eventId: response.data.event._id,
+        //     listId: selectedListForPost,
+        //   })
+        // );
+        const res = await unwrapResult(addToList);
+        if (res.data.addEventToList.success === true) {
+          closeModal();
+          setLoader(false);
+          setEventDescription("");
+          setEventTitle("");
+          setImageUrl(null);
+          setImageCopy([]);
+          setImageUpload(null);
         }
+      } else {
+        closeModal();
+        setLoader(false);
+        setEventDescription("");
+        setEventTitle("");
+        setImageUrl(null);
+        setImageCopy([]);
+        setImageUpload(null);
       }
-    // } else {
-    //   if (!selectedListForPost) {
-    //     setListError(error.EVENT_LIST_ERROR);
-    //   } else {
-    //     setListError("");
-    //   }
-    //   setError(error.EVENT_DETAILS_REQUIRED);
-    // }
-   // };
+      ws.send(
+        JSON.stringify({
+          action: "event",
+          event: {
+            ...response.event,
+            type: "addEvent",
+            user: user,
+            totalComments: 0,
+            likes: [],
+            createdAt: new Date(Date.now()),
+          },
+        })
+      );
+    }
+  };
 
   /**cancel button functionality */
   const cancelButton = (e) => {
@@ -460,8 +454,8 @@ const CreateEventModal = ({
           description: eventDescription,
           repeat: [8],
           date: new Date(Date.now()),
-          start_time: date.getHours() + ':' + date.getMinutes(),
-          end_time: date.getHours() + ':' + (parseInt(date.getMinutes())+15),
+          start_time: date.getHours() + ":" + date.getMinutes(),
+          end_time: date.getHours() + ":" + (parseInt(date.getMinutes()) + 15),
           images: [],
           lists: [],
         }}
@@ -488,71 +482,12 @@ const CreateEventModal = ({
               mentionArrayUser={mentionArrayUser}
               setMentionArrayUser={setMentionArrayUser}
             />
-            {/* {eventDetails !== null ? (
-              <AddYourPostBar>
-                <PostEvent
-                  eventDetails={eventDetails}
-                  setEventDetails={setEventDetails}
-                  loader={loader}
-                />
-              </AddYourPostBar>
-            ) : (
-              <AddYourPostBar>
-                <AddYourTimeLabel>Add Time</AddYourTimeLabel>
-                <button onClick={(e) => displayCalendar(e)} disabled={loader}>
-                  <AddImageDiv>
-                    <img src={CalenderImg} alt="" />
-                  </AddImageDiv>
-                </button>
-              </AddYourPostBar>
-            )} */}
-            {/* {formError !== "" ? <ErrorDiv>{formError}</ErrorDiv> : null}
-            {!imageUpload && (
-              <AddYourPostBar>
-                <AddYourPostLabel>Add a Picture</AddYourPostLabel>
-                <AddImageDiv>
-                  <input
-                    id="myInput"
-                    onChange={(e) => uploadImage(e)}
-                    multiple
-                    type="file"
-                    accept=".png, .jpg, .jpeg"
-                    ref={(ref) => (myInput = ref)}
-                    style={{ display: "none" }}
-                    disabled={loader}
-                  />
-                  <img
-                    src={AddImageImg}
-                    alt=""
-                    onClick={() => myInput.click()}
-                  />
-                </AddImageDiv>
-              </AddYourPostBar>
-            )}
-            {imageUpload ? (
-              <AddYourPostBar>
-                <PostImage
-                  loader={loader}
-                  type="eventImages"
-                  imageUrl={imageUpload}
-                  deleteImage={deleteImage}
-                  clearImages={clearImages}
-                />
-              </AddYourPostBar>
-            ) : null}
-            <SelectedListing
-              type="event"
-              selectedListForPost={selectedListForPost}
-              setSelectedListForPost={setSelectedListForPost}
-            />
-            */}
-            
+
             {listError !== "" ? <ErrorDiv>{listError}</ErrorDiv> : null}
-            
+
             {imageError !== "" ? <ErrorDiv>{imageError}</ErrorDiv> : null}
 
-            
-            {response !== "" ? <ErrorDiv>{response}</ErrorDiv> : <></>} 
+            {response !== "" ? <ErrorDiv>{response}</ErrorDiv> : <></>}
 
             <EventSchedule formik={formik} setEventDetails={() => null} />
             <AddImages formik={formik} />
@@ -560,9 +495,6 @@ const CreateEventModal = ({
 
             {/* bottom buttons bar */}
             <BottomButtonsBar>
-              {/* <BackButton disabled={loader} onClick={(e) => listDisplay(e)}>
-                Add to List
-              </BackButton> */}
               <BottomBtnWrap>
                 <ButtonGrey
                   className="MR-15"
