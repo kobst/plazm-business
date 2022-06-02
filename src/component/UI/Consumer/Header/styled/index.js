@@ -182,6 +182,7 @@ export const LogoutSection = styled.div`
       color: #575757;
       padding: 8px 12px;
       text-transform: capitalize;
+      cursor: pointer;
       :last-child {
         color: #ff2730;
       }
