@@ -1,0 +1,13 @@
+.MuiPickersDatePickerRoot-toolbarLandscape {
+    display: none;
+}
+
+.MuiButtonBase-root.MuiButton-root.MuiButton-text {
+    margin: 0;
+}
+.MuiButtonBase-root.MuiButton-root.MuiButton-text span.MuiButton-label {
+    font-size: 18px !important;
+    justify-content: center !important;
+    color: #3f51b5 !important;
+}
+

@@ -263,3 +263,27 @@ aside.emoji-picker-react {
       height: auto !important;
     } */
 }
+
+.MuiPickersDatePickerRoot-toolbar,
+.MuiPickersBasePicker-pickerView {
+  background-color: #272631 !important;
+}
+
+.MuiPickersCalendarHeader-switchHeader,
+.MuiPickersDay-day {
+  color: #fff !important;
+}
+
+.MuiPickersDay-daySelected {
+  border-radius: 2px !important;
+  background: #ff2e9a !important;
+}
+
+.MuiPickersCalendarHeader-iconButton {
+  background-color: transparent !important;
+  color: #fff !important;
+}
+
+.MuiPickersCalendarHeader-dayLabel {
+  color: #0094ff !important;
+}
