@@ -6,7 +6,8 @@ export const DaysWrap = styled.div`
   align-items: center;
   justify-content: space-between;
   flex-flow: row wrap;
-  margin-bottom: 5px;
+  margin: 0 10px;
+  max-width: 260px;
   a {
     background: transparent;
     border-radius: 3px;
@@ -21,7 +22,13 @@ export const DaysWrap = styled.div`
       background: #3f3777;
     }
     &.ColrRed {
-      color: #fd3b44;
+      color: #fff;
+      background: #136ef1;
+      border-radius: 3px;
+    }
+    &:first-child {
+      background: transparent;
+      color: #EE3840;
     }
   }
 `;

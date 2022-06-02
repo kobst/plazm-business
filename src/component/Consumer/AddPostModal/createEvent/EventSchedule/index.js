@@ -21,10 +21,11 @@ import {
   DateDropdown,
   Hyphen,
   ErrorDiv,
+  ForText,
 } from "../styled.js";
-import { DaysWrap } from './styled'
+import { DaysWrap } from "./styled";
 import TimePicker from "./TimePicker";
-import DropDown from "./DropDown"
+import DropDown from "./DropDown";
 
 const EventWrap = styled.div`
   width: 100%;
@@ -123,17 +124,19 @@ const CustomFirst = styled.div`
 `;
 
 const toMinutes = (hms) => {
-  var a = hms.split(':');
-  return (+a[0]) * 60 + (+a[1]);
-}
+  var a = hms.split(":");
+  return +a[0] * 60 + +a[1];
+};
 
 const ScheduleAnEvent = ({ formik }) => {
 
   const handleRepetition = (value) => {
-    const date = new Date(Math.round(Date.now() / (30 * 60 * 1000)) * (30 * 60 * 1000));
+    const date = new Date(
+      Math.round(Date.now() / (30 * 60 * 1000)) * (30 * 60 * 1000)
+    );
     // setRepeat((prev) => !prev);
     // formik.values.repeat
-    if (value == 'Repeat On') {
+    if (value == "Repeat On") {
       const dayToday = new Date().getDay();
       formik.setFieldValue("repeat", [dayToday + 1]);
     } else {
@@ -157,62 +160,66 @@ const ScheduleAnEvent = ({ formik }) => {
     <>
       <FirstRow>
         <ClockIcon>
-          <FaRegClock />
+          <FaRegClock className="IconOne" />
         </ClockIcon>
         <DatePickerInput>
-          <Calendar date={formik.values.date} changeDate={(val) => formik.setFieldValue('date', val)} minDate={null} />
+          <Calendar
+            className="EventCalender"
+            date={date}
+            changeDate={changeDate}
+            minDate={null}
+          />
         </DatePickerInput>
         <DateRow>
           <DateDiv>
-            <TimePicker 
-              max={toMinutes(formik.values.end_time)} 
-              value={formik.values.start_time} 
-              onChange={(val) => formik.setFieldValue("start_time", val)} 
+            <TimePicker
+              max={toMinutes(formik.values.end_time)}
+              value={formik.values.start_time}
+              onChange={(val) => formik.setFieldValue("start_time", val)}
             />
             <Hyphen>-</Hyphen>
-            <TimePicker 
-              min={toMinutes(formik.values.start_time)} 
-              value={formik.values.end_time} 
-              onChange={(val) => formik.setFieldValue("end_time", val)} />
+            <TimePicker
+              min={toMinutes(formik.values.start_time)}
+              value={formik.values.end_time}
+              onChange={(val) => formik.setFieldValue("end_time", val)}
+            />
           </DateDiv>
         </DateRow>
       </FirstRow>
       <FirstRow className="PL-20">
-        <DropDown 
-          options={['One Time', 'Repeat On']}
+        <DropDown
+          options={["One Time", "Repeat On"]}
           onChange={handleRepetition}
-          value={formik.values.repeat?.includes(8) ? 'One Time' : 'Repeat On'}
+          value={formik.values.repeat?.includes(8) ? "One Time" : "Repeat On"}
         />
         <DaysWrap>
-        {formik.values.repeat != 8 && (
-          <>
-            {Object.entries(Constants.REPETITION_DAY).map(([key, value]) => {
-              let className = parseInt(key) % 2 === 0 ? "" : "blueBg";
-              if (formik.values.repeat.includes(+key)) {
-                className += " ColrRed";
-              }
-              return (
-                <a
-                  key={key}
-                  id={key}
-                  className={className}
-                  onClick={handleDayClick}
-                >
-                  {value}
-                </a>
-              );
-            })}
-          </>
-        )}
-      </DaysWrap>
-
-      {formik.values.repeat != 8 && <DropDown 
-          options={['1 Week', '2 Week', '3 Week', '4 Week', '5 Week']}
-          onChange={(value) => formik.setFieldValue("for", value)}
-          value={formik.values.for}
-        />
-        }
-
+          {formik.values.repeat != 8 && (
+            <>
+              {Object.entries(Constants.REPETITION_DAY).map(([key, value]) => {
+                let className = parseInt(key) % 2 === 0 ? "" : "blueBg";
+                if (formik.values.repeat.includes(+key)) {
+                  className += " ColrRed";
+                }
+                return (
+                  <a
+                    key={key}
+                    id={key}
+                    className={className}
+                    onClick={handleDayClick}
+                  >
+                    {value}
+                  </a>
+                );
+              })}
+            </>
+          )}
+        </DaysWrap>
+        <ForText>For</ForText>
+        <TimePicker
+              max={toMinutes(formik.values.end_time)}
+              value={formik.values.start_time}
+              onChange={(val) => formik.setFieldValue("start_time", val)}
+            />
       </FirstRow>
       {formik.errors && formik.errors.repeat ? (
         <FirstRow>
