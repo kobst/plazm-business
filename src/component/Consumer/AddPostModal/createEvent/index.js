@@ -330,18 +330,22 @@ const CreateEventModal = ({
       parseInt(values.end_time?.split(":")[1])
     );
     end_time.hours(parseInt(values.end_time?.split(":")[0]));
+    if(values.repeat != 8) {
+      end_time.add(weekDays[values.for], 'days');
+    }
     if (start_time < moment()) {
-      console.log(error.START_DATE_GREATER_THAN_CURRENT);
+      setDateError(error.START_DATE_GREATER_THAN_CURRENT);
+      return
     }
     if (start_time > end_time) {
-      console.log(error.START_DATE_ERROR);
+      setDateError(error.START_DATE_ERROR);
+      return
     }
-    console.log(start_time.utc().valueOf(), end_time.utc().valueOf());
+    setLoader(true);
     const imagePromises = values.images.map((img) => uploadImage(img));
     let images = [];
     try {
       images = await Promise.all(imagePromises);
-      console.log(images, "images");
     } catch (error) {
       console.log(error);
     }
@@ -353,7 +357,6 @@ const CreateEventModal = ({
     // } else {
     setListError("");
     /*set loader value */
-    setLoader(true);
     /* to upload file to s3 bucket */
     let imageUrl = null;
 
