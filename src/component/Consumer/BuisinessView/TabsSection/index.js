@@ -28,6 +28,12 @@ const TabsSection = ({ profile, businessId }) => {
   const eventTabChange = async () => {
     dispatch(setCurrentDate());
   };
+  const onTabSelect = (index) => {
+    if(index === 3) {
+      index = 0
+    }
+    setSelectedIndex(index)
+  }
   return (
     <>
       {addPostModal && (
@@ -45,7 +51,7 @@ const TabsSection = ({ profile, businessId }) => {
       <TabsSectionContent className="InnerTabs">
         <Tabs
           selectedIndex={selectedIndex}
-          onSelect={(index) => setSelectedIndex(index)}
+          onSelect={(index) => onTabSelect(index)}
         >
           <TabList>
             <Tab>Posts</Tab>
