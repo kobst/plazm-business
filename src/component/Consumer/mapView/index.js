@@ -234,7 +234,7 @@ const MapView = (props) => {
         // height: '100vh',
         // width: '100%'
         height: '100vh',
-        width: '130vw',
+        width: '150vw',
         borderRadius: '5%'
     }
 
