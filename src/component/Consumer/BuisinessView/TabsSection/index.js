@@ -8,6 +8,8 @@ import PostsSection from "./PostsSection";
 import EventsSection from "./EventsSection";
 import { setCurrentDate } from "../../../../reducers/eventReducer";
 import useStore from "../../useState";
+import ModalComponent from "../../UI/Modal";
+import AddPostModal from "../../AddPostModal";
 
 const TabsSectionContent = styled.div`
   width: 100%;
@@ -17,25 +19,47 @@ const TabsSectionContent = styled.div`
 `;
 
 const TabsSection = ({ profile, businessId }) => {
+  const [addPostModal, setAddPostModal] = useState(false);
   const dispatch = useDispatch();
   const topEvent = useSelector((state) => state.event.topEvent);
   const [selectedIndex, setSelectedIndex] = useState(topEvent ? 1 : 0);
-
 
   /** to fetch current date events on tab change */
   const eventTabChange = async () => {
     dispatch(setCurrentDate());
   };
+  const onTabSelect = (index) => {
+    if(index === 3) {
+      index = 0
+    }
+    setSelectedIndex(index)
+  }
   return (
     <>
+      {addPostModal && (
+        <ModalComponent
+          closeOnOutsideClick={true}
+          isOpen={addPostModal}
+          closeModal={() => setAddPostModal(false)}
+        >
+          <AddPostModal
+            businessId={businessId}
+            closeModal={() => setAddPostModal(false)}
+          />
+        </ModalComponent>
+      )}
       <TabsSectionContent className="InnerTabs">
         <Tabs
           selectedIndex={selectedIndex}
-          onSelect={(index) => setSelectedIndex(index)}
+          onSelect={(index) => onTabSelect(index)}
         >
           <TabList>
             <Tab>Posts</Tab>
+            <Tab>Media</Tab>
             <Tab onClick={() => eventTabChange()}>Events</Tab>
+            <Tab onClick={() => setAddPostModal(true)}>
+              <span>+</span>Create Post
+            </Tab>
           </TabList>
 
           <TabPanel>
@@ -45,12 +69,14 @@ const TabsSection = ({ profile, businessId }) => {
               // setSelectedListId={setSelectedListId}
             />
           </TabPanel>
+          <TabPanel>Media Upcoming</TabPanel>
           <TabPanel>
             <EventsSection
               businessId={businessId}
               // setSelectedListId={setSelectedListId}
             />
           </TabPanel>
+          <TabPanel>Post Upcoming</TabPanel>
         </Tabs>
       </TabsSectionContent>
     </>
