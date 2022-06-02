@@ -2,11 +2,7 @@ import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import NewInBuzzItems from "../DiscoverList/ItemSectionSlider/SliderItems";
 import { Grid } from "@material-ui/core";
-import {
-  LoaderWrap,
-  NoMorePost,
-  GridWrapper,
-} from "../DiscoverList/styled";
+import { LoaderWrap, NoMorePost, GridWrapper } from "../DiscoverList/styled";
 // import {
 //   FetchMostPopularLists,
 //   FetchTrendingLists,
@@ -31,7 +27,7 @@ const ListsGrid = ({
   // setSelectedId,
   setTotalLists,
   totalLists,
-  loadMore
+  loadMore,
 }) => {
   const [displayModal, setDisplayModal] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
@@ -46,9 +42,9 @@ const ListsGrid = ({
     if (
       event.target.scrollLeft + event.target.offsetWidth ===
         event.target.scrollWidth &&
-        totalLists > offset
+      totalLists > offset
     ) {
-      loadMore()
+      loadMore();
     }
     //   if (heading === "Trending" && trendingLists.length === offset + 12) {
     //     setLoader({ value: true, heading });
@@ -84,17 +80,17 @@ const ListsGrid = ({
     divRef.current.scrollLeft += evt.deltaY;
   };
   return (
-    <GridWrapper>
-      <Grid ref={divRef}
+    <GridWrapper className="UserProfileGridWrapper">
+      <Grid
+        ref={divRef}
         onScroll={(e) => fetchMoreLists(e)}
-        onWheel={(e) => onWheel(e)} 
-        direction="row" 
-        container 
-        spacing={2} 
-        className="GridContainer"
+        onWheel={(e) => onWheel(e)}
+        direction="row"
+        container
+        spacing={2}
       >
         {data.map((i, key) => (
-          <Grid key={i._id} className="GridBox">
+          <Grid key={i._id}>
             <NewInBuzzItems
               data={i}
               heading={heading}
@@ -116,7 +112,7 @@ const ListsGrid = ({
           </LoaderWrap>
         )}
         {!loader && totalLists <= data?.length && (
-          <NoMorePost>No More Lists To Display</NoMorePost>
+          <NoMorePost className="MT-20">No More Lists To Display</NoMorePost>
         )}
       </Grid>
     </GridWrapper>

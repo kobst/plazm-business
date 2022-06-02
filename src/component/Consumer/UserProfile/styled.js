@@ -164,6 +164,7 @@ export const ListButtons = styled.div`
     color: #ff2e9a;
     background: #292549;
     border-radius: 5px;
+    border:0 !important;
   }
 `;
 

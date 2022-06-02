@@ -29,7 +29,7 @@ import {
   UserNameCircle,
 } from "./styled";
 import "./styles.css";
-import PlazmLogo from '../../../../images/plazmLogo.jpeg';
+import PlazmLogo from "../../../../images/plazmLogo.jpeg";
 
 const Header = () => {
   const routerHistory = useHistory();
@@ -45,7 +45,7 @@ const Header = () => {
   };
   const dispatch = useDispatch();
   const prevRoute = useHistory();
-  const route = useRouteMatch()
+  const route = useRouteMatch();
   const history = useLocation()
     .pathname.split("/")
     .filter((item) => item);
@@ -173,10 +173,8 @@ const Header = () => {
                 {"/ " + subListTabName[listTabSelected]}
               </span>
             )}
-            {route?.url === '/user-profile'  && (
-              <span className="crumb-text">
-                {selectedUser.user.name}
-              </span>
+            {route?.url === "/user-profile" && (
+              <span className="crumb-text">{selectedUser.user.name}</span>
             )}
           </BreadcrumbsText>
         </BreadcrumbsDiv>
@@ -208,7 +206,13 @@ const Header = () => {
         {showDiv && (
           <LogoutSection>
             <ul>
-              <li>profile</li>
+              <li
+                onClick={() => {
+                  routerHistory.push("/user-profile");
+                }}
+              >
+                profile
+              </li>
               <li
                 onClick={() => {
                   setshowDivModal((prev) => !prev);
