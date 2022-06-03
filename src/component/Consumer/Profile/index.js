@@ -32,13 +32,12 @@ const ProfileContent = ({ userId, setDisplayTab, setProfileClosed }) => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       const result = await dispatch(fetchUserProfileData(userId));
-      const data = await unwrapResult(result)
-      if(data) {
-        setFlag(false)
+      const data = await unwrapResult(result);
+      if (data) {
+        setFlag(false);
       }
     };
-    if(userId)
-    fetchUserProfile()
+    if (userId) fetchUserProfile();
   }, [dispatch, userId]);
 
   return loading || flag ? (
@@ -46,10 +45,10 @@ const ProfileContent = ({ userId, setDisplayTab, setProfileClosed }) => {
       <ValueLoader />
     </LoaderWrap>
   ) : userProfile !== null ? (
-    <div>
+    <div style={{ width: "100%" }}>
       <ProfileDetail
-        // setDisplayTab={setDisplayTab}
-        // setProfileClosed={setProfileClosed}
+      // setDisplayTab={setDisplayTab}
+      // setProfileClosed={setProfileClosed}
       />
       <ProfileTabs />
       <ProfileLock />

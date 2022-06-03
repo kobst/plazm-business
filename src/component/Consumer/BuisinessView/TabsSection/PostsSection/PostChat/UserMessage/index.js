@@ -65,12 +65,16 @@ const UserMsgWrap = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 12px;
-  :nth-child(even) {
+  background: #120f29;
+  border: 1px solid #3f3777;
+  border-radius: 10px;
+  margin: 0 10px 10px;
+  /* :nth-child(even) {
     background-color: #282352;
   }
   :nth-child(odd) {
     background-color: #221e45;
-  }
+  } */
 `;
 
 const ProfileNameHeader = styled.div`
@@ -156,9 +160,8 @@ const UserMessage = ({ postData }) => {
   const goToList = (list) => {
     // setSelectedList(list);
     setSelectedListId(list._id);
-    history.push(`/list/${list._id}`)
-  }
-
+    history.push(`/list/${list._id}`);
+  };
 
   ws.onmessage = (evt) => {
     const message = JSON.parse(evt.data);
@@ -403,7 +406,11 @@ const UserMessage = ({ postData }) => {
                   </InnerListBanner>
 
                   <ListNameWrap>
-                    <ListName onClick={() => goToList(postData.postDetails.list)}>{postData.postDetails.list.name}</ListName>
+                    <ListName
+                      onClick={() => goToList(postData.postDetails.list)}
+                    >
+                      {postData.postDetails.list.name}
+                    </ListName>
                     <ListInfo>
                       <FaCaretRight />
                       <ListAuthorName onClick={() => displayUserDetails()}>

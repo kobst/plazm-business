@@ -161,6 +161,7 @@ const DropdownContent = styled.div`
     padding: 0px 5px;
     text-decoration: none;
     font-size: 12px;
+    font-family: "Montserrat";
   }
   li:hover {
     background-color: #fe02b9;

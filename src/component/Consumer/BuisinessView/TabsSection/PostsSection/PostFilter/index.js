@@ -98,6 +98,7 @@ const DropdownContent = styled.div`
     padding: 0px 5px;
     text-decoration: none;
     font-size: 12px;
+    font-family: "Montserrat";
   }
   li:hover {
     background-color: #fe02b9;
@@ -105,7 +106,7 @@ const DropdownContent = styled.div`
   }
 `;
 
-const PostFilter = ({setFilterArr}) => {
+const PostFilter = ({ setFilterArr }) => {
   const [uploadMenu, setUploadMenu] = useState(false);
   const menuRef = useRef(null);
   const dispatch = useDispatch();

@@ -12,7 +12,7 @@ const PostFilterButtonContent = styled.div`
   width: 100%;
   position: relative;
   display: flex;
-  padding: 12px;
+  padding: 18px 12px 12px;
   background: #120f24;
   flex-direction: row;
   justify-content: space-between;

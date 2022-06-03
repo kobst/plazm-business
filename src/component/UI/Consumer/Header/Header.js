@@ -211,7 +211,7 @@ const Header = () => {
                   routerHistory.push("/user-profile");
                 }}
               >
-                profile
+                Profile Settings
               </li>
               <li
                 onClick={() => {
