@@ -139,6 +139,15 @@
   border-radius: 0;
 }
 
+.InnerTabs .react-tabs__tab:focus {
+  box-shadow: none !important;
+  border-color: transparent;
+}
+
+.InnerTabs .react-tabs__tab:focus:after {
+  display: none;
+}
+
 .InnerTabs #react-tabs-0 {
   background: transparent;
 }

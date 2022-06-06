@@ -4,8 +4,8 @@ import { MentionsInput, Mention } from "react-mentions";
 import { useSelector } from "react-redux";
 import "./style.css";
 import defaultMentionStyle from "./style";
-import ModalComponent from '../../../../UI/Modal'
-import AddPostModal from '../../../../AddPostModal'
+import ModalComponent from "../../../../UI/Modal";
+import AddPostModal from "../../../../AddPostModal";
 
 const AddPostSectionContent = styled.div`
   width: 100%;
@@ -15,6 +15,7 @@ const AddPostSectionContent = styled.div`
   background: #292454;
   flex-direction: column;
   justify-content: space-between;
+  display: none;
   @media (max-width: 767px) {
     flex-direction: column;
   }
@@ -67,8 +68,7 @@ const TextAreaWrap = styled.div`
   }
 `;
 
-
-const AddPostSection = ({  businessId }) => {
+const AddPostSection = ({ businessId }) => {
   const [addPostModal, setAddPostModal] = useState(false);
   const users = useSelector((state) => state.consumer.users);
   const lists = useSelector((state) => state.list.lists);
@@ -89,7 +89,10 @@ const AddPostSection = ({  businessId }) => {
           isOpen={addPostModal}
           closeModal={() => setAddPostModal(false)}
         >
-          <AddPostModal businessId={businessId} closeModal={() => setAddPostModal(false)}/>
+          <AddPostModal
+            businessId={businessId}
+            closeModal={() => setAddPostModal(false)}
+          />
         </ModalComponent>
       )}
       <AddPostSectionContent>
