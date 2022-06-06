@@ -474,7 +474,7 @@ const LikesBar = ({
               <RightDiv>
                 <BsThreeDots onClick={toggleUploadMenu} />
                 {uploadMenu && (
-                  <DropdownContent>
+                  <DropdownContent ref={menuRef}>
                     <ul>
                       <li onClick={() => editPost()}>Edit</li>
                       <li onClick={() => deletePost()}>Delete</li>
