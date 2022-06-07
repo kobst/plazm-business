@@ -57,9 +57,10 @@ const PanelContentContainer = styled.div`
   top: 60px;
   max-width: 620px;
   z-index: 3;
-  background: #221e45;
   /* overflow: auto; */
 `;
+
+// background: #221e45;
 
 // const MapCenterOffset = styled.div`
 //   width: 10px;

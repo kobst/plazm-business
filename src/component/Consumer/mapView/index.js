@@ -95,7 +95,7 @@ const setLinesExt = (dict) => {
 
 
 const setBBox = (_orderedPlaces) => {
-    let maxViewable = 100
+  
     let coordArray = [];
     let featureSet = []
     var limit = 10;
@@ -109,7 +109,7 @@ const setBBox = (_orderedPlaces) => {
     // }
   let length = _orderedPlaces.length
   if (length > 10) {
-    console.log(length)
+    console.log(length + " b box")
     lastPlaces = _orderedPlaces.slice(-10)
   } else {
     console.log("last places")
@@ -122,7 +122,6 @@ const setBBox = (_orderedPlaces) => {
       // console.log(i)
       // console.log(orderedPlaces[i])
       if (lastPlaces[i]) {
-
         let coords = lastPlaces[i].businessLocation.coordinates;
         coordArray.push(coords);
 
@@ -444,7 +443,7 @@ const clickHandler = (map, event) => {
                         if (places.length > 0) {
                             if (boundBox) {
                               map.fitBounds(boundBox, {
-                                padding: {top: 0, bottom:0, left: 200, right: 200}
+                                padding: {top: 0, bottom:0, left: 400, right: 400}
                                 })
                             }
 
