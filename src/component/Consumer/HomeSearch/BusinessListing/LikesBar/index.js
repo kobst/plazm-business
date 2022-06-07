@@ -161,6 +161,7 @@ const DropdownContent = styled.div`
     padding: 0px 5px;
     text-decoration: none;
     font-size: 12px;
+    font-family: "Montserrat";
   }
   li:hover {
     background-color: #fe02b9;
@@ -473,7 +474,7 @@ const LikesBar = ({
               <RightDiv>
                 <BsThreeDots onClick={toggleUploadMenu} />
                 {uploadMenu && (
-                  <DropdownContent>
+                  <DropdownContent ref={menuRef}>
                     <ul>
                       <li onClick={() => editPost()}>Edit</li>
                       <li onClick={() => deletePost()}>Delete</li>

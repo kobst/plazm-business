@@ -29,6 +29,7 @@ import {
   UserNameCircle,
 } from "./styled";
 import "./styles.css";
+import PlazmLogo from "../../../../images/plazmLogo.jpeg";
 
 const Header = () => {
   const routerHistory = useHistory();
@@ -44,7 +45,7 @@ const Header = () => {
   };
   const dispatch = useDispatch();
   const prevRoute = useHistory();
-  const route = useRouteMatch()
+  const route = useRouteMatch();
   const history = useLocation()
     .pathname.split("/")
     .filter((item) => item);
@@ -110,7 +111,7 @@ const Header = () => {
   /** for logout functionality redirection */
   const redirectUserToLoginScreen = () => {
     dispatch(setGloablLoader(false));
-    history.push("/consumer/login");
+    routerHistory.push("/consumer/login");
   };
 
   /** logout consumer */
@@ -172,10 +173,8 @@ const Header = () => {
                 {"/ " + subListTabName[listTabSelected]}
               </span>
             )}
-            {route?.url === '/user-profile'  && (
-              <span className="crumb-text">
-                {selectedUser.user.name}
-              </span>
+            {route?.url === "/user-profile" && (
+              <span className="crumb-text">{selectedUser.user.name}</span>
             )}
           </BreadcrumbsText>
         </BreadcrumbsDiv>
@@ -200,14 +199,20 @@ const Header = () => {
               setshowDiv((prev) => !prev);
             }}
           >
-            <img src="https://picsum.photos/id/237/200/300" />
+            <img src={PlazmLogo} alt="PlazmLogo" />
           </UserImg>
         </UserImgWrap>
 
         {showDiv && (
           <LogoutSection>
             <ul>
-              <li>profile</li>
+              <li
+                onClick={() => {
+                  routerHistory.push("/user-profile");
+                }}
+              >
+                Profile Settings
+              </li>
               <li
                 onClick={() => {
                   setshowDivModal((prev) => !prev);

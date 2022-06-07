@@ -1,245 +1,298 @@
-  .InnerTabs .react-tabs {
-    display: flex;
-    width: 100%;
-    border: 0;
-    color: #fff;
-    position: relative;
-    flex-direction: column;
-    background: transparent;
-  }
-  
-  .InnerTabs .react-tabs__tab-list {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    margin: 0 !important;
-    padding: 0;
-    color: white;
-    background: #221e45;
-    justify-content: space-between;
-    border-bottom: 2px solid #ff2e9a;
-  }
-  
-  .InnerTabs .react-tabs__tab {
-    height: auto;
-    list-style: none;
-    padding: 10px 0;
-    cursor: pointer;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 14px;
-    background-color: inherit;
-  }
+.InnerTabs .react-tabs {
+  display: flex;
+  width: 100%;
+  border: 0;
+  color: #fff;
+  position: relative;
+  flex-direction: column;
+  background: transparent;
+}
 
-  .InnerTabs .react-tabs__tab:nth-child(1){
-    height: auto;
-  }
+.InnerTabs .react-tabs__tab-list {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin: 0 !important;
+  padding: 0;
+  color: white;
+  background: #221e45;
+  justify-content: space-between;
+  border-bottom: 2px solid transparent;
+}
 
-  .InnerTabs .react-tabs__tab:nth-child(1), .InnerTabs .react-tabs__tab:nth-child(2), .InnerTabs .react-tabs__tab:nth-child(3){
-    border-bottom: 0 !important;
-    pointer-events: inherit;
-  }
-  
-  .InnerTabs .react-tabs__tab--selected, .InnerTabs .react-tabs__tab--selected:hover, .InnerTabs .react-tabs__tab--selected:focus {
-      outline: 0;
-  }
-  .InnerTabs .react-tabs__tab:last-child{
-    pointer-events: inherit;
-  }
-  
-  .InnerTabs .react-tabs__tab-panel {
-    display: none;
-    width: 100%;
-    position: relative;
-    left: inherit;
-    background: #221E45;
-    height: 100%;
-    z-index: 1;
-    animation: fadein .5s;
-    -moz-animation: fadein .5s; /* Firefox */
-    -webkit-animation: fadein .5s; /* Safari and Chrome */
-    -o-animation: fadein .5s; /* Opera */
-    
-  }
+.InnerTabs .react-tabs__tab-list li:last-child {
+  background: #136ef1;
+  border: 0 !important;
+}
+
+.InnerTabs .react-tabs__tab-list li:last-child span {
+  margin: 0 10px 0 0;
+}
+
+.InnerTabs .react-tabs__tab {
+  height: auto;
+  list-style: none;
+  padding: 10px 0;
+  cursor: pointer;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+  font-family: "Roboto";
+  background-color: inherit;
+  border-bottom: 2px solid transparent;
+}
+
+.InnerTabs .react-tabs__tab:nth-child(1) {
+  height: auto;
+}
+
+.InnerTabs .react-tabs__tab:nth-child(1),
+.InnerTabs .react-tabs__tab:nth-child(2),
+.InnerTabs .react-tabs__tab:nth-child(3) {
+  /* border-bottom: 0 !important; */
+  pointer-events: inherit;
+}
+
+.InnerTabs .react-tabs__tab--selected,
+.InnerTabs .react-tabs__tab--selected:hover,
+.InnerTabs .react-tabs__tab--selected:focus {
+  outline: 0;
+}
+.InnerTabs .react-tabs__tab:last-child {
+  pointer-events: inherit;
+}
+
+.InnerTabs .react-tabs__tab-panel {
+  display: none;
+  width: 100%;
+  position: relative;
+  left: inherit;
+  background: #221e45;
+  height: 100%;
+  z-index: 1;
+  animation: fadein 0.5s;
+  -moz-animation: fadein 0.5s; /* Firefox */
+  -webkit-animation: fadein 0.5s; /* Safari and Chrome */
+  -o-animation: fadein 0.5s; /* Opera */
+}
 @keyframes fadein {
-    from {
-        opacity:0;
-    }
-    to {
-        opacity:1;
-    }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
-@-moz-keyframes fadein { /* Firefox */
-    from {
-        opacity:0;
-    }
-    to {
-        opacity:1;
-    }
+@-moz-keyframes fadein {
+  /* Firefox */
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
-@-webkit-keyframes fadein { /* Safari and Chrome */
-    from {
-        opacity:0;
-    }
-    to {
-        opacity:1;
-    }
+@-webkit-keyframes fadein {
+  /* Safari and Chrome */
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
-@-o-keyframes fadein { /* Opera */
-    from {
-        opacity:0;
-    }
-    to {
-        opacity: 1;
-    }
+@-o-keyframes fadein {
+  /* Opera */
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
-  
+
 .InnerTabs .react-tabs__tab-panel--selected {
-    display: block;
+  display: block;
+}
+
+.InnerTabs .react-tabs__tab {
+  height: auto;
+  width: 50%;
+}
+
+.InnerTabs .react-tabs__tab--selected {
+  background: #ff2e9a;
+}
+
+.InnerTabs #react-tabs-1 {
+  display: none;
+}
+
+.InnerTabs .react-tabs__tab.react-tabs__tab--selected {
+  background: transparent;
+  border: 0 !important;
+  border-bottom: 2px solid #ff2e9a !important;
+  border-radius: 0;
+}
+
+.InnerTabs .react-tabs__tab:focus {
+  box-shadow: none !important;
+  border-color: transparent;
+}
+
+.InnerTabs .react-tabs__tab:focus:after {
+  display: none;
+}
+
+.InnerTabs #react-tabs-0 {
+  background: transparent;
+}
+
+@media (max-width: 767px) {
+  .InnerTabs .react-tabs__tab-panel {
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
-  
-  .InnerTabs .react-tabs__tab {
+  .InnerTabs .react-tabs__tab img {
+    max-width: 26px;
+  }
+  .InnerTabs .react-tabs__tab,
+  .react-tabs__tab:nth-child(1) {
     height: auto;
-    width: 50%;
   }
-  
-  .InnerTabs .react-tabs__tab--selected {
-    background: #FF2E9A;
-  }
-
-  .InnerTabs #react-tabs-1{
-      display: none;
-  }
-
-  .InnerTabs .react-tabs__tab.react-tabs__tab--selected{
-    background: #FF2E9A;
-    border: 0 !important;
-    border-radius: 0;
-  }
-
-  .InnerTabs #react-tabs-0{
-    background: transparent;
-  }
-
-  @media (max-width:767px){
-    .InnerTabs .react-tabs__tab-panel{
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-    .InnerTabs .react-tabs__tab img{
-      max-width: 26px;
-    }
-    .InnerTabs .react-tabs__tab, .react-tabs__tab:nth-child(1){
-      height: auto;
-    }
-    .InnerTabs .panel-content{
-      height: 90vh;
-      overflow: auto;
-      overflow-x: hidden;
-    }
-    .InnerTabs .react-tabs__tab {
-      font-size: 12px;
-      font-weight: 500;
-    }
-  }
-  @media (max-width:359px){
-    .InnerTabs .react-tabs__tab-panel{
-      left: 0;
-      width: 100%;
-    }
-  }
- 
-  aside.emoji-picker-react {
-    position: absolute !important;
-    right: 0 !important;
-    z-index: 1;
-    max-width: 250px !important;
-    box-shadow: none !important;
-    height: 250px !important;
-    color: #000 !important;
-  }
-
-  aside.emoji-picker-react .content-wrapper:before{
-    width: 80px;
-    right: 25px !important;
-    display: -webkit-box !important;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  } 
-
-  .emoji-picker-react input.emoji-search {
-    color: #000;
-  }
-
-  .emoji-picker-react .active-category-indicator-wrapper .active-category-indicator {
-    display: none;
-  }
-
-  .emoji-picker-react .emoji-group:before{
-    font-size: 11px !important;
-    display: none;
-  }
-
-  aside.emoji-picker-react .content-wrapper:before {
-    display: none !important;
-  }
-  
-  #scrollableDiv {
+  .InnerTabs .panel-content {
+    height: 90vh;
+    overflow: auto;
     overflow-x: hidden;
   }
+  .InnerTabs .react-tabs__tab {
+    font-size: 12px;
+    font-weight: 500;
+  }
+}
+@media (max-width: 359px) {
+  .InnerTabs .react-tabs__tab-panel {
+    left: 0;
+    width: 100%;
+  }
+}
 
-  #scrollableDiv::-webkit-scrollbar {
-    width: 5px;
-  }
-   
-  #scrollableDiv::-webkit-scrollbar-track {
-    background: rgba(241, 241, 241, 0.233);
-    border-radius: 10px;
-  }
-   
-  #scrollableDiv::-webkit-scrollbar-thumb {
-    background: #000; 
-    cursor: pointer;
-    border-radius: 10px;
-  }
+aside.emoji-picker-react {
+  position: absolute !important;
+  right: 0 !important;
+  z-index: 1;
+  max-width: 250px !important;
+  box-shadow: none !important;
+  height: 250px !important;
+  color: #000 !important;
+}
 
-  .InnerScroll {
-    overflow-x: hidden !important;
-  }
-  .InnerScroll>div:first-child {
-    overflow-x: hidden !important;
-  }
+aside.emoji-picker-react .content-wrapper:before {
+  width: 80px;
+  right: 25px !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 
+.emoji-picker-react input.emoji-search {
+  color: #000;
+}
+
+.emoji-picker-react
+  .active-category-indicator-wrapper
+  .active-category-indicator {
+  display: none;
+}
+
+.emoji-picker-react .emoji-group:before {
+  font-size: 11px !important;
+  display: none;
+}
+
+aside.emoji-picker-react .content-wrapper:before {
+  display: none !important;
+}
+
+#scrollableDiv {
+  overflow-x: hidden;
+}
+
+#scrollableDiv::-webkit-scrollbar {
+  width: 5px;
+}
+
+#scrollableDiv::-webkit-scrollbar-track {
+  background: rgba(241, 241, 241, 0.233);
+  border-radius: 10px;
+}
+
+#scrollableDiv::-webkit-scrollbar-thumb {
+  background: #000;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.InnerScroll {
+  overflow-x: hidden !important;
+}
+.InnerScroll > div:first-child {
+  overflow-x: hidden !important;
+}
+
+aside.emoji-picker-react {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  width: 50px;
+  right: 27px;
+}
+
+.__react_component_tooltip {
+  max-width: 280px;
+}
+
+@media (max-width: 767px) {
+  /* #scrollableDiv {
+      height: auto !important;
+    } */
   aside.emoji-picker-react {
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    width: 50px;
-    right: 27px;
+    right: -30px !important;
   }
+}
 
-  .__react_component_tooltip {
-    max-width: 280px;
-  }
-
-  @media (max-width:767px){ 
-    /* #scrollableDiv {
+@media (max-width: 991px) and (orientation: landscape) {
+  /* #scrollableDiv {
       height: auto !important;
     } */
-    aside.emoji-picker-react {
-      right: -30px !important;
-    }
-  }
+}
 
-  @media (max-width: 991px) and (orientation: landscape) {
-    /* #scrollableDiv {
-      height: auto !important;
-    } */
-  }
-  
+.MuiPickersDatePickerRoot-toolbar,
+.MuiPickersBasePicker-pickerView {
+  background-color: #272631 !important;
+}
+
+.MuiPickersCalendarHeader-switchHeader,
+.MuiPickersDay-day {
+  color: #fff !important;
+}
+
+.MuiPickersDay-daySelected {
+  border-radius: 2px !important;
+  background: #ff2e9a !important;
+}
+
+.MuiPickersCalendarHeader-iconButton {
+  background-color: transparent !important;
+  color: #fff !important;
+}
+
+.MuiPickersCalendarHeader-dayLabel {
+  color: #0094ff !important;
+}

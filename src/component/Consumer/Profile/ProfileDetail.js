@@ -25,7 +25,7 @@ const CloseDiv = styled.div`
 
 const ProfileItem = styled.div`
   display: flex;
-  align-item: flex-start;
+  align-items: flex-start;
   justify-content: flex-start;
   padding: 28px 32px 0;
   width: 100%;
@@ -60,14 +60,14 @@ const ProfileItemName = styled.div`
 
 const ProfileItemList = styled.div`
   display: flex;
-  align-item: flex-start;
+  align-items: flex-start;
 `;
 
 const ProfileItemNumber = styled.div`
   font-weight: 900;
   font-size: 12px;
   color: #ff2e9a;
-  width: 40px;
+  min-width: 20px;
 `;
 
 const ProfileItemCategory = styled.div`

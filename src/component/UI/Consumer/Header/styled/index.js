@@ -138,7 +138,6 @@ export const LocationWrap = styled.div`
 export const UserImgWrap = styled.div`
   display: flex;
   align-items: center;
-  border-left: 1px solid #d6d6d6;
   padding: 0 18px;
   height: 60px;
 `;
@@ -182,8 +181,16 @@ export const LogoutSection = styled.div`
       color: #575757;
       padding: 8px 12px;
       text-transform: capitalize;
+      cursor: pointer;
+      font-family: Roboto;
+      background: #f3f3f3;
       :last-child {
-        color: #ff2730;
+        color: #000;
+      }
+      :hover {
+        :last-child {
+          color: #ff2730;
+        }
       }
       .logoutDiv {
         display: flex;

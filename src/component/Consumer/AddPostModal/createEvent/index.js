@@ -13,11 +13,45 @@ import { validate } from "./validate";
 import ValueLoader from "../../../../utils/loader";
 import PostImage from "../PostImage";
 import ButtonGrey from "../../UI/ButtonGrey";
-import SelectedListing from "../SelectedListing";
+// import SelectedListing from "../SelectedListing";
 import PostEvent from "../PostEvent";
 import { addEvent } from "../../../../reducers/eventReducer";
 import error from "../../../../constants";
 import { AddEventToList } from "../../../../reducers/listReducer";
+import { FaRegClock } from "react-icons/fa";
+import { IoMdArrowDropdown, IoMdClose } from "react-icons/io";
+import { BsGrid } from "react-icons/bs";
+import GalleryIcon from "../../../../images/GalleryIcon.png";
+import { MdCheck } from "react-icons/md";
+import {
+  FirstRow,
+  ClockIcon,
+  DatePickerInput,
+  DateRow,
+  DateDiv,
+  DateText,
+  DateDropdown,
+  Hyphen,
+  DropDownSection,
+  AddImagesLabel,
+  ImagesRow,
+  ImagesNameSec,
+  ImagesCross,
+  DropDownList,
+  RightTick,
+} from "./styled.js";
+
+import EventSchedule from "./EventSchedule";
+import AddImages from "./AddImages";
+import SelectedListing from "./SelectedListing";
+
+import {
+  DatePicker,
+  MuiPickersUtilsProvider,
+  TimePicker,
+} from "@material-ui/pickers";
+import MomentUtils from "@date-io/moment";
+import moment from "moment";
 
 const bucket = process.env.REACT_APP_BUCKET;
 
@@ -25,7 +59,7 @@ const BottomButtonsBar = styled.div`
   width: 100%;
   color: #fff;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   textarea {
     min-height: 100px;
     font-weight: 500;
@@ -148,7 +182,14 @@ const BottomBtnWrap = styled.div`
   }
 `;
 
+const weekDays = {
+  '1 Week': 7, '2 Week': 14, '3 Week': 21, '4 Week': 28, '5 Week': 35
+} 
+
 let myInput;
+const date = new Date(
+  Math.round(Date.now() / (30 * 60 * 1000)) * (30 * 60 * 1000)
+);
 const CreateEventModal = ({
   setDisplayList,
   selectedListForPost,
@@ -175,6 +216,7 @@ const CreateEventModal = ({
   const [loader, setLoader] = useState(false);
   const [imageError, setImageError] = useState("");
   const [formError, setError] = useState("");
+  const [dateError, setDateError] = useState("")
   const [listError, setListError] = useState("");
   const [response, setResponse] = useState("");
   const user = useSelector((state) => state.user.user);
@@ -182,27 +224,7 @@ const CreateEventModal = ({
   const ws = useSelector((state) => state.user.ws);
   const dispatch = useDispatch();
 
-  /*
-  @desc: to check input file format and throw error if invalid image is input
-  @params: input file
-  */
-  const uploadImage = (e) => {
-    const selectedFile = e.target.files[0];
-    if (selectedFile) {
-      const idxDot = selectedFile.name.lastIndexOf(".") + 1;
-      const extFile = selectedFile.name
-        .substr(idxDot, selectedFile.name.length)
-        .toLowerCase();
-      // console.log(selectedFile, extFile);
-      if (extFile === "jpeg" || extFile === "png" || extFile === "jpg") {
-        setImageError("");
-        setImageUpload(URL.createObjectURL(e.target.files[0]));
-        setImageFile(selectedFile);
-      } else {
-        setImageError("Only jpg/jpeg and png,files are allowed!");
-      }
-    }
-  };
+  const [selectedDate, handleDateChange] = useState("2018-01-01T00:00:00.000Z");
   /*
    * @desc: to delete an image
    * @params: image id
@@ -236,126 +258,177 @@ const CreateEventModal = ({
   };
 
   /*
+  @desc: to check input file format and throw error if invalid image is input
+  @params: input file
+  */
+  const uploadImage = async (imageFile) => {
+    // const selectedFile = e.target.files[0];
+    // if (selectedFile) {
+    //   const idxDot = selectedFile.name.lastIndexOf(".") + 1;
+    //   const extFile = selectedFile.name
+    //     .substr(idxDot, selectedFile.name.length)
+    //     .toLowerCase();
+    //   // console.log(selectedFile, extFile);
+    //   if (extFile === "jpeg" || extFile === "png" || extFile === "jpg") {
+    //     setImageError("");
+    //     setImageUpload(URL.createObjectURL(e.target.files[0]));
+    //     setImageFile(selectedFile);
+    //   } else {
+    //     setImageError("Only jpg/jpeg and png,files are allowed!");
+    //   }
+    // }
+    if (imageFile !== null) {
+      const folder_name = folderName(user.name, user._id);
+      const file_name = fileName(imageFile.name);
+      const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${file_name}`;
+      const value = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/upload_photo`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            Key: file_name,
+            ContentType: imageFile.type,
+            folder_name: folder_name,
+          }),
+        }
+      );
+      const body = await value.text();
+      const Val = JSON.parse(body);
+
+      return fetch(Val, {
+        method: "PUT",
+        headers: {
+          "Content-Type": imageFile.type,
+        },
+        body: imageFile,
+      })
+        .then(() => {
+          return baseUrl;
+        })
+        .catch((error) => {
+          console.log(error); // Handle the error response object
+          return;
+        });
+    }
+  };
+
+  /*
   @desc: add a event
   @params: form values
   */
   const saveEvent = async (values) => {
+    // start_time: date.getHours() + ':' + date.getMinutes(),
+    // end_time: date.getHours() + ':' + (parseInt(date.getMinutes())+15),
+    const start_time = moment(values.date).minutes(
+      parseInt(values.start_time?.split(":")[1])
+    );
+    start_time.hours(parseInt(values.start_time?.split(":")[0]));
+    const end_time = moment(values.date).minutes(
+      parseInt(values.end_time?.split(":")[1])
+    );
+    end_time.hours(parseInt(values.end_time?.split(":")[0]));
+    if(values.repeat != 8) {
+      end_time.add(weekDays[values.for], 'days');
+    }
+    if (start_time < moment()) {
+      setDateError(error.START_DATE_GREATER_THAN_CURRENT);
+      return
+    }
+    if (start_time > end_time) {
+      setDateError(error.START_DATE_ERROR);
+      return
+    }
+    setLoader(true);
+    const imagePromises = values.images.map((img) => uploadImage(img));
+    let images = [];
+    try {
+      images = await Promise.all(imagePromises);
+    } catch (error) {
+      console.log(error);
+    }
+
     /** if event details are not added */
-    if (eventDetails !== null) {
-      if (!selectedListForPost) {
-        setListError(error.EVENT_LIST_ERROR);
-      } else {
-        setListError("");
-        /*set loader value */
-        setLoader(true);
-        /* to upload file to s3 bucket */
-        let imageUrl = null;
-        if (imageFile !== null) {
-          const folder_name = folderName(user.name, user._id);
-          const file_name = fileName(imageFile.name);
-          const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${file_name}`;
-          const value = await fetch(
-            `${process.env.REACT_APP_API_URL}/api/upload_photo`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                Key: file_name,
-                ContentType: imageFile.type,
-                folder_name: folder_name,
-              }),
-            }
-          );
-          const body = await value.text();
-          const Val = JSON.parse(body);
+    // if (eventDetails !== null) {
+    // if (!selectedListForPost) {
+    //   setListError(error.EVENT_LIST_ERROR);
+    // } else {
+    setListError("");
+    /*set loader value */
+    /* to upload file to s3 bucket */
+    let imageUrl = null;
 
-          await fetch(Val, {
-            method: "PUT",
-            headers: {
-              "Content-Type": imageFile.type,
-            },
-            body: imageFile,
-          })
-            .then(() => {
-              imageUrl = baseUrl;
+    const obj = {
+      user: user._id,
+      business: business[0]._id,
+      title: values.title,
+      description: values.description,
+      taggedUsers: mentionArrayUser,
+      taggedLists: mentionArrayList,
+      eventSchedule: {
+        start_time: start_time.format(),
+        end_time: end_time.format(),
+      },
+      recurring: values.repeat,
+      listId: values.lists[0],
+      media: images,
+    };
+
+    /** add event */
+    const resultAction = await dispatch(addEvent({ obj: obj, user: user }));
+    const response = await unwrapResult(resultAction);
+    if (response.data.success === true) {
+      /** if any list is selected than add event to list */
+      if (values.lists) {
+        const listPromises = values.lists.map((list) => {
+          return dispatch(
+            AddEventToList({
+              eventId: response.data.event._id,
+              listId: list,
             })
-            .catch(
-              (error) => console.log(error) // Handle the error response object
-            );
+          );
+        });
+        const addToList = await Promise.race(listPromises);
+        // const addToList = await dispatch(
+        //   AddEventToList({
+        //     eventId: response.data.event._id,
+        //     listId: selectedListForPost,
+        //   })
+        // );
+        const res = await unwrapResult(addToList);
+        if (res.data.addEventToList.success === true) {
+          closeModal();
+          setLoader(false);
+          setEventDescription("");
+          setEventTitle("");
+          setImageUrl(null);
+          setImageCopy([]);
+          setImageUpload(null);
         }
-
-        const obj = {
-          user: user._id,
-          business: business[0]._id,
-          title: values.title,
-          description: values.description,
-          taggedUsers: mentionArrayUser,
-          taggedLists: mentionArrayList,
-          eventSchedule: {
-            start_time: eventDetails.start_time,
-            end_time: eventDetails.end_time,
+      } else {
+        closeModal();
+        setLoader(false);
+        setEventDescription("");
+        setEventTitle("");
+        setImageUrl(null);
+        setImageCopy([]);
+        setImageUpload(null);
+      }
+      ws.send(
+        JSON.stringify({
+          action: "event",
+          event: {
+            ...response.event,
+            type: "addEvent",
+            user: user,
+            totalComments: 0,
+            likes: [],
+            createdAt: new Date(Date.now()),
           },
-          recurring: eventDetails.eventRepeat,
-          listId: selectedListForPost ? selectedListForPost : null,
-          media:
-            imageFile !== null ? (imageUrl !== null ? imageUrl : null) : null,
-        };
-
-        /** add event */
-        const resultAction = await dispatch(addEvent({ obj: obj, user: user }));
-        const response = await unwrapResult(resultAction);
-        if (response.data.success === true) {
-          /** if any list is selected than add event to list */
-          if (selectedListForPost) {
-            const addToList = await dispatch(
-              AddEventToList({
-                eventId: response.data.event._id,
-                listId: selectedListForPost,
-              })
-            );
-            const res = await unwrapResult(addToList);
-            if (res.data.addEventToList.success === true) {
-              closeModal();
-              setLoader(false);
-              setEventDescription("");
-              setEventTitle("");
-              setImageUrl(null);
-              setImageCopy([]);
-              setImageUpload(null);
-            }
-          } else {
-            closeModal();
-            setLoader(false);
-            setEventDescription("");
-            setEventTitle("");
-            setImageUrl(null);
-            setImageCopy([]);
-            setImageUpload(null);
-          }
-          ws.send(
-            JSON.stringify({
-              action: "event",
-              event: {
-                ...response.event,
-                type: "addEvent",
-                user: user,
-                totalComments: 0,
-                likes: [],
-                createdAt: new Date(Date.now()),
-              },
-            })
-          );
-        }
-      }
-    } else {
-      if (!selectedListForPost) {
-        setListError(error.EVENT_LIST_ERROR);
-      } else {
-        setListError("");
-      }
-      setError(error.EVENT_DETAILS_REQUIRED);
+        })
+      );
     }
   };
 
@@ -376,16 +449,24 @@ const CreateEventModal = ({
     e.preventDefault();
     setDisplayCalendar(true);
   };
+
   return (
     <PostContent>
       <TopBar>
         <Heading>Create Event</Heading>
       </TopBar>
       <Formik
-        enableReinitialize={true}
+        // enableReinitialize={true}
         initialValues={{
           title: eventTitle,
           description: eventDescription,
+          repeat: [8],
+          date: new Date(Date.now()),
+          start_time: date.getHours() + ":" + date.getMinutes(),
+          end_time: date.getHours() + ":" + (parseInt(date.getMinutes()) + 15),
+          images: [],
+          lists: [],
+          for: '2 Week',
         }}
         /*validation schema */
         validationSchema={Yup.object(validate)}
@@ -393,6 +474,7 @@ const CreateEventModal = ({
         validateOnBlur={false}
         onSubmit={(values) => {
           /*update profile function call*/
+          setDateError(null);
           saveEvent(values);
         }}
       >
@@ -409,75 +491,24 @@ const CreateEventModal = ({
               mentionArrayUser={mentionArrayUser}
               setMentionArrayUser={setMentionArrayUser}
             />
-            {eventDetails !== null ? (
-              <AddYourPostBar>
-                <PostEvent
-                  eventDetails={eventDetails}
-                  setEventDetails={setEventDetails}
-                  loader={loader}
-                />
-              </AddYourPostBar>
-            ) : (
-              <AddYourPostBar>
-                <AddYourTimeLabel>Add Time</AddYourTimeLabel>
-                <button onClick={(e) => displayCalendar(e)} disabled={loader}>
-                  <AddImageDiv>
-                    <img src={CalenderImg} alt="" />
-                  </AddImageDiv>
-                </button>
-              </AddYourPostBar>
-            )}
-            {formError !== "" ? <ErrorDiv>{formError}</ErrorDiv> : null}
-            {!imageUpload && (
-              <AddYourPostBar>
-                <AddYourPostLabel>Add a Picture</AddYourPostLabel>
-                <AddImageDiv>
-                  <input
-                    id="myInput"
-                    onChange={(e) => uploadImage(e)}
-                    multiple
-                    type="file"
-                    accept=".png, .jpg, .jpeg"
-                    ref={(ref) => (myInput = ref)}
-                    style={{ display: "none" }}
-                    disabled={loader}
-                  />
-                  <img
-                    src={AddImageImg}
-                    alt=""
-                    onClick={() => myInput.click()}
-                  />
-                </AddImageDiv>
-              </AddYourPostBar>
-            )}
-            {imageUpload ? (
-              <AddYourPostBar>
-                <PostImage
-                  loader={loader}
-                  type="eventImages"
-                  imageUrl={imageUpload}
-                  deleteImage={deleteImage}
-                  clearImages={clearImages}
-                />
-              </AddYourPostBar>
-            ) : null}
-            <SelectedListing
-              type="event"
-              selectedListForPost={selectedListForPost}
-              setSelectedListForPost={setSelectedListForPost}
-            />
-            {/* to display list error */}
+
             {listError !== "" ? <ErrorDiv>{listError}</ErrorDiv> : null}
-            {/* for displaying image error if any */}
+
             {imageError !== "" ? <ErrorDiv>{imageError}</ErrorDiv> : null}
 
-            {/* for displaying the response of add list */}
             {response !== "" ? <ErrorDiv>{response}</ErrorDiv> : <></>}
+
+            <EventSchedule formik={formik} setEventDetails={() => null} />
+            {dateError ? (
+              <FirstRow>
+                <ErrorDiv>{dateError}</ErrorDiv>
+              </FirstRow>
+            ) : null}
+            <AddImages formik={formik} />
+            <SelectedListing formik={formik} />
+
             {/* bottom buttons bar */}
             <BottomButtonsBar>
-              <BackButton disabled={loader} onClick={(e) => listDisplay(e)}>
-                Add to List
-              </BackButton>
               <BottomBtnWrap>
                 <ButtonGrey
                   className="MR-15"

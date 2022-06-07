@@ -87,7 +87,7 @@ const PostChat = () => {
     <>
       <div
         id="scrollableDiv"
-        style={{ height: "calc(100vh - 465px)", overflow: "auto" }}
+        style={{ height: "calc(100vh - 245px)", overflow: "auto" }}
       >
         {/* to display Top Post If any */}
         {topPost && (

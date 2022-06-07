@@ -65,30 +65,24 @@ const BuisinessView = ({
 
   useEffect(() => {
     if (businessProfile[0]) {
-      
       let deepClone = JSON.parse(JSON.stringify(businessProfile[0]));
       deepClone.businessLocation = deepClone.location;
 
       // console.log("XXXX   business view coordinates XXXXX");
       // console.log(deepClone);
 
-      setDetailView(true)
+      setDetailView(true);
       setSelectedPlace(deepClone);
     }
   }, [businessProfile]);
 
-
   useEffect(() => {
-  
     return () => {
-      console.log(" no business view - unmount")
-      setDetailView(false)
-      setSelectedPlace(null)};
-
+      console.log(" no business view - unmount");
+      setDetailView(false);
+      setSelectedPlace(null);
+    };
   }, []);
-
-
-
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -112,7 +106,7 @@ const BuisinessView = ({
               <GlobalSearchBox setOffset={() => {}} type={"Business Search"} />
             )}
           </div>
-          <div style={{ width: "100%" }}>
+          <div style={{ width: "100%", height: "100vh" }}>
             <BuisinessViewContent>
               {businessProfile &&
                 businessProfile.length > 0 &&

@@ -2,10 +2,14 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { deleteUserPost, deletePostInMyFeed } from "../../../../reducers/myFeedReducer";
+import {
+  deleteUserPost,
+  deletePostInMyFeed,
+} from "../../../../reducers/myFeedReducer";
 import ValueLoader from "../../../../utils/loader";
-import BackButton from "../../UI/BackButton";
-import SaveButton from "../../UI/SaveButton";
+import ButtonDelete from "../../UI/ButtonDelete";
+import ButtonGrey from "../../UI/ButtonGrey";
+import { FiAlertTriangle } from "react-icons/fi";
 
 const ModalContent = styled.div`
   width: 100%;
@@ -29,12 +33,24 @@ const ModalContent = styled.div`
   }
   &.DeleteModal {
     flex-direction: column;
-    max-width: 400px;
-    min-width: 376px;
+    max-width: 282px;
+    min-width: 282px;
     text-align: center;
-     p{
-      margin: 0 0 15px 0;
-     }
+    display: flex;
+    align-items: center;
+    padding: 30px;
+    border-radius: 8px;
+    p {
+      margin: 0 0 30px 0;
+      padding: 0;
+      font-family: "Montserrat";
+      font-style: normal;
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 17px;
+      text-align: center;
+      color: #ffffff;
+    }
   }
 `;
 
@@ -42,7 +58,8 @@ const BottomButtonsBar = styled.div`
   width: 100%;
   color: #fff;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
   textarea {
     min-height: 100px;
     font-weight: 500;
@@ -51,6 +68,22 @@ const BottomButtonsBar = styled.div`
   }
   @media (max-width: 991px) and (orientation: landscape) {
     padding: 0 0 15px;
+  }
+  .MR-10 {
+    margin-right: 10px;
+  }
+`;
+
+const AlertIcon = styled.div`
+  width: 100%;
+  color: #ff4848;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 0 25px;
+  svg {
+    font-size: 54px;
+    color: #ff4848;
   }
 `;
 
@@ -72,14 +105,24 @@ const DeletePostModal = ({ closeModal, id }) => {
   return (
     <>
       <ModalContent className="DeleteModal">
+        <AlertIcon>
+          <FiAlertTriangle />
+        </AlertIcon>
         <p>Are You Sure You Want To Delete The Post?</p>
         <BottomButtonsBar>
-          <BackButton onClick={() => closeModal()} disabled={loadingDeletePost}>
+          <ButtonGrey
+            className="MR-10"
+            onClick={() => closeModal()}
+            disabled={loadingDeletePost}
+          >
             Cancel
-          </BackButton>
-          <SaveButton onClick={() => deletePost()} disabled={loadingDeletePost}>
+          </ButtonGrey>
+          <ButtonDelete
+            onClick={() => deletePost()}
+            disabled={loadingDeletePost}
+          >
             {loadingDeletePost ? <ValueLoader /> : "Delete"}
-          </SaveButton>
+          </ButtonDelete>
         </BottomButtonsBar>
       </ModalContent>
     </>

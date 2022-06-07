@@ -484,6 +484,9 @@ export const NoMorePost = styled.p`
   align-items: center;
   justify-content: center;
   width: 100%;
+  &.MT-20 {
+    margin-top: 15px;
+  }
 `;
 
 export const ErrorDiv = styled.div`
@@ -516,6 +519,18 @@ export const ListWraper = styled.div`
 export const GridWrapper = styled.div`
   position: relative;
   width: 100%;
+  &.UserProfileGridWrapper {
+    padding: 70px 0px 30px 15px;
+    .UserProfileGridList {
+      width: 160px;
+      margin: 0 6px 15px;
+    }
+
+    .UserProfileCoverImg {
+      width: 100%;
+      height: 140px;
+    }
+  }
 
   .GridContainer {
     position: relative;
