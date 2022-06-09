@@ -172,8 +172,8 @@ export const RightIcons = styled.div`
   }
 `;
 export const InnerListBanner = styled.div`
-  width: 27px;
-  height: 27px;
+  width: 29px;
+  height: 29px;
   margin: 0 8px 0 0;
   overflow: hidden;
   position: relative;
@@ -260,7 +260,7 @@ export const FeedDescription = styled.p`
   font-style: normal;
   font-size: 12px;
   line-height: normal;
-  margin: 0 0 15px;
+  margin: 10px 0 15px;
   font-weight: 400;
   color: #fff;
   padding: 0%;
