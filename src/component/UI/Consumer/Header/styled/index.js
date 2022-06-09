@@ -147,6 +147,7 @@ export const UserImg = styled.div`
   align-items: center;
   border: 1px solid #ffffff;
   cursor: pointer;
+  border-radius: 50%;
   img {
     border-radius: 50%;
     width: 25px;

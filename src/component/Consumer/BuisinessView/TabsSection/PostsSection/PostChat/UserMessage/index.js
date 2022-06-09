@@ -93,13 +93,13 @@ const ProfileNameWrap = styled.div`
   justify-content: center;
   max-width: 100%;
   // border-bottom: 0.25px solid #878787;
-  padding: 0 0px 15px 0px;
+  padding: 0 0px 0px 0px;
   width: 100%;
   @media (max-width: 1024px) {
-    padding: 0 0px 15px 0px;
+    padding: 0 0px 0px 0px;
   }
   @media (max-width: 767px) {
-    padding: 0 0px 15px 0px;
+    padding: 0 0px 0px 0px;
   }
 `;
 

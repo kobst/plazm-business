@@ -44,7 +44,7 @@ const ReplyWrap = styled.div`
 const ProfileNameHeader = styled.div`
   display: flex;
   padding: 0;
-  margin: 15px 0 0;
+  margin: 10px 0 0;
   @media (max-width: 767px) {
     width: 100%;
   }
