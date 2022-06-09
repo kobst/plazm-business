@@ -20,6 +20,7 @@ import {
   FollowedByListUl,
   InnerDescriptionPara,
   SubscribeBtn,
+  InnerBottomBtns
 } from "../../styled";
 import {
   SubscribeToAListAction,
@@ -36,6 +37,7 @@ import useStore from "../../../useState";
 import ValueLoader from "../../../../../utils/loader";
 
 import { useHistory } from "react-router-dom";
+import ButtonBlue from "../../../UI/ButtonBlue";
 
 const getImage = (selectedList) => {
   if (selectedList && selectedList.media && selectedList.media.length > 0) {
@@ -174,7 +176,7 @@ const NewInBuzzItems = ({
                   offsetLeft={offsetLeft}
                   offsetTop={offsetTop}
                 >
-                  <InnerCoverImg>
+                  <InnerCoverImg className="InnerModalCoverImg">
                     <img
                       src={image}
                       alt=""
@@ -226,14 +228,18 @@ const NewInBuzzItems = ({
                     {data?.description}....
                     <strong onClick={() => ReadMore()}>Read More</strong>
                   </InnerDescriptionPara>
+                  <InnerBottomBtns>
+                  <ButtonBlue>Visit</ButtonBlue>
                   {data?.subscribers.length === 0 ||
                   !data?.subscribers.find((i) => i._id === user._id) ? (
+                    <>
+                    
                     <SubscribeBtn
                       onClick={() => listSubscribe()}
                       disabled={loader}
                     >
                       {loader ? <ValueLoader /> : "Subscribe"}
-                    </SubscribeBtn>
+                    </SubscribeBtn></>
                   ) : (
                     <SubscribeBtn
                       onClick={() => listUnSubscribe()}
@@ -242,6 +248,7 @@ const NewInBuzzItems = ({
                       {loader ? <ValueLoader /> : "UnSubscribe"}
                     </SubscribeBtn>
                   )}
+                  </InnerBottomBtns>
                 </DisplayItemContent>
               )}
           </ItemsDescription>
