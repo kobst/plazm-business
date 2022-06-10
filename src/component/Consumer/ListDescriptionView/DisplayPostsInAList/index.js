@@ -129,6 +129,10 @@ const DescriptionViewItem = styled.div`
   .background-inactive {
     background-color: #282352;
   }
+  background: #120F29;
+  border: 1px solid #3F3777;
+  border-radius: 10px;
+  margin: 0 10px 3px;
 `;
 
 const TitleBarWrap = styled.div`
@@ -212,14 +216,19 @@ const DisplayPostInAList = ({ data, id }) => {
             </UserMessageContent>
           </UserMsgWrap> */}
 
-          <UserMessage
-            postData={data}
-            businessData={data.business[0]}
-            listView={true}
-            setSelectedListId={setSelectedListId}
-            listDescriptionView={true}
-            setListIndex={setListIndex}
-          />
+         {/* <UserMsgWrap>
+        <UserMessageContent> */}
+            <UserMessage
+              postData={data}
+              businessData={data.business[0]}
+              listView={true}
+              setSelectedListId={setSelectedListId}
+              listDescriptionView={true}
+              setListIndex={setListIndex}
+            />
+          {/* </UserMessageContent>
+        </UserMsgWrap>  */}
+
         </div>
       </DescriptionViewItem>
     </>

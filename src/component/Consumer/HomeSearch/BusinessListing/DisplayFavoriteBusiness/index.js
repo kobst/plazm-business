@@ -303,7 +303,7 @@ const DisplayFavoriteBusiness = ({
 
 
   const handleHover = () => {
-    console.log("hover " + businessInfo.company_name)
+    // console.log("hover " + businessInfo.company_name)
     let deepClone = JSON.parse(JSON.stringify(businessInfo));
     deepClone.businessLocation = deepClone.location;
     setSelectedPlace(deepClone);
