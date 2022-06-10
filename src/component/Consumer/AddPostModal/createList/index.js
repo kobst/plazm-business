@@ -181,6 +181,7 @@ const CreateListModel = ({
 
   /**cancel button functionality */
   const cancelButton = (e) => {
+    console.log('here')
     e.preventDefault();
     setDisplayCreateList(false);
     setDisplayList(true);
