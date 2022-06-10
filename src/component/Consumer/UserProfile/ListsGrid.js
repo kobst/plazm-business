@@ -106,14 +106,14 @@ const ListsGrid = ({
             />
           </Grid>
         ))}
-        {loader && (
+        {loader ? (
           <LoaderWrap>
             <ValueLoader />
           </LoaderWrap>
-        )}
-        {!loader && totalLists <= data?.length && (
+        ): null}
+        {!loader && totalLists <= data?.length ? (
           <NoMorePost className="MT-20">No More Lists To Display</NoMorePost>
-        )}
+        ) : null}
       </Grid>
     </GridWrapper>
   );
