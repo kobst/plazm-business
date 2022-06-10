@@ -75,11 +75,13 @@ const InputContainer = styled.div`
 `;
 
 const LabelText = styled.label`
-  font-weight: bold;
-  font-size: 10px;
-  text-transform: uppercase;
+  text-transform: capitalize;
   color: #7f75bf;
   line-height: normal;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 11px;
 
   &::after {
     content: "*";
