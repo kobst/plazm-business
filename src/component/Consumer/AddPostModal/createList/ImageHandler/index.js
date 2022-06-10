@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import ReactCrop from "react-image-crop";
+import ReactCrop, {centerCrop, makeAspectCrop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import { FiPlus } from "react-icons/fi";
 import {
@@ -12,6 +12,26 @@ import {
 import { dataUrlToFile, cropImageNow } from "../../../../../utils/image";
 import ConfirmIcon from "../../../../../images/ConfrimOk.png";
 import CloseCrop from "../../../../../images/closecropimg.png";
+
+function centerAspectCrop(
+  mediaWidth,
+  mediaHeight,
+  aspect = 1,
+) {
+  return centerCrop(
+    makeAspectCrop(
+      {
+        unit: 'px',
+        width: mediaWidth - (mediaWidth * 0.1),
+      },
+      aspect,
+      mediaWidth,
+      mediaHeight,
+    ),
+    mediaWidth,
+    mediaHeight,
+  )
+}
 
 const ImageHandler = ({
   croppedImage,
@@ -38,6 +58,11 @@ const ImageHandler = ({
     },
   });
 
+  const onImageLoad = (e) => {
+      const { width, height } = e.currentTarget
+      setCrop(centerAspectCrop(width, height, 16 / 9))
+  }
+
   const showCroppedImage = async () => {
     try {
       const img = await cropImageNow(imgRef.current, crop);
@@ -55,6 +80,14 @@ const ImageHandler = ({
     setImgSrc(imagePreview);
     setCroppedImage(null);
     setImagePreview(null);
+  };
+
+  const remove = () => {
+    setImgSrc(null);
+    setImageFile(null)
+    setCroppedImage(null);
+    setImagePreview(null);
+    setCompletedCrop(null)
   };
 
   return (
@@ -79,12 +112,12 @@ const ImageHandler = ({
             onComplete={(p) => setCompletedCrop(p)}
             onChange={setCrop}
           >
-            <img className="CloseCropCross" src={CloseCrop} />
-            <img ref={imgRef} src={imgSrc} />
+            <img className="CloseCropCross" onClick={() => remove()} src={CloseCrop} />
+            <img ref={imgRef} src={imgSrc}  onLoad={onImageLoad} />
           </ReactCrop>
         </ContentTabPanel>
       )}
-      {completedCrop && (
+      {completedCrop && imageFile && (
         <button className="ConfirmImgBtn" onClick={() => showCroppedImage()}>
           <img src={ConfirmIcon} />
         </button>
