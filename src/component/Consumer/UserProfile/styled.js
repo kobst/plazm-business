@@ -155,16 +155,26 @@ export const ListButtons = styled.div`
     margin-right: 21px;
   }
   cursor: pointer;
+  img {
+    filter: brightness(0) invert(1);
+    margin-right: 21px;
+  }
   :hover {
     color: #ff2e9a;
     background: #292549;
     border-radius: 5px;
+    img {
+      filter: inherit;
+    }
   }
   &.active {
     color: #ff2e9a;
     background: #292549;
     border-radius: 5px;
-    border:0 !important;
+    border: 0 !important;
+    img {
+      filter: inherit;
+    }
   }
 `;
 

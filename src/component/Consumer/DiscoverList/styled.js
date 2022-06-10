@@ -523,7 +523,13 @@ export const GridWrapper = styled.div`
     padding: 70px 0px 30px 15px;
     .UserProfileGridList {
       width: 160px;
-      margin: 0 6px 15px;
+      margin: 0 11px 15px 6px;
+      .InnerModal {
+        width: 220px;
+        .InnerModalCoverImg {
+          height: 163px;
+        }
+      }
     }
 
     .UserProfileCoverImg {
@@ -565,5 +571,15 @@ export const GridWrapper = styled.div`
     ::-webkit-scrollbar-thumb:hover {
       background: #fff;
     }
+  }
+`;
+
+export const InnerBottomBtns = styled.div`
+  display: flex;
+  justify-content: space-between;
+  button {
+    width: 48%;
+    padding: 0;
+    min-width: inherit;
   }
 `;
