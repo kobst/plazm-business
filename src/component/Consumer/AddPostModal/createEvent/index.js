@@ -4,9 +4,6 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import AddImageImg from "../../../../images/addImage.svg";
-import CalenderImg from "../../../../images/calender_img.png";
-import BackButton from "../../UI/BackButton";
 import SaveButton from "../../UI/SaveButton";
 import FormBody from "./formBody";
 import { validate } from "./validate";
@@ -15,42 +12,16 @@ import PostImage from "../PostImage";
 import ButtonGrey from "../../UI/ButtonGrey";
 // import SelectedListing from "../SelectedListing";
 import PostEvent from "../PostEvent";
-import { addEvent } from "../../../../reducers/eventReducer";
+import { addEvent, fetchEventsForTheWeek, fetchInitialWeekEvents } from "../../../../reducers/eventReducer";
 import error from "../../../../constants";
 import { AddEventToList } from "../../../../reducers/listReducer";
-import { FaRegClock } from "react-icons/fa";
-import { IoMdArrowDropdown, IoMdClose } from "react-icons/io";
-import { BsGrid } from "react-icons/bs";
-import GalleryIcon from "../../../../images/GalleryIcon.png";
-import { MdCheck } from "react-icons/md";
 import {
   FirstRow,
-  ClockIcon,
-  DatePickerInput,
-  DateRow,
-  DateDiv,
-  DateText,
-  DateDropdown,
-  Hyphen,
-  DropDownSection,
-  AddImagesLabel,
-  ImagesRow,
-  ImagesNameSec,
-  ImagesCross,
-  DropDownList,
-  RightTick,
 } from "./styled.js";
 
 import EventSchedule from "./EventSchedule";
 import AddImages from "./AddImages";
 import SelectedListing from "./SelectedListing";
-
-import {
-  DatePicker,
-  MuiPickersUtilsProvider,
-  TimePicker,
-} from "@material-ui/pickers";
-import MomentUtils from "@date-io/moment";
 import moment from "moment";
 
 const bucket = process.env.REACT_APP_BUCKET;
@@ -121,48 +92,6 @@ const AddYourPostBar = styled.div`
   }
 `;
 
-const AddYourPostLabel = styled.label`
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 17px;
-  margin: 0 0 0 10px;
-  max-width: calc(100% - 35px);
-  @media (max-width: 767px) {
-    font-size: 12px;
-    margin: 0;
-  }
-`;
-
-const AddYourTimeLabel = styled.label`
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 17px;
-  margin: 0 0 0 10px;
-  max-width: calc(100% - 35px);
-  &::after {
-    content: "*";
-  }
-  @media (max-width: 767px) {
-    font-size: 12px;
-    margin: 0;
-  }
-`;
-
-const AddImageDiv = styled.div`
-  background: #ff2e9a;
-  border-radius: 3px;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1;
-  cursor: pointer;
-  svg {
-    font-size: 34px;
-    color: #fff;
-  }
-`;
 
 const ErrorDiv = styled.div`
   color: #ff0000;
@@ -223,6 +152,7 @@ const CreateEventModal = ({
   const business = useSelector((state) => state.business.business);
   const ws = useSelector((state) => state.user.ws);
   const dispatch = useDispatch();
+  const eventDate = useSelector((state) => state.event.date);
 
   const [selectedDate, handleDateChange] = useState("2018-01-01T00:00:00.000Z");
   /*
@@ -261,6 +191,7 @@ const CreateEventModal = ({
   @desc: to check input file format and throw error if invalid image is input
   @params: input file
   */
+
   const uploadImage = async (imageFile) => {
     // const selectedFile = e.target.files[0];
     // if (selectedFile) {
@@ -390,14 +321,31 @@ const CreateEventModal = ({
             })
           );
         });
-        const addToList = await Promise.race(listPromises);
+        const addToList = await Promise.all(listPromises);
         // const addToList = await dispatch(
         //   AddEventToList({
         //     eventId: response.data.event._id,
         //     listId: selectedListForPost,
         //   })
         // );
-        const res = await unwrapResult(addToList);
+        const res = await unwrapResult(addToList[0]);
+        if(moment(eventDate).isSame(new Date(), 'week')) {
+          await dispatch(
+            fetchInitialWeekEvents({
+              businessId: business[0]._id,
+              date: eventDate,
+              userId: user._id,
+            })
+          );
+        } else {
+           await dispatch(
+          fetchEventsForTheWeek({
+            businessId: business[0]._id,
+            date: eventDate,
+            userId: user._id,
+          })
+        )
+        }
         if (res.data.addEventToList.success === true) {
           closeModal();
           setLoader(false);
@@ -416,6 +364,7 @@ const CreateEventModal = ({
         setImageCopy([]);
         setImageUpload(null);
       }
+      console.log('here')
       ws.send(
         JSON.stringify({
           action: "event",
