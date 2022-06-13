@@ -79,10 +79,10 @@ const ProfileNameHeader = styled.div`
 `;
 
 const ProfileThumb = styled.div`
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 32px;
   margin: 0 10px 0 0;
-  border: 3px solid #ffffff;
+  border: 1px solid #ffffff;
   border-radius: 50%;
   overflow: hidden;
   img {
@@ -157,7 +157,7 @@ const InputWrap = styled.div`
     font-size: 13px;
     width: 110px;
   }
-  &.InnerReplySection { 
+  &.InnerReplySection {
     width: 96%;
   }
 `;
