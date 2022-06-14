@@ -68,7 +68,7 @@ const UserMsgWrap = styled.div`
   background: #120f29;
   border: 1px solid #3f3777;
   border-radius: 10px;
-  margin: 0 10px 10px;
+  margin: 0 10px 10px 0;
   /* :nth-child(even) {
     background-color: #282352;
   }

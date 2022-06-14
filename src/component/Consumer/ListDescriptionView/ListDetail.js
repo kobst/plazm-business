@@ -429,6 +429,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   //   }
   // };
 
+
   const onCloseTab = () => {
     // if (!listOpenedFromBusiness) setDisplayTab(false);
     // else if (readMore) setDiscoverBtn(true);
@@ -528,7 +529,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
               className="ScrollDivInner"
             >
               <InfiniteScroll
-                dataLength={orderedPlaces ? orderedPlaces.length : 0}
+                dataLength={postsInList ? postsInList.length : 0}
                 next={fetchMorePosts}
                 hasMore={hasMore}
                 loader={
@@ -543,7 +544,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
                 }
                 scrollableTarget="scrollableDiv"
                 endMessage={
-                  orderedPlaces.length > 20 && !loading ? (
+                  postsInList.length > 20 && !loading ? (
                     <center>
                       <NoMorePost className="noMorePost">
                         No more List to show
@@ -553,8 +554,8 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
                 }
               >
                 <ListingOptionWrap>
-                  {orderedPlaces.length > 0 ? (
-                    orderedPlaces.map((i, key) => (
+                  {postsInList.length > 0 ? (
+                    postsInList.map((i, key) => (
                       <DisplayPostInAList
                         data={i}
                         key={key}
@@ -565,7 +566,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
                       />
                     ))
                   ) : (
-                    <NoData>No Posts In A List To Display</NoData>
+                    <NoData>No Posts In A List To Display details</NoData>
                   )}
                 </ListingOptionWrap>
               </InfiniteScroll>
