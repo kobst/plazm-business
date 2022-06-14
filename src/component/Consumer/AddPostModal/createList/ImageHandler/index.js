@@ -105,7 +105,7 @@ const ImageHandler = ({
           </ClickTextBottom>
         </ContentTabPanel>
       )}
-      {!imagePreview && (
+      {!imagePreview && imgSrc && (
         <ContentTabPanel>
           <ReactCrop
             crop={crop}
