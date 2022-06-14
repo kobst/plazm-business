@@ -80,10 +80,10 @@ const ProfileNameHeader = styled.div`
 `;
 
 const ProfileThumb = styled.div`
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 32px;
   margin: 0 10px 0 0;
-  border: 3px solid #ffffff;
+  border: 1px solid #ffffff;
   border-radius: 50%;
   overflow: hidden;
   img {
@@ -241,8 +241,8 @@ const ReplyInput = ({
         /** if mention is of user add it into user's mention array */
         const valueArr = mentionArrayUser;
         let data = [];
-        data.push({_id:mentions[0].id, name:mentions[0].display});
-        setMentionData(data)
+        data.push({ _id: mentions[0].id, name: mentions[0].display });
+        setMentionData(data);
         valueArr.push(mentions[0].id);
         setMentionArrayUser(valueArr);
       }
@@ -270,7 +270,7 @@ const ReplyInput = ({
         userId: user._id,
         body: desc,
         taggedUsers: mentionArrayUser,
-        sendTaggedUsers: mentionData
+        sendTaggedUsers: mentionData,
       };
       addReply(obj);
     }

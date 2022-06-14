@@ -16,6 +16,8 @@ const BuisinessViewContent = styled.div`
   display: flex;
   height: 100%;
   flex-direction: column;
+  padding-left: 10px;
+  background: #170c1d;
 `;
 
 const LoaderWrap = styled.div`

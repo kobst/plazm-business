@@ -51,10 +51,10 @@ const ProfileNameHeader = styled.div`
 `;
 
 const ProfileThumb = styled.div`
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 32px;
   margin: 0 10px 0 0;
-  border: 3px solid #ffffff;
+  border: 1px solid #ffffff;
   border-radius: 50%;
   overflow: hidden;
   img {
@@ -157,7 +157,7 @@ const Comments = ({ i, postData, displayComments, setFlag, flag }) => {
         businessId: business[0]._id,
         taggedUsers: obj.taggedUsers,
         type: "Post",
-        sendTaggedUsers: obj.sendTaggedUsers
+        sendTaggedUsers: obj.sendTaggedUsers,
       })
     );
   };

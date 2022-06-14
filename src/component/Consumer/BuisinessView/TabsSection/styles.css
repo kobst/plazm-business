@@ -55,6 +55,7 @@
 .InnerTabs .react-tabs__tab:nth-child(3) {
   /* border-bottom: 0 !important; */
   pointer-events: inherit;
+  border-right: 2px solid #120f24 !important;
 }
 
 .InnerTabs .react-tabs__tab--selected,
@@ -137,6 +138,7 @@
   border: 0 !important;
   border-bottom: 2px solid #ff2e9a !important;
   border-radius: 0;
+  border-right: 2px solid #120f24 !important;
 }
 
 .InnerTabs .react-tabs__tab:focus {
