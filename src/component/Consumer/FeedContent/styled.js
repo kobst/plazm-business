@@ -277,7 +277,7 @@ export const FeedDescription = styled.p`
 
 export const FeedBigImage = styled.div`
   width: 100%;
-  height: 300px;
+  max-height: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
