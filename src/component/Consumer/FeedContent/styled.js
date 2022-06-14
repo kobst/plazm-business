@@ -257,15 +257,16 @@ export const ListAuthorName = styled.div`
 `;
 
 export const FeedDescription = styled.p`
-  font-style: normal;
   font-size: 12px;
   line-height: normal;
   margin: 10px 0 15px;
-  font-weight: 400;
   color: #fff;
   padding: 0%;
   text-align: justify;
   white-space: pre-wrap;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
   .mentionData {
     font-size: 13px;
     color: #ff2e9a;
@@ -274,15 +275,15 @@ export const FeedDescription = styled.p`
   }
 `;
 
-export const FeedBigImage = styled.p`
+export const FeedBigImage = styled.div`
   width: 100%;
-  height: 230px;
+  max-height: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 0 15px;
   img {
-    max-height: 230px;
+    max-height: 300px;
   }
 `;
 
