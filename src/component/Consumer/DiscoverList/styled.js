@@ -574,6 +574,29 @@ export const GridWrapper = styled.div`
   }
 `;
 
+
+export const GridWrapper2 = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%
+  overflow=auto
+  .GridContainer {
+    position: relative;
+    margin: 0 0 35px;
+    padding: 0 0 10px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    overflow-y: scroll;
+    flex-wrap: nowrap;
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: #fff;
+    }
+  }
+`;
+
+
 export const InnerBottomBtns = styled.div`
   display: flex;
   justify-content: space-between;

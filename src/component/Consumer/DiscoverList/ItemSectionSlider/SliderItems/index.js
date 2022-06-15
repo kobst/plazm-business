@@ -44,7 +44,7 @@ const getImage = (selectedList) => {
     const img =
       selectedList.media.find(({ image_type }) => image_type === "COVER") ||
       selectedList.media[0];
-    console.log(img, "img");
+    // console.log(img, "img");
     return img["image"];
   }
   return EventImg;

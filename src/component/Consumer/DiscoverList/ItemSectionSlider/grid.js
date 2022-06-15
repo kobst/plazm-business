@@ -7,6 +7,7 @@ import {
   NewInBuzzSliderWrapper,
   NoMorePost,
   GridWrapper,
+  GridWrapper2
 } from "../styled";
 import {
   FetchMostPopularLists,
@@ -42,10 +43,12 @@ const NewCollectionSectionGrid = ({
 
   /** fetch more data when scrollbar reaches end */
   const fetchMoreLists = (event) => {
+    // console.log(event);
     if (
       event.target.scrollLeft + event.target.offsetWidth ===
         event.target.scrollWidth &&
       offset <= totalList
+ 
     ) {
       if (heading === "Trending" && trendingLists.length === offset + 12) {
         setLoader({ value: true, heading });
@@ -76,22 +79,32 @@ const NewCollectionSectionGrid = ({
   };
 
   /** on mouse wheel event */
-  const onWheel = (evt) => {
-    evt.preventDefault();
-    divRef.current.scrollLeft += evt.deltaY;
-  };
+  // const onWheel = (evt) => {
+  //   evt.preventDefault();
+  //   divRef.current.scrollLeft += evt.deltaY;
+  // };
+  const handleScroll = (e) => {
+    console.log(e.target.scrollHeight)
+    const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
+    if (bottom) { console.log("scroll bottom")}
+  }
+
   return (
-    <GridWrapper>
+    <GridWrapper2 style={{maxHeight: '100vh', overflow: 'auto'}} >
       <Grid ref={divRef}
-        onScroll={(e) => fetchMoreLists(e)}
-        onWheel={(e) => onWheel(e)} 
+        // onScroll={(e) => fetchMoreLists(e)}
+        // onWheel={(e) => onWheel(e)} 
+        onScroll={(e) => handleScroll(e)}
+        overflow-y="scroll"
         direction="row" 
         container 
-        spacing={2} 
-        className="GridContainer"
+        spacing={12} 
+        columns={2}
+
       >
         {data.map((i, key) => (
-          <Grid className="GridBox">
+          // <Grid className="GridBox">
+          <Grid item xs={6} md={4}>
             <NewInBuzzItems
               data={i}
               key={key}
@@ -120,7 +133,7 @@ const NewCollectionSectionGrid = ({
         )}
     </Grid>
       <div style={{height: '350px'}} />
-    </GridWrapper>
+    </GridWrapper2>
 
   );
 };
