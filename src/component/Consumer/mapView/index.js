@@ -179,7 +179,8 @@ Geocode.setApiKey(process.env.REACT_APP_GOOGLE_API_KEY);
 const MapView = (props) => {
 
     const mapRef = useRef()
-    const [boundBox, setBox] = useState([])
+    // const [boundBox, setBox] = useState([])
+    const [boundBox, setBox] = useState([[-73.9876, 40.7661], [-73.9397, 40.8002]])
     const [geo, setGeo] = useState(null)
     const [lineArray, setLineArray] = useState([])
     const [hex, setHex] = useState()
@@ -441,9 +442,9 @@ const clickHandler = (map, event) => {
                         // const newPosDict = {}
 
                         if (places.length > 0) {
-                            if (boundBox) {
+                            if (boundBox !== [] && boundBox !== null) {
                               map.fitBounds(boundBox, {
-                                padding: {top: 0, bottom:0, left: 400, right: 400}
+                                padding: {top: 20, bottom:20, left: 500, right: 500}
                                 })
                             }
 
