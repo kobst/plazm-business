@@ -78,6 +78,7 @@ const ImageHandler = ({
 
   const cropAgain = () => {
     setImgSrc(imagePreview);
+    setImageFile(croppedImage)
     setCroppedImage(null);
     setImagePreview(null);
   };
