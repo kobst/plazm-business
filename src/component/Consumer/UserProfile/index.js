@@ -23,6 +23,8 @@ import {
 } from "../../../reducers/listReducer.js";
 import ListsGrid from "./ListsGrid";
 import DiscoverMore from "../../../images/DiscoverMore.svg";
+import PlazmLogo from "../../../images/plazmLogo.jpeg";
+
 
 const UserProfile = ({}) => {
   const dispatch = useDispatch("");
@@ -94,7 +96,7 @@ const UserProfile = ({}) => {
           <LeftPanel>
             <TopProfileDetails>
               <UserProfileImg>
-                <img src="https://i.picsum.photos/id/1005/5760/3840.jpg?hmac=2acSJCOwz9q_dKtDZdSB-OIK1HUcwBeXco_RMMTUgfY" />
+                <img src={PlazmLogo} />
               </UserProfileImg>
               <UserProfileName>
                 {user?.name}{" "}

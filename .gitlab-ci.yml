@@ -12,6 +12,7 @@ eslint:
   - merge_requests
 sonar-scanner:
  stage: sonar-scanner
+ when: manual
  script:
    - source /etc/environment
    - sonar-scanner -Dsonar.projectKey=metagon-curator-business -Dsonar.sources=. -Dsonar.host.url=$SONAR_HOST -Dsonar.login=$SONAR_KEY
