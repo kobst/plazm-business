@@ -62,6 +62,7 @@ const NewInBuzzItems = ({
   setSelectedId,
   setTotalLists,
   totalLists,
+  displayIn
 }) => {
   const user = useSelector((state) => state.user.user);
   const [offsetLeft, setOffsetLeft] = useState(0);
@@ -80,7 +81,8 @@ const NewInBuzzItems = ({
   const displayData = () => {
     const { top, right } = divRef.current.getBoundingClientRect();
     setTimeout(() => {
-      setOffsetLeft(right - 300);
+      const offsetLeftMinus = displayIn === 'GRID' ? 200 : 300
+      setOffsetLeft(right - offsetLeftMinus);
       setOffsetTop(top - 30);
       setModal(true);
       setSelectedId({ id: data._id, heading: heading });
