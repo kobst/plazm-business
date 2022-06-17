@@ -103,6 +103,7 @@ const ListsGrid = ({
               selectedId={selectedId}
               setTotalLists={() => null}
               totalLists={totalLists}
+              displayIn="GRID"
             />
           </Grid>
         ))}
