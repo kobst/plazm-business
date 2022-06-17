@@ -181,14 +181,12 @@ const CreateListModel = ({
 
   /**cancel button functionality */
   const cancelButton = (e) => {
-    console.log('here')
     e.preventDefault();
     setDisplayCreateList(false);
     setDisplayList(true);
   };
 
   const createPreview = (values) => {
-    console.log(coverImage);
     if (profileImage !== null && coverImage !== null) {
       setPreviewCreated(true)
       setFormData(values)
@@ -197,15 +195,16 @@ const CreateListModel = ({
 
   return (
     <PostContent>
+      {!previewCreated ?
+      <>
       <TopBar>
         <Heading>Create List</Heading>
       </TopBar>
-      {!previewCreated ?
       <Formik
         enableReinitialize={true}
         initialValues={{
-          title: "",
-          description: "",
+          title: formData.title ?? '',
+          description: formData.description ?? '',
         }}
         /*validation schema */
         validationSchema={Yup.object(validate)}
@@ -272,6 +271,7 @@ const CreateListModel = ({
           </form>
         )}
       </Formik>
+      </>
       :
       <>
       <CroppedFinalSection>
@@ -294,6 +294,9 @@ const CreateListModel = ({
               </FinalImgdesp>
             </CroppedFinalSection>
             <BottomButtonsBar>
+              <BackButton onClick={() => setPreviewCreated(false)} disabled={loader}>
+                Back
+              </BackButton>
               <BackButton onClick={(e) => cancelButton(e)} disabled={loader}>
                 Cancel
               </BackButton>
