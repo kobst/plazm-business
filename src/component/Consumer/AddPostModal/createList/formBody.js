@@ -19,11 +19,12 @@ const InputContainer = styled.div`
 `;
 
 const LabelText = styled.label`
-  font-weight: bold;
-  font-size: 10px;
-  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 11px;
+  text-transform: capitalize;
   color: #7f75bf;
   line-height: normal;
+  font-family: Roboto;
 `;
 
 /*
@@ -48,6 +49,7 @@ function FormBody({ loader, setResponse }) {
           name="description"
           disabled={loader}
           onFocus={() => setResponse("")}
+          className="CreateListDescription"
         />
       </InputContainer>
     </>
