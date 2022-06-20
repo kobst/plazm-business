@@ -220,7 +220,6 @@ const CreateListModel = ({
             <FormBody loader={loader} setResponse={setResponse} />
             {/* for displaying image error if any */}
             {imageError !== "" ? <ErrorDiv>{imageError}</ErrorDiv> : null}
-
             {/* for displaying the response of add list */}
             {error !== "" ? (
               <ErrorDiv>{error}</ErrorDiv>
@@ -242,6 +241,7 @@ const CreateListModel = ({
                     setCroppedImage={setCoverImage}
                     imagePreview={coverImagePreview}
                     setImagePreview={setCoverImagePreview}
+                    type="Cover"
                   />
                 </TabPanel>
                 <TabPanel>
@@ -250,6 +250,7 @@ const CreateListModel = ({
                     setCroppedImage={setProfileImage}
                     imagePreview={profileImagePreview}
                     setImagePreview={setProfileImagePreview}
+                    type="Profile"
                   />
                 </TabPanel>
               </Tabs>
@@ -263,9 +264,11 @@ const CreateListModel = ({
                   <ValueLoader />
                 </div>
               )}
-              {!loader && (<SaveButton type="submit" disabled={loader}>
-                  Create Preview
-                </SaveButton> 
+              {!loader && (<SaveButton 
+                    type="submit" 
+                    className={profileImage == null || coverImage == null || !formik.values.title || !formik.values.description ? 'disabled': null}>
+                      Create Preview
+                    </SaveButton> 
               )}
             </BottomButtonsBar>
           </form>
@@ -306,7 +309,7 @@ const CreateListModel = ({
                 </div>
               )}
               {!loader && (<SaveButton type="button" onClick={() => addList(formData)} disabled={loader}>
-                  Create
+                  Create List
                 </SaveButton>
               )}
             </BottomButtonsBar>
