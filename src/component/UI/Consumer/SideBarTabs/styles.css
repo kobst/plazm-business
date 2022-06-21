@@ -208,6 +208,12 @@
   display: flex;
 }
 
+@media (max-width: 767px) {
+  .Sidebar .react-tabs__tab#react-tabs-2 {
+    margin-top: 60px;
+  }
+}
+
 .Sidebar .react-tabs__tab--selected {
   background: #3b3946;
   border-color: transparent;
