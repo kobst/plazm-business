@@ -30,11 +30,12 @@ const GlobalSearchInputWrap = styled.div`
   position: relative;
   display: flex;
   width: 95%;
-  height: 46px;
+  height: 40px;
   margin: 10px 10px 15px;
   border-radius: 5px;
   overflow: hidden;
   z-index: 101;
+  align-items: center;
   input {
     width: calc(100% - 38px);
     height: 40px;
