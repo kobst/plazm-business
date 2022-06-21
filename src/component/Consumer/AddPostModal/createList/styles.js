@@ -4,7 +4,10 @@ export const BottomButtonsBar = styled.div`
   width: 100%;
   color: #fff;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
+  button {
+    margin-left: 10px;
+  }
   textarea {
     min-height: 100px;
     font-weight: 500;
@@ -16,6 +19,12 @@ export const BottomButtonsBar = styled.div`
   }
   @media (max-width: 767px) {
     padding-bottom: 15px;
+  }
+  .BackButtonCreateList {
+    margin-right: auto;
+    margin-left: 0;
+    left: 0px;
+    position: relative;
   }
 `;
 
@@ -154,6 +163,7 @@ export const TabsSectionContent = styled.div`
       color: #746f9f;
       background-color: inherit;
       background: #282352;
+      border-bottom: 1px dashed #fff;
     }
     .react-tabs__tab-list {
       display: flex;
@@ -169,7 +179,7 @@ export const TabsSectionContent = styled.div`
       color: #fff;
       border-radius: 5px 5px 0px 0px;
       border-bottom: 0;
-      margin-bottom: -2px;
+      margin-bottom: -1px;
     }
     .react-tabs__tab-panel {
       background: #332e5a;
@@ -177,6 +187,7 @@ export const TabsSectionContent = styled.div`
       border-radius: 5px;
       height: 210px;
       position: relative;
+      border-top: 0;
       .ConfirmImgBtn {
         position: absolute;
         bottom: 0;

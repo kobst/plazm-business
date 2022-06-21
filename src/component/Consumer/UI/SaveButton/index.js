@@ -23,6 +23,10 @@ border:0;
   font-size: 10px;
   min-width: 80px;
 }
+&.disabled {
+  cursor: not-allowed;
+  opacity:0.6;
+}
 `
 
 const SaveButton = (props) => {
