@@ -246,38 +246,39 @@ const CalenderSection = ({ businessId }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dateToDisplay]);
 
+  const fetchData = async () => {
+    if (
+      (eventDate.toDateString() !== currentDate.toDateString() ||
+        previousBtnClicked) &&
+      !todayClicked
+    )
+      await dispatch(
+        fetchEventsForTheWeek({
+          businessId: businessId,
+          date: eventDate,
+          userId: user._id,
+        })
+      );
+    /** to fetch week data for initial week */ else {
+      await dispatch(
+        fetchInitialWeekEvents({
+          businessId: businessId,
+          date: eventDate,
+          userId: user._id,
+        })
+      );
+      dispatch(setSelectedDate(days[currentDate.getDay()]));
+      dispatch(
+        fetchEventsForTheDay({
+          date: new Date(),
+          day: days[new Date().getDay()],
+          businessId: businessId,
+        })
+      );
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      if (
-        (eventDate.toDateString() !== currentDate.toDateString() ||
-          previousBtnClicked) &&
-        !todayClicked
-      )
-        await dispatch(
-          fetchEventsForTheWeek({
-            businessId: businessId,
-            date: eventDate,
-            userId: user._id,
-          })
-        );
-      /** to fetch week data for initial week */ else {
-        await dispatch(
-          fetchInitialWeekEvents({
-            businessId: businessId,
-            date: eventDate,
-            userId: user._id,
-          })
-        );
-        dispatch(setSelectedDate(days[currentDate.getDay()]));
-        dispatch(
-          fetchEventsForTheDay({
-            date: new Date(),
-            day: days[new Date().getDay()],
-            businessId: businessId,
-          })
-        );
-      }
-    };
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventDate]);
@@ -392,9 +393,23 @@ const CalenderSection = ({ businessId }) => {
         <ModalComponent
           closeOnOutsideClick={true}
           isOpen={addEventModal}
-          closeModal={() => setAddEventModal(false)}
+          closeModal={(success) => {
+            if(success) {
+              fetchData()
+            }
+            setAddEventModal(false)
+          }
+          }
         >
-          <AddEventModal closeModal={() => setAddEventModal(false)} />
+          <AddEventModal 
+          closeModal={(success) => {
+            if(success) {
+              fetchData()
+            } 
+            setAddEventModal(false)
+            }
+            } 
+          />
         </ModalComponent>
       )}
       {loader || loadingForWeek ? (
