@@ -521,6 +521,14 @@ export const GridWrapper = styled.div`
   width: 100%;
   &.UserProfileGridWrapper {
     padding: 70px 0px 30px 15px;
+    @media (max-width: 767px) {
+      padding: 30px 0px;
+    }
+    .MuiGrid-spacing-xs-2 {
+      @media (max-width: 767px) {
+        justify-content: center;
+      }
+    }
     .UserProfileGridList {
       width: 160px;
       margin: 0 11px 15px 6px;

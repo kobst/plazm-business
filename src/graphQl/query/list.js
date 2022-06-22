@@ -124,7 +124,10 @@ const filterUserLists = (obj) => {
               list {
                   _id
                   isPublic
-                  ownerId
+                  ownerId {
+                    _id
+                    name
+                  }
                   subscribers {
                     _id
                     name

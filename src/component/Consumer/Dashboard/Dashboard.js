@@ -29,24 +29,27 @@ const DashboardContent = styled.div`
   display: flex;
   height: 100%;
   overflow: hidden;
+  @media (max-width: 991px) {
+    overflow-y: scroll;
+  }
 `;
 const BusinessSearch = styled.div`
-    position: absolute;
+  position: absolute;
+  top: 60px;
+  z-index: 11;
+  right: 60px;
+  width: 530px;
+  @media (max-width: 1279px) {
+    right: inherit;
+    width: 400px;
+    left: 60px;
     top: 60px;
-    z-index: 11;
-    right: 60px;
-    width: 530px;
-    @media (max-width: 1279px){
-      right: inherit;
-      width: 400px;
-      left: 60px;
-      top: 60px;
-    }
-    @media (max-width: 767px){
-      width: 85%;
-      top: 120px;
-    }
-}`;
+  }
+  @media (max-width: 767px) {
+    width: 85%;
+    top: 120px;
+  }
+`;
 const PanelContentContainer = styled.div`
   padding-left: 60px;
   width: 100%;
@@ -57,7 +60,10 @@ const PanelContentContainer = styled.div`
   top: 60px;
   max-width: 620px;
   z-index: 3;
-  /* overflow: auto; */
+  background: #221e45;
+  @media (max-width: 767px) {
+    top: 120px;
+  }
 `;
 
 // background: #221e45;

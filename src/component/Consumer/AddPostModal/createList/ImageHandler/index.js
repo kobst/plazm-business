@@ -38,6 +38,7 @@ const ImageHandler = ({
   setCroppedImage,
   imagePreview,
   setImagePreview,
+  type
 }) => {
   const [imgSrc, setImgSrc] = useState();
   const [imageFile, setImageFile] = useState();
@@ -78,6 +79,7 @@ const ImageHandler = ({
 
   const cropAgain = () => {
     setImgSrc(imagePreview);
+    setImageFile(croppedImage)
     setCroppedImage(null);
     setImagePreview(null);
   };
@@ -100,8 +102,8 @@ const ImageHandler = ({
           </PlusIcon>
           <ClickText>Click the ‘+’ icon or drag and drop the image.</ClickText>
           <ClickTextBottom>
-            You may upload Cover image under the size of 2 MB each. Any
-            dimension related message goes here*
+            {`You may upload ${type} image under the size of 2 MB each. Any
+            dimension related message goes here*`}
           </ClickTextBottom>
         </ContentTabPanel>
       )}

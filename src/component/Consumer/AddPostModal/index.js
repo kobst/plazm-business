@@ -16,6 +16,15 @@ const ModalContent = styled.div`
   background: #282352;
   box-shadow: 0px 32px 70px rgba(0, 0, 0, 0.25);
   color: #fff;
+  &.large {
+    max-width: 748px;
+    min-width: 748px;
+    .text-input {
+      min-height: 20px;
+      height: 32px;
+      overflow: hidden;
+    }
+  }
   @media (max-width: 767px) {
     padding: 15px;
     min-width: 300px;
@@ -64,7 +73,7 @@ const AddPostModal = ({ businessId, closeModal, data }) => {
   }, [dispatch, user._id, userLists.length]);
   return (
     <>
-      <ModalContent>
+      <ModalContent className={displayCreateList ? "large" : null}>
         {displayList ? (
           <AllListingsContent
             setDisplayList={setDisplayList}

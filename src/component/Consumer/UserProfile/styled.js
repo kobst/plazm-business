@@ -25,9 +25,13 @@ export const ProfileTopBanner = styled.div`
   overflow: hidden;
   border-radius: 0 0 10px 0;
   position: relative;
+  @media (max-width: 991px) {
+    overflow: visible;
+  }
   img {
     width: 100%;
     height: 100%;
+    max-height: 203px;
   }
 `;
 

@@ -30,10 +30,14 @@ const GlobalSearchBtnWrap = styled.div`
     left: 50vw;
   }
   @media (max-width: 767px) {
-    top: 100px;
-    right: -40px;
-    left: inherit;
-    margin-top: 10px;
+    top: 75px;
+    right: inherit;
+    left: 60px;
+    margin-top: 0;
+    z-index: 999;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    position: fixed;
   }
 `;
 
