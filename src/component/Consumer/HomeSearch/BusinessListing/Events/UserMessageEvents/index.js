@@ -52,6 +52,7 @@ const ProfileNameHeader = styled.div`
   display: flex;
   padding: 0 0 0 12px;
   margin: 15px 0;
+  width: 100%;
   &.line-active {
     &:before {
       content: "";

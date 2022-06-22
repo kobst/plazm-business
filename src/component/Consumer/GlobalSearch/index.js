@@ -31,12 +31,13 @@ const GlobalSearchBtnWrap = styled.div`
   }
   @media (max-width: 767px) {
     top: 75px;
-    right: -70px;
-    left: inherit;
+    right: inherit;
+    left: 60px;
     margin-top: 0;
     z-index: 999;
     border: 1px solid #ccc;
     border-radius: 5px;
+    position: fixed;
   }
 `;
 
