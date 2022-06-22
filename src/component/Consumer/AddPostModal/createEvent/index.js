@@ -12,7 +12,7 @@ import PostImage from "../PostImage";
 import ButtonGrey from "../../UI/ButtonGrey";
 // import SelectedListing from "../SelectedListing";
 import PostEvent from "../PostEvent";
-import { addEvent, fetchEventsForTheWeek, fetchInitialWeekEvents } from "../../../../reducers/eventReducer";
+import { addEvent, fetchEventsForTheWeek, fetchInitialWeekEvents, fetchEventsForTheDay } from "../../../../reducers/eventReducer";
 import error from "../../../../constants";
 import { AddEventToList } from "../../../../reducers/listReducer";
 import {
@@ -114,6 +114,8 @@ const BottomBtnWrap = styled.div`
 const weekDays = {
   '1 Week': 7, '2 Week': 14, '3 Week': 21, '4 Week': 28, '5 Week': 35
 } 
+
+const days = ["sun", "mon", "tue", "wed", "thurs", "fri", "sat"];
 
 let myInput;
 const date = new Date(
@@ -329,25 +331,32 @@ const CreateEventModal = ({
         //   })
         // );
         const res = await unwrapResult(addToList[0]);
-        if(moment(eventDate).isSame(new Date(), 'week')) {
-          await dispatch(
-            fetchInitialWeekEvents({
-              businessId: business[0]._id,
-              date: eventDate,
-              userId: user._id,
-            })
-          );
-        } else {
-           await dispatch(
-          fetchEventsForTheWeek({
-            businessId: business[0]._id,
-            date: eventDate,
-            userId: user._id,
-          })
-        )
-        }
+        // if(moment(eventDate).isSame(new Date(), 'week')) {
+        //   await dispatch(
+        //     fetchInitialWeekEvents({
+        //       businessId: business[0]._id,
+        //       date: eventDate,
+        //       userId: user._id,
+        //     })
+        //   );
+        // } else {
+        //    await dispatch(
+        //   fetchEventsForTheWeek({
+        //     businessId: business[0]._id,
+        //     date: eventDate,
+        //     userId: user._id,
+        //   })
+        // )
+        // dispatch(
+        //   fetchEventsForTheDay({
+        //     date: new Date(),
+        //     day: days[new Date().getDay()],
+        //     businessId: business[0]._id,
+        //   })
+        // );
+        // }
         if (res.data.addEventToList.success === true) {
-          closeModal();
+          closeModal(true);
           setLoader(false);
           setEventDescription("");
           setEventTitle("");
