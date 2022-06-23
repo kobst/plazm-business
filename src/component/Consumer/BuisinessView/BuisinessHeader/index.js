@@ -89,6 +89,7 @@ const CloseDiv = styled.div`
     right: inherit;
     width: 30px;
     height: 30px;
+    display: none;
   }
 `;
 const ArrowBack = styled.div`

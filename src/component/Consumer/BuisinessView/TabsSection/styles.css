@@ -177,6 +177,13 @@
     font-weight: 500;
   }
 }
+
+@media (max-width: 479px) {
+  .InnerTabs .react-tabs__tab {
+    font-size: 9px;
+  }
+}
+
 @media (max-width: 359px) {
   .InnerTabs .react-tabs__tab-panel {
     left: 0;
