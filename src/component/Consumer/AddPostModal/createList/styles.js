@@ -62,9 +62,10 @@ export const TopBar = styled.div`
 
 export const Heading = styled.h1`
   font-style: normal;
-  font-weight: bold;
-  font-size: 16px;
-  line-height: 20px;
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 21px;
+  font-family: "Roboto";
   @media (max-width: 767px) {
     font-size: 14px;
     line-height: normal;
