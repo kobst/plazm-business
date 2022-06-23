@@ -19,6 +19,10 @@ const ModalContent = styled.div`
   &.large {
     max-width: 748px;
     min-width: 748px;
+    @media (max-width: 767px) {
+      max-width: 90vw;
+      min-width: 90vw;
+    }
     .text-input {
       min-height: 20px;
       height: 32px;

@@ -20,11 +20,20 @@ export const BottomButtonsBar = styled.div`
   @media (max-width: 767px) {
     padding-bottom: 15px;
   }
+  @media (max-width: 379px) {
+    flex-direction: column;
+  }
   .BackButtonCreateList {
     margin-right: auto;
     margin-left: 0;
     left: 0px;
     position: relative;
+  }
+  button {
+    @media (max-width: 379px) {
+      width: 100%;
+      margin: 0 0 5px;
+    }
   }
 `;
 
