@@ -98,6 +98,11 @@ const GlobalSearchBox = ({ setOffset, type }) => {
   const searchList = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
+      searchFn()
+    }
+  }
+  /** on key press handler for search */
+  const searchFn = () => {
       if (search !== "" && search.length >= 4 && !search.trim() === false) {
         setOffset(0);
         setSearchError("");
@@ -146,7 +151,6 @@ const GlobalSearchBox = ({ setOffset, type }) => {
       } else if (search.length >= 0 && search.length < 4) {
         setSearchError(error.SEARCH_ERROR);
       }
-    }
   };
 
   /** on change handler for search */
@@ -164,7 +168,7 @@ const GlobalSearchBox = ({ setOffset, type }) => {
           placeholder={type}
         />
         <button>
-          <img src={SearchIcon} />
+          <img src={SearchIcon} onClick={() => searchFn()} />
         </button>
       </GlobalSearchInputWrap>
       {searchError !== "" ? <ErrorDiv>{searchError}</ErrorDiv> : null}

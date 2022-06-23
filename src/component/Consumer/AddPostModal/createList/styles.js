@@ -20,11 +20,20 @@ export const BottomButtonsBar = styled.div`
   @media (max-width: 767px) {
     padding-bottom: 15px;
   }
+  @media (max-width: 379px) {
+    flex-direction: column;
+  }
   .BackButtonCreateList {
     margin-right: auto;
     margin-left: 0;
     left: 0px;
     position: relative;
+  }
+  button {
+    @media (max-width: 379px) {
+      width: 100%;
+      margin: 0 0 5px;
+    }
   }
 `;
 
@@ -53,9 +62,10 @@ export const TopBar = styled.div`
 
 export const Heading = styled.h1`
   font-style: normal;
-  font-weight: bold;
-  font-size: 16px;
-  line-height: 20px;
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 21px;
+  font-family: "Roboto";
   @media (max-width: 767px) {
     font-size: 14px;
     line-height: normal;
