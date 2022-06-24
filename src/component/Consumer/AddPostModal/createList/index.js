@@ -47,11 +47,13 @@ const CreateListModel = ({
   setDisplayCreateList,
 }) => {
   const [loader, setLoader] = useState(false);
+  const [profileBaseImage, setBaseProfileImage] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
   const [profileImagePreview, setProfileImagePreview] = useState(null);
   const [imageError, setImageError] = useState("");
   // const [imageFile, setImageFile] = useState(null);
   const [coverImage, setCoverImage] = useState(null);
+  const [coverBaseImage, setBaseCoverImage] = useState(null);
   const [coverImagePreview, setCoverImagePreview] = useState(null);
   const [previewCreated, setPreviewCreated] = useState(false);
   const [error, setError] = useState("");
@@ -270,6 +272,11 @@ const CreateListModel = ({
                         imagePreview={coverImagePreview}
                         setImagePreview={setCoverImagePreview}
                         type="Cover"
+                        aspect={16 / 9}
+                        cropHeight={140}
+                        cropWidth={620}
+                        imgSrc={profileBaseImage}
+                        setImgSrc={setBaseProfileImage}
                       />
                     </TabPanel>
                     <TabPanel>
@@ -279,6 +286,11 @@ const CreateListModel = ({
                         imagePreview={profileImagePreview}
                         setImagePreview={setProfileImagePreview}
                         type="Profile"
+                        aspect={1}
+                        cropHeight={32}
+                        cropWidth={32}
+                        imgSrc={coverBaseImage}
+                        setImgSrc={setBaseCoverImage}
                       />
                     </TabPanel>
                   </Tabs>

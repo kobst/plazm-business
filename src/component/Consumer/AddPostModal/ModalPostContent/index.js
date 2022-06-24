@@ -10,7 +10,7 @@ import {
   findAllLists,
   RemovePostFromAList,
 } from "../../../../reducers/listReducer";
-import { addPostToBusiness } from "../../../../reducers/businessReducer";
+import { addPostToBusiness, filterData } from "../../../../reducers/businessReducer";
 import {
   updatePostInMyFeed,
   updatePostToBusiness,
@@ -208,6 +208,7 @@ const ModalPostContent = ({
   const business = useSelector((state) => state.business.business);
   const [descriptionError, setDescriptionError] = useState("");
   const [listError, setListError] = useState("");
+  const filters = useSelector((state) => state.business.filters);
   let allData = [...users, ...lists];
   let data = allData.sort(function (a, b) {
     return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
@@ -432,6 +433,14 @@ const ModalPostContent = ({
               })
             );
             const res = await unwrapResult(addToList);
+            dispatch(
+              filterData({
+                businessId: businessId,
+                filters: filters,
+                value: 0,
+                ownerId: user._id,
+              })
+            );
             if (res.data.addPostToList.success === true) {
               closeModal();
               setLoader(false);

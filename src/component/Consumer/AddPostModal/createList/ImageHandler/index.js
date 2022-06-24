@@ -38,12 +38,21 @@ const ImageHandler = ({
   setCroppedImage,
   imagePreview,
   setImagePreview,
-  type
+  type,
+  aspect,
+  cropHeight,
+  cropWidth,
+  imgSrc,
+  setImgSrc
 }) => {
-  const [imgSrc, setImgSrc] = useState();
+  // const [imgSrc, setImgSrc] = useState();
   const [imageFile, setImageFile] = useState();
   const imgRef = useRef(null);
-  const [crop, setCrop] = useState();
+  const [crop, setCrop] = useState({
+    unit: 'px',
+    width: cropWidth,
+    height: cropHeight
+  });
   const [completedCrop, setCompletedCrop] = useState();
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
@@ -61,7 +70,12 @@ const ImageHandler = ({
 
   const onImageLoad = (e) => {
       const { width, height } = e.currentTarget
-      setCrop(centerAspectCrop(width, height, 16 / 9))
+      // setCrop(centerAspectCrop(width, height, aspect))
+      // setCrop({
+      //   unit: 'px',
+      //   width: cropWidth,
+      //   height: cropHeight
+      // })
   }
 
   const showCroppedImage = async () => {
@@ -69,7 +83,7 @@ const ImageHandler = ({
       const img = await cropImageNow(imgRef.current, crop);
       setImagePreview(img);
       setCompletedCrop(null);
-      setImgSrc(null);
+      // setImgSrc(null);
       const file = await dataUrlToFile(img, imageFile.name, imageFile.type);
       setCroppedImage(file);
     } catch (e) {
@@ -78,7 +92,7 @@ const ImageHandler = ({
   };
 
   const cropAgain = () => {
-    setImgSrc(imagePreview);
+    // setImgSrc(imagePreview);
     setImageFile(croppedImage)
     setCroppedImage(null);
     setImagePreview(null);
@@ -113,9 +127,16 @@ const ImageHandler = ({
             crop={crop}
             onComplete={(p) => setCompletedCrop(p)}
             onChange={setCrop}
+            keepSelection
+            locked
+            aspect={aspect}
           >
             <img className="CloseCropCross" onClick={() => remove()} src={CloseCrop} />
-            <img ref={imgRef} src={imgSrc}  onLoad={onImageLoad} />
+            <img 
+              ref={imgRef} 
+              src={imgSrc}  
+              onLoad={onImageLoad} 
+            />
           </ReactCrop>
         </ContentTabPanel>
       )}
