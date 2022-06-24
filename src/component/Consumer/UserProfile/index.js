@@ -25,7 +25,6 @@ import ListsGrid from "./ListsGrid";
 import DiscoverMore from "../../../images/DiscoverMore.svg";
 import PlazmLogo from "../../../images/plazmLogo.jpeg";
 
-
 const UserProfile = ({}) => {
   const dispatch = useDispatch("");
   const [activeTab, setActiveTab] = useState("created");
@@ -43,10 +42,10 @@ const UserProfile = ({}) => {
   useEffect(() => {
     if (user && user._id) dispatch(clearUserProfilePageListData());
     dispatch(
-      filterListsByUser({ id: user._id, created: true, page: 1, limit: 12 })
+      filterListsByUser({ id: user._id, created: true, page: 1, limit: 200 })
     );
     dispatch(
-      filterListsByUser({ id: user._id, subscribed: true, page: 1, limit: 12 })
+      filterListsByUser({ id: user._id, subscribed: true, page: 1, limit: 200 })
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
