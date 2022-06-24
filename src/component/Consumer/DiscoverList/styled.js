@@ -520,9 +520,30 @@ export const GridWrapper = styled.div`
   position: relative;
   width: 100%;
   &.UserProfileGridWrapper {
-    padding: 70px 0px 30px 15px;
+    padding: 70px 0px 200px 15px;
+    max-height: calc(100vh - 270px);
+    overflow: auto;
+    overflow-x: hidden;
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 5px;
+      cursor: pointer;
+    }
+    ::-webkit-scrollbar-track {
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #665f91;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 4px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #665f91;
+    }
     @media (max-width: 767px) {
-      padding: 30px 0px;
+      padding: 30px 0px 170px;
     }
     .MuiGrid-spacing-xs-2 {
       @media (max-width: 767px) {
@@ -532,6 +553,7 @@ export const GridWrapper = styled.div`
     .UserProfileGridList {
       width: 160px;
       margin: 0 11px 15px 6px;
+      font-family: Roboto;
       .InnerModal {
         width: 220px;
         .InnerModalCoverImg {

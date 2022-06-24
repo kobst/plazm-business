@@ -196,8 +196,13 @@ export const TabsSectionContent = styled.div`
       border: 1px dashed #b1abea;
       border-radius: 5px;
       height: 210px;
+      overflow: auto;
       position: relative;
       border-top: 0;
+      .ReactCrop{
+        overflow: auto !important
+        min-height: 150px;
+      }
       .ConfirmImgBtn {
         position: absolute;
         bottom: 0;

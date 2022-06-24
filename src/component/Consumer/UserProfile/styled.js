@@ -185,7 +185,7 @@ export const ListButtons = styled.div`
 export const RightPanel = styled.div`
   display: flex;
   width: 100%;
-  max-width: calc(100% - 240px);
+  max-width: calc(100% - 227px);
   @media (max-width: 767px) {
     max-width: 100%;
     padding: 0 15px 15px;
