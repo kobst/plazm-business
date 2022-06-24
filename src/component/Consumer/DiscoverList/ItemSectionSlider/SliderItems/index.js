@@ -20,7 +20,7 @@ import {
   FollowedByListUl,
   InnerDescriptionPara,
   SubscribeBtn,
-  InnerBottomBtns
+  InnerBottomBtns,
 } from "../../styled";
 import {
   SubscribeToAListAction,
@@ -62,7 +62,7 @@ const NewInBuzzItems = ({
   setSelectedId,
   setTotalLists,
   totalLists,
-  displayIn
+  displayIn,
 }) => {
   const user = useSelector((state) => state.user.user);
   const [offsetLeft, setOffsetLeft] = useState(0);
@@ -81,7 +81,7 @@ const NewInBuzzItems = ({
   const displayData = () => {
     const { top, right } = divRef.current.getBoundingClientRect();
     setTimeout(() => {
-      const offsetLeftMinus = displayIn === 'GRID' ? 200 : 300
+      const offsetLeftMinus = displayIn === "GRID" ? 190 : 300;
       setOffsetLeft(right - offsetLeftMinus);
       setOffsetTop(top - 30);
       setModal(true);
@@ -227,29 +227,29 @@ const NewInBuzzItems = ({
                     </FollowedByListUl>
                   </FollowedBy>
                   <InnerDescriptionPara>
-                    {data?.description}....
+                    {data?.description?.substring(0, 20)}....
                     <strong onClick={() => ReadMore()}>Read More</strong>
                   </InnerDescriptionPara>
                   <InnerBottomBtns>
-                  <ButtonBlue>Visit</ButtonBlue>
-                  {data?.subscribers.length === 0 ||
-                  !data?.subscribers.find((i) => i._id === user._id) ? (
-                    <>
-                    
-                    <SubscribeBtn
-                      onClick={() => listSubscribe()}
-                      disabled={loader}
-                    >
-                      {loader ? <ValueLoader /> : "Subscribe"}
-                    </SubscribeBtn></>
-                  ) : (
-                    <SubscribeBtn
-                      onClick={() => listUnSubscribe()}
-                      disabled={loader}
-                    >
-                      {loader ? <ValueLoader /> : "UnSubscribe"}
-                    </SubscribeBtn>
-                  )}
+                    <ButtonBlue>Visit</ButtonBlue>
+                    {data?.subscribers.length === 0 ||
+                    !data?.subscribers.find((i) => i._id === user._id) ? (
+                      <>
+                        <SubscribeBtn
+                          onClick={() => listSubscribe()}
+                          disabled={loader}
+                        >
+                          {loader ? <ValueLoader /> : "Subscribe"}
+                        </SubscribeBtn>
+                      </>
+                    ) : (
+                      <SubscribeBtn
+                        onClick={() => listUnSubscribe()}
+                        disabled={loader}
+                      >
+                        {loader ? <ValueLoader /> : "UnSubscribe"}
+                      </SubscribeBtn>
+                    )}
                   </InnerBottomBtns>
                 </DisplayItemContent>
               )}
