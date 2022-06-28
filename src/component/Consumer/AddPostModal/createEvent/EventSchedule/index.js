@@ -188,7 +188,7 @@ const ScheduleAnEvent = ({ formik }) => {
       </FirstRow>
       <FirstRow className="PL-20">
         <DropDown
-          options={["One Time", "Repeat On"]}
+          options={[formik.values.repeat?.includes(8) ? "Repeat On" : "One Time"]}
           onChange={handleRepetition}
           value={formik.values.repeat?.includes(8) ? "One Time" : "Repeat On"}
         />
