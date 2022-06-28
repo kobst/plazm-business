@@ -431,7 +431,8 @@ const UserMessage = ({ eventData }) => {
             />
             <EventBigImage>
               <ImageComment
-                image={eventData.media.length > 0 ? eventData.media[0] : ""}
+                image={eventData.media.length === 1 ? eventData.media[0] : ""}
+                imgSources={eventData.media.length > 1 ? eventData.media : ""}
               />
             </EventBigImage>
             <LikesBar
