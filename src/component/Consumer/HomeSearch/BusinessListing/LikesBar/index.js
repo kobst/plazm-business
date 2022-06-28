@@ -477,7 +477,7 @@ const LikesBar = ({
                 {uploadMenu && (
                   <DropdownContent ref={menuRef}>
                     <ul>
-                      <li onClick={() => editPost()}>Edit</li>
+                      {/* <li onClick={() => editPost()}>Edit</li> */}
                       <li onClick={() => deletePost()}>Delete</li>
                     </ul>
                   </DropdownContent>
