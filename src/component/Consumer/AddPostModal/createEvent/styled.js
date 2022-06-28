@@ -76,6 +76,18 @@ export const DateText = styled.div`
   line-height: 14px;
   color: #ffffff;
   position: relative;
+  span {
+    width: 56px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ActiveBox {
+    background: #e3e5e6;
+    border-radius: 3px;
+    color: #282352;
+  }
 `;
 
 export const DateDropdown = styled.div`
@@ -83,9 +95,14 @@ export const DateDropdown = styled.div`
   align-items: center;
   justify-content: center;
   margin: 0 0 0 5px;
+  cursor: pointer;
+  flex-direction: column;
   svg {
-    font-size: 18px;
+    font-size: 16px;
     color: #fff;
+  }
+  .DropupIcon {
+    margin: 0 0 -7px;
   }
 `;
 
@@ -114,6 +131,9 @@ export const DropDownSection = styled.div`
   padding: 5px 0px;
   overflow-x: hidden;
   display: ${(props) => (props.isOpen ? "block" : "none")};
+  @media (max-width: 767px) {
+    z-index: 1;
+  }
   ::-webkit-scrollbar {
     width: 4px;
     height: 5px;
@@ -175,6 +195,7 @@ export const ImagesRow = styled.div`
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+  max-width: calc(100% - 40px);
 `;
 
 export const ImagesNameSec = styled.div`

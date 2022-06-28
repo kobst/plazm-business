@@ -10,7 +10,7 @@ import {
   Hyphen,
   DropDownSection,
 } from "../styled.js";
-import { IoMdArrowDropdown } from "react-icons/io";
+import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 
 
 const DropDown = ({options, value, onChange}) => {
@@ -37,7 +37,7 @@ const DropDown = ({options, value, onChange}) => {
     <DateText ref={ref}>
       {value ?? '--'}
       <DateDropdown onClick={() => setOpen((v) => !v)}>
-        <IoMdArrowDropdown />
+        <IoMdArrowDropup className="DropupIcon" /> <IoMdArrowDropdown />
       </DateDropdown>
       <DropDownSection isOpen={open}>
         <ul>
