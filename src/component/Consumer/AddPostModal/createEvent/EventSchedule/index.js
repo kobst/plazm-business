@@ -1,24 +1,13 @@
 import React, { useState } from "react";
-import styled from "styled-components";
-import FormBody from "./formBody";
-import { Formik } from "formik";
-import * as Yup from "yup";
-import { validate } from "./validate";
 import Calendar from "./calendar";
-import moment from "moment";
-import { IoMdArrowDropdown, IoMdClose } from "react-icons/io";
 import Constants from "../../../../../constants/index";
-
 import { FaRegClock } from "react-icons/fa";
-
 import {
   FirstRow,
   ClockIcon,
   DatePickerInput,
   DateRow,
   DateDiv,
-  DateText,
-  DateDropdown,
   Hyphen,
   ErrorDiv,
   ForText,
@@ -26,102 +15,7 @@ import {
 import { DaysWrap } from "./styled";
 import TimePicker from "./TimePicker";
 import DropDown from "./DropDown";
-
-const EventWrap = styled.div`
-  width: 100%;
-  position: relative;
-  display: flex;
-  flex-flow: row wrap;
-  form {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-`;
-
-const CalendarWrap = styled.div`
-  /* width: 50%; */
-  @media (max-width: 767px) {
-    width: 100%;
-  }
-  .MuiPickersStaticWrapper-staticWrapperRoot {
-    @media (max-width: 767px) {
-      min-width: inherit;
-    }
-  }
-  .MuiPickersBasePicker-pickerViewLandscape {
-    @media (max-width: 767px) {
-      padding: 0;
-      min-width: 200px;
-      max-width: 100%;
-    }
-  }
-`;
-
-const FormWrap = styled.div`
-  /* width: 50%; */
-  width: 100%;
-  display: flex;
-  @media (max-width: 767px) {
-    width: 100%;
-  }
-`;
-
-const TopBar = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  margin: 0 0 15px;
-`;
-
-const Heading = styled.h1`
-  font-style: normal;
-  font-weight: bold;
-  font-size: 16px;
-  line-height: 20px;
-  @media (max-width: 767px) {
-    font-size: 14px;
-    line-height: normal;
-  }
-`;
-
-const BottomButtonsBar = styled.div`
-  width: 100%;
-  color: #fff;
-  display: flex;
-  justify-content: space-between;
-  textarea {
-    min-height: 100px;
-    font-weight: 500;
-    color: #000;
-    margin: 0 0 14px;
-  }
-  @media (max-width: 991px) and (orientation: landscape) {
-    padding: 0 0 15px;
-  }
-`;
-
-const CalenderTopWrap = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  margin: 0px;
-  flex-direction: row;
-  @media (max-width: 767px) {
-    flex-direction: column;
-  }
-`;
-
-const CustomFirst = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  margin: 0px;
-  flex-direction: row;
-  @media (max-width: 767px) {
-    flex-direction: column;
-  }
-`;
+import UpDownSelect from "./UpDownSelect";
 
 const toMinutes = (hms) => {
   var a = hms.split(":");
@@ -217,7 +111,7 @@ const ScheduleAnEvent = ({ formik }) => {
         {formik.values.repeat != 8 && (
         <>
           <ForText>For</ForText>
-          <DropDown 
+          <UpDownSelect 
             options={['1 Week', '2 Week', '3 Week', '4 Week', '5 Week']}
             onChange={(value) => formik.setFieldValue("for", value)}
             value={formik.values.for}
