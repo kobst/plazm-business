@@ -1,13 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import {
-  FirstRow,
-  ClockIcon,
-  DatePickerInput,
-  DateRow,
-  DateDiv,
   DateText,
   DateDropdown,
-  Hyphen,
   DropDownSection,
 } from "../styled.js";
 import { IoMdArrowDropdown } from "react-icons/io";
