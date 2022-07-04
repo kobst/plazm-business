@@ -200,8 +200,27 @@ export const TabsSectionContent = styled.div`
       position: relative;
       border-top: 0;
       .ReactCrop{
-        overflow: auto !important
+        overflow: auto !important;
         min-height: 150px;
+        ::-webkit-scrollbar {
+          width: 6px;
+          height: 5px;
+          cursor: pointer;
+        }
+        ::-webkit-scrollbar-track {
+          border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+          background: #000;
+          border-radius: 10px;
+          cursor: pointer;
+          width: 6px;
+          height: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+          background: #000;
+        }
+      
       }
       .ConfirmImgBtn {
         position: absolute;
@@ -212,9 +231,15 @@ export const TabsSectionContent = styled.div`
         cursor: pointer;
       }
       .PreviewImg {
-        width: 100%;
-        height: 100%;
-        position: relative;
+        transform: translate(-50%, -50%);
+        margin-top: -21px;
+        position: absolute;
+        text-align: center;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        top: 50%;
+        left: 50%;
       }
       .CropAgainContainer {
         background: rgba(0, 0, 0, 0.6);

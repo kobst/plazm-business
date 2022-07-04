@@ -287,8 +287,8 @@ const CreateListModel = ({
                         setImagePreview={setProfileImagePreview}
                         type="Profile"
                         aspect={1}
-                        cropHeight={32}
-                        cropWidth={32}
+                        cropHeight={140}
+                        cropWidth={140}
                         imgSrc={coverBaseImage}
                         setImgSrc={setBaseCoverImage}
                       />
