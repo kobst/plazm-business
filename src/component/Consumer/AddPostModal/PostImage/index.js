@@ -17,6 +17,7 @@ const PostImageDiv = styled.div`
   width: 100%;
   height: 184px;
   margin: 0 0 15px;
+  position: relative;
   @media (max-width: 767px) {
     height: 124px;
   }

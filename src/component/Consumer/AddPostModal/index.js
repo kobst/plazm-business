@@ -19,6 +19,13 @@ const ModalContent = styled.div`
   &.large {
     max-width: 748px;
     min-width: 748px;
+    @media (min-width: 992px) and (max-width: 1024px) {
+      margin: 90px 0 0;
+    }
+    @media (max-width: 991px) {
+      max-width: 80vw;
+      min-width: 80vw;
+    }
     @media (max-width: 767px) {
       max-width: 90vw;
       min-width: 90vw;
