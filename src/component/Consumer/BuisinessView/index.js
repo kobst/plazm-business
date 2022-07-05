@@ -6,7 +6,7 @@ import BuisinessHeaderNotClaimed from "./BuisinessHeaderNotClaimed";
 import { useDispatch, useSelector } from "react-redux";
 import BuisinessProfileDetails from "./BuisinessProfileDetails";
 import ValueLoader from "../../../utils/loader";
-import { setSideFilters } from "../../../reducers/businessReducer";
+import { setSideFilters, setFilters } from "../../../reducers/businessReducer";
 import useStore from "../useState/index";
 import GlobalSearchBox from "../GlobalSearch/GlobalSearchBox";
 
@@ -88,7 +88,15 @@ const BuisinessView = ({
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(setSideFilters());
+    // dispatch(setSideFilters());
+    dispatch(
+      setFilters({
+        Business: false,
+        PostsByMe: true,
+        MySubscriptions: false,
+        Others: false,
+      })
+    );
   }, [dispatch]);
   return (
     <>
