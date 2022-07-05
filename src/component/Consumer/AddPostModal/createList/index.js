@@ -18,12 +18,12 @@ import { FcCheckmark } from "react-icons/fc";
 
 import {
   TabsSectionContent,
-  LeftButtons,
-  RightButtons,
+  // LeftButtons,
+  // RightButtons,
   ErrorDiv,
-  AddImageDiv,
-  AddYourPostLabel,
-  AddYourPostBar,
+  // AddImageDiv,
+  // AddYourPostLabel,
+  // AddYourPostBar,
   Heading,
   TopBar,
   PostContent,
@@ -56,6 +56,8 @@ const CreateListModel = ({
   const [coverBaseImage, setBaseCoverImage] = useState(null);
   const [coverImagePreview, setCoverImagePreview] = useState(null);
   const [previewCreated, setPreviewCreated] = useState(false);
+  const [coverImageFile, setCoverImageFile] = useState();
+  const [imagePreviewFile, setPreviewImageFile] = useState();
   const [error, setError] = useState("");
   const [response, setResponse] = useState("");
   const [formData, setFormData] = useState({});
@@ -277,6 +279,8 @@ const CreateListModel = ({
                         cropWidth={660}
                         imgSrc={profileBaseImage}
                         setImgSrc={setBaseProfileImage}
+                        imageFile={coverImageFile}
+                        setImageFile={setCoverImageFile}
                       />
                     </TabPanel>
                     <TabPanel>
@@ -291,6 +295,8 @@ const CreateListModel = ({
                         cropWidth={189}
                         imgSrc={coverBaseImage}
                         setImgSrc={setBaseCoverImage}
+                        imageFile={imagePreviewFile}
+                        setImageFile={setPreviewImageFile}
                       />
                     </TabPanel>
                   </Tabs>
