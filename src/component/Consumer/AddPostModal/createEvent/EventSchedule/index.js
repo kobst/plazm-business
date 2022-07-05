@@ -108,7 +108,7 @@ const ScheduleAnEvent = ({ formik }) => {
             </>
           )}
         </DaysWrap>
-        {formik.values.repeat != 8 && (
+        {/* {formik.values.repeat != 8 && (
         <>
           <ForText>For</ForText>
           <UpDownSelect 
@@ -116,7 +116,7 @@ const ScheduleAnEvent = ({ formik }) => {
             onChange={(value) => formik.setFieldValue("for", value)}
             value={formik.values.for}
           />
-          </>)}
+          </>)} */}
       </FirstRow>
       {formik.errors && formik.errors.repeat ? (
         <FirstRow>

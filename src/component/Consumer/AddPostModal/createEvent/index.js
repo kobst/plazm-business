@@ -293,6 +293,12 @@ const CreateEventModal = ({
     /* to upload file to s3 bucket */
     let imageUrl = null;
 
+    var localFormat = 'YYYY-MM-DD[T]HH:mm:ss';
+    const s_t = start_time.format("HH:mm:ss");
+    const s_d = start_time.format("YYYY-MM-DD");
+    const e_t = end_time.format("HH:mm:ss");
+    const e_d = end_time.format("YYYY-MM-DD");
+
     const obj = {
       user: user._id,
       business: business[0]._id,
@@ -301,8 +307,8 @@ const CreateEventModal = ({
       taggedUsers: mentionArrayUser,
       taggedLists: mentionArrayList,
       eventSchedule: {
-        start_time: start_time.format(),
-        end_time: end_time.format(),
+        start_time: moment(s_t + ' ' + s_d).format(),
+        end_time: moment(e_t + ' ' + e_d).format(),
       },
       recurring: values.repeat,
       listId: values.lists[0],
@@ -424,7 +430,7 @@ const CreateEventModal = ({
           end_time: date.getHours() + ":" + (parseInt(date.getMinutes()) + 15),
           images: [],
           lists: [],
-          for: '2 Week',
+          for: '1 Week',
         }}
         /*validation schema */
         validationSchema={Yup.object(validate)}
