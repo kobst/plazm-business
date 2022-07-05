@@ -273,8 +273,8 @@ const CreateListModel = ({
                         setImagePreview={setCoverImagePreview}
                         type="Cover"
                         aspect={16 / 9}
-                        cropHeight={140}
-                        cropWidth={620}
+                        cropHeight={170}
+                        cropWidth={660}
                         imgSrc={profileBaseImage}
                         setImgSrc={setBaseProfileImage}
                       />
@@ -287,8 +287,8 @@ const CreateListModel = ({
                         setImagePreview={setProfileImagePreview}
                         type="Profile"
                         aspect={1}
-                        cropHeight={32}
-                        cropWidth={32}
+                        cropHeight={189}
+                        cropWidth={189}
                         imgSrc={coverBaseImage}
                         setImgSrc={setBaseCoverImage}
                       />
