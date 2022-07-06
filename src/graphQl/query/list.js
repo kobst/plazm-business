@@ -139,6 +139,7 @@ const filterUserLists = (obj) => {
                   type
                   media {
                     image
+                    image_type
                   }
                   createdAt
                   updatedAt
@@ -391,6 +392,7 @@ const SearchLists = (obj) => {
                 isPublic
                 media {
                   image
+                  image_type
                 }
                 ownerId
                 subscribers {
