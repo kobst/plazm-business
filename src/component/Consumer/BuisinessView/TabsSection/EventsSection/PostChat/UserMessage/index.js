@@ -42,8 +42,12 @@ const UserMessageContent = styled.div`
   width: 100%;
   position: relative;
   display: flex;
-  padding: 0 22px 0 12px;
+  padding: 8px 12px 0 12px;
   flex-direction: column;
+  background: #120f29;
+  border: 1px solid #3f3777;
+  border-radius: 10px;
+  margin: 0 0 6px;
   @media (max-width: 767px) {
     justify-content: flex-start;
     align-items: flex-start;
@@ -57,6 +61,18 @@ const UserMessageContent = styled.div`
   .InnerScroll {
     overflow-x: hidden;
   }
+  &.EventPostWrap {
+    .EventPostName {
+      font-family: "Montserrat";
+      font-style: normal;
+      font-weight: 700;
+      font-size: 13px;
+      color: #ff2e9a;
+    }
+    .EventPostInfo {
+      display: none;
+    }
+  }
 `;
 const ProfileNameHeader = styled.div`
   display: flex;
@@ -64,6 +80,9 @@ const ProfileNameHeader = styled.div`
   margin: 15px 0;
   @media (max-width: 767px) {
     width: 100%;
+  }
+  &.EventProfileNameHeader {
+    margin: 5px 0;
   }
 `;
 
@@ -81,6 +100,9 @@ const ProfileNameWrap = styled.div`
   }
   @media (max-width: 767px) {
     padding: 0 0px 15px 0px;
+  }
+  &.EventProfileNameWrap {
+    padding: 0 35px 10px 35px;
   }
 `;
 
@@ -379,7 +401,7 @@ const UserMessage = ({ eventData }) => {
   };
   return (
     <>
-      <UserMessageContent>
+      <UserMessageContent className="EventPostWrap">
         <TitleBarWrap>
           <InnerListBanner>
             <img
@@ -390,8 +412,8 @@ const UserMessage = ({ eventData }) => {
             {/* <InnerOverlay /> */}
           </InnerListBanner>
           <ListNameWrap>
-            <ListName>{eventData.list.name}</ListName>
-            <ListInfo>
+            <ListName className="EventPostName">{eventData.list.name}</ListName>
+            <ListInfo className="EventPostInfo">
               <FaCaretRight />
               <ListAuthorName onClick={() => displayUserDetails()}>
                 {user.name}
@@ -404,8 +426,8 @@ const UserMessage = ({ eventData }) => {
             </ListInfo>
           </ListNameWrap>
         </TitleBarWrap>
-        <ProfileNameHeader>
-          <ProfileNameWrap>
+        <ProfileNameHeader className="EventProfileNameHeader">
+          <ProfileNameWrap className="EventProfileNameWrap">
             <SubHeading>{eventData.title}</SubHeading>
             <ChatInput>
               {findDesc(
@@ -451,48 +473,48 @@ const UserMessage = ({ eventData }) => {
             />
           </ProfileNameWrap>
         </ProfileNameHeader>
-      </UserMessageContent>
-      <Scrollbars
-        autoHeight
-        autoHeightMin={0}
-        autoHeightMax={300}
-        thumbMinSize={30}
-        className="InnerScroll"
-      >
-        <ReplyWrap>
-          {displayEventComments &&
-          !loadingComments &&
-          eventData.comments.length > 0 ? (
-            eventData.comments.map((i, key) => {
-              return (
-                <Comment
-                  key={key}
-                  i={i}
-                  eventData={eventData}
-                  flag={flag}
-                  setFlag={setFlag}
+        <Scrollbars
+          autoHeight
+          autoHeightMin={0}
+          autoHeightMax={300}
+          thumbMinSize={30}
+          className="InnerScroll"
+        >
+          <ReplyWrap>
+            {displayEventComments &&
+            !loadingComments &&
+            eventData.comments.length > 0 ? (
+              eventData.comments.map((i, key) => {
+                return (
+                  <Comment
+                    key={key}
+                    i={i}
+                    eventData={eventData}
+                    flag={flag}
+                    setFlag={setFlag}
+                  />
+                );
+              })
+            ) : displayEventComments && loadingComments ? (
+              <LoaderWrap>
+                <ValueLoader />
+              </LoaderWrap>
+            ) : null}
+            {displayEventComments ? (
+              <>
+                <ReplyInput
+                  type="comment"
+                  eventId={eventData._id}
+                  description={description}
+                  setDescription={setDescription}
+                  addComment={addComment}
                 />
-              );
-            })
-          ) : displayEventComments && loadingComments ? (
-            <LoaderWrap>
-              <ValueLoader />
-            </LoaderWrap>
-          ) : null}
-          {displayEventComments ? (
-            <>
-              <ReplyInput
-                type="comment"
-                eventId={eventData._id}
-                description={description}
-                setDescription={setDescription}
-                addComment={addComment}
-              />
-              {flag === false ? <ScrollToBottom /> : null}
-            </>
-          ) : null}
-        </ReplyWrap>
-      </Scrollbars>
+                {flag === false ? <ScrollToBottom /> : null}
+              </>
+            ) : null}
+          </ReplyWrap>
+        </Scrollbars>
+      </UserMessageContent>
     </>
   );
 };

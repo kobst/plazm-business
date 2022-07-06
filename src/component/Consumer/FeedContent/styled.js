@@ -172,8 +172,8 @@ export const RightIcons = styled.div`
   }
 `;
 export const InnerListBanner = styled.div`
-  width: 29px;
-  height: 29px;
+  width: 30px;
+  height: 30px;
   margin: 0 8px 0 0;
   overflow: hidden;
   position: relative;
