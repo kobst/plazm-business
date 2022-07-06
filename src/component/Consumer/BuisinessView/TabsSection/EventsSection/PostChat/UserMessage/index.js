@@ -416,7 +416,7 @@ const UserMessage = ({ eventData }) => {
             <ListInfo className="EventPostInfo">
               <FaCaretRight />
               <ListAuthorName onClick={() => displayUserDetails()}>
-                {user.name}
+                <span>{user.name}</span>
               </ListAuthorName>
               <span>|</span>
               <ListAuthorName>

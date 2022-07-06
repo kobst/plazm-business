@@ -167,9 +167,8 @@ const UserMessage = ({
   setMyFeedIndex,
 }) => {
   const dispatch = useDispatch();
-  const ref = useRef()
-  const isVisible = useOnScreen(ref)
-
+  const ref = useRef();
+  const isVisible = useOnScreen(ref);
 
   const [displayComments, setDisplayComments] = useState(false);
   const loadingComments = useSelector(
@@ -178,15 +177,15 @@ const UserMessage = ({
   const [description, setDescription] = useState("");
   const [displayCommentInput, setDisplayCommentInput] = useState(false);
   const [flag, setFlag] = useState(false);
-  const [over, setOver] = useState(false)
+  const [over, setOver] = useState(false);
   const user = useSelector((state) => state.user.user);
   const ws = useSelector((state) => state.user.ws);
   const commentsRef = useRef();
   const history = useHistory();
-  const setPostsInView = useStore(state => state.setPostsInView)
-  const postsInView = useStore(state => state.postsInView)
-  const setSelectedPlace = useStore(state => state.setSelectedPlace)
-  const selectedPlace = useStore(state => state.selectedPlace)
+  const setPostsInView = useStore((state) => state.setPostsInView);
+  const postsInView = useStore((state) => state.postsInView);
+  const setSelectedPlace = useStore((state) => state.setSelectedPlace);
+  const selectedPlace = useStore((state) => state.selectedPlace);
   const selectedPostId = useSelector(
     (state) => state.myFeed.selectedPostIdForComments
   );
@@ -266,8 +265,6 @@ const UserMessage = ({
       })
     );
   };
-
-
 
   /** to scroll to bottom of comments */
   useEffect(() => {
@@ -411,35 +408,35 @@ const UserMessage = ({
 
   const handleHover = () => {
     // console.log("hover " + businessData.company_name)
-    setSelectedPlace(postData)
-  }
+    setSelectedPlace(postData);
+  };
 
   const handleLeave = () => {
     // console.log("leave" + businessData.company_name)
     //delay, if selectedPlace is not the same as postData, then cancel. If it is, then set to null
-    setSelectedPlace(null)
-  }
+    setSelectedPlace(null);
+  };
 
   useEffect(() => {
-
     const removePost = () => {
-      let _postsInView = postsInView
-      _postsInView = _postsInView.filter(item => {
-        return item._id != postData._id
-      })
-      setPostsInView(_postsInView)
-    }
+      let _postsInView = postsInView;
+      _postsInView = _postsInView.filter((item) => {
+        return item._id != postData._id;
+      });
+      setPostsInView(_postsInView);
+    };
     if (isVisible) {
-      console.log("on screen " + businessData.company_name)
-      setPostsInView([...postsInView, postData])
-
+      console.log("on screen " + businessData.company_name);
+      setPostsInView([...postsInView, postData]);
     }
-    if (!isVisible) {removePost()}
+    if (!isVisible) {
+      removePost();
+    }
 
-    return () => {removePost()}
-
-  }, [isVisible])
-
+    return () => {
+      removePost();
+    };
+  }, [isVisible]);
 
   return (
     <>
@@ -458,46 +455,49 @@ const UserMessage = ({
           >
             <ProfileNameWrap className="UserMessageViewProfileName">
               {/* {myFeedView && ( */}
-                <>
-                  <TopListHeader>
-                    <LeftListHeader>
+              <>
+                <TopListHeader>
+                  <LeftListHeader>
                     {myFeedView && (
                       <>
-                      <InnerListBanner onClick={() => listNavigate()}>
-                        <img
-                          src={listImage}
-                          alt=""
-                          onError={() => setListImage(BannerImg)}
-                        />
-                      </InnerListBanner>
-                      <ListNameWrap>
-                        <ListName>{postData.listId[0].name}</ListName>
-                        <ListInfo>
-                          <FaCaretRight />
-                          <ListAuthorName onClick={() => displayUserDetails()}>
-                            {postData.ownerId[0].name}
-                          </ListAuthorName>
-                          <span>|</span>
-                          <ListAuthorName>
-                            {moment(postData.createdAt).format(
-                              "MMM DD, YYYY, hh:MMa"
-                            )}{" "}
-                            EDT{" "}
-                          </ListAuthorName>
-                        </ListInfo>
-                      </ListNameWrap>
-                      </>)}
-                    </LeftListHeader>
-                    <RightBuisinessName>
-                      <BuisinessName>{businessData.company_name}</BuisinessName>
-                      <div className="hex">
-                        <div className="hex-background">
-                          <img src={businessData.default_image_url} />
-                        </div>
+                        <InnerListBanner onClick={() => listNavigate()}>
+                          <img
+                            src={listImage}
+                            alt=""
+                            onError={() => setListImage(BannerImg)}
+                          />
+                        </InnerListBanner>
+                        <ListNameWrap>
+                          <ListName>{postData.listId[0].name}</ListName>
+                          <ListInfo>
+                            <FaCaretRight />
+                            <ListAuthorName
+                              onClick={() => displayUserDetails()}
+                            >
+                              {postData.ownerId[0].name}
+                            </ListAuthorName>
+                            <span>|</span>
+                            <ListAuthorName>
+                              {moment(postData.createdAt).format(
+                                "MMM DD, YYYY, hh:MMa"
+                              )}{" "}
+                              EDT{" "}
+                            </ListAuthorName>
+                          </ListInfo>
+                        </ListNameWrap>
+                      </>
+                    )}
+                  </LeftListHeader>
+                  <RightBuisinessName>
+                    <BuisinessName>{businessData.company_name}</BuisinessName>
+                    <div className="hex">
+                      <div className="hex-background">
+                        <img src={businessData.default_image_url} />
                       </div>
-                    </RightBuisinessName>
-                  </TopListHeader>
-                </>
+                    </div>
+                  </RightBuisinessName>
+                </TopListHeader>
+              </>
               {/* )} */}
               {postData.title && <SubHeading>{postData.title}</SubHeading>}
 
@@ -544,9 +544,9 @@ const UserMessage = ({
 
               {!readMore && (
                 <ShowMoreDiv
-                 className="ListingShowMore"
+                  className="ListingShowMore"
                   onClick={() => {
-                    console.log("expand view more")
+                    console.log("expand view more");
                     // set detail true
                     setReadMore((prev) => !prev);
                   }}
@@ -560,7 +560,7 @@ const UserMessage = ({
                 <>
                   <ShowMoreDiv
                     onClick={() => {
-                      console.log("expand view less")
+                      console.log("expand view less");
                       // set detail false
                       setReadMore((prev) => !prev);
                     }}

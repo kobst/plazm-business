@@ -355,7 +355,7 @@ const UserMessageEvents = ({
           }
         >
           <ProfileNameWrap>
-            <InnerListBanner>
+            <InnerListBanner className="Tessss">
               <img
                 src={listImage}
                 onError={() => setListImage(BannerImg)}
