@@ -482,7 +482,6 @@ const UserMessage = ({
                             {moment(postData.createdAt).format(
                               "MMM DD, YYYY, hh:MMa"
                             )}{" "}
-                            EDT{" "}
                           </ListAuthorName>
                         </ListInfo>
                       </ListNameWrap>

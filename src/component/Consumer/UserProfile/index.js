@@ -14,6 +14,7 @@ import {
   BottomButtonList,
   ListButtons,
   RightPanel,
+  LoaderWrap
 } from "./styled.js";
 import { BsGrid } from "react-icons/bs";
 import {
@@ -25,10 +26,13 @@ import ListsGrid from "./ListsGrid";
 import DiscoverMore from "../../../images/DiscoverMore.svg";
 import PlazmLogo from "../../../images/plazmLogo.jpeg";
 import { useParams } from "react-router-dom";
+import { unwrapResult } from "@reduxjs/toolkit";
+import ValueLoader from "../../../utils/loader";
 
 const UserProfile = ({}) => {
   const dispatch = useDispatch("");
   const { id } = useParams();
+  const [flag, setFlag] = useState(true)
   const [activeTab, setActiveTab] = useState("created");
   const [data, setData] = useState({ data: [], total: 0 });
   const [page, setPage] = useState({ created: 1, subscribed: 1 });
@@ -55,7 +59,11 @@ const UserProfile = ({}) => {
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-     await dispatch(fetchUserProfileData(id || user._id));
+      const result = await dispatch(fetchUserProfileData(id || user._id));
+      const data = await unwrapResult(result);
+      if (data) {
+        setFlag(false);
+      }
     };
     fetchUserProfile();
   }, [dispatch, id]);
@@ -94,7 +102,11 @@ const UserProfile = ({}) => {
     }
   };
 
-  return (
+  return flag? (
+    <LoaderWrap>
+      <ValueLoader />
+    </LoaderWrap>
+  ) : (
     <UserProfileBody>
       <UserProfileContainer>
         <ProfileTopBanner>
