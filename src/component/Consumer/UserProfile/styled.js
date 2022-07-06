@@ -191,3 +191,18 @@ export const RightPanel = styled.div`
     padding: 0 15px 15px;
   }
 `;
+
+
+export const LoaderWrap = styled.div`
+  width: 100%;
+  position: relative;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 100px 0 0 0;
+  @media (max-width: 767px) {
+    margin: 30px 0 0 0;
+  }
+`;

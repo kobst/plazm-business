@@ -18,9 +18,9 @@ export const validate = {
   lists: Yup.array()
     .min(1, error.REQUIRED)
     .max(1000, error.MAXIMUM_EVENT_DESCRIPTION_LENGTH),
-  images: Yup.array()
-    .min(1, error.REQUIRED)
-    .max(1000, error.MAXIMUM_EVENT_DESCRIPTION_LENGTH),
+  // images: Yup.array()
+  //   .min(1, error.REQUIRED)
+  //   .max(1000, error.MAXIMUM_EVENT_DESCRIPTION_LENGTH),
   repeat: Yup.array()
     .min(1, error.REQUIRED)
     .max(1000, error.MAXIMUM_EVENT_DESCRIPTION_LENGTH),

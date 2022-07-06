@@ -24,6 +24,7 @@ const BuisinessHeaderContent = styled.div`
   position: relative;
   display: flex;
   height: 100px;
+  overflow: hidden;
   .ProfileArrow {
     display: none;
   }

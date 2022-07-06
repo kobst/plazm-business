@@ -14,19 +14,25 @@ import {
   BottomButtonList,
   ListButtons,
   RightPanel,
+  LoaderWrap
 } from "./styled.js";
 import { BsGrid } from "react-icons/bs";
-import { FaList } from "react-icons/fa";
 import {
   clearUserProfilePageListData,
   filterListsByUser,
 } from "../../../reducers/listReducer.js";
+import { fetchUserProfileData } from "../../../reducers/userReducer";
 import ListsGrid from "./ListsGrid";
 import DiscoverMore from "../../../images/DiscoverMore.svg";
 import PlazmLogo from "../../../images/plazmLogo.jpeg";
+import { useParams } from "react-router-dom";
+import { unwrapResult } from "@reduxjs/toolkit";
+import ValueLoader from "../../../utils/loader";
 
 const UserProfile = ({}) => {
   const dispatch = useDispatch("");
+  const { id } = useParams();
+  const [flag, setFlag] = useState(true)
   const [activeTab, setActiveTab] = useState("created");
   const [data, setData] = useState({ data: [], total: 0 });
   const [page, setPage] = useState({ created: 1, subscribed: 1 });
@@ -35,20 +41,32 @@ const UserProfile = ({}) => {
     (state) => state.list.loadingFilterUserLists
   );
   const user = useSelector((state) => state.user.user);
+  const selectedUser = useSelector((state) => state.user.selectedUser);
   const userSubscribedLists = useSelector(
     (state) => state.list.userSubscribedLists
   );
   const userCreatedLists = useSelector((state) => state.list.userCreatedLists);
   useEffect(() => {
-    if (user && user._id) dispatch(clearUserProfilePageListData());
+    if (id || (user && user._id)) dispatch(clearUserProfilePageListData());
     dispatch(
-      filterListsByUser({ id: user._id, created: true, page: 1, limit: 200 })
+      filterListsByUser({ id: id || user._id, created: true, page: 1, limit: 200 })
     );
     dispatch(
-      filterListsByUser({ id: user._id, subscribed: true, page: 1, limit: 200 })
+      filterListsByUser({ id: id || user._id, subscribed: true, page: 1, limit: 200 })
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [user, id]);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const result = await dispatch(fetchUserProfileData(id || user._id));
+      const data = await unwrapResult(result);
+      if (data) {
+        setFlag(false);
+      }
+    };
+    fetchUserProfile();
+  }, [dispatch, id]);
 
   useEffect(() => {
     const listData =
@@ -84,7 +102,11 @@ const UserProfile = ({}) => {
     }
   };
 
-  return (
+  return flag? (
+    <LoaderWrap>
+      <ValueLoader />
+    </LoaderWrap>
+  ) : (
     <UserProfileBody>
       <UserProfileContainer>
         <ProfileTopBanner>
@@ -98,7 +120,7 @@ const UserProfile = ({}) => {
                 <img src={PlazmLogo} />
               </UserProfileImg>
               <UserProfileName>
-                {user?.name}{" "}
+                {selectedUser?.name}{" "}
                 <span>
                   {userCreatedLists?.total + userSubscribedLists?.total} lists
                 </span>
@@ -114,7 +136,7 @@ const UserProfile = ({}) => {
                 onClick={() => setActiveTab("created")}
               >
                 <img src={DiscoverMore} />
-                {user?.name?.split(" ")?.[0]}’s Lists
+                {selectedUser?.name?.split(" ")?.[0]}’s Lists
               </ListButtons>
               <ListButtons
                 className={activeTab === "subscribed" ? "active" : null}

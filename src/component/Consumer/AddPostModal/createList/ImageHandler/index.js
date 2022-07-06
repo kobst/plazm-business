@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import ReactCrop, {centerCrop, makeAspectCrop } from "react-image-crop";
+import ReactCrop, { centerCrop, makeAspectCrop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import { FiPlus } from "react-icons/fi";
 import {
@@ -13,24 +13,20 @@ import { dataUrlToFile, cropImageNow } from "../../../../../utils/image";
 import ConfirmIcon from "../../../../../images/ConfrimOk.png";
 import CloseCrop from "../../../../../images/closecropimg.png";
 
-function centerAspectCrop(
-  mediaWidth,
-  mediaHeight,
-  aspect = 1,
-) {
+function centerAspectCrop(mediaWidth, mediaHeight, aspect = 1) {
   return centerCrop(
     makeAspectCrop(
       {
-        unit: 'px',
-        width: mediaWidth - (mediaWidth * 0.1),
+        unit: "px",
+        width: mediaWidth - mediaWidth * 0.1,
       },
       aspect,
       mediaWidth,
-      mediaHeight,
+      mediaHeight
     ),
     mediaWidth,
-    mediaHeight,
-  )
+    mediaHeight
+  );
 }
 
 const ImageHandler = ({
@@ -43,17 +39,25 @@ const ImageHandler = ({
   cropHeight,
   cropWidth,
   imgSrc,
-  setImgSrc
+  setImgSrc,
+  imageFile,
+  setImageFile,
 }) => {
   // const [imgSrc, setImgSrc] = useState();
-  const [imageFile, setImageFile] = useState();
+  // const [imageFile, setImageFile] = useState();
   const imgRef = useRef(null);
   const [crop, setCrop] = useState({
-    unit: 'px',
+    unit: "px",
     width: cropWidth,
-    height: cropHeight
+    height: cropHeight,
   });
-  const [completedCrop, setCompletedCrop] = useState();
+  const [completedCrop, setCompletedCrop] = useState({
+    x: 0,
+    y: 0,
+    unit: "px",
+    width: cropWidth,
+    height: cropHeight,
+  });
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/*": [".jpeg", ".jpg", ".png"],
@@ -69,14 +73,15 @@ const ImageHandler = ({
   });
 
   const onImageLoad = (e) => {
-      const { width, height } = e.currentTarget
-      // setCrop(centerAspectCrop(width, height, aspect))
-      // setCrop({
-      //   unit: 'px',
-      //   width: cropWidth,
-      //   height: cropHeight
-      // })
-  }
+    // setCrop(centerAspectCrop(width, height, aspect))
+    setCrop({
+      unit: "px",
+      width: cropWidth,
+      height: cropHeight,
+      x: 0,
+      y: 0,
+    });
+  };
 
   const showCroppedImage = async () => {
     try {
@@ -93,17 +98,17 @@ const ImageHandler = ({
 
   const cropAgain = () => {
     // setImgSrc(imagePreview);
-    setImageFile(croppedImage)
+    setImageFile(croppedImage);
     setCroppedImage(null);
     setImagePreview(null);
   };
 
   const remove = () => {
     setImgSrc(null);
-    setImageFile(null)
+    setImageFile(null);
     setCroppedImage(null);
     setImagePreview(null);
-    setCompletedCrop(null)
+    setCompletedCrop(null);
   };
 
   return (
@@ -125,18 +130,21 @@ const ImageHandler = ({
         <ContentTabPanel>
           <ReactCrop
             crop={crop}
-            onComplete={(p) => setCompletedCrop(p)}
-            onChange={setCrop}
+            // onComplete={(p) => setCompletedCrop(p)}
+            onChange={(p) => {
+              setCrop(p);
+              setCompletedCrop(p);
+            }}
             keepSelection
             locked
             aspect={aspect}
           >
-            <img className="CloseCropCross" onClick={() => remove()} src={CloseCrop} />
-            <img 
-              ref={imgRef} 
-              src={imgSrc}  
-              onLoad={onImageLoad} 
+            <img
+              className="CloseCropCross"
+              onClick={() => remove()}
+              src={CloseCrop}
             />
+            <img ref={imgRef} src={imgSrc} onLoad={onImageLoad} />
           </ReactCrop>
         </ContentTabPanel>
       )}

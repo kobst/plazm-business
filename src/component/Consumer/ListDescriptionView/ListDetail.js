@@ -413,6 +413,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   };
 
   useEffect(() => {
+    dispatch(clearListSearchData());
     setSelectedListId(id);
   }, [id]);
 

@@ -20,6 +20,7 @@ const TabsSectionContent = styled.div`
 
 const TabsSection = ({ profile, businessId }) => {
   const [addPostModal, setAddPostModal] = useState(false);
+  const [addEventModal, setAddEventModal] = useState(false);
   const dispatch = useDispatch();
   const topEvent = useSelector((state) => state.event.topEvent);
   const [selectedIndex, setSelectedIndex] = useState(topEvent ? 1 : 0);
@@ -30,7 +31,8 @@ const TabsSection = ({ profile, businessId }) => {
   };
   const onTabSelect = (index) => {
     if(index === 3) {
-      index = 0
+      // index = 0
+      return;
     }
     setSelectedIndex(index)
   }
@@ -57,8 +59,8 @@ const TabsSection = ({ profile, businessId }) => {
             <Tab>Posts</Tab>
             <Tab>Media</Tab>
             <Tab onClick={() => eventTabChange()}>Events</Tab>
-            <Tab onClick={() => setAddPostModal(true)}>
-              <span>+</span>Create Post
+            <Tab onClick={() => {selectedIndex === 2 ? setAddEventModal(true) : setAddPostModal(true)}}>
+              <span>+</span> {selectedIndex === 2 ? 'Create Event' : 'Create Post'}
             </Tab>
           </TabList>
 
@@ -74,6 +76,8 @@ const TabsSection = ({ profile, businessId }) => {
             <EventsSection
               businessId={businessId}
               // setSelectedListId={setSelectedListId}
+              addEventModal={addEventModal} 
+              setAddEventModal={(v) => setAddEventModal(v)}
             />
           </TabPanel>
           <TabPanel>Post Upcoming</TabPanel>
