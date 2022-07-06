@@ -451,12 +451,7 @@ const UserMessage = ({ eventData }) => {
               startTime={new Date(eventData.eventSchedule.start_time)}
               endTime={new Date(eventData.eventSchedule.end_time)}
             />
-            <EventBigImage>
-              <ImageComment
-                image={eventData.media.length === 1 ? eventData.media[0] : ""}
-                imgSources={eventData.media.length > 1 ? eventData.media : ""}
-              />
-            </EventBigImage>
+
             <LikesBar
               type="comment"
               eventId={eventData._id}
@@ -471,6 +466,13 @@ const UserMessage = ({ eventData }) => {
               flag={flag}
               setFlag={setFlag}
             />
+
+            <EventBigImage>
+              <ImageComment
+                image={eventData.media.length === 1 ? eventData.media[0] : ""}
+                imgSources={eventData.media.length > 1 ? eventData.media : ""}
+              />
+            </EventBigImage>
           </ProfileNameWrap>
         </ProfileNameHeader>
         <Scrollbars
