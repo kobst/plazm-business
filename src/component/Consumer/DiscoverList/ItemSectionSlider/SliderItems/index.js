@@ -231,7 +231,7 @@ const NewInBuzzItems = ({
                     <strong onClick={() => ReadMore()}>Read More</strong>
                   </InnerDescriptionPara>
                   <InnerBottomBtns>
-                    <ButtonBlue>Visit</ButtonBlue>
+                    <ButtonBlue onClick={() => ReadMore()}>Visit</ButtonBlue>
                     {data?.subscribers.length === 0 ||
                     !data?.subscribers.find((i) => i._id === user._id) ? (
                       <>

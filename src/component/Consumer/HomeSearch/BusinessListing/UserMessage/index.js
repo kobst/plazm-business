@@ -460,39 +460,36 @@ const UserMessage = ({
                   <LeftListHeader>
                     {myFeedView && (
                       <>
-                        <InnerListBanner onClick={() => listNavigate()}>
-                          <img
-                            src={listImage}
-                            alt=""
-                            onError={() => setListImage(BannerImg)}
-                          />
-                        </InnerListBanner>
-                        <ListNameWrap>
-                          <ListName>{postData.listId[0].name}</ListName>
-                          <ListInfo>
-                            <FaCaretRight />
-                            <ListAuthorName
-                              onClick={() => displayUserDetails()}
-                            >
-                              {postData.ownerId[0].name}
-                            </ListAuthorName>
-                            <span>|</span>
-                            <ListAuthorName>
-                              {moment(postData.createdAt).format(
-                                "MMM DD, YYYY, hh:MMa"
-                              )}{" "}
-                              EDT{" "}
-                            </ListAuthorName>
-                          </ListInfo>
-                        </ListNameWrap>
-                      </>
-                    )}
-                  </LeftListHeader>
-                  <RightBuisinessName>
-                    <BuisinessName>{businessData.company_name}</BuisinessName>
-                    <div className="hex">
-                      <div className="hex-background">
-                        <img src={businessData.default_image_url} />
+                      <InnerListBanner onClick={() => listNavigate()}>
+                        <img
+                          src={listImage}
+                          alt=""
+                          onError={() => setListImage(BannerImg)}
+                        />
+                      </InnerListBanner>
+                      <ListNameWrap>
+                        <ListName>{postData.listId[0].name}</ListName>
+                        <ListInfo>
+                          <FaCaretRight />
+                          <ListAuthorName onClick={() => displayUserDetails()}>
+                            {postData.ownerId[0].name}
+                          </ListAuthorName>
+                          <span>|</span>
+                          <ListAuthorName>
+                            {moment(postData.createdAt).format(
+                              "MMM DD, YYYY, hh:MMa"
+                            )}{" "}
+                          </ListAuthorName>
+                        </ListInfo>
+                      </ListNameWrap>
+                      </>)}
+                    </LeftListHeader>
+                    <RightBuisinessName>
+                      <BuisinessName>{businessData.company_name}</BuisinessName>
+                      <div className="hex">
+                        <div className="hex-background">
+                          <img src={businessData.default_image_url} />
+                        </div>
                       </div>
                     </div>
                   </RightBuisinessName>
