@@ -9,9 +9,9 @@ const ChatContent = styled.div`
   width: 100%;
   position: relative;
   display: flex;
-  padding: 12px 0 12px 12px;
+  padding: 0px 0 12px 0px;
   flex-direction: column;
-  background: #221e45;
+  background: #120f24;
   /* overflow: hidden; */
   @media (max-width: 767px) {
   }
@@ -20,7 +20,7 @@ const NoMorePost = styled.p`
   font-style: normal;
   font-size: 12px;
   line-height: normal;
-  margin: 0 0 5px;
+  margin: 20px 0 5px;
   color: #fff;
 `;
 

@@ -207,7 +207,7 @@ const DaysIndicator = styled.div`
   top: 0;
 `;
 
-const CalenderSection = ({ businessId }) => {
+const CalenderSection = ({ businessId, addEventModal, setAddEventModal }) => {
   const dispatch = useDispatch();
   const eventDate = useSelector((state) => state.event.date);
   const loadingForWeek = useSelector((state) => state.event.loadingForAWeek);
@@ -231,7 +231,7 @@ const CalenderSection = ({ businessId }) => {
   const [selectedCapsule, setSelectedCapsule] = useState(
     days[currentDate.getDay()]
   );
-  const [addEventModal, setAddEventModal] = useState(false);
+  // const [addEventModal, setAddEventModal] = useState(false);
   const user = useSelector((state) => state.user.user);
 
   useEffect(() => {
@@ -794,11 +794,11 @@ const CalenderSection = ({ businessId }) => {
               sat
             </DaysDiv>
           </DaysWrap>
-          <BtnWrap>
+          {/* <BtnWrap>
             <SaveButton onClick={() => setAddEventModal(true)}>
               Create Event
             </SaveButton>
-          </BtnWrap>
+          </BtnWrap> */}
         </CalenderSectionWrap>
       )}
     </>

@@ -415,7 +415,7 @@ const UserMessage = ({ postData }) => {
                       <FaCaretRight />
                       <ListAuthorName onClick={() => displayUserDetails()}>
                         {" "}
-                        {postData.postDetails.ownerId.name}
+                        <span>{postData.postDetails.ownerId.name}</span>
                       </ListAuthorName>
                       <span>|</span>
                       <ListAuthorName>

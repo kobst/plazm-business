@@ -140,7 +140,7 @@ const MapViewHooks = (props) => {
 
     const mapRef= useRef()
     const mapContainer = useRef(null);
-    const [boundBox, setBox] = useState(null)
+    const [boundBox, setBox] = useState([[-73.9876, 40.7661], [-73.9397, 40.8002]])
     const [map, setMap] = useState()
     const [lineArray, setLineArray] = useState([])
     const [hex, setHex] = useState()

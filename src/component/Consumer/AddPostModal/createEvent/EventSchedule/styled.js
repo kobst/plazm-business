@@ -27,7 +27,6 @@ export const DaysWrap = styled.div`
       border-radius: 3px;
     }
     &:first-child {
-      background: transparent;
       color: #EE3840;
     }
   }

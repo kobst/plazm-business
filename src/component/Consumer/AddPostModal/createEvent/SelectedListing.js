@@ -31,12 +31,12 @@ const SelectedListing = ({ formik }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   });
 
-  const toggleList = (list, index) => {
+  const toggleList = (list) => {
     const lists = formik.values.lists;
     if (lists?.includes(list)) {
       formik.setFieldValue(
         "lists",
-        formik.values.lists.filter((_, idx) => idx !== index)
+        formik.values.lists.filter((l) => l !== list)
       );
     } else {
       formik.setFieldValue("lists", [...lists, list]);
@@ -60,7 +60,7 @@ const SelectedListing = ({ formik }) => {
           <DropDownList isOpen={open}>
             <ul>
               {userLists.map((list, idx) => (
-                <li key={list._id} onClick={() => toggleList(list._id, idx)}>
+                <li key={list._id} onClick={() => toggleList(list._id)}>
                   <div className="ListName">{list.name}</div>
                   {lists?.includes(list._id) && (
                     <span>

@@ -31,7 +31,7 @@ const DateBar = ({startDay, endDay}) => {
     <>
     <BottomBarLikes>
       <LabelWrap>Date -</LabelWrap>
-      <LabelInput>{startDay} to {endDay}</LabelInput>
+      <LabelInput>{startDay} {endDay && 'to'} {endDay}</LabelInput>
     </BottomBarLikes>
     </>
     )

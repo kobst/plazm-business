@@ -150,6 +150,7 @@ function Calendar({ date, changeDate }) {
           onChange={onChange}
           minDate={new Date()}
           format="ddd, DD MMM YYYY"
+          disableToolbar
         />
       </MuiPickersUtilsProvider>
       {/* <MuiPickersUtilsProvider utils={DateFnsUtils}>

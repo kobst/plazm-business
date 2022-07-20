@@ -26,19 +26,19 @@ export const BottomBarLikes = styled.div`
     align-items: flex-start;
   }
   &.replyBar {
-    background: rgba(177, 171, 234, 0.1);
-    border: 0.75px solid #3f3777;
+    /* background: rgba(177, 171, 234, 0.1);
+    border: 0.75px solid #3f3777; */
     box-sizing: border-box;
     border-radius: 5px;
-    padding: 8px 15px;
+    /* padding: 8px 15px; */
   }
   &.replyBarComment {
-    background: rgba(177, 171, 234, 0.1);
-    border: 0.75px solid #3f3777;
+    /* background: rgba(177, 171, 234, 0.1);
+    border: 0.75px solid #3f3777; */
     box-sizing: border-box;
     border-radius: 5px;
-    padding: 8px 15px;
-    margin: 10px 0;
+    /* padding: 8px 15px;
+    margin: 10px 0; */
   }
 `;
 
