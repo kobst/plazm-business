@@ -9,7 +9,6 @@ import ButtonSmall from "../UI/ButtonSmall";
 import PlusIcon from "../../images/plus-img.svg";
 import DropdownIcon from "../../images/dropdown-arrow.svg";
 import MapPin from "../../images/map-pin.svg";
-import history from "../../utils/history";
 import "@pathofdev/react-tag-input/build/index.css";
 import TimePicker from "react-bootstrap-time-picker";
 // import GallerySec from '../UI/Gallery'
@@ -19,6 +18,7 @@ import Geocode from "react-geocode";
 import FindAddressValue from "../../utils/findAddress";
 import TagInputCross from "../../images/Mask.svg";
 import error from "../../constants";
+import { useHistory } from "react-router-dom";
 
 const bucket = process.env.REACT_APP_BUCKET;
 
@@ -277,6 +277,7 @@ const ErrorDiv = styled.div`
   margin-left: 14px;
 `;
 const EditProfile = ({ value }) => {
+  const history = useHistory();
   const [company, setCompany] = useState();
   const [website, setWebsite] = useState();
   const [phone, setPhone] = useState();
@@ -892,7 +893,7 @@ const EditProfile = ({ value }) => {
         <Card>
           <FlexRow>
             <ButtonSmall
-              onClick={() => (history.push(`/`), window.location.reload())}
+              onClick={() => history.push(`/`)}
               maxWidth="110px"
               bgColor="#FF7171"
               style={{ marginLeft: "auto", marginRight: "10px" }}

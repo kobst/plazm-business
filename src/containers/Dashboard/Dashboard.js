@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import RightSide from "../../component/RightSide/RightSide";
 import { Auth } from "aws-amplify";
-import history from "../../utils/history";
+import { useHistory } from "react-router-dom";
+
+import RightSide from "../../component/RightSide/RightSide";
 import Header from "../../component/Header";
 import Footer from "../../component/Footer";
 import { callPlace } from "../../Api";
@@ -32,24 +33,29 @@ const Container = styled.div`
 
 process.env.AWS_SDK_LOAD_CONFIG = true;
 const Dashboard = () => {
+  const history = useHistory();
   const [placeValue, setPlace] = useState();
-  const [ws, setWs] = useState()
+  const [ws, setWs] = useState();
   useEffect(() => {
     let updateUser = async (authState) => {
       try {
         const value = await Auth.currentAuthenticatedUser();
-        if (value.attributes["custom:type"] === "curator" || value.attributes["custom:type"] === "customer" || value.attributes["custom:type"] === "consumer") {
+        if (
+          value.attributes["custom:type"] === "curator" ||
+          value.attributes["custom:type"] === "customer" ||
+          value.attributes["custom:type"] === "consumer"
+        ) {
           history.push("/");
-          window.location.reload();
         } else {
           const place = await callPlace(value.attributes.sub);
-          const ws = new WebSocket(`${process.env.REACT_APP_WEBSOCKET}/?userId=${place[0]._id}`)
-          setWs(ws)
+          const ws = new WebSocket(
+            `${process.env.REACT_APP_WEBSOCKET}/?userId=${place[0]._id}`
+          );
+          setWs(ws);
           setPlace(place[0]);
         }
       } catch {
         history.push("/business/login");
-        window.location.reload();
       }
     };
     updateUser();

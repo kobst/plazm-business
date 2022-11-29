@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
 import { Auth } from "aws-amplify";
-import history from "../../utils/history";
+import { useHistory } from "react-router-dom";
+
 import Wrapper from "../../component/Login-Register/Wrapper";
 import RegisterForm from "../../component/Login-Register/Form-Components/Register-Form";
 import { getMessage } from "../../config";
@@ -16,6 +17,7 @@ import {
 const renderMessage = getMessage();
 
 const Register = (props) => {
+  const history = useHistory();
   const { userType } = props;
   const type = props.match.url;
   const [username, setUser] = useState();
@@ -50,7 +52,6 @@ const Register = (props) => {
       try {
         await Auth.currentAuthenticatedUser();
         history.push("/");
-        window.location.reload();
       } catch {
         setLoginValue(true);
       }
@@ -116,7 +117,7 @@ const Register = (props) => {
           password: password,
         })
           // eslint-disable-next-line no-sequences
-          .then(() => (history.push("/"), window.location.reload()))
+          .then(() => (history.push("/")))
           .catch((err) => console.log(err));
       })
       .catch((err) => setCodeError(true));

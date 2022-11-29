@@ -3,13 +3,14 @@ import "./style.css";
 import { Auth } from "aws-amplify";
 import { getMessage } from "../../config";
 import ValueLoader from "../../utils/loader";
-import history from "../../utils/history";
 import Wrapper from "../../component/Login-Register/Wrapper";
 import LoginForm from "../../component/Login-Register/Form-Components/Login-Form";
+import { useHistory } from "react-router-dom";
 
 const renderMessage = getMessage();
 
 const Login = (props) => {
+  const history = useHistory();
   const type = props.match.url;
   const [user, setUser] = useState();
   const [password, setPassword] = useState();
@@ -26,7 +27,6 @@ const Login = (props) => {
       try {
         await Auth.currentAuthenticatedUser();
         history.push("/business");
-        window.location.reload();
       } catch {
         setLoginValue(true);
       }
@@ -42,7 +42,8 @@ const Login = (props) => {
     })
       // eslint-disable-next-line no-sequences
       .then((data) => {
-        if (data.attributes["custom:type"] === "business") history.push("/business");
+        if (data.attributes["custom:type"] === "business")
+          history.push("/business");
         else if (
           data.attributes["custom:type"] === "curator" ||
           data.attributes["custom:type"] === "customer" ||
@@ -50,7 +51,6 @@ const Login = (props) => {
         )
           history.push("/");
         else history.push("/business/login");
-        window.location.reload();
       })
       .catch((err) => {
         if (err) {
@@ -61,7 +61,8 @@ const Login = (props) => {
 
   function validateEmail(user) {
     // eslint-disable-next-line no-useless-escape
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const re =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(user).toLowerCase());
   }
 
