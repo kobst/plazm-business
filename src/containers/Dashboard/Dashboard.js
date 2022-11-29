@@ -3,16 +3,12 @@ import styled from "styled-components";
 import { Auth } from "aws-amplify";
 import { useHistory } from "react-router-dom";
 
-import RightSide from "../../component/RightSide/RightSide";
-import Header from "../../component/Header";
-import Footer from "../../component/Footer";
-import { callPlace } from "../../Api";
-import ValueLoader from "../../utils/loader";
-// import ws from "../../utils/socket";
+import RightSide from "@components/RightSide/RightSide";
+import Header from "@components/Header";
+import Footer from "@components/Footer";
+import { callPlace } from "@api";
+import ValueLoader from "@utils/loader";
 
-// ws.onopen = () => {
-//   console.log("connected");
-// };
 const DashboardContainer = styled.div`
   display: flex;
   background: linear-gradient(157.1deg, #ff7171 -1.1%, #ff479d 100%);
@@ -32,12 +28,15 @@ const Container = styled.div`
 `;
 
 process.env.AWS_SDK_LOAD_CONFIG = true;
+
 const Dashboard = () => {
   const history = useHistory();
+
   const [placeValue, setPlace] = useState();
   const [ws, setWs] = useState();
+
   useEffect(() => {
-    let updateUser = async (authState) => {
+    let updateUser = async () => {
       try {
         const value = await Auth.currentAuthenticatedUser();
         if (
@@ -62,22 +61,22 @@ const Dashboard = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  if (placeValue) {
+    return (
+      <DashboardContainer>
+        <Container>
+          <Header value={placeValue} />
+          <RightSide ws={ws} />
+          <Footer />
+        </Container>
+      </DashboardContainer>
+    );
+  }
+
   return (
-    <>
-      {placeValue ? (
-        <DashboardContainer>
-          <Container>
-            <Header value={placeValue} />
-            <RightSide ws={ws} />
-            <Footer />
-          </Container>
-        </DashboardContainer>
-      ) : (
-        <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
-          <ValueLoader />
-        </div>
-      )}
-    </>
+    <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
+      <ValueLoader />
+    </div>
   );
 };
 

@@ -8,6 +8,7 @@ module.exports = {
   },
   webpack: {
     alias: {
+      "@api": path.resolve(__dirname, "src/Api/"),
       "@components": path.resolve(__dirname, "src/component/"),
       "@containers": path.resolve(__dirname, "src/containers/"),
       "@graphQl": path.resolve(__dirname, "src/graphQl/"),
