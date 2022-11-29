@@ -15,7 +15,6 @@ import {
   SearchListApi,
 } from "../../../reducers/listReducer";
 
-
 import ValueLoader from "../../../utils/loader";
 import Input from "../../UI/Input/Input";
 import SearchSection from "./SearchSection";
@@ -33,6 +32,7 @@ import {
   LoaderWrap,
 } from "./styled.js";
 import NewInBuzzItems from "./ItemSectionSlider/SliderItems";
+import ButtonOrange from "../UI/ButtonOrange";
 
 const TopContent = styled.div`
   width: 100%;
@@ -147,7 +147,7 @@ const ListMenu = (
   const userCreatedLoading = useSelector(
     (state) => state.list.loadingUserLists
   );
-  
+
   // const [userFollowedLists, setUserFollowedLists] = useState([]);
   // const [obj, setObj] = useState()
   const [searchError, setSearchError] = useState("");
@@ -162,15 +162,13 @@ const ListMenu = (
   const [totalLists, setTotalLists] = useState(
     parseInt(totalList - userLists.length)
   );
-  const [results, setResults] = useState()
+  const [results, setResults] = useState();
 
   const userSubscribedLists = useStore((state) => state.userSubscribedLists);
   const userCreatedLists = useStore((state) => state.userCreatedLists);
   const setSelectedListId = useStore((state) => state.setSelectedListId);
   const setDiscoverBtn = useStore((state) => state.setDiscoverBtn);
   const setReadMore = useStore((state) => state.setReadMore);
-
-  
 
   useEffect(() => {
     // setObj({ subscriberId: user._id })
@@ -189,7 +187,6 @@ const ListMenu = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-
   // only set for user subscribed Lists...
   // useEffect(() => {
   //   let _userFollowedLists = []
@@ -205,7 +202,7 @@ const ListMenu = (
   //         }
   //     }
   //     })
-  //   }  
+  //   }
   //   setUserFollowedLists(_userFollowedLists)
   //   //   const _userFollowedLists = listData.filter(_list => {
   //   //     console.log(_list.subscribers)
@@ -242,32 +239,32 @@ const ListMenu = (
   // }, [listSearch]);
 
   useEffect(() => {
-    console.log("search list")
-   console.log(searchList)
+    console.log("search list");
+    console.log(searchList);
   }, [searchList]);
 
-    /** to search data based on input */
-    useEffect(() => {
-      // console.log("search data" + JSON.stringify(obj))
-      var obj = {}
-      // if (tabIndex != 2) {
-      //   obj={ subscriberId: user._id }
-      // }
-      setSearch(listSearch);
-      const searchData = async () => {
-        console.log("search data" + obj)
-        const data = await dispatch(
-          SearchListApi({ value: 0, search: listSearch, ...obj })
-        );
-        const res = await unwrapResult(data);
-        if (res) {
-          console.log(res)
+  /** to search data based on input */
+  useEffect(() => {
+    // console.log("search data" + JSON.stringify(obj))
+    var obj = {};
+    // if (tabIndex != 2) {
+    //   obj={ subscriberId: user._id }
+    // }
+    setSearch(listSearch);
+    const searchData = async () => {
+      console.log("search data" + obj);
+      const data = await dispatch(
+        SearchListApi({ value: 0, search: listSearch, ...obj })
+      );
+      const res = await unwrapResult(data);
+      if (res) {
+        console.log(res);
 
-          setFlag(false);
-        }
-      };
-      searchData();
-    }, [listSearch, dispatch]);
+        setFlag(false);
+      }
+    };
+    searchData();
+  }, [listSearch, dispatch]);
 
   /** to fetch more lists */
   // const fetchMoreList = () => {
@@ -280,8 +277,6 @@ const ListMenu = (
   //     setHasMore(false);
   //   }
   // };
-
-
 
   /** back btn */
   const backBtn = () => {
@@ -319,6 +314,7 @@ const ListMenu = (
               <Tab>Discover More</Tab>
             </div>
             <RightSearchWrap>
+              <ButtonOrange className="createListBtn">Create List</ButtonOrange>
               <Input
                 value={search}
                 onKeyPress={(event) => searchListsData(event)}
@@ -355,23 +351,23 @@ const ListMenu = (
             )}
             {listSearch && (
               <SliderSection
-              heading="search results"
-              data={searchList}
-              totalList={totalPopularLists}
-              setSelectedListId={setSelectedListId}
-              setDiscoverBtn={setDiscoverBtn}
-              setReadMore={setReadMore}
-              offset={offsetPopular}
-              setOffSet={setOffSetPopular}
-              loader={loader}
-              setLoader={setLoader}
-              modal={displayTrendingModel}
-              setModal={setDisplayTrendingModel}
-              setSelectedId={setSelectedId}
-              selectedId={selectedId}
-              setTotalLists={setTotalLists}
-              totalLists={totalLists}
-          />
+                heading="search results"
+                data={searchList}
+                totalList={totalPopularLists}
+                setSelectedListId={setSelectedListId}
+                setDiscoverBtn={setDiscoverBtn}
+                setReadMore={setReadMore}
+                offset={offsetPopular}
+                setOffSet={setOffSetPopular}
+                loader={loader}
+                setLoader={setLoader}
+                modal={displayTrendingModel}
+                setModal={setDisplayTrendingModel}
+                setSelectedId={setSelectedId}
+                selectedId={selectedId}
+                setTotalLists={setTotalLists}
+                totalLists={totalLists}
+              />
             )}
           </TabPanel>
           <TabPanel index={1}>
@@ -397,23 +393,23 @@ const ListMenu = (
             )}
             {listSearch && (
               <SliderSection
-              heading="search results"
-              data={searchList}
-              totalList={totalPopularLists}
-              setSelectedListId={setSelectedListId}
-              setDiscoverBtn={setDiscoverBtn}
-              setReadMore={setReadMore}
-              offset={offsetPopular}
-              setOffSet={setOffSetPopular}
-              loader={loader}
-              setLoader={setLoader}
-              modal={displayTrendingModel}
-              setModal={setDisplayTrendingModel}
-              setSelectedId={setSelectedId}
-              selectedId={selectedId}
-              setTotalLists={setTotalLists}
-              totalLists={totalLists}
-          />
+                heading="search results"
+                data={searchList}
+                totalList={totalPopularLists}
+                setSelectedListId={setSelectedListId}
+                setDiscoverBtn={setDiscoverBtn}
+                setReadMore={setReadMore}
+                offset={offsetPopular}
+                setOffSet={setOffSetPopular}
+                loader={loader}
+                setLoader={setLoader}
+                modal={displayTrendingModel}
+                setModal={setDisplayTrendingModel}
+                setSelectedId={setSelectedId}
+                selectedId={selectedId}
+                setTotalLists={setTotalLists}
+                totalLists={totalLists}
+              />
             )}
           </TabPanel>
           <TabPanel index={2}>
@@ -439,26 +435,26 @@ const ListMenu = (
             )}
             {listSearch && (
               <>
-              <SliderSection
-                heading="search results"
-                data={searchList}
-                totalList={totalPopularLists}
-                setSelectedListId={setSelectedListId}
-                setDiscoverBtn={setDiscoverBtn}
-                setReadMore={setReadMore}
-                offset={offsetPopular}
-                setOffSet={setOffSetPopular}
-                loader={loader}
-                setLoader={setLoader}
-                modal={displayTrendingModel}
-                setModal={setDisplayTrendingModel}
-                setSelectedId={setSelectedId}
-                selectedId={selectedId}
-                setTotalLists={setTotalLists}
-                totalLists={totalLists}
-            />
+                <SliderSection
+                  heading="search results"
+                  data={searchList}
+                  totalList={totalPopularLists}
+                  setSelectedListId={setSelectedListId}
+                  setDiscoverBtn={setDiscoverBtn}
+                  setReadMore={setReadMore}
+                  offset={offsetPopular}
+                  setOffSet={setOffSetPopular}
+                  loader={loader}
+                  setLoader={setLoader}
+                  modal={displayTrendingModel}
+                  setModal={setDisplayTrendingModel}
+                  setSelectedId={setSelectedId}
+                  selectedId={selectedId}
+                  setTotalLists={setTotalLists}
+                  totalLists={totalLists}
+                />
 
-               {/* <SearchSection
+                {/* <SearchSection
                 setSelectedListId={setSelectedListId}
                 setDiscoverBtn={setDiscoverBtn}
                 setReadMore={setReadMore}
