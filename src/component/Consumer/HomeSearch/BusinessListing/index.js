@@ -73,7 +73,7 @@ const BusinessListing = ({ loader, coords, closestFilter }) => {
   const draggedLocation = useStore((state) => state.draggedLocation);
   const setGridMode = useStore((state) => state.setGridMode);
   const gridMode = useStore((state) => state.gridMode);
-  const setPostsInView = useStore(state => state.setPostsInView)
+  const setPostsInView = useStore((state) => state.setPostsInView);
 
   useEffect(() => {
     dispatch(setEnterClicked(false));
@@ -138,6 +138,8 @@ const BusinessListing = ({ loader, coords, closestFilter }) => {
     } else setHasMore(false);
   };
 
+  console.log("businessData", businessData);
+
   return (
     <>
       {/* <SearchBar
@@ -146,10 +148,10 @@ const BusinessListing = ({ loader, coords, closestFilter }) => {
         setFilterSelected={setFilterSelected}
         // setDisplayTab={setDisplayTab}
       /> */}
-
       {showSearchBar && (
         <GlobalSearchBox setOffset={setOffset} type={"Explore"} />
       )}
+
       {(loading && offset === 0) || flag ? (
         <LoaderWrap>
           <ValueLoader />

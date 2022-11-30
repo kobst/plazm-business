@@ -158,6 +158,19 @@ export const HomeSearch = createAsyncThunk("data/HomeSearch", async (obj) => {
 });
 
 /*
+ * @desc:  home search and get list
+ * @params: search data
+ */
+export const SearchFeedList = createAsyncThunk(
+  "data/SearchFeedList",
+  async (obj) => {
+    const graphQl = homeSearch(obj);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.homeSearch;
+  }
+);
+
+/*
  * @desc:  home search
  * @params: search data
  */
@@ -200,7 +213,9 @@ export const slice = createSlice({
   name: "myFeed",
   initialState: {
     loading: false,
+    isNoDataFound: false,
     searchFeed: [],
+    searchFeedList: [],
     myFeed: [],
     totalData: 0,
     loadingPostComments: false,
@@ -648,6 +663,21 @@ export const slice = createSlice({
       state.myFeed = state.myFeed.concat(obj).sort((a, b) => {
         return new Date(b.createdAt) - new Date(a.createdAt);
       });
+    },
+    [SearchFeedList.fulfilled]: (state, action) => {
+      if (action.payload) {
+        const data = action.payload.data.map((obj) => ({
+          ...obj,
+          comments: [],
+          likes: obj.likes !== null ? obj.likes : [],
+          listId: [].concat({
+            ...obj.list,
+            media: obj.list && obj.list.image ? [].concat(obj.list.image) : [],
+          }),
+        }));
+        state.searchFeedList = data;
+        state.isNoDataFound = !data.length;
+      }
     },
     [HomeSearch.pending]: (state) => {
       if (!state.loading) {

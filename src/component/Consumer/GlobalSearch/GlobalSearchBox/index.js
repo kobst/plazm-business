@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import SearchIcon from "../../../../images/search-icon.png";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,12 +8,14 @@ import { setSearchData } from "../../../../reducers/myFeedReducer";
 import useStore from "../../useState";
 import {
   HomeSearch,
+  SearchFeedList,
   clearSearchFeed,
   setSideFiltersHomeSearch,
   setEnterClicked,
 } from "../../../../reducers/myFeedReducer";
 import { checkBusiness } from "../../../../reducers/businessReducer";
 import { useLocation } from "react-router-dom";
+import GooglePlacesSearch from "../../../../utils/googlePlacesSearch";
 
 const ErrorDiv = styled.div`
   color: #ff0000;
@@ -68,11 +70,15 @@ const GlobalSearchBox = ({ setOffset, type }) => {
   const history = useLocation()
     .pathname.split("/")
     .filter((item) => item);
+  const autoCompleteRef = useRef(null);
+
   const [search, setSearch] = useState("");
   const loader = useSelector((state) => state.myFeed.loading);
   const [searchError, setSearchError] = useState("");
   // const [uploadMenu, setUploadMenu] = useState(false);
   const searchData = useSelector((state) => state.myFeed.searchData);
+  const searchFeedList = useSelector((state) => state.myFeed.searchFeedList);
+  const isNoDataFound = useSelector((state) => state.myFeed.isNoDataFound);
   const filterClosest = useSelector((state) => state.myFeed.filterByClosest);
   const filters = useSelector((state) => state.business.filters);
   const user = useSelector((state) => state.user.user);
@@ -98,72 +104,80 @@ const GlobalSearchBox = ({ setOffset, type }) => {
   const searchList = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      searchFn()
+      searchFn();
     }
-  }
+  };
   /** on key press handler for search */
-  const searchFn = () => {
-      if (search !== "" && search.length >= 4 && !search.trim() === false) {
-        setOffset(0);
-        setSearchError("");
-        dispatch(setSearchData(search));
-        switch (type) {
-          case "Explore":
-            dispatch(clearSearchFeed());
-            dispatch(setSideFiltersHomeSearch());
-            const obj = {
-              search: search,
+  const searchFn = (search) => {
+    if (search !== "" && search.length >= 4 && !search.trim() === false) {
+      setOffset(0);
+      setSearchError("");
+      // dispatch(setSearchData(search));
+      switch (type) {
+        case "Explore":
+          // dispatch(setSideFiltersHomeSearch());
+          const obj = {
+            search: search,
+            value: 0,
+            filters: { closest: filterClosest, updated: updatedAtFilter },
+            latitude: draggedLocation.lat,
+            longitude: draggedLocation.lng,
+          };
+          // dispatch(setEnterClicked(true));
+          dispatch(SearchFeedList(obj));
+          // dispatch(HomeSearch(obj));
+          break;
+        case "Business Search":
+          dispatch(
+            checkBusiness({
+              businessId: history.at(-1),
+              filters: {
+                PostsByMe: filters.PostsByMe
+                  ? filters.PostsByMe
+                  : !filters.Business &&
+                    !filters.PostsByMe &&
+                    !filters.MySubscriptions &&
+                    !filters.Others
+                  ? true
+                  : false,
+                Business: false,
+                MySubscriptions: filters.MySubscriptions
+                  ? filters.MySubscriptions
+                  : false,
+                Others: filters.Others ? filters.Others : false,
+              },
               value: 0,
-              filters: { closest: filterClosest, updated: updatedAtFilter },
-              latitude: draggedLocation.lat,
-              longitude: draggedLocation.lng,
-            };
-            dispatch(setEnterClicked(true));
-            dispatch(HomeSearch(obj));
-            break;
-          case "Business Search":
-            dispatch(
-              checkBusiness({
-                businessId: history.at(-1),
-                filters: {
-                  PostsByMe: filters.PostsByMe
-                    ? filters.PostsByMe
-                    : !filters.Business &&
-                      !filters.PostsByMe &&
-                      !filters.MySubscriptions &&
-                      !filters.Others
-                    ? true
-                    : false,
-                  Business: false,
-                  MySubscriptions: filters.MySubscriptions
-                    ? filters.MySubscriptions
-                    : false,
-                  Others: filters.Others ? filters.Others : false,
-                },
-                value: 0,
-                ownerId: user ? user._id : null,
-                sideFilters: { likes: sideFilterForLikes },
-                search: search,
-              })
-            );
-            break;
-        }
-      } else if (search.length >= 0 && search.length < 4) {
-        setSearchError(error.SEARCH_ERROR);
+              ownerId: user ? user._id : null,
+              sideFilters: { likes: sideFilterForLikes },
+              search: search,
+            })
+          );
+          break;
       }
+    } else if (search.length >= 0 && search.length < 4) {
+      setSearchError(error.SEARCH_ERROR);
+    }
+    autoCompleteRef.current.focus();
   };
 
   /** on change handler for search */
   const onChangeSearch = (e) => {
     setSearch(e.target.value);
+    if (search.length >= 4) {
+      searchFn(e.target.value);
+    }
   };
+
+  console.log("searchFeedList", searchFeedList);
   return (
     <>
       <GlobalSearchInputWrap>
-        <input
-          value={search}
-          onKeyPress={(event) => searchList(event)}
-          onChange={(e) => onChangeSearch(e)}
+        <GooglePlacesSearch
+          searchFeedList={searchFeedList}
+          autoCompleteRef={autoCompleteRef}
+          isNoDataFound={isNoDataFound}
+          query={search}
+          onChange={onChangeSearch}
           disabled={loader}
           placeholder={type}
         />
