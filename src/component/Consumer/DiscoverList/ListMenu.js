@@ -76,6 +76,8 @@ const ModalContent = styled.div`
     overflow-x: hidden;
   }
 `;
+import ButtonOrange from "../UI/ButtonOrange";
+import ModalComponent from "../UI/Modal";
 
 const TopContent = styled.div`
   width: 100%;
@@ -355,9 +357,15 @@ const ListMenu = (
   return (
     <>
       {displayCreateList && (
-        <ModalContent className="large">
-          <CreateListModel setDisplayCreateList={setDisplayCreateList} />
-        </ModalContent>
+        <ModalComponent
+          closeOnOutsideClick={true}
+          isOpen={displayCreateList}
+          closeModal={() => setDisplayCreateList(false)}
+        >
+          <ModalContent>
+            <CreateListModel setDisplayCreateList={setDisplayCreateList} />
+          </ModalContent>
+        </ModalComponent>
       )}
       <TopContent>
         <Tabs selectedIndex={selectedTab} onSelect={setTab}>
@@ -367,10 +375,14 @@ const ListMenu = (
               <Tab>My Lists</Tab>
               <Tab>Discover More</Tab>
             </div>
-            <SaveButton onClick={handleToggleCreateList} type="submit">
-              Create List
-            </SaveButton>
             <RightSearchWrap>
+              <ButtonOrange
+                onClick={handleToggleCreateList}
+                type="submit"
+                className="createListBtn"
+              >
+                Create List
+              </ButtonOrange>
               <Input
                 value={search}
                 onKeyPress={(event) => searchListsData(event)}

@@ -1,40 +1,35 @@
-
-import React from 'react'
-import styled from 'styled-components'
+import React from "react";
+import styled from "styled-components";
 
 const InputText = styled.input`
-border: 1px solid  ${props => props.usererror ? "#FF7171" : "#DBE2EA" };
-height: 52px;
-font-size: 16px;
-line-height:21px;
-width: 100%;
-padding:0 15px;
-margin-top:7px;
-background: #FFFFFF;
-box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
-font-family: 'IBM Plex Sans', sans-serif;
-border-radius: 6px;
-:focus{
-    outline:none;
-}
-::placeholder{
-color:#7C9CBF
-}
-@media (max-width:991px){
+  border: 1px solid ${(props) => (props.usererror ? "#FF7171" : "#fff")};
+  height: 45px;
+  font-size: 14px;
+  line-height: 21px;
+  width: 100%;
+  padding: 0 15px;
+  margin-top: 7px;
+  background: #ffffff;
+  box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
+  border-radius: 6px;
+  :focus {
+    outline: none;
+  }
+  ::placeholder {
+    color: #7c9cbf;
+  }
+  @media (max-width: 991px) {
     height: 40px;
     font-size: 14px;
-    line-height:19px 
-}
-@media (max-width:767px){
+    line-height: 19px;
+  }
+  @media (max-width: 767px) {
     height: 35px;
-}
-
-`
+  }
+`;
 
 const Input = (props) => {
-    return(
-    <InputText ref={props.refs} {...props} usererror = {props.error}/>
-    )
-}
+  return <InputText ref={props.refs} {...props} usererror={props.error} />;
+};
 
-export default Input
+export default Input;
