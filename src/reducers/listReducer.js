@@ -18,7 +18,6 @@ import {
   SearchLists,
 } from "../graphQl";
 
-
 import useStore from "../component/Consumer/useState";
 import { filterUserLists } from "../graphQl/query/list";
 /*
@@ -64,8 +63,8 @@ export const filterListsByUser = createAsyncThunk(
     const graphQl = filterUserLists(obj);
     const response = await graphQlEndPoint(graphQl);
     const { list, totalLists, type } = response.data.fetchUserLists;
-    console.log({ list, totalLists});
-    return { data: list, total: totalLists, type }
+    console.log({ list, totalLists });
+    return { data: list, total: totalLists, type };
   }
 );
 
@@ -120,7 +119,6 @@ export const fetchUserSubscribedList = createAsyncThunk(
     return response.data.getUserSubscribedLists;
   }
 );
-
 
 /*
  * @desc:  to fetch user created and followed list
@@ -253,6 +251,7 @@ export const slice = createSlice({
     loadingSearchList: false,
     searchList: [],
     totalSearchList: 0,
+    isListCreated: false,
   },
   reducers: {
     clearListData: (state) => {
@@ -302,6 +301,9 @@ export const slice = createSlice({
       state.data = state.data.concat(action.payload.list);
       state.totalList = action.payload.totalList;
     },
+    setListCreated: (state, action) => {
+      state.isListCreated = action.payload;
+    },
     userSubscribeToAList: (state, action) => {
       let listName;
       let findList;
@@ -324,13 +326,22 @@ export const slice = createSlice({
           break;
         case "created":
           listName = "selectedListDetails";
-          console.log(state.userCreatedLists, 'state.userCreatedLists',  action.payload);
-          findList = state.userCreatedLists.data.find(l => l._id === action.payload.listId)
-          console.log(findList, 'findList');
+          console.log(
+            state.userCreatedLists,
+            "state.userCreatedLists",
+            action.payload
+          );
+          findList = state.userCreatedLists.data.find(
+            (l) => l._id === action.payload.listId
+          );
+          console.log(findList, "findList");
           findList.subscribers = findList.subscribers.concat({
             _id: action.payload.user._id,
           });
-          state.userSubscribedLists.data = [findList, ...state.userSubscribedLists.data];
+          state.userSubscribedLists.data = [
+            findList,
+            ...state.userSubscribedLists.data,
+          ];
           state.userSubscribedLists.total = state.userSubscribedLists.total + 1;
           break;
       }
@@ -367,8 +378,13 @@ export const slice = createSlice({
         case "created":
           listName = "selectedListDetails";
           console.log(state);
-          findList = state.userSubscribedLists.data.find(l => l._id === action.payload.listId)
-          state.userSubscribedLists.data = state.userSubscribedLists.data.filter(l => l._id === action.payload.listId);
+          findList = state.userSubscribedLists.data.find(
+            (l) => l._id === action.payload.listId
+          );
+          state.userSubscribedLists.data =
+            state.userSubscribedLists.data.filter(
+              (l) => l._id === action.payload.listId
+            );
           state.userSubscribedLists.total = state.userSubscribedLists.total - 1;
           break;
       }
@@ -425,21 +441,23 @@ export const slice = createSlice({
       }
     },
     [filterListsByUser.pending]: (state) => {
-        state.loadingFilterUserLists += 1 ;
+      state.loadingFilterUserLists += 1;
     },
     [filterListsByUser.fulfilled]: (state, action) => {
       if (state.loadingFilterUserLists) {
         state.loadingFilterUserLists -= 1;
         if (action.payload) {
-          const {type, data, total} = action.payload;
-          if(type === 'created') {
+          const { type, data, total } = action.payload;
+          if (type === "created") {
             // state.userCreatedLists = {data, total}
-            state.userCreatedLists.data = state.userCreatedLists.data.concat(data);
+            state.userCreatedLists.data =
+              state.userCreatedLists.data.concat(data);
             state.userCreatedLists.total = total;
           }
-          if(type === 'subscribed') {
+          if (type === "subscribed") {
             // state.userSubscribedLists = {data, total};
-            state.userSubscribedLists.data = state.userSubscribedLists.data.concat(data);
+            state.userSubscribedLists.data =
+              state.userSubscribedLists.data.concat(data);
             state.userSubscribedLists.total = total;
           }
         }
@@ -483,7 +501,6 @@ export const slice = createSlice({
         if (action.payload) {
           state.subscribedLists = action.payload.list;
           state.totalSubscribedList = action.payload.totalLists;
-
         }
       }
     },
@@ -502,7 +519,11 @@ export const slice = createSlice({
       if (state.loadingUserCreatedAndFollowed) {
         state.loadingUserCreatedAndFollowed = false;
         if (action.payload) {
-          state.data = state.data.concat(action.payload.list);
+          action.payload.list.forEach((item) => {
+            if (!state.data.some((i) => item._id === i._id)) {
+              state.data.push(item);
+            }
+          });
           state.totalList = action.payload.totalLists;
         }
       }
@@ -623,5 +644,6 @@ export const {
   clearListSearchData,
   setSelectedListDetails,
   setListData,
+  setListCreated,
 } = slice.actions;
 export default slice.reducer;

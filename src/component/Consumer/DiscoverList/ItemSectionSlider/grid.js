@@ -82,12 +82,13 @@ const NewCollectionSectionGrid = ({
   };
   return (
     <GridWrapper>
-      <Grid ref={divRef}
+      <Grid
+        ref={divRef}
         onScroll={(e) => fetchMoreLists(e)}
-        onWheel={(e) => onWheel(e)} 
-        direction="row" 
-        container 
-        spacing={2} 
+        onWheel={(e) => onWheel(e)}
+        direction="row"
+        container
+        spacing={2}
         className="GridContainer"
       >
         {data.map((i, key) => (

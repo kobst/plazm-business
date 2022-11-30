@@ -34,6 +34,7 @@ import {
   fetchUserCreatedAndFollowedList,
   fetchUserSubscribedList,
   clearListData,
+  setListCreated,
 } from "../../../../reducers/listReducer";
 
 import useStore from "../../../Consumer/useState/index";
@@ -88,8 +89,6 @@ const SubcriptionHeading = styled.h1`
   padding: 15px 0 5px 15px;
 `;
 
-
-
 const SideBarTabs = ({
   profile,
   setFlag,
@@ -110,10 +109,11 @@ const SideBarTabs = ({
   // const totalList = useSelector((state) => state.list.totalList);
   const listData = useSelector((state) => state.list.data);
 
-  const subscribedLists = useSelector((state) => state.list.subscribedLists)
+  const subscribedLists = useSelector((state) => state.list.subscribedLists);
   const totalList = useSelector((state) => state.list.totalList);
   const userLists = useSelector((state) => state.list.userLists);
   const loading = useSelector((state) => state.myFeed.loading);
+  const isListCreated = useSelector((state) => state.list.isListCreated);
   const loader = useSelector((state) => state.consumer.globalLoader);
   const [displayChangePassword, setDisplayChangePassword] = useState(false);
   const [tabIndex, setTabIndex] = useState();
@@ -123,9 +123,11 @@ const SideBarTabs = ({
   // new useStore
   // const [userFollowedLists, setUserFollowedLists] = useState([]);
 
-  const userSubscribedLists = useStore((state) => state.userSubscribedLists)
-  const setUserSubscribedLists = useStore((state) => state.setUserSubscribedLists)
-  const setUserCreatedLists = useStore((state) => state.setUserCreatedLists)
+  const userSubscribedLists = useStore((state) => state.userSubscribedLists);
+  const setUserSubscribedLists = useStore(
+    (state) => state.setUserSubscribedLists
+  );
+  const setUserCreatedLists = useStore((state) => state.setUserCreatedLists);
   const selectedTab = useStore((state) => state.tabSelected);
   const selectedListId = useStore((state) => state.selectedListId);
   const searchIndex = useStore((state) => state.searchIndex);
@@ -172,70 +174,59 @@ const SideBarTabs = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-
   /** to fetch all the user created and subscribed lists */
   useEffect(() => {
-    if (user && user._id) {
-      const fetchListData = async () => {
+    if (!!user?._id) {
+      const fetchListData = () => {
         const obj = {
           id: user._id,
           value: page,
           limit: 15,
         };
-        dispatch(clearListData());
-        const data = await dispatch(fetchUserCreatedAndFollowedList(obj));
-        // const data = await dispatch(fetchUserSubscribedList(obj));
-        // de-duplicate
-        const res = await unwrapResult(data);
-        if (res) {
-          // setFlag(false);
-        }
+        if (!isListCreated) dispatch(clearListData());
+        dispatch(fetchUserCreatedAndFollowedList(obj));
       };
-      // if (page > 1) {
-        if (listData.length < 1) {
+      if (listData.length < 1 || isListCreated) {
         fetchListData();
+        dispatch(setListCreated(false));
       }
     }
-  }, [dispatch, user._id]);
-
-  // }, [dispatch, user._id, page]);
-
+  }, [dispatch, user._id, isListCreated]);
 
   useEffect(() => {
-    let _userFollowedLists = []
-    let _userCreatedLists = []
-    console.log("new list data incoming " + listData.length)
+    let _userFollowedLists = [];
+    let _userCreatedLists = [];
+    console.log("new list data incoming " + listData.length);
 
     if (listData.length > 0) {
-      const listUnique = [...new Map(listData.map(v => [v._id, v])).values()]
-      listUnique.forEach(list => {
+      const listUnique = [...new Map(listData.map((v) => [v._id, v])).values()];
+      listUnique.forEach((list) => {
         var arrayLength = list.subscribers.length;
         for (var i = 0; i < arrayLength; i++) {
           // console.log(list.subscribers[i]._id)
           if (list.subscribers[i]._id === user._id) {
             // console.log("Good")
-            _userFollowedLists.push(list)
-            break
+            _userFollowedLists.push(list);
+            break;
           }
         }
         if (list.ownerId === user._id) {
-          _userCreatedLists.push(list)
+          _userCreatedLists.push(list);
         }
-
-      })
+      });
     }
 
-    setUserSubscribedLists(_userFollowedLists)
-    setUserCreatedLists(_userCreatedLists)
-  }, [listData])
+    setUserSubscribedLists(_userFollowedLists);
+    setUserCreatedLists(_userCreatedLists);
+  }, [listData]);
 
   /** to clear selected data on tab click */
   const homeSearchFunction = () => {
     setFavoriteIndex(null);
     setSelectedList(null);
     setSelectedListId(null);
-    setOrderedPlaces([])
-    setSelectedPlace(null)
+    setOrderedPlaces([]);
+    setSelectedPlace(null);
     if (!loading) {
       history.push("/explore");
     }
@@ -247,17 +238,14 @@ const SideBarTabs = ({
     // setSelectedListId(null);
     // history.push("/home");
     // if (!loading) {
-      setSelectedList(null);
-      setSelectedListId(null);
-      setOrderedPlaces([])
-      setSelectedPlace(null)
-      history.push("/home");
-      
+    setSelectedList(null);
+    setSelectedListId(null);
+    setOrderedPlaces([]);
+    setSelectedPlace(null);
+    history.push("/home");
+
     // }
   };
-
-
- 
 
   /** to clear selected data on tab click */
   // const listView = () => {
@@ -274,7 +262,7 @@ const SideBarTabs = ({
   // };
 
   const listDiscovery = () => {
-    setSelectedPlace(null)
+    setSelectedPlace(null);
     history.push("/lists");
     setDiscoverBtn(false);
   };
@@ -411,7 +399,7 @@ const SideBarTabs = ({
             >
               <div className="item">
                 {/* <FiBell className="sidebar-icon" /> */}
-                {/* <img
+            {/* <img
                   src={selectedTab === 3 ? BellIconWhite : BellIcon}
                   className="sidebar-icon"
                 />
@@ -460,7 +448,6 @@ const SideBarTabs = ({
             </Tab>
           </TabList>
         </Tabs>
-
 
         {userSubscribedLists.length > 0 && (
           <SubcriptionHeading>{expanded && "Subscriptions"}</SubcriptionHeading>

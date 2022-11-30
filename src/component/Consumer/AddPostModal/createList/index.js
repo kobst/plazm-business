@@ -9,7 +9,7 @@ import ValueLoader from "../../../../utils/loader";
 import { useDispatch, useSelector } from "react-redux";
 import BackButton from "../../UI/BackButton";
 import SaveButton from "../../UI/SaveButton";
-import { createList } from "../../../../reducers/listReducer";
+import { createList, setListCreated } from "../../../../reducers/listReducer";
 import PostImage from "../PostImage";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
@@ -42,9 +42,9 @@ import ButtonGrey from "../../UI/ButtonGrey";
 const bucket = process.env.REACT_APP_BUCKET;
 
 const CreateListModel = ({
-  setDisplayList,
-  setSelectedListForPost,
-  setDisplayCreateList,
+  setDisplayList = () => {},
+  setSelectedListForPost = () => {},
+  setDisplayCreateList = () => {},
 }) => {
   const [loader, setLoader] = useState(false);
   const [profileBaseImage, setBaseProfileImage] = useState(null);
@@ -177,6 +177,7 @@ const CreateListModel = ({
       const data = await unwrapResult(res);
       if (data && data.data.createList.success === true) {
         setResponse("List added successfully.");
+        dispatch(setListCreated(true));
         setError("");
         setLoader(false);
         setDisplayCreateList(false);

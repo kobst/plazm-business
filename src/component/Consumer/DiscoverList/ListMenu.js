@@ -32,8 +32,8 @@ import {
   LoaderWrap,
 } from "./styled.js";
 import NewInBuzzItems from "./ItemSectionSlider/SliderItems";
-import Button from "../../UI/Button/Button";
 import CreateListModel from "../AddPostModal/createList";
+import SaveButton from "../UI/SaveButton";
 
 const ModalContent = styled.div`
   width: 100%;
@@ -207,9 +207,7 @@ const ListMenu = (
   );
   const [results, setResults] = useState();
 
-  const [displayList, setDisplayList] = useState(false);
   const [displayCreateList, setDisplayCreateList] = useState(false);
-  const [selectedListForPost, setSelectedListForPost] = useState(null);
 
   const userSubscribedLists = useStore((state) => state.userSubscribedLists);
   const userCreatedLists = useStore((state) => state.userCreatedLists);
@@ -356,15 +354,11 @@ const ListMenu = (
 
   return (
     <>
-      <ModalContent className={displayCreateList ? "large" : null}>
-        {displayCreateList && (
-          <CreateListModel
-            setSelectedListForPost={setSelectedListForPost}
-            setDisplayList={setDisplayList}
-            setDisplayCreateList={setDisplayCreateList}
-          />
-        )}
-      </ModalContent>
+      {displayCreateList && (
+        <ModalContent className="large">
+          <CreateListModel setDisplayCreateList={setDisplayCreateList} />
+        </ModalContent>
+      )}
       <TopContent>
         <Tabs selectedIndex={selectedTab} onSelect={setTab}>
           <TabList>
@@ -373,13 +367,9 @@ const ListMenu = (
               <Tab>My Lists</Tab>
               <Tab>Discover More</Tab>
             </div>
-            <Button
-              onClick={handleToggleCreateList}
-              type="submit"
-              className="btn btn-primary"
-            >
+            <SaveButton onClick={handleToggleCreateList} type="submit">
               Create List
-            </Button>
+            </SaveButton>
             <RightSearchWrap>
               <Input
                 value={search}
