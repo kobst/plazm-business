@@ -26,6 +26,7 @@ import {
 } from "../../../reducers/userReducer";
 import { useHistory } from "react-router-dom";
 import ButtonOrange from "../UI/ButtonOrange";
+import useStore from "../useState";
 
 const ListOptionSection = styled.div`
   width: 100%;
@@ -260,7 +261,6 @@ const ArrowBack = styled.div`
   }
 `;
 
-
 const ListDescriptionView = ({
   setDisplayTab,
   setSelectedListId,
@@ -272,6 +272,7 @@ const ListDescriptionView = ({
   setDiscoverBtn,
 }) => {
   const dispatch = useDispatch();
+  const userLocation = useStore((state) => state.userLocation);
   const loading = useSelector((state) => state.myFeed.loadingSelectedList);
   const loadingUnSubScribe = useSelector(
     (state) => state.list.loadingUnSubscribe
@@ -317,7 +318,12 @@ const ListDescriptionView = ({
   useEffect(() => {
     const fetchListDetails = async () => {
       const result = await dispatch(
-        fetchSelectedListDetails({ id: selectedListId, value: offset })
+        fetchSelectedListDetails({
+          id: selectedListId,
+          value: offset,
+          latitude: Number(userLocation.lat),
+          longitude: Number(userLocation.lng),
+        })
       );
       const data = await unwrapResult(result);
       if (data) {
@@ -331,7 +337,12 @@ const ListDescriptionView = ({
     if (offset + 20 < totalData) {
       setOffSet(offset + 20);
       dispatch(
-        fetchSelectedListDetails({ id: selectedListId, value: offset + 20 })
+        fetchSelectedListDetails({
+          id: selectedListId,
+          value: offset + 20,
+          latitude: Number(userLocation.lat),
+          longitude: Number(userLocation.lng),
+        })
       );
     } else setHasMore(false);
   };
@@ -398,7 +409,7 @@ const ListDescriptionView = ({
         <ListOptionSection>
           <HeadingWrap>
             <TopHeadingWrap>
-            <ArrowBack onClick={() => console.log("back")}>BACK</ArrowBack>
+              <ArrowBack onClick={() => console.log("back")}>BACK</ArrowBack>
 
               <ListBannerSection>
                 <img src={image} alt="" onError={() => setImage(BannerImg)} />

@@ -383,7 +383,14 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   const fetchMorePosts = () => {
     if (offset + 20 < totalData) {
       setOffSet(offset + 20);
-      dispatch(fetchSelectedListDetails({ id: id, value: offset + 20 }));
+      dispatch(
+        fetchSelectedListDetails({
+          id: id,
+          value: offset + 20,
+          latitude: Number(userLocation.lat),
+          longitude: Number(userLocation.lng),
+        })
+      );
     } else setHasMore(false);
   };
 
