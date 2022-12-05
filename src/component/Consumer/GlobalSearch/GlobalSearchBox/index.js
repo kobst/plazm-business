@@ -112,7 +112,7 @@ const GlobalSearchBox = ({ setOffset, type }) => {
     if (search !== "" && search.length >= 4 && !search.trim() === false) {
       setOffset(0);
       setSearchError("");
-      // dispatch(setSearchData(search));
+      dispatch(setSearchData(search));
       switch (type) {
         case "Explore":
           // dispatch(setSideFiltersHomeSearch());
@@ -162,18 +162,18 @@ const GlobalSearchBox = ({ setOffset, type }) => {
 
   /** on change handler for search */
   const onChangeSearch = (e) => {
+    setSearchError("");
     setSearch(e.target.value);
+    dispatch(setSearchData(e.target.value));
     if (search.length >= 4) {
       searchFn(e.target.value);
     }
   };
 
-  console.log("searchFeedList", searchFeedList);
   return (
     <>
       <GlobalSearchInputWrap>
         <GooglePlacesSearch
-          searchFeedList={searchFeedList}
           autoCompleteRef={autoCompleteRef}
           isNoDataFound={isNoDataFound}
           query={search}

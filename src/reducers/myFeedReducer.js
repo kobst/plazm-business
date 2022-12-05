@@ -214,6 +214,7 @@ export const slice = createSlice({
   initialState: {
     loading: false,
     isNoDataFound: false,
+    isSearch: false,
     searchFeed: [],
     searchFeedList: [],
     myFeed: [],
@@ -254,6 +255,9 @@ export const slice = createSlice({
     setSearchData: (state, action) => {
       state.searchData = action.payload;
       // state.enterClicked = false;
+    },
+    setIsSearch: (state, action) => {
+      state.isSearch = action.payload;
     },
     setEnterClicked: (state, action) => {
       state.enterClicked = action.payload;
@@ -800,6 +804,7 @@ export const { clearMyFeedData } = slice.actions;
 export const {
   setLoading,
   setSearchData,
+  setIsSearch,
   setSideFiltersByClosest,
   setSideFiltersByUpdatedAt,
   setSideFiltersHomeSearch,

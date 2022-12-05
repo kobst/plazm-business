@@ -5,7 +5,6 @@ import styled from "styled-components";
 import { unwrapResult } from "@reduxjs/toolkit";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ValueLoader from "../../../../utils/loader";
-import SearchBar from "../SearchBar";
 import {
   clearSearchFeed,
   HomeSearch,
@@ -16,6 +15,7 @@ import error from "../../../../constants";
 
 import GlobalSearchBox from "../../GlobalSearch/GlobalSearchBox";
 import useStore from "../../useState";
+import { useHistory } from "react-router-dom";
 
 const BusinessListWrap = styled.div`
   width: 100%;
@@ -49,6 +49,9 @@ const NoMorePost = styled.p`
 `;
 
 const BusinessListing = ({ loader, coords, closestFilter }) => {
+  const history = useHistory();
+
+  const searchFeedList = useSelector((state) => state.myFeed.searchFeedList);
   const businessData = useSelector((state) => state.myFeed.searchFeed);
   const loading = useSelector((state) => state.myFeed.loading);
   const [offset, setOffset] = useState(0);
@@ -79,9 +82,7 @@ const BusinessListing = ({ loader, coords, closestFilter }) => {
     dispatch(setEnterClicked(false));
     dispatch(clearSearchFeed());
   }, []);
-  useEffect(() => {
-    // console.log(gridMode + "gridMode");
-  }, [gridMode]);
+
   /** useEffect called when any side filters are selected */
   useEffect(() => {
     const fetchSearchData = async () => {
@@ -138,21 +139,30 @@ const BusinessListing = ({ loader, coords, closestFilter }) => {
     } else setHasMore(false);
   };
 
-  console.log("businessData", businessData);
+  /** to display business details page */
+  const displayBusinessDetail = (id) => {
+    history.push(`/b/${id}`);
+  };
 
   return (
     <>
-      {/* <SearchBar
-        offset={offset}
-        setOffset={setOffset}
-        setFilterSelected={setFilterSelected}
-        // setDisplayTab={setDisplayTab}
-      /> */}
       {showSearchBar && (
         <GlobalSearchBox setOffset={setOffset} type={"Explore"} />
       )}
-
-      {(loading && offset === 0) || flag ? (
+      {search.length ? (
+        searchFeedList.map((ele) => {
+          return (
+            <ul>
+              <li
+                onClick={() => displayBusinessDetail(ele._id)}
+                style={{ color: "white", cursor: "pointer" }}
+              >
+                {ele.company_name}
+              </li>
+            </ul>
+          );
+        })
+      ) : (loading && offset === 0) || flag ? (
         <LoaderWrap>
           <ValueLoader />
         </LoaderWrap>

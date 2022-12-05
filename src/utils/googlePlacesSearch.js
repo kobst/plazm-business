@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { useHistory } from "react-router-dom";
 
 let autoComplete;
 
@@ -40,7 +39,6 @@ async function handlePlaceSelect(updateQuery) {
   const addressObject = autoComplete.getPlace();
   const query = addressObject.formatted_address;
   updateQuery(query);
-  console.log(addressObject);
 }
 
 function GooglePlacesSearch({
@@ -50,10 +48,7 @@ function GooglePlacesSearch({
   onChange,
   disabled,
   placeholder,
-  searchFeedList,
 }) {
-  const history = useHistory();
-
   useEffect(() => {
     if (isNoDataFound) {
       loadScript(
@@ -63,31 +58,14 @@ function GooglePlacesSearch({
     }
   }, [isNoDataFound]);
 
-  /** to display business details page */
-  const displayBusinessDetail = (id) => {
-    history.push(`/b/${id}`);
-  };
-
   return (
-    <>
-      <input
-        ref={autoCompleteRef}
-        value={query}
-        onChange={onChange}
-        disabled={disabled}
-        placeholder={placeholder}
-      />
-      {searchFeedList.length &&
-        searchFeedList.map((ele) => {
-          return (
-            <ul>
-              <li onClick={() => displayBusinessDetail(ele._id)}>
-                {ele.company_name}
-              </li>
-            </ul>
-          );
-        })}
-    </>
+    <input
+      ref={autoCompleteRef}
+      value={query}
+      onChange={onChange}
+      disabled={disabled}
+      placeholder={placeholder}
+    />
   );
 }
 
