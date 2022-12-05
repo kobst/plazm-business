@@ -106,11 +106,9 @@ const getUserSubscribedLists = (obj) => {
   return graphQl;
 };
 
-
 /*
 @desc: getUserSubscribedLists query
 */
-
 
 const filterUserLists = (obj) => {
   const graphQl = {
@@ -146,14 +144,14 @@ const filterUserLists = (obj) => {
                 }
               }
           }`,
-    variables:{
-      input : {
+    variables: {
+      input: {
         id: obj.id,
         page: obj.page || 1,
         limit: obj?.limit || 12,
         created: obj.created || false,
         subscribed: obj?.subscribed || false,
-      }
+      },
     },
   };
   return graphQl;
@@ -205,8 +203,8 @@ const getUserCreatedAndFollowedLists = (obj) => {
 const GetListDetails = (obj) => {
   const graphQl = {
     query: `
-          query GetListDetails($id: ID!, $value: Int){
-            getListDetails (input: {id: $id, value:$value}){
+          query GetListDetails($id: ID!, $value: Int, $latitude: Float!, $longitude: Float!){
+            getListDetails (input: {id: $id, value:$value, latitude:$latitude, longitude:$longitude}){
               message
               success
               totalLists 
@@ -289,6 +287,8 @@ const GetListDetails = (obj) => {
     variables: {
       id: obj.id,
       value: obj.value,
+      latitude: obj.latitude,
+      longitude: obj.longitude,
     },
   };
   return graphQl;

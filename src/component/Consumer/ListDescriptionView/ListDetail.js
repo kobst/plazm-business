@@ -304,6 +304,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   const selectedList = useStore((state) => state.selectedList);
   const setSelectedList = useStore((state) => state.setSelectedList);
   const selectedListId = useStore((state) => state.selectedListId);
+  const userLocation = useStore((state) => state.userLocation);
   const setSelectedListId = useStore((state) => state.setSelectedListId);
   const setSelectedListName = useStore((state) => state.setSelectedListName);
   const setListIndex = useStore((state) => state.setListIndex);
@@ -362,7 +363,12 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   useEffect(() => {
     const fetchListDetails = async () => {
       const result = await dispatch(
-        fetchSelectedListDetails({ id: id, value: offset })
+        fetchSelectedListDetails({
+          id: id,
+          value: offset,
+          latitude: Number(userLocation.lat),
+          longitude: Number(userLocation.lng),
+        })
       );
       const data = await unwrapResult(result);
       setSelectedList(data?.listDetails);
