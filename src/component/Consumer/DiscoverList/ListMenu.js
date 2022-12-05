@@ -34,6 +34,8 @@ import {
 import NewInBuzzItems from "./ItemSectionSlider/SliderItems";
 import CreateListModel from "../AddPostModal/createList";
 import SaveButton from "../UI/SaveButton";
+import ButtonOrange from "../UI/ButtonOrange";
+import ModalComponent from "../UI/Modal";
 
 const ModalContent = styled.div`
   width: 100%;
@@ -76,8 +78,6 @@ const ModalContent = styled.div`
     overflow-x: hidden;
   }
 `;
-import ButtonOrange from "../UI/ButtonOrange";
-import ModalComponent from "../UI/Modal";
 
 const TopContent = styled.div`
   width: 100%;
