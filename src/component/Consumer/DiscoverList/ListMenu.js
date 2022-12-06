@@ -2,10 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import styled from "styled-components";
 import "react-tabs/style/react-tabs.css";
 
-import styled from "styled-components";
-
+import { RightSearchWrap, ErrorDiv } from "./styled.js";
+import CreateListModel from "../AddPostModal/createList";
+import ButtonOrange from "../UI/ButtonOrange";
+import ModalComponent from "../UI/Modal";
+import SliderSection from "./SliderSection";
+import useStore from "../useState";
+import error from "../../../constants";
 import {
   clearListSearchData,
   FetchMostPopularLists,
@@ -13,16 +19,8 @@ import {
   setListSearch,
   SearchListApi,
 } from "../../../reducers/listReducer";
-
 import ValueLoader from "../../../utils/loader";
 import Input from "../../UI/Input/Input";
-import SliderSection from "./SliderSection";
-import error from "../../../constants";
-
-import useStore from "../useState";
-
-import { RightSearchWrap, ErrorDiv } from "./styled.js";
-import CreateListModel from "../AddPostModal/createList";
 
 const ModalContent = styled.div`
   width: 100%;
@@ -65,8 +63,7 @@ const ModalContent = styled.div`
     overflow-x: hidden;
   }
 `;
-import ButtonOrange from "../UI/ButtonOrange";
-import ModalComponent from "../UI/Modal";
+
 
 const TopContent = styled.div`
   width: 100%;
@@ -162,7 +159,6 @@ const ListMenu = () => {
   const searchList = useSelector((state) => state.list.searchList);
 
   const [selectedTab, setSelectedTab] = useState(2);
-  const [tabIndex, setTabIndex] = useState();
   const userCreatedLoading = useSelector(
     (state) => state.list.loadingUserLists
   );
@@ -171,7 +167,6 @@ const ListMenu = () => {
   const [search, setSearch] = useState("");
   const [offset, setOffSet] = useState(0);
   const [offsetPopular, setOffSetPopular] = useState(0);
-  const [offsetSearch, setOffSetSearch] = useState(0);
   const [loader, setLoader] = useState(false);
   const [flag, setFlag] = useState(true);
   const [displayTrendingModel, setDisplayTrendingModel] = useState(false);
@@ -179,7 +174,6 @@ const ListMenu = () => {
   const [totalLists, setTotalLists] = useState(
     parseInt(totalList - userLists.length)
   );
-  const [results, setResults] = useState();
 
   const [displayCreateList, setDisplayCreateList] = useState(false);
 
@@ -217,7 +211,6 @@ const ListMenu = () => {
         dispatch(clearListSearchData());
         dispatch(setListSearch(event.target.value));
         setSearchError("");
-        setOffSetSearch(0);
       } else if (search.length > 0 && search.length < 4) {
         setSearchError(error.SEARCH_ERROR);
       }
@@ -254,7 +247,6 @@ const ListMenu = () => {
     setSearch("");
     dispatch(clearListSearchData());
     dispatch(setListSearch(""));
-    setTabIndex(index);
     setSearchError("");
     setSelectedTab(index);
     setListTabSelected(index);

@@ -63,7 +63,6 @@ export const filterListsByUser = createAsyncThunk(
     const graphQl = filterUserLists(obj);
     const response = await graphQlEndPoint(graphQl);
     const { list, totalLists, type } = response.data.fetchUserLists;
-    console.log({ list, totalLists });
     return { data: list, total: totalLists, type };
   }
 );
@@ -326,15 +325,9 @@ export const slice = createSlice({
           break;
         case "created":
           listName = "selectedListDetails";
-          console.log(
-            state.userCreatedLists,
-            "state.userCreatedLists",
-            action.payload
-          );
           findList = state.userCreatedLists.data.find(
             (l) => l._id === action.payload.listId
           );
-          console.log(findList, "findList");
           findList.subscribers = findList.subscribers.concat({
             _id: action.payload.user._id,
           });
@@ -377,7 +370,6 @@ export const slice = createSlice({
           break;
         case "created":
           listName = "selectedListDetails";
-          console.log(state);
           findList = state.userSubscribedLists.data.find(
             (l) => l._id === action.payload.listId
           );

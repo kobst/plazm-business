@@ -1,69 +1,29 @@
 import React, { useEffect, useState } from "react";
+import { Auth } from "aws-amplify";
 import styled from "styled-components";
-import "./styles.css";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import Notifications from "../../../../images/notifications-new.png";
-import BuisinessView from "../../../Consumer/BuisinessView";
-import BusinessList from "../../../Consumer/BusinessList";
+import { Tab, Tabs, TabList } from "react-tabs";
 import { useDispatch, useSelector } from "react-redux";
-import ListOptionView from "../../../Consumer/ListOptionView";
-import ListDescriptionView from "../../../Consumer/ListDescriptionView";
-import ListDetail from "../../../Consumer/ListDescriptionView/ListDetail";
+import { useHistory } from "react-router-dom";
+import { BsGrid } from "react-icons/bs";
 
-import MyFeed from "../../../Consumer/MyFeed";
+import "./styles.css";
+import ListTab from "./ListTab";
 import {
   clearMyFeedData,
   setSearchData,
-  fetchMyFeedData,
-  setSideFiltersHomeSearch,
 } from "../../../../reducers/myFeedReducer";
-import Profile from "../../../Consumer/Profile";
-import ChangePassword from "../../../Consumer/ChangePassword";
-import ProfileSettings from "../../../Consumer/ProfileSettings";
-import HomeSearchComponent from "../../../Consumer/HomeSearch";
-import { useHistory } from "react-router-dom";
-import { unwrapResult } from "@reduxjs/toolkit";
-
-import {
-  clearBusinessData,
-  clearTopPost,
-} from "../../../../reducers/businessReducer";
-
 import {
   fetchUserLists,
   fetchUserCreatedAndFollowedList,
-  fetchUserSubscribedList,
   clearListData,
   setListCreated,
 } from "../../../../reducers/listReducer";
-
 import useStore from "../../../Consumer/useState/index";
-
-import {
-  FiSearch,
-  FiHome,
-  FiGlobe,
-  FiHeart,
-  FiBell,
-  FiList,
-} from "react-icons/fi";
-import { BsListUl, BsThreeDots } from "react-icons/bs";
-import PolygonArrow from "../../../../images/Polygon.png";
-import { Auth } from "aws-amplify";
 import { setGloablLoader } from "../../../../reducers/consumerReducer";
-import DiscoverList from "../../../Consumer/DiscoverList";
-
-import ListTab from "./ListTab";
-// import PanelContent from "../Panel-Content/PanelContent";
-
-import ValueLoader from "../../../../utils/loader";
 import CompassIconWhite from "../../../../images/compass-white.png";
 import CompassIcon from "../../../../images/compass.svg";
 import HomeIconWhite from "../../../../images/home-white.png";
 import HomeIcon from "../../../../images/home.svg";
-import BellIconWhite from "../../../../images/bell-white.png";
-import BellIcon from "../../../../images/bell.svg";
-import { BsGrid } from "react-icons/bs";
 
 const TabIcon = styled.div`
   width: 36px;
@@ -89,39 +49,22 @@ const SubcriptionHeading = styled.h1`
   padding: 15px 0 5px 15px;
 `;
 
-const SideBarTabs = ({
-  profile,
-  setFlag,
-  isBusinessOpen,
-  businessExists,
-  detailId,
-  businessId,
-  isUserOpen,
-  userId,
-  view,
-}) => {
+const SideBarTabs = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
   const user = useSelector((state) => state.user.user);
-  const userLocation = useSelector((state) => state.business.userLocation);
-  const filteredListData = useSelector((state) => state.list.filteredList);
-  // const totalList = useSelector((state) => state.list.totalList);
   const listData = useSelector((state) => state.list.data);
 
-  const subscribedLists = useSelector((state) => state.list.subscribedLists);
   const totalList = useSelector((state) => state.list.totalList);
   const userLists = useSelector((state) => state.list.userLists);
   const loading = useSelector((state) => state.myFeed.loading);
   const isListCreated = useSelector((state) => state.list.isListCreated);
   const loader = useSelector((state) => state.consumer.globalLoader);
-  const [displayChangePassword, setDisplayChangePassword] = useState(false);
   const [tabIndex, setTabIndex] = useState();
   const listLoader = useSelector(
     (state) => state.list.loadingUserCreatedAndFollowed
   );
-  // new useStore
-  // const [userFollowedLists, setUserFollowedLists] = useState([]);
 
   const userSubscribedLists = useStore((state) => state.userSubscribedLists);
   const setUserSubscribedLists = useStore(
@@ -129,37 +72,13 @@ const SideBarTabs = ({
   );
   const setUserCreatedLists = useStore((state) => state.setUserCreatedLists);
   const selectedTab = useStore((state) => state.tabSelected);
-  const selectedListId = useStore((state) => state.selectedListId);
-  const searchIndex = useStore((state) => state.searchIndex);
-  const listClickedFromSearch = useStore(
-    (state) => state.listClickedFromSearch
-  );
-  const myFeedIndex = useStore((state) => state.myFeedIndex);
-  const listIndex = useStore((state) => state.listIndex);
-  const favoriteIndex = useStore((state) => state.favoriteIndex);
-  const userDataId = useStore((state) => state.userDataId);
-  const discoverBtn = useStore((state) => state.discoverBtn);
-  const businessDetailProfile = useStore(
-    (state) => state.businessDetailProfile
-  );
-  const readMore = useStore((state) => state.readMore);
 
-  const setBusinessDetailProfile = useStore(
-    (state) => state.setBusinessDetailProfile
-  );
   const setSelectedTab = useStore((state) => state.setTabSelected);
   const setSelectedListId = useStore((state) => state.setSelectedListId);
-  const setSearchIndex = useStore((state) => state.setSearchIndex);
-  const setListClickedFromSearch = useStore(
-    (state) => state.setListClickedFromSearch
-  );
-  const setMyFeedIndex = useStore((state) => state.setMyFeedIndex);
   const setListIndex = useStore((state) => state.setListIndex);
   const setFavoriteIndex = useStore((state) => state.setFavoriteIndex);
   const setUserDataId = useStore((state) => state.setUserDataId);
   const setDiscoverBtn = useStore((state) => state.setDiscoverBtn);
-  const setReadMore = useStore((state) => state.setReadMore);
-  const draggedLocation = useStore((state) => state.draggedLocation);
   const setSelectedList = useStore((state) => state.setSelectedList);
   const setSelectedPlace = useStore((state) => state.setSelectedPlace);
   const setOrderedPlaces = useStore((state) => state.setOrderedPlaces);
@@ -196,16 +115,13 @@ const SideBarTabs = ({
   useEffect(() => {
     let _userFollowedLists = [];
     let _userCreatedLists = [];
-    console.log("new list data incoming " + listData.length);
 
     if (listData.length > 0) {
       const listUnique = [...new Map(listData.map((v) => [v._id, v])).values()];
       listUnique.forEach((list) => {
         var arrayLength = list.subscribers.length;
         for (var i = 0; i < arrayLength; i++) {
-          // console.log(list.subscribers[i]._id)
           if (list.subscribers[i]._id === user._id) {
-            // console.log("Good")
             _userFollowedLists.push(list);
             break;
           }
