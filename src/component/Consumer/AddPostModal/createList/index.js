@@ -18,12 +18,7 @@ import { FcCheckmark } from "react-icons/fc";
 
 import {
   TabsSectionContent,
-  // LeftButtons,
-  // RightButtons,
   ErrorDiv,
-  // AddImageDiv,
-  // AddYourPostLabel,
-  // AddYourPostBar,
   Heading,
   TopBar,
   PostContent,
@@ -51,7 +46,6 @@ const CreateListModel = ({
   const [profileImage, setProfileImage] = useState(null);
   const [profileImagePreview, setProfileImagePreview] = useState(null);
   const [imageError, setImageError] = useState("");
-  // const [imageFile, setImageFile] = useState(null);
   const [coverImage, setCoverImage] = useState(null);
   const [coverBaseImage, setBaseCoverImage] = useState(null);
   const [coverImagePreview, setCoverImagePreview] = useState(null);
