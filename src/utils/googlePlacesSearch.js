@@ -21,6 +21,13 @@ const loadScript = (url, callback) => {
   document.getElementsByTagName("head")[0].appendChild(script);
 };
 
+const unloadScript = () => {
+  if (!!document.querySelector(".pac-container")) {
+    document.querySelector(".pac-container").remove();
+    return;
+  }
+};
+
 function handleScriptLoad(updateQuery, autoCompleteRef) {
   if (autoCompleteRef.current.length < 4) {
     return;
@@ -55,7 +62,7 @@ function GooglePlacesSearch({
         `https://maps.googleapis.com/maps/api/js?key=AIzaSyAYVZIvAZkQsaxLD3UdFH5EH3DvYmSYG6Q&libraries=places`,
         () => handleScriptLoad(onChange, autoCompleteRef)
       );
-    }
+    } else unloadScript();
   }, [isNoDataFound]);
 
   return (
