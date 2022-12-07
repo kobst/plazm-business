@@ -272,7 +272,7 @@ const ListDescriptionView = ({
   setDiscoverBtn,
 }) => {
   const dispatch = useDispatch();
-  const userLocation = useStore((state) => state.userLocation);
+  const draggedLocation = useStore((state) => state.draggedLocation);
   const loading = useSelector((state) => state.myFeed.loadingSelectedList);
   const loadingUnSubScribe = useSelector(
     (state) => state.list.loadingUnSubscribe
@@ -321,8 +321,8 @@ const ListDescriptionView = ({
         fetchSelectedListDetails({
           id: selectedListId,
           value: offset,
-          latitude: Number(userLocation.lat),
-          longitude: Number(userLocation.lng),
+          latitude: Number(draggedLocation.lat),
+          longitude: Number(draggedLocation.lng),
         })
       );
       const data = await unwrapResult(result);
@@ -331,7 +331,7 @@ const ListDescriptionView = ({
       }
     };
     offset === 0 && fetchListDetails();
-  }, [dispatch, selectedListId, offset]);
+  }, [dispatch, selectedListId, offset, draggedLocation]);
 
   const fetchMorePosts = () => {
     if (offset + 20 < totalData) {
@@ -340,8 +340,8 @@ const ListDescriptionView = ({
         fetchSelectedListDetails({
           id: selectedListId,
           value: offset + 20,
-          latitude: Number(userLocation.lat),
-          longitude: Number(userLocation.lng),
+          latitude: Number(draggedLocation.lat),
+          longitude: Number(draggedLocation.lng),
         })
       );
     } else setHasMore(false);

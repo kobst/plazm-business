@@ -9,7 +9,7 @@ import useStore from "../useState";
 const ListView = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
-  const userLocation = useStore((state) => state.userLocation);
+  const draggedLocation = useStore((state) => state.draggedLocation);
 
   useEffect(() => {
     const obj = {
@@ -21,8 +21,8 @@ const ListView = () => {
       fetchSelectedListDetails({
         id: "608271ed16f9cb00088ce985",
         value: 0,
-        latitude: Number(userLocation.lat),
-        longitude: Number(userLocation.lng),
+        latitude: Number(draggedLocation.lat),
+        longitude: Number(draggedLocation.lng),
       })
     );
   }, [dispatch, user._id]);
