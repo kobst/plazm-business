@@ -89,6 +89,7 @@ const GlobalSearchBox = ({ setOffset, type }) => {
     (state) => state.myFeed.filterByUpdatedAt
   );
   const draggedLocation = useStore((state) => state.draggedLocation);
+
   useEffect(() => {
     return () => {
       dispatch(setSearchData(""));
@@ -101,14 +102,15 @@ const GlobalSearchBox = ({ setOffset, type }) => {
   }, [searchData]);
 
   /** on key press handler for search */
-  const searchList = (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      searchFn();
-    }
-  };
+  // const searchList = (event) => {
+  //   if (event.key === "Enter") {
+  //     event.preventDefault();
+  //     searchFn();
+  //   }
+  // };
+
   /** on key press handler for search */
-  const searchFn = (search) => {
+  const searchFn = (search = "") => {
     if (search !== "" && search.length >= 4 && !search.trim() === false) {
       setOffset(0);
       setSearchError("");
@@ -181,9 +183,9 @@ const GlobalSearchBox = ({ setOffset, type }) => {
           disabled={loader}
           placeholder={type}
         />
-        <button>
+        {/* <button>
           <img src={SearchIcon} onClick={() => searchFn()} />
-        </button>
+        </button> */}
       </GlobalSearchInputWrap>
       {searchError !== "" ? <ErrorDiv>{searchError}</ErrorDiv> : null}
     </>
