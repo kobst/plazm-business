@@ -57,7 +57,6 @@ const GridContainer = () => {
       }
       _places.push(deepClone);
     });
-    setPlacesLoading(false);
     setPlaces(_places);
     setGridView(true);
   };
