@@ -20,6 +20,10 @@ const InputText = styled.textarea`
   font-weight: bold;
   resize: none;
   font-family: Montserrat;
+  &.CreateListDescription {
+    min-height: 55px;
+    height: 55px;
+  }
   :focus {
     outline: none;
   }

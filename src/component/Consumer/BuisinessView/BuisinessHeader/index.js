@@ -9,24 +9,29 @@ import LinkedInImg from '../../../../images/Linkedin-new.svg';
 import InstagramImg from '../../../../images/Instagram-new.svg';
 import {useHistory} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  clearBusinessData,
-  clearTopPost,
-} from '../../../../reducers/businessReducer';
-import {clearTopEvent} from '../../../../reducers/eventReducer';
 
-import useStore from '../../useState';
+import useStore from "../../useState";
+import { IoIosArrowBack } from "react-icons/io";
+import HeartBorder from "../../../../images/heartBorder.png";
 
 const BuisinessHeaderContent = styled.div`
   width: 100%;
   position: relative;
   display: flex;
-  height: 215px;
+  height: 100px;
+  overflow: hidden;
+  .ProfileArrow {
+    display: none;
+  }
   @media (max-width: 767px) {
     flex-direction: column;
-    height: 200px;
+    height: 100px;
   }
   &.HeaderSpacing {
+    height: 215px;
+    .ProfileArrow {
+      display: flex;
+    }
     @media (max-width: 767px) {
       height: 140px;
     }
@@ -80,26 +85,29 @@ const CloseDiv = styled.div`
     right: inherit;
     width: 30px;
     height: 30px;
+    display: none;
   }
 `;
 const ArrowBack = styled.div`
-  background: #000;
+  background: #ff2e9a;
   border-radius: 0px;
-  padding: 0 18px;
+  padding: 0;
   color: #fff;
   font-family: Montserrat;
   font-style: normal;
   font-weight: 800;
-  font-size: 12px;
-  height: 40px;
+  font-size: 18px;
+  width: 24px;
+  height: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
   position: absolute;
-  right: 0px;
+  right: 8px;
   cursor: pointer;
-  top: 0px;
+  top: 8px;
   z-index: 2;
+  border-radius: 50%;
   @media (max-width: 767px) {
     /* width: 24px;
     height: 24px; */
@@ -161,9 +169,12 @@ const ArrowDown = styled.div`
   svg {
     font-size: 34px;
     color: #fff;
+    :hover {
+      cursor: pointer;
+    }
   }
-  svg: hover {
-    cursor: pointer;
+  &.BusinessHeaderArrow {
+    background: transparent;
   }
 `;
 
@@ -285,7 +296,9 @@ const BuisinessHeader = ({
       <BuisinessHeaderContent
         className={displayBusinessProfile ? 'HeaderSpacing' : ''}
       >
-        <ArrowBack onClick={history.goBack}>BACK</ArrowBack>
+        <ArrowBack onClick={history.goBack}>
+          <IoIosArrowBack />
+        </ArrowBack>
         <CloseDiv>
           <IoMdClose onClick={() => closeTab()} />
         </CloseDiv>
@@ -304,7 +317,20 @@ const BuisinessHeader = ({
             {!isProfile ? (
               <BusinessNameWrap>
                 <BusinessName>
-                  <span>{businessProfile.company_name}</span>{' '}
+                  <span>
+                    {businessProfile.company_name} <img src={HeartBorder} />
+                  </span>
+                  <ArrowDown className="BusinessHeaderArrow">
+                    {isProfile ? (
+                      <MdKeyboardArrowUp
+                        onClick={() => setDisplayBusinessProfile(false)}
+                      />
+                    ) : (
+                      <MdKeyboardArrowDown
+                        onClick={() => setDisplayBusinessProfile(true)}
+                      />
+                    )}
+                  </ArrowDown>
                 </BusinessName>
                 <SocialIconsWrap>
                   {businessProfile.handles.instagram ? (
@@ -355,7 +381,7 @@ const BuisinessHeader = ({
               </BusinessNameWrap>
             ) : null}
           </LeftHeader>
-          <ArrowDown>
+          <ArrowDown className="ProfileArrow">
             {isProfile ? (
               <MdKeyboardArrowUp
                 onClick={() => setDisplayBusinessProfile(false)}

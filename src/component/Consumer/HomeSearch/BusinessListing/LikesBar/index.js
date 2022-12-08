@@ -119,7 +119,7 @@ const RightDiv = styled.div`
 const DropdownContent = styled.div`
   display: flex;
   position: absolute;
-  min-width: 102px;
+  min-width: 74px;
   overflow: auto;
   background: #fe02b9;
   box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.3);
@@ -127,7 +127,7 @@ const DropdownContent = styled.div`
   top: 25px;
   width: 30px;
   overflow: visible;
-  right: -5px;
+  left: -5px;
   padding: 5px;
   :before {
     background: url(${DropdwonArrowTop}) no-repeat top center;
@@ -139,7 +139,7 @@ const DropdownContent = styled.div`
     margin: 0 auto;
     display: flex;
     text-align: center;
-    left: 78px;
+    left: 0px;
     @media (max-width: 767px) {
       left: 0;
     }
@@ -161,6 +161,8 @@ const DropdownContent = styled.div`
     padding: 0px 5px;
     text-decoration: none;
     font-size: 12px;
+    font-family: "Montserrat";
+    text-align: left;
   }
   li:hover {
     background-color: #fe02b9;
@@ -475,9 +477,9 @@ const LikesBar = ({
               <RightDiv>
                 <BsThreeDots onClick={toggleUploadMenu} />
                 {uploadMenu && (
-                  <DropdownContent>
+                  <DropdownContent ref={menuRef}>
                     <ul>
-                      <li onClick={() => editPost()}>Edit</li>
+                      {/* <li onClick={() => editPost()}>Edit</li> */}
                       <li onClick={() => deletePost()}>Delete</li>
                     </ul>
                   </DropdownContent>

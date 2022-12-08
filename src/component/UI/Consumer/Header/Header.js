@@ -1,34 +1,51 @@
+import { Auth } from "aws-amplify";
 import React, { Fragment, useEffect, useState } from "react";
+import { FiAlertOctagon, FiLogOut } from "react-icons/fi";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useLocation, useRouteMatch } from "react-router-dom";
+import BackBtn from "../../../../images/back-btn.png";
+import ListIcon from "../../../../images/Grid_icon.png";
+import GridIcon from "../../../../images/grid_icon_blue.png";
+import { setGloablLoader } from "../../../../reducers/consumerReducer";
+import ButtonGrey from "../../../Consumer/UI/ButtonGrey";
+import ModalComponent from "../../../Consumer/UI/Modal";
+import SaveButton from "../../../Consumer/UI/SaveButton";
 import useStore from "../../../Consumer/useState/index";
 import {
+  AlertIcon,
+  BackArrow,
+  BreadcrumbsDiv,
+  BreadcrumbsText,
   HeaderBar,
   LeftHeaderBar,
-  UserNameCircle,
-  BreadcrumbsDiv,
-  BackArrow,
-  BreadcrumbsText,
-  RightHeaderBar,
   LocationWrap,
-  UserImgWrap,
+  LogoutBtnWrap,
+  LogoutComponent,
+  LogoutMsg,
+  LogoutSection,
+  RightHeaderBar,
   UserImg,
+  UserImgWrap,
+  UserNameCircle,
 } from "./styled";
-import BackBtn from "../../../../images/back-btn.png";
 import "./styles.css";
-import GridIcon from "../../../../images/grid_icon_blue.png";
-import ListIcon from "../../../../images/Grid_icon.png";
-import { useHistory, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import PlazmLogo from "../../../../images/plazmLogo.jpeg";
 
 const Header = () => {
+  const routerHistory = useHistory();
   const [tabTitle, setTabTitle] = useState();
   const [coords, setCoords] = useState();
   const subListTabName = ["Lists Subscribe", "My List", "Discover More"];
+  const [showDiv, setshowDiv] = useState(false);
+  const [showDivModal, setshowDivModal] = useState(false);
   const routeObj = {
     u: "User",
     b: "Business",
     list: "List",
   };
+  const dispatch = useDispatch();
   const prevRoute = useHistory();
+  const route = useRouteMatch();
   const history = useLocation()
     .pathname.split("/")
     .filter((item) => item);
@@ -81,13 +98,9 @@ const Header = () => {
         setTabTitle((prev) => prev);
         break;
     }
-    if (
-      (selectedTab < 1 || selectedTab > 2) &&
-      routeObj[history[0]] !== routeObj.list &&
-      history.length <= 1
-    ) {
-      setGridMode(false);
-    }
+    // if (selectedTab !== 1) {
+    //   setGridMode(false);
+    // }
   }, [selectedTab]);
 
   useEffect(() => {
@@ -95,9 +108,27 @@ const Header = () => {
     setCoords(loc);
   }, [draggedLocation]);
 
+  /** for logout functionality redirection */
+  const redirectUserToLoginScreen = () => {
+    dispatch(setGloablLoader(false));
+    routerHistory.push("/consumer/login");
+  };
+
+  /** logout consumer */
+  const consumerLogout = async () => {
+    try {
+      dispatch(setGloablLoader(true));
+      await Auth.signOut();
+      setTimeout(() => redirectUserToLoginScreen(), 3000);
+    } catch (error) {
+      dispatch(setGloablLoader(false));
+    }
+  };
+
   const isObjectId = (id) => {
     return id.length === 24 && !isNaN(Number("0x" + id));
   };
+
   return (
     <HeaderBar>
       <LeftHeaderBar>
@@ -142,6 +173,9 @@ const Header = () => {
                 {"/ " + subListTabName[listTabSelected]}
               </span>
             )}
+            {route?.url === "/user-profile" && (
+              <span className="crumb-text">{selectedUser.user.name}</span>
+            )}
           </BreadcrumbsText>
         </BreadcrumbsDiv>
       </LeftHeaderBar>
@@ -157,11 +191,57 @@ const Header = () => {
           {city}
         </LocationWrap>
 
+        {/* <div color="#FF7171" width="20px" onClick={consumerLogout} >Logout</div> */}
+
         <UserImgWrap>
-          <UserImg>
-            <img src="https://picsum.photos/id/237/200/300" />
+          <UserImg
+            onClick={() => {
+              setshowDiv((prev) => !prev);
+            }}
+          >
+            <img src={PlazmLogo} alt="PlazmLogo" />
           </UserImg>
         </UserImgWrap>
+
+        {showDiv && (
+          <LogoutSection>
+            <ul>
+              <li
+                onClick={() => {
+                  routerHistory.push("/user-profile");
+                }}
+              >
+                Profile Settings
+              </li>
+              <li
+                onClick={() => {
+                  setshowDivModal((prev) => !prev);
+                }}
+                className="lightGrayBg"
+              >
+                <div className="logoutDiv">
+                  <FiLogOut />
+                  logout
+                </div>
+              </li>
+            </ul>
+          </LogoutSection>
+        )}
+
+        <ModalComponent isOpen={showDivModal}>
+          <LogoutComponent>
+            <AlertIcon>
+              <FiAlertOctagon />
+            </AlertIcon>
+            <LogoutMsg>Are you sure you want to Logout?</LogoutMsg>
+            <LogoutBtnWrap>
+              <ButtonGrey onClick={() => setshowDivModal((prev) => !prev)}>
+                Cancel
+              </ButtonGrey>
+              <SaveButton onClick={() => consumerLogout()}>Logout</SaveButton>
+            </LogoutBtnWrap>
+          </LogoutComponent>
+        </ModalComponent>
 
         {/* <div className="title">
                     <h4>{tabTitle}</h4>

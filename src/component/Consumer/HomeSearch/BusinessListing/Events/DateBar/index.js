@@ -28,10 +28,10 @@ const LabelInput = styled.div`
 const DateBar = ({startDay, endDay}) => {
   return (
     <>
-      <BottomBarLikes>
-        <LabelWrap>Date -</LabelWrap>
-        <LabelInput>{startDay} to {endDay}</LabelInput>
-      </BottomBarLikes>
+    <BottomBarLikes>
+      <LabelWrap>Date -</LabelWrap>
+      <LabelInput>{startDay} {endDay && 'to'} {endDay}</LabelInput>
+    </BottomBarLikes>
     </>
   );
 };

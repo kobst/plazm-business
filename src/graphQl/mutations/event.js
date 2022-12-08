@@ -72,7 +72,7 @@ const createEventGraphql = (values) => {
       business: values.business,
       eventSchedule: values.eventSchedule,
       recurring: values.recurring,
-      media: values.media && values.media !== '' ? [values.media] : [],
+      media: Array.isArray(values.media) ? values.media : values.media && values.media !== "" ? [values.media] : [],
       listId: values.listId,
       taggedLists: values.taggedLists,
       taggedUsers: values.taggedUsers,

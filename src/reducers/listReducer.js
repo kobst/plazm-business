@@ -6,6 +6,7 @@ import {
   createListGraphql,
   getAllListsGraphql,
   getUserCreatedAndFollowedListsGraphql,
+  getUserSubscribedListsGraphql,
   getUserListsGraphql,
   deleteListGraphql,
   unsubscribeToAListGraphql,
@@ -16,6 +17,9 @@ import {
   searchListsGraphql,
 } from '../graphQl';
 
+
+import useStore from "../component/Consumer/useState";
+import { filterUserListsGraphql } from "../graphQl/query/list";
 /*
  * @desc:  to check if business exists or not
  * @params: businessId
@@ -45,6 +49,21 @@ export const fetchUserLists = createAsyncThunk('data/fetchUserLists', async (obj
   const response = await graphQlEndPoint(graphQl);
   return response.data.getUserLists.list;
 });
+
+/*
+ * @desc:  to get user created lists
+ * @params: ownerId
+ */
+export const filterListsByUser = createAsyncThunk(
+  "data/filterListsByUser",
+  async (obj) => {
+    const graphQl = filterUserListsGraphql(obj);
+    const response = await graphQlEndPoint(graphQl);
+    const { list, totalLists, type } = response.data.fetchUserLists;
+    console.log({ list, totalLists});
+    return { data: list, total: totalLists, type }
+  }
+);
 
 /*
  * @desc:  to add post to list
@@ -80,12 +99,28 @@ export const addEventToList = createAsyncThunk('data/AddEventToList', async (obj
  * @desc:  to fetch user created and followed list
  * @params: userId
  */
-export const fetchUserCreatedAndFollowedList = createAsyncThunk('data/fetchUserCreatedAndFollowedList',
-    async (obj) => {
-      const graphQl = getUserCreatedAndFollowedListsGraphql(obj);
-      const response = await graphQlEndPoint(graphQl);
-      return response.data.getUserCreatedAndFollowedLists;
-    });
+export const fetchUserSubscribedList = createAsyncThunk(
+  "data/fetchUserSubscribedList",
+  async (obj) => {
+    const graphQl = getUserSubscribedListsGraphql(obj);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.getUserSubscribedLists;
+  }
+);
+
+
+/*
+ * @desc:  to fetch user created and followed list
+ * @params: userId
+ */
+export const fetchUserCreatedAndFollowedList = createAsyncThunk(
+  "data/fetchUserCreatedAndFollowedList",
+  async (obj) => {
+    const graphQl = getUserCreatedAndFollowedListsGraphql(obj);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.getUserCreatedAndFollowedLists;
+  }
+);
 
 /*
  * @desc:  to delete a user created list
@@ -155,9 +190,21 @@ export const slice = createSlice({
     loadingUserLists: false,
     loadingCreateList: false,
     userLists: [],
+    loadingFilterUserLists: 0,
+    userCreatedLists: {
+      data: [],
+      total: 0,
+    },
+    userSubscribedLists: {
+      data: [],
+      total: 0,
+    },
+    subscribedLists: [],
+    loadingUserSubscribed: false,
     loadingUserCreatedAndFollowed: false,
     data: [],
     totalList: 0,
+    totalSubscribedList: 0,
     loadingSelectedList: false,
     totalPostInList: 0,
     selectedListData: [],
@@ -193,6 +240,16 @@ export const slice = createSlice({
     clearDiscoverPageData: (state) => {
       state.popularLists = [];
       state.trendingLists = [];
+    },
+    clearUserProfilePageListData: (state) => {
+      state.userCreatedLists = {
+        data: [],
+        total: 0,
+      };
+      state.userSubscribedLists = {
+        data: [],
+        total: 0,
+      };
     },
     filterUserCreatedLists: (state, action) => {
       state.filteredList = current(state.data).filter(
@@ -238,6 +295,17 @@ export const slice = createSlice({
           listName = 'selectedListDetails';
           findList = state.selectedListDetails;
           break;
+        case "created":
+          listName = "selectedListDetails";
+          console.log(state.userCreatedLists, 'state.userCreatedLists',  action.payload);
+          findList = state.userCreatedLists.data.find(l => l._id === action.payload.listId)
+          console.log(findList, 'findList');
+          findList.subscribers = findList.subscribers.concat({
+            _id: action.payload.user._id,
+          });
+          state.userSubscribedLists.data = [findList, ...state.userSubscribedLists.data];
+          state.userSubscribedLists.total = state.userSubscribedLists.total + 1;
+          break;
       }
       if (findList) {
         findList.subscribers =
@@ -272,6 +340,13 @@ export const slice = createSlice({
         case 'Selected':
           listName = 'selectedListDetails';
           findList = state.selectedListDetails;
+          break;
+        case "created":
+          listName = "selectedListDetails";
+          console.log(state);
+          findList = state.userSubscribedLists.data.find(l => l._id === action.payload.listId)
+          state.userSubscribedLists.data = state.userSubscribedLists.data.filter(l => l._id === action.payload.listId);
+          state.userSubscribedLists.total = state.userSubscribedLists.total - 1;
           break;
       }
       if (findList && listName !== 'selectedListDetails') {
@@ -326,6 +401,33 @@ export const slice = createSlice({
         state.error = action.payload;
       }
     },
+    [filterListsByUser.pending]: (state) => {
+        state.loadingFilterUserLists += 1 ;
+    },
+    [filterListsByUser.fulfilled]: (state, action) => {
+      if (state.loadingFilterUserLists) {
+        state.loadingFilterUserLists -= 1;
+        if (action.payload) {
+          const {type, data, total} = action.payload;
+          if(type === 'created') {
+            // state.userCreatedLists = {data, total}
+            state.userCreatedLists.data = state.userCreatedLists.data.concat(data);
+            state.userCreatedLists.total = total;
+          }
+          if(type === 'subscribed') {
+            // state.userSubscribedLists = {data, total};
+            state.userSubscribedLists.data = state.userSubscribedLists.data.concat(data);
+            state.userSubscribedLists.total = total;
+          }
+        }
+      }
+    },
+    [filterListsByUser.rejected]: (state, action) => {
+      if (state.loadingFilterUserLists) {
+        state.loadingFilterUserLists -= 1;
+        state.error = action.payload;
+      }
+    },
     [createList.pending]: (state) => {
       if (!state.loadingCreateList) {
         state.loadingCreateList = true;
@@ -344,6 +446,27 @@ export const slice = createSlice({
     [createList.rejected]: (state, action) => {
       if (state.loadingCreateList) {
         state.loadingCreateList = false;
+        state.error = action.payload;
+      }
+    },
+    [fetchUserSubscribedList.pending]: (state) => {
+      if (!state.loadingUserCreatedAndFollowed) {
+        state.loadingUserSubscribed = true;
+      }
+    },
+    [fetchUserSubscribedList.fulfilled]: (state, action) => {
+      if (state.loadingUserCreatedAndFollowed) {
+        state.loadingUserCreatedAndFollowed = false;
+        if (action.payload) {
+          state.subscribedLists = action.payload.list;
+          state.totalSubscribedList = action.payload.totalLists;
+
+        }
+      }
+    },
+    [fetchUserSubscribedList.rejected]: (state, action) => {
+      if (state.loadingUserCreatedAndFollowed) {
+        state.loadingUserSubscribed = false;
         state.error = action.payload;
       }
     },
@@ -484,6 +607,7 @@ export const {
   filterUserCreatedLists,
   filterByAll,
   clearDiscoverPageData,
+  clearUserProfilePageListData,
   userSubscribeToAList,
   userUnSubscribeToAList,
   setListSearch,

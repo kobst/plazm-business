@@ -47,10 +47,10 @@ const ProfileContent = ({userId, setDisplayTab, setProfileClosed}) => {
       <ValueLoader />
     </LoaderWrap>
   ) : userProfile !== null ? (
-    <div>
+    <div style={{ width: "100%" }}>
       <ProfileDetail
-        // setDisplayTab={setDisplayTab}
-        // setProfileClosed={setProfileClosed}
+      // setDisplayTab={setDisplayTab}
+      // setProfileClosed={setProfileClosed}
       />
       <ProfileTabs />
       <ProfileLock />

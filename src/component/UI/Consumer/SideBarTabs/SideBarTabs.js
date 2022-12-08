@@ -12,11 +12,13 @@ import {useHistory} from 'react-router-dom';
 import {unwrapResult} from '@reduxjs/toolkit';
 
 
-import {fetchUserLists, fetchUserCreatedAndFollowedList} from '../../../../reducers/listReducer';
+import {
+  fetchUserLists,
+  fetchUserCreatedAndFollowedList,
+} from "../../../../reducers/listReducer";
 
 import useStore from '../../../Consumer/useState/index';
 
-import {FiHeart} from 'react-icons/fi';
 
 import ListTab from './ListTab';
 
@@ -24,8 +26,6 @@ import CompassIconWhite from '../../../../images/compass-white.png';
 import CompassIcon from '../../../../images/compass.svg';
 import HomeIconWhite from '../../../../images/home-white.png';
 import HomeIcon from '../../../../images/home.svg';
-import BellIconWhite from '../../../../images/bell-white.png';
-import BellIcon from '../../../../images/bell.svg';
 import {BsGrid} from 'react-icons/bs';
 
 const SubcriptionHeading = styled.h1`
@@ -40,6 +40,8 @@ const SubcriptionHeading = styled.h1`
 	border-top: 1px dashed #d2d2d2;
 	padding: 15px 0 5px 15px;
 `;
+
+
 
 const SideBarTabs = ({
   profile,
@@ -57,12 +59,19 @@ const SideBarTabs = ({
 
   const user = useSelector((state) => state.user.user);
   const listData = useSelector((state) => state.list.data);
+
+  const subscribedLists = useSelector((state) => state.list.subscribedLists)
   const totalList = useSelector((state) => state.list.totalList);
   const userLists = useSelector((state) => state.list.userLists);
   const loading = useSelector((state) => state.myFeed.loading);
   const listLoader = useSelector((state) => state.list.loadingUserCreatedAndFollowed);
 
   // new useStore
+  // const [userFollowedLists, setUserFollowedLists] = useState([]);
+
+  const userSubscribedLists = useStore((state) => state.userSubscribedLists)
+  const setUserSubscribedLists = useStore((state) => state.setUserSubscribedLists)
+  const setUserCreatedLists = useStore((state) => state.setUserCreatedLists)
   const selectedTab = useStore((state) => state.tabSelected);
 
   const setSelectedTab = useStore((state) => state.setTabSelected);
@@ -70,6 +79,8 @@ const SideBarTabs = ({
   const setFavoriteIndex = useStore((state) => state.setFavoriteIndex);
   const setDiscoverBtn = useStore((state) => state.setDiscoverBtn);
   const setSelectedList = useStore((state) => state.setSelectedList);
+  const setSelectedPlace = useStore((state) => state.setSelectedPlace);
+  const setOrderedPlaces = useStore((state) => state.setOrderedPlaces);
 
   // old useStore
 
@@ -80,6 +91,7 @@ const SideBarTabs = ({
       dispatch(fetchUserLists(user._id));
     }
   }, [user]);
+
 
   /** to fetch all the user created and subscribed lists */
   useEffect(() => {
@@ -95,17 +107,47 @@ const SideBarTabs = ({
         );
         await unwrapResult(data);
       };
-      if (page > 1) {
+        if (listData.length < 1) {
         fetchListData();
       }
     }
-  }, [dispatch, user._id, page]);
+  }, [dispatch, user._id]);
+
+  useEffect(() => {
+    let _userFollowedLists = []
+    let _userCreatedLists = []
+    console.log("new list data incoming " + listData.length)
+
+    if (listData.length > 0) {
+      const listUnique = [...new Map(listData.map(v => [v._id, v])).values()]
+      listUnique.forEach(list => {
+        var arrayLength = list.subscribers.length;
+        for (var i = 0; i < arrayLength; i++) {
+          // console.log(list.subscribers[i]._id)
+          if (list.subscribers[i]._id === user._id) {
+            // console.log("Good")
+            _userFollowedLists.push(list)
+            break
+          }
+        }
+        if (list.ownerId === user._id) {
+          _userCreatedLists.push(list)
+        }
+
+      })
+    }
+
+    setUserSubscribedLists(_userFollowedLists)
+    setUserCreatedLists(_userCreatedLists)
+  }, [listData])
 
   /** to clear selected data on tab click */
   const homeSearchFunction = () => {
     setFavoriteIndex(null);
     setSelectedList(null);
     setSelectedListId(null);
+    setOrderedPlaces([])
+    setSelectedPlace(null)
     if (!loading) {
       history.push('/explore');
     }
@@ -113,16 +155,16 @@ const SideBarTabs = ({
 
   /** to clear selected data on tab click */
   const myFeedFunction = () => {
-    if (!loading) {
       setSelectedList(null);
       setSelectedListId(null);
-
-      history.push('/home');
-    }
+      setOrderedPlaces([])
+      setSelectedPlace(null)
+      history.push("/home");
   };
 
   const listDiscovery = () => {
-    history.push('/lists');
+    setSelectedPlace(null)
+    history.push("/lists");
     setDiscoverBtn(false);
   };
 
@@ -259,69 +301,6 @@ const SideBarTabs = ({
               disabled={
                 loading ||
 								selectedTab ===
-									3
-              }
-              className={
-								3 ===
-								selectedTab -
-									1? selectedTab ===
-									  4? 'react-tabs__tab LIBefore removeBorder' :
-										'react-tabs__tab LIBefore' :
-									selectedTab +
-											1 ===
-									  3? 'react-tabs__tab' :
-									selectedTab ===
-									  3? 'react-tabs__tab react-tabs__tab--selected removeBorder' :
-									'react-tabs__tab'
-              }
-            >
-              <div className="item">
-                {/* <FiBell className="sidebar-icon" /> */}
-                <img
-                  src={
-										selectedTab ===
-										3? BellIconWhite :
-											BellIcon
-                  }
-                  className="sidebar-icon"
-                />
-                <div className="NotificationDot"></div>
-                <span className="sidebar-text">
-									Notifications
-                </span>
-              </div>
-            </Tab>
-            <Tab
-              disabled={
-                loading ||
-								selectedTab ===
-									4
-              }
-              className={
-								4 ===
-								selectedTab -
-									1? selectedTab ===
-									  5? 'react-tabs__tab LIBefore removeBorder' :
-										'react-tabs__tab LIBefore' :
-									selectedTab +
-											1 ===
-									  4? 'react-tabs__tab' :
-									selectedTab ===
-									  4? 'react-tabs__tab react-tabs__tab--selected removeBorder' :
-									'react-tabs__tab'
-              }
-            >
-              <div className="item">
-                <FiHeart className="sidebar-icon" />
-                <span className="sidebar-text">
-									Favorites
-                </span>
-              </div>
-            </Tab>
-            <Tab
-              disabled={
-                loading ||
-								selectedTab ===
 									5
               }
               className={
@@ -350,47 +329,22 @@ const SideBarTabs = ({
             </Tab>
           </TabList>
         </Tabs>
-
-        {listData.length > 0 && (
-          <SubcriptionHeading>
-            {expanded && 'Subscriptions'}
-          </SubcriptionHeading>
+        {userSubscribedLists.length > 0 && (
+          <SubcriptionHeading>{expanded && "Subscriptions"}</SubcriptionHeading>
         )}
 
         <div className="list-scroll">
-          {listData.length ? (
-						listData.map((i, key) => (
-						  <ListTab
-						    data={i}
-						    key={
-						      key
-						    }
-						    handleListTabClick={
-						      handleListTabClick
-						    }
-						    setSelectedListId={
-						      setSelectedListId
-						    }
-						  />
-						))
-					) : (
-						<h6></h6>
-					)}
-          {totalList > listData.length && !listLoader && (
-            <button
-              onClick={() => {
-                setPage(
-                    (
-                        prev
-                    ) =>
-                      prev +
-										1
-                );
-              }}
-              className="loadMore"
-            >
-							Load
-            </button>
+          {userSubscribedLists.length > 0 ? (
+            userSubscribedLists.map((i, key) => (
+              <ListTab
+                data={i}
+                key={key}
+                handleListTabClick={handleListTabClick}
+                setSelectedListId={setSelectedListId}
+              />
+            ))
+          ) : (
+            <h6></h6>
           )}
         </div>
       </div>

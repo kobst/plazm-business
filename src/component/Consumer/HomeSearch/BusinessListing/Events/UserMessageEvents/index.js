@@ -13,12 +13,6 @@ import ReplyInput from './ReplyInput';
 import Comments from './comments';
 import {
   ImgThumbWrap,
-  InnerListBanner,
-  InnerOverlay,
-  ListAuthorName,
-  ListInfo,
-  ListName,
-  ListNameWrap,
   ShowMoreDiv,
 } from '../../../../FeedContent/styled';
 import {useHistory} from 'react-router';
@@ -26,6 +20,8 @@ import DaysBar from '../../../../BuisinessView/TabsSection/EventsSection/PostCha
 import ArrowSm from '../../../../../../images/arrow-sm-up.png';
 import ArrowSmDown from '../../../../../../images/arrow-sm.png';
 import ImageSlider from '../../UserMessage/imageslider';
+import DetailsHeader from './DetailsHeader';
+import ListHeader from './ListHeader';
 
 const reactStringReplace = require('react-string-replace');
 
@@ -50,6 +46,7 @@ const ProfileNameHeader = styled.div`
   display: flex;
   padding: 0 0 0 12px;
   margin: 15px 0;
+  width: 100%;
   &.line-active {
     &:before {
       content: "";
@@ -122,6 +119,7 @@ const UserMessageEvents = ({
   setSearchIndex,
   myFeedView,
   setSelectedListId,
+  isList
 }) => {
   const [displayEventComments, setDisplayEventComments] = useState(false);
   const [flag, setFlag] = useState(false);
@@ -356,7 +354,8 @@ const UserMessageEvents = ({
           }
         >
           <ProfileNameWrap>
-            <InnerListBanner>
+            {isList ? <ListHeader eventData={eventData} businessInfo={businessInfo} /> : <DetailsHeader eventData={eventData} />}
+            {/* <InnerListBanner>
               <img
                 src={listImage}
                 onError={() => setListImage(BannerImg)}
@@ -380,7 +379,7 @@ const UserMessageEvents = ({
                   </ListAuthorName>
                 </ListInfo>
               </ListNameWrap>
-            </InnerListBanner>
+            </InnerListBanner> */}
             <SubHeading>{eventData.title}</SubHeading>
             <ChatInput>
               {findDesc(

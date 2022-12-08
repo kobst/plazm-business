@@ -1,35 +1,34 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { IoMdClose } from "react-icons/io";
+import { unwrapResult } from "@reduxjs/toolkit";
 import moment from "moment";
-import InfiniteScroll from "react-infinite-scroll-component";
-import BannerImg from "../../../images/sliderimg.png";
-import styled from "styled-components";
+import React, { useEffect, useState } from "react";
 import { CgLock } from "react-icons/cg";
-
+import { IoMdClose } from "react-icons/io";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useParams } from "react-router-dom";
+import styled from "styled-components";
+import BannerImg from "../../../images/sliderimg.png";
 import {
   unSubscribeToAList,
   subscribeToAListAction,
   fetchUserLists,
   clearListSearchData,
+  setSelectedListDetails,
   userSubscribeToAList,
   userUnSubscribeToAList,
-  setSelectedListDetails,
 } from "../../../reducers/listReducer";
 import {
-  fetchSelectedListDetails,
   clearMyFeedData,
+  fetchSelectedListDetails,
 } from "../../../reducers/myFeedReducer";
-import ValueLoader from "../../../utils/loader";
-import DisplayPostInAList from "./DisplayPostsInAList";
-import { unwrapResult } from "@reduxjs/toolkit";
 import {
   addSubscribedList,
   removeSubscribedList,
 } from "../../../reducers/userReducer";
-import { useHistory } from "react-router-dom";
+import ValueLoader from "../../../utils/loader";
 import ButtonOrange from "../UI/ButtonOrange";
 import useStore from "../useState";
+import DisplayPostInAList from "./DisplayPostsInAList";
 
 const ListOptionSection = styled.div`
   width: 100%;
@@ -264,8 +263,18 @@ const ArrowBack = styled.div`
   }
 `;
 
+const getImage = (selectedList) => {
+  if(selectedList && selectedList.media && selectedList.media.length > 0) {
+    const img = selectedList.media.find(({image_type}) => image_type === 'COVER') || selectedList.media[0]
+    console.log(img, 'img');
+    return img['image']
+  }
+  return BannerImg
+}
+
 const ListDetailView = ({ listOpenedFromBusiness }) => {
   const dispatch = useDispatch();
+  const { id } = useParams();
   const loading = useSelector((state) => state.myFeed.loadingSelectedList);
   const loadingUnSubScribe = useSelector(
     (state) => state.list.loadingUnSubscribe
@@ -287,7 +296,10 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   const [offset, setOffSet] = useState(0);
   const [flag, setFlag] = useState(true);
 
+  const orderedPlaces = useStore((state) => state.orderedPlaces);
+
   const selectedList = useStore((state) => state.selectedList);
+  const setSelectedList = useStore((state) => state.setSelectedList);
   const selectedListId = useStore((state) => state.selectedListId);
   const setSelectedListId = useStore((state) => state.setSelectedListId);
   const setSelectedListName = useStore((state) => state.setSelectedListName);
@@ -297,11 +309,11 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   const readMore = useStore((state) => state.readMore);
   const gridMode = useStore((state) => state.gridMode);
 
-  const [image, setImage] = useState(
-    selectedList && selectedList.media.length > 0
-      ? selectedList.media[0].image
-      : BannerImg
-  );
+  const [image, setImage] = useState(() => getImage(selectedList))
+  //   selectedList && selectedList.media.length > 0
+  //     ? selectedList.media.find(({image_type}) => image_type === 'PROFILE') || selectedList.media[0].image
+  //     : BannerImg
+  // );
 
   const history = useHistory();
 
@@ -309,12 +321,14 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
     // if (!image) {
     if (selectedList) {
       if (selectedList.media.length > 0) {
-        setImage(selectedList.media[0].image);
+        const img = selectedList.media.find(({image_type}) => image_type === 'COVER') || selectedList.media[0]
+        setImage(img.image);
       }
     } else {
       if (selectedListDetails) {
         if (selectedListDetails.media.length > 0) {
-          setImage(selectedListDetails.media[0].image);
+          const img = selectedListDetails.media.find(({image_type}) => image_type === 'COVER') || selectedListDetails.media[0]
+          setImage(img.image);
         }
       }
     }
@@ -330,6 +344,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
 
   /** to clear all the data initially */
   useEffect(() => {
+    // setPostsInView([])
     dispatch(clearMyFeedData());
     setOffSet(0);
     setHasMore(true);
@@ -339,23 +354,22 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   useEffect(() => {
     const fetchListDetails = async () => {
       const result = await dispatch(
-        fetchSelectedListDetails({ id: selectedListId, value: offset })
+        fetchSelectedListDetails({ id: id, value: offset })
       );
       const data = await unwrapResult(result);
+      setSelectedList(data?.listDetails);
       dispatch(setSelectedListDetails(data?.listDetails));
       if (data) {
         setFlag(false);
       }
     };
     offset === 0 && fetchListDetails();
-  }, [dispatch, selectedListId, offset]);
+  }, [dispatch, id, offset]);
 
   const fetchMorePosts = () => {
     if (offset + 20 < totalData) {
       setOffSet(offset + 20);
-      dispatch(
-        fetchSelectedListDetails({ id: selectedListId, value: offset + 20 })
-      );
+      dispatch(fetchSelectedListDetails({ id: id, value: offset + 20 }));
     } else setHasMore(false);
   };
 
@@ -399,6 +413,11 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
     }
   };
 
+  useEffect(() => {
+    dispatch(clearListSearchData());
+    setSelectedListId(id);
+  }, [id]);
+
   // /** to delete a list */
   // const deleteList = async () => {
   //   const obj = {
@@ -411,6 +430,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   //     setSelectedListId(null);
   //   }
   // };
+
 
   const onCloseTab = () => {
     // if (!listOpenedFromBusiness) setDisplayTab(false);
@@ -548,7 +568,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
                       />
                     ))
                   ) : (
-                    <NoData>No Posts In A List To Display</NoData>
+                    <NoData>No Posts In A List To Display details</NoData>
                   )}
                 </ListingOptionWrap>
               </InfiniteScroll>

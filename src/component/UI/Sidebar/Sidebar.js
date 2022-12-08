@@ -35,7 +35,7 @@ const LeftSidebar = styled.div`
   position: absolute;
   top: 110px;
   right:0px;
-  z-index: 91;
+  z-index: 100;
   visibilty:hidden;
   :after,:before{
     bottom: 100%;

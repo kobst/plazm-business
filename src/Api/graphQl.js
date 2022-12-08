@@ -1,4 +1,4 @@
-/* graphQL function*/
+/* graphQL function used in the project*/
 export const graphQlEndPoint = async (graphQl) => {
   const response = await fetch(
       `${process.env.REACT_APP_API_URL}/graphql`,

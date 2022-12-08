@@ -172,8 +172,8 @@ export const RightIcons = styled.div`
   }
 `;
 export const InnerListBanner = styled.div`
-  width: 27px;
-  height: 27px;
+  width: 30px;
+  height: 30px;
   margin: 0 8px 0 0;
   overflow: hidden;
   position: relative;
@@ -220,6 +220,9 @@ export const ListName = styled.div`
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const ListInfo = styled.div`
@@ -250,19 +253,25 @@ export const ListAuthorName = styled.div`
   margin: 0;
   font-weight: 700;
   color: #ff2e9a;
-  cursor: pointer;
+  span {
+    cursor: pointer;
+    font-size: inherit;
+    margin: 0;
+    font-weight: 700;
+  }
 `;
 
 export const FeedDescription = styled.p`
-  font-style: normal;
   font-size: 12px;
   line-height: normal;
-  margin: 0 0 15px;
-  font-weight: 400;
+  margin: 10px 0 15px;
   color: #fff;
   padding: 0%;
   text-align: justify;
   white-space: pre-wrap;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
   .mentionData {
     font-size: 13px;
     color: #ff2e9a;
@@ -271,15 +280,15 @@ export const FeedDescription = styled.p`
   }
 `;
 
-export const FeedBigImage = styled.p`
+export const FeedBigImage = styled.div`
   width: 100%;
-  height: 230px;
+  max-height: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 0 15px;
   img {
-    max-height: 230px;
+    max-height: 300px;
   }
 `;
 
@@ -288,7 +297,7 @@ export const EventBigImage = styled.p`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 0 15px;
+  margin: 15px 0;
 `;
 
 export const TopListHeader = styled.div`
@@ -382,7 +391,7 @@ export const RightBuisinessName = styled.div`
   }
 `;
 
-export const BuisinessNme = styled.div`
+export const BuisinessName = styled.div`
   font-weight: bold;
   font-size: 13px;
   text-align: right;
@@ -416,6 +425,9 @@ export const ShowMoreDiv = styled.div`
   }
   .ArrowSm {
     margin: 2px 0 0 4px;
+  }
+  &.ListingShowMore {
+    margin: 0 0 10px;
   }
 `;
 
@@ -572,4 +584,181 @@ export const HeartIcon = styled.div``;
 export const RightBuisinessImg = styled.div`
   display: flex;
   align-items: center;
+`;
+
+export const InnerListBannerList = styled.div`
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  @media (max-width: 767px) {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+  .hex {
+    display: block;
+    margin: 0 auto;
+    position: relative;
+    width: 32px;
+    height: 30px; /* width * 0.866 */
+    background: #fff;
+    box-sizing: border-box;
+    -webkit-clip-path: polygon(
+      0% 50%,
+      25% 0%,
+      75% 0%,
+      100% 50%,
+      75% 100%,
+      25% 100%
+    );
+    -moz-clip-path: polygon(
+      0% 50%,
+      25% 0%,
+      75% 0%,
+      100% 50%,
+      75% 100%,
+      25% 100%
+    );
+  }
+
+  .hex-background {
+    position: absolute;
+    background-color: orange; /*color of the main-background*/
+    top: 2px; /* equal to border thickness */
+    left: 2px; /* equal to border thickness */
+    width: 28px;
+    height: 26px; /* width * 0.866 */
+    -webkit-clip-path: polygon(
+      0% 50%,
+      25% 0%,
+      75% 0%,
+      100% 50%,
+      75% 100%,
+      25% 100%
+    );
+    -moz-clip-path: polygon(
+      0% 50%,
+      25% 0%,
+      75% 0%,
+      100% 50%,
+      75% 100%,
+      25% 100%
+    );
+  }
+
+  .hex img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    -webkit-clip-path: polygon(
+      0% 50%,
+      25% 0%,
+      75% 0%,
+      100% 50%,
+      75% 100%,
+      25% 100%
+    );
+    -moz-clip-path: polygon(
+      0% 50%,
+      25% 0%,
+      75% 0%,
+      100% 50%,
+      75% 100%,
+      25% 100%
+    );
+  }
+`;
+
+export const EventListImg = styled.div`
+  width: 30px;
+  height: 30px;
+  margin: 0 8px 0 0;
+  overflow: hidden;
+  position: relative;
+  border-radius: 50%;
+  border: 1px solid #ffffff;
+  img {
+    width: 100%;
+    height: 100%;
+  }
+`;
+
+export const ListNameWrapList = styled.div`
+  font-style: normal;
+  font-size: 13px;
+  line-height: normal;
+  margin: 4px 0 0 0;
+  font-weight: 700;
+  color: #fff;
+  position: relative;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: calc(100% - 30px);
+  font-family: "Roboto", sans-serif;
+`;
+
+export const ListNameList = styled.div`
+  font-style: normal;
+  font-size: 11px;
+  line-height: normal;
+  margin: 0 0 3px;
+  font-weight: 700;
+  color: #fff;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+export const ListInfoList = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: #fff;
+  svg {
+    margin: 0 2px 0 0;
+    @media (max-width: 767px) {
+      margin: 0 2px 0 0;
+    }
+  }
+  span {
+    margin: 0 5px;
+    font-weight: 500;
+    font-size: 12px;
+    @media (max-width: 767px) {
+      margin: 0 2px;
+    }
+  }
+`;
+
+export const ListAuthorNameList = styled.div`
+  font-style: normal;
+  font-size: 9px;
+  line-height: normal;
+  margin: 0;
+  font-weight: 700;
+  color: #ff2e9a;
+  span {
+    cursor: pointer;
+    font-size: inherit;
+    margin: 0;
+    font-weight: 700;
+  }
+`;
+
+export const LeftFirst = styled.div`
+  display: flex;
+  align-items: center;
+  max-width: calc(100% - 30%);
+  @media (max-width: 767px) {
+    max-width: 100%;
+    margin: 4px 0 8px;
+  }
 `;

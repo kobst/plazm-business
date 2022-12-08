@@ -9,7 +9,9 @@ import {
 } from '../../../reducers/myFeedReducer';
 import DisplayBusinessDetails from './DisplayBusinessDetails';
 import {unwrapResult} from '@reduxjs/toolkit';
-
+import SearchBar from "./SearchBar";
+import GridView from "../GridComponents/gridView/gridView";
+import {getHomeFeedRest} from "../../../Api";
 import useStore from '../useState';
 import GlobalSearchBox from '../GlobalSearch/GlobalSearchBox';
 
@@ -121,13 +123,14 @@ const MyFeed = () => {
   const draggedLocation = useStore((state) => state.draggedLocation);
   const setGridMode = useStore((state) => state.setGridMode);
   const gridMode = useStore((state) => state.gridMode);
+  const setMyFeedItems = useStore((state) => state.setMyFeedItems)
+  const myFeedItems = useStore((state) => state.myFeedItems)
+  const orderedPlaces = useStore((state) => state.orderedPlaces)
+  const setPostsInView = useStore(state => state.setPostsInView)
+ 
 
   const showSearchBar = useSelector((state) => state.globalSearch.displayBar);
 
-  useEffect(() => {
-  }, [gridMode]);
-
-  /** to fetch data initially */
   useEffect(() => {
     const fetchData = async () => {
       const _gridMode = gridMode;
@@ -150,7 +153,9 @@ const MyFeed = () => {
         setGridMode(true);
       }
     };
-    fetchData();
+    
+      fetchData();
+   
   }, [
     dispatch,
     user._id,
@@ -238,7 +243,7 @@ const MyFeed = () => {
                     ))
                   ) : !loading ? (
                     <NoData>No Data To Display</NoData>
-                  ) : null}
+                  ) : null} 
                 </BusinessListWrap>
               </InfiniteScroll>
             </div>

@@ -23,6 +23,7 @@ import {
   getMostTrendingListsGraphql,
   getMostPopularListsGraphql,
   searchListsGraphql,
+  getUserSubscribedListsGraphql,
 } from './query/list';
 
 import {
@@ -97,4 +98,5 @@ export {
   getMostTrendingListsGraphql,
   getMostPopularListsGraphql,
   searchListsGraphql,
+  getUserSubscribedListsGraphql,
 };

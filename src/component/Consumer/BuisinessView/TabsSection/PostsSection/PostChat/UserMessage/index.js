@@ -61,12 +61,16 @@ const UserMsgWrap = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 12px;
-  :nth-child(even) {
+  background: #120f29;
+  border: 1px solid #3f3777;
+  border-radius: 10px;
+  margin: 0 10px 10px 0;
+  /* :nth-child(even) {
     background-color: #282352;
   }
   :nth-child(odd) {
     background-color: #221e45;
-  }
+  } */
 `;
 
 const ProfileNameHeader = styled.div`
@@ -85,13 +89,13 @@ const ProfileNameWrap = styled.div`
   justify-content: center;
   max-width: 100%;
   // border-bottom: 0.25px solid #878787;
-  padding: 0 0px 15px 0px;
+  padding: 0 0px 0px 0px;
   width: 100%;
   @media (max-width: 1024px) {
-    padding: 0 0px 15px 0px;
+    padding: 0 0px 0px 0px;
   }
   @media (max-width: 767px) {
-    padding: 0 0px 15px 0px;
+    padding: 0 0px 0px 0px;
   }
 `;
 
@@ -138,6 +142,12 @@ const UserMessage = ({postData}) => {
   );
 
   const setSelectedListId = useStore((state) => state.setSelectedListId);
+
+  const goToList = (list) => {
+    // setSelectedList(list);
+    setSelectedListId(list._id);
+    history.push(`/list/${list._id}`);
+  };
 
   ws.onmessage = (evt) => {
     const message = JSON.parse(evt.data);
@@ -384,12 +394,16 @@ const UserMessage = ({postData}) => {
                   </InnerListBanner>
 
                   <ListNameWrap>
-                    <ListName>{postData.postDetails.list.name}</ListName>
+                    <ListName
+                      onClick={() => goToList(postData.postDetails.list)}
+                    >
+                      {postData.postDetails.list.name}
+                    </ListName>
                     <ListInfo>
                       <FaCaretRight />
                       <ListAuthorName onClick={() => displayUserDetails()}>
-                        {' '}
-                        {postData.postDetails.ownerId.name}
+                        {" "}
+                        <span>{postData.postDetails.ownerId.name}</span>
                       </ListAuthorName>
                       <span>|</span>
                       <ListAuthorName>

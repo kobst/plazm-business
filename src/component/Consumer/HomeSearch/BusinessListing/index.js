@@ -71,6 +71,8 @@ const BusinessListing = ({loader, coords, closestFilter}) => {
   const draggedLocation = useStore((state) => state.draggedLocation);
   const setGridMode = useStore((state) => state.setGridMode);
   const gridMode = useStore((state) => state.gridMode);
+  const setPostsInView = useStore(state => state.setPostsInView)
+
   useEffect(() => {
     dispatch(setEnterClicked(false));
     dispatch(clearSearchFeed());
@@ -81,6 +83,7 @@ const BusinessListing = ({loader, coords, closestFilter}) => {
   /** useEffect called when any side filters are selected */
   useEffect(() => {
     const fetchSearchData = async () => {
+      // setPostsInView([])
       const _gridMode = gridMode;
       if (_gridMode) {
         setGridMode(false);

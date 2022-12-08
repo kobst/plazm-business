@@ -16,7 +16,7 @@ const ChatContent = styled.div`
   width: 100%;
   position: relative;
   display: flex;
-  padding: 30px 0 12px 12px;
+  padding: 20px 0 20px 12px;
   flex-direction: column;
   &.InnerReply {
     margin: 30px 0 0;
@@ -79,10 +79,10 @@ const ProfileNameHeader = styled.div`
 `;
 
 const ProfileThumb = styled.div`
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 32px;
   margin: 0 10px 0 0;
-  border: 3px solid #ffffff;
+  border: 1px solid #ffffff;
   border-radius: 50%;
   overflow: hidden;
   img {
@@ -157,7 +157,7 @@ const InputWrap = styled.div`
     font-size: 13px;
     width: 110px;
   }
-  &.InnerReplySection { 
+  &.InnerReplySection {
     width: 96%;
   }
 `;

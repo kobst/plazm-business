@@ -15,6 +15,7 @@ const ModalContent = styled.div`
   background: #282352;
   box-shadow: 0px 32px 70px rgba(0, 0, 0, 0.25);
   color: #fff;
+  overflow: visible;
   @media (max-width: 767px) {
     padding: 15px;
     min-width: 300px;

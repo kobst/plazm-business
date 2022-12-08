@@ -23,11 +23,14 @@ const SearchSection = ({
   /** to search data based on input */
   useEffect(() => {
     const searchData = async () => {
+      console.log("search data" + JSON.stringify(obj))
+
       const data = await dispatch(
           searchListApi({value: 0, search: listSearch, ...obj}),
       );
       const res = await unwrapResult(data);
       if (res) {
+        console.log(res)
         setFlag(false);
       }
     };
@@ -40,7 +43,7 @@ const SearchSection = ({
     </div>
   ) : (
     <>
-      <FeatureWrapper>
+      {/* <FeatureWrapper>
         <FeatureContainer>
           <ListResultHeading>
             {totalList} Search Results for <span>{listSearch}</span>
@@ -54,7 +57,7 @@ const SearchSection = ({
             obj={obj}
           />
         </FeatureContainer>
-      </FeatureWrapper>
+      </FeatureWrapper> */}
     </>
   );
 };

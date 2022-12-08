@@ -171,7 +171,7 @@ export const DisplayItemContent = styled.div`
   border-radius: 2px;
   padding: 15px 15px 20px;
   width: 320px;
-  z-index: 1000;
+  z-index: 10;
   &.InnerModal {
     visibility: hidden;
   }
@@ -484,6 +484,9 @@ export const NoMorePost = styled.p`
   align-items: center;
   justify-content: center;
   width: 100%;
+  &.MT-20 {
+    margin-top: 15px;
+  }
 `;
 
 export const ErrorDiv = styled.div`
@@ -511,4 +514,102 @@ export const ListWraper = styled.div`
   width: 100%;
   background: #141414;
   padding-left: 60px;
+`;
+
+export const GridWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  &.UserProfileGridWrapper {
+    padding: 70px 0px 200px 15px;
+    max-height: calc(100vh - 270px);
+    overflow: auto;
+    overflow-x: hidden;
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 5px;
+      cursor: pointer;
+    }
+    ::-webkit-scrollbar-track {
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #665f91;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 4px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #665f91;
+    }
+    @media (max-width: 767px) {
+      padding: 30px 0px 170px;
+    }
+    .MuiGrid-spacing-xs-2 {
+      @media (max-width: 767px) {
+        justify-content: center;
+      }
+    }
+    .UserProfileGridList {
+      width: 160px;
+      margin: 0 11px 15px 6px;
+      font-family: Roboto;
+      .InnerModal {
+        width: 220px;
+        .InnerModalCoverImg {
+          height: 163px;
+        }
+      }
+    }
+
+    .UserProfileCoverImg {
+      width: 100%;
+      height: 140px;
+    }
+  }
+
+  .GridContainer {
+    position: relative;
+    margin: 0 0 35px;
+    padding: 0 0 10px;
+    width: 100%;
+    display: flex;
+    overflow-x: scroll;
+    flex-wrap: nowrap;
+    /* width */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 5px;
+      cursor: pointer;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      border-radius: 10px;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: #fff;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 8px;
+      height: 5px;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: #fff;
+    }
+  }
+`;
+
+export const InnerBottomBtns = styled.div`
+  display: flex;
+  justify-content: space-between;
+  button {
+    width: 48%;
+    padding: 0;
+    min-width: inherit;
+  }
 `;

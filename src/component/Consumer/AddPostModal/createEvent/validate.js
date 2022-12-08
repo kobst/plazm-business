@@ -11,8 +11,14 @@ export const validate = {
       .max(255, error.MAXIMUM_TITLE_LENGTH)
       .required(error.REQUIRED),
   description: Yup.string()
-      .trim()
-      .min(5, error.MINIMUM_EVENT_DESCRIPTION_LENGTH)
-      .max(1000, error.MAXIMUM_EVENT_DESCRIPTION_LENGTH)
-      .required(error.REQUIRED),
+    .trim()
+    .min(5, error.MINIMUM_EVENT_DESCRIPTION_LENGTH)
+    .max(1000, error.MAXIMUM_EVENT_DESCRIPTION_LENGTH)
+    .required(error.REQUIRED),
+  lists: Yup.array()
+    .min(1, error.REQUIRED)
+    .max(1000, error.MAXIMUM_EVENT_DESCRIPTION_LENGTH),
+  repeat: Yup.array()
+    .min(1, error.REQUIRED)
+    .max(1000, error.MAXIMUM_EVENT_DESCRIPTION_LENGTH),
 };

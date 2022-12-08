@@ -1,5 +1,9 @@
-import hexSlotFunction from './hexSlots';
-import slotArrayXYZ from './slotArrayXYZ';
+import { isElement } from 'react-dom/test-utils';
+import hexSlotFunction from './hexSlots'
+import slotArrayXYZ from './slotArrayXYZ'
+import ColorDict from './colorSlotDict'
+
+const _colorDict = ColorDict()
 
 function distance(lat1, lon1, lat2, lon2) {
 	if (lat1 == lat2 && lon1 == lon2) {
@@ -88,36 +92,268 @@ const _createXYZ = (angle) => {
 };
 
 const _OrderDistanceSeperate = (places, defaultCenter, selectedPlace) => {
-	let center = {};
-	if (selectedPlace) {
-		center.lat = selectedPlace.businessLocation.coordinates[1];
-		center.lng = selectedPlace.businessLocation.coordinates[0];
-	} else {
-		center = defaultCenter;
-	}
-	places.forEach((element, index) => {
-		let closestDistance = 0;
-		let farthestDistance = 0;
-		const distA = distance(
-			element.businessLocation.coordinates[1],
-			element.businessLocation.coordinates[0],
-			center.lat,
-			center.lng
-		);
-		element.distance = distA;
-		if (index === 0) {
-			closestDistance = distA;
-		}
-		if (index === 10 || index === places.length - 1) {
-			farthestDistance = distA;
-		}
-	});
+  // console.log(defaultCenter)
+  let center = {}
+  if (selectedPlace) {
+    center.lat = selectedPlace.businessLocation.coordinates[1]
+    center.lng = selectedPlace.businessLocation.coordinates[0]
+  } else {
+    center = defaultCenter
+  }
+  var closestDistance = 0
+  var farthestDistance = 1000
+  places.forEach((element, index) => {
+    let distA = distance(element.businessLocation.coordinates[1], element.businessLocation.coordinates[0], center.lat, center.lng)
+    element.distance = distA
+    if (index === 0) {
+      closestDistance = distA
+    }
+    if (index === 10 || index === places.length - 1) {
+      farthestDistance = distA
+    }
+  })
 
-	places.sort(function (a, b) {
-		return a.distance - b.distance;
-	});
-	return places;
-};
+  places.sort(function (a, b) {
+    return a.distance - b.distance
+  })
+  return places
+}
+
+
+
+const AssignMolecularDict = (_places, defaultCenter, selectedPlace) => {
+
+
+
+  let newXyz = slotArrayXYZ
+
+  let places = _OrderDistanceSeperate(_places, defaultCenter, selectedPlace)
+
+  let coordDict = {}
+  let multiDict = {}
+  let slotDict = {}
+  let placesSet = []
+  
+
+  let newCenter = places[0]
+
+  // console.log("AssignMolecular", center.lat, selectedPlace)
+  let nearestAssignedPlace = newCenter
+  const zeroObject = [0, 0, 0]
+  // console.log(places.length + " count")
+  // console.log(JSON.stringify(newCenter.company_name))
+
+  multiDict[newCenter._id] = {
+    cubeCoor: zeroObject,
+    posVector: zeroObject
+  }
+
+  newCenter.posVector = zeroObject
+  newCenter.cubeCoor = zeroObject
+  newCenter.icon_color = 'white'
+  placesSet.push(newCenter)
+
+  coordDict[newCenter._id] = zeroObject
+
+  slotDict["0-0-0"] = nearestAssignedPlace
+
+  // places.forEach(function (element, index) {
+  for (let index = 1; index < places.length; index++) {
+    var element = places[index]
+
+    var closestDistance = distance(places[index].businessLocation.coordinates[1], places[index].businessLocation.coordinates[0], newCenter.businessLocation.coordinates[1], newCenter.businessLocation.coordinates[0])
+    for (let index2 = 0; index2 < index; index2++) {
+      if (index !== index2) {
+        var comparedPlace = places[index2]
+        let comparedDistance = distance(places[index].businessLocation.coordinates[1], places[index].businessLocation.coordinates[0], places[index2].businessLocation.coordinates[1], places[index2].businessLocation.coordinates[0])
+        if (comparedDistance < closestDistance) {
+          closestDistance = comparedDistance
+          nearestAssignedPlace = comparedPlace
+        }
+      }
+    }
+    //get angle from nearestAssignedPlace to newPlace
+    const angle = bearing(nearestAssignedPlace.businessLocation.coordinates[1], nearestAssignedPlace.businessLocation.coordinates[0], places[index].businessLocation.coordinates[1], places[index].businessLocation.coordinates[0])
+
+    for (let slotIndex = 1; slotIndex < newXyz.length - 1; slotIndex++) {
+      // let slot = hexSlots[slotIndex]
+      let slot = newXyz[slotIndex]
+      let position = slot.posVector
+      // console.log(position + "/")
+      let coordinates = slot.coordinate
+      // let nearestPlacePosition = nearestAssignedPlace.posVector
+
+      let nearestPlacePosition 
+      let nearestPlaceCoordinates
+      if (multiDict[nearestAssignedPlace._id]) {
+        // console.log("checking multi Dict" + multiDict)
+        nearestPlacePosition = multiDict[nearestAssignedPlace._id].posVector
+        nearestPlaceCoordinates = multiDict[nearestAssignedPlace._id].cubeCoor
+
+      } else {
+        nearestPlacePosition = [0,0,0]
+        nearestPlaceCoordinates = [0,0,0]
+      }
+
+      let newPositionX = position[0] + nearestPlacePosition[0]
+      let newPositionY = position[1] + nearestPlacePosition[1]
+      let newPositionZ = position[2] + nearestPlacePosition[2]
+      // let nearestPlaceCoordinates = nearestAssignedPlace.coordinates
+
+      // why does this fail sometime? bc you are grabbing places that are not assigned to multiDict
+
+      let newCoordinateX = coordinates[0] + nearestPlaceCoordinates[0]
+      let newCoordinateY = coordinates[1] + nearestPlaceCoordinates[1]
+      let newCoordinateZ = coordinates[2] + nearestPlaceCoordinates[2]
+      let newCoordinateKey = newCoordinateX + "-" + newCoordinateY + "-" + newCoordinateZ
+      if (slotDict[newCoordinateKey]) {
+        continue
+      }
+      if ((slot.rangeMax < slot.rangeMin &&
+          (angle >= slot.rangeMin || angle < slot.rangeMax)) ||
+        (angle >= slot.rangeMin && angle < slot.rangeMax)) {
+        // console.log(angle + "  " + slot.rangeMin + "btw" + slot.rangeMax)
+        element.coordinates = [newCoordinateX, newCoordinateY, newCoordinateZ]
+        element.posVector = [newPositionX, newPositionY, newPositionZ]
+        slotDict[newCoordinateKey] = element
+        
+        let color = _colorDict[newCoordinateKey]
+        if (color) {
+          element.icon_color = color
+        } else {
+          element.icon_color = "gray"
+        }
+        
+        placesSet.push(element)
+
+        // const cubeObject = {
+        //   x: newCoordinateX,
+        //   y: newCoordinateY,
+        //   z: newCoordinateZ
+        // }
+        // const posObject = {
+        //   x: newPositionX,
+        //   y: newPositionY,
+        //   z: newPositionY
+        // }
+
+        // const _cubeObject = [newCoordinateX, newCoordinateY, newCoordinateZ]
+        // const _posObject = [newPositionX, newPositionY, newPositionZ]
+
+        // const obj = {
+        //   cubeCoor: _cubeObject,
+        //   posVector: _posObject
+        // }
+        // multiDict[element._id] = obj
+        break
+      }
+    }
+  }
+
+
+  let obj = {
+    _orderedPlacesResponse: placesSet,
+    _slotDictResponse: slotDict
+    // _multiDictResponse: multiDict
+  }
+  return obj
+
+  // return multiDict
+
+  // return places
+
+}
+
+
+const AssignHexDict = (_places, defaultCenter, selectedPlace) => {
+
+  let newXyz = slotArrayXYZ
+  let multiDict = {}
+  let slotDict = {}
+  let placesSet = []
+
+
+  const zeroObject = [0, 0, 0]
+  // console.log(JSON.stringify(newCenter.company_name))
+  var closestDistance = 0
+  var farthestDistance = 1000
+
+  let places = _OrderDistanceSeperate(_places, defaultCenter, selectedPlace)
+
+//   console.log(places)
+
+  let newCenterPlace = places[0]
+
+
+
+  multiDict[newCenterPlace._id] = {
+      cubeCoor: zeroObject,
+      posVector: zeroObject
+    }
+  
+    newCenterPlace.posVector = zeroObject
+    newCenterPlace.cubeCoor = zeroObject
+    newCenterPlace.icon_color = 'white'
+    placesSet.push(newCenterPlace)
+
+
+  slotDict["0-0-0"] = newCenterPlace
+
+  for (let index = 1; index < places.length; index++) {
+      // console.log(index + " top " )
+
+      var element = places[index]
+      const angle = bearing(newCenterPlace.businessLocation.coordinates[1], newCenterPlace.businessLocation.coordinates[0], element.businessLocation.coordinates[1], element.businessLocation.coordinates[0])
+    for (let slotIndex = 1; slotIndex < newXyz.length - 1; slotIndex++) {
+      // console.log(angle)
+      let slot = newXyz[slotIndex]
+      let position = slot.posVector
+      let coordinates = slot.coordinate
+      let newCoordinateKey = slot.coordinate[0] + "-" + slot.coordinate[1] + "-" + slot.coordinate[2]
+      if (slotDict[newCoordinateKey]) {
+          continue
+        }
+      if ((slot.rangeMax < slot.rangeMin &&
+          (angle >= slot.rangeMin || angle < slot.rangeMax)) ||
+        (angle >= slot.rangeMin && angle < slot.rangeMax)) {
+        // console.log(angle + "  " + slot.rangeMin + "btw" + slot.rangeMax)
+        
+        element.cubeVector = coordinates
+        element.posVector = position
+        slotDict[newCoordinateKey] = element
+        
+        let color = _colorDict[newCoordinateKey]
+        if (color) {
+          element.icon_color = color
+        } else {
+          element.icon_color = "gray"
+        }
+        
+
+        placesSet.push(element)
+        // const obj = {
+        //   cubeCoor: coordinates,
+        //   posVector: position
+        // }
+        // multiDict[element._id] = obj
+        // console.log(element.company_name)
+        // console.log(index + " hex dict")
+
+        break
+      }
+    }
+  };
+
+  let obj = {
+      _orderedPlacesResponse: placesSet,
+      _slotDictResponse: slotDict
+      // _multiDictResponse: multiDict
+    }
+    return obj
+}
+
+
+
 
 const assignMolecularDict = (_places, defaultCenter, selectedPlace) => {
 	const newXyz = slotArrayXYZ;

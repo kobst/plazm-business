@@ -20,6 +20,7 @@ import {
   FollowedByListUl,
   InnerDescriptionPara,
   SubscribeBtn,
+  InnerBottomBtns,
 } from "../../styled";
 import {
   subscribeToAListAction,
@@ -36,6 +37,18 @@ import useStore from "../../../useState";
 import ValueLoader from "../../../../../utils/loader";
 
 import { useHistory } from "react-router-dom";
+import ButtonBlue from "../../../UI/ButtonBlue";
+
+const getImage = (selectedList) => {
+  if (selectedList && selectedList.media && selectedList.media.length > 0) {
+    const img =
+      selectedList.media.find(({ image_type }) => image_type === "COVER") ||
+      selectedList.media[0];
+    console.log(img, "img");
+    return img["image"];
+  }
+  return EventImg;
+};
 
 const NewInBuzzItems = ({
   data,
@@ -49,14 +62,13 @@ const NewInBuzzItems = ({
   setSelectedId,
   setTotalLists,
   totalLists,
+  displayIn,
 }) => {
   const user = useSelector((state) => state.user.user);
   const [offsetLeft, setOffsetLeft] = useState(0);
   const [offsetTop, setOffsetTop] = useState(0);
   const [loader, setLoader] = useState(false);
-  const [image, setImage] = useState(
-    data && data.media && data.media.length > 0 ? data.media[0].image : EventImg
-  );
+  const [image, setImage] = useState(() => getImage(data));
 
   const setSelectedListId = useStore((state) => state.setSelectedListId);
   const setSelectedList = useStore((state) => state.setSelectedList);
@@ -69,7 +81,8 @@ const NewInBuzzItems = ({
   const displayData = () => {
     const { top, right } = divRef.current.getBoundingClientRect();
     setTimeout(() => {
-      setOffsetLeft(right - 300);
+      const offsetLeftMinus = displayIn === "GRID" ? 190 : 300;
+      setOffsetLeft(right - offsetLeftMinus);
       setOffsetTop(top - 30);
       setModal(true);
       setSelectedId({ id: data._id, heading: heading });
@@ -141,10 +154,11 @@ const NewInBuzzItems = ({
 
   return (
     <>
-      <ItemsWrapper ref={divRef}>
+      <ItemsWrapper ref={divRef} className="UserProfileGridList">
         <CoverImg
           onMouseOver={() => displayData()}
           onMouseLeave={() => hideData()}
+          className="UserProfileCoverImg"
         >
           <img src={image} alt="" onError={() => setImage(EventImg)} />
           {!data.isPublic && data.isPublic !== null && (
@@ -164,7 +178,7 @@ const NewInBuzzItems = ({
                   offsetLeft={offsetLeft}
                   offsetTop={offsetTop}
                 >
-                  <InnerCoverImg>
+                  <InnerCoverImg className="InnerModalCoverImg">
                     <img
                       src={image}
                       alt=""
@@ -213,25 +227,30 @@ const NewInBuzzItems = ({
                     </FollowedByListUl>
                   </FollowedBy>
                   <InnerDescriptionPara>
-                    {data?.description}....
+                    {data?.description?.substring(0, 20)}....
                     <strong onClick={() => ReadMore()}>Read More</strong>
                   </InnerDescriptionPara>
-                  {data?.subscribers.length === 0 ||
-                  !data?.subscribers.find((i) => i._id === user._id) ? (
-                    <SubscribeBtn
-                      onClick={() => listSubscribe()}
-                      disabled={loader}
-                    >
-                      {loader ? <ValueLoader /> : "Subscribe"}
-                    </SubscribeBtn>
-                  ) : (
-                    <SubscribeBtn
-                      onClick={() => listUnSubscribe()}
-                      disabled={loader}
-                    >
-                      {loader ? <ValueLoader /> : "UnSubscribe"}
-                    </SubscribeBtn>
-                  )}
+                  <InnerBottomBtns>
+                    <ButtonBlue onClick={() => ReadMore()}>Visit</ButtonBlue>
+                    {data?.subscribers.length === 0 ||
+                    !data?.subscribers.find((i) => i._id === user._id) ? (
+                      <>
+                        <SubscribeBtn
+                          onClick={() => listSubscribe()}
+                          disabled={loader}
+                        >
+                          {loader ? <ValueLoader /> : "Subscribe"}
+                        </SubscribeBtn>
+                      </>
+                    ) : (
+                      <SubscribeBtn
+                        onClick={() => listUnSubscribe()}
+                        disabled={loader}
+                      >
+                        {loader ? <ValueLoader /> : "UnSubscribe"}
+                      </SubscribeBtn>
+                    )}
+                  </InnerBottomBtns>
                 </DisplayItemContent>
               )}
           </ItemsDescription>

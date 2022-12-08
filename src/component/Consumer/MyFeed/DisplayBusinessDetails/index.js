@@ -40,6 +40,7 @@ const DisplayBusinessDetails = ({
             type={'MyFeedEvent'}
             setSearchIndex={setMyFeedIndex}
             myFeedView={true}
+            isList
           />
         ) : (
           //   to display post for the business

@@ -109,7 +109,6 @@ const GridContainer = () => {
         setDisplacedCenterHexPosition([0, 0, 0]);
         setCamPos([0, 0, 5]);
       } else {
-        // console.log(" nooooo places")
         setOrderedPlaces([]);
         setMultiDict({});
         setPlaceCoordDict({});
@@ -129,13 +128,3 @@ const GridContainer = () => {
 };
 
 export default GridContainer;
-
-
-{/* <div className="radar-container"> */}
-{/* <RadarView /> */}
-{/* </div>  */}
-
-{/* {gridView ? <div className="map-overlay"></div> : <div className="map-overlay-large"></div>} */}
-{/* <div className="map-container"> */}
-{/* <MapView /> */}
-{/* </div>  */}

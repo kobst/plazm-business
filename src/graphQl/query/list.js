@@ -50,6 +50,7 @@ const getUserListsGraphql = (ownerId) => {
                   type
                   media {
                     image
+                    image_type
                   }
                   createdAt
                   updatedAt
@@ -64,13 +65,13 @@ const getUserListsGraphql = (ownerId) => {
 };
 
 /*
-@desc: getUserCreatedAndFollowedListsGraphql query
+@desc: getUserSubscribedListsGraphql query
 */
-const getUserCreatedAndFollowedListsGraphql = (obj) => {
+const getUserSubscribedListsGraphql = (obj) => {
   const graphQl = {
     query: `
-          query GetUserCreatedAndFollowedLists($id: ID!, $value: Int, $limit: Int){
-            getUserCreatedAndFollowedLists (input: {id: $id, value:$value, limit: $limit}){
+          query GetUserSubscribedLists($id: ID!, $value: Int, $limit: Int){
+            getUserSubscribedLists (input: {id: $id, value:$value, limit: $limit}){
               message
               success
               totalLists
@@ -89,6 +90,100 @@ const getUserCreatedAndFollowedListsGraphql = (obj) => {
                   type
                   media {
                     image
+                    image_type
+                  }
+                  createdAt
+                  updatedAt
+                }
+              }
+          }`,
+    variables: {
+      id: obj.id,
+      value: obj.value,
+      limit: obj?.limit || 15,
+    },
+  };
+  return graphQl;
+};
+
+
+/*
+@desc: filterUserListsGraphql query
+*/
+
+const filterUserListsGraphql = (obj) => {
+  const graphQl = {
+    query: `
+          query FetchUserLists($input: userFetchInput!){
+            fetchUserLists(input: $input){
+              message
+              success
+              totalLists
+              type
+              list {
+                  _id
+                  isPublic
+                  ownerId {
+                    _id
+                    name
+                  }
+                  subscribers {
+                    _id
+                    name
+                    photo
+                    
+                  }
+                  name
+                  description
+                  type
+                  media {
+                    image
+                    image_type
+                  }
+                  createdAt
+                  updatedAt
+                }
+              }
+          }`,
+    variables:{
+      input : {
+        id: obj.id,
+        page: obj.page || 1,
+        limit: obj?.limit || 12,
+        created: obj.created || false,
+        subscribed: obj?.subscribed || false,
+      }
+    },
+  };
+  return graphQl;
+};
+
+/*
+@desc: getUserCreatedAndFollowedLists query
+*/
+const getUserCreatedAndFollowedListsGraphql = (obj) => {
+  const graphQl = {
+    query: `
+          query GetUserCreatedAndFollowedLists($id: ID!, $value: Int, $limit: Int){
+            getUserCreatedAndFollowedLists (input: {id: $id, value:$value, limit: $limit}){
+              message
+              success
+              totalLists
+              list {
+                  _id
+                  isPublic
+                  ownerId
+                  subscribers {
+                    _id
+                    name
+                    photo
+                  }
+                  name
+                  description
+                  type
+                  media {
+                    image
+                    image_type
                   }
                   createdAt
                   updatedAt
@@ -125,6 +220,7 @@ const getListDetailsGraphql = (obj) => {
                 }
                 media {
                   image
+                  image_type
                 }
                 updatedAt
               }
@@ -174,6 +270,9 @@ const getListDetailsGraphql = (obj) => {
                 listId {
                   _id
                   name
+                  media {
+                    image
+                  }
                 }
                 totalPosts {
                   totalPosts
@@ -212,6 +311,7 @@ const getMostTrendingListsGraphql = (value) => {
                 isPublic
                 media {
                   image
+                  image_type
                 }
                 ownerId {
                   _id
@@ -251,6 +351,7 @@ const getMostPopularListsGraphql = (value) => {
                 isPublic
                 media {
                   image
+                  image_type
                 }
                 ownerId {
                   _id
@@ -290,6 +391,7 @@ const searchListsGraphql = (obj) => {
                 isPublic
                 media {
                   image
+                  image_type
                 }
                 ownerId
                 subscribers {
@@ -319,4 +421,6 @@ export {
   getMostTrendingListsGraphql,
   getMostPopularListsGraphql,
   searchListsGraphql,
+  getUserSubscribedListsGraphql,
+  filterUserListsGraphql,
 };
