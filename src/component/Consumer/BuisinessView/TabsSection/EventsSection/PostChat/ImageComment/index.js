@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-import CommentStaticImg from "../../../../../../../images/CommentStaticImg.png";
+import React from 'react';
+import styled from 'styled-components';
+import CommentStaticImg from '../../../../../../../images/CommentStaticImg.png';
 
 const BottomBarLikes = styled.div`
   display: flex;
@@ -19,12 +19,12 @@ const BottomBarLikes = styled.div`
   }
 `;
 
-const ImageComment = ({ image }) => {
+const ImageComment = ({image}) => {
   return (
     <>
-      {image !== "" ? (
+      {image !== '' ? (
         <BottomBarLikes>
-          <img src={image !== "" ? image : CommentStaticImg} alt="" />
+          <img src={image !== '' ? image : CommentStaticImg} alt="" />
         </BottomBarLikes>
       ) : null}
     </>

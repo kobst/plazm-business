@@ -1,7 +1,7 @@
 /*
-@desc: findPostComments query
+@desc: findPostCommentsGraphql query
 */
-const findPostComments = (id) => {
+const findPostCommentsGraphql = (id) => {
   const graphQl = {
     query: `
             query GetComment($id: ID!){
@@ -55,9 +55,9 @@ const findPostComments = (id) => {
 };
 
 /*
-@desc: findCommentReplies query
+@desc: findCommentRepliesGraphql query
 */
-const findCommentReplies = (id) => {
+const findCommentRepliesGraphql = (id) => {
   const graphQl = {
     query: `
           query GetReplies($id: ID!){
@@ -88,4 +88,4 @@ const findCommentReplies = (id) => {
   };
   return graphQl;
 };
-export { findPostComments ,findCommentReplies};
+export {findPostCommentsGraphql, findCommentRepliesGraphql};

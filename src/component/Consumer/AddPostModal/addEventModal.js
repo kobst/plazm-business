@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import AllListingsContent from "../AddPostModal/AllListings";
-import CreateListModel from "./createList";
-import CreateEventModal from "./createEvent";
-import ScheduleAnEvent from "./ScheduleAnEvent";
+import React, {useState} from 'react';
+import styled from 'styled-components';
+import AllListingsContent from '../AddPostModal/AllListings';
+import CreateListModel from './createList';
+import CreateEventModal from './createEvent';
+import ScheduleAnEvent from './ScheduleAnEvent';
 
 const ModalContent = styled.div`
   width: 100%;
@@ -31,17 +31,17 @@ const ModalContent = styled.div`
   }
 `;
 
-const AddEventModal = ({ closeModal }) => {
+const AddEventModal = ({closeModal}) => {
   const [displayList, setDisplayList] = useState(false);
   const [displayCreateList, setDisplayCreateList] = useState(false);
   const [selectedListForPost, setSelectedListForPost] = useState(null);
   const [displayCalendar, setDisplayCalendar] = useState(false);
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState('');
   const [mentionArrayList, setMentionArrayList] = useState([]);
   const [mentionArrayUser, setMentionArrayUser] = useState([]);
   const [eventDetails, setEventDetails] = useState(null);
-  const [eventTitle, setEventTitle] = useState("");
-  const [eventDescription, setEventDescription] = useState("");
+  const [eventTitle, setEventTitle] = useState('');
+  const [eventDescription, setEventDescription] = useState('');
   const [imageUrl, setImageUrl] = useState(null);
   const [imageCopy, setImageCopy] = useState([]);
   const [imageUpload, setImageUpload] = useState(null);

@@ -1,7 +1,7 @@
 
-import React from 'react'
-import styled from 'styled-components'
-import CrossIcon from '../../../images/cross-brown.svg'
+import React from 'react';
+import styled from 'styled-components';
+import CrossIcon from '../../../images/cross-brown.svg';
 
 const BadgesText = styled.label`
 height: 34px;
@@ -31,14 +31,13 @@ img{
   min-width:147px;
   font-size: 12px;
 }
-`
-
+`;
 
 
 const Badges = (props) => {
-    return(
+  return (
     <BadgesText>{props.name} <img src={CrossIcon} alt="Cross" /></BadgesText>
-    )
-}
+  );
+};
 
-export default Badges
+export default Badges;

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import "./style.css";
-import { Auth } from "aws-amplify";
-import { getMessage } from "../../config";
-import ValueLoader from "../../utils/loader";
-import Wrapper from "../../component/Login-Register/Wrapper";
-import LoginForm from "../../component/Login-Register/Form-Components/Login-Form";
-import { useHistory } from "react-router-dom";
+import React, {useState, useEffect} from 'react';
+import './style.css';
+import {Auth} from 'aws-amplify';
+import {getMessage} from '../../config';
+import ValueLoader from '../../utils/loader';
+import Wrapper from '../../component/Login-Register/Wrapper';
+import LoginForm from '../../component/Login-Register/Form-Components/Login-Form';
+import {useHistory} from 'react-router-dom';
 
 const renderMessage = getMessage();
 
@@ -23,16 +23,15 @@ const Login = (props) => {
   const [disable, setDisable] = useState(false);
 
   useEffect(() => {
-    let updateUser = async (authState) => {
+    const updateUser = async (authState) => {
       try {
         await Auth.currentAuthenticatedUser();
-        history.push("/business");
-      } catch {
+        history.push('/business');
+      } catch (error) {
         setLoginValue(true);
       }
     };
     updateUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const signIn = () => {
@@ -40,29 +39,33 @@ const Login = (props) => {
       username: user,
       password: password,
     })
-      // eslint-disable-next-line no-sequences
-      .then((data) => {
-        if (data.attributes["custom:type"] === "business")
-          history.push("/business");
-        else if (
-          data.attributes["custom:type"] === "curator" ||
-          data.attributes["custom:type"] === "customer" ||
-          data.attributes["custom:type"] === "consumer"
-        )
-          history.push("/");
-        else history.push("/business/login");
-      })
-      .catch((err) => {
-        if (err) {
-          return setmessage(err.message), setError(true), setDisable(false);
-        }
-      });
+    // eslint-disable-next-line no-sequences
+        .then((data) => {
+          if (data.attributes['custom:type'] === 'business') {
+            history.push('/business');
+          } else if (
+            data.attributes['custom:type'] === 'curator' ||
+					data.attributes['custom:type'] === 'customer' ||
+					data.attributes['custom:type'] === 'consumer'
+          ) {
+            history.push('/');
+          } else history.push('/business/login');
+        })
+        .catch((err) => {
+          if (err) {
+            return (
+              setmessage(err.message),
+              setError(true),
+              setDisable(false)
+            );
+          }
+        });
   };
 
   function validateEmail(user) {
     // eslint-disable-next-line no-useless-escape
     const re =
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+			/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(user).toLowerCase());
   }
 
@@ -71,13 +74,13 @@ const Login = (props) => {
     setError(false);
     setmessage();
     setDisable(true);
-    if (Validation()) {
+    if (validation()) {
       setLoader(true);
       signIn();
     }
   };
 
-  const Validation = () => {
+  const validation = () => {
     if (!user) {
       setuserError(true);
       setDisable(false);
@@ -103,9 +106,9 @@ const Login = (props) => {
     setLoader(false);
     setuserError(false);
     setPasswordError(false);
-    if (e.target.id === "username") {
+    if (e.target.id === 'username') {
       setUser(e.target.value.trim());
-    } else if (e.target.id === "password") {
+    } else if (e.target.id === 'password') {
       setPassword(e.target.value);
     }
   };
@@ -113,33 +116,33 @@ const Login = (props) => {
   return (
     <>
       {loginValue === true ? (
-        <Wrapper
-          type={type}
-          page="login"
-          heading={renderMessage.Welcome}
-          welcomeMessage={
-            type.includes("business")
-              ? renderMessage.Login_Mess
-              : renderMessage.Login_Mess_Consumer
-          }
-        >
-          <LoginForm
-            type={type}
-            error={error}
-            userError={userError}
-            passwordError={passwordError}
-            loader={loader}
-            message={message}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            disable={disable}
-          />
-        </Wrapper>
-      ) : (
-        <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
-          <ValueLoader />
-        </div>
-      )}
+				<Wrapper
+				  type={type}
+				  page="login"
+				  heading={renderMessage.Welcome}
+				  welcomeMessage={
+						type.includes('business') ?
+							renderMessage.Login_Mess :
+							renderMessage.Login_Mess_Consumer
+				  }
+				>
+				  <LoginForm
+				    type={type}
+				    error={error}
+				    userError={userError}
+				    passwordError={passwordError}
+				    loader={loader}
+				    message={message}
+				    handleChange={handleChange}
+				    handleSubmit={handleSubmit}
+				    disable={disable}
+				  />
+				</Wrapper>
+			) : (
+				<div style={{textAlign: 'center', margin: ' 40px auto 0'}}>
+				  <ValueLoader />
+				</div>
+			)}
     </>
   );
 };

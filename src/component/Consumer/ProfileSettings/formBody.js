@@ -1,10 +1,10 @@
-import React from "react";
-import styled from "styled-components";
-import Checkbox from "../UI/Checkbox";
-import Input from "../UI/FormikInput";
+import React from 'react';
+import styled from 'styled-components';
+import Checkbox from '../UI/Checkbox';
+import Input from '../UI/FormikInput';
 
 const InputContainer = styled.div`
-  border: 1px solid ${(props) => (props.usererror ? "#FF7171" : "#ffffff")};
+  border: 1px solid ${(props) => (props.usererror ? '#FF7171' : '#ffffff')};
   min-height: 60px;
   font-size: 16px;
   line-height: 21px;
@@ -40,16 +40,16 @@ const CheckboxContainer = styled.div`
 /*
 *@desc: form body for update profile
 */
-function FormBody({loader,setResponse}) {
+function FormBody({loader, setResponse}) {
   return (
     <>
       <InputContainer>
         <LabelText>Name</LabelText>
-        <Input type="text" name="name" disabled={loader} onFocus={()=>setResponse("")}/>
+        <Input type="text" name="name" disabled={loader} onFocus={()=>setResponse('')}/>
       </InputContainer>
       <InputContainer>
         <LabelText>Phone Number</LabelText>
-        <Input type="text" name="phoneNumber" disabled={loader} onFocus={()=>setResponse("")}/>
+        <Input type="text" name="phoneNumber" disabled={loader} onFocus={()=>setResponse('')}/>
       </InputContainer>
       <InputContainer>
         <LabelText>Email Address</LabelText>

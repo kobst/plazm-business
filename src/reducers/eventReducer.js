@@ -1,24 +1,23 @@
-import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
-import moment from "moment";
+import {createSlice, createAsyncThunk, current} from '@reduxjs/toolkit';
+import moment from 'moment';
 import {
-  addLikeToEvents,
-  createEvent,
-  // fetchEvent,
-  fetchEventForAWeek,
-  findCommentReplies,
-  findPostComments,
-} from "../graphQl";
-import { graphQlEndPoint } from "../Api/graphQl";
+  addLikeToEventsGraphql,
+  createEventGraphql,
+  fetchEventForAWeekGraphql,
+  findCommentRepliesGraphql,
+  findPostCommentsGraphql,
+} from '../graphQl';
+import {graphQlEndPoint} from '../Api/graphQl';
 
 /*
  * @desc:  to fetch events of current day for a particular business
  * @params: businessId,date,day
  */
 export const fetchEventsForTheDay = createAsyncThunk(
-  "data/fetchEventsForTheDay",
-  async () => {
-    return true;
-  }
+    'data/fetchEventsForTheDay',
+    async () => {
+      return true;
+    },
 );
 
 /*
@@ -26,17 +25,17 @@ export const fetchEventsForTheDay = createAsyncThunk(
  * @params: businessId,date
  */
 export const fetchEventsForTheWeek = createAsyncThunk(
-  "data/fetchEventsForTheWeek",
-  async ({ businessId, date, userId }) => {
-    const obj = {
-      date: date,
-      id: businessId,
-      userId: userId,
-    };
-    const graphQl = fetchEventForAWeek(obj);
-    const response = await graphQlEndPoint(graphQl);
-    return response.data.getEventsForTheWeek.event;
-  }
+    'data/fetchEventsForTheWeek',
+    async ({businessId, date, userId}) => {
+      const obj = {
+        date: date,
+        id: businessId,
+        userId: userId,
+      };
+      const graphQl = fetchEventForAWeekGraphql(obj);
+      const response = await graphQlEndPoint(graphQl);
+      return response.data.getEventsForTheWeek.event;
+    },
 );
 
 /*
@@ -44,12 +43,12 @@ export const fetchEventsForTheWeek = createAsyncThunk(
  * @params: eventId
  */
 export const fetchEventComments = createAsyncThunk(
-  "data/fetchEventComments",
-  async (eventId) => {
-    const graphQl = findPostComments(eventId);
-    const response = await graphQlEndPoint(graphQl);
-    return { data: response.data.getComment, eventId: eventId };
-  }
+    'data/fetchEventComments',
+    async (eventId) => {
+      const graphQl = findPostCommentsGraphql(eventId);
+      const response = await graphQlEndPoint(graphQl);
+      return {data: response.data.getComment, eventId: eventId};
+    },
 );
 
 /*
@@ -57,10 +56,10 @@ export const fetchEventComments = createAsyncThunk(
  * @params: comments
  */
 export const addCommentViaSocket = createAsyncThunk(
-  "data/addEventCommentViaSocket",
-  async (obj) => {
-    return obj;
-  }
+    'data/addEventCommentViaSocket',
+    async (obj) => {
+      return obj;
+    },
 );
 
 /*
@@ -68,23 +67,23 @@ export const addCommentViaSocket = createAsyncThunk(
  * @params: comments
  */
 export const addReplyViaSocket = createAsyncThunk(
-  "data/addEventReplyViaSocket",
-  async (obj) => {
-    return obj;
-  }
+    'data/addEventReplyViaSocket',
+    async (obj) => {
+      return obj;
+    },
 );
 
 /*
  * @desc:  to add like to event
  * @params: comments
  */
-export const AddLikeToEvent = createAsyncThunk(
-  "data/AddLikeToEvent",
-  async (obj) => {
-    const graphQl = addLikeToEvents(obj);
-    const response = await graphQlEndPoint(graphQl);
-    return response.data.addLikeToEvents;
-  }
+export const addLikeToEvent = createAsyncThunk(
+    'data/AddLikeToEvent',
+    async (obj) => {
+      const graphQl = addLikeToEventsGraphql(obj);
+      const response = await graphQlEndPoint(graphQl);
+      return response.data.addLikeToEvents;
+    },
 );
 
 /*
@@ -92,10 +91,10 @@ export const AddLikeToEvent = createAsyncThunk(
  * @params: like
  */
 export const addLikeViaSocket = createAsyncThunk(
-  "data/addEventLikeViaSocket",
-  async (obj) => {
-    return obj;
-  }
+    'data/addEventLikeViaSocket',
+    async (obj) => {
+      return obj;
+    },
 );
 
 /*
@@ -103,10 +102,10 @@ export const addLikeViaSocket = createAsyncThunk(
  * @params: like
  */
 export const addLikeToCommentViaSocket = createAsyncThunk(
-  "data/addLikeToEventCommentViaSocket",
-  async (obj) => {
-    return obj;
-  }
+    'data/addLikeToEventCommentViaSocket',
+    async (obj) => {
+      return obj;
+    },
 );
 
 /*
@@ -114,12 +113,12 @@ export const addLikeToCommentViaSocket = createAsyncThunk(
  * @params: postId
  */
 export const fetchCommentReplies = createAsyncThunk(
-  "data/fetchEventCommentReplies",
-  async (businessId) => {
-    const graphQl = findCommentReplies(businessId);
-    const response = await graphQlEndPoint(graphQl);
-    return response.data.getReplies;
-  }
+    'data/fetchEventCommentReplies',
+    async (businessId) => {
+      const graphQl = findCommentRepliesGraphql(businessId);
+      const response = await graphQlEndPoint(graphQl);
+      return response.data.getReplies;
+    },
 );
 
 /*
@@ -127,12 +126,12 @@ export const fetchCommentReplies = createAsyncThunk(
  * @params: obj
  */
 export const addEvent = createAsyncThunk(
-  "data/addEvent",
-  async ({ obj, user }) => {
-    const graphQl = createEvent(obj);
-    const response = await graphQlEndPoint(graphQl);
-    return { data: response.data.addEvent, user: user };
-  }
+    'data/addEvent',
+    async ({obj, user}) => {
+      const graphQl = createEventGraphql(obj);
+      const response = await graphQlEndPoint(graphQl);
+      return {data: response.data.addEvent, user: user};
+    },
 );
 
 /*
@@ -140,17 +139,17 @@ export const addEvent = createAsyncThunk(
  * @params: businessId,date
  */
 export const fetchInitialWeekEvents = createAsyncThunk(
-  "data/fetchInitialWeekEvents",
-  async ({ businessId, date, userId }) => {
-    const obj = {
-      date: date,
-      id: businessId,
-      userId: userId,
-    };
-    const graphQl = fetchEventForAWeek(obj);
-    const response = await graphQlEndPoint(graphQl);
-    return response.data.getEventsForTheWeek.event;
-  }
+    'data/fetchInitialWeekEvents',
+    async ({businessId, date, userId}) => {
+      const obj = {
+        date: date,
+        id: businessId,
+        userId: userId,
+      };
+      const graphQl = fetchEventForAWeekGraphql(obj);
+      const response = await graphQlEndPoint(graphQl);
+      return response.data.getEventsForTheWeek.event;
+    },
 );
 
 /*
@@ -158,10 +157,10 @@ export const fetchInitialWeekEvents = createAsyncThunk(
  * @params: obj
  */
 export const addEventViaSocket = createAsyncThunk(
-  "data/addEventViaSocket",
-  async (obj) => {
-    return obj;
-  }
+    'data/addEventViaSocket',
+    async (obj) => {
+      return obj;
+    },
 );
 
 /*
@@ -169,10 +168,10 @@ export const addEventViaSocket = createAsyncThunk(
  * @params: eventId
  */
 export const deleteEventViaSocket = createAsyncThunk(
-  "data/deleteEventViaSocket",
-  async (id) => {
-    return id;
-  }
+    'data/deleteEventViaSocket',
+    async (id) => {
+      return id;
+    },
 );
 
 /*
@@ -180,13 +179,13 @@ export const deleteEventViaSocket = createAsyncThunk(
  * @params: obj
  */
 export const editEventViaSocket = createAsyncThunk(
-  "data/editEventViaSocket",
-  async (obj) => {
-    return obj;
-  }
+    'data/editEventViaSocket',
+    async (obj) => {
+      return obj;
+    },
 );
 export const slice = createSlice({
-  name: "event",
+  name: 'event',
   initialState: {
     loading: false,
     loadingForAWeek: false,
@@ -222,7 +221,7 @@ export const slice = createSlice({
       state.date = currentDate;
       state.initialWeekEvents = [];
 
-      const endOfWeek = moment(currentDate1).startOf("week").toDate();
+      const endOfWeek = moment(currentDate1).startOf('week').toDate();
       endOfWeek.setUTCHours(0, 0, 0, 0);
       state.selectedDate = endOfWeek;
     },
@@ -232,19 +231,19 @@ export const slice = createSlice({
     setSelectedDate: (state, action) => {
       const currentDate = new Date(state.date);
       const arr = [
-        { day: "sun", val: 0 },
-        { day: "mon", val: 1 },
-        { day: "tue", val: 2 },
-        { day: "wed", val: 3 },
-        { day: "thurs", val: 4 },
-        { day: "fri", val: 5 },
-        { day: "sat", val: 6 },
+        {day: 'sun', val: 0},
+        {day: 'mon', val: 1},
+        {day: 'tue', val: 2},
+        {day: 'wed', val: 3},
+        {day: 'thurs', val: 4},
+        {day: 'fri', val: 5},
+        {day: 'sat', val: 6},
       ];
       const x = arr.filter((i) => i.day === action.payload);
       const startOfWeek = moment(currentDate)
-        .startOf("week")
-        .add(x[0].val, "d")
-        .toDate();
+          .startOf('week')
+          .add(x[0].val, 'd')
+          .toDate();
       startOfWeek.setUTCHours(0, 0, 0, 0);
       state.selectedDate = startOfWeek;
     },
@@ -263,13 +262,13 @@ export const slice = createSlice({
         list:
           action.payload.listId.length > 0 ? action.payload.listId[0] : null,
         likes:
-          action.payload.likesData && action.payload.likesData.length > 0
-            ? action.payload.likesData
-            : action.payload.likes,
+          action.payload.likesData && action.payload.likesData.length > 0 ?
+            action.payload.likesData :
+            action.payload.likes,
         comments: [],
-        totalComments: action.payload.totalComments[0]
-          ? action.payload.totalComments[0].totalCount
-          : 0,
+        totalComments: action.payload.totalComments[0] ?
+          action.payload.totalComments[0].totalCount :
+          0,
       };
       state.topEventId = obj;
     },
@@ -285,14 +284,10 @@ export const slice = createSlice({
       if (state.loading) {
         state.loading = false;
         if (action.payload) {
-          // let arr = action.payload.map((obj) => ({
-          //   ...obj,
-          //   comments: [],
-          // }));
-          let arr = current(state.initialWeekEvents).filter(
-            (i) =>
-              moment(i.eventSchedule.start_time).format("DD-MM-YYYY") ===
-              moment(state.selectedDate).format("DD-MM-YYYY")
+          const arr = current(state.initialWeekEvents).filter(
+              (i) =>
+                moment(i.eventSchedule.start_time).format('DD-MM-YYYY') ===
+              moment(state.selectedDate).format('DD-MM-YYYY'),
           );
           state.events = arr.sort((a, b) => {
             return (
@@ -320,7 +315,7 @@ export const slice = createSlice({
       if (state.loadingForAWeek) {
         state.loadingForAWeek = false;
         if (action.payload) {
-          let arr = action.payload.map((obj) => ({
+          const arr = action.payload.map((obj) => ({
             ...obj,
             comments: [],
           }));
@@ -356,7 +351,7 @@ export const slice = createSlice({
       if (state.loadingForInitialWeek) {
         state.loadingForInitialWeek = false;
         if (action.payload) {
-          let arr = action.payload.map((obj) => ({
+          const arr = action.payload.map((obj) => ({
             ...obj,
             comments: [],
           }));
@@ -385,18 +380,18 @@ export const slice = createSlice({
         state.loadingEventComments = false;
         if (action.payload) {
           const findEvent = current(state.events).filter(
-            (i) => i._id === action.payload.eventId
+              (i) => i._id === action.payload.eventId,
           )[0];
           const findOtherEvents = current(state.events).filter(
-            (i) => i._id !== action.payload.eventId
+              (i) => i._id !== action.payload.eventId,
           );
           let eventsArr = [];
-          let arr = action.payload.data.post.map((obj) => ({
+          const arr = action.payload.data.post.map((obj) => ({
             ...obj.comment,
             totalReplies: obj.totalReplies,
             replies: [],
           }));
-          eventsArr.push({ ...findEvent, comments: arr });
+          eventsArr.push({...findEvent, comments: arr});
           eventsArr = eventsArr.concat(findOtherEvents);
           if (state.weekBtnClicked) {
             state.events = eventsArr.sort((a, b) => {
@@ -419,7 +414,7 @@ export const slice = createSlice({
             state.topEvent &&
             state.topEventId._id === action.payload.eventId
           ) {
-            let arr = action.payload.data.post.map((obj) => ({
+            const arr = action.payload.data.post.map((obj) => ({
               ...obj.comment,
               totalReplies: obj.totalReplies,
               replies: [],
@@ -447,19 +442,19 @@ export const slice = createSlice({
       if (state.loadingReplies) {
         state.loadingReplies = false;
         if (action.payload) {
-          let posts = current(state.events).filter(
-            (i) => i._id !== action.payload.postId
+          const posts = current(state.events).filter(
+              (i) => i._id !== action.payload.postId,
           );
-          let posts1 = current(state.events).filter(
-            (i) => i._id === action.payload.postId
+          const posts1 = current(state.events).filter(
+              (i) => i._id === action.payload.postId,
           )[0];
           let dummy1 = [];
           if (posts1.comments.length > 0) {
-            let findComment = posts1.comments.filter(
-              (i) => i._id === action.payload.commentId
+            const findComment = posts1.comments.filter(
+                (i) => i._id === action.payload.commentId,
             );
-            let findComment1 = posts1.comments.filter(
-              (i) => i._id !== action.payload.commentId
+            const findComment1 = posts1.comments.filter(
+                (i) => i._id !== action.payload.commentId,
             );
             let newArr = [];
             newArr = newArr.concat({
@@ -497,11 +492,11 @@ export const slice = createSlice({
             state.topEvent &&
             state.topEventId._id === action.payload.postId
           ) {
-            let findComment = state.topEventId.comments.filter(
-              (i) => i._id === action.payload.commentId
+            const findComment = state.topEventId.comments.filter(
+                (i) => i._id === action.payload.commentId,
             );
-            let findComment1 = state.topEventId.comments.filter(
-              (i) => i._id !== action.payload.commentId
+            const findComment1 = state.topEventId.comments.filter(
+                (i) => i._id !== action.payload.commentId,
             );
             let newArr = [];
             newArr = newArr.concat({
@@ -530,10 +525,10 @@ export const slice = createSlice({
     [addCommentViaSocket.fulfilled]: (state, action) => {
       if (action.payload) {
         const findEvent = current(state.events).filter(
-          (i) => i._id === action.payload.commentInfo.itemId
+            (i) => i._id === action.payload.commentInfo.itemId,
         );
         const findOtherEvents = current(state.events).filter(
-          (i) => i._id !== action.payload.commentInfo.itemId
+            (i) => i._id !== action.payload.commentInfo.itemId,
         );
         if (
           findEvent &&
@@ -590,20 +585,20 @@ export const slice = createSlice({
     },
     [addReplyViaSocket.fulfilled]: (state, action) => {
       if (action.payload) {
-        let events = current(state.events).filter(
-          (i) => i._id !== action.payload.postId
+        const events = current(state.events).filter(
+            (i) => i._id !== action.payload.postId,
         );
-        let events1 = current(state.events).filter(
-          (i) => i._id === action.payload.postId
+        const events1 = current(state.events).filter(
+            (i) => i._id === action.payload.postId,
         )[0];
         if (events1.comments.length > 0) {
-          let findComment = events1.comments.filter(
-            (i) => i._id === action.payload.commentId
+          const findComment = events1.comments.filter(
+              (i) => i._id === action.payload.commentId,
           )[0];
-          let findComment1 = events1.comments.filter(
-            (i) => i._id !== action.payload.commentId
+          const findComment1 = events1.comments.filter(
+              (i) => i._id !== action.payload.commentId,
           );
-          let replies = findComment.replies.concat({
+          const replies = findComment.replies.concat({
             ...action.payload.reply,
             userId: {
               _id: action.payload.userId,
@@ -611,15 +606,15 @@ export const slice = createSlice({
               photo: action.payload.photo,
             },
           });
-          let commentsSort = findComment1
-            .concat({
-              ...findComment,
-              replies: replies,
-              totalReplies: findComment.totalReplies + 1,
-            })
-            .sort((a, b) => {
-              return new Date(a.createdAt) - new Date(b.createdAt);
-            });
+          const commentsSort = findComment1
+              .concat({
+                ...findComment,
+                replies: replies,
+                totalReplies: findComment.totalReplies + 1,
+              })
+              .sort((a, b) => {
+                return new Date(a.createdAt) - new Date(b.createdAt);
+              });
           let dummy1 = [];
           dummy1.push({
             ...events1,
@@ -644,13 +639,13 @@ export const slice = createSlice({
         }
         /** to add a like to reply via socket for top event */
         if (state.topEvent && state.topEventId._id === action.payload.postId) {
-          let findComment = state.topEventId.comments.filter(
-            (i) => i._id === action.payload.commentId
+          const findComment = state.topEventId.comments.filter(
+              (i) => i._id === action.payload.commentId,
           )[0];
-          let findComment1 = state.topEventId.comments.filter(
-            (i) => i._id !== action.payload.commentId
+          const findComment1 = state.topEventId.comments.filter(
+              (i) => i._id !== action.payload.commentId,
           );
-          let replies = findComment.replies.concat({
+          const replies = findComment.replies.concat({
             ...action.payload.reply,
             userId: {
               _id: action.payload.userId,
@@ -658,15 +653,15 @@ export const slice = createSlice({
               photo: action.payload.photo,
             },
           });
-          let commentsSort = findComment1
-            .concat({
-              ...findComment,
-              replies: replies,
-              totalReplies: findComment.totalReplies + 1,
-            })
-            .sort((a, b) => {
-              return new Date(a.createdAt) - new Date(b.createdAt);
-            });
+          const commentsSort = findComment1
+              .concat({
+                ...findComment,
+                replies: replies,
+                totalReplies: findComment.totalReplies + 1,
+              })
+              .sort((a, b) => {
+                return new Date(a.createdAt) - new Date(b.createdAt);
+              });
           state.topEventId = {
             ...state.topEventId,
             comments: commentsSort,
@@ -676,14 +671,14 @@ export const slice = createSlice({
     },
     [addLikeViaSocket.fulfilled]: (state, action) => {
       if (action.payload) {
-        let findPost = current(state.events).filter(
-          (i) => i._id !== action.payload.postId
+        const findPost = current(state.events).filter(
+            (i) => i._id !== action.payload.postId,
         );
-        let findPost1 = current(state.events).filter(
-          (i) => i._id === action.payload.postId
+        const findPost1 = current(state.events).filter(
+            (i) => i._id === action.payload.postId,
         );
         if (findPost1 && findPost1.length > 0) {
-          let likes = findPost1[0].likes.concat(action.payload.like);
+          const likes = findPost1[0].likes.concat(action.payload.like);
           let dummy1 = [];
           dummy1.push({
             ...findPost1[0],
@@ -717,28 +712,28 @@ export const slice = createSlice({
     },
     [addLikeToCommentViaSocket.fulfilled]: (state, action) => {
       if (action.payload) {
-        let findPost = current(state.events).filter(
-          (i) => i._id !== action.payload.postId
+        const findPost = current(state.events).filter(
+            (i) => i._id !== action.payload.postId,
         );
-        let findPost1 = current(state.events).filter(
-          (i) => i._id === action.payload.postId
+        const findPost1 = current(state.events).filter(
+            (i) => i._id === action.payload.postId,
         );
         if (findPost1 && findPost1.length > 0) {
           if (findPost1[0].comments.length > 0) {
-            let findComment = findPost1[0].comments.filter(
-              (i) => i._id === action.payload.commentId
+            const findComment = findPost1[0].comments.filter(
+                (i) => i._id === action.payload.commentId,
             );
-            let findComment1 = findPost1[0].comments.filter(
-              (i) => i._id !== action.payload.commentId
+            const findComment1 = findPost1[0].comments.filter(
+                (i) => i._id !== action.payload.commentId,
             );
 
             if (findComment && findComment.length > 0) {
-              let likes = findComment[0].likes.concat(action.payload.like);
-              let commentsSort = findComment1
-                .concat({ ...findComment[0], likes: likes })
-                .sort((a, b) => {
-                  return new Date(a.createdAt) - new Date(b.createdAt);
-                });
+              const likes = findComment[0].likes.concat(action.payload.like);
+              const commentsSort = findComment1
+                  .concat({...findComment[0], likes: likes})
+                  .sort((a, b) => {
+                    return new Date(a.createdAt) - new Date(b.createdAt);
+                  });
               let dummy1 = [];
               dummy1.push({
                 ...findPost1[0],
@@ -766,20 +761,20 @@ export const slice = createSlice({
         /** to add comments for top event */
         if (state.topEvent && state.topEventId._id === action.payload.postId) {
           if (state.topEventId.comments.length > 0) {
-            let findComment = state.topEventId.comments.filter(
-              (i) => i._id === action.payload.commentId
+            const findComment = state.topEventId.comments.filter(
+                (i) => i._id === action.payload.commentId,
             );
-            let findComment1 = state.topEventId.comments.filter(
-              (i) => i._id !== action.payload.commentId
+            const findComment1 = state.topEventId.comments.filter(
+                (i) => i._id !== action.payload.commentId,
             );
 
             if (findComment && findComment.length > 0) {
-              let likes = findComment[0].likes.concat(action.payload.like);
-              let commentsSort = findComment1
-                .concat({ ...findComment[0], likes: likes })
-                .sort((a, b) => {
-                  return new Date(a.createdAt) - new Date(b.createdAt);
-                });
+              const likes = findComment[0].likes.concat(action.payload.like);
+              const commentsSort = findComment1
+                  .concat({...findComment[0], likes: likes})
+                  .sort((a, b) => {
+                    return new Date(a.createdAt) - new Date(b.createdAt);
+                  });
               state.topEventId = {
                 ...state.topEventId,
                 comments: commentsSort,
@@ -792,9 +787,9 @@ export const slice = createSlice({
     [addEvent.fulfilled]: (state, action) => {
       if (action.payload && action.payload.success) {
         if (
-          moment(state.selectedDate).format("DD MMM YYYY") ===
+          moment(state.selectedDate).format('DD MMM YYYY') ===
           moment(action.payload.data.event.eventSchedule.start_time).format(
-            "DD MMM YYYY"
+              'DD MMM YYYY',
           )
         ) {
           const arr = state.events.concat({
@@ -837,7 +832,7 @@ export const slice = createSlice({
       });
 
       const initialWeekEvents = state.initialWeekEvents.concat(
-        action.payload.event
+          action.payload.event,
       );
       state.initialWeekEvents = initialWeekEvents.sort((a, b) => {
         return (
@@ -856,7 +851,7 @@ export const slice = createSlice({
       });
 
       const deleteInitialWeekEvents = state.initialWeekEvents.filter(
-        (i) => i._id !== action.payload
+          (i) => i._id !== action.payload,
       );
       state.initialWeekEvents = deleteInitialWeekEvents.sort((a, b) => {
         return (
@@ -867,7 +862,7 @@ export const slice = createSlice({
     },
     [editEventViaSocket.fulfilled]: (state, action) => {
       const findEvent = state.events.filter(
-        (i) => i._id === action.payload._id
+          (i) => i._id === action.payload._id,
       );
       if (findEvent && findEvent.length > 0) {
         let arr = state.events.filter((i) => i._id !== action.payload._id);
@@ -880,14 +875,14 @@ export const slice = createSlice({
         });
       }
       const findInitialEvent = state.initialWeekEvents.filter(
-        (i) => i._id === action.payload._id
+          (i) => i._id === action.payload._id,
       );
       if (findInitialEvent) {
         let deleteInitialWeekEvents = state.initialWeekEvents.filter(
-          (i) => i._id !== action.payload._id
+            (i) => i._id !== action.payload._id,
         );
         deleteInitialWeekEvents = deleteInitialWeekEvents.concat(
-          action.payload
+            action.payload,
         );
         state.initialWeekEvents = deleteInitialWeekEvents.sort((a, b) => {
           return (

@@ -1,26 +1,26 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { MdClose } from "react-icons/md";
-import { MentionsInput, Mention } from "react-mentions";
-import { useDispatch, useSelector } from "react-redux";
-import { unwrapResult } from "@reduxjs/toolkit";
-import { findAllUsers } from "../../../../reducers/consumerReducer";
+import React, {useEffect, useState} from 'react';
+import styled from 'styled-components';
+import {MdClose} from 'react-icons/md';
+import {MentionsInput, Mention} from 'react-mentions';
+import {useDispatch, useSelector} from 'react-redux';
+import {unwrapResult} from '@reduxjs/toolkit';
+import {findAllUsers} from '../../../../reducers/consumerReducer';
 import {
-  AddPostToList,
+  addPostToList,
   findAllLists,
-  RemovePostFromAList,
-} from "../../../../reducers/listReducer";
-import { addPostToBusiness } from "../../../../reducers/businessReducer";
+  removePostFromAList,
+} from '../../../../reducers/listReducer';
+import {addPostToBusiness} from '../../../../reducers/businessReducer';
 import {
   updatePostInMyFeed,
   updatePostToBusiness,
   deletePostInMyFeed,
-} from "../../../../reducers/myFeedReducer";
-import BottomButtons from "../BottomButtons";
-import AddImageImg from "../../../../images/addImage.svg";
-import SelectedListing from "../SelectedListing";
-import PostImage from "../PostImage";
-import error from "../../../../constants";
+} from '../../../../reducers/myFeedReducer';
+import BottomButtons from '../BottomButtons';
+import AddImageImg from '../../../../images/addImage.svg';
+import SelectedListing from '../SelectedListing';
+import PostImage from '../PostImage';
+import error from '../../../../constants';
 
 const bucket = process.env.REACT_APP_BUCKET;
 
@@ -167,7 +167,7 @@ const ErrorDiv = styled.div`
 `;
 
 const InputContainer = styled.div`
-  border: 1px solid ${(props) => (props.usererror ? "#FF7171" : "#ffffff")};
+  border: 1px solid ${(props) => (props.usererror ? '#FF7171' : '#ffffff')};
   min-height: 60px;
   font-size: 16px;
   line-height: 21px;
@@ -202,18 +202,18 @@ const ModalPostContent = ({
   const [loader, setLoader] = useState(false);
   const users = useSelector((state) => state.consumer.users);
   const lists = useSelector((state) => state.list.lists);
-  const [imageError, setImageError] = useState("");
+  const [imageError, setImageError] = useState('');
   const ws = useSelector((state) => state.user.ws);
   const user = useSelector((state) => state.user.user);
   const business = useSelector((state) => state.business.business);
-  const [descriptionError, setDescriptionError] = useState("");
-  const [listError, setListError] = useState("");
-  let allData = [...users, ...lists];
-  let data = allData.sort(function (a, b) {
+  const [descriptionError, setDescriptionError] = useState('');
+  const [listError, setListError] = useState('');
+  const allData = [...users, ...lists];
+  const data = allData.sort(function(a, b) {
     return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
   });
   const dispatch = useDispatch();
-  let userMentionData = data.map((myUser) => ({
+  const userMentionData = data.map((myUser) => ({
     id: myUser._id,
     display: `@${myUser.name}`,
   }));
@@ -256,35 +256,35 @@ const ModalPostContent = ({
   const uploadImage = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
-      const idxDot = selectedFile.name.lastIndexOf(".") + 1;
+      const idxDot = selectedFile.name.lastIndexOf('.') + 1;
       const extFile = selectedFile.name
-        .substr(idxDot, selectedFile.name.length)
-        .toLowerCase();
-      if (extFile === "jpeg" || extFile === "png" || extFile === "jpg") {
-        setImageError("");
+          .substr(idxDot, selectedFile.name.length)
+          .toLowerCase();
+      if (extFile === 'jpeg' || extFile === 'png' || extFile === 'jpg') {
+        setImageError('');
         setImageUpload(URL.createObjectURL(e.target.files[0]));
         setImageFile(selectedFile);
       } else {
-        setImageError("Only jpg/jpeg and png,files are allowed!");
+        setImageError('Only jpg/jpeg and png,files are allowed!');
       }
     }
   };
   /*
    * @desc: to get folder_name in which image needs to be stored in s3 bucket
    */
-  const folderName = () => {
+  const getFolderName = () => {
     /* to remove all special characters except space */
-    const removeSpecialCharacter = user.name.replace(/[^a-zA-Z ]/g, "");
+    const removeSpecialCharacter = user.name.replace(/[^a-zA-Z ]/g, '');
     /* to replace all spaces to underscore */
-    const replacedName = removeSpecialCharacter.split(" ").join("_");
+    const replacedName = removeSpecialCharacter.split(' ').join('_');
     /* return folder name */
-    return replacedName + "_" + user._id;
+    return replacedName + '_' + user._id;
   };
 
   /*
-   * @desc: to change file_name
+   * @desc: to change getFileName
    */
-  const fileName = (name) => {
+  const getFileName = (name) => {
     return `${Date.now()}-${name}`;
   };
 
@@ -292,61 +292,61 @@ const ModalPostContent = ({
    * @desc: add a post
    */
   const savePost = async () => {
-    if (description === "" || !description.trim() === true) {
+    if (description === '' || !description.trim() === true) {
       setDescriptionError(error.REQUIRED);
       if (!selectedListForPost) {
         setListError(error.POST_LIST_ERROR);
       } else {
-        setListError("");
+        setListError('');
       }
     } else if (!selectedListForPost) {
       setListError(error.POST_LIST_ERROR);
-      if (description === "" || !description.trim() === true) {
+      if (description === '' || !description.trim() === true) {
         setDescriptionError(error.REQUIRED);
       } else {
-        setDescriptionError("");
+        setDescriptionError('');
       }
     } else {
-      /*set loader value */
+      /* set loader value */
       setLoader(true);
-      setListError("");
-      setDescriptionError("");
+      setListError('');
+      setDescriptionError('');
       /* to upload file to s3 bucket on save of profile button */
       let imageUrl = null;
       if (imageFile !== null) {
-        const folder_name = folderName(user.name, user._id);
-        const file_name = fileName(imageFile.name);
-        const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${file_name}`;
+        const folderName = getFolderName(user.name, user._id);
+        const fileName = getFileName(imageFile.name);
+        const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folderName}/profiles/${fileName}`;
         const value = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/upload_photo`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
+            `${process.env.REACT_APP_API_URL}/api/upload_photo`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                Key: fileName,
+                ContentType: imageFile.type,
+                folder_name: folderName,
+              }),
             },
-            body: JSON.stringify({
-              Key: file_name,
-              ContentType: imageFile.type,
-              folder_name: folder_name,
-            }),
-          }
         );
         const body = await value.text();
         const Val = JSON.parse(body);
 
         await fetch(Val, {
-          method: "PUT",
+          method: 'PUT',
           headers: {
-            "Content-Type": imageFile.type,
+            'Content-Type': imageFile.type,
           },
           body: imageFile,
         })
-          .then(() => {
-            imageUrl = baseUrl;
-          })
-          .catch(
-            (error) => console.log(error) // Handle the error response object
-          );
+            .then(() => {
+              imageUrl = baseUrl;
+            })
+            .catch(
+                (error) => console.log(error), // Handle the error response object
+            );
       }
 
       let obj = {
@@ -365,13 +365,13 @@ const ModalPostContent = ({
           ...obj,
           _id: businessData._id,
           media:
-            imageFile !== null
-              ? imageUrl !== null
-                ? imageUrl
-                : []
-              : imageUpload
-              ? imageUpload
-              : [],
+            imageFile !== null ?
+              imageUrl !== null ?
+                imageUrl :
+                [] :
+              imageUpload ?
+              imageUpload :
+              [],
         };
         const updatePost = await dispatch(updatePostToBusiness(obj));
         const response = await unwrapResult(updatePost);
@@ -380,7 +380,7 @@ const ModalPostContent = ({
             businessData.listId.length > 0 &&
             businessData.listId[0]._id === selectedListForPost
           ) {
-            //edit post in redux for the same list
+            // edit post in redux for the same list
             const updatedPost = {
               ...response.post,
               business: businessData.business,
@@ -395,29 +395,29 @@ const ModalPostContent = ({
           } else {
             // if list is changed then need to remove from redux
             const removeFromList = await dispatch(
-              RemovePostFromAList({
-                postId: response.post._id,
-                listId: selectedListForPost,
-              })
+                removePostFromAList({
+                  postId: response.post._id,
+                  listId: selectedListForPost,
+                }),
             );
             if (removeFromList) {
               const addToList = await dispatch(
-                AddPostToList({
-                  postId: response.post._id,
-                  listId: selectedListForPost,
-                })
+                  addPostToList({
+                    postId: response.post._id,
+                    listId: selectedListForPost,
+                  }),
               );
               if (addToList) {
                 dispatch(deletePostInMyFeed(response.post._id));
                 closeModal();
                 setLoader(false);
-                setDescription("");
+                setDescription('');
               }
             }
           }
           closeModal();
           setLoader(false);
-          setDescription("");
+          setDescription('');
         }
       } else {
         /* create a post api */
@@ -426,45 +426,45 @@ const ModalPostContent = ({
         if (response.success === true) {
           if (selectedListForPost) {
             const addToList = await dispatch(
-              AddPostToList({
-                postId: response.post._id,
-                listId: selectedListForPost,
-              })
+                addPostToList({
+                  postId: response.post._id,
+                  listId: selectedListForPost,
+                }),
             );
             const res = await unwrapResult(addToList);
             if (res.data.addPostToList.success === true) {
               closeModal();
               setLoader(false);
-              setDescription("");
+              setDescription('');
             }
           } else {
             closeModal();
             setLoader(false);
-            setDescription("");
+            setDescription('');
           }
           ws.send(
-            JSON.stringify({
-              action: "post",
-              businessId: businessId,
-              post: {
-                postId: response.post._id,
-                postDetails: {
-                  ...response.post,
-                  listId: {
-                    ...response.post.list,
-                    media: response.post.list.image
-                      ? [].concat({ image: response.post.list.image })
-                      : [],
-                  },
+              JSON.stringify({
+                action: 'post',
+                businessId: businessId,
+                post: {
+                  postId: response.post._id,
+                  postDetails: {
+                    ...response.post,
+                    listId: {
+                      ...response.post.list,
+                      media: response.post.list.image ?
+                      [].concat({image: response.post.list.image}) :
+                      [],
+                    },
 
-                  businessDetails: business[0],
-                  totalPosts: [{ totalPosts: response.totalPosts }],
+                    businessDetails: business[0],
+                    totalPosts: [{totalPosts: response.totalPosts}],
+                  },
+                  totalComments: 0,
+                  totalLikes: 0,
+                  comments: [],
                 },
-                totalComments: 0,
-                totalLikes: 0,
-                comments: [],
-              },
-            })
+              }),
           );
         }
       }
@@ -496,7 +496,7 @@ const ModalPostContent = ({
               appendSpaceOnAdd={true}
             />
           </MentionsInput>
-          {descriptionError !== "" ? (
+          {descriptionError !== '' ? (
             <ErrorDiv>{descriptionError}</ErrorDiv>
           ) : null}
         </InputContainer>
@@ -516,21 +516,21 @@ const ModalPostContent = ({
                 type="file"
                 accept=".png, .jpg, .jpeg"
                 ref={(ref) => (myInput = ref)}
-                style={{ display: "none" }}
+                style={{display: 'none'}}
                 disabled={loader}
               />
               <img src={AddImageImg} alt="" onClick={(e) => myInput.click()} />
             </AddImageDiv>
           </AddYourPostBar>
         )}
-        {imageError !== "" ? <ErrorDiv>{imageError}</ErrorDiv> : null}
+        {imageError !== '' ? <ErrorDiv>{imageError}</ErrorDiv> : null}
         <SelectedListing
           selectedListForPost={selectedListForPost}
           setSelectedListForPost={setSelectedListForPost}
         />
-        {listError !== "" ? <ErrorDiv>{listError}</ErrorDiv> : null}
+        {listError !== '' ? <ErrorDiv>{listError}</ErrorDiv> : null}
         <BottomButtons
-          type={businessData ? "editPost" : "post"}
+          type={businessData ? 'editPost' : 'post'}
           setDisplayList={setDisplayList}
           loader={loader}
           description={description}

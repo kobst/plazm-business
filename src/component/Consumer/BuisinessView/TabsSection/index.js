@@ -1,13 +1,12 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import { useDispatch, useSelector } from "react-redux";
-import "react-tabs/style/react-tabs.css";
-import "./styles.css";
-import PostsSection from "./PostsSection";
-import EventsSection from "./EventsSection";
-import { setCurrentDate } from "../../../../reducers/eventReducer";
-import useStore from "../../useState";
+import React, {useState} from 'react';
+import styled from 'styled-components';
+import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
+import {useDispatch, useSelector} from 'react-redux';
+import 'react-tabs/style/react-tabs.css';
+import './styles.css';
+import PostsSection from './PostsSection';
+import EventsSection from './EventsSection';
+import {setCurrentDate} from '../../../../reducers/eventReducer';
 
 const TabsSectionContent = styled.div`
   width: 100%;
@@ -16,7 +15,7 @@ const TabsSectionContent = styled.div`
   height: 100%;
 `;
 
-const TabsSection = ({ profile, businessId }) => {
+const TabsSection = ({profile, businessId}) => {
   const dispatch = useDispatch();
   const topEvent = useSelector((state) => state.event.topEvent);
   const [selectedIndex, setSelectedIndex] = useState(topEvent ? 1 : 0);

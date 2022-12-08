@@ -3,17 +3,17 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import Amplify from "aws-amplify";
-import awsExports from "./aws-exports";
+import Amplify from 'aws-amplify';
+import awsExports from './aws-exports';
 import store from './store';
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 Amplify.configure(awsExports);
 
 ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
-  document.getElementById('root')
+    <Provider store={store}>
+      <App />
+    </Provider>,
+    document.getElementById('root'),
 );
 
 // If you want your app to work offline and load faster, you can change

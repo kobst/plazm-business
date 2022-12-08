@@ -1,7 +1,7 @@
-import React from "react";
-import { useField } from "formik";
-import styled from "styled-components";
-import error from "../../../../constants";
+import React from 'react';
+import {useField} from 'formik';
+import styled from 'styled-components';
+import error from '../../../../constants';
 
 const InputText = styled.textarea`
   min-height: 100px;
@@ -39,7 +39,7 @@ const ErrorDiv = styled.div`
 /*
 @desc: formik form input box
 */
-const TextArea = ({ label, formError, ...props }) => {
+const TextArea = ({label, formError, ...props}) => {
   const [field, meta] = useField(props);
   return (
     <>

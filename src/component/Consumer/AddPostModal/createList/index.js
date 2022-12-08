@@ -1,17 +1,17 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import AddImageImg from "../../../../images/addImage.svg";
-import { Formik } from "formik";
-import * as Yup from "yup";
-import FormBody from "./formBody";
-import { validate } from "./validate";
-import ValueLoader from "../../../../utils/loader";
-import { useDispatch, useSelector } from "react-redux";
-import BackButton from "../../UI/BackButton";
-import SaveButton from "../../UI/SaveButton";
-import { createList } from "../../../../reducers/listReducer";
-import PostImage from "../PostImage";
-import { unwrapResult } from "@reduxjs/toolkit";
+import React, {useState} from 'react';
+import styled from 'styled-components';
+import AddImageImg from '../../../../images/addImage.svg';
+import {Formik} from 'formik';
+import * as Yup from 'yup';
+import FormBody from './formBody';
+import {validate} from './validate';
+import ValueLoader from '../../../../utils/loader';
+import {useDispatch, useSelector} from 'react-redux';
+import BackButton from '../../UI/BackButton';
+import SaveButton from '../../UI/SaveButton';
+import {createList} from '../../../../reducers/listReducer';
+import PostImage from '../PostImage';
+import {unwrapResult} from '@reduxjs/toolkit';
 
 const bucket = process.env.REACT_APP_BUCKET;
 
@@ -110,10 +110,10 @@ const CreateListModel = ({
 }) => {
   const [loader, setLoader] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
-  const [imageError, setImageError] = useState("");
+  const [imageError, setImageError] = useState('');
   const [imageFile, setImageFile] = useState(null);
-  const [error, setError] = useState("");
-  const [response, setResponse] = useState("");
+  const [error, setError] = useState('');
+  const [response, setResponse] = useState('');
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   /*
@@ -122,16 +122,16 @@ const CreateListModel = ({
   */
   const uploadImage = (e) => {
     const selectedFile = e.target.files[0];
-    const idxDot = selectedFile.name.lastIndexOf(".") + 1;
+    const idxDot = selectedFile.name.lastIndexOf('.') + 1;
     const extFile = selectedFile.name
-      .substr(idxDot, selectedFile.name.length)
-      .toLowerCase();
-    if (extFile === "jpeg" || extFile === "png" || extFile === "jpg") {
-      setImageError("");
+        .substr(idxDot, selectedFile.name.length)
+        .toLowerCase();
+    if (extFile === 'jpeg' || extFile === 'png' || extFile === 'jpg') {
+      setImageError('');
       setProfileImage(URL.createObjectURL(e.target.files[0]));
       setImageFile(selectedFile);
     } else {
-      setImageError("Only jpg/jpeg and png,files are allowed!");
+      setImageError('Only jpg/jpeg and png,files are allowed!');
     }
   };
 
@@ -139,18 +139,18 @@ const CreateListModel = ({
   @desc: to get specific folder name to be created in aws
   @params: consumer name, consumer _id
   */
-  const folderName = (name, id) => {
+  const getFolderName = (name, id) => {
     /* to remove all special characters except space */
-    const removeSpecialCharacter = name.replace(/[^a-zA-Z ]/g, "");
+    const removeSpecialCharacter = name.replace(/[^a-zA-Z ]/g, '');
     /* to replace all spaces to underscore */
-    const replacedName = removeSpecialCharacter.split(" ").join("_");
+    const replacedName = removeSpecialCharacter.split(' ').join('_');
     /* return folder name */
-    return replacedName + "_" + id;
+    return replacedName + '_' + id;
   };
   /*
-   * @desc: to change file_name
+   * @desc: to change fileName
    */
-  const fileName = (name) => {
+  const getFileName = (name) => {
     return `${Date.now()}-${name}`;
   };
   /*
@@ -161,73 +161,73 @@ const CreateListModel = ({
     /* to upload file to s3 bucket on save of profile button */
     let imageUrl = null;
     if (imageFile !== null && profileImage !== null) {
-      /*set loader value */
+      /* set loader value */
       setLoader(true);
-      const folder_name = folderName(user.name, user._id);
-      const file_name = fileName(imageFile.name);
-      const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${file_name}`;
+      const folderName = getFolderName(user.name, user._id);
+      const fileName = getFileName(imageFile.name);
+      const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folderName}/profiles/${fileName}`;
       const value = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/upload_photo`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+          `${process.env.REACT_APP_API_URL}/api/upload_photo`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              Key: fileName,
+              ContentType: imageFile.type,
+              folder_name: folderName,
+            }),
           },
-          body: JSON.stringify({
-            Key: file_name,
-            ContentType: imageFile.type,
-            folder_name: folder_name,
-          }),
-        }
       );
       const body = await value.text();
       const Val = JSON.parse(body);
 
       await fetch(Val, {
-        method: "PUT",
+        method: 'PUT',
         headers: {
-          "Content-Type": imageFile.type,
+          'Content-Type': imageFile.type,
         },
         body: imageFile,
       })
-        .then((response) => {
-          imageUrl = baseUrl;
-        })
-        .catch(
-          (error) => console.log(error) // Handle the error response object
-        );
+          .then((response) => {
+            imageUrl = baseUrl;
+          })
+          .catch(
+              (error) => console.log(error), // Handle the error response object
+          );
       const obj = {
         ownerId: user._id,
         title: values.title,
         description: values.description,
         media:
-          imageFile !== null
-            ? imageUrl !== null
-              ? [{ image: imageUrl, thumbnail: "" }]
-              : ""
-            : "",
+          imageFile !== null ?
+            imageUrl !== null ?
+              [{image: imageUrl, thumbnail: ''}] :
+              '' :
+            '',
       };
       /* create a list api */
       const res = await dispatch(createList(obj));
       const data = await unwrapResult(res);
       if (data && data.data.createList.success === true) {
-        setResponse("List added successfully.");
-        setError("");
+        setResponse('List added successfully.');
+        setError('');
         setLoader(false);
         setDisplayCreateList(false);
         setDisplayList(false);
         setSelectedListForPost(data.data.createList.list._id);
       } else if (data && data.data.createList.success === false) {
         setLoader(false);
-        setResponse("");
-        setError("Could not create list");
+        setResponse('');
+        setError('Could not create list');
       }
     } else {
-      setImageError("Image Is required");
+      setImageError('Image Is required');
     }
   };
 
-  /**cancel button functionality */
+  /** cancel button functionality */
   const cancelButton = (e) => {
     e.preventDefault();
     setDisplayCreateList(false);
@@ -241,15 +241,15 @@ const CreateListModel = ({
       <Formik
         enableReinitialize={true}
         initialValues={{
-          title: "",
-          description: "",
+          title: '',
+          description: '',
         }}
-        /*validation schema */
+        /* validation schema */
         validationSchema={Yup.object(validate)}
         validateOnChange={false}
         validateOnBlur={false}
         onSubmit={(values) => {
-          /*update profile function call*/
+          /* update profile function call*/
           addList(values);
         }}
       >
@@ -274,7 +274,7 @@ const CreateListModel = ({
                     type="file"
                     accept=".png, .jpg, .jpeg"
                     ref={(ref) => (myInput = ref)}
-                    style={{ display: "none" }}
+                    style={{display: 'none'}}
                     disabled={loader}
                   />
                   <img
@@ -286,12 +286,12 @@ const CreateListModel = ({
               </AddYourPostBar>
             )}
             {/* for displaying image error if any */}
-            {imageError !== "" ? <ErrorDiv>{imageError}</ErrorDiv> : null}
+            {imageError !== '' ? <ErrorDiv>{imageError}</ErrorDiv> : null}
 
             {/* for displaying the response of add list */}
-            {error !== "" ? (
+            {error !== '' ? (
               <ErrorDiv>{error}</ErrorDiv>
-            ) : response !== "" ? (
+            ) : response !== '' ? (
               <ErrorDiv>{response}</ErrorDiv>
             ) : (
               <></>
@@ -302,7 +302,7 @@ const CreateListModel = ({
                 Cancel
               </BackButton>
               {loader && (
-                <div style={{ marginTop: "3px" }}>
+                <div style={{marginTop: '3px'}}>
                   <ValueLoader />
                 </div>
               )}

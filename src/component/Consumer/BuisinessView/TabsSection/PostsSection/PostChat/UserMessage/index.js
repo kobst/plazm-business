@@ -1,41 +1,37 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { useHistory } from "react-router-dom";
-import { FaCaretRight } from "react-icons/fa";
-import moment from "moment";
-import BannerImg from "../../../../../../../images/sliderimg.png";
-import ReplyInput from "./ReplyInput";
-import LikesBar from "../LikesBar";
-import { useSelector, useDispatch } from "react-redux";
-import ValueLoader from "../../../../../../../utils/loader";
-import { Scrollbars } from "react-custom-scrollbars";
+import React, {useState} from 'react';
+import styled from 'styled-components';
+import {useHistory} from 'react-router-dom';
+import {FaCaretRight} from 'react-icons/fa';
+import moment from 'moment';
+import BannerImg from '../../../../../../../images/sliderimg.png';
+import ReplyInput from './ReplyInput';
+import LikesBar from '../LikesBar';
+import {useSelector, useDispatch} from 'react-redux';
+import ValueLoader from '../../../../../../../utils/loader';
+import {Scrollbars} from 'react-custom-scrollbars';
 import {
   addCommentToPost,
   addReplyToComment,
   addPostViaSocket,
   addLikeViaSocket,
   addLikeToCommentViaSocket,
-} from "../../../../../../../reducers/businessReducer";
-import Comment from "./comments";
-import ScrollToBottom from "./ScrollToBottom";
-import { setWs } from "../../../../../../../reducers/userReducer";
+} from '../../../../../../../reducers/businessReducer';
+import Comment from './comments';
+import ScrollToBottom from './ScrollToBottom';
+import {setWs} from '../../../../../../../reducers/userReducer';
 import {
   FeedBigImage,
   FeedDescription,
   InnerListBanner,
-  InnerOverlay,
   ListAuthorName,
   ListInfo,
   ListName,
   ListNameWrap,
-} from "../../../../../FeedContent/styled";
-import DateBar from "../../../EventsSection/PostChat/DateBar";
-import TimeBar from "../../../EventsSection/PostChat/TimeBar";
+} from '../../../../../FeedContent/styled';
 
-import useStore from "../../../../../useState";
-import DaysBar from "../../../EventsSection/PostChat/DaysBar";
+import useStore from '../../../../../useState';
 
-const reactStringReplace = require("react-string-replace");
+const reactStringReplace = require('react-string-replace');
 const TitleBarWrap = styled.div`
   display: flex;
   width: 100%;
@@ -121,24 +117,14 @@ const SubHeading = styled.div`
   color: #00c2ff;
 `;
 
-const days = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
-
-const UserMessage = ({ postData }) => {
+const UserMessage = ({postData}) => {
   const dispatch = useDispatch();
   const [displayComments, setDisplayComments] = useState(false);
   const loadingComments = useSelector(
-    (state) => state.business.loadingPostComments
+      (state) => state.business.loadingPostComments,
   );
   const business = useSelector((state) => state.business.business)[0];
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState('');
   const [displayCommentInput, setDisplayCommentInput] = useState(false);
   const [flag, setFlag] = useState(false);
   const filters = useSelector((state) => state.business.filters);
@@ -146,9 +132,9 @@ const UserMessage = ({ postData }) => {
   const ws = useSelector((state) => state.user.ws);
   const history = useHistory();
   const [listImage, setListImage] = useState(
-    postData.postDetails.list.image
-      ? postData.postDetails.list.image
-      : BannerImg
+    postData.postDetails.list.image ?
+      postData.postDetails.list.image :
+      BannerImg,
   );
 
   const setSelectedListId = useStore((state) => state.setSelectedListId);
@@ -156,13 +142,13 @@ const UserMessage = ({ postData }) => {
   ws.onmessage = (evt) => {
     const message = JSON.parse(evt.data);
     /** to add reply via socket */
-    if (message.comment && message.commentId && message.type === "Post") {
+    if (message.comment && message.commentId && message.type === 'Post') {
       if (message.businessId === business._id) {
         dispatch(addReplyToComment(message));
       }
-    } else if (message.commentInfo && message.commentType === "Post") {
+    } else if (message.commentInfo && message.commentType === 'Post') {
       /** to add comment via socket */
-      setDescription("");
+      setDescription('');
       if (message.businessId === business._id) {
         dispatch(addCommentToPost(message));
       }
@@ -176,7 +162,7 @@ const UserMessage = ({ postData }) => {
             (message.post.postDetails.list._id === null ||
               message.post.postDetails.list._id !== null) &&
             user.listFollowed.find(
-              (i) => i === message.post.postDetails.list._id
+                (i) => i === message.post.postDetails.list._id,
             )
           ) {
             dispatch(addPostViaSocket(message));
@@ -192,7 +178,7 @@ const UserMessage = ({ postData }) => {
             (message.post.postDetails.list._id === null ||
               message.post.postDetails.list._id !== null) &&
             user.listFollowed.find(
-              (i) => i === message.post.postDetails.list._id
+                (i) => i === message.post.postDetails.list._id,
             )
           ) {
             dispatch(addPostViaSocket(message));
@@ -200,7 +186,7 @@ const UserMessage = ({ postData }) => {
           if (filters.Others === true) {
             dispatch(addPostViaSocket(message));
           } else if (
-            message.post.postDetails.type === "Business" &&
+            message.post.postDetails.type === 'Business' &&
             filters.Business === true
           ) {
             dispatch(addPostViaSocket(message));
@@ -212,7 +198,7 @@ const UserMessage = ({ postData }) => {
       if (message.businessId === business._id) {
         dispatch(addLikeToCommentViaSocket(message));
       }
-    } else if (message.like && message.type === "Post") {
+    } else if (message.like && message.type === 'Post') {
       /** to add post like via socket */
       if (
         message.businessId === business._id &&
@@ -226,7 +212,7 @@ const UserMessage = ({ postData }) => {
   ws.onclose = () => {
     if (user) {
       const ws = new WebSocket(
-        `${process.env.REACT_APP_WEBSOCKET}/?userId=${user._id}`
+          `${process.env.REACT_APP_WEBSOCKET}/?userId=${user._id}`,
       );
       dispatch(setWs(ws));
     }
@@ -235,45 +221,45 @@ const UserMessage = ({ postData }) => {
   /** to add comment function */
   const addComment = async (obj) => {
     ws.send(
-      JSON.stringify({
-        action: "comment",
-        postId: obj.itemId,
-        type: "Post",
-        comment: obj.body,
-        userId: obj.userId,
-        businessId: business._id,
-        taggedUsers: obj.taggedUsers,
-      })
+        JSON.stringify({
+          action: 'comment',
+          postId: obj.itemId,
+          type: 'Post',
+          comment: obj.body,
+          userId: obj.userId,
+          businessId: business._id,
+          taggedUsers: obj.taggedUsers,
+        }),
     );
   };
 
   /** to highlight the user mentions mentioned in post description */
   const findDesc = (value, mentions, mentionsList) => {
-    let divContent = value;
+    const divContent = value;
     if (mentions.length > 0 && mentionsList.length > 0) {
-      let arr = [],
-        data;
+      const arr = [];
+      let data;
       for (let i = 0; i < mentions.length; i++) {
-        if (value.includes("@" + mentions[i].name)) {
+        if (value.includes('@' + mentions[i].name)) {
           arr.push({
-            name: "@" + mentions[i].name,
+            name: '@' + mentions[i].name,
             id: mentions[i]._id,
-            type: "name",
+            type: 'name',
           });
         }
       }
       for (let i = 0; i < mentionsList.length; i++) {
-        if (value.includes("@" + mentionsList[i].name)) {
+        if (value.includes('@' + mentionsList[i].name)) {
           arr.push({
-            name: "@" + mentionsList[i].name,
+            name: '@' + mentionsList[i].name,
             id: mentionsList[i]._id,
-            type: "list",
+            type: 'list',
           });
         }
       }
       for (let i = 0; i < arr.length; i++) {
         if (i === 0) {
-          if (arr[i].type === "list")
+          if (arr[i].type === 'list') {
             data = reactStringReplace(value, arr[i].name, (match, j) => (
               <span
                 key={j}
@@ -283,7 +269,7 @@ const UserMessage = ({ postData }) => {
                 {match}
               </span>
             ));
-          else
+          } else {
             data = reactStringReplace(value, arr[i].name, (match, j) => (
               <span
                 key={j}
@@ -293,8 +279,9 @@ const UserMessage = ({ postData }) => {
                 {match}
               </span>
             ));
+          }
         } else {
-          if (arr[i].type === "list")
+          if (arr[i].type === 'list') {
             data = reactStringReplace(data, arr[i].name, (match, j) => (
               <span
                 key={j}
@@ -304,7 +291,7 @@ const UserMessage = ({ postData }) => {
                 {match}
               </span>
             ));
-          else
+          } else {
             data = reactStringReplace(data, arr[i].name, (match, j) => (
               <span
                 key={j}
@@ -314,15 +301,16 @@ const UserMessage = ({ postData }) => {
                 {match}
               </span>
             ));
+          }
         }
       }
       return data;
     } else if (mentions.length > 0) {
       for (let i = 0; i < mentions.length; i++) {
-        if (value.search(new RegExp("@" + mentions[i].name, "g") !== -1)) {
+        if (value.search(new RegExp('@' + mentions[i].name, 'g') !== -1)) {
           return (
             <div>
-              {reactStringReplace(value, "@" + mentions[i].name, (match, j) => (
+              {reactStringReplace(value, '@' + mentions[i].name, (match, j) => (
                 <span
                   key={j}
                   className="mentionData"
@@ -339,20 +327,20 @@ const UserMessage = ({ postData }) => {
       }
     } else if (mentionsList.length > 0) {
       for (let i = 0; i < mentionsList.length; i++) {
-        if (value.search(new RegExp("@" + mentionsList[i].name, "g") !== -1)) {
+        if (value.search(new RegExp('@' + mentionsList[i].name, 'g') !== -1)) {
           return (
             <div>
               {reactStringReplace(
-                value,
-                "@" + mentionsList[i].name,
-                (match, j) => (
-                  <span
-                    className="mentionData"
-                    onClick={() => setSelectedListId(mentionsList[i]._id)}
-                  >
-                    {match}
-                  </span>
-                )
+                  value,
+                  '@' + mentionsList[i].name,
+                  (match, j) => (
+                    <span
+                      className="mentionData"
+                      onClick={() => setSelectedListId(mentionsList[i]._id)}
+                    >
+                      {match}
+                    </span>
+                  ),
               )}
             </div>
           );
@@ -363,7 +351,7 @@ const UserMessage = ({ postData }) => {
       if (mentionsList.length !== 0) {
         return (
           <>
-            <div dangerouslySetInnerHTML={{ __html: divContent }}></div>
+            <div dangerouslySetInnerHTML={{__html: divContent}}></div>
           </>
         );
       } else {
@@ -400,16 +388,16 @@ const UserMessage = ({ postData }) => {
                     <ListInfo>
                       <FaCaretRight />
                       <ListAuthorName onClick={() => displayUserDetails()}>
-                        {" "}
+                        {' '}
                         {postData.postDetails.ownerId.name}
                       </ListAuthorName>
                       <span>|</span>
                       <ListAuthorName>
-                        Added on{" "}
+                        Added on{' '}
                         {moment(postData.postDetails.createdAt).format(
-                          "MMM DD, YYYY, hh:MMa"
-                        )}{" "}
-                        EDT{" "}
+                            'MMM DD, YYYY, hh:MMa',
+                        )}{' '}
+                        EDT{' '}
                       </ListAuthorName>
                     </ListInfo>
                   </ListNameWrap>
@@ -420,9 +408,9 @@ const UserMessage = ({ postData }) => {
               )}
               <FeedDescription>
                 {findDesc(
-                  postData.postDetails.data,
-                  postData.postDetails.taggedUsers,
-                  postData.postDetails.taggedLists
+                    postData.postDetails.data,
+                    postData.postDetails.taggedUsers,
+                    postData.postDetails.taggedLists,
                 )}
               </FeedDescription>
 

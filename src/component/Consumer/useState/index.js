@@ -1,4 +1,4 @@
-import create from "zustand";
+import create from 'zustand';
 
 const [useStore] = create((set) => ({
   profile: null,
@@ -6,7 +6,7 @@ const [useStore] = create((set) => ({
   detailId: null,
   tabSelected: -1,
   listTabSelected: 2,
-  view: "",
+  view: '',
   selectedList: null,
   selectedListId: null,
   searchIndex: null,
@@ -19,12 +19,12 @@ const [useStore] = create((set) => ({
   readMore: false,
   places: [],
   orderedPlaces: [],
-  placeCoordDict: { 0: [0, 0, 0] },
+  placeCoordDict: {0: [0, 0, 0]},
   coordPlaceDict: {},
   centerId: null,
   centerPlace: null,
-  sublocality: "",
-  city: "",
+  sublocality: '',
+  city: '',
   userLocation: {
     lat: process.env.REACT_APP_LATITUDE,
     lng: process.env.REACT_APP_LONGITUDE,
@@ -254,7 +254,7 @@ const [useStore] = create((set) => ({
       ...state,
       selectedPlace,
     })),
-  removeAllCoor: () => set({ places: { 0: [0, 0, 0] } }),
+  removeAllCoor: () => set({places: {0: [0, 0, 0]}}),
 }));
 
 export default useStore;

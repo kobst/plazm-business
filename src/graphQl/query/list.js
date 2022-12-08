@@ -1,7 +1,7 @@
 /*
-@desc: getAllLists query
+@desc: getAllListsGraphql query
 */
-const getAllLists = () => {
+const getAllListsGraphql = () => {
   const graphQl = {
     query: `
             query GetLists{
@@ -26,9 +26,9 @@ const getAllLists = () => {
 };
 
 /*
-@desc: getUserLists query
+@desc: getUserListsGraphql query
 */
-const getUserLists = (ownerId) => {
+const getUserListsGraphql = (ownerId) => {
   const graphQl = {
     query: `
           query GetUserLists($id: ID!){
@@ -64,9 +64,9 @@ const getUserLists = (ownerId) => {
 };
 
 /*
-@desc: getUserCreatedAndFollowedLists query
+@desc: getUserCreatedAndFollowedListsGraphql query
 */
-const getUserCreatedAndFollowedLists = (obj) => {
+const getUserCreatedAndFollowedListsGraphql = (obj) => {
   const graphQl = {
     query: `
           query GetUserCreatedAndFollowedLists($id: ID!, $value: Int, $limit: Int){
@@ -104,12 +104,12 @@ const getUserCreatedAndFollowedLists = (obj) => {
   return graphQl;
 };
 /*
-@desc: getListDetails query
+@desc: getListDetailsGraphql query
 */
-const GetListDetails = (obj) => {
+const getListDetailsGraphql = (obj) => {
   const graphQl = {
     query: `
-          query GetListDetails($id: ID!, $value: Int){
+          query getListDetails($id: ID!, $value: Int){
             getListDetails (input: {id: $id, value:$value}){
               message
               success
@@ -195,9 +195,9 @@ const GetListDetails = (obj) => {
 };
 
 /*
-@desc: getMostTrendingLists query
+@desc: getMostTrendingListsGraphql query
 */
-const getMostTrendingLists = (value) => {
+const getMostTrendingListsGraphql = (value) => {
   const graphQl = {
     query: `
           query FetchMostTrendingLists($value: Int){
@@ -234,9 +234,9 @@ const getMostTrendingLists = (value) => {
 };
 
 /*
-@desc: getMostPopularLists query
+@desc: getMostPopularListsGraphql query
 */
-const getMostPopularLists = (value) => {
+const getMostPopularListsGraphql = (value) => {
   const graphQl = {
     query: `
           query FetchMostPopularLists($value: Int){
@@ -273,9 +273,9 @@ const getMostPopularLists = (value) => {
 };
 
 /*
-@desc: SearchLists query
+@desc: searchListsGraphql query
 */
-const SearchLists = (obj) => {
+const searchListsGraphql = (obj) => {
   const graphQl = {
     query: `
           query ListSearch($value: Int, $search: String, $userId: String, $subscriberId: String){
@@ -312,11 +312,11 @@ const SearchLists = (obj) => {
 };
 
 export {
-  getAllLists,
-  getUserLists,
-  getUserCreatedAndFollowedLists,
-  GetListDetails,
-  getMostTrendingLists,
-  getMostPopularLists,
-  SearchLists,
+  getAllListsGraphql,
+  getUserListsGraphql,
+  getUserCreatedAndFollowedListsGraphql,
+  getListDetailsGraphql,
+  getMostTrendingListsGraphql,
+  getMostPopularListsGraphql,
+  searchListsGraphql,
 };

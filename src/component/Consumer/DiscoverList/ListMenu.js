@@ -1,35 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { MdChevronLeft } from "react-icons/md";
-import { useDispatch, useSelector } from "react-redux";
-import { unwrapResult } from "@reduxjs/toolkit";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import "react-tabs/style/react-tabs.css";
+import React, {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 
-import styled from "styled-components";
+import styled from 'styled-components';
 
 import {
   clearListSearchData,
-  FetchMostPopularLists,
-  FetchTrendingLists,
+  fetchMostPopularLists,
+  fetchTrendingLists,
   setListSearch,
-} from "../../../reducers/listReducer";
-import ValueLoader from "../../../utils/loader";
-import Input from "../../UI/Input/Input";
-import SearchSection from "./SearchSection";
-import SliderSection from "./SliderSection";
-import error from "../../../constants";
+} from '../../../reducers/listReducer';
+import ValueLoader from '../../../utils/loader';
+import Input from '../../UI/Input/Input';
+import SearchSection from './SearchSection';
+import SliderSection from './SliderSection';
+import error from '../../../constants';
 
-import useStore from "../useState";
+import useStore from '../useState';
 
 import {
-  TopSectionWrap,
-  LeftWrap,
-  TotalNum,
   RightSearchWrap,
   ErrorDiv,
-  LoaderWrap,
-} from "./styled.js";
-import NewInBuzzItems from "./ItemSectionSlider/SliderItems";
+} from './styled.js';
 
 const TopContent = styled.div`
   width: 100%;
@@ -87,26 +80,18 @@ const TopContent = styled.div`
 `;
 
 const ListMenu = (
-  {
+    {
     // setDiscoverBtn,
     // setSelectedListId,
     // setReadMore
-  }
+    },
 ) => {
   const dispatch = useDispatch();
-  const loadindTrending = useSelector(
-    (state) => state.list.loadingTrendingLists
-  );
-  const loadingPopular = useSelector((state) => state.list.loadingPopularLists);
-  const trendingLists = useSelector((state) => state.list.trendingLists);
-  const totalTrendingList = useSelector(
-    (state) => state.list.totalTrendingList
-  );
   const setListTabSelected = useStore((state) => state.setListTabSelected);
   const popularLists = useSelector((state) => state.list.popularLists);
   const popularLoading = useSelector((state) => state.list.loadingPopularLists);
   const totalPopularLists = useSelector(
-    (state) => state.list.totalPopularLists
+      (state) => state.list.totalPopularLists,
   );
   const user = useSelector((state) => state.user.user);
   const totalList = useSelector((state) => state.list.totalList);
@@ -116,23 +101,21 @@ const ListMenu = (
   const listSearch = useSelector((state) => state.list.listSearch);
 
   const [selectedTab, setSelectedTab] = useState(2);
-  const [tabIndex, setTabIndex] = useState();
   const userCreatedLists = useSelector((state) => state.list.userLists);
   const userCreatedLoading = useSelector(
-    (state) => state.list.loadingUserLists
+      (state) => state.list.loadingUserLists,
   );
   const userFollowedLists = useSelector((state) => state.list.data);
-  const [searchError, setSearchError] = useState("");
-  const [search, setSearch] = useState("");
-  const [offset, setOffSet] = useState(0);
+  const [searchError, setSearchError] = useState('');
+  const [search, setSearch] = useState('');
+  const [offset] = useState(0);
   const [offsetPopular, setOffSetPopular] = useState(0);
   const [offsetSearch, setOffSetSearch] = useState(0);
   const [loader, setLoader] = useState(false);
-  const [flag, setFlag] = useState(true);
   const [displayTrendingModel, setDisplayTrendingModel] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [totalLists, setTotalLists] = useState(
-    parseInt(totalList - userLists.length)
+      parseInt(totalList - userLists.length),
   );
 
   const setSelectedListId = useStore((state) => state.setSelectedListId);
@@ -140,32 +123,26 @@ const ListMenu = (
   const setReadMore = useStore((state) => state.setReadMore);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = () => {
       /** to fetch most trending list data */
-      const trending = await dispatch(FetchTrendingLists(0));
-      const resTrending = await unwrapResult(trending);
+      dispatch(fetchTrendingLists(0));
       /** to fetch most popular list data */
-      const popular = await dispatch(FetchMostPopularLists(0));
-      const resPopular = await unwrapResult(popular);
-      if (resPopular) {
-        setFlag(false);
-      }
+      dispatch(fetchMostPopularLists(0));
     };
     (offset === 0 || offsetPopular === 0) && fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /** search data */
   const searchListsData = (event) => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       event.preventDefault();
       if (!search.trim()) {
         dispatch(setListSearch(event.target.value));
       }
-      if (search !== "" && search.length >= 4 && !search.trim() === false) {
+      if (search !== '' && search.length >= 4 && !search.trim() === false) {
         dispatch(clearListSearchData());
         dispatch(setListSearch(event.target.value));
-        setSearchError("");
+        setSearchError('');
         setOffSetSearch(0);
       } else if (search.length > 0 && search.length < 4) {
         setSearchError(error.SEARCH_ERROR);
@@ -178,28 +155,18 @@ const ListMenu = (
     setSearch(listSearch);
   }, [listSearch]);
 
-  /** back btn */
-  const backBtn = () => {
-    if (listSearch === "") {
-      setDiscoverBtn(false);
-    } else {
-      dispatch(setListSearch(""));
-      setSearch("");
-    }
-  };
-
   const setTab = (index) => {
-    setSearch("");
+    setSearch('');
     dispatch(clearListSearchData());
-    dispatch(setListSearch(""));
+    dispatch(setListSearch(''));
     setTabIndex(index);
-    setSearchError("");
+    setSearchError('');
     setSelectedTab(index);
     setListTabSelected(index);
   };
 
   const handleSearchChange = (e) => {
-    setSearchError("");
+    setSearchError('');
     setSearch(e.target.value);
   };
 
@@ -255,7 +222,7 @@ const ListMenu = (
                 setReadMore={setReadMore}
                 offset={offsetSearch}
                 setOffSet={setOffSetSearch}
-                obj={{ subscriberId: user._id }}
+                obj={{subscriberId: user._id}}
               />
             )}
           </TabPanel>
@@ -287,7 +254,7 @@ const ListMenu = (
                 setReadMore={setReadMore}
                 offset={offsetSearch}
                 setOffSet={setOffSetSearch}
-                obj={{ userId: user._id }}
+                obj={{userId: user._id}}
               />
             )}
           </TabPanel>
@@ -323,7 +290,7 @@ const ListMenu = (
               />
             )}
             {(popularLoading || userCreatedLoading) && !listSearch && (
-              <div style={{ textAlign: "center" }}>
+              <div style={{textAlign: 'center'}}>
                 <ValueLoader />
               </div>
             )}

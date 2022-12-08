@@ -1,24 +1,19 @@
-import React, { useState, useEffect } from "react";
-import "./style.css";
-import { Auth } from "aws-amplify";
-import { useHistory } from "react-router-dom";
+import React, {useState, useEffect} from 'react';
+import './style.css';
+import {Auth} from 'aws-amplify';
+import {useHistory} from 'react-router-dom';
 
-import Wrapper from "../../component/Login-Register/Wrapper";
-import RegisterForm from "../../component/Login-Register/Form-Components/Register-Form";
-import { getMessage } from "../../config";
-import ValueLoader from "../../utils/loader";
-import {
-  callApi,
-  addBusiness,
-  updateBusiness,
-  addUserProfile,
-} from "../../Api";
+import Wrapper from '../../component/Login-Register/Wrapper';
+import RegisterForm from '../../component/Login-Register/Form-Components/Register-Form';
+import {getMessage} from '../../config';
+import ValueLoader from '../../utils/loader';
+import {callApi, addBusiness, updateBusiness, addUserProfile} from '../../Api';
 
 const renderMessage = getMessage();
 
 const Register = (props) => {
   const history = useHistory();
-  const { userType } = props;
+  const {userType} = props;
   const type = props.match.url;
   const [username, setUser] = useState();
   const [password, setPassword] = useState();
@@ -26,7 +21,7 @@ const Register = (props) => {
   const [email, setEmail] = useState();
   const [loc, setLoc] = useState();
   const [confirmationCode, setconfirmationCode] = useState();
-  const [phone_number, setPhoneNumber] = useState();
+  const [phoneNumber, setPhoneNumber] = useState();
   const [err, setError] = useState(false);
   const [message, setMessage] = useState();
   const [businessInfo, setBusinessInfo] = useState();
@@ -48,16 +43,15 @@ const Register = (props) => {
   const [phoneOnlyNumbers, setPhoneOnlyNumbers] = useState(false);
 
   useEffect(() => {
-    let updateUser = async (authState) => {
+    const updateUser = async (authState) => {
       try {
         await Auth.currentAuthenticatedUser();
-        history.push("/");
-      } catch {
+        history.push('/');
+      } catch (error) {
         setLoginValue(true);
       }
     };
     updateUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const signUp = (form) => {
@@ -65,71 +59,84 @@ const Register = (props) => {
       username: email,
       password: password,
       attributes: {
-        email: email,
-        phone_number: phone_number,
+        email,
+        phone_number: phoneNumber,
         name: username,
-        "custom:type": userType,
+        'custom:type': userType,
       },
     })
-      .then(async (res) => {
-        if (res.userSub) {
-          if (type.includes("consumer")) {
-            const obj = {
-              name: username,
-              email: email,
-              phoneNumber: phone_number,
-              userSub: res.userSub,
-            };
-            const profile = await addUserProfile(obj);
-            if (profile.data.addUser.success === true) {
+        .then(async (res) => {
+          if (res.userSub) {
+            if (type.includes('consumer')) {
+              const obj = {
+                name: username,
+                email: email,
+                phoneNumber: phoneNumber,
+                userSub: res.userSub,
+              };
+              const profile =
+							await addUserProfile(
+							    obj,
+							);
+              if (
+                profile.data.addUser
+                    .success ===
+							true
+              ) {
+                form.reset();
+                setVerified(true);
+                setError(false);
+                setLoader(false);
+              }
+            }
+            if (
+              type.includes('business') &&
+						(await checkUser(res.userSub))
+            ) {
               form.reset();
               setVerified(true);
               setError(false);
               setLoader(false);
             }
           }
-          if (type.includes("business") && (await checkUser(res.userSub))) {
-            form.reset();
-            setVerified(true);
-            setError(false);
-            setLoader(false);
+        })
+        .catch((err) => {
+          if (err.message.includes('phone')) {
+            return (
+              setMessage(renderMessage.phone_Err),
+              setError(true),
+              setDisable(false)
+            );
+          } else {
+            return (
+              setMessage(err.message),
+              setError(true),
+              setDisable(false)
+            );
           }
-        }
-      })
-      .catch((err) => {
-        if (err.message.includes("phone")) {
-          return (
-            setMessage(renderMessage.phone_Err),
-            setError(true),
-            setDisable(false)
-          );
-        } else {
-          return setMessage(err.message), setError(true), setDisable(false);
-        }
-      });
+        });
   };
 
   const confirmSignUp = () => {
     Auth.confirmSignUp(email, confirmationCode)
-      .then(() => {
-        Auth.signIn({
-          username: email,
-          password: password,
-        })
+        .then(() => {
+          Auth.signIn({
+            username: email,
+            password: password,
+          })
           // eslint-disable-next-line no-sequences
-          .then(() => (history.push("/")))
-          .catch((err) => console.log(err));
-      })
-      .catch((err) => setCodeError(true));
+              .then(() => history.push('/'))
+              .catch((err) => console.log(err));
+        })
+        .catch((err) => setCodeError(true));
   };
 
   function validateEmail(email) {
-    // eslint-disable-next-line no-useless-escape
     const re =
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+			/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
   }
-  const ValidateCode = () => {
+  const validateCode = () => {
     if (!confirmationCode) {
       setEmptyCodeError(true);
     } else {
@@ -137,7 +144,7 @@ const Register = (props) => {
     }
   };
 
-  const Validation = () => {
+  const validation = () => {
     if (!username) {
       setFirstNameError(true);
     }
@@ -146,7 +153,7 @@ const Register = (props) => {
         setFirstError(true);
       }
     }
-    if (!loc && type.includes("business")) {
+    if (!loc && type.includes('business')) {
       setLocError(true);
     }
     if (loc) {
@@ -158,15 +165,15 @@ const Register = (props) => {
         setMessage(renderMessage.Err);
       }
     }
-    if (!phone_number) {
+    if (!phoneNumber) {
       setPhoneError(true);
     }
-    if (phone_number) {
-      if (phone_number.length <= 5) {
+    if (phoneNumber) {
+      if (phoneNumber.length <= 5) {
         setPhoneShort(true);
-      } else if (phone_number.length >= 50) {
+      } else if (phoneNumber.length >= 50) {
         setPhoneLong(true);
-      } else if (!phone_number.match(/^[^a-zA-Z]*$/)) {
+      } else if (!phoneNumber.match(/^[^a-zA-Z]*$/)) {
         setPhoneOnlyNumbers(true);
       }
     }
@@ -183,32 +190,32 @@ const Register = (props) => {
       }
     }
     if (
-      type.includes("business") &&
-      username &&
-      loc &&
-      username.length > 3 &&
-      phone_number &&
-      phone_number.match(/^[^a-zA-Z]*$/) &&
-      validateEmail(email) &&
-      password &&
-      name &&
-      password.length > 7 &&
-      phone_number.length >= 5 &&
-      phone_number.length <= 50
+      type.includes('business') &&
+			username &&
+			loc &&
+			username.length > 3 &&
+			phoneNumber &&
+			phoneNumber.match(/^[^a-zA-Z]*$/) &&
+			validateEmail(email) &&
+			password &&
+			name &&
+			password.length > 7 &&
+			phoneNumber.length >= 5 &&
+			phoneNumber.length <= 50
     ) {
       return true;
     }
     if (
-      type.includes("consumer") &&
-      username &&
-      username.length > 3 &&
-      phone_number &&
-      phone_number.match(/^[^a-zA-Z]*$/) &&
-      validateEmail(email) &&
-      password &&
-      password.length > 7 &&
-      phone_number.length >= 5 &&
-      phone_number.length <= 50
+      type.includes('consumer') &&
+			username &&
+			username.length > 3 &&
+			phoneNumber &&
+			phoneNumber.match(/^[^a-zA-Z]*$/) &&
+			validateEmail(email) &&
+			password &&
+			password.length > 7 &&
+			phoneNumber.length >= 5 &&
+			phoneNumber.length <= 50
     ) {
       return true;
     }
@@ -218,12 +225,12 @@ const Register = (props) => {
     e.preventDefault();
     const form = e.target;
     setMessage();
-    if (verified && ValidateCode()) {
+    if (verified && validateCode()) {
       setMessage();
       confirmSignUp();
       setLoader(true);
     }
-    if (!verified && Validation()) {
+    if (!verified && validation()) {
       setLoader(true);
       setDisable(true);
       if (await checkBusiness()) {
@@ -270,19 +277,19 @@ const Register = (props) => {
     setPhoneLong(false);
     setPhoneShort(false);
     setPhoneOnlyNumbers(false);
-    if (e.target.id === "username") {
+    if (e.target.id === 'username') {
       setUser(e.target.value);
-    } else if (e.target.id === "password") {
+    } else if (e.target.id === 'password') {
       setPassword(e.target.value);
-    } else if (e.target.id === "phone_number") {
+    } else if (e.target.id === 'phoneNumber') {
       setPhoneNumber(e.target.value);
-    } else if (e.target.id === "email") {
+    } else if (e.target.id === 'email') {
       setEmail(e.target.value.trim());
-    } else if (e.target.id === "confirmationCode") {
+    } else if (e.target.id === 'confirmationCode') {
       setconfirmationCode(e.target.value);
-    } else if (e.target.id === "location") {
-      setName("");
-      setBusinessInfo("");
+    } else if (e.target.id === 'location') {
+      setName('');
+      setBusinessInfo('');
       setLoc(e.target.value);
     }
   };
@@ -290,47 +297,47 @@ const Register = (props) => {
   return (
     <>
       {loginValue === true ? (
-        <Wrapper
-          type={type}
-          page="register"
-          welcomeMessage={
-            type.includes("business")
-              ? renderMessage.New_Reg
-              : renderMessage.New_Reg_Consumer
-          }
-        >
-          <RegisterForm
-            type={type}
-            err={err}
-            firstError={firstError}
-            passwordError={passwordError}
-            loader={loader}
-            message={message}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            verified={verified}
-            business={business}
-            setbusiness={setbusiness}
-            setBusinessInfo={setBusinessInfo}
-            setName={setName}
-            codeError={codeError}
-            firstNameError={firstNameError}
-            phoneError={phoneError}
-            emailError={emailError}
-            locationError={locationError}
-            emptyCode={emptyCode}
-            phoneLong={phoneLong}
-            phoneShort={phoneShort}
-            password={password}
-            disable={disable}
-            phoneOnlyNumbers={phoneOnlyNumbers}
-          />
-        </Wrapper>
-      ) : (
-        <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
-          <ValueLoader />
-        </div>
-      )}
+				<Wrapper
+				  type={type}
+				  page="register"
+				  welcomeMessage={
+						type.includes('business') ?
+							renderMessage.New_Reg :
+							renderMessage.New_Reg_Consumer
+				  }
+				>
+				  <RegisterForm
+				    type={type}
+				    err={err}
+				    firstError={firstError}
+				    passwordError={passwordError}
+				    loader={loader}
+				    message={message}
+				    handleChange={handleChange}
+				    handleSubmit={handleSubmit}
+				    verified={verified}
+				    business={business}
+				    setbusiness={setbusiness}
+				    setBusinessInfo={setBusinessInfo}
+				    setName={setName}
+				    codeError={codeError}
+				    firstNameError={firstNameError}
+				    phoneError={phoneError}
+				    emailError={emailError}
+				    locationError={locationError}
+				    emptyCode={emptyCode}
+				    phoneLong={phoneLong}
+				    phoneShort={phoneShort}
+				    password={password}
+				    disable={disable}
+				    phoneOnlyNumbers={phoneOnlyNumbers}
+				  />
+				</Wrapper>
+			) : (
+				<div style={{textAlign: 'center', margin: ' 40px auto 0'}}>
+				  <ValueLoader />
+				</div>
+			)}
     </>
   );
 };

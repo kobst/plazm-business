@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { Auth } from "aws-amplify";
-import { useHistory } from "react-router-dom";
+import React, {useEffect, useState} from 'react';
+import styled from 'styled-components';
+import {Auth} from 'aws-amplify';
+import {useHistory} from 'react-router-dom';
 
-import RightSide from "@components/RightSide/RightSide";
-import Header from "@components/Header";
-import Footer from "@components/Footer";
-import { callPlace } from "@api";
-import ValueLoader from "@utils/loader";
+import RightSide from '@components/RightSide/RightSide';
+import Header from '@components/Header';
+import Footer from '@components/Footer';
+import {callPlace} from '@api';
+import ValueLoader from '@utils/loader';
 
 const DashboardContainer = styled.div`
   display: flex;
@@ -36,29 +36,28 @@ const Dashboard = () => {
   const [ws, setWs] = useState();
 
   useEffect(() => {
-    let updateUser = async () => {
+    const updateUser = async () => {
       try {
         const value = await Auth.currentAuthenticatedUser();
         if (
-          value.attributes["custom:type"] === "curator" ||
-          value.attributes["custom:type"] === "customer" ||
-          value.attributes["custom:type"] === "consumer"
+          value.attributes['custom:type'] === 'curator' ||
+          value.attributes['custom:type'] === 'customer' ||
+          value.attributes['custom:type'] === 'consumer'
         ) {
-          history.push("/");
+          history.push('/');
         } else {
           const place = await callPlace(value.attributes.sub);
           const ws = new WebSocket(
-            `${process.env.REACT_APP_WEBSOCKET}/?userId=${place[0]._id}`
+              `${process.env.REACT_APP_WEBSOCKET}/?userId=${place[0]._id}`
           );
           setWs(ws);
           setPlace(place[0]);
         }
-      } catch {
-        history.push("/business/login");
+      } catch (err) {
+        history.push('/business/login');
       }
     };
     updateUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (placeValue) {
@@ -74,7 +73,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
+    <div style={{textAlign: 'center', margin: ' 40px auto 0'}}>
       <ValueLoader />
     </div>
   );

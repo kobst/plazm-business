@@ -1,6 +1,6 @@
 
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
 
 const LabelText = styled.label`
 font-weight: 600;
@@ -13,12 +13,12 @@ margin:0px;
     font-size:14px;
     line-height: 19px;   
 }
-`
+`;
 
 const Label = (props) => {
-    return(
+  return (
     <LabelText>{props.name}</LabelText>
-    )
-}
+  );
+};
 
-export default Label
+export default Label;

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import UserMessage from "./UserMessage";
-import { useSelector, useDispatch } from "react-redux";
-import InfiniteScroll from "react-infinite-scroll-component";
-import ValueLoader from "../../../../../../utils/loader";
-import { addFilteredPosts } from "../../../../../../reducers/businessReducer";
-import useStore from "../../../../useState";
+import React, {useState, useEffect} from 'react';
+import styled from 'styled-components';
+import UserMessage from './UserMessage';
+import {useSelector, useDispatch} from 'react-redux';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import ValueLoader from '../../../../../../utils/loader';
+import {addFilteredPosts} from '../../../../../../reducers/businessReducer';
+import useStore from '../../../../useState';
 const ChatContent = styled.div`
   width: 100%;
   position: relative;
@@ -45,13 +45,13 @@ const PostChat = () => {
   const user = useSelector((state) => state.user.user);
   const filters = useSelector((state) => state.business.filters);
   const sideFilterForLikes = useSelector(
-    (state) => state.business.filterByMostLiked
+      (state) => state.business.filterByMostLiked,
   );
   const sideFilterForRecent = useSelector(
-    (state) => state.business.filterByMostRecent
+      (state) => state.business.filterByMostRecent,
   );
   const loadingFilterData = useSelector(
-    (state) => state.business.loadingFilterData
+      (state) => state.business.loadingFilterData,
   );
   const totalPosts = useSelector((state) => state.business.totalPosts);
   const topPost = useSelector((state) => state.business.topPost);
@@ -73,13 +73,13 @@ const PostChat = () => {
     if (offset + 20 < totalPosts) {
       setOffSet(offset + 20);
       dispatch(
-        addFilteredPosts({
-          businessId: business && business[0] ? business[0]._id : "",
-          filters: filters,
-          value: offset + 20,
-          ownerId: user._id,
-          sideFilters: { likes: sideFilterForLikes },
-        })
+          addFilteredPosts({
+            businessId: business && business[0] ? business[0]._id : '',
+            filters: filters,
+            value: offset + 20,
+            ownerId: user._id,
+            sideFilters: {likes: sideFilterForLikes},
+          }),
       );
     } else setHasMore(false);
   };
@@ -87,7 +87,7 @@ const PostChat = () => {
     <>
       <div
         id="scrollableDiv"
-        style={{ height: "calc(100vh - 465px)", overflow: "auto" }}
+        style={{height: 'calc(100vh - 465px)', overflow: 'auto'}}
       >
         {/* to display Top Post If any */}
         {topPost && (
@@ -106,8 +106,8 @@ const PostChat = () => {
             posts.length > 20 &&
             offset + 20 < totalPosts &&
             !loadingFilterData ? (
-              <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
-                {" "}
+              <div style={{textAlign: 'center', margin: ' 40px auto 0'}}>
+                {' '}
                 <ValueLoader height="40" width="40" />
               </div>
             ) : null

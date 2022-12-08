@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { MentionsInput, Mention } from "react-mentions";
-import { useSelector } from "react-redux";
-import "./style.css";
-import defaultMentionStyle from "./style";
-import ModalComponent from '../../../../UI/Modal'
-import AddPostModal from '../../../../AddPostModal'
+import React, {useState} from 'react';
+import styled from 'styled-components';
+import {MentionsInput, Mention} from 'react-mentions';
+import {useSelector} from 'react-redux';
+import './style.css';
+import defaultMentionStyle from './style';
+import ModalComponent from '../../../../UI/Modal';
+import AddPostModal from '../../../../AddPostModal';
 
 const AddPostSectionContent = styled.div`
   width: 100%;
@@ -68,16 +68,16 @@ const TextAreaWrap = styled.div`
 `;
 
 
-const AddPostSection = ({  businessId }) => {
+const AddPostSection = ({businessId}) => {
   const [addPostModal, setAddPostModal] = useState(false);
   const users = useSelector((state) => state.consumer.users);
   const lists = useSelector((state) => state.list.lists);
-  let allData = [...users, ...lists];
-  let data = allData.sort(function (a, b) {
+  const allData = [...users, ...lists];
+  const data = allData.sort(function(a, b) {
     return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
   });
 
-  let userMentionData = data.map((myUser) => ({
+  const userMentionData = data.map((myUser) => ({
     id: myUser._id,
     display: `@${myUser.name}`,
   }));

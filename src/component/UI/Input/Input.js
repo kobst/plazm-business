@@ -1,9 +1,9 @@
 
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
 
 const InputText = styled.input`
-border: 1px solid  ${props => props.usererror ? "#FF7171" : "#DBE2EA" };
+border: 1px solid  ${(props) => props.usererror ? '#FF7171' : '#DBE2EA' };
 height: 52px;
 font-size: 16px;
 line-height:21px;
@@ -29,12 +29,12 @@ color:#7C9CBF
     height: 35px;
 }
 
-`
+`;
 
 const Input = (props) => {
-    return(
+  return (
     <InputText ref={props.refs} {...props} usererror = {props.error}/>
-    )
-}
+  );
+};
 
-export default Input
+export default Input;

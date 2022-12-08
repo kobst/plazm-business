@@ -1,5 +1,5 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
 
 const ItemsWrapper = styled.div`
   position: relative;
@@ -16,14 +16,14 @@ const ItemsWrapper = styled.div`
     height: 100%;
     max-height: 142px;
   }
-`
+`;
 
 const SliderItems = ({image}) => (
   <>
     <ItemsWrapper>
-        <img src={image} alt="Cover" />
+      <img src={image} alt="Cover" />
     </ItemsWrapper>
   </>
-)
+);
 
-export default SliderItems
+export default SliderItems;

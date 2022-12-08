@@ -1,29 +1,27 @@
 /* eslint-disable no-sequences */
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import Card from "../UI/Card/Card";
-import PinIcon from "../../images/location.svg";
-import Label from "../UI/Label/label";
-import Input from "../UI/Input/Input";
-import ButtonSmall from "../UI/ButtonSmall";
-import PlusIcon from "../../images/plus-img.svg";
-import DropdownIcon from "../../images/dropdown-arrow.svg";
-import MapPin from "../../images/map-pin.svg";
-import "@pathofdev/react-tag-input/build/index.css";
-import TimePicker from "react-bootstrap-time-picker";
-// import GallerySec from '../UI/Gallery'
-// import ReactTagInput from "@pathofdev/react-tag-input";
-import GoogleMapReact from "google-map-react";
-import Geocode from "react-geocode";
-import FindAddressValue from "../../utils/findAddress";
-import TagInputCross from "../../images/Mask.svg";
-import error from "../../constants";
-import { useHistory } from "react-router-dom";
+import React, {useState, useEffect} from 'react';
+import styled from 'styled-components';
+import Card from '../UI/Card/Card';
+import PinIcon from '../../images/location.svg';
+import Label from '../UI/Label/label';
+import Input from '../UI/Input/Input';
+import ButtonSmall from '../UI/ButtonSmall';
+import PlusIcon from '../../images/plus-img.svg';
+import DropdownIcon from '../../images/dropdown-arrow.svg';
+import MapPin from '../../images/map-pin.svg';
+import '@pathofdev/react-tag-input/build/index.css';
+import TimePicker from 'react-bootstrap-time-picker';
+import GoogleMapReact from 'google-map-react';
+import Geocode from 'react-geocode';
+import FindAddressValue from '../../utils/findAddress';
+import TagInputCross from '../../images/Mask.svg';
+import error from '../../constants';
+import {useHistory} from 'react-router-dom';
 
 const bucket = process.env.REACT_APP_BUCKET;
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_API_KEY);
-Geocode.setLanguage("en");
+Geocode.setLanguage('en');
 
 const ProfileOuter = styled.div`
 display:flex;
@@ -276,7 +274,7 @@ const ErrorDiv = styled.div`
   font-size: 12px;
   margin-left: 14px;
 `;
-const EditProfile = ({ value }) => {
+const EditProfile = ({value}) => {
   const history = useHistory();
   const [company, setCompany] = useState();
   const [website, setWebsite] = useState();
@@ -285,8 +283,8 @@ const EditProfile = ({ value }) => {
   const [type, setType] = useState();
   const [status, setStatus] = useState();
   const [map, setMap] = useState();
-  const [latitude, setLatitude] = useState("");
-  const [longitude, setLongitude] = useState("");
+  const [latitude, setLatitude] = useState('');
+  const [longitude, setLongitude] = useState('');
   const [userAddress, setAddress] = useState();
   const [twitter, setTwitter] = useState();
   const [instagram, setInstagram] = useState();
@@ -300,26 +298,26 @@ const EditProfile = ({ value }) => {
   const [formDisable, setFormDisable] = useState(true);
   const [inputList, setInputList] = useState([
     {
-      StartDay: "Monday",
-      EndDay: "Monday",
-      Start: "00:00",
-      End: "00:00",
-      error: "",
+      StartDay: 'Monday',
+      EndDay: 'Monday',
+      Start: '00:00',
+      End: '00:00',
+      error: '',
     },
   ]);
   const days = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
   ];
   let tagInput;
 
   useEffect(() => {
-    if (typeof value !== "undefined") {
+    if (typeof value !== 'undefined') {
       setFormDisable(false);
       window.scrollTo(0, 0);
       if (value.company_name) {
@@ -351,7 +349,7 @@ const EditProfile = ({ value }) => {
       }
       if (value.address) {
         setAddress(value.address);
-        FindAddress(value.address);
+        findAddress(value.address);
       }
       if (value.hours_format) {
         for (let i = 0; i < value.hours_format.length; i++) {
@@ -361,7 +359,7 @@ const EditProfile = ({ value }) => {
           ) {
             value.hours_format[i].error = error.END_DAY_ERROR;
           } else {
-            value.hours_format[i].error = "";
+            value.hours_format[i].error = '';
           }
         }
         setInputList(value.hours_format);
@@ -369,7 +367,7 @@ const EditProfile = ({ value }) => {
       if (value.filter_tags) {
         setTags(value.filter_tags);
       }
-      if (typeof value.handles !== "undefined") {
+      if (typeof value.handles !== 'undefined') {
         if (value.handles.twitter) {
           setTwitter(value.handles.twitter);
         }
@@ -387,15 +385,14 @@ const EditProfile = ({ value }) => {
         setImageUrl(value.default_image_url);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   const updateBusiness = async () => {
     setFormDisable(true);
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/place`, {
-      method: "PUT",
+      method: 'PUT',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         _id: value._id,
@@ -425,16 +422,16 @@ const EditProfile = ({ value }) => {
     return body;
   };
 
-  const AnyReactComponent = ({ text }) => (
+  const AnyReactComponent = ({text}) => (
     <div
       style={{
-        color: "white",
-        padding: "10px 5px",
-        display: "inline-flex",
-        textAlign: "center",
-        alignItems: "center",
-        justifyContent: "center",
-        transform: "translate(-50%, -50%)",
+        color: 'white',
+        padding: '10px 5px',
+        display: 'inline-flex',
+        textAlign: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        transform: 'translate(-50%, -50%)',
       }}
     >
       <div className="mapTextOuter">
@@ -451,56 +448,56 @@ const EditProfile = ({ value }) => {
 
   const inputKeyDown = (e) => {
     const val = e.target.value;
-    if (e.key === "Enter" && val) {
+    if (e.key === 'Enter' && val) {
       if (tags.find((tag) => tag.toLowerCase() === val.toLowerCase())) {
         return;
       }
       setTags([...tags, val]);
       tagInput.value = null;
-    } else if (e.key === "Backspace" && !val) {
+    } else if (e.key === 'Backspace' && !val) {
       removeTag(tags.length - 1);
     }
   };
 
   const handleChange = (e) => {
-    if (e.target.id === "company") {
+    if (e.target.id === 'company') {
       setCompany(e.target.value);
-    } else if (e.target.id === "add") {
+    } else if (e.target.id === 'add') {
       setAddress(e.target.value);
-    } else if (e.target.id === "website") {
+    } else if (e.target.id === 'website') {
       setWebsite(e.target.value);
-    } else if (e.target.id === "phone") {
+    } else if (e.target.id === 'phone') {
       setPhone(e.target.value);
-    } else if (e.target.id === "rating") {
+    } else if (e.target.id === 'rating') {
       setRating(e.target.value);
-    } else if (e.target.id === "type") {
+    } else if (e.target.id === 'type') {
       setType(e.target.value);
-    } else if (e.target.id === "status") {
+    } else if (e.target.id === 'status') {
       setStatus(e.target.value);
-    } else if (e.target.id === "map") {
+    } else if (e.target.id === 'map') {
       setMap(e.target.value);
-    } else if (e.target.id === "lat") {
+    } else if (e.target.id === 'lat') {
       setLatitude(e.target.value);
-    } else if (e.target.id === "long") {
+    } else if (e.target.id === 'long') {
       setLongitude(e.target.value);
-    } else if (e.target.id === "facebook") {
+    } else if (e.target.id === 'facebook') {
       setFacebook(e.target.value);
-    } else if (e.target.id === "twitter") {
+    } else if (e.target.id === 'twitter') {
       setTwitter(e.target.value);
-    } else if (e.target.id === "instagram") {
+    } else if (e.target.id === 'instagram') {
       setInstagram(e.target.value);
-    } else if (e.target.id === "linkedin") {
+    } else if (e.target.id === 'linkedin') {
       setLinkedIn(e.target.value);
     }
   };
   const updateTime = (time) => {
     const timePointer = time / 1800;
     if (timePointer === 1) {
-      return "00:30";
+      return '00:30';
     } else if (timePointer % 2 === 0) {
-      return timePointer / 2 + ":00";
+      return timePointer / 2 + ':00';
     } else {
-      return (timePointer - 1) / 2 + ":30";
+      return (timePointer - 1) / 2 + ':30';
     }
   };
   const handleStartChange = (time, index, name) => {
@@ -521,17 +518,17 @@ const EditProfile = ({ value }) => {
   const zoom = 15;
   const renderMarkers = (val) => {
     if (DropPin === true) {
-      setChangeCenter({ lat: val.lat, lng: val.lng });
+      setChangeCenter({lat: val.lat, lng: val.lng});
       setLatitude(val.lat);
       setLongitude(val.lng);
       Geocode.fromLatLng(val.lat, val.lng).then(
-        (response) => {
-          const address = response.results[0].formatted_address;
-          setAddress(address);
-        },
-        (error) => {
-          console.error(error);
-        }
+          (response) => {
+            const address = response.results[0].formatted_address;
+            setAddress(address);
+          },
+          (error) => {
+            console.error(error);
+          },
       );
     }
   };
@@ -540,16 +537,16 @@ const EditProfile = ({ value }) => {
     setLatitude(lat);
     setLongitude(lng);
   };
-  const FindAddress = (userAddress) => {
+  const findAddress = (userAddress) => {
     Geocode.fromAddress(userAddress).then(
-      (response) => {
-        const { lat, lng } = response.results[0].geometry.location;
-        setData(lat, lng);
-        setChangeCenter({ lat, lng });
-      },
-      (error) => {
-        console.error(error);
-      }
+        (response) => {
+          const {lat, lng} = response.results[0].geometry.location;
+          setData(lat, lng);
+          setChangeCenter({lat, lng});
+        },
+        (error) => {
+          console.error(error);
+        },
     );
   };
   const editName = (name) => {
@@ -561,53 +558,53 @@ const EditProfile = ({ value }) => {
     const newName = editName(file.name);
     const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${newName}`;
     const value = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/upload_photo`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+        `${process.env.REACT_APP_API_URL}/api/upload_photo`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            Key: newName,
+            ContentType: file.type,
+          }),
         },
-        body: JSON.stringify({
-          Key: newName,
-          ContentType: file.type,
-        }),
-      }
     );
     const body = await value.text();
     const Val = JSON.parse(body);
 
     await fetch(Val, {
-      method: "PUT",
+      method: 'PUT',
       headers: {
-        "Content-Type": file.type,
+        'Content-Type': file.type,
       },
       body: file,
     })
-      .then((response) => setImageUrl(baseUrl))
-      .catch(
-        (error) => console.log(error) // Handle the error response object
-      );
+        .then((response) => setImageUrl(baseUrl))
+        .catch(
+            (error) => console.log(error), // Handle the error response object
+        );
   };
 
   const handleInputChange = (e, index) => {
-    const { name, value } = e.target;
+    const {name, value} = e.target;
     const list = [...inputList];
-    if (name === "EndDay") {
-      if (days.indexOf(list[index]["StartDay"]) > days.indexOf(value)) {
-        list[index]["error"] = error.END_DAY_ERROR;
+    if (name === 'EndDay') {
+      if (days.indexOf(list[index]['StartDay']) > days.indexOf(value)) {
+        list[index]['error'] = error.END_DAY_ERROR;
         setInputList(list);
       } else {
         list[index][name] = value;
-        list[index]["error"] = "";
+        list[index]['error'] = '';
         setInputList(list);
       }
     } else {
-      if (days.indexOf(list[index]["EndDay"]) < days.indexOf(value)) {
-        list[index]["error"] = error.END_DAY_ERROR;
+      if (days.indexOf(list[index]['EndDay']) < days.indexOf(value)) {
+        list[index]['error'] = error.END_DAY_ERROR;
         setInputList(list);
       } else {
         list[index][name] = value;
-        list[index]["error"] = "";
+        list[index]['error'] = '';
         setInputList(list);
       }
     }
@@ -618,7 +615,7 @@ const EditProfile = ({ value }) => {
   const handleAddClick = () => {
     setInputList([
       ...inputList,
-      { StartDay: "Monday", EndDay: "Monday", Start: "00:00", End: "00:00" },
+      {StartDay: 'Monday', EndDay: 'Monday', Start: '00:00', End: '00:00'},
     ]);
   };
   let myInput;
@@ -629,12 +626,12 @@ const EditProfile = ({ value }) => {
       <ProfileInner>
         <LeftProfile>
           <Card>
-            {typeof value !== "undefined" &&
-            latitude !== "" &&
-            longitude !== "" ? (
+            {typeof value !== 'undefined' &&
+            latitude !== '' &&
+            longitude !== '' ? (
               <GoogleMapReact
                 center={
-                  typeof changeCenter === "undefined" ? center : changeCenter
+                  typeof changeCenter === 'undefined' ? center : changeCenter
                 }
                 defaultZoom={zoom}
                 onClick={(e) => renderMarkers(e)}
@@ -657,11 +654,11 @@ const EditProfile = ({ value }) => {
                   onChange={(e) => upload(e)}
                   type="file"
                   ref={(ref) => (myInput = ref)}
-                  style={{ display: "none" }}
+                  style={{display: 'none'}}
                 />
                 <TopProfile onClick={(e) => myInput.click()}>
                   {typeof preview !== undefined ||
-                  (typeof value !== "undefined" && value.default_image_url) ? (
+                  (typeof value !== 'undefined' && value.default_image_url) ? (
                     <img src={preview ? preview : imageUrl} alt="" />
                   ) : null}
                 </TopProfile>
@@ -699,9 +696,9 @@ const EditProfile = ({ value }) => {
                     Drop Pin
                   </ButtonSmall>
                   <ButtonSmall
-                    onClick={() => FindAddress(userAddress)}
+                    onClick={() => findAddress(userAddress)}
                     maxWidth="137px"
-                    style={{ marginLeft: "auto" }}
+                    style={{marginLeft: 'auto'}}
                   >
                     Find Address
                   </ButtonSmall>
@@ -859,7 +856,7 @@ const EditProfile = ({ value }) => {
                     <Label name="Start Time"></Label>
                     <TimePicker
                       disabled={formDisable}
-                      onChange={(e) => handleStartChange(e, i, "Start")}
+                      onChange={(e) => handleStartChange(e, i, 'Start')}
                       value={x.Start}
                     />
                   </div>
@@ -867,12 +864,12 @@ const EditProfile = ({ value }) => {
                     <Label name="End Time"></Label>
                     <TimePicker
                       disabled={formDisable}
-                      onChange={(e) => handleEndChange(e, i, "End")}
+                      onChange={(e) => handleEndChange(e, i, 'End')}
                       value={x.End}
                     />
                   </div>
                 </SelectSection>
-                {x.error !== "" ? <ErrorDiv>{x.error}</ErrorDiv> : null}
+                {x.error !== '' ? <ErrorDiv>{x.error}</ErrorDiv> : null}
               </>
             );
           })}
@@ -896,7 +893,7 @@ const EditProfile = ({ value }) => {
               onClick={() => history.push(`/`)}
               maxWidth="110px"
               bgColor="#FF7171"
-              style={{ marginLeft: "auto", marginRight: "10px" }}
+              style={{marginLeft: 'auto', marginRight: '10px'}}
             >
               Cancel
             </ButtonSmall>

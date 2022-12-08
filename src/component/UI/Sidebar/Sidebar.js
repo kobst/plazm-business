@@ -1,23 +1,23 @@
 /* eslint-disable no-sequences */
 
-import React, { useEffect, useState } from "react";
-import { Auth } from "aws-amplify";
-import styled from "styled-components";
-import { Link, useHistory } from "react-router-dom";
-import SubHeading from "../SubHeading";
-import Facebook from "../../../images/facebook.svg";
-import Twitter from "../../../images/Twitter.svg";
-import Instagram from "../../../images/Instagram.svg";
-import linkedIn from "../../../images/linkedIn.svg";
-import ModalBox from "../../Edit-Business/index";
-import Badges from "../../UI/Badges";
-import MapPin from "../../../images/map-pin.svg";
-import ButtonSmall from "../../UI/ButtonSmall";
-import GoogleMapReact from "google-map-react";
-import Geocode from "react-geocode";
+import React, {useEffect, useState} from 'react';
+import {Auth} from 'aws-amplify';
+import styled from 'styled-components';
+import {Link, useHistory} from 'react-router-dom';
+import SubHeading from '../SubHeading';
+import Facebook from '../../../images/facebook.svg';
+import Twitter from '../../../images/Twitter.svg';
+import Instagram from '../../../images/Instagram.svg';
+import linkedIn from '../../../images/linkedIn.svg';
+import ModalBox from '../../Edit-Business/index';
+import Badges from '../../UI/Badges';
+import MapPin from '../../../images/map-pin.svg';
+import ButtonSmall from '../../UI/ButtonSmall';
+import GoogleMapReact from 'google-map-react';
+import Geocode from 'react-geocode';
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_API_KEY);
-Geocode.setLanguage("en");
+Geocode.setLanguage('en');
 
 const LeftSidebar = styled.div`
   width:100%;
@@ -25,7 +25,11 @@ const LeftSidebar = styled.div`
   background: #F2FBFF;;
   padding: 10px 10px 15px;
   border: 1px solid #DBE2EA;
-  box-shadow:  0px 56px 63px rgba(255, 82, 117, 0.19), 0px 23.3955px 26.3199px rgba(255, 82, 117, 0.136582), 0px 12.5083px 14.0719px rgba(255, 82, 117, 0.11326), 0px 7.01207px 7.88858px rgba(255, 82, 117, 0.095), 0px 3.72406px 4.18956px rgba(255, 82, 117, 0.0767396), 0px 1.54966px 1.74337px rgba(255, 82, 117, 0.0534177);
+  box-shadow:  0px 56px 63px rgba(255, 82, 117, 0.19),
+   0px 23.3955px 26.3199px rgba(255, 82, 117, 0.136582), 
+   0px 12.5083px 14.0719px rgba(255, 82, 117, 0.11326), 
+   0px 7.01207px 7.88858px rgba(255, 82, 117, 0.095), 
+   0px 3.72406px 4.18956px rgba(255, 82, 117, 0.0767396), 0px 1.54966px 1.74337px rgba(255, 82, 117, 0.0534177);
 }
   border-radius:25px;
   position: absolute;
@@ -142,8 +146,8 @@ const SocialOuter = styled.div`
   }
 `;
 
-const Sidebar = ({ value }) => {
-  const history = useHistory()
+const Sidebar = ({value}) => {
+  const history = useHistory();
   const [placeValue, setPlace] = useState({});
   const [isOpen, setIsOpen] = useState(false);
   const [facebook, setFacebook] = useState();
@@ -157,9 +161,9 @@ const Sidebar = ({ value }) => {
   const [longitude, setLongitude] = useState();
 
   useEffect(() => {
-    let updateUser = async (authState) => {
+    const updateUser = async (authState) => {
       try {
-        if (typeof value.handles !== "undefined") {
+        if (typeof value.handles !== 'undefined') {
           setFacebook(value.handles.facebook);
           setInstagram(value.handles.instagram);
           setTwitter(value.handles.twitter);
@@ -170,27 +174,26 @@ const Sidebar = ({ value }) => {
         setLongitude(value.longitude);
         setTags(value.filter_tags);
         setPlace(value);
-        FindAddress(value.address);
+        findAddress(value.address);
       } catch (err) {}
     };
     updateUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
   const center = {
     lat: 30.7092231,
     lng: 76.68880390000004,
   };
   const zoom = 15;
-  const AnyReactComponent = ({ text }) => (
+  const AnyReactComponent = ({text}) => (
     <div
       style={{
-        color: "white",
-        padding: "10px 5px",
-        display: "inline-flex",
-        textAlign: "center",
-        alignItems: "center",
-        justifyContent: "center",
-        transform: "translate(-50%, -50%)",
+        color: 'white',
+        padding: '10px 5px',
+        display: 'inline-flex',
+        textAlign: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        transform: 'translate(-50%, -50%)',
       }}
     >
       <div className="mapTextOuter">
@@ -202,28 +205,27 @@ const Sidebar = ({ value }) => {
     disableDefaultUI: true,
     scrollwheel: false,
   };
-  const FindAddress = (userAddress) => {
+  const findAddress = (userAddress) => {
     Geocode.fromAddress(userAddress).then(
-      (response) => {
-        const { lat, lng } = response.results[0].geometry.location;
-        setChangeCenter({ lat, lng });
-      },
-      (error) => {
-        console.error(error);
-      }
+        (response) => {
+          const {lat, lng} = response.results[0].geometry.location;
+          setChangeCenter({lat, lng});
+        },
+        (error) => {
+          console.error(error);
+        },
     );
   };
 
   return (
     <LeftSidebar>
-      {/* <div name={typeof placeValue !== 'undefined'&& placeValue.company_name?placeValue.company_name:'-'} setIsOpen={setIsOpen} /> */}
-      {typeof placeValue !== "undefined" ? (
+      {typeof placeValue !== 'undefined' ? (
         <>
           <Map>
-            <div style={{ height: "100%", width: "100%" }}>
+            <div style={{height: '100%', width: '100%'}}>
               <GoogleMapReact
                 center={
-                  typeof changeCenter === "undefined" ? center : changeCenter
+                  typeof changeCenter === 'undefined' ? center : changeCenter
                 }
                 defaultZoom={zoom}
                 options={mapOptions}
@@ -232,9 +234,9 @@ const Sidebar = ({ value }) => {
                   lat={latitude}
                   lng={longitude}
                   text={
-                    typeof placeValue !== "undefined"
-                      ? placeValue.company_name
-                      : null
+                    typeof placeValue !== 'undefined' ?
+                      placeValue.company_name :
+                      null
                   }
                 />
               </GoogleMapReact>
@@ -243,9 +245,9 @@ const Sidebar = ({ value }) => {
           <CompanyAddress>
             <div>
               <h3>
-                {typeof placeValue !== "undefined"
-                  ? placeValue.company_name
-                  : null}
+                {typeof placeValue !== 'undefined' ?
+                  placeValue.company_name :
+                  null}
               </h3>
               <p>0 Followers</p>
             </div>
@@ -259,7 +261,7 @@ const Sidebar = ({ value }) => {
           <Listing>
             <SubHeading name="Address" />
             <p>
-              {typeof placeValue !== "undefined" ? placeValue.address : null}
+              {typeof placeValue !== 'undefined' ? placeValue.address : null}
             </p>
             <ModalBox
               value={placeValue}
@@ -272,77 +274,78 @@ const Sidebar = ({ value }) => {
           <Listing>
             <SubHeading name="Website" />
             <p>
-              {typeof placeValue !== "undefined" && placeValue.web_site
-                ? placeValue.web_site
-                : "-"}
+              {typeof placeValue !== 'undefined' && placeValue.web_site ?
+                placeValue.web_site :
+                '-'}
             </p>
           </Listing>
           <Listing>
             <SubHeading name="Type" />
             <p>
-              {typeof placeValue !== "undefined" && placeValue.type
-                ? placeValue.type
-                : "-"}
+              {typeof placeValue !== 'undefined' && placeValue.type ?
+                placeValue.type :
+                '-'}
             </p>
           </Listing>
           <Listing>
             <SubHeading name="Status" />
             <p>
-              {typeof placeValue !== "undefined" && placeValue.status
-                ? placeValue.status
-                : "-"}
+              {typeof placeValue !== 'undefined' && placeValue.status ?
+                placeValue.status :
+                '-'}
             </p>
           </Listing>
           <Listing>
             <SubHeading name="Phone" />
             <p>
-              {typeof placeValue !== "undefined" && placeValue.telephone
-                ? placeValue.telephone
-                : "-"}
+              {typeof placeValue !== 'undefined' && placeValue.telephone ?
+                placeValue.telephone :
+                '-'}
             </p>
           </Listing>
           <Listing>
             <SubHeading name="Opening Hours" />
-            {typeof placeValue !== "undefined" && openingHours
-              ? openingHours.map((v) => (
-                  <p>
-                    <span>
-                      {v.StartDay} - {v.EndDay}
-                    </span>{" "}
-                    <span style={{ marginLeft: "auto" }}>
-                      {v.Start} to {v.End}
-                    </span>
-                  </p>
-                ))
-              : null}
+            {typeof placeValue !== 'undefined' && openingHours ?
+              openingHours.map((v, key) => (
+                <p key={key}>
+                  <span>
+                    {v.StartDay} - {v.EndDay}
+                  </span>{' '}
+                  <span style={{marginLeft: 'auto'}}>
+                    {v.Start} to {v.End}
+                  </span>
+                </p>
+              )) :
+              null}
           </Listing>
 
-          <Listing style={{ borderBottom: "none" }}>
+          <Listing style={{borderBottom: 'none'}}>
             <SubHeading name="Hashtags" />
-            {typeof placeValue !== "undefined"
-              ? tags.map((v) => <Badges name={v} />)
-              : null}
+            {typeof placeValue !== 'undefined' ?
+              // eslint-disable-next-line react/jsx-key
+              tags.map((v) => <Badges name={v} />) :
+              null}
           </Listing>
 
           <SocialOuter>
             <SocialIcon>
               <div>
-                {typeof placeValue !== "undefined" && facebook ? (
+                {typeof placeValue !== 'undefined' && facebook ? (
                   <a href={facebook}>
                     <img src={Facebook} alt={Facebook} />
                   </a>
                 ) : null}
-                {typeof placeValue !== "undefined" && twitter ? (
+                {typeof placeValue !== 'undefined' && twitter ? (
                   <a href={twitter}>
                     <img src={Twitter} alt={Twitter} />
                   </a>
                 ) : null}
-                {typeof placeValue !== "undefined" && LinkedIn ? (
+                {typeof placeValue !== 'undefined' && LinkedIn ? (
                   <a href={LinkedIn}>
                     <img src={linkedIn} alt={linkedIn} />
                   </a>
                 ) : null}
-                {typeof placeValue !== "undefined" && instagram ? (
+                {typeof placeValue !== 'undefined' && instagram ? (
                   <a href={instagram}>
                     <img src={Instagram} alt={Instagram} />
                   </a>
@@ -355,7 +358,7 @@ const Sidebar = ({ value }) => {
                 onClick={() => Auth.signOut()}
                 className="btn btn-primary"
               >
-                {" "}
+                {' '}
                 <Link to="/business/login">Logout</Link>
               </ButtonSmall>
             </SocialIcon>

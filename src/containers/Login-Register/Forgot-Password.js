@@ -1,34 +1,34 @@
-import React, { useState, useEffect } from "react";
-import { Auth } from "aws-amplify";
-import { useHistory } from "react-router-dom";
+import React, {useState, useEffect} from 'react';
+import {Auth} from 'aws-amplify';
+import {useHistory} from 'react-router-dom';
 
-import Wrapper from "@components/Login-Register/Wrapper";
-import ForgotPasswordForm from "@components/Login-Register/Form-Components/Forgot-Password-Form";
-import ValueLoader from "@utils/loader";
-import "./style.css";
-import { getMessage } from "../../config";
-import { validateEmail, validatePassword } from "./helper";
+import Wrapper from '@components/Login-Register/Wrapper';
+import ForgotPasswordForm from '@components/Login-Register/Form-Components/Forgot-Password-Form';
+import ValueLoader from '@utils/loader';
+import './style.css';
+import {getMessage} from '../../config';
+import {validateEmail, validatePassword} from './helper';
 
 const renderMessage = getMessage();
 
 const initialUserDetailsState = {
-  email: "",
-  password: "",
-  confirmPassword: "",
+  email: '',
+  password: '',
+  confirmPassword: '',
 };
 
 const initialErrorsState = {
-  email: "",
-  password: "",
-  verification: "",
-  new_password: "",
-  confirmPass: "",
-  code: "",
-  email: "",
-  emError: "",
+  email: '',
+  password: '',
+  verification: '',
+  new_password: '',
+  confirmPass: '',
+  code: '',
+  email: '',
+  emError: '',
 };
 
-const ForgotPassword = ({ match }) => {
+const ForgotPassword = ({match}) => {
   const history = useHistory();
 
   const isNewPasswordPage = Object.keys(match.params).length;
@@ -40,19 +40,18 @@ const ForgotPassword = ({ match }) => {
   const [loader, setLoader] = useState(false);
   const [isAlreadyAuthenticated, setIsAlreadyAuthenticated] = useState(false);
 
-  const { email, password, confirmPassword } = userDetails;
+  const {email, password, confirmPassword} = userDetails;
 
   useEffect(() => {
-    let updateUser = async () => {
+    const updateUser = async () => {
       try {
         await Auth.currentAuthenticatedUser();
-        history.push("/");
-      } catch {
+        history.push('/');
+      } catch (err) {
         setIsAlreadyAuthenticated(true);
       }
     };
     updateUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmitEmail = (e) => {
@@ -64,13 +63,13 @@ const ForgotPassword = ({ match }) => {
       return;
     }
     Auth.forgotPassword(email)
-      .then(() => setEmailSent(true))
-      .catch(() =>
-        setErrors((prevState) => ({
-          ...prevState,
-          email: renderMessage.Email_Err,
-        }))
-      );
+        .then(() => setEmailSent(true))
+        .catch(() =>
+          setErrors((prevState) => ({
+            ...prevState,
+            email: renderMessage.Email_Err,
+          }))
+        );
     e.target.reset();
     setLoader(false);
   };
@@ -86,23 +85,23 @@ const ForgotPassword = ({ match }) => {
       return;
     }
     Auth.forgotPasswordSubmit(match.params.id, match.params.code, password)
-      .then(() => {
-        if (type.includes("business")) {
-          history.push(`/business/login`);
-        } else {
-          history.push(`/consumer/login`);
-        }
-      })
-      .catch(() =>
-        setErrors((prevState) => ({
-          ...prevState,
-          verification: renderMessage.Email_Err,
-        }))
-      );
+        .then(() => {
+          if (type.includes('business')) {
+            history.push(`/business/login`);
+          } else {
+            history.push(`/consumer/login`);
+          }
+        })
+        .catch(() =>
+          setErrors((prevState) => ({
+            ...prevState,
+            verification: renderMessage.Email_Err,
+          }))
+        );
   };
 
   const handleChangeDetails = (e) => {
-    const { value, id } = e.target;
+    const {value, id} = e.target;
     setErrors(initialErrorsState);
     setLoader(false);
     const updatedDetails = Object.assign({}, userDetails);
@@ -112,7 +111,7 @@ const ForgotPassword = ({ match }) => {
 
   if (!isAlreadyAuthenticated) {
     return (
-      <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
+      <div style={{textAlign: 'center', margin: ' 40px auto 0'}}>
         <ValueLoader />
       </div>
     );
@@ -123,9 +122,7 @@ const ForgotPassword = ({ match }) => {
       type={type}
       page="forgot"
       heading={renderMessage.Reset}
-      welcomeMessage={
-        email ? renderMessage.Res_Message : renderMessage.Email_Msg
-      }
+      welcomeMessage={email ? renderMessage.Res_Message : renderMessage.Email_Msg}
     >
       <ForgotPasswordForm
         loader={loader}

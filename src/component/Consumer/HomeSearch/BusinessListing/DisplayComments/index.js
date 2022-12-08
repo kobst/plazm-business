@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import ReactTooltip from "react-tooltip";
-import { RiArrowDropRightFill } from "react-icons/ri";
-import Comments from "../UserMessage/Comments";
-import ProfileImg from "../../../../../images/profile-img.png";
-import LikesBar from "../LikesBar";
-import { useHistory } from "react-router-dom";
+import React, {useState} from 'react';
+import styled from 'styled-components';
+import ReactTooltip from 'react-tooltip';
+import {RiArrowDropRightFill} from 'react-icons/ri';
+import Comments from '../UserMessage/Comments';
+import ProfileImg from '../../../../../images/profile-img.png';
+import LikesBar from '../LikesBar';
+import {useHistory} from 'react-router-dom';
 
-const reactStringReplace = require("react-string-replace");
+const reactStringReplace = require('react-string-replace');
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -150,39 +150,39 @@ const DescriptionBox = styled.div`
   }
 `;
 
-const DisplayComment = ({ postData, businessData, setSelectedListId }) => {
+const DisplayComment = ({postData, businessData, setSelectedListId}) => {
   const [displayComments, setDisplayComments] = useState(false);
   const [displayCommentInput, setDisplayCommentInput] = useState(false);
   const [flag, setFlag] = useState(false);
-  const history = useHistory()
+  const history = useHistory();
 
   /** to highlight the user mentions mentioned in post description */
   const findDesc = (value, mentions, mentionsList) => {
     let divContent = value;
     if (mentions.length > 0 && mentionsList.length > 0) {
-      let arr = [],
-        data;
+      const arr = [];
+      let data;
       for (let i = 0; i < mentions.length; i++) {
-        if (value.includes("@" + mentions[i].name)) {
+        if (value.includes('@' + mentions[i].name)) {
           arr.push({
-            name: "@" + mentions[i].name,
+            name: '@' + mentions[i].name,
             id: mentions[i]._id,
-            type: "name",
+            type: 'name',
           });
         }
       }
       for (let i = 0; i < mentionsList.length; i++) {
-        if (value.includes("@" + mentionsList[i].name)) {
+        if (value.includes('@' + mentionsList[i].name)) {
           arr.push({
-            name: "@" + mentionsList[i].name,
+            name: '@' + mentionsList[i].name,
             id: mentionsList[i]._id,
-            type: "list",
+            type: 'list',
           });
         }
       }
       for (let i = 0; i < arr.length; i++) {
         if (i === 0) {
-          if (arr[i].type === "list")
+          if (arr[i].type === 'list') {
             data = reactStringReplace(value, arr[i].name, (match, j) => (
               <span
                 key={j}
@@ -192,7 +192,7 @@ const DisplayComment = ({ postData, businessData, setSelectedListId }) => {
                 {match}
               </span>
             ));
-          else
+          } else {
             data = reactStringReplace(value, arr[i].name, (match, j) => (
               <span
                 key={j}
@@ -202,8 +202,9 @@ const DisplayComment = ({ postData, businessData, setSelectedListId }) => {
                 {match}
               </span>
             ));
+          }
         } else {
-          if (arr[i].type === "list")
+          if (arr[i].type === 'list') {
             data = reactStringReplace(data, arr[i].name, (match, j) => (
               <span
                 key={j}
@@ -213,7 +214,7 @@ const DisplayComment = ({ postData, businessData, setSelectedListId }) => {
                 {match}
               </span>
             ));
-          else
+          } else {
             data = reactStringReplace(data, arr[i].name, (match, j) => (
               <span
                 key={j}
@@ -223,15 +224,16 @@ const DisplayComment = ({ postData, businessData, setSelectedListId }) => {
                 {match}
               </span>
             ));
+          }
         }
       }
       return data;
     } else if (mentions.length > 0) {
       for (let i = 0; i < mentions.length; i++) {
-        if (value.search(new RegExp("@" + mentions[i].name, "g") !== -1)) {
+        if (value.search(new RegExp('@' + mentions[i].name, 'g') !== -1)) {
           return (
             <div>
-              {reactStringReplace(value, "@" + mentions[i].name, (match, j) => (
+              {reactStringReplace(value, '@' + mentions[i].name, (match, j) => (
                 <span
                   className="mentionData"
                   onClick={() => history.push(`/u/${mentions[i]._id}`)}
@@ -247,17 +249,17 @@ const DisplayComment = ({ postData, businessData, setSelectedListId }) => {
       }
     } else if (mentionsList.length > 0) {
       mentionsList.map((v) => {
-        let re = new RegExp("@" + v.name, "g");
+        const re = new RegExp('@' + v.name, 'g');
         divContent = divContent.replace(
-          re,
-          `<span className='mentionData'> ${"@" + v.name}  </span>`
+            re,
+            `<span className='mentionData'> ${'@' + v.name}  </span>`,
         );
         return divContent;
       });
       if (mentionsList.length !== 0) {
         return (
           <>
-            <div dangerouslySetInnerHTML={{ __html: divContent }}></div>
+            <div dangerouslySetInnerHTML={{__html: divContent}}></div>
           </>
         );
       } else {
@@ -276,21 +278,21 @@ const DisplayComment = ({ postData, businessData, setSelectedListId }) => {
               <img
                 src={
                   postData.itemId.ownerId === null ||
-                  postData.itemId.ownerId.length === 0
-                    ? businessData.default_image_url
-                    : postData.itemId.ownerId[0].photo !== "" &&
-                      postData.itemId.ownerId[0].photo !== null
-                    ? postData.itemId.ownerId[0].photo
-                    : ProfileImg
+                  postData.itemId.ownerId.length === 0 ?
+                    businessData.default_image_url :
+                    postData.itemId.ownerId[0].photo !== '' &&
+                      postData.itemId.ownerId[0].photo !== null ?
+                    postData.itemId.ownerId[0].photo :
+                    ProfileImg
                 }
                 alt=""
               />
             </ProfileThumb>
             <ProfileNameWrap>
               <ProfileName>
-                {postData.userId === null || postData.userId.length === 0
-                  ? businessData.company_name
-                  : postData.userId[0].name}{" "}
+                {postData.userId === null || postData.userId.length === 0 ?
+                  businessData.company_name :
+                  postData.userId[0].name}{' '}
                 {postData.listId !== null && postData.listId.length !== 0 ? (
                   <RightArrowSec>
                     <ArrowRight>
@@ -316,18 +318,18 @@ const DisplayComment = ({ postData, businessData, setSelectedListId }) => {
               </ProfileName>
               <ChatInput>
                 {findDesc(
-                  postData.itemId.data,
-                  postData.itemId.taggedUsers,
-                  postData.itemId.taggedLists
+                    postData.itemId.data,
+                    postData.itemId.taggedUsers,
+                    postData.itemId.taggedLists,
                 )}
               </ChatInput>
               <LikesBar
                 type="disabled"
                 totalLikes={postData.itemId.likes.length}
                 totalComments={
-                  postData.totalComments.length > 0
-                    ? postData.totalComments[0].totalCount
-                    : 0
+                  postData.totalComments.length > 0 ?
+                    postData.totalComments[0].totalCount :
+                    0
                 }
                 date={new Date(postData.itemId.createdAt)}
                 setDisplayComments={setDisplayComments}

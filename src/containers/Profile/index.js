@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { Auth } from "aws-amplify";
-import Header from "../../component/Header";
-import EditProfile from "../../component/Edit-Profile";
-import { callPlace } from "../../Api";
-import { useHistory } from "react-router-dom";
+import React, {useEffect, useState} from 'react';
+import styled from 'styled-components';
+import {Auth} from 'aws-amplify';
+import Header from '../../component/Header';
+import EditProfile from '../../component/Edit-Profile';
+import {callPlace} from '../../Api';
+import {useHistory} from 'react-router-dom';
 const ProfileSection = styled.div`
   display: flex;
   background: linear-gradient(157.1deg, #ff7171 -1.1%, #ff479d 100%);
@@ -24,19 +24,19 @@ const Container = styled.div`
 `;
 
 const Profile = () => {
-  const history = useHistory()
+  const history = useHistory();
   const [placeValue, setPlace] = useState();
   const [center, setCenter] = useState();
   useEffect(() => {
-    let updateUser = async (authState) => {
+    const updateUser = async (authState) => {
       try {
         const value = await Auth.currentAuthenticatedUser();
         const place = await callPlace(value.attributes.sub);
         setPlace(place[0]);
-        const centerValue = { lat: place[0].latitude, lng: place[0].longitude };
+        const centerValue = {lat: place[0].latitude, lng: place[0].longitude};
         setCenter(centerValue);
-      } catch {
-        history.push("/business/login");
+      } catch (error) {
+        history.push('/business/login');
       }
     };
     updateUser();

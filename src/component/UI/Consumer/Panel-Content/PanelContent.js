@@ -1,95 +1,42 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import "./styles.css";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import Notifications from "../../../../images/notifications-new.png";
-import { useDispatch, useSelector } from "react-redux";
+import React from 'react';
+import './styles.css';
 
-import ListDetail from "../../../Consumer/ListDescriptionView/ListDetail";
+import ListDetail from '../../../Consumer/ListDescriptionView/ListDetail';
 
-import MyFeed from "../../../Consumer/MyFeed";
-import {
-  clearMyFeedData,
-  setSearchData,
-  fetchMyFeedData,
-  setSideFiltersHomeSearch,
-} from "../../../../reducers/myFeedReducer";
+import MyFeed from '../../../Consumer/MyFeed';
 
-import Profile from "../../../Consumer/Profile";
-import HomeSearchComponent from "../../../Consumer/HomeSearch";
-import BuisinessView from "../../../Consumer/BuisinessView";
-import BusinessList from "../../../Consumer/BusinessList";
-import DiscoverList from "../../../Consumer/DiscoverList";
-import ListMenu from "../../../Consumer/DiscoverList/ListMenu";
+import Profile from '../../../Consumer/Profile';
+import HomeSearchComponent from '../../../Consumer/HomeSearch';
+import BuisinessView from '../../../Consumer/BuisinessView';
+import DiscoverList from '../../../Consumer/DiscoverList';
 
-
-
-import { useHistory } from "react-router-dom";
-import { unwrapResult } from "@reduxjs/toolkit";
-
-
-import {
-  clearBusinessData,
-  clearTopPost,
-} from "../../../../reducers/businessReducer";
-
-
-import {
-  fetchUserLists,
-  fetchUserCreatedAndFollowedList,
-  clearListData,
-} from "../../../../reducers/listReducer";
-
-
-import useStore from '../../../Consumer/useState/index'
-
-
+import useStore from '../../../Consumer/useState/index';
 
 // const PanelContent = ({view}) => {
 const PanelContent = () => {
+  const detailId = useStore((state) => state.detailId);
+  const view = useStore((state) => state.view);
 
-// const user = useSelector((state) => state.user.user);
-// const userLocation = useSelector((state) => state.business.userLocation);
-// const [selectedListId, setSelectedListId] = useState(null);
-// const [listClickedFromSearch, setListClickedFromSearch] = useState(false);
-// const loading = useSelector((state) => state.myFeed.loading);
-// const loader = useSelector((state) => state.consumer.globalLoader);
-// const [searchIndex, setSearchIndex] = useState(null);
-// const [myFeedIndex, setMyFeedIndex] = useState(null);
-// const [listIndex, setListIndex] = useState(null);
-// const [favoriteIndex, setFavoriteIndex] = useState(null);
-// const [profileClosed, setProfileClosed] = useState(false);
-// const [userDataId, setUserDataId] = useState(userId);
+  return (
+    <>
+      <div className="panel-content">
+        {view === 'explore' && <HomeSearchComponent />}
 
-// const [readMore, setReadMore] = useState(false);
-// const dispatch = useDispatch();
-// const history = useHistory();
+        {view == 'my_feed' && <MyFeed />}
 
-const selectedTab= useStore((state) => state.tabSelected)
-const detailId = useStore((state) => state.detailId)
-const gridMode = useStore((state) => state.gridMode)
-const view = useStore((state) => state.view)
+        {view === 'list_detail' && <ListDetail />}
 
+        {view === 'business_detail' && (
+          <BuisinessView businessId={detailId} />
+        )}
 
-    return (
-        <>
-        <div className="panel-content">
-                {view ==="explore" && <HomeSearchComponent/> }
+        {view === 'user_detail' && <Profile userId={detailId} />}
+      </div>
 
-                {view =="my_feed" && <MyFeed/> } 
+      {/* {view === "list_explore" && <ListMenu/>} */}
+      {view === 'list_explore' && <DiscoverList />}
+    </>
+  );
+};
 
-                {view ==="list_detail" && <ListDetail/>}
-
-                {view ==="business_detail" && <BuisinessView businessId={detailId}/>}
-
-                {view ==="user_detail" && <Profile userId={detailId}/>}
-        </div>
-
-        {/* {view === "list_explore" && <ListMenu/>} */}
-        {view === "list_explore" && <DiscoverList/>}
-
-        </>
-    )
-}
-
-export default PanelContent
+export default PanelContent;

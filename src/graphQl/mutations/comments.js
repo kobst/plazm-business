@@ -2,9 +2,9 @@
 @desc: add comment to a post graphQL mutation
 @params: itemId, userId, body, created_on
 */
-const AddComment = (values) => {
-    const graphQl = {
-      query: `
+const addCommentGraphql = (values) => {
+  const graphQl = {
+    query: `
             mutation CreateComment($itemId:ID, $userId:ID, $body:String, $created_on:Date){
                 createComment(input: { itemId:$itemId, userId:$userId, body:$body, created_on:$created_on}) {
                 message
@@ -42,21 +42,21 @@ const AddComment = (values) => {
                 }
               }
             }`,
-      variables: {
-        itemId: values.itemId,
-        userId: values.userId,
-        body: values.body,
-        created_on: values.created_on,
-      },
-    };
-    return graphQl;
+    variables: {
+      itemId: values.itemId,
+      userId: values.userId,
+      body: values.body,
+      created_on: values.created_on,
+    },
   };
+  return graphQl;
+};
 
 /*
 @desc: add comment to a post graphQL mutation
 @params: _id, userId, body
 */
-const CreateReply = (values) => {
+const createReplyGraphql = (values) => {
   const graphQl = {
     query: `
           mutation CreateReply($_id:ID!, $userId:ID!, $body:String!){
@@ -88,7 +88,7 @@ const CreateReply = (values) => {
 @desc: add comment to a post graphQL mutation
 @params: commentId, userId
 */
-const AddLikeToComment = (values) => {
+const addLikeToCommentGraphql = (values) => {
   const graphQl = {
     query: `
           mutation AddLikeToComment($id:ID!, $userId:ID!){
@@ -110,9 +110,9 @@ const AddLikeToComment = (values) => {
           }`,
     variables: {
       id: values.id,
-      userId: values.userId
+      userId: values.userId,
     },
   };
   return graphQl;
 };
-  export { AddComment, CreateReply, AddLikeToComment };
+export {addCommentGraphql, createReplyGraphql, addLikeToCommentGraphql};

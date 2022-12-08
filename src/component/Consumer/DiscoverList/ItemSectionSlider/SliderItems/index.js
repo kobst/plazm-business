@@ -22,8 +22,8 @@ import {
   SubscribeBtn,
 } from "../../styled";
 import {
-  SubscribeToAListAction,
-  UnSubscribeToAList,
+  subscribeToAListAction,
+  unSubscribeToAList,
   userSubscribeToAList,
   userUnSubscribeToAList,
 } from "../../../../../reducers/listReducer";
@@ -93,7 +93,7 @@ const NewInBuzzItems = ({
       userId: user._id,
       listId: data._id,
     };
-    const list = await dispatch(UnSubscribeToAList(obj));
+    const list = await dispatch(unSubscribeToAList(obj));
     const response = await unwrapResult(list);
     if (response) {
       setLoader(false);
@@ -117,7 +117,7 @@ const NewInBuzzItems = ({
       userId: user._id,
       listId: data._id,
     };
-    const list = await dispatch(SubscribeToAListAction(obj));
+    const list = await dispatch(subscribeToAListAction(obj));
     const response = await unwrapResult(list);
     if (response) {
       setLoader(false);

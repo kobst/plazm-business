@@ -78,7 +78,9 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -96,6 +98,10 @@
     ]
   },
   "devDependencies": {
-    "@types/react-big-calendar": "^0.24.6"
+    "@types/react-big-calendar": "^0.24.6",
+    "eslint": "^8.29.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-react": "^7.31.11",
+    "optionator": "^0.9.1"
   }
 }

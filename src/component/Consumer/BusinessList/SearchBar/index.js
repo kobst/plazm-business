@@ -1,14 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
-import Input from "../../UI/Input/Input";
-import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
+import React, {useEffect, useRef, useState} from 'react';
+import Input from '../../UI/Input/Input';
+import styled from 'styled-components';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   setSideFiltersByClosest,
   setSideFiltersByUpdatedAt,
-} from "../../../../reducers/myFeedReducer";
-import DropdwonArrowTop from "../../../../images/top_arrow_polygon.png";
-import { FaFilter } from "react-icons/fa";
-import { IoMdClose } from "react-icons/io";
+} from '../../../../reducers/myFeedReducer';
+import DropdwonArrowTop from '../../../../images/top_arrow_polygon.png';
+import {FaFilter} from 'react-icons/fa';
+import {IoMdClose} from 'react-icons/io';
 
 const SearchWrap = styled.div`
   height: 40px;
@@ -173,20 +173,19 @@ const DropdownContent = styled.div`
   }
 `;
 
-const SearchBar = ({ setOffset, setDisplayTab, search, setSearch }) => {
+const SearchBar = ({setOffset, setDisplayTab, search, setSearch}) => {
   const menuRef = useRef(null);
   const loader = useSelector((state) => state.myFeed.loading);
   const [uploadMenu, setUploadMenu] = useState(false);
   const searchData = useSelector((state) => state.myFeed.searchData);
   const filterByClosest = useSelector((state) => state.myFeed.filterByClosest);
   const filterByUpdatedAt = useSelector(
-    (state) => state.myFeed.filterByUpdatedAt
+      (state) => state.myFeed.filterByUpdatedAt,
   );
   const dispatch = useDispatch();
 
   useEffect(() => {
     setSearch(searchData);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchData]);
 
   /** to toggle side filter menu */
@@ -229,7 +228,7 @@ const SearchBar = ({ setOffset, setDisplayTab, search, setSearch }) => {
               <DropdownContent>
                 <ul>
                   <li>
-                    {" "}
+                    {' '}
                     <button
                       onClick={() => closestFilter()}
                       disabled={filterByClosest}
@@ -243,7 +242,7 @@ const SearchBar = ({ setOffset, setDisplayTab, search, setSearch }) => {
                       onClick={() => recentlyUpdatedFilter()}
                       disabled={filterByUpdatedAt}
                     >
-                      {" "}
+                      {' '}
                       Recently Updated
                     </button>
                   </li>

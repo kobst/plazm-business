@@ -1,9 +1,8 @@
-import React from "react";
-import styled from "styled-components";
-import UserMessage from "./UserMessage";
-import { Scrollbars } from "react-custom-scrollbars";
-import { useSelector } from "react-redux";
-import useStore from "../../../../useState";
+import React from 'react';
+import styled from 'styled-components';
+import UserMessage from './UserMessage';
+import {Scrollbars} from 'react-custom-scrollbars';
+import {useSelector} from 'react-redux';
 
 const ChatContent = styled.div`
   width: 100%;
@@ -28,7 +27,7 @@ const PostChat = () => {
   const loading = useSelector((state) => state.event.loading);
   const loadingForAWeek = useSelector((state) => state.event.loadingForAWeek);
   const loadingForInitialWeek = useSelector(
-    (state) => state.event.loadingForInitialWeek
+      (state) => state.event.loadingForInitialWeek,
   );
   const topEvent = useSelector((state) => state.event.topEvent);
   const topEventId = useSelector((state) => state.event.topEventId);

@@ -1,15 +1,15 @@
-import { AddUser, getUser, updateUserProfile } from "../graphQl";
-import { graphQlEndPoint } from "./graphQl";
+import {addUserGraphql, getUserGraphql, updateUserProfileGraphql} from '../graphQl';
+import {graphQlEndPoint} from './graphQl';
 
 export const callPlace = async (userSub) => {
   const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/api/place-fetch/${userSub}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
+      `${process.env.REACT_APP_API_URL}/api/place-fetch/${userSub}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
-    }
   );
   const body = await response.text();
   const val = JSON.parse(body);
@@ -17,13 +17,13 @@ export const callPlace = async (userSub) => {
 };
 export const fetchPosts = async (id) => {
   const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/api/posts/${id}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
+      `${process.env.REACT_APP_API_URL}/api/posts/${id}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
-    }
   );
   const body = await response.text();
   const val = JSON.parse(body);
@@ -32,13 +32,13 @@ export const fetchPosts = async (id) => {
 
 export const fetchComments = async (id) => {
   const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/api/comments/${id}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
+      `${process.env.REACT_APP_API_URL}/api/comments/${id}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
-    }
   );
   const body = await response.text();
   const val = JSON.parse(body);
@@ -46,13 +46,13 @@ export const fetchComments = async (id) => {
 };
 export const fetchEvents = async (id) => {
   const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/api/events/${id}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
+      `${process.env.REACT_APP_API_URL}/api/events/${id}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
-    }
   );
   const body = await response.text();
   const val = JSON.parse(body);
@@ -60,9 +60,9 @@ export const fetchEvents = async (id) => {
 };
 export const fetchUsers = async (id) => {
   const response = await fetch(`${process.env.REACT_APP_API_URL}/api/user`, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   });
   const body = await response.text();
@@ -72,13 +72,13 @@ export const fetchUsers = async (id) => {
 
 export const callApi = async (name) => {
   const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/api/place/${name}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
+      `${process.env.REACT_APP_API_URL}/api/place/${name}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
-    }
   );
   const body = await response.text();
   return JSON.parse(body);
@@ -86,9 +86,9 @@ export const callApi = async (name) => {
 
 export const addBusiness = async (userSub, businessInfo) => {
   const response = await fetch(`${process.env.REACT_APP_API_URL}/api/place`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       status: businessInfo.business_status,
@@ -109,9 +109,9 @@ export const addBusiness = async (userSub, businessInfo) => {
 };
 export const updateBusiness = async (value, userSub) => {
   const response = await fetch(`${process.env.REACT_APP_API_URL}/api/place`, {
-    method: "PUT",
+    method: 'PUT',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       _id: value._id,
@@ -153,21 +153,21 @@ export const addUserProfile = async (values) => {
     phoneNumber: values.phoneNumber,
     userSub: values.userSub,
   };
-  const graphQl = AddUser(obj);
+  const graphQl = addUserGraphql(obj);
   const response = graphQlEndPoint(graphQl);
   return response;
 };
 
 /* get User Profile of the signIn consumer */
 export const getUserProfile = async (userSub) => {
-  const graphQl = getUser(userSub);
+  const graphQl = getUserGraphql(userSub);
   const response = graphQlEndPoint(graphQl);
   return response;
 };
 
 /* update User Profile */
 export const updateProfileApi = async (obj) => {
-  const graphQl = updateUserProfile(obj);
+  const graphQl = updateUserProfileGraphql(obj);
   const response = graphQlEndPoint(graphQl);
   return response;
 };

@@ -1,11 +1,11 @@
-import { unwrapResult } from "@reduxjs/toolkit";
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
-import { deleteUserPost } from "../../../../reducers/myFeedReducer";
-import ValueLoader from "../../../../utils/loader";
-import BackButton from "../../UI/BackButton";
-import SaveButton from "../../UI/SaveButton";
+import {unwrapResult} from '@reduxjs/toolkit';
+import React from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import styled from 'styled-components';
+import {deleteUserPost} from '../../../../reducers/myFeedReducer';
+import ValueLoader from '../../../../utils/loader';
+import BackButton from '../../UI/BackButton';
+import SaveButton from '../../UI/SaveButton';
 
 const ModalContent = styled.div`
   width: 100%;
@@ -54,10 +54,10 @@ const BottomButtonsBar = styled.div`
   }
 `;
 
-const DeletePostModal = ({ closeModal, id }) => {
+const DeletePostModal = ({closeModal, id}) => {
   const dispatch = useDispatch();
   const loadingDeletePost = useSelector(
-    (state) => state.myFeed.loadingDeletePost
+      (state) => state.myFeed.loadingDeletePost,
   );
 
   /** to delete the post created by user */
@@ -77,7 +77,7 @@ const DeletePostModal = ({ closeModal, id }) => {
             Cancel
           </BackButton>
           <SaveButton onClick={() => deletePost()} disabled={loadingDeletePost}>
-            {loadingDeletePost ? <ValueLoader /> : "Delete"}
+            {loadingDeletePost ? <ValueLoader /> : 'Delete'}
           </SaveButton>
         </BottomButtonsBar>
       </ModalContent>

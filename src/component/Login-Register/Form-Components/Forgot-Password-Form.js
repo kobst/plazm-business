@@ -1,13 +1,13 @@
-import React from "react";
-import styled from "styled-components";
-import Links from "../../UI/Link/Link";
-import { Link } from "react-router-dom";
-import Button from "../../UI/Button/Button";
-import Input from "../../UI/Input/Input";
-import ValueLoader from "../../../utils/loader";
-import { getMessage } from "../../../config";
-import Label from "../../UI/Label/label";
-import PasswordStrengthMeter from "../../PasswordStrenthMeter/PasswordStrengthMeter";
+import React from 'react';
+import styled from 'styled-components';
+import Links from '../../UI/Link/Link';
+import {Link} from 'react-router-dom';
+import Button from '../../UI/Button/Button';
+import Input from '../../UI/Input/Input';
+import ValueLoader from '../../../utils/loader';
+import {getMessage} from '../../../config';
+import Label from '../../UI/Label/label';
+import PasswordStrengthMeter from '../../PasswordStrenthMeter/PasswordStrengthMeter';
 
 const FormGroup = styled.div`
   margin-bottom: 22px;
@@ -26,17 +26,6 @@ const ErrorMessage = styled.div`
   line-height: 18px;
   text-align: right;
   color: #ff7171;
-  position: absolute;
-  right: 0;
-  bottom: -25px;
-`;
-const SuccessMessage = styled.div`
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 18px;
-  text-align: right;
-  color: #1483ab;
   position: absolute;
   right: 0;
   bottom: -25px;
@@ -93,9 +82,9 @@ const ForgotPasswordForm = ({
     <form onSubmit={onSubmitEmail}>
       {emailSent ? (
         <p className="code">
-          {" "}
+          {' '}
           We have send you a Reset Password link on your registered email,
-          Please click on the reset link to reset your password.{" "}
+          Please click on the reset link to reset your password.{' '}
         </p>
       ) : (
         <>
@@ -112,11 +101,11 @@ const ForgotPasswordForm = ({
             )}
           </FormGroup>
           <Button type="submit" className="btn btn-primary">
-            {loader && !errors.email ? <ValueLoader /> : "Reset"}
+            {loader && !errors.email ? <ValueLoader /> : 'Reset'}
           </Button>
 
           <Links>
-            {type.includes("business") ? (
+            {type.includes('business') ? (
               <Link to="/business/login" className="link-btn">
                 {renderMessage.Log_Link}
               </Link>

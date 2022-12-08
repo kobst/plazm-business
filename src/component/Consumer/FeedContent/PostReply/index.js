@@ -1,7 +1,7 @@
-import React from "react";
-import styled from "styled-components";
-import ProfileImg from "../../../../images/profile-img.png";
-import BottomBarLikesContent from "../BottomBarLikes";
+import React from 'react';
+import styled from 'styled-components';
+import ProfileImg from '../../../../images/profile-img.png';
+import BottomBarLikesContent from '../BottomBarLikes';
 
 const PostReplyWrap = styled.div`
   display: flex;

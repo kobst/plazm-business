@@ -1,7 +1,7 @@
 
-import React from 'react'
-import styled from 'styled-components'
-import './checkbox-style.css'
+import React from 'react';
+import styled from 'styled-components';
+import './checkbox-style.css';
 
 const DivText = styled.label`
     border: 0;
@@ -14,15 +14,15 @@ const DivText = styled.label`
     :focus{
         outline:none;
     }
-`
+`;
 
 const Checkbox = (props) => (
-    <>
-        <DivText className="container">
-        <input type="checkbox" {...props} />
-            <span className="checkmark"></span>
-        </DivText>
-    </>
-)
+  <>
+    <DivText className="container">
+      <input type="checkbox" {...props} />
+      <span className="checkmark"></span>
+    </DivText>
+  </>
+);
 
-export default Checkbox
+export default Checkbox;

@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import BuisinessHeader from "./BuisinessHeader";
-import TabsSection from "./TabsSection";
-import BuisinessHeaderNotClaimed from "./BuisinessHeaderNotClaimed";
-import { useDispatch, useSelector } from "react-redux";
-import BuisinessProfileDetails from "./BuisinessProfileDetails";
-import ValueLoader from "../../../utils/loader";
-import { setSideFilters } from "../../../reducers/businessReducer";
-import useStore from "../useState/index";
-import GlobalSearchBox from "../GlobalSearch/GlobalSearchBox";
+import React, {useState, useEffect} from 'react';
+import styled from 'styled-components';
+import BuisinessHeader from './BuisinessHeader';
+import TabsSection from './TabsSection';
+import {useDispatch, useSelector} from 'react-redux';
+import BuisinessProfileDetails from './BuisinessProfileDetails';
+import ValueLoader from '../../../utils/loader';
+import {setSideFilters} from '../../../reducers/businessReducer';
+import useStore from '../useState/index';
+import GlobalSearchBox from '../GlobalSearch/GlobalSearchBox';
 
 const BuisinessViewContent = styled.div`
   width: 100%;
@@ -64,7 +63,7 @@ const BuisinessView = ({
 
   useEffect(() => {
     if (businessProfile[0]) {
-      let deepClone = JSON.parse(JSON.stringify(businessProfile[0]));
+      const deepClone = JSON.parse(JSON.stringify(businessProfile[0]));
       deepClone.businessLocation = deepClone.location;
 
       // console.log("XXXX   business view coordinates XXXXX");
@@ -91,12 +90,12 @@ const BuisinessView = ({
         </LoaderWrap>
       ) : (
         <BusinessWrap>
-          <div style={{ width: "100%" }}>
+          <div style={{width: '100%'}}>
             {showSearchBar && (
-              <GlobalSearchBox setOffset={() => {}} type={"Business Search"} />
+              <GlobalSearchBox setOffset={() => {}} type={'Business Search'} />
             )}
           </div>
-          <div style={{ width: "100%" }}>
+          <div style={{width: '100%'}}>
             <BuisinessViewContent>
               {businessProfile &&
                 businessProfile.length > 0 &&
@@ -134,12 +133,12 @@ const BuisinessView = ({
                 !loading &&
                 businessProfile &&
                 businessProfile.length > 0 && (
-                  <TabsSection
-                    // profile={profile}
-                    businessId={businessId}
-                    // setSelectedListId={setSelectedListId}
-                  />
-                )}
+                <TabsSection
+                  // profile={profile}
+                  businessId={businessId}
+                  // setSelectedListId={setSelectedListId}
+                />
+              )}
             </BuisinessViewContent>
           </div>
         </BusinessWrap>

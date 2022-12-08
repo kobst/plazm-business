@@ -1,8 +1,8 @@
-import React from "react";
-import { IoMdClose } from "react-icons/io";
-import { useSelector } from "react-redux";
-import styled from "styled-components";
-import ProfileImg from "../../../images/profile-img.png";
+import React from 'react';
+import {IoMdClose} from 'react-icons/io';
+import {useSelector} from 'react-redux';
+import styled from 'styled-components';
+import ProfileImg from '../../../images/profile-img.png';
 
 const ProfileOuter = styled.div`
   display: flex;
@@ -77,7 +77,7 @@ const ProfileItemCategory = styled.div`
   width: calc(100% - 40px);
 `;
 
-const ProfileLock = ({ setDisplayTab, setProfileClosed }) => {
+const ProfileLock = ({setDisplayTab, setProfileClosed}) => {
   const userProfile = useSelector((state) => state.user.selectedUser);
 
   /*
@@ -114,7 +114,7 @@ const ProfileLock = ({ setDisplayTab, setProfileClosed }) => {
           </ProfileItemList>
           <ProfileItemList>
             <ProfileItemNumber>
-              {" "}
+              {' '}
               {userProfile.listFollowed ? userProfile.listFollowed.length : 0}
             </ProfileItemNumber>
             <ProfileItemCategory>Lists followed by me</ProfileItemCategory>
