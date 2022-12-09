@@ -93,6 +93,7 @@ const GlobalSearchBox = ({setOffset, type}) => {
 			setSearch('');
 		};
 	}, []);
+	
 	useEffect(() => {
 		setSearch(searchData);
 	}, [searchData]);
@@ -162,8 +163,6 @@ const GlobalSearchBox = ({setOffset, type}) => {
 
 	/** on change handler for search */
 	const onChangeSearch = async (e, isGoogleSearch, isHomeSearch = false) => {
-		setSearch(e.target.value);
-		if (isHomeSearch) return;
 		if (isGoogleSearch) {
 			let business = await addBusiness(user.userSub, e);
 			business = JSON.parse(business);
@@ -172,6 +171,8 @@ const GlobalSearchBox = ({setOffset, type}) => {
 				return;
 			}
 		}
+		setSearch(e.target.value);
+		if (isHomeSearch) return;
 		setSearchError('');
 		if (search !== '' && search.length >= 4 && !search.trim() === false) {
 			searchFn(e.target.value);
