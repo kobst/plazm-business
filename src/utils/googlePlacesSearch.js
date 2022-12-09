@@ -33,16 +33,12 @@ function handleScriptLoad(updateQuery, autoCompleteRef) {
 		return;
 	}
 	autoComplete = new window.google.maps.places.Autocomplete(autoCompleteRef.current);
-	autoComplete.setFields(['address_components', 'formatted_address']);
 	autoComplete.addListener('place_changed', () => handlePlaceSelect(updateQuery));
-	console.log('autoComplete', autoComplete);
 }
 
 async function handlePlaceSelect(updateQuery) {
 	const addressObject = autoComplete.getPlace();
-	console.log('addressObject', addressObject);
-	const query = addressObject.formatted_address;
-	updateQuery(query, true);
+	updateQuery(addressObject, true);
 }
 
 function GooglePlacesSearch({autoCompleteRef, isNoDataFound, query, onChange, disabled, placeholder}) {
