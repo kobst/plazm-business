@@ -680,7 +680,6 @@ export const slice = createSlice({
           }),
         }));
         state.searchFeedList = data;
-        state.isNoDataFound = !data.length;
       }
     },
     [HomeSearch.pending]: (state) => {
@@ -702,9 +701,7 @@ export const slice = createSlice({
                 obj.list && obj.list.image ? [].concat(obj.list.image) : [],
             }),
           }));
-          // if (state.filterByClosest || state.filterByUpdatedAt)
-          //   state.myFeed = [];
-          // state.myFeed = state.myFeed.concat(data);
+          state.isNoDataFound = !data.length;
           state.searchFeed = state.searchFeed.concat(data);
           state.totalData = action.payload.totalPlaces;
         }

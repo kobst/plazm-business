@@ -45,7 +45,7 @@ function GooglePlacesSearch({autoCompleteRef, isNoDataFound, query, onChange, di
 	useEffect(() => {
 		if (isNoDataFound) {
 			loadScript(
-				`https://maps.googleapis.com/maps/api/js?key=AIzaSyA0Km17gy-1LY_rAVq0y2OKIeZNz-kNY50&libraries=places`,
+				`https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places`,
 				() => handleScriptLoad(onChange, autoCompleteRef)
 			);
 		} else unloadScript();

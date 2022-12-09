@@ -51,7 +51,6 @@ const NoMorePost = styled.p`
 const BusinessListing = ({ loader, coords, closestFilter }) => {
   const history = useHistory();
 
-  const searchFeedList = useSelector((state) => state.myFeed.searchFeedList);
   const businessData = useSelector((state) => state.myFeed.searchFeed);
   const loading = useSelector((state) => state.myFeed.loading);
   const [offset, setOffset] = useState(0);
@@ -150,7 +149,7 @@ const BusinessListing = ({ loader, coords, closestFilter }) => {
         <GlobalSearchBox setOffset={setOffset} type={"Explore"} />
       )}
       {search.length ? (
-        searchFeedList.map((ele) => {
+        businessData.map((ele) => {
           return (
             <ul>
               <li

@@ -1,9 +1,16 @@
 import React, {useState, useEffect, useRef} from 'react';
+import SearchIcon from '../../../../images/search-icon.png';
 import styled from 'styled-components';
 import {useDispatch, useSelector} from 'react-redux';
 import {setDisplayBar} from '../../../../reducers/globalSearchReducer';
 import error from '../../../../constants';
-import {setSearchData} from '../../../../reducers/myFeedReducer';
+import {
+	clearSearchFeed,
+	HomeSearch,
+	setEnterClicked,
+	setSearchData,
+	setSideFiltersHomeSearch,
+} from '../../../../reducers/myFeedReducer';
 import useStore from '../../useState';
 import {SearchFeedList} from '../../../../reducers/myFeedReducer';
 import {checkBusiness} from '../../../../reducers/businessReducer';
@@ -25,7 +32,7 @@ const ErrorDiv = styled.div`
 const GlobalSearchInputWrap = styled.div`
 	position: relative;
 	display: flex;
-	width: 100%;
+	width: ${({isFullWidth}) => (isFullWidth ? '100%' : '95%')};
 	height: 40px;
 	margin: 10px 10px 15px;
 	border-radius: 5px;
@@ -91,14 +98,16 @@ const GlobalSearchBox = ({setOffset, type}) => {
 	}, [searchData]);
 
 	/** on key press handler for search */
-	const searchFn = (search = '') => {
+	const searchFn = (filter = search) => {
 		setOffset(0);
 		setSearchError('');
-		dispatch(setSearchData(search));
+		dispatch(setSearchData(filter));
 		switch (type) {
 			case 'Explore':
+				dispatch(clearSearchFeed());
+				dispatch(setSideFiltersHomeSearch());
 				const obj = {
-					search: search,
+					search: filter,
 					value: 0,
 					filters: {
 						closest: filterClosest,
@@ -107,12 +116,13 @@ const GlobalSearchBox = ({setOffset, type}) => {
 					latitude: draggedLocation.lat,
 					longitude: draggedLocation.lng,
 				};
-				dispatch(SearchFeedList(obj));
+				dispatch(setEnterClicked(true));
+				dispatch(HomeSearch(obj));
 				break;
 			case 'Business Search':
 				dispatch(
 					checkBusiness({
-						businessId: location.at(-1),
+						businessId: history.at(-1),
 						filters: {
 							PostsByMe: filters.PostsByMe
 								? filters.PostsByMe
@@ -135,17 +145,25 @@ const GlobalSearchBox = ({setOffset, type}) => {
 						sideFilters: {
 							likes: sideFilterForLikes,
 						},
-						search: search,
+						search: filter,
 					})
 				);
 				break;
 		}
+	};
 
-		autoCompleteRef.current.focus();
+	/** on key press handler for search */
+	const searchList = (event) => {
+		if (event.key === 'Enter') {
+			event.preventDefault();
+			searchFn(event.target.value);
+		}
 	};
 
 	/** on change handler for search */
-	const onChangeSearch = async (e, isGoogleSearch) => {
+	const onChangeSearch = async (e, isGoogleSearch, isHomeSearch = false) => {
+		setSearch(e.target.value);
+		if (isHomeSearch) return;
 		if (isGoogleSearch) {
 			let business = await addBusiness(user.userSub, e);
 			business = JSON.parse(business);
@@ -155,8 +173,6 @@ const GlobalSearchBox = ({setOffset, type}) => {
 			}
 		}
 		setSearchError('');
-		setSearch(e.target.value);
-		dispatch(setSearchData(e.target.value));
 		if (search !== '' && search.length >= 4 && !search.trim() === false) {
 			searchFn(e.target.value);
 		} else if (search.length >= 0 && search.length < 4) {
@@ -166,15 +182,41 @@ const GlobalSearchBox = ({setOffset, type}) => {
 
 	return (
 		<>
-			<GlobalSearchInputWrap>
-				<GooglePlacesSearch
-					autoCompleteRef={autoCompleteRef}
-					isNoDataFound={isNoDataFound}
-					query={search}
-					onChange={onChangeSearch}
-					disabled={loader}
-					placeholder={type}
-				/>
+			<GlobalSearchInputWrap isFullWidth={type === 'Explore'}>
+				{type === 'Explore' ? (
+					<GooglePlacesSearch
+						autoCompleteRef={autoCompleteRef}
+						isNoDataFound={isNoDataFound}
+						query={search}
+						onChange={onChangeSearch}
+						disabled={loader}
+						placeholder={type}
+					/>
+				) : (
+					<input
+						value={search}
+						onKeyPress={searchList}
+						onChange={(e) =>
+							onChangeSearch(
+								e,
+								null,
+								true
+							)
+						}
+						disabled={loader}
+						placeholder={type}
+					/>
+				)}
+				{type !== 'Explore' && (
+					<button>
+						<img
+							src={SearchIcon}
+							onClick={() =>
+								searchFn()
+							}
+						/>
+					</button>
+				)}
 			</GlobalSearchInputWrap>
 			{searchError !== '' ? <ErrorDiv>{searchError}</ErrorDiv> : null}
 		</>
