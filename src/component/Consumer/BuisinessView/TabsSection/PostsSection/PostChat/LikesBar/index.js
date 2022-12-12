@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from 'react';
 import {
   MdFavoriteBorder,
   MdChatBubbleOutline,
   MdFavorite,
-} from "react-icons/md";
-import { useDispatch, useSelector } from "react-redux";
+} from 'react-icons/md';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   fetchPostComments,
-  AddLikeToPost,
+  addLikeToPost,
   addLikeToComment,
   addLikeViaSocket,
   fetchCommentReplies,
   setPostId,
-} from "../../../../../../../reducers/businessReducer";
-import { unwrapResult } from "@reduxjs/toolkit";
-import styled from "styled-components";
+} from '../../../../../../../reducers/businessReducer';
+import {unwrapResult} from '@reduxjs/toolkit';
+import styled from 'styled-components';
 
 export const BottomBarLikes = styled.div`
   display: flex;
@@ -106,7 +106,7 @@ const LikesBar = ({
     setLikeCount(0);
     setLikeCountForComment(0);
 
-    if (type === "comment" && totalLikes > 0) {
+    if (type === 'comment' && totalLikes > 0) {
       if (postLikes.length > 0) {
         const findUser = postLikes.find((i) => i._id === user._id);
         const findUserInId = postLikes.find((i) => i === user._id);
@@ -117,7 +117,7 @@ const LikesBar = ({
           setUserLikedPost(false);
         }
       }
-    } else if (type === "reply" && totalLikes > 0) {
+    } else if (type === 'reply' && totalLikes > 0) {
       if (commentLikes.length > 0) {
         const findUser = commentLikes.find((i) => i._id === user._id);
         if (findUser) {
@@ -134,10 +134,10 @@ const LikesBar = ({
   const displayCommentsWithPosts = () => {
     setDisplayComments(!displayComments);
     dispatch(setPostId(postId));
-    if (type === "comment") {
+    if (type === 'comment') {
       setFlag(false);
       if (displayComments === false) dispatch(fetchPostComments(postId));
-    } else if (type === "reply") {
+    } else if (type === 'reply') {
       setFlag(true);
       if (displayComments === false) dispatch(fetchCommentReplies(commentId));
     }
@@ -145,31 +145,31 @@ const LikesBar = ({
 
   /** to add like to post or comments */
   const addLike = async () => {
-    if (type === "comment") {
+    if (type === 'comment') {
       const obj = {
         postId: postId,
         userId: user._id,
       };
       dispatch(
-        addLikeViaSocket({ postId: postId, like: { ...obj, _id: user._id } })
+          addLikeViaSocket({postId: postId, like: {...obj, _id: user._id}}),
       );
-      const data = await dispatch(AddLikeToPost(obj));
+      const data = await dispatch(addLikeToPost(obj));
       const response = await unwrapResult(data);
       if (response.success === true) {
         ws.send(
-          JSON.stringify({
-            action: "like",
-            postId: postId,
-            like: response.like,
-            businessId: business[0]._id,
-            type: "Post",
-          })
+            JSON.stringify({
+              action: 'like',
+              postId: postId,
+              like: response.like,
+              businessId: business[0]._id,
+              type: 'Post',
+            }),
         );
       } else {
         setUserLikedPost(false);
         setLikeCount(totalLikes - 1);
       }
-    } else if (type === "reply") {
+    } else if (type === 'reply') {
       setUserLikedComment(true);
       setLikeCountForComment(totalLikes + 1);
       const obj = {
@@ -180,14 +180,14 @@ const LikesBar = ({
       const response = await unwrapResult(data);
       if (response.success === true) {
         ws.send(
-          JSON.stringify({
-            action: "like",
-            postId: response.postId,
-            like: response.like,
-            commentId: response.commentId,
-            businessId: business[0]._id,
-            type: "Post",
-          })
+            JSON.stringify({
+              action: 'like',
+              postId: response.postId,
+              like: response.like,
+              commentId: response.commentId,
+              businessId: business[0]._id,
+              type: 'Post',
+            }),
         );
       }
     }
@@ -195,26 +195,26 @@ const LikesBar = ({
 
   return (
     <>
-      <BottomBarLikes className={type === "reply" ? "replyBar" : ""}>
+      <BottomBarLikes className={type === 'reply' ? 'replyBar' : ''}>
         <LikesBtnWrap>
-          {type !== "commentReply" && (
+          {type !== 'commentReply' && (
             <RightDiv>
               {userLikedPost || userLikedComment ? (
-                <MdFavorite style={{ color: "red" }} />
+                <MdFavorite style={{color: 'red'}} />
               ) : (
                 <MdFavoriteBorder
                   onClick={() => addLike()}
                   disabled={userLikedPost || userLikedComment}
                 />
-              )}{" "}
-              {likeCount === 0
-                ? likeCountForComment === 0
-                  ? totalLikes
-                  : likeCountForComment
-                : likeCount}
+              )}{' '}
+              {likeCount === 0 ?
+                likeCountForComment === 0 ?
+                  totalLikes :
+                  likeCountForComment :
+                likeCount}
             </RightDiv>
           )}
-          {type !== "commentReply" && (
+          {type !== 'commentReply' && (
             <RightDiv>
               <button>
                 <MdChatBubbleOutline

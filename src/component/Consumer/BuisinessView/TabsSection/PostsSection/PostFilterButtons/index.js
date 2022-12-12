@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
+import React, {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import styled from 'styled-components';
 import {
   filterData,
   setFilters,
   setSideFiltersByMostLiked,
   setSideFiltersByMostRecent,
-} from "../../../../../../reducers/businessReducer";
+} from '../../../../../../reducers/businessReducer';
 
 const PostFilterButtonContent = styled.div`
   width: 100%;
@@ -105,7 +105,7 @@ const BorderButtons = styled.button`
   }
 `;
 
-const PostFilterButton = ({ setFilterArr }) => {
+const PostFilterButton = ({setFilterArr}) => {
   const dispatch = useDispatch();
   const [flag, setFlag] = useState(false);
   const [sideFilterFlag, setSideFilterFlag] = useState(false);
@@ -113,22 +113,22 @@ const PostFilterButton = ({ setFilterArr }) => {
   const user = useSelector((state) => state.user.user);
   const filters = useSelector((state) => state.business.filters);
   const filterByLiked = useSelector(
-    (state) => state.business.filterByMostLiked
+      (state) => state.business.filterByMostLiked,
   );
   const loadingFilterData = useSelector(
-    (state) => state.business.loadingFilterData
+      (state) => state.business.loadingFilterData,
   );
 
   /** useEffect to check if no checkbox is selected then by default check Business checkbox */
   useEffect(() => {
     if (flag === true) {
       dispatch(
-        filterData({
-          businessId: business && business[0] ? business[0]._id : "",
-          filters: filters,
-          value: 0,
-          ownerId: user._id,
-        })
+          filterData({
+            businessId: business && business[0] ? business[0]._id : '',
+            filters: filters,
+            value: 0,
+            ownerId: user._id,
+          }),
       );
       setFlag(false);
     }
@@ -138,13 +138,13 @@ const PostFilterButton = ({ setFilterArr }) => {
   useEffect(() => {
     if (sideFilterFlag === true) {
       dispatch(
-        filterData({
-          businessId: business && business[0] ? business[0]._id : "",
-          filters: filters,
-          value: 0,
-          ownerId: user._id,
-          sideFilters: { likes: filterByLiked },
-        })
+          filterData({
+            businessId: business && business[0] ? business[0]._id : '',
+            filters: filters,
+            value: 0,
+            ownerId: user._id,
+            sideFilters: {likes: filterByLiked},
+          }),
       );
       setSideFilterFlag(false);
     }
@@ -153,14 +153,14 @@ const PostFilterButton = ({ setFilterArr }) => {
   /*
    * @desc: filter by posts by me
    */
-  const FilterByPostsByMe = () => {
+  const filterByPostsByMe = () => {
     dispatch(
-      setFilters({
-        Business: false,
-        PostsByMe: true,
-        MySubscriptions: false,
-        Others: false,
-      })
+        setFilters({
+          Business: false,
+          PostsByMe: true,
+          MySubscriptions: false,
+          Others: false,
+        }),
     );
     setFlag(!flag);
     setFilterArr([]);
@@ -169,14 +169,14 @@ const PostFilterButton = ({ setFilterArr }) => {
   /*
    * @desc: filter by others
    */
-  const FilterByPostsByOthers = () => {
+  const filterByPostsByOthers = () => {
     dispatch(
-      setFilters({
-        Business: false,
-        PostsByMe: false,
-        MySubscriptions: false,
-        Others: true,
-      })
+        setFilters({
+          Business: false,
+          PostsByMe: false,
+          MySubscriptions: false,
+          Others: true,
+        }),
     );
     setFlag(!flag);
     setFilterArr([]);
@@ -203,16 +203,16 @@ const PostFilterButton = ({ setFilterArr }) => {
       <PostFilterButtonContent>
         <RoundButtonsWrap>
           <RoundButton
-            onClick={() => FilterByPostsByMe()}
-            disabled={filters["PostsByMe"] || loadingFilterData}
-            className={filters["PostsByMe"] ? "selected" : ""}
+            onClick={() => filterByPostsByMe()}
+            disabled={filters['PostsByMe'] || loadingFilterData}
+            className={filters['PostsByMe'] ? 'selected' : ''}
           >
             For Me
           </RoundButton>
           <RoundButton
-            onClick={() => FilterByPostsByOthers()}
-            disabled={filters["Others"] || loadingFilterData}
-            className={filters["Others"] ? "selected" : ""}
+            onClick={() => filterByPostsByOthers()}
+            disabled={filters['Others'] || loadingFilterData}
+            className={filters['Others'] ? 'selected' : ''}
           >
             Others
           </RoundButton>
@@ -222,14 +222,14 @@ const PostFilterButton = ({ setFilterArr }) => {
           <BorderButtons
             onClick={() => setMostLiked()}
             disabled={filterByLiked}
-            className={filterByLiked ? "selected" : ""}
+            className={filterByLiked ? 'selected' : ''}
           >
             Most Liked
           </BorderButtons>
           <BorderButtons
             onClick={() => setMostRecent()}
             disabled={!filterByLiked}
-            className={!filterByLiked ? "selected" : ""}
+            className={!filterByLiked ? 'selected' : ''}
           >
             Newest
           </BorderButtons>

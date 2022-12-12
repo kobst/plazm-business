@@ -2,11 +2,13 @@
 @desc: create post graphQL mutation
 @params: business, data, media, taggedUsers, taggedLists, ownerId
 */
-const createPost = (values) => {
+const createPostGraphql = (values) => {
   const graphQl = {
     query: `
-          mutation CreatePost($business: ID, $data:String, $media:[String], $taggedUsers:[ID], $taggedLists: [ID], $ownerId: ID, $listId: ID){
-              createPost(input: {business:$business, data:$data, media:$media, taggedUsers:$taggedUsers, taggedLists:$taggedLists, ownerId:$ownerId, listId:$listId }) {
+          mutation CreatePost($business: ID, $data:String, $media:[String], $taggedUsers:[ID],
+             $taggedLists: [ID], $ownerId: ID, $listId: ID){
+              createPost(input: {business:$business, data:$data, media:$media,
+                 taggedUsers:$taggedUsers, taggedLists:$taggedLists, ownerId:$ownerId, listId:$listId }) {
               message
               success
               totalPosts
@@ -70,7 +72,7 @@ const createPost = (values) => {
 @desc: add like to a post
 @params: postId, userId
 */
-const addLikeToPost = (values) => {
+const addLikeToPostGraphql = (values) => {
   const graphQl = {
     query: `
           mutation AddLikeToPost($id: ID!, $userId:ID!){
@@ -100,7 +102,7 @@ const addLikeToPost = (values) => {
 @desc: delete post graphQL mutation
 @params: id
 */
-const deletePost = (id) => {
+const deletePostGraphql = (id) => {
   const graphQl = {
     query: `
           mutation DeletePost($id: ID!){
@@ -120,11 +122,13 @@ const deletePost = (id) => {
 @desc: update post graphQL mutation
 @params: business, data, media, taggedUsers, taggedLists, ownerId
 */
-const updatePost = (values) => {
+const updatePostGraphql = (values) => {
   const graphQl = {
     query: `
-          mutation UpdatePost($business: ID, $data:String, $media:[String], $taggedUsers:[ID], $taggedLists: [ID], $ownerId: ID, $listId: ID, $_id: ID){
-            updatePost(input: {business:$business, data:$data, media:$media, taggedUsers:$taggedUsers, taggedLists:$taggedLists, ownerId:$ownerId, listId:$listId, _id:$_id }) {
+          mutation UpdatePost($business: ID, $data:String, $media:[String], 
+            $taggedUsers:[ID], $taggedLists: [ID], $ownerId: ID, $listId: ID, $_id: ID){
+            updatePost(input: {business:$business, data:$data, media:$media, 
+              taggedUsers:$taggedUsers, taggedLists:$taggedLists, ownerId:$ownerId, listId:$listId, _id:$_id }) {
               message
               success
               post {
@@ -157,4 +161,4 @@ const updatePost = (values) => {
   return graphQl;
 };
 
-export { createPost, addLikeToPost, updatePost, deletePost };
+export {createPostGraphql, addLikeToPostGraphql, updatePostGraphql, deletePostGraphql};

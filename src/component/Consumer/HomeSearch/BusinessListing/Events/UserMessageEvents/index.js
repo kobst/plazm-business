@@ -1,30 +1,29 @@
-import React, { useRef, useState, useEffect } from "react";
-import styled from "styled-components";
-import { FaCaretRight } from "react-icons/fa";
-import moment from "moment";
-import BannerImg from "../../../../../../images/sliderimg.png";
-import LikeBar from "../LikeBar";
-import DateBar from "../DateBar";
-import TimeBar from "../TimeBar";
-import ImageComment from "../ImageComment";
-import { useSelector } from "react-redux";
-import { Scrollbars } from "react-custom-scrollbars";
-import ValueLoader from "../../../../../../utils/loader";
-import ReplyInput from "./ReplyInput";
-import Comments from "./comments";
+import React, {useRef, useState, useEffect} from 'react';
+import styled from 'styled-components';
+import {FaCaretRight} from 'react-icons/fa';
+import moment from 'moment';
+import BannerImg from '../../../../../../images/sliderimg.png';
+import LikeBar from '../LikeBar';
+import DateBar from '../DateBar';
+import TimeBar from '../TimeBar';
+import {useSelector} from 'react-redux';
+import {Scrollbars} from 'react-custom-scrollbars';
+import ValueLoader from '../../../../../../utils/loader';
+import ReplyInput from './ReplyInput';
+import Comments from './comments';
 import {
   ImgThumbWrap,
   ShowMoreDiv,
-} from "../../../../FeedContent/styled";
-import { useHistory } from "react-router";
-import DaysBar from "../../../../BuisinessView/TabsSection/EventsSection/PostChat/DaysBar";
-import ArrowSm from "../../../../../../images/arrow-sm-up.png";
-import ArrowSmDown from "../../../../../../images/arrow-sm.png";
-import ImageSlider from "../../UserMessage/imageslider";
+} from '../../../../FeedContent/styled';
+import {useHistory} from 'react-router';
+import DaysBar from '../../../../BuisinessView/TabsSection/EventsSection/PostChat/DaysBar';
+import ArrowSm from '../../../../../../images/arrow-sm-up.png';
+import ArrowSmDown from '../../../../../../images/arrow-sm.png';
+import ImageSlider from '../../UserMessage/imageslider';
 import DetailsHeader from './DetailsHeader';
 import ListHeader from './ListHeader';
 
-const reactStringReplace = require("react-string-replace");
+const reactStringReplace = require('react-string-replace');
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -126,21 +125,21 @@ const UserMessageEvents = ({
   const [flag, setFlag] = useState(false);
   const [displayEventCommentInput, setDisplayEventCommentInput] =
     useState(false);
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState('');
   const [listImage, setListImage] = useState(
-    eventData.listId.length > 0 && eventData.listId[0].media.length > 0
-      ? eventData.listId[0].media[0].image
-      : BannerImg
+    eventData.listId.length > 0 && eventData.listId[0].media.length > 0 ?
+      eventData.listId[0].media[0].image :
+      BannerImg,
   );
   const [readMore, setReadMore] = useState(false);
   const loadingComments = useSelector(
-    (state) => state.myFeed.loadingEventComments
+      (state) => state.myFeed.loadingEventComments,
   );
   const ws = useSelector((state) => state.user.ws);
   const search = useSelector((state) => state.myFeed.enterClicked);
   const commentsRef = useRef(null);
   const selectedEventId = useSelector(
-    (state) => state.myFeed.selectedEventIdForComments
+      (state) => state.myFeed.selectedEventIdForComments,
   );
   const commentAdded = useSelector((state) => state.myFeed.commentAdded);
   const history = useHistory();
@@ -154,8 +153,8 @@ const UserMessageEvents = ({
       (commentAdded && eventData._id === selectedEventId)
     ) {
       commentsRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
+        behavior: 'smooth',
+        block: 'center',
       });
     }
   }, [
@@ -168,41 +167,41 @@ const UserMessageEvents = ({
   /** to add comment on event function */
   const addComment = async (obj) => {
     ws.send(
-      JSON.stringify({
-        action: "comment",
-        postId: obj.itemId,
-        type: "Events",
-        comment: obj.body,
-        userId: obj.userId,
-        businessId: businessInfo._id,
-        taggedUsers: obj.taggedUsers,
-      })
+        JSON.stringify({
+          action: 'comment',
+          postId: obj.itemId,
+          type: 'Events',
+          comment: obj.body,
+          userId: obj.userId,
+          businessId: businessInfo._id,
+          taggedUsers: obj.taggedUsers,
+        }),
     );
-    setDescription("");
+    setDescription('');
   };
 
   const days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
   ];
 
   /** to highlight the user mentions mentioned in post description */
   const findDesc = (value, mentions, mentionsList) => {
-    let divContent = value;
+    const divContent = value;
     if (mentions.length > 0 && mentionsList.length > 0) {
-      let arr = [],
-        data;
+      const arr = [];
+      let data;
       for (let i = 0; i < mentions.length; i++) {
         if (value.includes(mentions[i].name)) {
           arr.push({
             name: mentions[i].name,
             id: mentions[i]._id,
-            type: "name",
+            type: 'name',
           });
         }
       }
@@ -211,13 +210,13 @@ const UserMessageEvents = ({
           arr.push({
             name: mentionsList[i].name,
             id: mentionsList[i]._id,
-            type: "list",
+            type: 'list',
           });
         }
       }
       for (let i = 0; i < arr.length; i++) {
         if (i === 0) {
-          if (arr[i].type === "list")
+          if (arr[i].type === 'list') {
             data = reactStringReplace(value, arr[i].name, (match, j) => (
               <span
                 key={j}
@@ -227,7 +226,7 @@ const UserMessageEvents = ({
                 {match}
               </span>
             ));
-          else
+          } else {
             data = reactStringReplace(value, arr[i].name, (match, j) => (
               <span
                 key={j}
@@ -237,8 +236,9 @@ const UserMessageEvents = ({
                 {match}
               </span>
             ));
+          }
         } else {
-          if (arr[i].type === "list")
+          if (arr[i].type === 'list') {
             data = reactStringReplace(data, arr[i].name, (match, j) => (
               <span
                 key={j}
@@ -248,7 +248,7 @@ const UserMessageEvents = ({
                 {match}
               </span>
             ));
-          else
+          } else {
             data = reactStringReplace(data, arr[i].name, (match, j) => (
               <span
                 key={j}
@@ -258,25 +258,26 @@ const UserMessageEvents = ({
                 {match}
               </span>
             ));
+          }
         }
       }
       return data;
     } else if (mentions.length > 0) {
-      let arr = [],
-        data;
+      const arr = [];
+      let data;
       for (let i = 0; i < mentions.length; i++) {
         if (value.includes(mentions[i].name)) {
           arr.push({
             name: mentions[i].name,
             id: mentions[i]._id,
-            type: "name",
+            type: 'name',
           });
         }
       }
 
       for (let i = 0; i < arr.length; i++) {
         if (i === 0) {
-          if (arr[i].type !== "list")
+          if (arr[i].type !== 'list') {
             data = reactStringReplace(value, arr[i].name, (match, j) => (
               <span
                 key={j}
@@ -286,8 +287,9 @@ const UserMessageEvents = ({
                 {match}
               </span>
             ));
+          }
         } else {
-          if (arr[i].type !== "list")
+          if (arr[i].type !== 'list') {
             data = reactStringReplace(data, arr[i].name, (match, j) => (
               <span
                 key={j}
@@ -297,12 +299,13 @@ const UserMessageEvents = ({
                 {match}
               </span>
             ));
+          }
         }
       }
       return data;
     } else if (mentionsList.length > 0) {
       for (let i = 0; i < mentionsList.length; i++) {
-        if (value.search(new RegExp(mentionsList[i].name, "g") !== -1)) {
+        if (value.search(new RegExp(mentionsList[i].name, 'g') !== -1)) {
           return (
             <div>
               {reactStringReplace(value, mentionsList[i].name, (match, j) => (
@@ -322,7 +325,7 @@ const UserMessageEvents = ({
       if (mentionsList.length !== 0) {
         return (
           <>
-            <div dangerouslySetInnerHTML={{ __html: divContent }}></div>
+            <div dangerouslySetInnerHTML={{__html: divContent}}></div>
           </>
         );
       } else {
@@ -342,12 +345,12 @@ const UserMessageEvents = ({
       <UserMessageContent>
         <ProfileNameHeader
           className={
-            type !== "MyFeedEvent" &&
-            ((eventData.body !== null && eventData.type === "Post") ||
+            type !== 'MyFeedEvent' &&
+            ((eventData.body !== null && eventData.type === 'Post') ||
               eventData.data !== null ||
-              !search)
-              ? "line-active"
-              : "line-inactive"
+              !search) ?
+              'line-active' :
+              'line-inactive'
           }
         >
           <ProfileNameWrap>
@@ -370,9 +373,9 @@ const UserMessageEvents = ({
                   )}
                   <span>|</span>
                   <ListAuthorName>
-                    Added on{" "}
-                    {moment(eventData.createdAt).format("MMM DD, YYYY, hh:MMa")}{" "}
-                    EDT{" "}
+                    Added on{' '}
+                    {moment(eventData.createdAt).format('MMM DD, YYYY, hh:MMa')}{' '}
+                    EDT{' '}
                   </ListAuthorName>
                 </ListInfo>
               </ListNameWrap>
@@ -380,11 +383,11 @@ const UserMessageEvents = ({
             <SubHeading>{eventData.title}</SubHeading>
             <ChatInput>
               {findDesc(
-                eventData.data.length > 200 && !readMore
-                  ? eventData.data.substring(0, 200)
-                  : eventData.data,
+                eventData.data.length > 200 && !readMore ?
+                  eventData.data.substring(0, 200) :
+                  eventData.data,
                 eventData.taggedUsers,
-                eventData.taggedLists
+                eventData.taggedLists,
               )}
               {!readMore && eventData.data.length > 200 && <b>...</b>}
             </ChatInput>
@@ -453,9 +456,9 @@ const UserMessageEvents = ({
                 date={new Date(eventData.createdAt)}
                 totalLikes={eventData.likes ? eventData.likes.length : 0}
                 totalComments={
-                  eventData.totalComments.length > 0
-                    ? eventData.totalComments[0].totalCount
-                    : 0
+                  eventData.totalComments.length > 0 ?
+                    eventData.totalComments[0].totalCount :
+                    0
                 }
                 setDisplayEventComments={setDisplayEventComments}
                 displayEventComments={displayEventComments}

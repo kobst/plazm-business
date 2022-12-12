@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import InfiniteScroll from "react-infinite-scroll-component";
-import SearchItems from "./SearchItems";
-import { SearchItemsContainer, NoMorePost } from "../styled";
-import ValueLoader from "../../../../utils/loader";
-import { SearchListApi } from "../../../../reducers/listReducer";
+import React, {useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import SearchItems from './SearchItems';
+import {SearchItemsContainer, NoMorePost} from '../styled';
+import ValueLoader from '../../../../utils/loader';
+import {searchListApi} from '../../../../reducers/listReducer';
 
 const SectionItemWrapper = ({
   offset,
@@ -26,7 +26,7 @@ const SectionItemWrapper = ({
     if (offset + 30 < totalList) {
       setOffSet(offset + 30);
       dispatch(
-        SearchListApi({ value: offset + 30, search: listSearch, ...obj })
+          searchListApi({value: offset + 30, search: listSearch, ...obj}),
       );
     } else {
       setHasMore(false);
@@ -42,8 +42,8 @@ const SectionItemWrapper = ({
           hasMore={hasMore}
           loader={
             offset < totalList && loading ? (
-              <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
-                {" "}
+              <div style={{textAlign: 'center', margin: ' 40px auto 0'}}>
+                {' '}
                 <ValueLoader />
               </div>
             ) : null

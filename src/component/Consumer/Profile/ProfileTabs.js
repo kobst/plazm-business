@@ -1,6 +1,6 @@
 import React from 'react';
-import styled from "styled-components";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import styled from 'styled-components';
+import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 
 const TabsSectionContent = styled.div`
   width: 100%;
@@ -13,19 +13,19 @@ const TabsSectionContent = styled.div`
     }
 `;
 
-const ProfileTabs = (props) => (    
+const ProfileTabs = (props) => (
   <TabsSectionContent className="InnerTabs">
-  <Tabs>
-    <TabList>
-      <Tab>Posts</Tab>
-      <Tab>Lists</Tab>
-      <Tab>Favorites</Tab>
-    </TabList>
-    <TabPanel></TabPanel>
-    <TabPanel></TabPanel>
-    <TabPanel></TabPanel>
-  </Tabs>
-</TabsSectionContent>
-)
+    <Tabs>
+      <TabList>
+        <Tab>Posts</Tab>
+        <Tab>Lists</Tab>
+        <Tab>Favorites</Tab>
+      </TabList>
+      <TabPanel></TabPanel>
+      <TabPanel></TabPanel>
+      <TabPanel></TabPanel>
+    </Tabs>
+  </TabsSectionContent>
+);
 
 export default ProfileTabs;

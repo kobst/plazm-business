@@ -1,5 +1,5 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
 
 const LoginLink = styled.div`
 font-size: 16px;
@@ -27,11 +27,10 @@ font-size: 14px;
 line-height:19px;
 margin-top: 15px
 }
-`
+`;
 
 const Links = (props) => {
-    return <LoginLink {...props} />
+  return <LoginLink {...props} />;
+};
 
-}
-
-export default Links
+export default Links;

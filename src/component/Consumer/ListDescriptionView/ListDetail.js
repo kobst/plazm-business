@@ -9,10 +9,11 @@ import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 import BannerImg from "../../../images/sliderimg.png";
 import {
+  unSubscribeToAList,
+  subscribeToAListAction,
+  fetchUserLists,
   clearListSearchData,
   setSelectedListDetails,
-  SubscribeToAListAction,
-  UnSubscribeToAList,
   userSubscribeToAList,
   userUnSubscribeToAList,
 } from "../../../reducers/listReducer";
@@ -378,7 +379,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
       userId: user._id,
       listId: selectedList._id,
     };
-    const list = await dispatch(UnSubscribeToAList(obj));
+    const list = await dispatch(unSubscribeToAList(obj));
     const response = await unwrapResult(list);
     if (response) {
       dispatch(removeSubscribedList(response.listId));
@@ -398,7 +399,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
       userId: user._id,
       listId: selectedList._id,
     };
-    const list = await dispatch(SubscribeToAListAction(obj));
+    const list = await dispatch(subscribeToAListAction(obj));
     const response = await unwrapResult(list);
     if (response) {
       dispatch(addSubscribedList(response.listId));

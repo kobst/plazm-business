@@ -1,19 +1,18 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import Button from "../../UI/Button/Button";
-import Input from "../../UI/Input/Input";
-import SearchLocationInput from "../../../utils/findYourBusiness";
-import ValueLoader from "../../../utils/loader";
-import Label from "../../UI/Label/label";
-import PasswordStrengthMeter from "../../PasswordStrenthMeter/PasswordStrengthMeter";
+import React from 'react';
+import {Link} from 'react-router-dom';
+import Button from '../../UI/Button/Button';
+import Input from '../../UI/Input/Input';
+import ValueLoader from '../../../utils/loader';
+import Label from '../../UI/Label/label';
+import PasswordStrengthMeter from '../../PasswordStrenthMeter/PasswordStrengthMeter';
 
 import {
   FormGroup,
   FindYourBusinessWrapper,
   ErrorMessage,
   TermsWrap,
-} from "../Wrapper/style";
-import SocialLogin from "./Social-Login";
+} from '../Wrapper/style';
+import SocialLogin from './Social-Login';
 
 const RegisterForm = ({
   verified,
@@ -48,18 +47,12 @@ const RegisterForm = ({
         <form>
           <>
             <p className="code">
-              {" "}
+              {' '}
               We have send you a verification link on your registered email,
               Please Verify your email then you can Click on Sign In to login
-              into the Plazm{" "}
+              into the Plazm{' '}
             </p>
-
-            {/* <FormGroup>
-                            <Label name="Confirmation Code" />
-                            <Input value={confirmationCode} id='confirmationCode' type='text' onChange={(e) => handleChange(e)} error={emptyCode} />
-                            {codeError ? <ErrorMessage>Confirmation code does not match</ErrorMessage> : null}
-                        </FormGroup> */}
-            {type.includes("business") ? (
+            {type.includes('business') ? (
               <Link to="/business/login" className="link-btn">
                 <strong>Sign In</strong>
               </Link>
@@ -74,7 +67,7 @@ const RegisterForm = ({
         <form onSubmit={(e) => handleSubmit(e)}>
           <FormGroup>
             <Label
-              name={type.includes("business") ? "Business Name" : "Name"}
+              name={type.includes('business') ? 'Business Name' : 'Name'}
             />
             <Input
               disabled={disable}
@@ -115,7 +108,7 @@ const RegisterForm = ({
                 Phone Number length should be less than 50.
               </ErrorMessage>
             ) : null}
-            {err && message && message.includes("number") ? (
+            {err && message && message.includes('number') ? (
               <ErrorMessage>{message}</ErrorMessage>
             ) : null}
           </FormGroup>
@@ -130,7 +123,7 @@ const RegisterForm = ({
               error={emailError}
               placeholder=""
             />
-            {err && message && message.includes("exists") ? (
+            {err && message && message.includes('exists') ? (
               <ErrorMessage>{message}</ErrorMessage>
             ) : null}
           </FormGroup>
@@ -146,44 +139,28 @@ const RegisterForm = ({
               placeholder=""
             />
             <PasswordStrengthMeter password={password} />
-            {err && message && message.includes("Password") ? (
+            {err && message && message.includes('Password') ? (
               <ErrorMessage>{message}</ErrorMessage>
             ) : null}
           </FormGroup>
 
           <FindYourBusinessWrapper>
-            {/* {type.includes("business") ? (
-              <>
-                <h2 onClick={() => setbusiness(true)}> Find Your Business</h2>
-                <FormGroup>
-                  <SearchLocationInput
-                    disabled={disable}
-                    id="location"
-                    error={locationError}
-                    handleChange={handleChange}
-                    setBusinessInfo={setBusinessInfo}
-                    setName={setName}
-                  />
-                </FormGroup>
-              </>
-            ) : null}
-            {err && message && message.includes("business") ? (
-              <ErrorMessage>{message}</ErrorMessage>
-            ) : null} */}
             <TermsWrap>
-              <label class="container">
+              <label className="container">
                 I accept the Terms & Conditions
                 <input type="checkbox" />
-                <span class="checkmark"></span>
+                <span className="checkmark"></span>
               </label>
               <p>
-                By clicking sign up, I represent I have read, understand, and agree to the Postmates Privacy Policy and Terms of Service. This site is protected bt reCAPTCHA and google Privacy Policy and Terms of Service apply.
+                By clicking sign up, I represent I have read, understand, and agree
+                to the Postmates Privacy Policy and Terms of Service. This site is
+                protected bt reCAPTCHA and google Privacy Policy and Terms of Service apply.
               </p>
             </TermsWrap>
           </FindYourBusinessWrapper>
 
           <Button type="submit" className="btnRegister">
-            {loader && !message ? <ValueLoader /> : "Sign Up"}
+            {loader && !message ? <ValueLoader /> : 'Sign Up'}
           </Button>
 
           <SocialLogin />

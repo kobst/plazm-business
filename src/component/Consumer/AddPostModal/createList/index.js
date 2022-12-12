@@ -47,11 +47,9 @@ const CreateListModel = ({
   setDisplayCreateList,
 }) => {
   const [loader, setLoader] = useState(false);
-  const [profileBaseImage, setBaseProfileImage] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
   const [profileImagePreview, setProfileImagePreview] = useState(null);
   const [imageError, setImageError] = useState("");
-  // const [imageFile, setImageFile] = useState(null);
   const [coverImage, setCoverImage] = useState(null);
   const [coverBaseImage, setBaseCoverImage] = useState(null);
   const [coverImagePreview, setCoverImagePreview] = useState(null);
@@ -65,41 +63,21 @@ const CreateListModel = ({
   const dispatch = useDispatch();
 
   /*
-  @desc: to check input file format and throw error if invalid image is input
-  @params: input file
-  */
-
-  // const uploadImage = (e) => {
-  //   const selectedFile = e.target.files[0];
-  //   const idxDot = selectedFile.name.lastIndexOf(".") + 1;
-  //   const extFile = selectedFile.name
-  //     .substr(idxDot, selectedFile.name.length)
-  //     .toLowerCase();
-  //   if (extFile === "jpeg" || extFile === "png" || extFile === "jpg") {
-  //     setImageError("");
-  //     setProfileImage(URL.createObjectURL(e.target.files[0]));
-  //     setImageFile(selectedFile);
-  //   } else {
-  //     setImageError("Only jpg/jpeg and png,files are allowed!");
-  //   }
-  // };
-
-  /*
   @desc: to get specific folder name to be created in aws
   @params: consumer name, consumer _id
   */
-  const folderName = (name, id) => {
+  const getFolderName = (name, id) => {
     /* to remove all special characters except space */
-    const removeSpecialCharacter = name.replace(/[^a-zA-Z ]/g, "");
+    const removeSpecialCharacter = name.replace(/[^a-zA-Z ]/g, '');
     /* to replace all spaces to underscore */
-    const replacedName = removeSpecialCharacter.split(" ").join("_");
+    const replacedName = removeSpecialCharacter.split(' ').join('_');
     /* return folder name */
-    return replacedName + "_" + id;
+    return replacedName + '_' + id;
   };
   /*
-   * @desc: to change file_name
+   * @desc: to change fileName
    */
-  const fileName = (name) => {
+  const getFileName = (name) => {
     return `${Date.now()}-${name}`;
   };
   /*
@@ -176,23 +154,23 @@ const CreateListModel = ({
       const res = await dispatch(createList(obj));
       const data = await unwrapResult(res);
       if (data && data.data.createList.success === true) {
-        setResponse("List added successfully.");
-        setError("");
+        setResponse('List added successfully.');
+        setError('');
         setLoader(false);
         setDisplayCreateList(false);
         setDisplayList(false);
         setSelectedListForPost(data.data.createList.list._id);
       } else if (data && data.data.createList.success === false) {
         setLoader(false);
-        setResponse("");
-        setError("Could not create list");
+        setResponse('');
+        setError('Could not create list');
       }
     } else {
-      setImageError("Image Is required");
+      setImageError('Image Is required');
     }
   };
 
-  /**cancel button functionality */
+  /** cancel button functionality */
   const cancelButton = (e) => {
     e.preventDefault();
     setDisplayCreateList(false);

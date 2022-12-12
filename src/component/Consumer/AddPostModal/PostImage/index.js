@@ -1,7 +1,7 @@
-import React from "react";
-import styled from "styled-components";
-import { IoMdCloseCircle } from "react-icons/io";
-import CrossIcon from "../../../../images/cross-icon.svg";
+import React from 'react';
+import styled from 'styled-components';
+import {IoMdCloseCircle} from 'react-icons/io';
+import CrossIcon from '../../../../images/cross-icon.svg';
 
 const AllListingsContent = styled.div`
   width: 100%;
@@ -96,7 +96,7 @@ const PostImage = ({
   return (
     <>
       <AllListingsContent>
-        {type === "eventImages" ? (
+        {type === 'eventImages' ? (
           <WrapperDiv>
             <UploadImage disabled={loader} onClick={() => deleteImage()}>
               <img src={imageUrl} alt="Upload" />

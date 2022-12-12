@@ -1,7 +1,7 @@
 /*
-@desc: getUser query
+@desc: getUserGraphql query
 */
-const getUser = (userSub, value, limit = 15) => {
+const getUserGraphql = (userSub, value, limit = 15) => {
   const graphQl = {
     query: `
           query GetUser($userSub: String, $value: Int, $limit: Int){
@@ -20,7 +20,8 @@ const getUser = (userSub, value, limit = 15) => {
                   listFollowed
               }
             }
-            userCreateAndFollowList: getUserSubCreatedAndFollowedLists(input: {userSub: $userSub, value: $value, limit: $limit}) {
+            userCreateAndFollowList: getUserSubCreatedAndFollowedLists(input: 
+              {userSub: $userSub, value: $value, limit: $limit}) {
               message
               success
               totalLists
@@ -53,9 +54,9 @@ const getUser = (userSub, value, limit = 15) => {
   return graphQl;
 };
 /*
-@desc: getAllUser query
+@desc: getAllUsersGraphql query
 */
-const getAllUsers = () => {
+const getAllUsersGraphql = () => {
   const graphQl = {
     query: `
         query GetAllUser{
@@ -78,12 +79,13 @@ const getAllUsers = () => {
 };
 
 /*
-@desc: getUserFavoritesBusiness query
+@desc: getUserFavoritesGraphql query
 */
-const getUserFavorites = ({ id, value, filters, longitude, latitude }) => {
+const getUserFavoritesGraphql = ({id, value, filters, longitude, latitude}) => {
   const graphQl = {
     query: `
-          query GetFavorites($id: ID!, $value: Int, $filters:homeSearchFilterInput!,$latitude: Float!,$longitude: Float!){
+          query GetFavorites($id: ID!, $value: Int,
+             $filters:homeSearchFilterInput!,$latitude: Float!,$longitude: Float!){
             getFavorites(input: {id:$id, value:$value, filters:$filters, latitude:$latitude, longitude:$longitude}) {
               message
               success
@@ -167,13 +169,15 @@ const getUserFavorites = ({ id, value, filters, longitude, latitude }) => {
 };
 
 /*
-@desc: GetMyFeedData query
+@desc: getMyFeedDataGraphql query
 */
-const GetMyFeedData = (obj) => {
+const getMyFeedDataGraphql = (obj) => {
   const graphQl = {
     query: `
-          query GetMyFeedData($id: ID!, $value: Int, $filters: homeSearchFilterInput!,  $longitude: Float!, $latitude: Float!, $search: String){
-            getMyFeedData (input: {id: $id, value:$value, filters:$filters,longitude:$longitude, latitude:$latitude, search: $search}){
+          query GetMyFeedData($id: ID!, $value: Int, $filters: homeSearchFilterInput!, 
+             $longitude: Float!, $latitude: Float!, $search: String){
+            getMyFeedData (input: {id: $id, value:$value, filters:$filters,longitude:$longitude, 
+              latitude:$latitude, search: $search}){
               message
               success
               totalPlaces 
@@ -258,9 +262,9 @@ const GetMyFeedData = (obj) => {
 };
 
 /*
-@desc: getUserProfileData query
+@desc: getUserProfileDataGraphql query
 */
-const GetUserProfileData = (id) => {
+const getUserProfileDataGraphql = (id) => {
   const graphQl = {
     query: `
           query GetUserProfileData($id: ID!){
@@ -282,10 +286,4 @@ const GetUserProfileData = (id) => {
   };
   return graphQl;
 };
-export {
-  getUser,
-  getAllUsers,
-  getUserFavorites,
-  GetMyFeedData,
-  GetUserProfileData,
-};
+export {getUserGraphql, getAllUsersGraphql, getUserFavoritesGraphql, getMyFeedDataGraphql, getUserProfileDataGraphql};

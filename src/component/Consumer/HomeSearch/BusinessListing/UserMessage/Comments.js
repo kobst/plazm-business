@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { useHistory } from "react-router-dom";
-import ProfileImg from "../../../../../images/profile-img.png";
-import ReplyInput from "./ReplyInput";
-import LikesBar from "../LikesBar";
-import { Scrollbars } from "react-custom-scrollbars";
-import { useSelector } from "react-redux";
-import ValueLoader from "../../../../../utils/loader";
-import ScrollToBottom1 from "./ScrollToBottom1";
+import React, {useState, useEffect} from 'react';
+import styled from 'styled-components';
+import {useHistory} from 'react-router-dom';
+import ProfileImg from '../../../../../images/profile-img.png';
+import ReplyInput from './ReplyInput';
+import LikesBar from '../LikesBar';
+import {Scrollbars} from 'react-custom-scrollbars';
+import {useSelector} from 'react-redux';
+import ValueLoader from '../../../../../utils/loader';
+import ScrollToBottom1 from './ScrollToBottom1';
 import {
   checkMime,
   replaceBucket,
-} from "../../../../../utilities/checkResizedImage";
-import ReplyImage from "./replyImage";
+} from '../../../../../utilities/checkResizedImage';
+import ReplyImage from './replyImage';
 
-const reactStringReplace = require("react-string-replace");
+const reactStringReplace = require('react-string-replace');
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -120,16 +120,16 @@ const Comments = ({
 }) => {
   const [displayReply, setDisplayReply] = useState(false);
   const [displayReplyInput, setDisplayReplyInput] = useState(false);
-  const [replyDescription, setReplyDescription] = useState("");
+  const [replyDescription, setReplyDescription] = useState('');
   const ws = useSelector((state) => state.user.ws);
   const [image, setImage] = useState(null);
   const loadingReplies = useSelector((state) => state.myFeed.loadingReplies);
-  const history = useHistory()
+  const history = useHistory();
 
   /** to find resized image */
   useEffect(() => {
     if (i.userId.length > 0) {
-      if (i.userId[0].photo !== "" && i.userId[0].photo) {
+      if (i.userId[0].photo !== '' && i.userId[0].photo) {
         const findMime = checkMime(i.userId[0].photo);
         const image = replaceBucket(i.userId[0].photo, findMime, 30, 30);
         setImage(image);
@@ -147,28 +147,28 @@ const Comments = ({
 
   /** to add reply function */
   const addReply = async (obj) => {
-    setReplyDescription("");
+    setReplyDescription('');
     ws.send(
-      JSON.stringify({
-        action: "message",
-        commentId: obj._id, //commentId
-        userId: obj.userId, //userId
-        comment: "@" + i.userId.name + " " + obj.body,
-        postId: obj.postId,
-        businessId: business._id,
-        taggedUsers: obj.taggedUsers,
-        type: "Post",
-      })
+        JSON.stringify({
+          action: 'message',
+          commentId: obj._id, // commentId
+          userId: obj.userId, // userId
+          comment: '@' + i.userId.name + ' ' + obj.body,
+          postId: obj.postId,
+          businessId: business._id,
+          taggedUsers: obj.taggedUsers,
+          type: 'Post',
+        }),
     );
   };
   /** to highlight the user mentions mentioned in post description */
   const findDesc = (value, mentions) => {
     if (mentions.length > 0) {
       for (let i = 0; i < mentions.length; i++) {
-        if (value.search(new RegExp(mentions[i].name, "g") !== -1)) {
+        if (value.search(new RegExp(mentions[i].name, 'g') !== -1)) {
           return (
             <div>
-              {reactStringReplace(value, "@" + mentions[i].name, (match, j) => (
+              {reactStringReplace(value, '@' + mentions[i].name, (match, j) => (
                 <span
                   className="mentionData"
                   onClick={() => history.push(`/u/${mentions[i]._id}`)}
@@ -190,7 +190,7 @@ const Comments = ({
   /** to check image error */
   const checkError = () => {
     if (i.userId.length > 0) {
-      if (i.userId[0].photo !== "" && i.userId[0].photo) {
+      if (i.userId[0].photo !== '' && i.userId[0].photo) {
         setImage(i.userId[0].photo);
       } else if (i.userId.photo) {
         setImage(i.userId.photo);
@@ -210,11 +210,11 @@ const Comments = ({
           <ProfileName
             onClick={() => history.push(`/u/${i.userId._id}`)}
           >
-            {i.userId.name ? i.userId.name : i.userId[0].name}{" "}
+            {i.userId.name ? i.userId.name : i.userId[0].name}{' '}
           </ProfileName>
           <ChatInput> {findDesc(i.body, i.taggedUsers)}</ChatInput>
           <LikesBar
-            type={listView ? "reply" : "disabled"}
+            type={listView ? 'reply' : 'disabled'}
             date={new Date(i.createdAt)}
             setDisplayComments={setDisplayReply}
             displayComments={displayReply}
@@ -235,10 +235,10 @@ const Comments = ({
             autoHeightMin={0}
             autoHeightMax={300}
             thumbMinSize={30}
-            style={{ overflowX: "hidden" }}
+            style={{overflowX: 'hidden'}}
             className="InnerScroll"
           >
-            <ReplyWrap style={{ overflowX: "hidden" }}>
+            <ReplyWrap style={{overflowX: 'hidden'}}>
               {displayReply && i.replies.length > 0 && !loadingReplies ? (
                 <div>
                   {i.replies.map((j, key) => (
@@ -255,13 +255,13 @@ const Comments = ({
                                 onClick={() =>
                                   history.push(`/u/${j.userId._id}`)
                                 }
-                                style={{ color: "#ff2e9a" }}
+                                style={{color: '#ff2e9a'}}
                               >
                                 {j.userId.name}
-                              </span>{" "}
+                              </span>{' '}
                             </ProfileName>
                             <ChatInput>
-                              {" "}
+                              {' '}
                               {findDesc(j.body, j.taggedUsers)}
                             </ChatInput>
                             <LikesBar

@@ -1,6 +1,6 @@
 
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
 
 
 const TooltipInner = styled.div`
@@ -47,13 +47,13 @@ strong{
   font-weight:700;
 }
 
-`
+`;
 
 const Tooltip = (props) => {
-    return(
+  return (
 
-    <TooltipInner {...props} /> 
-    )
-}
+    <TooltipInner {...props} />
+  );
+};
 
-export default Tooltip
+export default Tooltip;

@@ -9,8 +9,8 @@ import {
   GridWrapper,
 } from "../styled";
 import {
-  FetchMostPopularLists,
-  FetchTrendingLists,
+  fetchMostPopularLists,
+  fetchTrendingLists,
   fetchUserCreatedAndFollowedList,
 } from "../../../../reducers/listReducer";
 import ValueLoader from "../../../../utils/loader";
@@ -50,14 +50,14 @@ const NewCollectionSectionGrid = ({
       if (heading === "Trending" && trendingLists.length === offset + 12) {
         setLoader({ value: true, heading });
         setOffSet(offset + 12);
-        dispatch(FetchTrendingLists(offset + 12));
+        dispatch(fetchTrendingLists(offset + 12));
       } else if (
         heading === "Most Popular" &&
         popularLists.length === offset + 12
       ) {
         setLoader({ value: true, heading });
         setOffSet(offset + 12);
-        dispatch(FetchMostPopularLists(offset + 12));
+        dispatch(fetchMostPopularLists(offset + 12));
       } else if (heading === "Subscribed Lists") {
         setLoader({ value: true, heading });
         setOffSet(offset + 12);

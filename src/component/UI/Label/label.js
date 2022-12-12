@@ -1,22 +1,24 @@
-import React from "react";
-import styled from "styled-components";
+
+import React from 'react';
+import styled from 'styled-components';
 
 const LabelText = styled.label`
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 16px;
-  color: #181818;
-  margin: 0px;
-  &.RememberMeLabel {
-    font-weight: 300;
-    color: #756f86;
-  }
+font-weight: 600;
+font-size:16px;
+line-height: 21px;
+color: #756F86;
+font-family: 'IBM Plex Sans', sans-serif;
+margin:0px;
+@media (max-width:767px){
+    font-size:14px;
+    line-height: 19px;   
+}
 `;
 
 const Label = (props) => {
-  return <LabelText>{props.name}</LabelText>;
+  return (
+    <LabelText>{props.name}</LabelText>
+  );
 };
 
 export default Label;

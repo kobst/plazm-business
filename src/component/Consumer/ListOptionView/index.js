@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { IoMdClose } from "react-icons/io";
-import Input from "../../UI/Input/Input";
-import Select from "react-select";
-import SearchIcon from "../../../images/subscriptionSearchIcon.svg";
-import { useDispatch, useSelector } from "react-redux";
+import React, {useEffect, useState} from 'react';
+import styled from 'styled-components';
+import {IoMdClose} from 'react-icons/io';
+import Input from '../../UI/Input/Input';
+import Select from 'react-select';
+import SearchIcon from '../../../images/subscriptionSearchIcon.svg';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   fetchUserCreatedAndFollowedList,
   clearListData,
@@ -12,10 +12,10 @@ import {
   filterUserCreatedLists,
   filterByAll,
   clearDiscoverPageData,
-} from "../../../reducers/listReducer";
-import ValueLoader from "../../../utils/loader";
-import DisplayListSection from "./DisplayListSection";
-import { unwrapResult } from "@reduxjs/toolkit";
+} from '../../../reducers/listReducer';
+import ValueLoader from '../../../utils/loader';
+import DisplayListSection from './DisplayListSection';
+import {unwrapResult} from '@reduxjs/toolkit';
 
 const ListOptionSection = styled.div`
   width: 100%;
@@ -186,60 +186,60 @@ const ListOptionView = ({
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const loading = useSelector(
-    (state) => state.list.loadingUserCreatedAndFollowed
+      (state) => state.list.loadingUserCreatedAndFollowed,
   );
   const totalList = useSelector((state) => state.list.totalList);
   const listData = useSelector((state) => state.list.data);
 
   const filteredListData = useSelector((state) => state.list.filteredList);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [filteredList, setFilteredList] = useState([]);
-  const [selectedFilter, setSelectedFilter] = useState("All");
+  const [selectedFilter, setSelectedFilter] = useState('All');
   const [selectedList, setSelectedList] = useState(null);
   const [flag, setFlag] = useState(true);
   const list =
-    filteredList.length > 0
-      ? filteredList
-      : filteredListData.length > 0 && search === ""
-      ? filteredListData
-      : search === ""
-      ? listData
-      : [];
+    filteredList.length > 0 ?
+      filteredList :
+      filteredListData.length > 0 && search === '' ?
+      filteredListData :
+      search === '' ?
+      listData :
+      [];
   const userLists = listData.filter((i) => i.ownerId === user._id);
 
   const options = [
     {
-      value: "All",
+      value: 'All',
       label: (
         <>
           All
           <span
             className="dropdown-count"
-            dangerouslySetInnerHTML={{ __html: totalList }}
+            dangerouslySetInnerHTML={{__html: totalList}}
           />
         </>
       ),
     },
     {
-      value: "My Lists",
+      value: 'My Lists',
       label: (
         <>
           My Lists
           <span
             className="dropdown-count"
-            dangerouslySetInnerHTML={{ __html: userLists.length }}
+            dangerouslySetInnerHTML={{__html: userLists.length}}
           />
         </>
       ),
     },
     {
-      value: "Subscribed Lists",
+      value: 'Subscribed Lists',
       label: (
         <>
           Subscribed Lists
           <span
             className="dropdown-count"
-            dangerouslySetInnerHTML={{ __html: totalList - userLists.length }}
+            dangerouslySetInnerHTML={{__html: totalList - userLists.length}}
           />
         </>
       ),
@@ -248,9 +248,9 @@ const ListOptionView = ({
 
   /** to filter data based on top filters */
   useEffect(() => {
-    if (selectedFilter === "Subscribed Lists") {
+    if (selectedFilter === 'Subscribed Lists') {
       dispatch(filterSubscribedLists(user._id));
-    } else if (selectedFilter === "My Lists") {
+    } else if (selectedFilter === 'My Lists') {
       dispatch(filterUserCreatedLists(user._id));
     } else dispatch(filterByAll());
   }, [selectedFilter, dispatch, user._id]);
@@ -275,23 +275,23 @@ const ListOptionView = ({
   /** lists search functionality implemented (to search based on title or description) */
   useEffect(() => {
     if (
-      selectedFilter === "Subscribed Lists" ||
-      selectedFilter === "My Lists"
+      selectedFilter === 'Subscribed Lists' ||
+      selectedFilter === 'My Lists'
     ) {
       setFilteredList(
-        filteredListData.filter(
-          (entry) =>
-            entry.name.toLowerCase().indexOf(search.toLowerCase()) !== -1 ||
-            entry.description.toLowerCase().indexOf(search.toLowerCase()) !== -1
-        )
+          filteredListData.filter(
+              (entry) =>
+                entry.name.toLowerCase().indexOf(search.toLowerCase()) !== -1 ||
+            entry.description.toLowerCase().indexOf(search.toLowerCase()) !== -1,
+          ),
       );
     } else {
       setFilteredList(
-        listData.filter(
-          (entry) =>
-            entry.name.toLowerCase().indexOf(search.toLowerCase()) !== -1 ||
-            entry.description.toLowerCase().indexOf(search.toLowerCase()) !== -1
-        )
+          listData.filter(
+              (entry) =>
+                entry.name.toLowerCase().indexOf(search.toLowerCase()) !== -1 ||
+            entry.description.toLowerCase().indexOf(search.toLowerCase()) !== -1,
+          ),
       );
     }
   }, [search, listData, filteredListData, selectedFilter]);
@@ -299,7 +299,7 @@ const ListOptionView = ({
   /** on top filter change */
   const selectChange = (obj) => {
     setSelectedFilter(obj.value);
-    setSearch("");
+    setSearch('');
   };
 
   /** to display discover page */
@@ -340,13 +340,13 @@ const ListOptionView = ({
                       className="dropdown-count"
                       dangerouslySetInnerHTML={{
                         __html:
-                          selectedFilter === "All"
-                            ? "(" + totalList + ")"
-                            : selectedFilter === "My Lists"
-                            ? "(" + userLists.length + ")"
-                            : "(" +
+                          selectedFilter === 'All' ?
+                            '(' + totalList + ')' :
+                            selectedFilter === 'My Lists' ?
+                            '(' + userLists.length + ')' :
+                            '(' +
                               parseInt(totalList - userLists.length) +
-                              ")",
+                              ')',
                       }}
                     />
                   </>
@@ -358,101 +358,101 @@ const ListOptionView = ({
               styles={{
                 control: (provided) => ({
                   ...provided,
-                  flexGrow: 1,
-                  paddingLeft: "0",
-                  height: "100%",
-                  boxShadow: "none",
-                  border: "1px solid #221E45",
-                  backgroundColor: "#221E45",
-                  color: "#fff",
-                  width: "230px",
-                  fontSize: "20px",
-                  fontWeight: "500",
-                  fontFamily: "Roboto",
-                  ":hover": {
-                    border: "1px solid #221E45",
+                  'flexGrow': 1,
+                  'paddingLeft': '0',
+                  'height': '100%',
+                  'boxShadow': 'none',
+                  'border': '1px solid #221E45',
+                  'backgroundColor': '#221E45',
+                  'color': '#fff',
+                  'width': '230px',
+                  'fontSize': '20px',
+                  'fontWeight': '500',
+                  'fontFamily': 'Roboto',
+                  ':hover': {
+                    border: '1px solid #221E45',
                   },
-                  "@media only screen and (min-width: 320px) and (max-width: 768px)":
+                  '@media only screen and (min-width: 320px) and (max-width: 768px)':
                     {
-                      fontSize: "12px",
+                      fontSize: '12px',
                     },
                 }),
                 container: (provided) => ({
                   ...provided,
-                  height: "40px",
+                  height: '40px',
                 }),
                 indicatorsContainer: () => ({
-                  color: "#fff",
-                  "@media only screen and (min-width: 1025px) and (max-width: 1399px)":
+                  'color': '#fff',
+                  '@media only screen and (min-width: 1025px) and (max-width: 1399px)':
                     {
-                      padding: "0 5px",
+                      padding: '0 5px',
                     },
-                  svg: {
-                    color: "#fff",
+                  'svg': {
+                    color: '#fff',
                   },
-                  div: {
-                    "@media only screen and (min-width: 1025px) and (max-width: 1399px)":
+                  'div': {
+                    '@media only screen and (min-width: 1025px) and (max-width: 1399px)':
                       {
-                        padding: "8px 0",
+                        padding: '8px 0',
                       },
                   },
                 }),
                 placeholder: () => ({
-                  color: "#1D264F",
-                  fontSize: "20px",
-                  fontWeight: "500",
-                  fontFamily: "Roboto",
-                  "@media only screen and (min-width: 320px) and (max-width: 768px)":
+                  'color': '#1D264F',
+                  'fontSize': '20px',
+                  'fontWeight': '500',
+                  'fontFamily': 'Roboto',
+                  '@media only screen and (min-width: 320px) and (max-width: 768px)':
                     {
-                      fontSize: "12px",
+                      fontSize: '12px',
                     },
                 }),
                 singleValue: () => ({
-                  fontSize: "20px",
-                  fontWeight: "500",
-                  fontFamily: "Roboto",
-                  "@media only screen and (min-width: 320px) and (max-width: 768px)":
+                  'fontSize': '20px',
+                  'fontWeight': '500',
+                  'fontFamily': 'Roboto',
+                  '@media only screen and (min-width: 320px) and (max-width: 768px)':
                     {
-                      fontSize: "12px",
+                      fontSize: '12px',
                     },
                 }),
                 valueContainer: () => ({
-                  display: "flex",
-                  alignItems: "center",
-                  fontFamily: "Roboto",
-                  "@media only screen and (min-width: 1025px) and (max-width: 1399px)":
+                  'display': 'flex',
+                  'alignItems': 'center',
+                  'fontFamily': 'Roboto',
+                  '@media only screen and (min-width: 1025px) and (max-width: 1399px)':
                     {
-                      padding: "2px 3px",
+                      padding: '2px 3px',
                     },
                 }),
                 IndicatorContainer: () => ({
-                  "@media only screen and (min-width: 1025px) and (max-width: 1399px)":
+                  '@media only screen and (min-width: 1025px) and (max-width: 1399px)':
                     {
-                      padding: "8px 0",
+                      padding: '8px 0',
                     },
                 }),
                 menu: (styles) => ({
                   ...styles,
-                  backgroundColor: "#221E45",
-                  border: "1px solid #221E45",
-                  cursor: "pointer",
-                  fontSize: "13px",
+                  backgroundColor: '#221E45',
+                  border: '1px solid #221E45',
+                  cursor: 'pointer',
+                  fontSize: '13px',
                 }),
-                option: (styles, { isFocused, isSelected }) => ({
+                option: (styles, {isFocused, isSelected}) => ({
                   ...styles,
-                  padding: "5px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100%",
-                  backgroundColor: isSelected
-                    ? "#FF2E9A"
-                    : isFocused
-                    ? "#FF2E9A"
-                    : "#221E45",
-                  ":active": {
-                    ...styles[":active"],
-                    backgroundColor: isSelected ? "#FF2E9A" : "#221E45",
+                  'padding': '5px',
+                  'display': 'flex',
+                  'alignItems': 'center',
+                  'justifyContent': 'space-between',
+                  'width': '100%',
+                  'backgroundColor': isSelected ?
+                    '#FF2E9A' :
+                    isFocused ?
+                    '#FF2E9A' :
+                    '#221E45',
+                  ':active': {
+                    ...styles[':active'],
+                    backgroundColor: isSelected ? '#FF2E9A' : '#221E45',
                   },
                 }),
               }}
@@ -464,7 +464,7 @@ const ListOptionView = ({
         </HeadingWrap>
         <div
           id="scrollableDiv"
-          style={{ height: "calc(100vh - 115px)", overflow: "auto" }}
+          style={{height: 'calc(100vh - 115px)', overflow: 'auto'}}
         >
           <ListingOptionWrap>
             {list.length > 0 ? (

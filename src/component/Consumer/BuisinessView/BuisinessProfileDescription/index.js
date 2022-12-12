@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-import { IoMdClose } from "react-icons/io";
+import React from 'react';
+import styled from 'styled-components';
+import {IoMdClose} from 'react-icons/io';
 import {
   FaTwitter,
   FaFacebookF,
@@ -8,8 +8,8 @@ import {
   FaLinkedinIn,
   FaBehance,
   FaDeviantart,
-} from "react-icons/fa";
-import { useSelector } from "react-redux";
+} from 'react-icons/fa';
+import {useSelector} from 'react-redux';
 
 const BuisinessViewContent = styled.div`
   width: 100%;
@@ -156,7 +156,7 @@ const FirstDiv = styled.div`
   align-items: center;
 `;
 
-const BuisinessProfileDescription = ({ setDisplayTab }) => {
+const BuisinessProfileDescription = ({setDisplayTab}) => {
   const businessProfile = useSelector((state) => state.business.business)[0];
   return (
     <>
@@ -173,11 +173,11 @@ const BuisinessProfileDescription = ({ setDisplayTab }) => {
         <CommonWrap>
           <HeadingDesp>Hours</HeadingDesp>
 
-          {businessProfile.hours_format.length > 0
-            ? businessProfile.hours_format.map((i) => {
-                return (
-                  <>
-                    {i.StartDay !== null || i.EndDay !== null ? (
+          {businessProfile.hours_format.length > 0 ?
+            businessProfile.hours_format.map((i) => {
+              return (
+                <>
+                  {i.StartDay !== null || i.EndDay !== null ? (
                       <WeekDays>
                         <span>
                           {i.StartDay.slice(0, 3)} to {i.EndDay.slice(0, 3)}
@@ -186,19 +186,19 @@ const BuisinessProfileDescription = ({ setDisplayTab }) => {
                         {i.Start} Hours - {i.End} Hours
                       </WeekDays>
                     ) : null}
-                  </>
-                );
-              })
-            : null}
+                </>
+              );
+            }) :
+            null}
         </CommonWrap>
         <CommonWrap>
           <HeadingDesp>Hashtags</HeadingDesp>
           <HastagsWrap>
-            {businessProfile.filter_tags.length > 0
-              ? businessProfile.filter_tags.map((i, key) => (
-                  <Hastags key={key}>#{i}</Hastags>
-                ))
-              : null}
+            {businessProfile.filter_tags.length > 0 ?
+              businessProfile.filter_tags.map((i, key) => (
+                <Hastags key={key}>#{i}</Hastags>
+              )) :
+              null}
           </HastagsWrap>
         </CommonWrap>
         <CommonWrap>
@@ -228,7 +228,7 @@ const BuisinessProfileDescription = ({ setDisplayTab }) => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {" "}
+                  {' '}
                   <FirstDiv>
                     <FaFacebookF /> Facebook
                   </FirstDiv>
@@ -246,7 +246,7 @@ const BuisinessProfileDescription = ({ setDisplayTab }) => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {" "}
+                  {' '}
                   <FirstDiv>
                     <FaInstagramSquare /> Instagram
                   </FirstDiv>
