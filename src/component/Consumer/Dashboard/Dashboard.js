@@ -1,27 +1,27 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import LeftBar from "../../UI/Consumer/LeftBar";
-import SideBarTabs from "../../UI/Consumer/SideBarTabs/SideBarTabs";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import LeftBar from '../../UI/Consumer/LeftBar';
+import SideBarTabs from '../../UI/Consumer/SideBarTabs/SideBarTabs';
 // import PanelContent from "../../UI/Consumer/Panel-Content/PanelContent";
 
-import Header from "../../UI/Consumer/Header/Header";
-import RightBar from "../Dashboard/RightBar";
+import Header from '../../UI/Consumer/Header/Header';
+import RightBar from '../Dashboard/RightBar';
 
-import HomeSearch from "../HomeSearch";
-import MyFeed from "../MyFeed";
-import BuisinessView from "../BuisinessView";
-import DiscoverList from "../DiscoverList";
-import ListDetail from "../ListDescriptionView/ListDetail";
-import Profile from "../Profile";
+import HomeSearch from '../HomeSearch';
+import MyFeed from '../MyFeed';
+import BuisinessView from '../BuisinessView';
+import DiscoverList from '../DiscoverList';
+import ListDetail from '../ListDescriptionView/ListDetail';
+import Profile from '../Profile';
 
-import GridContainer from "../GridComponents/index";
-import MapView from "../mapView/index";
-import RadarView from "../radarView/radarView";
-import useStore from "../useState";
-import GlobalSearch from "../GlobalSearch";
-import GlobalSearchBox from "../GlobalSearch/GlobalSearchBox";
-import { useSelector } from "react-redux";
-import UserProfile from "../UserProfile";
+import GridContainer from '../GridComponents/index';
+import MapView from '../mapView/index';
+import RadarView from '../radarView/radarView';
+import useStore from '../useState';
+import GlobalSearch from '../GlobalSearch';
+import GlobalSearchBox from '../GlobalSearch/GlobalSearchBox';
+import { useSelector } from 'react-redux';
+import UserProfile from '../UserProfile';
 
 const DashboardContent = styled.div`
   width: 100%;
