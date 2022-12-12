@@ -48,6 +48,7 @@ const BusinessListing = ({loader, coords, closestFilter}) => {
 	const history = useHistory();
 
 	const businessData = useSelector((state) => state.myFeed.searchFeed);
+	const searchFeedList = useSelector((state) => state.myFeed.searchFeedList);
 	const loading = useSelector((state) => state.myFeed.loading);
 	const [offset, setOffset] = useState(0);
 	const [hasMore, setHasMore] = useState(true);
@@ -67,7 +68,6 @@ const BusinessListing = ({loader, coords, closestFilter}) => {
 	const draggedLocation = useStore((state) => state.draggedLocation);
 	const setGridMode = useStore((state) => state.setGridMode);
 	const gridMode = useStore((state) => state.gridMode);
-	const setPostsInView = useStore((state) => state.setPostsInView);
 
 	useEffect(() => {
 		dispatch(setEnterClicked(false));
@@ -134,7 +134,7 @@ const BusinessListing = ({loader, coords, closestFilter}) => {
 			{showSearchBar && <GlobalSearchBox setOffset={setOffset} type={'Explore'} />}
 			{search.length && (
 				<SearchListingContent>
-					{businessData.map((ele) => (
+					{searchFeedList.map((ele) => (
 						<li
 							onClick={() =>
 								displayBusinessDetail(

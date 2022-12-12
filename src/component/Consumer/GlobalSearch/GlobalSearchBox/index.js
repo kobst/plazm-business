@@ -10,9 +10,9 @@ import {
   setEnterClicked,
   setSearchData,
   setSideFiltersHomeSearch,
+  SearchFeedList,
 } from "../../../../reducers/myFeedReducer";
 import useStore from "../../useState";
-import { SearchFeedList } from "../../../../reducers/myFeedReducer";
 import { checkBusiness } from "../../../../reducers/businessReducer";
 import { useHistory, useLocation } from "react-router-dom";
 import GooglePlacesSearch from "../../../../utils/googlePlacesSearch";
@@ -122,7 +122,7 @@ const GlobalSearchBox = ({ setOffset, type }) => {
           longitude: draggedLocation.lng,
         };
         dispatch(setEnterClicked(true));
-        dispatch(HomeSearch(obj));
+        dispatch(SearchFeedList(obj));
         break;
       case "Business Search":
         dispatch(
