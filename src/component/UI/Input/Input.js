@@ -23,9 +23,9 @@ color:#7C9CBF
 @media (max-width:991px){
     height: 40px;
     font-size: 14px;
-    line-height:19px 
-}
-@media (max-width:767px){
+    line-height: 19px;
+  }
+  @media (max-width: 767px) {
     height: 35px;
 }
 
