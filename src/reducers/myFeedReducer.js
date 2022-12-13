@@ -726,7 +726,17 @@ export const slice = createSlice({
             ...obj,
             comments: [],
           }));
-          state.myFeed = state.myFeed.concat(data);
+          // If draggedLocation is changed, then newFeed is used for updated list. Otherwise, prevFeed is getting used.
+          const prevMyFeed = [...state.myFeed];
+          const newFeed = [];
+
+          data.forEach((item) => {
+            //for pagination, if an item is not in the state.myFeed, then pushing that item in the state.myFeed.
+            if (!prevMyFeed.some((i) => item._id === i._id)) {
+              prevMyFeed.push(item);
+            } else newFeed.push(item);
+          });
+          state.myFeed = newFeed.length ? newFeed : prevMyFeed;
           state.totalData = action.payload.totalLists;
           state.selectedListDetails = action.payload.listDetails;
         }

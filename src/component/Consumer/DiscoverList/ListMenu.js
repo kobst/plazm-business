@@ -20,7 +20,7 @@ import {
 } from '../../../reducers/listReducer';
 import ValueLoader from '../../../utils/loader';
 import Input from '../../UI/Input/Input';
-import { unwrapResult } from '@reduxjs/toolkit';
+import {unwrapResult} from '@reduxjs/toolkit';
 
 const ModalContent = styled.div`
   width: 100%;
@@ -63,7 +63,6 @@ const ModalContent = styled.div`
     overflow-x: hidden;
   }
 `;
-
 
 const TopContent = styled.div`
   width: 100%;

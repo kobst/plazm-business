@@ -305,6 +305,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   const selectedList = useStore((state) => state.selectedList);
   const setSelectedList = useStore((state) => state.setSelectedList);
   const selectedListId = useStore((state) => state.selectedListId);
+  const draggedLocation = useStore((state) => state.draggedLocation);
   const setSelectedListId = useStore((state) => state.setSelectedListId);
   const setSelectedListName = useStore((state) => state.setSelectedListName);
   const setListIndex = useStore((state) => state.setListIndex);
@@ -363,7 +364,12 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   useEffect(() => {
     const fetchListDetails = async () => {
       const result = await dispatch(
-        fetchSelectedListDetails({ id: id, value: offset })
+        fetchSelectedListDetails({
+          id: id,
+          value: offset,
+          latitude: Number(draggedLocation.lat),
+          longitude: Number(draggedLocation.lng),
+        })
       );
       const data = await unwrapResult(result);
       setSelectedList(data?.listDetails);
@@ -373,12 +379,19 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
       }
     };
     offset === 0 && fetchListDetails();
-  }, [dispatch, id, offset]);
+  }, [dispatch, id, offset, draggedLocation]);
 
   const fetchMorePosts = () => {
     if (offset + 20 < totalData) {
       setOffSet(offset + 20);
-      dispatch(fetchSelectedListDetails({ id: id, value: offset + 20 }));
+      dispatch(
+        fetchSelectedListDetails({
+          id: id,
+          value: offset + 20,
+          latitude: Number(draggedLocation.lat),
+          longitude: Number(draggedLocation.lng),
+        })
+      );
     } else setHasMore(false);
   };
 

@@ -26,6 +26,7 @@ import {
 } from '../../../reducers/userReducer';
 import {useHistory} from 'react-router-dom';
 import ButtonOrange from '../UI/ButtonOrange';
+import useStore from '../useState';
 
 const ListOptionSection = styled.div`
   width: 100%;
@@ -260,7 +261,6 @@ const ArrowBack = styled.div`
   }
 `;
 
-
 const ListDescriptionView = ({
   setDisplayTab,
   setSelectedListId,
@@ -272,6 +272,7 @@ const ListDescriptionView = ({
   setDiscoverBtn,
 }) => {
   const dispatch = useDispatch();
+  const draggedLocation = useStore((state) => state.draggedLocation);
   const loading = useSelector((state) => state.myFeed.loadingSelectedList);
   const loadingUnSubScribe = useSelector(
       (state) => state.list.loadingUnSubscribe,
@@ -318,7 +319,12 @@ const ListDescriptionView = ({
   useEffect(() => {
     const fetchListDetails = async () => {
       const result = await dispatch(
-          fetchSelectedListDetails({id: selectedListId, value: offset}),
+          fetchSelectedListDetails({
+            id: selectedListId,
+            value: offset,
+            latitude: Number(draggedLocation.lat),
+            longitude: Number(draggedLocation.lng),
+          })
       );
       const data = await unwrapResult(result);
       if (data) {
@@ -326,13 +332,18 @@ const ListDescriptionView = ({
       }
     };
     offset === 0 && fetchListDetails();
-  }, [dispatch, selectedListId, offset]);
+  }, [dispatch, selectedListId, offset, draggedLocation]);
 
   const fetchMorePosts = () => {
     if (offset + 20 < totalData) {
       setOffSet(offset + 20);
       dispatch(
-          fetchSelectedListDetails({id: selectedListId, value: offset + 20}),
+          fetchSelectedListDetails({
+            id: selectedListId,
+            value: offset + 20,
+            latitude: Number(draggedLocation.lat),
+            longitude: Number(draggedLocation.lng),
+          })
       );
     } else setHasMore(false);
   };
@@ -362,19 +373,6 @@ const ListDescriptionView = ({
       dispatch(addSubscribedList(response.listId));
     }
   };
-
-  // /** to delete a list */
-  // const deleteList = async () => {
-  //   const obj = {
-  //     userId: user._id,
-  //     listId: selectedList._id,
-  //   };
-  //   const data = await dispatch(deleteUserCreatedList(obj));
-  //   const response = await unwrapResult(data);
-  //   if (response) {
-  //     setSelectedListId(null);
-  //   }
-  // };
 
   const onCloseTab = () => {
     if (!listOpenedFromBusiness) setDisplayTab(false);
