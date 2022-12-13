@@ -124,7 +124,7 @@ export const fetchSelectedListDetails = createAsyncThunk('data/fetchSelectedList
  * @desc:  home search
  * @params: search data
  */
-export const HomeSearch = createAsyncThunk('data/HomeSearch', async (obj) => {
+export const homeSearch = createAsyncThunk('data/HomeSearch', async (obj) => {
 	const graphQl = homeSearch(obj);
 	const response = await graphQlEndPoint(graphQl);
 	return response.data.homeSearch;
@@ -134,7 +134,7 @@ export const HomeSearch = createAsyncThunk('data/HomeSearch', async (obj) => {
  * @desc:  home search and get list
  * @params: search data
  */
-export const SearchFeedList = createAsyncThunk('data/SearchFeedList', async (obj) => {
+export const searchFeedList = createAsyncThunk('data/SearchFeedList', async (obj) => {
 	const graphQl = homeSearch(obj);
 	const response = await graphQlEndPoint(graphQl);
 	return response.data.homeSearch;
@@ -144,7 +144,7 @@ export const SearchFeedList = createAsyncThunk('data/SearchFeedList', async (obj
  * @desc:  home search
  * @params: search data
  */
-export const HomeSearchInitial = createAsyncThunk('data/HomeSearchInitial', async (obj) => {
+export const homeSearchInitial = createAsyncThunk('data/HomeSearchInitial', async (obj) => {
 	const graphQl = homeSearch(obj);
 	const response = await graphQlEndPoint(graphQl);
 	return response.data.homeSearch;
@@ -869,7 +869,7 @@ export const slice = createSlice({
 				return new Date(b.createdAt) - new Date(a.createdAt);
 			});
 		},
-		[SearchFeedList.fulfilled]: (state, action) => {
+		[searchFeedList.fulfilled]: (state, action) => {
 			if (action.payload) {
 				const data = action.payload.data.map((obj) => ({
 					...obj,
@@ -892,7 +892,7 @@ export const slice = createSlice({
 				state.searchFeedList = data;
 			}
 		},
-		[HomeSearch.fulfilled]: (state, action) => {
+		[homeSearch.fulfilled]: (state, action) => {
 			if (action.payload) {
 				const data = action.payload.data.map((obj) => ({
 					...obj,
@@ -915,19 +915,19 @@ export const slice = createSlice({
 				state.totalData = action.payload.totalPlaces;
 			}
 		},
-		[HomeSearch.rejected]: (state, action) => {
+		[homeSearch.rejected]: (state, action) => {
 			if (state.loading) {
 				state.error = action.payload;
 			}
 		},
-		[HomeSearchInitial.pending]: (state) => {
+		[homeSearchInitial.pending]: (state) => {
 			if (!state.loading) {
 				state.loading = true;
 				// state.myFeed = [];
 				// state.searchFeed = [];
 			}
 		},
-		[HomeSearchInitial.fulfilled]: (state, action) => {
+		[homeSearchInitial.fulfilled]: (state, action) => {
 			if (state.loading) {
 				state.loading = false;
 				if (action.payload) {
@@ -958,7 +958,7 @@ export const slice = createSlice({
 				}
 			}
 		},
-		[HomeSearchInitial.rejected]: (state, action) => {
+		[homeSearchInitial.rejected]: (state, action) => {
 			if (state.loading) {
 				state.loading = false;
 				state.error = action.payload;
