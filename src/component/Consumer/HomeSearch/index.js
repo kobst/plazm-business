@@ -16,6 +16,7 @@ import GridView from "../GridComponents/gridView/gridView";
 const ContentWrap = styled.div`
   padding: 0px;
   width: 100%;
+  position: relative;
 `;
 
 const LoaderWrap = styled.div`
@@ -32,21 +33,20 @@ const LoaderWrap = styled.div`
   }
 `;
 
-const HomeSearch = ({
-  ...props
-}) => {
+const HomeSearch = ({ ...props }) => {
   const dispatch = useDispatch();
   const [locationState, setLocationState] = useState("prompt");
   const [loader, setLoader] = useState(null);
   const [coords, setCoords] = useState(null);
   const [closestFilter, setClosestFilter] = useState(true);
 
-  
-  const setSelectedListId = useStore((state) => state.setSelectedListId)
-  const setSearchIndex = useStore((state) => state.setSearchIndex)
-  const setListClickedFromSearch = useStore((state) => state.setListClickedFromSearch) 
-  const draggedLocation = useStore((state) => state.draggedLocation)
-  const gridMode = useStore((state) => state.gridMode)
+  const setSelectedListId = useStore((state) => state.setSelectedListId);
+  const setSearchIndex = useStore((state) => state.setSearchIndex);
+  const setListClickedFromSearch = useStore(
+    (state) => state.setListClickedFromSearch
+  );
+  const draggedLocation = useStore((state) => state.draggedLocation);
+  const gridMode = useStore((state) => state.gridMode);
 
   useEffect(() => {
     dispatch(setSideFiltersHomeSearch());
@@ -55,30 +55,27 @@ const HomeSearch = ({
 
   // /** to set coordinates when location is enabled */
   useEffect(() => {
-      navigator.geolocation.getCurrentPosition(function (position) {
-        setClosestFilter(true);
-        setLocationState("granted");
-        setCoords({
-          latitude: draggedLocation.lat,
-          longitude: draggedLocation.lng,
-        });
-        dispatch(
-          setUserlocation({
-            latitude: draggedLocation.lat,
-            longitude: draggedLocation.lat,
-          })
-        );
+    navigator.geolocation.getCurrentPosition(function (position) {
+      setClosestFilter(true);
+      setLocationState("granted");
+      setCoords({
+        latitude: draggedLocation.lat,
+        longitude: draggedLocation.lng,
       });
-  
+      dispatch(
+        setUserlocation({
+          latitude: draggedLocation.lat,
+          longitude: draggedLocation.lat,
+        })
+      );
+    });
   }, [dispatch]);
-
-
 
   /** to wait for 3 sec for user reply to allow/deny geoLocation */
   useEffect(() => {
     if (locationState) {
       setLoader(true);
-      dispatch(setLoading())
+      dispatch(setLoading());
       if (locationState === "prompt") {
         setTimeout(() => {
           setLoader(false);
@@ -95,21 +92,21 @@ const HomeSearch = ({
         {/* {(locationState === "granted" && coords !== null) ||
         locationState === "denied" ||
         locationState === "prompt" ? ( */}
-          <BusinessListing
-            setSelectedListId={setSelectedListId}
-            setListClickedFromSearch={setListClickedFromSearch}
-            setSearchIndex={setSearchIndex}
-            loader={loader}
-            coords={coords}
-            // setDisplayTab={setDisplayTab}
-            closestFilter={closestFilter}
-          />
+        <BusinessListing
+          setSelectedListId={setSelectedListId}
+          setListClickedFromSearch={setListClickedFromSearch}
+          setSearchIndex={setSearchIndex}
+          loader={loader}
+          coords={coords}
+          // setDisplayTab={setDisplayTab}
+          closestFilter={closestFilter}
+        />
         {/* ) : (
           <LoaderWrap>
             <ValueLoader />
           </LoaderWrap>
         )} */}
-      </ContentWrap> 
+      </ContentWrap>
       {/* } */}
     </>
   );

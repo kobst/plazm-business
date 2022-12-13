@@ -11,6 +11,10 @@ export const SearchListingContent = styled.ul`
   padding: 0;
   margin: 0 10px;
   max-height: 200px;
+  position: absolute;
+  z-index: 1;
+  width: 96%;
+  top: 51px;
   ::-webkit-scrollbar {
     width: 6px;
     height: 5px;
@@ -18,6 +22,7 @@ export const SearchListingContent = styled.ul`
   }
   ::-webkit-scrollbar-track {
     border-radius: 0px;
+    background: #3b3946;
   }
   ::-webkit-scrollbar-thumb {
     background: #000;
