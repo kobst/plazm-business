@@ -2,10 +2,10 @@
 @desc: add list
 @params: name, description, media, ownerId
 */
-const CreateList = (values) => {
+const createListGraphql = (values) => {
   const graphQl = {
     query: `
-            mutation CreateList($name: String, $description:String, $media:[media], $ownerId: ID){
+            mutation createList($name: String, $description:String, $media:[media], $ownerId: ID){
                 createList(input: {name:$name, description:$description, media:$media, ownerId:$ownerId}) {
                 message
                 success
@@ -38,7 +38,7 @@ const CreateList = (values) => {
 @desc: add post to a list
 @params: name, description, media, ownerId
 */
-const addPostToList = (values) => {
+const addPostToListGraphql = (values) => {
   const graphQl = {
     query: `
           mutation addPostToList($listId: ID!, $postId:ID! ){
@@ -72,7 +72,7 @@ const addPostToList = (values) => {
 @desc: add event to a list
 @params: name, description, media, ownerId
 */
-const addEventToList = (values) => {
+const addEventToListGraphql = (values) => {
   const graphQl = {
     query: `
           mutation addEventToList($listId: ID!, $eventId:ID! ){
@@ -106,7 +106,7 @@ const addEventToList = (values) => {
 @desc: delete list
 @params: userId, listId
 */
-const DeleteList = (values) => {
+const deleteListGraphql = (values) => {
   const graphQl = {
     query: `
             mutation DeleteUserList($listId: ID!, $userId:ID!){
@@ -141,10 +141,10 @@ const DeleteList = (values) => {
 @desc: to subscribe to a list
 @params: userId, listId
 */
-const SubscribeToAList = (values) => {
+const subscribeToAListGraphql = (values) => {
   const graphQl = {
     query: `
-            mutation SubscribeToAList($listId: ID!, $userId:ID!){
+            mutation subscribeToAList($listId: ID!, $userId:ID!){
               subscribeToAList(input: {listId:$listId, userId:$userId}) {
                 message
                 success
@@ -162,7 +162,7 @@ const SubscribeToAList = (values) => {
 @desc: to unSubscribe to a list
 @params: userId, listId
 */
-const UnsubscribeToAList = (values) => {
+const unsubscribeToAListGraphql = (values) => {
   const graphQl = {
     query: `
             mutation UnSubscribeToAList($listId: ID!, $userId:ID!){
@@ -183,7 +183,7 @@ const UnsubscribeToAList = (values) => {
 @desc: delete post to a list
 @params: postId, listId
 */
-const DeletePostFromAList = (values) => {
+const deletePostFromAListGraphql = (values) => {
   const graphQl = {
     query: `
           mutation deletePostFromAList($listId: ID!, $postId:ID! ){
@@ -213,11 +213,11 @@ const DeletePostFromAList = (values) => {
   return graphQl;
 };
 export {
-  CreateList,
-  addPostToList,
-  addEventToList,
-  DeleteList,
-  UnsubscribeToAList,
-  SubscribeToAList,
-  DeletePostFromAList,
+  createListGraphql,
+  addPostToListGraphql,
+  addEventToListGraphql,
+  deleteListGraphql,
+  unsubscribeToAListGraphql,
+  subscribeToAListGraphql,
+  deletePostFromAListGraphql,
 };

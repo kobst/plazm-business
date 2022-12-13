@@ -1,19 +1,14 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { IoMdClose } from "react-icons/io";
-import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
-import ProfileImg from "../../../../images/profile-img.png";
-import FacebookImg from "../../../../images/Facebook-new.svg";
-import TwitterImg from "../../../../images/Twitter-new.svg";
-import LinkedInImg from "../../../../images/Linkedin-new.svg";
-import InstagramImg from "../../../../images/Instagram-new.svg";
-import { useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  clearBusinessData,
-  clearTopPost,
-} from "../../../../reducers/businessReducer";
-import { clearTopEvent } from "../../../../reducers/eventReducer";
+import React, {useState, useEffect} from 'react';
+import styled from 'styled-components';
+import {IoMdClose} from 'react-icons/io';
+import {MdKeyboardArrowDown, MdKeyboardArrowUp} from 'react-icons/md';
+import ProfileImg from '../../../../images/profile-img.png';
+import FacebookImg from '../../../../images/Facebook-new.svg';
+import TwitterImg from '../../../../images/Twitter-new.svg';
+import LinkedInImg from '../../../../images/Linkedin-new.svg';
+import InstagramImg from '../../../../images/Instagram-new.svg';
+import {useHistory} from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux';
 
 import useStore from "../../useState";
 import { IoIosArrowBack } from "react-icons/io";
@@ -260,9 +255,9 @@ const BuisinessHeader = ({
   const history = useHistory();
   const businessProfile = useSelector((state) => state.business.business)[0];
   const [image, setImage] = useState(
-    businessProfile.default_image_url
-      ? businessProfile.default_image_url
-      : ProfileImg
+    businessProfile.default_image_url ?
+      businessProfile.default_image_url :
+      ProfileImg,
   );
   const dispatch = useDispatch();
 
@@ -275,14 +270,14 @@ const BuisinessHeader = ({
   const setListIndex = useStore((state) => state.setListIndex);
   const setFavoriteIndex = useStore((state) => state.setFavoriteIndex);
   const setTabIndex = useStore((state) => state.setTabSelected);
-  const [route, setRoute] = useState("");
+  const [route, setRoute] = useState('');
 
   /*
    * @desc: close tab function to be called on cross icon click
    */
   const closeTab = () => {
     setDisplayTab(false);
-    history.push("/");
+    history.push('/');
     if (myFeedIndex) {
       setMyFeedIndex(null);
     }
@@ -291,37 +286,15 @@ const BuisinessHeader = ({
     setRoute(history.location.pathname);
   }, []);
   useEffect(() => {
-    if (history.action === "POP" && history.location.pathname === route) {
+    if (history.action === 'POP' && history.location.pathname === route) {
       history.goBack();
     }
   }, [history.action]);
-  /** to return to all business listing */ // redo backbutton here...
-  const backBusiness = () => {
-    dispatch(clearBusinessData());
-    dispatch(clearTopEvent());
-    dispatch(clearTopPost());
-    if (searchIndex) {
-      history.goBack();
-      setTabIndex(1);
-      setSearchIndex(null);
-    } else if (myFeedIndex) {
-      history.goBack();
-      setTabIndex(2);
-      setMyFeedIndex(null);
-    } else if (listIndex) {
-      history.goBack();
-      setTabIndex(5);
-      setListIndex(null);
-    } else {
-      history.goBack();
-      setFavoriteIndex(null);
-    }
-  };
 
   return (
     <>
       <BuisinessHeaderContent
-        className={displayBusinessProfile ? "HeaderSpacing" : ""}
+        className={displayBusinessProfile ? 'HeaderSpacing' : ''}
       >
         <ArrowBack onClick={history.goBack}>
           <IoIosArrowBack />
@@ -339,7 +312,7 @@ const BuisinessHeader = ({
           />
         </BusinessIcon>
 
-        <BottomBar className={isProfile ? "ProfileHeaderNam" : ""}>
+        <BottomBar className={isProfile ? 'ProfileHeaderNam' : ''}>
           <LeftHeader>
             {!isProfile ? (
               <BusinessNameWrap>

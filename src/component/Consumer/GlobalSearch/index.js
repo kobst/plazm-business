@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import SearchIcon from "../../../images/search-icon.png";
-import { useDispatch, useSelector } from "react-redux";
-import { setDisplayBar } from "../../../reducers/globalSearchReducer";
-import error from "../../../constants";
-import { setSearchData } from "../../../reducers/myFeedReducer";
+import React from 'react';
+import styled from 'styled-components';
+import SearchIcon from '../../../images/search-icon.png';
+import {useDispatch, useSelector} from 'react-redux';
+import {setDisplayBar} from '../../../reducers/globalSearchReducer';
 
 const GlobalSearchBtnWrap = styled.div`
   position: relative;

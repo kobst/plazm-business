@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import SearchIcon from "../../../images/zoom-out.png";
+import styled from 'styled-components';
+import SearchIcon from '../../../images/zoom-out.png';
 
 export const TopSectionWrap = styled.div`
   display: flex;

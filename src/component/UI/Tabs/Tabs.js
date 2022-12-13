@@ -1,5 +1,5 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
 
 const Title = styled.div`
  cursor: pointer;
@@ -14,12 +14,13 @@ const Title = styled.div`
   div:last-child img{
      width:26px;
  }
-`
+`;
 
-const Tabs = ({setMentions,name,isActive,image}) => {
-    return(
-    <Title className={isActive? 'active' : null} onClick={()=>setMentions(name)}><h2>{name}</h2><img src={image} alt="error" width="24px" /></Title>
-    )
-}
+const Tabs = ({setMentions, name, isActive, image}) => {
+  return (
+    <Title className={isActive? 'active' : null}
+      onClick={()=>setMentions(name)}><h2>{name}</h2><img src={image} alt="error" width="24px" /></Title>
+  );
+};
 
-export default Tabs
+export default Tabs;

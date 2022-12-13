@@ -1,12 +1,12 @@
-import React from "react";
-import styled from "styled-components";
-import ProfileImg from "../../../../images/profile-img.png";
-import FacebookImg from "../../../../images/Facebook-new.svg";
-import TwitterImg from "../../../../images/Twitter-new.svg";
-import LinkedInImg from "../../../../images/Linkedin-new.svg";
-import InstagramImg from "../../../../images/Instagram-new.svg";
-import { useSelector } from "react-redux";
-import { MdKeyboardArrowUp } from "react-icons/md";
+import React from 'react';
+import styled from 'styled-components';
+import ProfileImg from '../../../../images/profile-img.png';
+import FacebookImg from '../../../../images/Facebook-new.svg';
+import TwitterImg from '../../../../images/Twitter-new.svg';
+import LinkedInImg from '../../../../images/Linkedin-new.svg';
+import InstagramImg from '../../../../images/Instagram-new.svg';
+import {useSelector} from 'react-redux';
+import {MdKeyboardArrowUp} from 'react-icons/md';
 
 const ArrowDown = styled.div`
   background: #ff2e9a;
@@ -125,7 +125,7 @@ const SocialIcon = styled.div`
   cursor: pointer;
 `;
 
-const BuisinessProfileSection = ({ setDisplayBusinessProfile }) => {
+const BuisinessProfileSection = ({setDisplayBusinessProfile}) => {
   const businessProfile = useSelector((state) => state.business.business)[0];
 
   return (
@@ -136,9 +136,9 @@ const BuisinessProfileSection = ({ setDisplayBusinessProfile }) => {
             <BusinessIcon>
               <img
                 src={
-                  businessProfile.default_image_url
-                    ? businessProfile.default_image_url
-                    : ProfileImg
+                  businessProfile.default_image_url ?
+                    businessProfile.default_image_url :
+                    ProfileImg
                 }
                 alt=""
               />

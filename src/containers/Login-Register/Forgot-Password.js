@@ -1,161 +1,142 @@
-import React, { useState, useEffect } from 'react'
-import './style.css'
-import { Auth } from 'aws-amplify';
-import history from '../../utils/history'
-import Wrapper from '../../component/Login-Register/Wrapper'
-import ForgotPasswordForm from '../../component/Login-Register/Form-Components/Forgot-Password-Form'
-import ValueLoader from '../../utils/loader'
-import {getMessage} from '../../config'
+import React, {useState, useEffect} from 'react';
+import {Auth} from 'aws-amplify';
+import {useHistory} from 'react-router-dom';
 
-const renderMessage= getMessage()
+import Wrapper from '@components/Login-Register/Wrapper';
+import ForgotPasswordForm from '@components/Login-Register/Form-Components/Forgot-Password-Form';
+import ValueLoader from '@utils/loader';
+import './style.css';
+import {getMessage} from '../../config';
+import {validateEmail, validatePassword} from './helper';
 
-const ForgotPassword = (props) => {
-    const ResponseValue=Object.keys(props.match.params).length
-    const type = props.match.url
-    const [username,setUserName] = useState()
-    const [new_password,setPassword] = useState()
-    const [confirmPass,setConfirmPass] = useState()
-    const [email,setEmail] = useState(false)
-    const [error,setError] = useState(false)
-    const [emailError,setEmailError] = useState(false)
-    const [passErr,setPassErr] = useState(false)
-    const [verificationErr,setVerificationErr] = useState()
-    const [codeErr,setcodeErr] = useState(false)
-    const [newPassErr,setNewPassErr] = useState(false)
-    const [confirmPassErr,setConfirmPassErr] = useState(false)
-    const [con,setCon] = useState(false)
-    const [loader,setLoader] = useState(false)
-    const [emError,setEmError]= useState(false)
-    const [loginValue,setLoginValue]= useState(false)
-    
-    useEffect(() => {
-        let updateUser = async authState => {
-          try {
-            await Auth.currentAuthenticatedUser()
-            history.push('/')
-            window.location.reload() 
-            
-          } catch {
-              setLoginValue(true)
-          }
-        }
-        updateUser()
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, []);
+const renderMessage = getMessage();
 
-    const submitEmail = e => {
-        e.preventDefault()
-        setLoader(true)
-        if(username&&validateEmail(username)){
-    Auth.forgotPassword(username)
-    .then(data => setEmail(true) )
-    .catch(err => setEmailError(true));
-        e.target.reset()
-        }
-        else{
-            setLoader(false)
-            setEmError(true)
+const initialUserDetailsState = {
+  email: '',
+  password: '',
+  confirmPassword: '',
+};
 
-        }
-    }
-   
-    const submitPassword = e => {
-        e.preventDefault()
-        setError(false)
-        setPassErr(false)
-    if(new_password === confirmPass && Validation()){
-    Auth.forgotPasswordSubmit(props.match.params.id, props.match.params.code, new_password)
-    .then(data => {if(type.includes('business')){
-        setCon(true)
-        return (history.push(`/business/login`),
-        window.location.reload() )
-        }
-        else{
-            return( history.push(`/consumer/login`),
-            window.location.reload())  
-        }
-    }
-     )
-    .catch(err => setVerificationErr(err.message), setError(true));
-}
-    else if(new_password!== confirmPass){
-        setPassErr(true)
-    }
-   }
-   const Validation = () => {
-    if(!new_password){
-        setNewPassErr(true)
-    }
-    if(new_password && confirmPass){
-    if(new_password.length<=7 && confirmPass.length<=7){
-    setVerificationErr(renderMessage.pass_length)
-    setError(true)
-}
-    }
-    if(!confirmPass){
-        setConfirmPassErr(true)
-    }
-    if(new_password && confirmPass && new_password.length>7 && confirmPass.length>7){
-        return true
-    }
+const initialErrorsState = {
+  email: '',
+  password: '',
+  verification: '',
+  new_password: '',
+  confirmPass: '',
+  code: '',
+  email: '',
+  emError: '',
+};
 
-}
-function validateEmail(user) {
-    // eslint-disable-next-line no-useless-escape
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(user).toLowerCase());
-}
+const ForgotPassword = ({match}) => {
+  const history = useHistory();
 
-   const handleChange = e => {
-    setError(false)
-    setcodeErr(false)
-    setNewPassErr(false)
-    setConfirmPassErr(false)
-    setEmailError(false)
-    setPassErr(false)
-    setEmError(false)
-    setLoader(false)
-    setVerificationErr('')
-    if (e.target.id === 'username') {
-      setUserName(e.target.value.trim())
-      
-    } else if (e.target.id === 'password') {
-      setPassword(e.target.value)
-    }
-      else if (e.target.id === 'conPassword') {
-        setConfirmPass(e.target.value)
+  const isNewPasswordPage = Object.keys(match.params).length;
+  const type = match.url;
+
+  const [userDetails, setUserDetails] = useState(initialUserDetailsState);
+  const [errors, setErrors] = useState(initialErrorsState);
+  const [emailSent, setEmailSent] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const [isAlreadyAuthenticated, setIsAlreadyAuthenticated] = useState(false);
+
+  const {email, password, confirmPassword} = userDetails;
+
+  useEffect(() => {
+    const updateUser = async () => {
+      try {
+        await Auth.currentAuthenticatedUser();
+        history.push('/');
+      } catch (err) {
+        setIsAlreadyAuthenticated(true);
       }
-}
+    };
+    updateUser();
+  }, []);
 
- return(
-     <>
-     {loginValue === true ?
-     <Wrapper type ={type} page='forgot' heading={renderMessage.Reset} welcomeMessage={email?renderMessage.Res_Message:renderMessage.Email_Msg}>
-         <ForgotPasswordForm 
-         type = {type}
-         con={con}
-         email ={email}
-         loader= {loader} 
-         submitPassword = {submitPassword}
-         codeErr= {codeErr}
-         error = {error}
-         passErr =  {passErr}
-         newPassErr = {newPassErr}
-         emailError={emailError}
-         emError={emError}
-         confirmPassErr= {confirmPassErr}
-         verificationErr={verificationErr}
-         handleChange={handleChange}
-         submitEmail={submitEmail}
-         password={new_password}
-         ResponseValue={ResponseValue}
-         
-         />
-         </Wrapper>:<div style={{textAlign:'center' ,margin:' 40px auto 0'}}><ValueLoader /></div> }
-         </>
+  const handleSubmitEmail = (e) => {
+    e.preventDefault();
+    setLoader(true);
+    const errors = validateEmail(email);
+    if (Object.keys(errors).length) {
+      setErrors(errors);
+      return;
+    }
+    Auth.forgotPassword(email)
+        .then(() => setEmailSent(true))
+        .catch(() =>
+          setErrors((prevState) => ({
+            ...prevState,
+            email: renderMessage.Email_Err,
+          }))
+        );
+    e.target.reset();
+    setLoader(false);
+  };
 
- )
-    
- }
+  const handleSubmitPassword = (e) => {
+    e.preventDefault();
+    const errors = validatePassword({
+      password,
+      confirmPassword,
+    });
+    if (Object.keys(errors).length) {
+      setErrors(errors);
+      return;
+    }
+    Auth.forgotPasswordSubmit(match.params.id, match.params.code, password)
+        .then(() => {
+          if (type.includes('business')) {
+            history.push(`/business/login`);
+          } else {
+            history.push(`/consumer/login`);
+          }
+        })
+        .catch(() =>
+          setErrors((prevState) => ({
+            ...prevState,
+            verification: renderMessage.Email_Err,
+          }))
+        );
+  };
 
-export default ForgotPassword
+  const handleChangeDetails = (e) => {
+    const {value, id} = e.target;
+    setErrors(initialErrorsState);
+    setLoader(false);
+    const updatedDetails = Object.assign({}, userDetails);
+    updatedDetails[id] = value;
+    setUserDetails(updatedDetails);
+  };
+
+  if (!isAlreadyAuthenticated) {
+    return (
+      <div style={{textAlign: 'center', margin: ' 40px auto 0'}}>
+        <ValueLoader />
+      </div>
+    );
+  }
+
+  return (
+    <Wrapper
+      type={type}
+      page="forgot"
+      heading={renderMessage.Reset}
+      welcomeMessage={email ? renderMessage.Res_Message : renderMessage.Email_Msg}
+    >
+      <ForgotPasswordForm
+        loader={loader}
+        type={type}
+        emailSent={emailSent}
+        password={userDetails.password}
+        errors={errors}
+        isNewPasswordPage={isNewPasswordPage}
+        onChangeDetails={handleChangeDetails}
+        onSubmitEmail={handleSubmitEmail}
+        onSubmitPassword={handleSubmitPassword}
+      />
+    </Wrapper>
+  );
+};
+
+export default ForgotPassword;

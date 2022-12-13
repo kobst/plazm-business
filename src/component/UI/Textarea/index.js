@@ -1,6 +1,6 @@
 
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
 
 const TextareaText = styled.textarea`
 background: #FFFFFF;
@@ -25,12 +25,12 @@ color:#7C9CBF
     height:100px;
 }
 
-`
+`;
 
 const Textarea = (props) => {
-    return(
+  return (
     <TextareaText {...props}/>
-    )
-}
+  );
+};
 
-export default Textarea
+export default Textarea;

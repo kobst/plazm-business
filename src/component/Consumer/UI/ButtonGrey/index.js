@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 const ButtonText = styled.button`
   background: #878787;
@@ -10,7 +10,7 @@ const ButtonText = styled.button`
   color: #fff;
   font-weight: bold;
   min-width: 100px;
-  max-width: ${(props) => (props.maxWidth ? props.maxWidth : "inherit")};
+  max-width: ${(props) => (props.maxWidth ? props.maxWidth : 'inherit')};
   border-radius: 5px;
   border: 0;
   padding: 0 25px;

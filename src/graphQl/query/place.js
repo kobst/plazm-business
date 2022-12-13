@@ -1,11 +1,12 @@
 /*
-@desc: getPlace query
+@desc: getPlaceGraphql query
 */
-const getPlace = (obj) => {
+const getPlaceGraphql = (obj) => {
   const graphQl = {
-    query: `
-          query SearchPlacesByUserId($id: ID!, $value: Int, $filters: filterInput, $ownerId:ID, $sideFilters: sideFilterInput, $search: String){
-            searchPlacesByUserId(input: {id:$id, value:$value, filters:$filters, ownerId:$ownerId, sideFilters: $sideFilters, search: $search}) {
+    query: `query SearchPlacesByUserId($id: ID!, $value: Int, 
+      $filters: filterInput, $ownerId:ID, $sideFilters: sideFilterInput, $search: String){
+            searchPlacesByUserId(input: {id:$id, value:$value, 
+              filters:$filters, ownerId:$ownerId, sideFilters: $sideFilters, search: $search}) {
               message
               success
               totalPosts
@@ -120,17 +121,17 @@ const getPlace = (obj) => {
       value: obj.value,
       filters: obj.filters,
       ownerId: obj.ownerId || null,
-      sideFilters: obj.sideFilters || { likes: false, recent: true },
-      search: obj?.search || "",
+      sideFilters: obj.sideFilters || {likes: false, recent: true},
+      search: obj?.search || '',
     },
   };
   return graphQl;
 };
 
 /*
-@desc: searchAllPlaces query
+@desc: searchAllPlacesGraphql query
 */
-const searchAllPlaces = () => {
+const searchAllPlacesGraphql = () => {
   const graphQl = {
     query: `
           query SearchAllPlaces{
@@ -149,9 +150,9 @@ const searchAllPlaces = () => {
 };
 
 /*
-@desc: homeSearch query
+@desc: homeSearchGraphql query
 */
-const homeSearch = (obj) => {
+const homeSearchGraphql = (obj) => {
   const graphQl = {
     query: `
           query HomeSearch($search: String, $value:Int, $filters: homeSearchFilterInput!, $longitude: Float!, $latitude: Float!){
@@ -283,4 +284,4 @@ const homeSearch = (obj) => {
   };
   return graphQl;
 };
-export { getPlace, searchAllPlaces, homeSearch };
+export {getPlaceGraphql, searchAllPlacesGraphql, homeSearchGraphql};

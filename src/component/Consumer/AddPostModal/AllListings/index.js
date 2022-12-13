@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import Input from "../../UI/Input/Input";
-import { FiSearch } from "react-icons/fi";
-import { MdCheck } from "react-icons/md";
-import { Scrollbars } from "react-custom-scrollbars";
-import BottomButtons from "../BottomButtons";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchUserLists } from "../../../../reducers/listReducer";
-import ValueLoader from "../../../../utils/loader";
+import React, {useEffect, useState} from 'react';
+import styled from 'styled-components';
+import Input from '../../UI/Input/Input';
+import {FiSearch} from 'react-icons/fi';
+import {MdCheck} from 'react-icons/md';
+import {Scrollbars} from 'react-custom-scrollbars';
+import BottomButtons from '../BottomButtons';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchUserLists} from '../../../../reducers/listReducer';
+import ValueLoader from '../../../../utils/loader';
 
 const AllListingsContent = styled.div`
   width: 100%;
@@ -181,12 +181,12 @@ const AllListings = ({
   const [userListsFiltered, setUserListsFiltered] = useState([]);
   const loadingUserLists = useSelector((state) => state.list.loadingUserLists);
   const [selectedList, setSelectedList] = useState(null);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   const userLists =
     userListsFiltered.length > 0 ? userListsFiltered : userListsFromStore;
 
-  /**fetch user list */
+  /** fetch user list */
   useEffect(() => {
     if (userLists.length === 0) dispatch(fetchUserLists(user._id));
   }, [dispatch, user._id, userLists.length]);
@@ -195,7 +195,7 @@ const AllListings = ({
   useEffect(() => {
     if (selectedListForPost !== null) {
       setSelectedList(
-        userLists.filter((i) => i._id === selectedListForPost)[0]._id
+          userLists.filter((i) => i._id === selectedListForPost)[0]._id,
       );
     }
   }, [selectedListForPost, userLists]);
@@ -203,9 +203,9 @@ const AllListings = ({
   /** lists search functionality implemented */
   useEffect(() => {
     setUserListsFiltered(
-      userListsFromStore.filter(
-        (entry) => entry.name.toLowerCase().indexOf(search.toLowerCase()) !== -1
-      )
+        userListsFromStore.filter(
+            (entry) => entry.name.toLowerCase().indexOf(search.toLowerCase()) !== -1,
+        ),
     );
   }, [search, userListsFromStore]);
 
@@ -231,7 +231,7 @@ const AllListings = ({
         <AllListingHead>
           <AllListingHeading>All lists</AllListingHeading>
           <SelectedListed>
-            {selectedList === null ? "0" : "1"} list selected
+            {selectedList === null ? '0' : '1'} list selected
           </SelectedListed>
         </AllListingHead>
         <Scrollbars
@@ -260,14 +260,14 @@ const AllListings = ({
                   <ListingList
                     key={key}
                     onClick={() => selectList(i._id)}
-                    className={selectedList === i._id ? "selectedList" : ""}
+                    className={selectedList === i._id ? 'selectedList' : ''}
                   >
                     {i.name}
                     <RightTick
                       className={
-                        selectedList === i._id
-                          ? "RightTickImgSelected"
-                          : "RightTickImg"
+                        selectedList === i._id ?
+                          'RightTickImgSelected' :
+                          'RightTickImg'
                       }
                     >
                       <MdCheck />

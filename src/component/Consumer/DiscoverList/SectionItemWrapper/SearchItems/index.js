@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-import EventImg from "../../../../../images/eventimg.png";
-import LockImage from "../../../../../images/lock.png";
+import React, {useState} from 'react';
+import PropTypes from 'prop-types';
+import EventImg from '../../../../../images/eventimg.png';
+import LockImage from '../../../../../images/lock.png';
 import {
   ItemsWrapper,
   CoverImg,
   ItemsDescription,
   CollectionPara,
   Lock,
-} from "../../styled";
+} from '../../styled';
 
 const SearchItems = ({
   data,
@@ -17,7 +17,7 @@ const SearchItems = ({
   setReadMore,
 }) => {
   const [image, setImage] = useState(
-    data.media && data.media.length > 0 ? data.media[0].image : EventImg
+    data.media && data.media.length > 0 ? data.media[0].image : EventImg,
   );
 
   /** to display list details page */

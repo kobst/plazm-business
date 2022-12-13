@@ -1,7 +1,7 @@
-import React from "react";
-import styled from "styled-components";
-import { IoMdCloseCircle } from "react-icons/io";
-import Constants from "../../../../constants/index";
+import React from 'react';
+import styled from 'styled-components';
+import {IoMdCloseCircle} from 'react-icons/io';
+import Constants from '../../../../constants/index';
 
 const AllListingsContent = styled.div`
   width: 100%;
@@ -50,7 +50,7 @@ const CloseList = styled.button`
   }
 `;
 
-const PostEvent = ({ eventDetails, setEventDetails, loader }) => {
+const PostEvent = ({eventDetails, setEventDetails, loader}) => {
   return (
     <>
       {eventDetails !== null ? (
@@ -58,24 +58,24 @@ const PostEvent = ({ eventDetails, setEventDetails, loader }) => {
           <div>
             <span>
               <EventListing>
-                <span className="TitleSpan">Event Date :</span>{" "}
+                <span className="TitleSpan">Event Date :</span>{' '}
                 <span>{eventDetails.eventDate}</span>
               </EventListing>
             </span>
             <span>
               <EventListing>
-                <span className="TitleSpan">Event Timing :</span>{" "}
+                <span className="TitleSpan">Event Timing :</span>{' '}
                 <span>{eventDetails.eventTime}</span>
               </EventListing>
             </span>
             <span>
               <EventListing>
-                <span className="TitleSpan">Event Repeat :</span>{" "}
+                <span className="TitleSpan">Event Repeat :</span>{' '}
                 {eventDetails.eventRepeat == 8 ? (
                   <span>Once</span>
                 ) : (
-                  eventDetails.eventRepeat.map((val) => (
-                    <span>{Constants.REPETITION_DAY[val] + " "}</span>
+                  eventDetails.eventRepeat.map((val, key) => (
+                    <span key={key}>{Constants.REPETITION_DAY[val] + ' '}</span>
                   ))
                 )}
               </EventListing>

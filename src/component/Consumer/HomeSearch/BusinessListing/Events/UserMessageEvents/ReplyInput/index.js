@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { FaRegSmile } from "react-icons/fa";
-import ProfileImg from "../../../../../../../images/profile-img.png";
-import { useDispatch, useSelector } from "react-redux";
-import { MentionsInput, Mention } from "react-mentions";
-import Picker from "emoji-picker-react";
-import { findSelectedUsers } from "../../../../../../../reducers/consumerReducer";
-import { unwrapResult } from "@reduxjs/toolkit";
-import { checkMime, replaceBucket } from "../../../../../../../utilities/checkResizedImage";
+import React, {useState, useEffect} from 'react';
+import styled from 'styled-components';
+import {FaRegSmile} from 'react-icons/fa';
+import ProfileImg from '../../../../../../../images/profile-img.png';
+import {useDispatch, useSelector} from 'react-redux';
+import {MentionsInput, Mention} from 'react-mentions';
+import Picker from 'emoji-picker-react';
+import {findSelectedUsers} from '../../../../../../../reducers/consumerReducer';
+import {unwrapResult} from '@reduxjs/toolkit';
+import {checkMime, replaceBucket} from '../../../../../../../utilities/checkResizedImage';
 
 const ChatContent = styled.div`
   width: 100%;
@@ -181,7 +181,7 @@ const ReplyInput = ({
   const dispatch = useDispatch();
 
   const selectedEventId = useSelector(
-    (state) => state.myFeed.selectedEventIdForComments
+      (state) => state.myFeed.selectedEventIdForComments,
   );
 
   useEffect(() => {
@@ -209,22 +209,23 @@ const ReplyInput = ({
         setMentionArrayUser(valueArr);
       }
     }
-    if (type === "comment") setDescription(newPlainTextValue);
-    else if (type === "reply") setReplyDescription(newPlainTextValue);
+    if (type === 'comment') setDescription(newPlainTextValue);
+    else if (type === 'reply') setReplyDescription(newPlainTextValue);
   };
 
   /** to add emoji in input */
   const onEmojiClick = (event, emojiObject) => {
-    if (type === "comment") setDescription(description + emojiObject.emoji);
-    else if (type === "reply")
+    if (type === 'comment') setDescription(description + emojiObject.emoji);
+    else if (type === 'reply') {
       setReplyDescription(replyDescription + emojiObject.emoji);
+    }
   };
 
   /** to add comment on post or comment */
   const addCommentToPost = async () => {
     if (
-      type === "comment" &&
-      description !== "" &&
+      type === 'comment' &&
+      description !== '' &&
       !description.trim() === false
     ) {
       const obj = {
@@ -236,8 +237,8 @@ const ReplyInput = ({
       };
       addComment(obj);
     } else if (
-      type === "reply" &&
-      replyDescription !== "" &&
+      type === 'reply' &&
+      replyDescription !== '' &&
       !replyDescription.trim() === false
     ) {
       const obj = {
@@ -246,18 +247,18 @@ const ReplyInput = ({
         userId: user._id,
         body: replyDescription,
         taggedUsers: mentionArrayUser,
-        replyUser: "@" + name,
+        replyUser: '@' + name,
       };
       addReply(obj);
     }
   };
   /** on adding comment keyPress function */
   const commentAddKeyPress = (event) => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       event.preventDefault();
-      addCommentToPost(type === "reply" ? replyDescription : description);
-      if (type === "reply") setReplyDescription("");
-      else setDescription("");
+      addCommentToPost(type === 'reply' ? replyDescription : description);
+      if (type === 'reply') setReplyDescription('');
+      else setDescription('');
     }
   };
 
@@ -267,11 +268,11 @@ const ReplyInput = ({
       <MentionsImage>
         <img
           src={
-            entry.image !== null
-              ? entry.image !== "" && entry.image !== "sample"
-                ? entry.image
-                : ProfileImg
-              : ProfileImg
+            entry.image !== null ?
+              entry.image !== '' && entry.image !== 'sample' ?
+                entry.image :
+                ProfileImg :
+              ProfileImg
           }
           alt=""
           className="mentionsImageImg"
@@ -287,10 +288,10 @@ const ReplyInput = ({
     const data = await dispatch(findSelectedUsers(query));
     const res = await unwrapResult(data);
     if (res) {
-      let x = res.map((myUser) => ({
+      const x = res.map((myUser) => ({
         id: myUser._id,
         display: `${myUser.name}`,
-        image: myUser.photo ? myUser.photo : "",
+        image: myUser.photo ? myUser.photo : '',
       }));
       setSelectedUsers(res);
       return callback(x);
@@ -298,30 +299,30 @@ const ReplyInput = ({
   };
   return (
     <>
-      <ChatContent className={type === "reply" ? "InnerReply" : ""}>
+      <ChatContent className={type === 'reply' ? 'InnerReply' : ''}>
         <ProfileNameHeader>
           <ProfileThumb>
             <img src={image} onError={() => checkError()} alt="" />
           </ProfileThumb>
           <ProfileNameWrap>
             <InputWrap>
-              {type === "reply" ? (
-                <div className="taggedUserInput">{"@" + name}</div>
+              {type === 'reply' ? (
+                <div className="taggedUserInput">{'@' + name}</div>
               ) : null}
-              {type === "comment" ? (
+              {type === 'comment' ? (
                 <MentionsInput
                   markup="@(__id__)[__display__]"
-                  value={type === "reply" ? replyDescription : description}
+                  value={type === 'reply' ? replyDescription : description}
                   onChange={handleChange}
-                  placeholder={type === "reply" ? "Add Reply" : "Add Comment"}
+                  placeholder={type === 'reply' ? 'Add Reply' : 'Add Comment'}
                   className="replyInput"
                   onKeyPress={(event) => commentAddKeyPress(event)}
                   autoFocus={
-                    type === "reply"
-                      ? selectedEventId === eventId
-                        ? true
-                        : false
-                      : true
+                    type === 'reply' ?
+                      selectedEventId === eventId ?
+                        true :
+                        false :
+                      true
                   }
                 >
                   <Mention
@@ -339,11 +340,11 @@ const ReplyInput = ({
                   onChange={(e) => setReplyDescription(e.target.value)}
                   onKeyPress={(event) => commentAddKeyPress(event)}
                   autoFocus={
-                    type === "reply"
-                      ? selectedEventId === eventId
-                        ? true
-                        : false
-                      : true
+                    type === 'reply' ?
+                      selectedEventId === eventId ?
+                        true :
+                        false :
+                      true
                   }
                 />
               )}

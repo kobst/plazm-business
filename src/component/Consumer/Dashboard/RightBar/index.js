@@ -1,6 +1,5 @@
-import React from "react";
-import styled from "styled-components"
-import RightBG from '../../../../images/Gridview.png';
+import React from 'react';
+import styled from 'styled-components';
 
 const RightBarContent = styled.div`
     width:100%;
@@ -25,13 +24,13 @@ const RightBarContent = styled.div`
             max-width: 100%;
         }
     }
-`
+`;
 
 const RightBar = ({displayTab}) => (
-    <>
-        <RightBarContent className={displayTab===true?"imgSlide_onTabOpen":""}>
-        </RightBarContent>
-    </>
-  )
-  
-export default RightBar
+  <>
+    <RightBarContent className={displayTab===true?'imgSlide_onTabOpen':''}>
+    </RightBarContent>
+  </>
+);
+
+export default RightBar;

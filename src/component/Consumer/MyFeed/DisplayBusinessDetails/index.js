@@ -1,23 +1,9 @@
-import React from "react";
-import styled from "styled-components";
-import UserMessageEvents from "../../HomeSearch/BusinessListing/Events/UserMessageEvents";
-import UserMessage from "../../HomeSearch/BusinessListing/UserMessage";
+import React from 'react';
+import styled from 'styled-components';
+import UserMessageEvents from '../../HomeSearch/BusinessListing/Events/UserMessageEvents';
+import UserMessage from '../../HomeSearch/BusinessListing/UserMessage';
 
-import { useHistory } from "react-router";
-import {
-  ProfileThumbBanner,
-  ProfileThumbOverlay,
-  ProfileName,
-} from "../../FeedContent/styled";
-
-import useStore from "../../useState";
-
-const UserMsgWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  position: relative;
-`;
+import useStore from '../../useState';
 
 const FeedListItem = styled.div`
   /* .background-active {
@@ -35,34 +21,23 @@ const FeedListItem = styled.div`
 /** display business details */
 const DisplayBusinessDetails = ({
   data,
-  id
+  id,
 }) => {
+  const setSelectedListId = useStore((state) => state.setSelectedListId);
 
-  const setSelectedListId = useStore((state) => state.setSelectedListId)
-
-  const setMyFeedIndex = useStore((state) => state.setMyFeedIndex)
-
-
-
-  const history = useHistory();
-
-  /** to display business details page */
-  const displayBusinessDetail = () => {
-    setMyFeedIndex(data.business[0]._id);
-    history.push(`/b/${data.business[0]._id}`);
-  };
+  const setMyFeedIndex = useStore((state) => state.setMyFeedIndex);
 
   return data ? (
     <FeedListItem>
       <div
-        className={id % 2 === 0 ? "background-active" : "background-inactive"}
+        className={id % 2 === 0 ? 'background-active' : 'background-inactive'}
       >
         {/* to display event for the business */}
         {data.eventSchedule !== null ? (
           <UserMessageEvents
             eventData={data}
             businessInfo={data.business[0]}
-            type={"MyFeedEvent"}
+            type={'MyFeedEvent'}
             setSearchIndex={setMyFeedIndex}
             myFeedView={true}
             isList

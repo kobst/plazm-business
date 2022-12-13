@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-import "./checkboxSquare-style.css";
+import React from 'react';
+import styled from 'styled-components';
+import './checkboxSquare-style.css';
 
 const DivText = styled.label`
   border: 0;

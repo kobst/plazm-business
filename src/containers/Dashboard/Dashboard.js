@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import RightSide from "../../component/RightSide/RightSide";
-import { Auth } from "aws-amplify";
-import history from "../../utils/history";
-import Header from "../../component/Header";
-import Footer from "../../component/Footer";
-import { callPlace } from "../../Api";
-import ValueLoader from "../../utils/loader";
-// import ws from "../../utils/socket";
+import React, {useEffect, useState} from 'react';
+import styled from 'styled-components';
+import {Auth} from 'aws-amplify';
+import {useHistory} from 'react-router-dom';
 
-// ws.onopen = () => {
-//   console.log("connected");
-// };
+import RightSide from '@components/RightSide/RightSide';
+import Header from '@components/Header';
+import Footer from '@components/Footer';
+import {callPlace} from '@api';
+import ValueLoader from '@utils/loader';
+
 const DashboardContainer = styled.div`
   display: flex;
   background: linear-gradient(157.1deg, #ff7171 -1.1%, #ff479d 100%);
@@ -31,47 +28,54 @@ const Container = styled.div`
 `;
 
 process.env.AWS_SDK_LOAD_CONFIG = true;
+
 const Dashboard = () => {
+  const history = useHistory();
+
   const [placeValue, setPlace] = useState();
-  const [ws, setWs] = useState()
+  const [ws, setWs] = useState();
+
   useEffect(() => {
-    let updateUser = async (authState) => {
+    const updateUser = async () => {
       try {
         const value = await Auth.currentAuthenticatedUser();
-        if (value.attributes["custom:type"] === "curator" || value.attributes["custom:type"] === "customer" || value.attributes["custom:type"] === "consumer") {
-          history.push("/");
-          window.location.reload();
+        if (
+          value.attributes['custom:type'] === 'curator' ||
+          value.attributes['custom:type'] === 'customer' ||
+          value.attributes['custom:type'] === 'consumer'
+        ) {
+          history.push('/');
         } else {
           const place = await callPlace(value.attributes.sub);
-          const ws = new WebSocket(`${process.env.REACT_APP_WEBSOCKET}/?userId=${place[0]._id}`)
-          setWs(ws)
+          const ws = new WebSocket(
+              `${process.env.REACT_APP_WEBSOCKET}/?userId=${place[0]._id}`
+          );
+          setWs(ws);
           setPlace(place[0]);
         }
-      } catch {
-        history.push("/business/login");
-        window.location.reload();
+      } catch (err) {
+        history.push('/business/login');
       }
     };
     updateUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  if (placeValue) {
+    return (
+      <DashboardContainer>
+        <Container>
+          <Header value={placeValue} />
+          <RightSide ws={ws} />
+          <Footer />
+        </Container>
+      </DashboardContainer>
+    );
+  }
+
   return (
-    <>
-      {placeValue ? (
-        <DashboardContainer>
-          <Container>
-            <Header value={placeValue} />
-            <RightSide ws={ws} />
-            <Footer />
-          </Container>
-        </DashboardContainer>
-      ) : (
-        <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
-          <ValueLoader />
-        </div>
-      )}
-    </>
+    <div style={{textAlign: 'center', margin: ' 40px auto 0'}}>
+      <ValueLoader />
+    </div>
   );
 };
 

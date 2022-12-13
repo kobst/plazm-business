@@ -1,6 +1,6 @@
 
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
 // import DownArrow from '../../../Public/images/down-arrow.svg'
 
 const ButtonText = styled.button`
@@ -25,12 +25,12 @@ cursor:pointer;
 img{
   margin-left:6px;
 }
-`
+`;
 
-const LineButton = props => {
-    return(
-      <ButtonText onClick={()=>props.setShowTag(true)}>{props.name}</ButtonText>
-    )
-}
+const LineButton = (props) => {
+  return (
+    <ButtonText onClick={()=>props.setShowTag(true)}>{props.name}</ButtonText>
+  );
+};
 
-export default LineButton
+export default LineButton;

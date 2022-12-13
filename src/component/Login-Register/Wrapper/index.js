@@ -1,9 +1,9 @@
-import React from "react";
-import PlazmText from "../../../images/auth-Plazm-logo.png";
-import ResetImg from "../../../images/resetimg.png";
-import Line from "../../../images/line.png";
-import ArrowDown from "../../../images/arrow-down.png";
-import { Link } from "react-router-dom";
+import React from 'react';
+import PlazmText from '../../../images/auth-Plazm-logo.png';
+import ResetImg from '../../../images/resetimg.png';
+import Line from '../../../images/line.png';
+import ArrowDown from '../../../images/arrow-down.png';
+import {Link} from 'react-router-dom';
 import {
   LoginWrapper,
   OuterWrapper,
@@ -21,16 +21,16 @@ import {
   SignUpOuter,
   AuthInfoWrap,
   AuthInfoBusinessWrap,
-} from "./style";
+} from './style';
 
 const Wrapper = (props) => {
   return (
     <LoginWrapper>
-      {props.page === "login" ? (
+      {props.page === 'login' ? (
         <OuterWrapper>
           <LoginContainer>
             <LoginInner>
-              {props.page === "register" ? (
+              {props.page === 'register' ? (
                 <LineImage>
                   <img src={Line} alt="" />
                 </LineImage>
@@ -38,7 +38,7 @@ const Wrapper = (props) => {
               <LeftSide>
                 <AuthInfoWrap>
                   <img src={PlazmText} alt="Plazm" />
-                  {props.page === "register" ? (
+                  {props.page === 'register' ? (
                     <RegisterLeft>
                       <h2>Howdy! Let's get you started</h2>
                       <p>
@@ -49,8 +49,8 @@ const Wrapper = (props) => {
                   <h2>Let’s get you started</h2>
                   <p>Login to start working on your profile page</p>
                   <SignUpOuter>
-                    {props.page === "login" ? (
-                      props.type.includes("business") ? (
+                    {props.page === 'login' ? (
+                      props.type.includes('business') ? (
                         <Link to="/business/register">
                           <img src={ArrowDown} /> <strong>Sign Up</strong>
                         </Link>
@@ -61,10 +61,10 @@ const Wrapper = (props) => {
                       )
                     ) : null}
                   </SignUpOuter>
-                  {props.page === "register" ? (
+                  {props.page === 'register' ? (
                     <SignIn>
                       <span>Already On Plazm?</span>
-                      {props.type.includes("business") ? (
+                      {props.type.includes('business') ? (
                         <Link to="/business/login" className="link-btn">
                           <strong>Sign In</strong>
                         </Link>
@@ -75,7 +75,7 @@ const Wrapper = (props) => {
                       )}
                     </SignIn>
                   ) : null}
-                  {props.page === "forgot" ? (
+                  {props.page === 'forgot' ? (
                     <ResetImage>
                       <img src={ResetImg} alt="" />
                     </ResetImage>
@@ -89,7 +89,7 @@ const Wrapper = (props) => {
                       <h2>{props.heading}</h2>
                       <h2 className="colorRed">Sign in</h2>
                       <img className="MT-15" src={ArrowDown} />
-                      {props.page === "register" ? (
+                      {props.page === 'register' ? (
                         <h3>{props.welcomeMessage}</h3>
                       ) : (
                         <p></p>
@@ -108,7 +108,7 @@ const Wrapper = (props) => {
         <>
           <LoginContainer>
             <LoginInner>
-              {props.page === "register" ? (
+              {props.page === 'register' ? (
                 <LineImage>
                   <img src={Line} alt="" />
                 </LineImage>
@@ -116,13 +116,13 @@ const Wrapper = (props) => {
               <LeftSide>
                 <AuthInfoWrap>
                   <img src={PlazmText} alt="Plazm" />
-                  {props.page === "register" ? (
+                  {props.page === 'register' ? (
                     <RegisterLeft>
                       <h2>Let’s get you started</h2>
                       <p>Login to start working on your profile page</p>
                     </RegisterLeft>
                   ) : null}
-                  {props.type.includes("business") ? (
+                  {props.type.includes('business') ? (
                     <AuthInfoBusinessWrap>
                       <p>Claim and Customize your spot on Plazm Map</p>
                       <p>Connect & engage your nearby audience</p>
@@ -135,11 +135,11 @@ const Wrapper = (props) => {
                     <></>
                   )}
 
-                  {props.page === "register" ? (
+                  {props.page === 'register' ? (
                     <SignIn>
                       <span>We Missed You?</span>
                       <img src={ArrowDown} />
-                      {props.type.includes("business") ? (
+                      {props.type.includes('business') ? (
                         <Link to="/business/login" className="link-btn">
                           <strong>Sign In</strong>
                         </Link>
@@ -150,7 +150,7 @@ const Wrapper = (props) => {
                       )}
                     </SignIn>
                   ) : null}
-                  {props.page === "forgot" ? (
+                  {props.page === 'forgot' ? (
                     <ResetImage>
                       <img src={ResetImg} alt="" />
                     </ResetImage>
@@ -161,7 +161,7 @@ const Wrapper = (props) => {
                 <LoginOuter>
                   <LoginFormWrapper>
                     <LoginFormHeader>
-                      {props.page === "register" ? (
+                      {props.page === 'register' ? (
                         <h3 className="colorRed">{props.welcomeMessage}</h3>
                       ) : (
                         <p>{props.welcomeMessage}</p>

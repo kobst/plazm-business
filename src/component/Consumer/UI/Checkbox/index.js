@@ -1,8 +1,8 @@
 
-import React from 'react'
-import styled from 'styled-components'
-import './checkbox-style.css'
-import { Field } from "formik";
+import React from 'react';
+import styled from 'styled-components';
+import './checkbox-style.css';
+import {Field} from 'formik';
 
 const DivText = styled.label`
     border: 0;
@@ -15,15 +15,15 @@ const DivText = styled.label`
     :focus{
         outline:none;
     }
-`
+`;
 
 const Checkbox = ({loader}) => (
-    <>
-        <DivText className="container">
-        <Field type="checkbox" name="lockMyProfile" disabled={loader}/>
-            <span className="checkmark"></span>
-        </DivText>
-    </>
-)
+  <>
+    <DivText className="container">
+      <Field type="checkbox" name="lockMyProfile" disabled={loader}/>
+      <span className="checkmark"></span>
+    </DivText>
+  </>
+);
 
-export default Checkbox
+export default Checkbox;

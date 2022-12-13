@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   fetchSelectedListDetails,
   fetchUserCreatedAndFollowedList,
-} from "../../../reducers/listReducer";
+} from '../../../reducers/listReducer';
 
 const ListView = () => {
   const dispatch = useDispatch();
@@ -16,7 +16,7 @@ const ListView = () => {
     };
     dispatch(fetchUserCreatedAndFollowedList(obj));
     dispatch(
-      fetchSelectedListDetails({ id: "608271ed16f9cb00088ce985", value: 0 })
+        fetchSelectedListDetails({id: '608271ed16f9cb00088ce985', value: 0}),
     );
   }, [dispatch, user._id]);
   return <></>;
