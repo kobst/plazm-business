@@ -58,12 +58,13 @@ export const TotalNum = styled.div`
 
 export const RightSearchWrap = styled.div`
   display: flex;
-  max-width: 285px;
+  max-width: 335px;
   width: 100%;
   height: 26px;
   position: relative;
   @media (max-width: 767px) {
     max-width: 200px;
+    font-size: 12px;
   }
   .SearchSubscriptionsInput {
     background: url(${SearchIcon}) no-repeat right 10px center #fff;
@@ -72,13 +73,32 @@ export const RightSearchWrap = styled.div`
     padding-right: 35px;
     margin: 0;
     border: 1px solid #f0f0f0;
-    border-radius: 50px;
+    border-radius: 3px;
     background-size: 14px;
+    max-width: 198px;
+    width: 100%;
+    padding-left: 10px;
+
     ::placeholder {
       color: #c8c8c8;
     }
+    @media (max-width: 767px) {
+      font-size: 11px;
+    }
+
   }
+
+  .createListBtn {
+    background: #ff2e9a;
+    border-radius: 3px;
+    height: 26px;
+    margin: 0 8px 0 0;
+    max-width: 118px;
+    width: 100%;
+  }
+
 `;
+
 
 export const FeatureWrapper = styled.div`
   position: relative;
