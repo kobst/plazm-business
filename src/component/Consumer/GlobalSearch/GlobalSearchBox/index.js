@@ -9,7 +9,7 @@ import {
   setEnterClicked,
   setSearchData,
   setSideFiltersHomeSearch,
-  searchFeedList,
+  searchFeedListGraphql,
 } from "../../../../reducers/myFeedReducer";
 import useStore from "../../useState";
 import { checkBusiness } from "../../../../reducers/businessReducer";
@@ -121,7 +121,7 @@ const GlobalSearchBox = ({ setOffset, type }) => {
           longitude: draggedLocation.lng,
         };
         dispatch(setEnterClicked(true));
-        dispatch(searchFeedList(obj));
+        dispatch(searchFeedListGraphql(obj));
         break;
       case "Business Search":
         dispatch(

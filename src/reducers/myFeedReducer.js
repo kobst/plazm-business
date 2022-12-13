@@ -124,7 +124,7 @@ export const fetchSelectedListDetails = createAsyncThunk('data/fetchSelectedList
  * @desc:  home search
  * @params: search data
  */
-export const homeSearch = createAsyncThunk('data/HomeSearch', async (obj) => {
+export const homeSearchGraphql = createAsyncThunk('data/HomeSearch', async (obj) => {
 	const graphQl = homeSearch(obj);
 	const response = await graphQlEndPoint(graphQl);
 	return response.data.homeSearch;
@@ -134,7 +134,7 @@ export const homeSearch = createAsyncThunk('data/HomeSearch', async (obj) => {
  * @desc:  home search and get list
  * @params: search data
  */
-export const searchFeedList = createAsyncThunk('data/SearchFeedList', async (obj) => {
+export const searchFeedListGraphql = createAsyncThunk('data/SearchFeedList', async (obj) => {
 	const graphQl = homeSearch(obj);
 	const response = await graphQlEndPoint(graphQl);
 	return response.data.homeSearch;
@@ -144,7 +144,7 @@ export const searchFeedList = createAsyncThunk('data/SearchFeedList', async (obj
  * @desc:  home search
  * @params: search data
  */
-export const homeSearchInitial = createAsyncThunk('data/HomeSearchInitial', async (obj) => {
+export const homeSearchInitialGraphql = createAsyncThunk('data/HomeSearchInitial', async (obj) => {
 	const graphQl = homeSearch(obj);
 	const response = await graphQlEndPoint(graphQl);
 	return response.data.homeSearch;
@@ -869,7 +869,7 @@ export const slice = createSlice({
 				return new Date(b.createdAt) - new Date(a.createdAt);
 			});
 		},
-		[searchFeedList.fulfilled]: (state, action) => {
+		[searchFeedListGraphql.fulfilled]: (state, action) => {
 			if (action.payload) {
 				const data = action.payload.data.map((obj) => ({
 					...obj,
@@ -892,7 +892,7 @@ export const slice = createSlice({
 				state.searchFeedList = data;
 			}
 		},
-		[homeSearch.fulfilled]: (state, action) => {
+		[homeSearchGraphql.fulfilled]: (state, action) => {
 			if (action.payload) {
 				const data = action.payload.data.map((obj) => ({
 					...obj,
@@ -915,19 +915,19 @@ export const slice = createSlice({
 				state.totalData = action.payload.totalPlaces;
 			}
 		},
-		[homeSearch.rejected]: (state, action) => {
+		[homeSearchGraphql.rejected]: (state, action) => {
 			if (state.loading) {
 				state.error = action.payload;
 			}
 		},
-		[homeSearchInitial.pending]: (state) => {
+		[homeSearchInitialGraphql.pending]: (state) => {
 			if (!state.loading) {
 				state.loading = true;
 				// state.myFeed = [];
 				// state.searchFeed = [];
 			}
 		},
-		[homeSearchInitial.fulfilled]: (state, action) => {
+		[homeSearchInitialGraphql.fulfilled]: (state, action) => {
 			if (state.loading) {
 				state.loading = false;
 				if (action.payload) {
@@ -958,7 +958,7 @@ export const slice = createSlice({
 				}
 			}
 		},
-		[homeSearchInitial.rejected]: (state, action) => {
+		[homeSearchInitialGraphql.rejected]: (state, action) => {
 			if (state.loading) {
 				state.loading = false;
 				state.error = action.payload;

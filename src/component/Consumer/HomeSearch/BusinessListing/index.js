@@ -5,7 +5,8 @@ import styled from 'styled-components';
 import {unwrapResult} from '@reduxjs/toolkit';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import ValueLoader from '../../../../utils/loader';
-import {clearSearchFeed, homeSearch, homeSearchInitial, setEnterClicked} from '../../../../reducers/myFeedReducer';
+import {clearSearchFeed, homeSearchGraphql, homeSearchInitialGraphql,
+	 setEnterClicked} from '../../../../reducers/myFeedReducer';
 import error from '../../../../constants';
 
 import GlobalSearchBox from '../../GlobalSearch/GlobalSearchBox';
@@ -95,7 +96,7 @@ const BusinessListing = ({loader, coords, closestFilter}) => {
 				latitude: draggedLocation.lat,
 				longitude: draggedLocation.lng,
 			};
-			const result = await dispatch(homeSearchInitial(obj));
+			const result = await dispatch(homeSearchInitialGraphql(obj));
 			const data = await unwrapResult(result);
 			if (data) {
 				setFlag(false);
@@ -120,7 +121,7 @@ const BusinessListing = ({loader, coords, closestFilter}) => {
 				latitude: draggedLocation.lat,
 				longitude: draggedLocation.lng,
 			};
-			dispatch(homeSearch(obj));
+			dispatch(homeSearchGraphql(obj));
 		} else setHasMore(false);
 	};
 
