@@ -132,7 +132,7 @@ const BusinessListing = ({loader, coords, closestFilter}) => {
 	return (
 		<>
 			{showSearchBar && <GlobalSearchBox setOffset={setOffset} type={'Explore'} />}
-			{search.length && (
+			{!!search.length && (
 				<SearchListingContent>
 					{searchFeedList.map((ele) => (
 						<li
