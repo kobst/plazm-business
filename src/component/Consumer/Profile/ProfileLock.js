@@ -1,7 +1,7 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import styled from "styled-components";
-import Frame from "../../../images/Frame.png";
+import React from 'react';
+import {useSelector} from 'react-redux';
+import styled from 'styled-components';
+import Frame from '../../../images/Frame.png';
 
 const ProfileLockOuter = styled.div`
   width: 100%;
@@ -28,7 +28,7 @@ const ProfileImg = styled.div`
 `;
 
 const ProfileLock = () => {
-    const userProfile = useSelector((state) => state.user.selectedUser);
+  const userProfile = useSelector((state) => state.user.selectedUser);
   return (
     <ProfileLockOuter>
       <ProfileImg>

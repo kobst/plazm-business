@@ -1,7 +1,5 @@
-
-import ReactDOM from 'react-dom'
-import React, { useRef, useState, useEffect, useMemo, Children } from 'react'
-import { Canvas, useFrame, useThree, extend, useLoader, applyProps, stateContext } from '@react-three/fiber'
+import React, {useRef, useState, useEffect, useMemo} from 'react';
+import {Canvas, useFrame, useThree, extend} from '@react-three/fiber';
 import * as THREE from 'three';
 import { OrbitControls, MapControls, MOUSE } from 'three/examples/jsm/controls/OrbitControls'
 import { Polyhedron, Plane, RoundedBox, OrthographicCamera } from '@react-three/drei';
@@ -208,10 +206,6 @@ function Camera(props) {
     //zoom 12 shows depth 1
     //zoom 7 shows depth 2
 }
-
-
-
-
 
 const RadarView = () => {
 

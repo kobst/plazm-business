@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import ProfileImg from "../../../../images/profile-img.png";
-import UserMessage from "../../HomeSearch/BusinessListing/UserMessage";
-import { useHistory } from "react-router";
+import React, {useState, useEffect} from 'react';
+import styled from 'styled-components';
+import ProfileImg from '../../../../images/profile-img.png';
+import UserMessage from '../../HomeSearch/BusinessListing/UserMessage';
+import {useHistory} from 'react-router';
 import {
   checkMime,
   replaceBucket,
-} from "../../../../utilities/checkResizedImage";
+} from '../../../../utilities/checkResizedImage';
 
 import useStore from "../../useState";
-import { InnerListBanner, RightBuisinessName, BuisinessName } from "../../FeedContent/styled";
+import {InnerListBanner, RightBuisinessName, BuisinessName} from "../../FeedContent/styled";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -53,30 +53,6 @@ const ProfileNameHeader = styled.div`
   width: 100%;
   margin-left: auto; 
   margin-right: 0;
-`;
-
-const ProfileThumbBanner = styled.div`
-  width: 100%;
-  height: 50px;
-  margin: 0;
-  overflow: hidden;
-  position: relative;
-  img {
-    width: 100%;
-    max-height: 50px;
-  }
-`;
-
-const ProfileThumbOverlay = styled.div`
-  background: linear-gradient(
-    360deg,
-    rgba(0, 0, 0, 0.6) -30%,
-    rgba(0, 0, 0, 0.6) 100%
-  );
-  width: 100%;
-  position: absolute;
-  height: 100%;
-  top: 0;
 `;
 
 const ProfileName = styled.div`
@@ -139,24 +115,24 @@ const TitleBarWrap = styled.div`
 `;
 
 /** display business details */
-const DisplayPostInAList = ({ data, id }) => {
+const DisplayPostInAList = ({data, id}) => {
   const setSelectedListId = useStore((state) => state.setSelectedListId);
   const setListIndex = useStore((state) => state.setListIndex);
 
   const [image, setImage] = useState(
-    data.business[0].default_image_url
-      ? data.business[0].default_image_url
-      : ProfileImg
+    data.business[0].default_image_url ?
+      data.business[0].default_image_url :
+      ProfileImg,
   );
 
   useEffect(() => {
     if (data.business[0].default_image_url) {
       const findMime = checkMime(data.business[0].default_image_url);
       const image = replaceBucket(
-        data.business[0].default_image_url,
-        findMime,
-        30,
-        30
+          data.business[0].default_image_url,
+          findMime,
+          30,
+          30,
       );
       setImage(image);
     } else {
@@ -184,7 +160,7 @@ const DisplayPostInAList = ({ data, id }) => {
     <>
       <DescriptionViewItem>
         <div
-          className={id % 2 === 0 ? "background-active" : "background-inactive"}
+          className={id % 2 === 0 ? 'background-active' : 'background-inactive'}
         >
           {/* <UserMsgWrap>
             <UserMessageContent>

@@ -1,9 +1,9 @@
 /*
-@desc: findBusinessPhotos query
+@desc: findBusinessPhotosGraphql query
 */
-const findBusinessPhotos = (id) => {
-    const graphQl = {
-      query: `
+const findBusinessPhotosGraphql = (id) => {
+  const graphQl = {
+    query: `
             query GetPostImages($id: ID!){
                 getPostImages(input: {id:$id}) {
                 message
@@ -11,10 +11,10 @@ const findBusinessPhotos = (id) => {
                 post
               }
             }`,
-      variables: {
-        id: id,
-      },
-    };
-    return graphQl;
+    variables: {
+      id: id,
+    },
   };
-  export {findBusinessPhotos};
+  return graphQl;
+};
+export {findBusinessPhotosGraphql};

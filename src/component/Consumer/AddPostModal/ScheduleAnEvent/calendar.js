@@ -1,18 +1,18 @@
-import React, { useState } from "react";
+import React, {useState} from 'react';
 import {
   DatePicker,
   MuiPickersUtilsProvider,
   TimePicker,
-} from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
-import styled from "styled-components";
-import moment from "moment";
-import MomentUtils from "@date-io/moment";
+} from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
+import styled from 'styled-components';
+import moment from 'moment';
+import MomentUtils from '@date-io/moment';
 
-moment.updateLocale("en", {
+moment.updateLocale('en', {
   week: {
-    dow: 1
-  }
+    dow: 1,
+  },
 });
 
 const CalendarWrap = styled.div`
@@ -123,7 +123,7 @@ const CalendarWrap = styled.div`
 /*
  *@desc: calendar component
  */
-function Calendar({ date, changeDate }) {
+function Calendar({date, changeDate}) {
   const [open, setOpen] = useState(false);
 
   const onChange = (value) => {
@@ -132,8 +132,8 @@ function Calendar({ date, changeDate }) {
   };
 
   const onChangeTime = (value) => {
-    const time = moment(value).format("HH:mm:ss");
-    const date1 = moment(date).format("YYYY-MM-DD");
+    const time = moment(value).format('HH:mm:ss');
+    const date1 = moment(date).format('YYYY-MM-DD');
     changeDate(moment(date1+' '+time));
   };
   return (

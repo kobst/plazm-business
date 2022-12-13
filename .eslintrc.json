@@ -1,40 +1,35 @@
 {
-    "env": {
-        "browser": true,
-        "es6": true
-    },
-    "extends": [
-        "plugin:react/recommended",
-        "airbnb"
-    ],
-    "globals": {
-        "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
-    },
-    "parserOptions": {
-        "ecmaFeatures": {
-            "jsx": true
-        },
-        "ecmaVersion": 2018,
-        "sourceType": "module"
-    },
-    "plugins": [
-        "react"
-    ],
-    "rules": {
-        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-        "import/no-extraneous-dependencies": [1, {"devDependencies": true}],
-        "jsx-a11y/anchor-is-valid": 0,
-        "react/forbid-prop-types": 0
-    },
-        "settings": {
-          "import/resolver":{
-            "node": {
-              "paths": ["src"]
-            }
-          }
-        }
-      }
- 
-    
-
+	"env": {
+		"browser": true,
+		"es6": true
+	},
+	"extends": ["google", "plugin:react/recommended"],
+	"globals": {
+		"Atomics": "readonly",
+		"SharedArrayBuffer": "readonly"
+	},
+	"parserOptions": {
+		"ecmaFeatures": {
+			"jsx": true
+		},
+		"ecmaVersion": 2018,
+		"sourceType": "module"
+	},
+	"plugins": ["react"],
+	"rules": {
+		"valid-jsdoc": "off",
+		"require-jsdoc": "off",
+		"no-tabs": "off",
+		"no-mixed-spaces-and-tabs": "off",
+		"max-len": [
+			"warn",
+			{
+				"code": 120,
+				"ignoreRegExpLiterals": true
+			}
+		],
+		"react/prop-types": 0,
+		"quote-props": "off",
+		"comma-dangle": "off"
+	}
+}

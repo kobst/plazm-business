@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 const HashtagsWrap = styled.div`
   display: flex;
@@ -21,13 +21,13 @@ const Hashtags = styled.div`
   cursor:default;
 `;
 /** display favorite business hash tags */
-const BusinessHashTags = ({ data }) => {
+const BusinessHashTags = ({data}) => {
   return (
     <>
       <HashtagsWrap>
-        {data.length > 0
-          ? data.map((i, key) => <Hashtags key={key}>#{i}</Hashtags>)
-          : null}
+        {data.length > 0 ?
+          data.map((i, key) => <Hashtags key={key}>#{i}</Hashtags>) :
+          null}
       </HashtagsWrap>
     </>
   );

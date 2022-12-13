@@ -1,26 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { unwrapResult } from "@reduxjs/toolkit";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import styled from "styled-components";
-import "react-tabs/style/react-tabs.css";
+import React, {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+import styled from 'styled-components';
 
-import { RightSearchWrap, ErrorDiv } from "./styled.js";
-import CreateListModel from "../AddPostModal/createList";
-import ButtonOrange from "../UI/ButtonOrange";
-import ModalComponent from "../UI/Modal";
-import SliderSection from "./SliderSection";
-import useStore from "../useState";
-import error from "../../../constants";
+import {RightSearchWrap, ErrorDiv} from './styled.js';
+import CreateListModel from '../AddPostModal/createList';
+import ButtonOrange from '../UI/ButtonOrange';
+import ModalComponent from '../UI/Modal';
+import SliderSection from './SliderSection';
+import useStore from '../useState';
+import error from '../../../constants';
 import {
   clearListSearchData,
-  FetchMostPopularLists,
-  FetchTrendingLists,
+  fetchMostPopularLists,
+  fetchTrendingLists,
   setListSearch,
-  SearchListApi,
-} from "../../../reducers/listReducer";
-import ValueLoader from "../../../utils/loader";
-import Input from "../../UI/Input/Input";
+  searchListApi,
+} from '../../../reducers/listReducer';
+import ValueLoader from '../../../utils/loader';
+import Input from '../../UI/Input/Input';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 const ModalContent = styled.div`
   width: 100%;
@@ -137,9 +137,9 @@ const TopContent = styled.div`
     box-shadow: none !important;
   }
 
-  .react-tabs__tab:focus:after {
-    display: none;
-  }
+	.react-tabs__tab:focus:after {
+		display: none;
+	}
 `;
 
 const ListMenu = () => {
@@ -148,7 +148,7 @@ const ListMenu = () => {
   const popularLists = useSelector((state) => state.list.popularLists);
   const popularLoading = useSelector((state) => state.list.loadingPopularLists);
   const totalPopularLists = useSelector(
-    (state) => state.list.totalPopularLists
+      (state) => state.list.totalPopularLists
   );
   const user = useSelector((state) => state.user.user);
   const totalList = useSelector((state) => state.list.totalList);
@@ -160,19 +160,17 @@ const ListMenu = () => {
 
   const [selectedTab, setSelectedTab] = useState(2);
   const userCreatedLoading = useSelector(
-    (state) => state.list.loadingUserLists
+      (state) => state.list.loadingUserLists
   );
-
-  const [searchError, setSearchError] = useState("");
-  const [search, setSearch] = useState("");
-  const [offset, setOffSet] = useState(0);
+  const [searchError, setSearchError] = useState('');
+  const [search, setSearch] = useState('');
+  const [offset] = useState(0);
   const [offsetPopular, setOffSetPopular] = useState(0);
   const [loader, setLoader] = useState(false);
-  const [flag, setFlag] = useState(true);
   const [displayTrendingModel, setDisplayTrendingModel] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [totalLists, setTotalLists] = useState(
-    parseInt(totalList - userLists.length)
+      parseInt(totalList - userLists.length)
   );
 
   const [displayCreateList, setDisplayCreateList] = useState(false);
@@ -184,33 +182,27 @@ const ListMenu = () => {
   const setReadMore = useStore((state) => state.setReadMore);
 
   useEffect(() => {
-    // setObj({ subscriberId: user._id })
     const fetchData = async () => {
       /** to fetch most trending list data */
-      const trending = await dispatch(FetchTrendingLists(0));
-      const resTrending = await unwrapResult(trending);
+      const trending = await dispatch(fetchTrendingLists(0));
+      await unwrapResult(trending);
       /** to fetch most popular list data */
-      const popular = await dispatch(FetchMostPopularLists(0));
-      const resPopular = await unwrapResult(popular);
-      if (resPopular) {
-        setFlag(false);
-      }
+      await dispatch(fetchMostPopularLists(0));
     };
     (offset === 0 || offsetPopular === 0) && fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /** search data */
   const searchListsData = (event) => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       event.preventDefault();
       if (!search.trim()) {
         dispatch(setListSearch(event.target.value));
       }
-      if (search !== "" && search.length >= 4 && !search.trim() === false) {
+      if (search !== '' && search.length >= 4 && !search.trim() === false) {
         dispatch(clearListSearchData());
         dispatch(setListSearch(event.target.value));
-        setSearchError("");
+        setSearchError('');
       } else if (search.length > 0 && search.length < 4) {
         setSearchError(error.SEARCH_ERROR);
       }
@@ -219,41 +211,32 @@ const ListMenu = () => {
 
   /** to search data based on input */
   useEffect(() => {
-    var obj = {};
+    const obj = {};
     setSearch(listSearch);
     const searchData = async () => {
-      const data = await dispatch(
-        SearchListApi({ value: 0, search: listSearch, ...obj })
+      await dispatch(
+          searchListApi({value: 0, search: listSearch, ...obj})
       );
-      const res = await unwrapResult(data);
-      if (res) {
-        setFlag(false);
-      }
     };
     searchData();
   }, [listSearch, dispatch]);
 
-  /** back btn */
-  const backBtn = () => {
-    if (listSearch === "") {
-      setDiscoverBtn(false);
-    } else {
-      dispatch(setListSearch(""));
-      setSearch("");
-    }
-  };
+  /** to set search value */
+  useEffect(() => {
+    setSearch(listSearch);
+  }, [listSearch]);
 
   const setTab = (index) => {
-    setSearch("");
+    setSearch('');
     dispatch(clearListSearchData());
-    dispatch(setListSearch(""));
-    setSearchError("");
+    dispatch(setListSearch(''));
+    setSearchError('');
     setSelectedTab(index);
     setListTabSelected(index);
   };
 
   const handleSearchChange = (e) => {
-    setSearchError("");
+    setSearchError('');
     setSearch(e.target.value);
   };
 
@@ -408,30 +391,8 @@ const ListMenu = () => {
                 totalLists={totalLists}
               />
             )}
-            {listSearch && (
-              <>
-                <SliderSection
-                  heading="search results"
-                  data={searchList}
-                  totalList={totalPopularLists}
-                  setSelectedListId={setSelectedListId}
-                  setDiscoverBtn={setDiscoverBtn}
-                  setReadMore={setReadMore}
-                  offset={offsetPopular}
-                  setOffSet={setOffSetPopular}
-                  loader={loader}
-                  setLoader={setLoader}
-                  modal={displayTrendingModel}
-                  setModal={setDisplayTrendingModel}
-                  setSelectedId={setSelectedId}
-                  selectedId={selectedId}
-                  setTotalLists={setTotalLists}
-                  totalLists={totalLists}
-                />
-              </>
-            )}
             {(popularLoading || userCreatedLoading) && !listSearch && (
-              <div style={{ textAlign: "center" }}>
+              <div style={{textAlign: 'center'}}>
                 <ValueLoader />
               </div>
             )}

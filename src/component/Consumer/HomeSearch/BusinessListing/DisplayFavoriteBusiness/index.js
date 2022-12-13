@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
-import moment from "moment";
 import styled from "styled-components";
 import ProfileImg from "../../../../../images/profile-img.png";
 import UserMessage from "../UserMessage";
@@ -15,7 +14,6 @@ import {
   ProfileThumbBannerFeed,
   ProfileThumbOverlay,
   TopBuisinessBar,
-  HeartIcon,
   RightBuisinessImg,
   BuisinessName,
   ShowMoreDiv,
@@ -26,9 +24,6 @@ import {
   HastagDiv,
 } from "../../../FeedContent/styled";
 
-import HeartBorder from "../../../../../images/heart-border.png";
-import ArrowSm from "../../../../../images/arrow-sm.png";
-import ArrowSmUP from "../../../../../images/arrow-sm-up.png";
 const UserMessageContent = styled.div`
   width: 100%;
   position: relative;
@@ -91,7 +86,7 @@ const ProfileThumbBanner = styled.div`
   }
 `;
 //   object-fit: cover;
-//height: 204px;
+// height: 204px;
 
 //    width: 100%;
 // max-height: 204px;
@@ -194,9 +189,6 @@ const DisplayFavoriteBusiness = ({
     data.business && data.business.length > 0 ? data.business[0] : data;
 
   const search = useSelector((state) => state.myFeed.enterClicked);
-  const getUtcHour = new Date().getUTCHours();
-  const getUtcMinutes = new Date().getUTCMinutes();
-  const currentUtcDay = new Date().getUTCDay();
   const [image, setImage] = useState(businessInfo.default_image_url);
 
   const ref = useRef()
@@ -256,44 +248,6 @@ const DisplayFavoriteBusiness = ({
 
   
   const history = useHistory();
-  const days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
-  const [showDiv, setShowDiv] = useState(false);
-  /** to check if business is open/close */
-  const checkBusinessOpenClose = () => {
-    if (businessInfo.hours_format) {
-      for (let i = 0; i < businessInfo.hours_format.length; i++) {
-        const startDayIndex = days.indexOf(
-          businessInfo.hours_format[i].StartDay
-        );
-        const endDayIndex = days.indexOf(businessInfo.hours_format[i].EndDay);
-        if (currentUtcDay >= startDayIndex && currentUtcDay <= endDayIndex) {
-          const time = moment(getUtcHour + ":" + getUtcMinutes, "HH:mm");
-          const beforeTime = moment(
-            businessInfo.hours_format[i].Start,
-            "HH:mm"
-          );
-          const afterTime = moment(businessInfo.hours_format[i].End, "HH:mm");
-          if (time.isBetween(beforeTime, afterTime)) {
-            return true;
-          } else {
-            return false;
-          }
-        } else {
-          return false;
-        }
-      }
-    } else {
-      return false;
-    }
-  };
 
   /** to display business details page */
   const displayBusinessDetail = () => {
@@ -326,10 +280,10 @@ const DisplayFavoriteBusiness = ({
           className={
             data.eventSchedule !== null ||
             data.data !== null ||
-            (data.body !== null && data.type === "Post") ||
-            (data.body !== null && data.type === "Events")
-              ? "search-active"
-              : ""
+            (data.body !== null && data.type === 'Post') ||
+            (data.body !== null && data.type === 'Events') ?
+              'search-active' :
+              ''
           }
         >
           <UserMessageContent>
@@ -342,9 +296,6 @@ const DisplayFavoriteBusiness = ({
                 />
               </ProfileThumbBanner>
               <TopBuisinessBar>
-                {/* <HeartIcon>
-                  <img src={HeartBorder} />
-                </HeartIcon> */}
                 <RightBuisinessImg>
                   <BuisinessName onClick={() => displayBusinessDetail()}>
                     {businessInfo.company_name}
@@ -362,71 +313,10 @@ const DisplayFavoriteBusiness = ({
                   </div>
                 </RightBuisinessImg>
               </TopBuisinessBar>
-
-              {/* <BottomShowMoreDiv
-                onClick={() => {
-                  setShowDiv((prev) => !prev);
-                }}
-              >
-                <ShowMoreDiv>
-                  {!showDiv && (
-                    <span>
-                      Show More <img src={ArrowSm} className="ArrowSm" />
-                    </span>
-                  )}
-                  {showDiv && (
-                    <span>
-                      Show Less <img src={ArrowSmUP} className="ArrowSm" />
-                    </span>
-                  )}
-                </ShowMoreDiv>
-              </BottomShowMoreDiv> */}
-
-              {/* <HastagWrap>
-                <HastagDiv>#burger</HastagDiv>
-                <HastagDiv>#Credit Card</HastagDiv>
-                <HastagDiv>#Fresh Fruits</HastagDiv>
-                <HastagDiv>#Takeaway</HastagDiv>
-                <HastagDiv>#burger</HastagDiv>
-              </HastagWrap> */}
-              {showDiv && (
-                <ProfileNameWrap>
-                  <ProfileName>
-                    {/* <div
-                      className="businessNameTitle"
-                      onClick={() => displayBusinessDetail()}
-                    >
-                      {businessInfo.company_name}
-                    </div> */}
-                    <ChatInput>
-                      {/* <p>
-                      <span className="postSpan">
-                        245
-                      </span>{" "}
-                      Followers
-                    </p> */}
-                      <p>
-                        <span className="postSpan">
-                          {data.totalPosts && data.totalPosts.length > 0
-                            ? data.totalPosts[0].totalPosts
-                            : 0}
-                        </span>{" "}
-                        Posts
-                      </p>
-                    </ChatInput>
-                    {/* <BuisinessThumbImages>
-                    <BuisinessThumbImg><img src="https://picsum.photos/200/300" /></BuisinessThumbImg>
-                    <BuisinessThumbImg><img src="https://picsum.photos/200/300" /></BuisinessThumbImg>
-                    <BuisinessThumbImg><img src="https://picsum.photos/200/300" /></BuisinessThumbImg>
-                    <BuisinessThumbImg><img src="https://picsum.photos/200/300" /></BuisinessThumbImg>
-                  </BuisinessThumbImages> */}
-                  </ProfileName>
-                </ProfileNameWrap>
-              )}
             </ProfileNameHeader>
           </UserMessageContent>
         </UserMsgWrap>
-      ) : (data.body !== null && data.type === "Post" && search) ||
+      ) : (data.body !== null && data.type === 'Post' && search) ||
         (data.data !== null && search) ? (
         <ProfileThumbBannerFeed>
           <img
@@ -461,13 +351,13 @@ const DisplayFavoriteBusiness = ({
           myFeedView={true}
           setMyFeedIndex={setSearchIndex}
         />
-      ) : data.body !== null && data.type === "Post" ? (
+      ) : data.body !== null && data.type === 'Post' ? (
         <DisplayComment
           postData={data}
           businessData={businessInfo}
           setSelectedListId={setSelectedListId}
         />
-      ) : data.body !== null && data.type === "Events" ? (
+      ) : data.body !== null && data.type === 'Events' ? (
         <DisplayCommentForEvent postData={data} businessData={businessInfo} />
       ) : search && businessInfo.company_name !== null ? (
         <UserMsgWrap
@@ -476,10 +366,10 @@ const DisplayFavoriteBusiness = ({
           className={
             data.eventSchedule !== null ||
             data.data !== null ||
-            (data.body !== null && data.type === "Post") ||
-            (data.body !== null && data.type === "Events")
-              ? "search-active"
-              : ""
+            (data.body !== null && data.type === 'Post') ||
+            (data.body !== null && data.type === 'Events') ?
+              'search-active' :
+              ''
           }
         >
           <UserMessageContent>
@@ -490,12 +380,6 @@ const DisplayFavoriteBusiness = ({
                   onError={() => setImage(ProfileImg)}
                   alt=""
                 />
-                {/* {businessInfo.hours_format &&
-                businessInfo.hours_format.length === 0 ? (
-                  <div className="CloseDiv">Closed</div>
-                ) : checkBusinessOpenClose() === true ? null : (
-                  <div className="CloseDiv">Closed</div>
-                )} */}
               </ProfileThumbBanner>
 
               <ProfileNameWrap>
@@ -509,10 +393,10 @@ const DisplayFavoriteBusiness = ({
                   <ChatInput>
                     <p>
                       <span className="postSpan">
-                        {data.totalPosts && data.totalPosts.length > 0
-                          ? data.totalPosts[0].totalPosts
-                          : 0}
-                      </span>{" "}
+                        {data.totalPosts && data.totalPosts.length > 0 ?
+                          data.totalPosts[0].totalPosts :
+                          0}
+                      </span>{' '}
                       Posts
                     </p>
                   </ChatInput>

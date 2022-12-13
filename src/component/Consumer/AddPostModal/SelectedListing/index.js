@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { IoMdCloseCircle } from "react-icons/io";
-import { useSelector } from "react-redux";
+import React, {useEffect, useState} from 'react';
+import styled from 'styled-components';
+import {IoMdCloseCircle} from 'react-icons/io';
+import {useSelector} from 'react-redux';
 
 const AllListingsContent = styled.div`
   width: 100%;
@@ -56,13 +56,13 @@ const SelectedListing = ({
   type,
 }) => {
   const userLists = useSelector((state) => state.list.userLists);
-  const [listName, setListName] = useState("");
+  const [listName, setListName] = useState('');
 
   /** to display the name of the selected list */
   useEffect(() => {
     if (selectedListForPost !== null) {
       setListName(
-        userLists.filter((i) => i._id === selectedListForPost)[0].name
+          userLists.filter((i) => i._id === selectedListForPost)[0].name,
       );
     }
   }, [selectedListForPost, userLists]);
@@ -70,7 +70,7 @@ const SelectedListing = ({
     <>
       {selectedListForPost !== null ? (
         <AllListingsContent>
-          {type === "event" ? (
+          {type === 'event' ? (
             <div>
               <EventListing>ADDED TO LIST</EventListing>
               <p>{listName}</p>

@@ -1,13 +1,10 @@
-import React from 'react'
-import Modal from 'react-modal'
-import Galleryimg1 from '../../images/gallery-img.png'
-import ButtonSmall from '../UI/ButtonSmall'
-import CrossIcon from '../../images/cross-pink.svg'
+import React from 'react';
+import Modal from 'react-modal';
+import Galleryimg1 from '../../images/gallery-img.png';
+import ButtonSmall from '../UI/ButtonSmall';
+import CrossIcon from '../../images/cross-pink.svg';
 
-const GallerModalBox = ({ isOpen, closeModal }) => {
-
-
-
+const GallerModalBox = ({isOpen, closeModal}) => {
   return (
     <div>
       <Modal
@@ -75,12 +72,13 @@ const GallerModalBox = ({ isOpen, closeModal }) => {
           <div className="uploadimg"><p>Drap or <span>Upload</span> Image</p></div>
 
           <div className="modalButton">
-            <ButtonSmall maxWidth="100px" onClick={() => closeModal()} type="submit" className="btn btn-primary ">Publish</ButtonSmall>
+            <ButtonSmall maxWidth="100px" onClick={() => closeModal()}
+              type="submit" className="btn btn-primary ">Publish</ButtonSmall>
           </div>
         </div>
       </Modal>
     </div >
-  )
-}
+  );
+};
 
-export default GallerModalBox
+export default GallerModalBox;

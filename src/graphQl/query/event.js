@@ -1,7 +1,7 @@
 /*
 @desc: fetch events for a particular graphQL query
 */
-const fetchEvent = (values) => {
+const fetchEventGraphql = (values) => {
   const graphQl = {
     query: `
         query GetEventsForTheDay($id: ID, $day: String, $date:Date){
@@ -60,7 +60,7 @@ const fetchEvent = (values) => {
 /*
 @desc: fetch events for a week graphQL query
 */
-const fetchEventForAWeek = (values) => {
+const fetchEventForAWeekGraphql = (values) => {
   const graphQl = {
     query: `
       query GetEventsForTheWeek($id: ID, $date:Date, $userId: ID){
@@ -116,4 +116,4 @@ const fetchEventForAWeek = (values) => {
   };
   return graphQl;
 };
-export { fetchEvent, fetchEventForAWeek };
+export {fetchEventGraphql, fetchEventForAWeekGraphql};

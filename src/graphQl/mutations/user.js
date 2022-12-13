@@ -2,7 +2,7 @@
 @desc: add place graphQL mutation
 @params: name, email, phoneNumber, userSub
 */
-const AddUser = (values) => {
+const addUserGraphql = (values) => {
   const graphQl = {
     query: `
           mutation AddUser($name:String, $email:String, $phoneNumber:String, $userSub:String){
@@ -31,11 +31,13 @@ const AddUser = (values) => {
 @desc: update user profile graphQL mutation
 @params: name, email, phoneNumber, userSub
 */
-const updateUserProfile = (values) => {
+const updateUserProfileGraphql = (values) => {
   const graphQl = {
     query: `
-          mutation UpdateProfile($name:String, $email:String, $phoneNumber:String, $userSub:String, $photo:String, $lockProfile:Int){
-            updateProfile(input: { name:$name, email:$email, phoneNumber:$phoneNumber, userSub:$userSub, photo:$photo, lockProfile:$lockProfile}) {
+          mutation UpdateProfile($name:String, $email:String, $phoneNumber:String,
+             $userSub:String, $photo:String, $lockProfile:Int){
+            updateProfile(input: { name:$name, email:$email, phoneNumber:$phoneNumber,
+               userSub:$userSub, photo:$photo, lockProfile:$lockProfile}) {
               message
               success
               user {
@@ -53,8 +55,8 @@ const updateUserProfile = (values) => {
       email: values.email,
       phoneNumber: values.phoneNumber,
       userSub: values.userSub,
-      photo: values.photo? values.photo:"",
-      lockProfile: values.lockProfile
+      photo: values.photo? values.photo:'',
+      lockProfile: values.lockProfile,
     },
   };
   return graphQl;
@@ -64,7 +66,7 @@ const updateUserProfile = (values) => {
 @desc: update user profile graphQL mutation
 @params: name, email, phoneNumber, userSub
 */
-const getSelectedUser = (search) => {
+const getSelectedUserGraphql = (search) => {
   const graphQl = {
     query: `
           mutation GetSelectedUser($search:String){
@@ -83,7 +85,7 @@ const getSelectedUser = (search) => {
             }
           }`,
     variables: {
-      search: search
+      search: search,
     },
   };
   return graphQl;
@@ -93,7 +95,7 @@ const getSelectedUser = (search) => {
 @desc: to add favorites to a business
 @params: businessId, userId
 */
-const addFavoriteBusiness = (obj) => {
+const addFavoriteBusinessGraphql = (obj) => {
   const graphQl = {
     query: `
           mutation AddFavoriteBusiness($userId:ID!, $businessId:ID!){
@@ -108,7 +110,7 @@ const addFavoriteBusiness = (obj) => {
           }`,
     variables: {
       userId: obj.userId,
-      businessId: obj.businessId
+      businessId: obj.businessId,
     },
   };
   return graphQl;
@@ -119,7 +121,7 @@ const addFavoriteBusiness = (obj) => {
 @desc: to remove favorites to a business
 @params: businessId, userId
 */
-const removeFavoriteBusiness = (obj) => {
+const removeFavoriteBusinessGraphql = (obj) => {
   const graphQl = {
     query: `
           mutation RemoveFavoriteBusiness($userId:ID!, $businessId:ID!){
@@ -134,9 +136,15 @@ const removeFavoriteBusiness = (obj) => {
           }`,
     variables: {
       userId: obj.userId,
-      businessId: obj.businessId
+      businessId: obj.businessId,
     },
   };
   return graphQl;
 };
-export { AddUser, updateUserProfile, getSelectedUser, addFavoriteBusiness, removeFavoriteBusiness };
+export {
+  addUserGraphql,
+  updateUserProfileGraphql,
+  getSelectedUserGraphql,
+  addFavoriteBusinessGraphql,
+  removeFavoriteBusinessGraphql
+};

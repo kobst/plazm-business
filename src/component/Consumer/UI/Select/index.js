@@ -1,7 +1,7 @@
-import React from 'react'
-import styled from 'styled-components'
-import PropTypes from 'prop-types'
-import selectarrow from '../../../../images/SelectArrow.svg'
+import React from 'react';
+import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import selectarrow from '../../../../images/SelectArrow.svg';
 
 const SelectStyled = styled.select`
   border: 0;
@@ -24,12 +24,12 @@ const SelectStyled = styled.select`
     color: #666;
     font-weight: 400;
   }
-`
+`;
 
-const Select = (props) => <SelectStyled {...props}>{props.children}</SelectStyled>
+const Select = (props) => <SelectStyled {...props}>{props.children}</SelectStyled>;
 
 Select.propTypes = {
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.string]).isRequired,
-}
+};
 
-export default Select
+export default Select;

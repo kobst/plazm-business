@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 const ButtonText = styled.button`
   background: #ff6067;
@@ -11,7 +11,7 @@ const ButtonText = styled.button`
   color: #fff;
   font-weight: bold;
   min-width: 80px;
-  max-width: ${(props) => (props.maxWidth ? props.maxWidth : "inherit")};
+  max-width: ${(props) => (props.maxWidth ? props.maxWidth : 'inherit')};
   border: 0;
   :hover {
     opacity: 0.6;
