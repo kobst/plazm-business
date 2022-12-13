@@ -2,26 +2,68 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-
 import styled from 'styled-components';
 
+import {RightSearchWrap, ErrorDiv} from './styled.js';
+import CreateListModel from '../AddPostModal/createList';
+import ButtonOrange from '../UI/ButtonOrange';
+import ModalComponent from '../UI/Modal';
+import SliderSection from './SliderSection';
+import useStore from '../useState';
+import error from '../../../constants';
 import {
   clearListSearchData,
   fetchMostPopularLists,
   fetchTrendingLists,
   setListSearch,
   searchListApi,
-} from "../../../reducers/listReducer";
+} from '../../../reducers/listReducer';
+import ValueLoader from '../../../utils/loader';
+import Input from '../../UI/Input/Input';
+import { unwrapResult } from '@reduxjs/toolkit';
 
+const ModalContent = styled.div`
+  width: 100%;
+  position: relative;
+  display: flex;
+  padding: 20px;
+  max-width: 540px;
+  min-width: 536px;
+  background: #282352;
+  box-shadow: 0px 32px 70px rgba(0, 0, 0, 0.25);
+  color: #fff;
+  &.large {
+    max-width: 748px;
+    min-width: 748px;
+    @media (min-width: 992px) and (max-width: 1024px) {
+      margin: 90px 0 0;
+    }
+    @media (max-width: 991px) {
+      max-width: 80vw;
+      min-width: 80vw;
+    }
+    @media (max-width: 767px) {
+      max-width: 90vw;
+      min-width: 90vw;
+    }
+    .text-input {
+      min-height: 20px;
+      height: 32px;
+      overflow: hidden;
+    }
+  }
+  @media (max-width: 767px) {
+    padding: 15px;
+    min-width: 300px;
+    max-width: 300px;
+  }
+  @media (max-width: 991px) and (orientation: landscape) {
+    max-height: 80vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+`;
 
-import ValueLoader from "../../../utils/loader";
-import Input from "../../UI/Input/Input";
-import SliderSection from "./SliderSection";
-import error from "../../../constants";
-
-import useStore from '../useState';
-
-import {RightSearchWrap, ErrorDiv} from './styled.js';
 
 const TopContent = styled.div`
   width: 100%;
@@ -106,7 +148,7 @@ const ListMenu = () => {
   const popularLists = useSelector((state) => state.list.popularLists);
   const popularLoading = useSelector((state) => state.list.loadingPopularLists);
   const totalPopularLists = useSelector(
-    (state) => state.list.totalPopularLists
+      (state) => state.list.totalPopularLists
   );
   const user = useSelector((state) => state.user.user);
   const totalList = useSelector((state) => state.list.totalList);
@@ -118,19 +160,20 @@ const ListMenu = () => {
 
   const [selectedTab, setSelectedTab] = useState(2);
   const userCreatedLoading = useSelector(
-    (state) => state.list.loadingUserLists
+      (state) => state.list.loadingUserLists
   );
-  
-  const [searchError, setSearchError] = useState("");
-  const [search, setSearch] = useState("");
+  const [searchError, setSearchError] = useState('');
+  const [search, setSearch] = useState('');
   const [offset] = useState(0);
   const [offsetPopular, setOffSetPopular] = useState(0);
   const [loader, setLoader] = useState(false);
   const [displayTrendingModel, setDisplayTrendingModel] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [totalLists, setTotalLists] = useState(
-    parseInt(totalList - userLists.length)
+      parseInt(totalList - userLists.length)
   );
+
+  const [displayCreateList, setDisplayCreateList] = useState(false);
 
   const userSubscribedLists = useStore((state) => state.userSubscribedLists);
   const userCreatedLists = useStore((state) => state.userCreatedLists);
@@ -151,54 +194,69 @@ const ListMenu = () => {
 
   /** search data */
   const searchListsData = (event) => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       event.preventDefault();
       if (!search.trim()) {
         dispatch(setListSearch(event.target.value));
       }
-      if (search !== "" && search.length >= 4 && !search.trim() === false) {
+      if (search !== '' && search.length >= 4 && !search.trim() === false) {
         dispatch(clearListSearchData());
         dispatch(setListSearch(event.target.value));
-        setSearchError("");
+        setSearchError('');
       } else if (search.length > 0 && search.length < 4) {
         setSearchError(error.SEARCH_ERROR);
       }
     }
   };
 
-    /** to search data based on input */
-    useEffect(() => {
-      var obj = {}
-      setSearch(listSearch);
-      const searchData = async () => {
-        const data = await dispatch(
-          searchListApi({ value: 0, search: listSearch, ...obj })
-        );
-      };
-      searchData();
-    }, [listSearch, dispatch]);
+  /** to search data based on input */
+  useEffect(() => {
+    const obj = {};
+    setSearch(listSearch);
+    const searchData = async () => {
+      await dispatch(
+          searchListApi({value: 0, search: listSearch, ...obj})
+      );
+    };
+    searchData();
+  }, [listSearch, dispatch]);
 
-	/** to set search value */
-	useEffect(() => {
-		setSearch(listSearch);
-	}, [listSearch]);
+  /** to set search value */
+  useEffect(() => {
+    setSearch(listSearch);
+  }, [listSearch]);
 
-	const setTab = (index) => {
-		setSearch('');
-		dispatch(clearListSearchData());
-		dispatch(setListSearch(''));
-		setSearchError('');
-		setSelectedTab(index);
-		setListTabSelected(index);
-	};
+  const setTab = (index) => {
+    setSearch('');
+    dispatch(clearListSearchData());
+    dispatch(setListSearch(''));
+    setSearchError('');
+    setSelectedTab(index);
+    setListTabSelected(index);
+  };
 
-	const handleSearchChange = (e) => {
-		setSearchError('');
-		setSearch(e.target.value);
-	};
+  const handleSearchChange = (e) => {
+    setSearchError('');
+    setSearch(e.target.value);
+  };
+
+  const handleToggleCreateList = () => {
+    setDisplayCreateList((prevState) => !prevState);
+  };
 
   return (
     <>
+      {displayCreateList && (
+        <ModalComponent
+          closeOnOutsideClick={true}
+          isOpen={displayCreateList}
+          closeModal={() => setDisplayCreateList(false)}
+        >
+          <ModalContent>
+            <CreateListModel setDisplayCreateList={setDisplayCreateList} />
+          </ModalContent>
+        </ModalComponent>
+      )}
       <TopContent>
         <Tabs selectedIndex={selectedTab} onSelect={setTab}>
           <TabList>
@@ -208,6 +266,13 @@ const ListMenu = () => {
               <Tab>Discover More</Tab>
             </div>
             <RightSearchWrap>
+              <ButtonOrange
+                onClick={handleToggleCreateList}
+                type="submit"
+                className="createListBtn"
+              >
+                Create List
+              </ButtonOrange>
               <Input
                 value={search}
                 onKeyPress={(event) => searchListsData(event)}
@@ -244,23 +309,23 @@ const ListMenu = () => {
             )}
             {listSearch && (
               <SliderSection
-              heading="search results"
-              data={searchList}
-              totalList={totalPopularLists}
-              setSelectedListId={setSelectedListId}
-              setDiscoverBtn={setDiscoverBtn}
-              setReadMore={setReadMore}
-              offset={offsetPopular}
-              setOffSet={setOffSetPopular}
-              loader={loader}
-              setLoader={setLoader}
-              modal={displayTrendingModel}
-              setModal={setDisplayTrendingModel}
-              setSelectedId={setSelectedId}
-              selectedId={selectedId}
-              setTotalLists={setTotalLists}
-              totalLists={totalLists}
-          />
+                heading="search results"
+                data={searchList}
+                totalList={totalPopularLists}
+                setSelectedListId={setSelectedListId}
+                setDiscoverBtn={setDiscoverBtn}
+                setReadMore={setReadMore}
+                offset={offsetPopular}
+                setOffSet={setOffSetPopular}
+                loader={loader}
+                setLoader={setLoader}
+                modal={displayTrendingModel}
+                setModal={setDisplayTrendingModel}
+                setSelectedId={setSelectedId}
+                selectedId={selectedId}
+                setTotalLists={setTotalLists}
+                totalLists={totalLists}
+              />
             )}
           </TabPanel>
           <TabPanel index={1}>
@@ -286,23 +351,23 @@ const ListMenu = () => {
             )}
             {listSearch && (
               <SliderSection
-              heading="search results"
-              data={searchList}
-              totalList={totalPopularLists}
-              setSelectedListId={setSelectedListId}
-              setDiscoverBtn={setDiscoverBtn}
-              setReadMore={setReadMore}
-              offset={offsetPopular}
-              setOffSet={setOffSetPopular}
-              loader={loader}
-              setLoader={setLoader}
-              modal={displayTrendingModel}
-              setModal={setDisplayTrendingModel}
-              setSelectedId={setSelectedId}
-              selectedId={selectedId}
-              setTotalLists={setTotalLists}
-              totalLists={totalLists}
-          />
+                heading="search results"
+                data={searchList}
+                totalList={totalPopularLists}
+                setSelectedListId={setSelectedListId}
+                setDiscoverBtn={setDiscoverBtn}
+                setReadMore={setReadMore}
+                offset={offsetPopular}
+                setOffSet={setOffSetPopular}
+                loader={loader}
+                setLoader={setLoader}
+                modal={displayTrendingModel}
+                setModal={setDisplayTrendingModel}
+                setSelectedId={setSelectedId}
+                selectedId={selectedId}
+                setTotalLists={setTotalLists}
+                totalLists={totalLists}
+              />
             )}
           </TabPanel>
           <TabPanel index={2}>
@@ -326,30 +391,8 @@ const ListMenu = () => {
                 totalLists={totalLists}
               />
             )}
-            {listSearch && (
-              <>
-              <SliderSection
-                heading="search results"
-                data={searchList}
-                totalList={totalPopularLists}
-                setSelectedListId={setSelectedListId}
-                setDiscoverBtn={setDiscoverBtn}
-                setReadMore={setReadMore}
-                offset={offsetPopular}
-                setOffSet={setOffSetPopular}
-                loader={loader}
-                setLoader={setLoader}
-                modal={displayTrendingModel}
-                setModal={setDisplayTrendingModel}
-                setSelectedId={setSelectedId}
-                selectedId={selectedId}
-                setTotalLists={setTotalLists}
-                totalLists={totalLists}
-            />
-              </>
-            )}
             {(popularLoading || userCreatedLoading) && !listSearch && (
-              <div style={{ textAlign: "center" }}>
+              <div style={{textAlign: 'center'}}>
                 <ValueLoader />
               </div>
             )}

@@ -9,7 +9,7 @@ import ValueLoader from "../../../../utils/loader";
 import { useDispatch, useSelector } from "react-redux";
 import BackButton from "../../UI/BackButton";
 import SaveButton from "../../UI/SaveButton";
-import { createList } from "../../../../reducers/listReducer";
+import { createList, setListCreated } from "../../../../reducers/listReducer";
 import PostImage from "../PostImage";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
@@ -18,12 +18,7 @@ import { FcCheckmark } from "react-icons/fc";
 
 import {
   TabsSectionContent,
-  // LeftButtons,
-  // RightButtons,
   ErrorDiv,
-  // AddImageDiv,
-  // AddYourPostLabel,
-  // AddYourPostBar,
   Heading,
   TopBar,
   PostContent,
@@ -42,12 +37,13 @@ import ButtonGrey from "../../UI/ButtonGrey";
 const bucket = process.env.REACT_APP_BUCKET;
 
 const CreateListModel = ({
-  setDisplayList,
-  setSelectedListForPost,
-  setDisplayCreateList,
+  setDisplayList = () => {},
+  setSelectedListForPost = () => {},
+  setDisplayCreateList = () => {},
 }) => {
   const [loader, setLoader] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
+  const [profileBaseImage, setBaseProfileImage] = useState(null);
   const [profileImagePreview, setProfileImagePreview] = useState(null);
   const [imageError, setImageError] = useState("");
   const [coverImage, setCoverImage] = useState(null);
@@ -86,8 +82,8 @@ const CreateListModel = ({
   */
 
   const imageUpload = async (imageFile) => {
-    const folder_name = folderName(user.name, user._id);
-    const file_name = fileName(imageFile.name);
+    const folder_name = getFolderName(user.name, user._id);
+    const file_name = getFileName(imageFile.name);
     const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${file_name}`;
     const value = await fetch(
       `${process.env.REACT_APP_API_URL}/api/upload_photo`,
@@ -154,8 +150,9 @@ const CreateListModel = ({
       const res = await dispatch(createList(obj));
       const data = await unwrapResult(res);
       if (data && data.data.createList.success === true) {
-        setResponse('List added successfully.');
-        setError('');
+        setResponse("List added successfully.");
+        dispatch(setListCreated(true));
+        setError("");
         setLoader(false);
         setDisplayCreateList(false);
         setDisplayList(false);

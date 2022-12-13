@@ -1,32 +1,39 @@
-import React, {useEffect, useState} from 'react';
-import styled from 'styled-components';
-import './styles.css';
-import {Tab, Tabs, TabList} from 'react-tabs';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { Tab, Tabs, TabList } from "react-tabs";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { BsGrid } from "react-icons/bs";
 
+import "./styles.css";
+import ListTab from "./ListTab";
 import {
   clearMyFeedData,
   setSearchData,
-} from '../../../../reducers/myFeedReducer';
-import {useHistory} from 'react-router-dom';
-import {unwrapResult} from '@reduxjs/toolkit';
-
-
+} from "../../../../reducers/myFeedReducer";
 import {
   fetchUserLists,
   fetchUserCreatedAndFollowedList,
+  clearListData,
+  setListCreated,
 } from "../../../../reducers/listReducer";
+import useStore from "../../../Consumer/useState/index";
+import { setGloablLoader } from "../../../../reducers/consumerReducer";
+import CompassIconWhite from "../../../../images/compass-white.png";
+import CompassIcon from "../../../../images/compass.svg";
+import HomeIconWhite from "../../../../images/home-white.png";
+import HomeIcon from "../../../../images/home.svg";
 
-import useStore from '../../../Consumer/useState/index';
-
-
-import ListTab from './ListTab';
-
-import CompassIconWhite from '../../../../images/compass-white.png';
-import CompassIcon from '../../../../images/compass.svg';
-import HomeIconWhite from '../../../../images/home-white.png';
-import HomeIcon from '../../../../images/home.svg';
-import {BsGrid} from 'react-icons/bs';
+const TabIcon = styled.div`
+  width: 36px;
+  svg {
+    color: #767676;
+    font-size: 26px;
+    @media (max-width: 767px) {
+      font-size: 24px;
+    }
+  }
+`;
 
 const SubcriptionHeading = styled.h1`
 	font-family: Roboto;
@@ -41,37 +48,22 @@ const SubcriptionHeading = styled.h1`
 	padding: 15px 0 5px 15px;
 `;
 
-
-
-const SideBarTabs = ({
-  profile,
-  setFlag,
-  isBusinessOpen,
-  businessExists,
-  detailId,
-  businessId,
-  isUserOpen,
-  userId,
-  view,
-}) => {
+const SideBarTabs = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
   const user = useSelector((state) => state.user.user);
   const listData = useSelector((state) => state.list.data);
 
-  const subscribedLists = useSelector((state) => state.list.subscribedLists)
-  const totalList = useSelector((state) => state.list.totalList);
   const userLists = useSelector((state) => state.list.userLists);
   const loading = useSelector((state) => state.myFeed.loading);
-  const listLoader = useSelector((state) => state.list.loadingUserCreatedAndFollowed);
+  const isListCreated = useSelector((state) => state.list.isListCreated);
 
-  // new useStore
-  // const [userFollowedLists, setUserFollowedLists] = useState([]);
-
-  const userSubscribedLists = useStore((state) => state.userSubscribedLists)
-  const setUserSubscribedLists = useStore((state) => state.setUserSubscribedLists)
-  const setUserCreatedLists = useStore((state) => state.setUserCreatedLists)
+  const userSubscribedLists = useStore((state) => state.userSubscribedLists);
+  const setUserSubscribedLists = useStore(
+    (state) => state.setUserSubscribedLists
+  );
+  const setUserCreatedLists = useStore((state) => state.setUserCreatedLists);
   const selectedTab = useStore((state) => state.tabSelected);
 
   const setSelectedTab = useStore((state) => state.setTabSelected);
@@ -92,62 +84,56 @@ const SideBarTabs = ({
     }
   }, [user]);
 
-
   /** to fetch all the user created and subscribed lists */
   useEffect(() => {
-    if (user && user._id) {
-      const fetchListData = async () => {
+    if (!!user?._id) {
+      const fetchListData = () => {
         const obj = {
           id: user._id,
           value: page,
           limit: 15,
         };
-        const data = await dispatch(
-            fetchUserCreatedAndFollowedList(obj)
-        );
-        await unwrapResult(data);
+        if (!isListCreated) dispatch(clearListData());
+        dispatch(fetchUserCreatedAndFollowedList(obj));
       };
-        if (listData.length < 1) {
+      if (listData.length < 1 || isListCreated) {
         fetchListData();
+        dispatch(setListCreated(false));
       }
     }
-  }, [dispatch, user._id]);
+  }, [dispatch, user._id, isListCreated]);
 
   useEffect(() => {
-    let _userFollowedLists = []
-    let _userCreatedLists = []
-    console.log("new list data incoming " + listData.length)
+    let _userFollowedLists = [];
+    let _userCreatedLists = [];
 
     if (listData.length > 0) {
-      const listUnique = [...new Map(listData.map(v => [v._id, v])).values()]
-      listUnique.forEach(list => {
+      const listUnique = [...new Map(listData.map((v) => [v._id, v])).values()];
+      listUnique.forEach((list) => {
         var arrayLength = list.subscribers.length;
         for (var i = 0; i < arrayLength; i++) {
-          // console.log(list.subscribers[i]._id)
           if (list.subscribers[i]._id === user._id) {
-            // console.log("Good")
-            _userFollowedLists.push(list)
-            break
+            _userFollowedLists.push(list);
+            break;
           }
         }
         if (list.ownerId === user._id) {
-          _userCreatedLists.push(list)
+          _userCreatedLists.push(list);
         }
-
-      })
+      });
     }
 
-    setUserSubscribedLists(_userFollowedLists)
-    setUserCreatedLists(_userCreatedLists)
-  }, [listData])
+    setUserSubscribedLists(_userFollowedLists);
+    setUserCreatedLists(_userCreatedLists);
+  }, [listData]);
 
   /** to clear selected data on tab click */
   const homeSearchFunction = () => {
     setFavoriteIndex(null);
     setSelectedList(null);
     setSelectedListId(null);
-    setOrderedPlaces([])
-    setSelectedPlace(null)
+    setOrderedPlaces([]);
+    setSelectedPlace(null);
     if (!loading) {
       history.push('/explore');
     }
@@ -155,15 +141,15 @@ const SideBarTabs = ({
 
   /** to clear selected data on tab click */
   const myFeedFunction = () => {
-      setSelectedList(null);
-      setSelectedListId(null);
-      setOrderedPlaces([])
-      setSelectedPlace(null)
-      history.push("/home");
+    setSelectedList(null);
+    setSelectedListId(null);
+    setOrderedPlaces([]);
+    setSelectedPlace(null);
+    history.push("/home");
   };
 
   const listDiscovery = () => {
-    setSelectedPlace(null)
+    setSelectedPlace(null);
     history.push("/lists");
     setDiscoverBtn(false);
   };
@@ -245,7 +231,6 @@ const SideBarTabs = ({
               }
             >
               <div className="item">
-                {/* <FiGlobe className="sidebar-icon"/> */}
                 <img
                   src={
 										selectedTab ===

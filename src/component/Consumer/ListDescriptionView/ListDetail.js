@@ -26,6 +26,8 @@ import {
   removeSubscribedList,
 } from "../../../reducers/userReducer";
 import ValueLoader from "../../../utils/loader";
+import BackButton from "../UI/BackButton";
+import { BottomButtonsBar } from "../AddPostModal/createList/styles";
 import ButtonOrange from "../UI/ButtonOrange";
 import useStore from "../useState";
 import DisplayPostInAList from "./DisplayPostsInAList";
@@ -264,13 +266,15 @@ const ArrowBack = styled.div`
 `;
 
 const getImage = (selectedList) => {
-  if(selectedList && selectedList.media && selectedList.media.length > 0) {
-    const img = selectedList.media.find(({image_type}) => image_type === 'COVER') || selectedList.media[0]
-    console.log(img, 'img');
-    return img['image']
+  if (selectedList && selectedList.media && selectedList.media.length > 0) {
+    const img =
+      selectedList.media.find(({ image_type }) => image_type === "COVER") ||
+      selectedList.media[0];
+    console.log(img, "img");
+    return img["image"];
   }
-  return BannerImg
-}
+  return BannerImg;
+};
 
 const ListDetailView = ({ listOpenedFromBusiness }) => {
   const dispatch = useDispatch();
@@ -309,7 +313,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   const readMore = useStore((state) => state.readMore);
   const gridMode = useStore((state) => state.gridMode);
 
-  const [image, setImage] = useState(() => getImage(selectedList))
+  const [image, setImage] = useState(() => getImage(selectedList));
   //   selectedList && selectedList.media.length > 0
   //     ? selectedList.media.find(({image_type}) => image_type === 'PROFILE') || selectedList.media[0].image
   //     : BannerImg
@@ -321,13 +325,18 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
     // if (!image) {
     if (selectedList) {
       if (selectedList.media.length > 0) {
-        const img = selectedList.media.find(({image_type}) => image_type === 'COVER') || selectedList.media[0]
+        const img =
+          selectedList.media.find(({ image_type }) => image_type === "COVER") ||
+          selectedList.media[0];
         setImage(img.image);
       }
     } else {
       if (selectedListDetails) {
         if (selectedListDetails.media.length > 0) {
-          const img = selectedListDetails.media.find(({image_type}) => image_type === 'COVER') || selectedListDetails.media[0]
+          const img =
+            selectedListDetails.media.find(
+              ({ image_type }) => image_type === "COVER"
+            ) || selectedListDetails.media[0];
           setImage(img.image);
         }
       }
@@ -431,7 +440,6 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   //   }
   // };
 
-
   const onCloseTab = () => {
     // if (!listOpenedFromBusiness) setDisplayTab(false);
     // else if (readMore) setDiscoverBtn(true);
@@ -457,7 +465,15 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
           <ListOptionSection>
             <HeadingWrap>
               <TopHeadingWrap>
-                <ArrowBack onClick={history.goBack}>BACK</ArrowBack>
+                {/* ToDo: Styling needs to be done for back button position */}
+                <BottomButtonsBar>
+                  <BackButton
+                    onClick={history.goBack}
+                    className="BackButtonCreateList"
+                  >
+                    Back
+                  </BackButton>
+                </BottomButtonsBar>
 
                 <ListBannerSection>
                   <img src={image} alt="" onError={() => setImage(BannerImg)} />
