@@ -7,7 +7,6 @@ import "./styles.css";
 import PostsSection from "./PostsSection";
 import EventsSection from "./EventsSection";
 import { setCurrentDate } from "../../../../reducers/eventReducer";
-import useStore from "../../useState";
 import ModalComponent from "../../UI/Modal";
 import AddPostModal from "../../AddPostModal";
 
@@ -18,7 +17,7 @@ const TabsSectionContent = styled.div`
   height: 100%;
 `;
 
-const TabsSection = ({ profile, businessId }) => {
+const TabsSection = ({businessId}) => {
   const [addPostModal, setAddPostModal] = useState(false);
   const [addEventModal, setAddEventModal] = useState(false);
   const dispatch = useDispatch();
@@ -31,7 +30,6 @@ const TabsSection = ({ profile, businessId }) => {
   };
   const onTabSelect = (index) => {
     if(index === 3) {
-      // index = 0
       return;
     }
     setSelectedIndex(index)
@@ -66,16 +64,13 @@ const TabsSection = ({ profile, businessId }) => {
 
           <TabPanel>
             <PostsSection
-              // profile={profile}
               businessId={businessId}
-              // setSelectedListId={setSelectedListId}
             />
           </TabPanel>
           <TabPanel>Media Upcoming</TabPanel>
           <TabPanel>
             <EventsSection
               businessId={businessId}
-              // setSelectedListId={setSelectedListId}
               addEventModal={addEventModal} 
               setAddEventModal={(v) => setAddEventModal(v)}
             />

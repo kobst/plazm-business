@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import FormBody from "./formBody";
-import { Formik } from "formik";
-import BackButton from "../../UI/BackButton";
-import SaveButton from "../../UI/SaveButton";
-import * as Yup from "yup";
-import { validate } from "./validate";
-import Calendar from "./calendar";
-import moment from "moment";
+import React, {useState} from 'react';
+import styled from 'styled-components';
+import FormBody from './formBody';
+import {Formik} from 'formik';
+import BackButton from '../../UI/BackButton';
+import SaveButton from '../../UI/SaveButton';
+import * as Yup from 'yup';
+import {validate} from './validate';
+import Calendar from './calendar';
+import moment from 'moment';
 
 const EventWrap = styled.div`
   width: 100%;
@@ -134,19 +134,19 @@ const ScheduleAnEvent = ({
               endTime: endDate,
               repeat: [8],
             }}
-            /*validation schema */
+            /* validation schema */
             validationSchema={Yup.object(validate)}
             validateOnChange={false}
             validateOnBlur={false}
             onSubmit={(values) => {
-              /*to set event details*/
+              /* to set event details*/
               const obj = {
-                eventDate: `${moment(date).format("DD MMM YYYY")} to ${moment(
-                  endDate
-                ).format("DD MMM YYYY")}`,
+                eventDate: `${moment(date).format('DD MMM YYYY')} to ${moment(
+                    endDate,
+                ).format('DD MMM YYYY')}`,
                 eventTime: `FROM: ${moment(values.startTime).format(
-                  "HH:mm A"
-                )} to ${moment(values.endTime).format("HH:mm A")}`,
+                    'HH:mm A',
+                )} to ${moment(values.endTime).format('HH:mm A')}`,
                 eventRepeat: values.repeat,
                 start_time: values.startTime,
                 end_time: values.endTime,

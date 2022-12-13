@@ -1,10 +1,10 @@
-import React from "react";
-import { FaCaretRight } from "react-icons/fa";
+import React from 'react';
+import {FaCaretRight} from 'react-icons/fa';
 
-import ProfileImg from "../../../images/profile-img.png";
-import BuisinessHeart from "../../../images/buisiness-heart.png";
-import InnerImage from "../../../images/Gridview.png";
-import GreenDot from "../../../images/green-dot.png";
+import ProfileImg from '../../../images/profile-img.png';
+import BuisinessHeart from '../../../images/buisiness-heart.png';
+import InnerImage from '../../../images/Gridview.png';
+import GreenDot from '../../../images/green-dot.png';
 import {
   DescriptionViewItem,
   UserMessageContent,
@@ -21,10 +21,10 @@ import {
   ListAuthorName,
   FeedDescription,
   FeedBigImage,
-} from "./styled";
+} from './styled';
 // import SaveButton from "../../UI/SaveButton";
-import PostReplyContent from "./PostReply";
-import BottomBarLikesContent from "./BottomBarLikes";
+import PostReplyContent from './PostReply';
+import BottomBarLikesContent from './BottomBarLikes';
 
 const FeedDataContent = () => {
   return (

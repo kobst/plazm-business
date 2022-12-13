@@ -1,16 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
-import Input from "../../UI/Input/Input";
-import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
-import error from "../../../../constants";
+import React, {useEffect, useRef, useState} from 'react';
+import Input from '../../UI/Input/Input';
+import styled from 'styled-components';
+import {useDispatch, useSelector} from 'react-redux';
+import error from '../../../../constants';
 import {
   setSearchData,
   setSideFiltersByClosest,
   setSideFiltersByUpdatedAt,
-} from "../../../../reducers/myFeedReducer";
-import DropdwonArrowTop from "../../../../images/top_arrow_polygon.png";
-import { FaFilter } from "react-icons/fa";
-import { IoMdClose } from "react-icons/io";
+} from '../../../../reducers/myFeedReducer';
+import DropdwonArrowTop from '../../../../images/top_arrow_polygon.png';
+import {FaFilter} from 'react-icons/fa';
+import {IoMdClose} from 'react-icons/io';
 
 const SearchWrap = styled.div`
   height: 40px;
@@ -188,16 +188,16 @@ const DropdownContent = styled.div`
   }
 `;
 
-const SearchBar = ({ setOffset, setDisplayTab, setFlag }) => {
+const SearchBar = ({setOffset, setDisplayTab, setFlag}) => {
   const menuRef = useRef(null);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const loader = useSelector((state) => state.myFeed.loading);
-  const [searchError, setSearchError] = useState("");
+  const [searchError, setSearchError] = useState('');
   const [uploadMenu, setUploadMenu] = useState(false);
   const searchData = useSelector((state) => state.myFeed.searchData);
   const filterByClosest = useSelector((state) => state.myFeed.filterByClosest);
   const filterByUpdatedAt = useSelector(
-    (state) => state.myFeed.filterByUpdatedAt
+      (state) => state.myFeed.filterByUpdatedAt,
   );
   const dispatch = useDispatch();
 
@@ -228,11 +228,11 @@ const SearchBar = ({ setOffset, setDisplayTab, setFlag }) => {
 
   /** on key press handler for search */
   const searchList = (event) => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       event.preventDefault();
-      if (search !== "" && search.length >= 4 && !search.trim() === false) {
+      if (search !== '' && search.length >= 4 && !search.trim() === false) {
         setOffset(0);
-        setSearchError("");
+        setSearchError('');
         dispatch(setSearchData(search));
       } else if (search.length >= 0 && search.length < 4) {
         setSearchError(error.SEARCH_ERROR);
@@ -262,7 +262,7 @@ const SearchBar = ({ setOffset, setDisplayTab, setFlag }) => {
               <DropdownContent>
                 <ul>
                   <li>
-                    {" "}
+                    {' '}
                     <button
                       onClick={() => closestFilter()}
                       disabled={filterByClosest}
@@ -276,7 +276,7 @@ const SearchBar = ({ setOffset, setDisplayTab, setFlag }) => {
                       onClick={() => recentlyUpdatedFilter()}
                       disabled={filterByUpdatedAt}
                     >
-                      {" "}
+                      {' '}
                       Recently Updated
                     </button>
                   </li>
@@ -289,7 +289,7 @@ const SearchBar = ({ setOffset, setDisplayTab, setFlag }) => {
           <IoMdClose onClick={() => setDisplayTab()} />
         </CloseDiv>
       </SearchWrap>
-      {searchError !== "" ? <ErrorDiv>{searchError}</ErrorDiv> : null}
+      {searchError !== '' ? <ErrorDiv>{searchError}</ErrorDiv> : null}
     </>
   );
 };

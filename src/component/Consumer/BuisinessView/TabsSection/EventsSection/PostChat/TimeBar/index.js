@@ -1,6 +1,5 @@
-import React,{useState, useEffect} from "react"
-import styled from "styled-components"
-
+import React, {useState, useEffect} from 'react';
+import styled from 'styled-components';
 
 
 const BottomBarLikes = styled.div`
@@ -12,19 +11,19 @@ const BottomBarLikes = styled.div`
     flex-direction: column;
     align-items: flex-start;
   }
-`
+`;
 const LabelWrap = styled.div`
   font-size: 13px;
   font-weight: 700;
   color: #fff;
   min-width: 60px;
   margin-right: 5px;
-`
+`;
 const LabelInput = styled.div`
   font-size: 13px;
   font-weight: 700;
   color: #FF2E9A;
-`
+`;
 
 const TimeBar = ({startTime, endTime}) => {
   const [sTime, setSTime] = useState();
@@ -42,24 +41,24 @@ const TimeBar = ({startTime, endTime}) => {
     hours = hours ? hours : 12; // the hour '0' should be '12'
     minutes = minutes < 10 ? '0'+minutes : minutes;
     const strTime = hours + ':' + minutes + ' ' + ampm;
-    return strTime
-  }
+    return strTime;
+  };
 
   /** to convert time in display format */
   useEffect(()=>{
-      const stTime = formatTime(startTime)
-      setSTime(stTime);
-      const etTime = formatTime(endTime)
-      setETime(etTime)
-  },[endTime, startTime])
-    return (
+    const stTime = formatTime(startTime);
+    setSTime(stTime);
+    const etTime = formatTime(endTime);
+    setETime(etTime);
+  }, [endTime, startTime]);
+  return (
     <>
-    <BottomBarLikes>
-      <LabelWrap>Time -</LabelWrap>
-      <LabelInput>{sTime} - {eTime}</LabelInput>
-    </BottomBarLikes>
+      <BottomBarLikes>
+        <LabelWrap>Time -</LabelWrap>
+        <LabelInput>{sTime} - {eTime}</LabelInput>
+      </BottomBarLikes>
     </>
-    )
-}
-  
-export default TimeBar
+  );
+};
+
+export default TimeBar;

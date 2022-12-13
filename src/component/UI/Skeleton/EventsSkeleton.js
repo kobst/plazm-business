@@ -10,12 +10,12 @@ const EventsSkeleton = () => (
         <div className="title">
           <Skeleton count={1} height={12} width={200} />
         </div>
-        <Skeleton count={3} height={7}  width={'80%'} />
+        <Skeleton count={3} height={7} width={'80%'} />
       </div>
       <div className="eventImage">
         <Skeleton height={150} />
       </div>
-      </div>
+    </div>
   </div>
 );
 

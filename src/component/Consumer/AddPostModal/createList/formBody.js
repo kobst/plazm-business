@@ -1,10 +1,10 @@
-import React from "react";
-import styled from "styled-components";
-import Input from "../../UI/FormikInput";
-import TextArea from "../../UI/formikTextArea";
+import React from 'react';
+import styled from 'styled-components';
+import Input from '../../UI/FormikInput';
+import TextArea from '../../UI/formikTextArea';
 
 const InputContainer = styled.div`
-  border: 1px solid ${(props) => (props.usererror ? "#FF7171" : "#ffffff")};
+  border: 1px solid ${(props) => (props.usererror ? '#FF7171' : '#ffffff')};
   min-height: 60px;
   font-size: 16px;
   line-height: 21px;
@@ -30,7 +30,7 @@ const LabelText = styled.label`
 /*
  *@desc: form body for update profile
  */
-function FormBody({ loader, setResponse }) {
+function FormBody({loader, setResponse}) {
   return (
     <>
       <InputContainer>
@@ -39,7 +39,7 @@ function FormBody({ loader, setResponse }) {
           type="text"
           name="title"
           disabled={loader}
-          onFocus={() => setResponse("")}
+          onFocus={() => setResponse('')}
         />
       </InputContainer>
       <InputContainer>

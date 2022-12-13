@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import ProfileImg from "../../../../../images/profile-img.png";
-import { checkMime, replaceBucket } from "../../../../../utilities/checkResizedImage";
+import React, {useEffect, useState} from 'react';
+import ProfileImg from '../../../../../images/profile-img.png';
+import {checkMime, replaceBucket} from '../../../../../utilities/checkResizedImage';
 
-const ReplyImage = ({ j }) => {
+const ReplyImage = ({j}) => {
   const [image, setImage] = useState(null);
   useEffect(() => {
     if (j.userId.photo) {

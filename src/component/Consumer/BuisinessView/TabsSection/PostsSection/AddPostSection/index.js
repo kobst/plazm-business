@@ -68,16 +68,17 @@ const TextAreaWrap = styled.div`
   }
 `;
 
-const AddPostSection = ({ businessId }) => {
+
+const AddPostSection = ({businessId}) => {
   const [addPostModal, setAddPostModal] = useState(false);
   const users = useSelector((state) => state.consumer.users);
   const lists = useSelector((state) => state.list.lists);
-  let allData = [...users, ...lists];
-  let data = allData.sort(function (a, b) {
+  const allData = [...users, ...lists];
+  const data = allData.sort(function(a, b) {
     return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
   });
 
-  let userMentionData = data.map((myUser) => ({
+  const userMentionData = data.map((myUser) => ({
     id: myUser._id,
     display: `@${myUser.name}`,
   }));

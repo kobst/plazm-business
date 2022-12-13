@@ -1,9 +1,9 @@
-import React from 'react'
-import styled from 'styled-components'
-import Carousel from 'react-multi-carousel'
-import 'react-multi-carousel/lib/styles.css'
-import SliderItems from './SliderItems'
-import {useSelector} from 'react-redux'
+import React from 'react';
+import styled from 'styled-components';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
+import SliderItems from './SliderItems';
+import {useSelector} from 'react-redux';
 
 const SectionSliderWrapper = styled.div`
   position: relative;
@@ -15,42 +15,42 @@ const SectionSliderWrapper = styled.div`
   @media (max-width:767px){ 
     height: 142px;
   }
-`
+`;
 
 const SectionSlider = () => {
-  const images = useSelector(state => state.business.images);
+  const images = useSelector((state) => state.business.images);
   const responsive = {
     desktop: {
-      breakpoint: { max: 3000, min: 1024 },
+      breakpoint: {max: 3000, min: 1024},
       items: 1,
       slidesToSlide: 1, // optional, default to 1.
     },
     tablet: {
-      breakpoint: { max: 1024, min: 991 },
+      breakpoint: {max: 1024, min: 991},
       items: 1,
       slidesToSlide: 1, // optional, default to 1.
     },
     mobile: {
-      breakpoint: { max: 990, min: 767 },
+      breakpoint: {max: 990, min: 767},
       items: 1,
       slidesToSlide: 1, // optional, default to 1.
     },
     mobilexl: {
-      breakpoint: { max: 766, min: 541 },
+      breakpoint: {max: 766, min: 541},
       items: 1,
       slidesToSlide: 1, // optional, default to 1.
     },
     mobilexls: {
-      breakpoint: { max: 540, min: 463 },
+      breakpoint: {max: 540, min: 463},
       items: 1,
       slidesToSlide: 1, // optional, default to 1.
     },
     mobilesm: {
-      breakpoint: { max: 464, min: 0 },
+      breakpoint: {max: 464, min: 0},
       items: 1,
       slidesToSlide: 1, // optional, default to 1.
     },
-  }
+  };
   return (
     <>
       <SectionSliderWrapper>
@@ -67,13 +67,13 @@ const SectionSlider = () => {
           autoPlay={false}
           autoPlaySpeed={2000}
         >
-          {images.map((i,key)=><div key={key}>
+          {images.map((i, key)=><div key={key}>
             <SliderItems image={i}/>
           </div>)}
         </Carousel>
       </SectionSliderWrapper>
     </>
-  )
-}
+  );
+};
 
-export default SectionSlider
+export default SectionSlider;

@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
-import InfiniteScroll from "react-infinite-scroll-component";
-import ValueLoader from "../../../utils/loader";
-import DisplayFavoriteBusiness from "./displayFavoriteBusiness";
+import React, {useState, useEffect} from 'react';
+import styled from 'styled-components';
+import {useDispatch, useSelector} from 'react-redux';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import ValueLoader from '../../../utils/loader';
+import DisplayFavoriteBusiness from './displayFavoriteBusiness';
 import {
   clearUserFavorites,
   fetchUserFavoritesBusiness,
-} from "../../../reducers/userReducer";
-import { unwrapResult } from "@reduxjs/toolkit";
-import SearchBar from "./SearchBar";
-import useStore from "../useState";
+} from '../../../reducers/userReducer';
+import {unwrapResult} from '@reduxjs/toolkit';
+import SearchBar from './SearchBar';
+import useStore from '../useState';
 
 
 const LoaderWrap = styled.div`
@@ -102,46 +102,46 @@ const NoMorePost = styled.p`
 /*
  * @desc: to display all business lists
  */
-const BusinessList = ({ setDisplayTab, setFavoriteIndex }) => {
+const BusinessList = ({setDisplayTab, setFavoriteIndex}) => {
   const [offset, setOffSet] = useState(0);
   const totalFavorites = useSelector((state) => state.user.totalFavorites);
   const [hasMore, setHasMore] = useState(true);
   const user = useSelector((state) => state.user.user);
   const loadingFavoriteBusiness = useSelector(
-    (state) => state.user.loadingFavoriteBusiness
+      (state) => state.user.loadingFavoriteBusiness,
   );
   // const userLocation = useSelector((state) => state.business.userLocation);
   const favoriteBusiness = useSelector((state) => state.user.favoriteBusiness);
   const filterByClosest = useSelector((state) => state.myFeed.filterByClosest);
   const filterByUpdatedAt = useSelector(
-    (state) => state.myFeed.filterByUpdatedAt
+      (state) => state.myFeed.filterByUpdatedAt,
   );
   const [flag, setFlag] = useState(true);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [filteredData, setFilteredData] = useState([]);
 
-  const draggedLocation = useStore((state) => state.draggedLocation)
+  const draggedLocation = useStore((state) => state.draggedLocation);
   const dispatch = useDispatch();
 
   const userFavorites =
-    search !== "" && !search.trim() === false
-      ? filteredData.length > 0
-        ? filteredData
-        : []
-      : favoriteBusiness;
+    search !== '' && !search.trim() === false ?
+      filteredData.length > 0 ?
+        filteredData :
+        [] :
+      favoriteBusiness;
 
   /** to fetch initial data */
   useEffect(() => {
     const fetchFavoriteBusiness = async () => {
       dispatch(clearUserFavorites());
       const result = await dispatch(
-        fetchUserFavoritesBusiness({
-          id: user._id,
-          value: offset,
-          latitude: draggedLocation.lat,
-          longitude: draggedLocation.lng,
-          filters: { closest: filterByClosest, updated: filterByUpdatedAt },
-        })
+          fetchUserFavoritesBusiness({
+            id: user._id,
+            value: offset,
+            latitude: draggedLocation.lat,
+            longitude: draggedLocation.lng,
+            filters: {closest: filterByClosest, updated: filterByUpdatedAt},
+          }),
       );
       const data = await unwrapResult(result);
       if (data) {
@@ -168,29 +168,28 @@ const BusinessList = ({ setDisplayTab, setFavoriteIndex }) => {
     if (offset + 20 < totalFavorites) {
       setOffSet(offset + 20);
       dispatch(
-        fetchUserFavoritesBusiness({
-          id: user._id,
-          value: offset + 20,
-          latitude: draggedLocation.lat,
-          longitude: draggedLocation.lng,
-          filters: { closest: filterByClosest, updated: filterByUpdatedAt },
-        })
+          fetchUserFavoritesBusiness({
+            id: user._id,
+            value: offset + 20,
+            latitude: draggedLocation.lat,
+            longitude: draggedLocation.lng,
+            filters: {closest: filterByClosest, updated: filterByUpdatedAt},
+          }),
       );
     } else setHasMore(false);
   };
 
   /** to filter based on search */
   useEffect(() => {
-    if (search !== "" && !search.trim() === false) {
+    if (search !== '' && !search.trim() === false) {
       setFilteredData(
-        favoriteBusiness.filter(
-          (entry) =>
-            entry.listId[0].name.toLowerCase().indexOf(search.toLowerCase()) !==
-            -1
-        )
+          favoriteBusiness.filter(
+              (entry) =>
+                entry.listId[0].name.toLowerCase().indexOf(search.toLowerCase()) !==
+            -1,
+          ),
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
   return (
@@ -209,7 +208,7 @@ const BusinessList = ({ setDisplayTab, setFavoriteIndex }) => {
           />
           <div
             id="scrollableDiv"
-            style={{ height: "calc(100vh - 44px)", overflow: "auto" }}
+            style={{height: 'calc(100vh - 44px)', overflow: 'auto'}}
           >
             <InfiniteScroll
               dataLength={userFavorites ? userFavorites.length : 0}
@@ -217,8 +216,8 @@ const BusinessList = ({ setDisplayTab, setFavoriteIndex }) => {
               hasMore={hasMore}
               loader={
                 offset < totalFavorites && loadingFavoriteBusiness ? (
-                  <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
-                    {" "}
+                  <div style={{textAlign: 'center', margin: ' 40px auto 0'}}>
+                    {' '}
                     <ValueLoader height="40" width="40" />
                   </div>
                 ) : null
