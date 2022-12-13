@@ -6,11 +6,10 @@ import { setDisplayBar } from "../../../../reducers/globalSearchReducer";
 import error from "../../../../constants";
 import {
   clearSearchFeed,
-  HomeSearch,
   setEnterClicked,
   setSearchData,
   setSideFiltersHomeSearch,
-  SearchFeedList,
+  searchFeedList,
 } from "../../../../reducers/myFeedReducer";
 import useStore from "../../useState";
 import { checkBusiness } from "../../../../reducers/businessReducer";
@@ -122,7 +121,7 @@ const GlobalSearchBox = ({ setOffset, type }) => {
           longitude: draggedLocation.lng,
         };
         dispatch(setEnterClicked(true));
-        dispatch(SearchFeedList(obj));
+        dispatch(searchFeedList(obj));
         break;
       case "Business Search":
         dispatch(
