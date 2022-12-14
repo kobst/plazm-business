@@ -165,8 +165,9 @@ const GlobalSearchBox = ({setOffset, type}) => {
 
 	/** on change handler for search */
 	const onChangeSearch = async (e, isGoogleSearch, isHomeSearch = false) => {
-		const filter = e.target.value;
+		
 		if (isGoogleSearch) {
+			debugger
 			let business = await addBusiness(user.userSub, e);
 			business = JSON.parse(business);
 			if (business?.place?._id) {
@@ -174,6 +175,7 @@ const GlobalSearchBox = ({setOffset, type}) => {
 				return;
 			}
 		}
+		const filter = e.target.value;
 		setSearch(filter);
 		if (type === 'Explore') dispatch(clearSearchFeed());
 		if (isHomeSearch) return;
