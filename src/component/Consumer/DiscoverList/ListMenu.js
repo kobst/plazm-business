@@ -6,11 +6,11 @@ import 'react-tabs/style/react-tabs.css';
 import styled from 'styled-components';
 
 import {
-  clearListSearchData,
-  fetchMostPopularLists,
-  fetchTrendingLists,
-  setListSearch,
-  searchListApi,
+	clearListSearchData,
+	fetchMostPopularLists,
+	fetchTrendingLists,
+	setListSearch,
+	searchListApi,
 } from '../../../reducers/listReducer';
 import CreateListModel from '../AddPostModal/createList';
 import ButtonOrange from '../UI/ButtonOrange';
@@ -143,507 +143,509 @@ const ModalContent = styled.div`
 `;
 
 const ListMenu = () => {
-  const dispatch = useDispatch();
-  const setListTabSelected = useStore((state) => state.setListTabSelected);
-  const popularLists = useSelector((state) => state.list.popularLists);
-  const popularLoading = useSelector((state) => state.list.loadingPopularLists);
-  const totalPopularLists = useSelector((state) => state.list.totalPopularLists);
-  const user = useSelector((state) => state.user.user);
-  const totalList = useSelector((state) => state.list.totalList);
-  const listData = useSelector((state) => state.list.data);
-  const userLists = listData.filter((i) => i.ownerId === user._id);
-  const loading = useSelector((state) => state.list.loadingSearchList);
-  const listSearch = useSelector((state) => state.list.listSearch);
-  const searchList = useSelector((state) => state.list.searchList);
+	const dispatch = useDispatch();
+	const setListTabSelected = useStore((state) => state.setListTabSelected);
+	const popularLists = useSelector((state) => state.list.popularLists);
+	const popularLoading = useSelector((state) => state.list.loadingPopularLists);
+	const totalPopularLists = useSelector((state) => state.list.totalPopularLists);
+	const user = useSelector((state) => state.user.user);
+	const totalList = useSelector((state) => state.list.totalList);
+	const listData = useSelector((state) => state.list.data);
+	const userLists = listData.filter((i) => i.ownerId === user._id);
+	const loading = useSelector((state) => state.list.loadingSearchList);
+	const listSearch = useSelector((state) => state.list.listSearch);
+	const searchList = useSelector((state) => state.list.searchList);
 
-  const [selectedTab, setSelectedTab] = useState(2);
-  const userCreatedLoading = useSelector((state) => state.list.loadingUserLists);
+	const [selectedTab, setSelectedTab] = useState(2);
+	const userCreatedLoading = useSelector((state) => state.list.loadingUserLists);
 
-  const [searchError, setSearchError] = useState('');
-  const [search, setSearch] = useState('');
-  const [offset] = useState(0);
-  const [offsetPopular, setOffSetPopular] = useState(0);
-  const [loader, setLoader] = useState(false);
-  const [displayTrendingModel, setDisplayTrendingModel] = useState(false);
-  const [selectedId, setSelectedId] = useState(null);
-  const [totalLists, setTotalLists] = useState(parseInt(totalList - userLists.length));
+	const [searchError, setSearchError] = useState('');
+	const [search, setSearch] = useState('');
+	const [offset] = useState(0);
+	const [offsetPopular, setOffSetPopular] = useState(0);
+	const [loader, setLoader] = useState(false);
+	const [displayTrendingModel, setDisplayTrendingModel] = useState(false);
+	const [selectedId, setSelectedId] = useState(null);
+	const [totalLists, setTotalLists] = useState(parseInt(totalList - userLists.length));
 
-  const [displayCreateList, setDisplayCreateList] = useState(false);
+	const [displayCreateList, setDisplayCreateList] = useState(false);
 
-  const userSubscribedLists = useStore((state) => state.userSubscribedLists);
-  const userCreatedLists = useStore((state) => state.userCreatedLists);
-  const setSelectedListId = useStore((state) => state.setSelectedListId);
-  const setDiscoverBtn = useStore((state) => state.setDiscoverBtn);
-  const setReadMore = useStore((state) => state.setReadMore);
+	const userSubscribedLists = useStore((state) => state.userSubscribedLists);
+	const userCreatedLists = useStore((state) => state.userCreatedLists);
+	const setSelectedListId = useStore((state) => state.setSelectedListId);
+	const setDiscoverBtn = useStore((state) => state.setDiscoverBtn);
+	const setReadMore = useStore((state) => state.setReadMore);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      /** to fetch most trending list data */
-      const trending = await dispatch(fetchTrendingLists(0));
-      await unwrapResult(trending);
-      /** to fetch most popular list data */
-      await dispatch(fetchMostPopularLists(0));
-    };
-    (offset === 0 || offsetPopular === 0) && fetchData();
-  }, []);
+	useEffect(() => {
+		const fetchData = async () => {
+			/** to fetch most trending list data */
+			const trending = await dispatch(fetchTrendingLists(0));
+			await unwrapResult(trending);
+			/** to fetch most popular list data */
+			await dispatch(fetchMostPopularLists(0));
+		};
+		(offset === 0 || offsetPopular === 0) && fetchData();
+	}, []);
 
-  /** search data */
-  const searchListsData = (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      if (!search.trim()) {
-        dispatch(setListSearch(event.target.value));
-      }
-      if (search !== '' && search.length >= 4 && !search.trim() === false) {
-        dispatch(clearListSearchData());
-        dispatch(setListSearch(event.target.value));
-        setSearchError('');
-      } else if (search.length > 0 && search.length < 4) {
-        setSearchError(error.SEARCH_ERROR);
-      }
-    }
-  };
+	/** search data */
+	const searchListsData = (event) => {
+		if (event.key === 'Enter') {
+			event.preventDefault();
+			if (!search.trim()) {
+				dispatch(setListSearch(event.target.value));
+			}
+			if (search !== '' && search.length >= 4 && !search.trim() === false) {
+				dispatch(clearListSearchData());
+				dispatch(setListSearch(event.target.value));
+				setSearchError('');
+			} else if (search.length > 0 && search.length < 4) {
+				setSearchError(error.SEARCH_ERROR);
+			}
+		}
+	};
 
-  /** to search data based on input */
-  useEffect(() => {
-    const obj = {};
-    setSearch(listSearch);
-    const searchData = async () => {
-      const data = await dispatch(
-          searchListApi({value: 0, search: listSearch, ...obj})
-      );
-    };
-    searchData();
-  }, [listSearch, dispatch]);
+	/** to search data based on input */
+	useEffect(() => {
+		const obj = {};
+		setSearch(listSearch);
+		const searchData = async () => {
+			const data = await dispatch(
+				searchListApi({value: 0, search: listSearch, ...obj})
+			);
+		};
+		searchData();
+	}, [listSearch, dispatch]);
 
-  useEffect(() => {
-    const obj = {};
-    setSearch(listSearch);
-    const searchData = async () => {
-      await dispatch(searchListApi({value: 0, search: listSearch, ...obj}));
-    };
-    searchData();
-  }, [listSearch, dispatch]);
+	useEffect(() => {
+		const obj = {};
+		setSearch(listSearch);
+		const searchData = async () => {
+			await dispatch(searchListApi({value: 0, search: listSearch, ...obj}));
+		};
+		searchData();
+	}, [listSearch, dispatch]);
 
-  /** to set search value */
-  useEffect(() => {
-    setSearch(listSearch);
-  }, [listSearch]);
+	/** to set search value */
+	useEffect(() => {
+		setSearch(listSearch);
+	}, [listSearch]);
 
-  const setTab = (index) => {
-    setSearch('');
-    dispatch(clearListSearchData());
-    dispatch(setListSearch(''));
-    setSearchError('');
-    setSelectedTab(index);
-    setListTabSelected(index);
-  };
+	const setTab = (index) => {
+		setSearch('');
+		dispatch(clearListSearchData());
+		dispatch(setListSearch(''));
+		setSearchError('');
+		setSelectedTab(index);
+		setListTabSelected(index);
+	};
 
-  const handleSearchChange = (e) => {
-    setSearchError('');
-    setSearch(e.target.value);
-  };
+	const handleSearchChange = (e) => {
+		setSearchError('');
+		setSearch(e.target.value);
+	};
 
-  const handleToggleCreateList = () => {
-    setDisplayCreateList((prevState) => !prevState);
-  };
+	const handleToggleCreateList = () => {
+		setDisplayCreateList((prevState) => !prevState);
+	};
 
-  return (
-    <>
-      {displayCreateList && (
-        <ModalComponent
-          closeOnOutsideClick={true}
-          isOpen={displayCreateList}
-          closeModal={() => setDisplayCreateList(false)}
-        >
-          <ModalContent>
-            <CreateListModel
-              setDisplayCreateList={
-                setDisplayCreateList
-              }
-            />
-          </ModalContent>
-        </ModalComponent>
-      )}
+	return (
+		<>
+			{displayCreateList && (
+				<ModalComponent
+					closeOnOutsideClick={true}
+					isOpen={displayCreateList}
+					closeModal={() => setDisplayCreateList(false)}
+				>
+					<ModalContent>
+						<CreateListModel
+							setDisplayCreateList={
+								setDisplayCreateList
+							}
+						/>
+					</ModalContent>
+				</ModalComponent>
+			)}
 
-      <TopContent>
-        <Tabs selectedIndex={selectedTab} onSelect={setTab}>
-          <TabList>
-            <div className="LeftTabsList">
-              <Tab>
+			<TopContent>
+				<Tabs selectedIndex={selectedTab} onSelect={setTab}>
+					<TabList>
+						<div className="LeftTabsList">
+							<Tab>
 								Lists
 								Subscribed
-              </Tab>
-              <Tab>My Lists</Tab>
-              <Tab>
+							</Tab>
+							<Tab>My Lists</Tab>
+							<Tab>
 								Discover
 								More
-              </Tab>
-            </div>
-            <ButtonOrange
-              onClick={
-                handleToggleCreateList
-              }
-              type="submit"
-              className="createListBtn"
-            >
-							Create List
-            </ButtonOrange>
-            <RightSearchWrap>
-              <Input
-                value={
-                  search
-                }
-                onKeyPress={(
-                    event
-                ) =>
-                  searchListsData(
-                      event
-                  )
-                }
-                onChange={
-                  handleSearchChange
-                }
-                className="SearchSubscriptionsInput"
-                placeholder="Search Lists"
-                disabled={
-                  loading
-                }
-              />
-              {searchError && (
-                <ErrorDiv className="list-error">
-                  {
-                    searchError
-                  }
-                </ErrorDiv>
-              )}
-            </RightSearchWrap>
-          </TabList>
-          <TabPanel index={0}>
-            {!listSearch && (
-              <SliderSection
-                heading="Subscribed Lists"
-                data={
-                  userSubscribedLists
-                }
-                totalList={
-                  totalPopularLists
-                }
-                setSelectedListId={
-                  setSelectedListId
-                }
-                setDiscoverBtn={
-                  setDiscoverBtn
-                }
-                setReadMore={
-                  setReadMore
-                }
-                offset={
-                  offsetPopular
-                }
-                setOffSet={
-                  setOffSetPopular
-                }
-                loader={
-                  loader
-                }
-                setLoader={
-                  setLoader
-                }
-                modal={
-                  displayTrendingModel
-                }
-                setModal={
-                  setDisplayTrendingModel
-                }
-                setSelectedId={
-                  setSelectedId
-                }
-                selectedId={
-                  selectedId
-                }
-                setTotalLists={
-                  setTotalLists
-                }
-                totalLists={
-                  totalLists
-                }
-              />
-            )}
-            {listSearch && (
-              <SliderSection
-                heading="search results"
-                data={
-                  searchList
-                }
-                totalList={
-                  totalPopularLists
-                }
-                setSelectedListId={
-                  setSelectedListId
-                }
-                setDiscoverBtn={
-                  setDiscoverBtn
-                }
-                setReadMore={
-                  setReadMore
-                }
-                offset={
-                  offsetPopular
-                }
-                setOffSet={
-                  setOffSetPopular
-                }
-                loader={
-                  loader
-                }
-                setLoader={
-                  setLoader
-                }
-                modal={
-                  displayTrendingModel
-                }
-                setModal={
-                  setDisplayTrendingModel
-                }
-                setSelectedId={
-                  setSelectedId
-                }
-                selectedId={
-                  selectedId
-                }
-                setTotalLists={
-                  setTotalLists
-                }
-                totalLists={
-                  totalLists
-                }
-              />
-            )}
-          </TabPanel>
-          <TabPanel index={1}>
-            {!listSearch && (
-              <SliderSection
-                heading="My Lists"
-                data={
-                  userCreatedLists
-                }
-                totalList={
-                  totalPopularLists
-                }
-                setSelectedListId={
-                  setSelectedListId
-                }
-                setDiscoverBtn={
-                  setDiscoverBtn
-                }
-                setReadMore={
-                  setReadMore
-                }
-                offset={
-                  offsetPopular
-                }
-                setOffSet={
-                  setOffSetPopular
-                }
-                loader={
-                  loader
-                }
-                setLoader={
-                  setLoader
-                }
-                modal={
-                  displayTrendingModel
-                }
-                setModal={
-                  setDisplayTrendingModel
-                }
-                setSelectedId={
-                  setSelectedId
-                }
-                selectedId={
-                  selectedId
-                }
-                setTotalLists={
-                  setTotalLists
-                }
-                totalLists={
-                  totalLists
-                }
-              />
-            )}
-            {listSearch && (
-              <SliderSection
-                heading="search results"
-                data={
-                  searchList
-                }
-                totalList={
-                  totalPopularLists
-                }
-                setSelectedListId={
-                  setSelectedListId
-                }
-                setDiscoverBtn={
-                  setDiscoverBtn
-                }
-                setReadMore={
-                  setReadMore
-                }
-                offset={
-                  offsetPopular
-                }
-                setOffSet={
-                  setOffSetPopular
-                }
-                loader={
-                  loader
-                }
-                setLoader={
-                  setLoader
-                }
-                modal={
-                  displayTrendingModel
-                }
-                setModal={
-                  setDisplayTrendingModel
-                }
-                setSelectedId={
-                  setSelectedId
-                }
-                selectedId={
-                  selectedId
-                }
-                setTotalLists={
-                  setTotalLists
-                }
-                totalLists={
-                  totalLists
-                }
-              />
-            )}
-          </TabPanel>
-          <TabPanel index={2}>
-            {!listSearch &&
+							</Tab>
+						</div>
+
+						<RightSearchWrap>
+							<ButtonOrange
+								onClick={
+									handleToggleCreateList
+								}
+								type="submit"
+								className="createListBtn"
+							>
+								Create
+								List
+							</ButtonOrange>
+							<Input
+								value={
+									search
+								}
+								onKeyPress={(
+									event
+								) =>
+									searchListsData(
+										event
+									)
+								}
+								onChange={
+									handleSearchChange
+								}
+								className="SearchSubscriptionsInput"
+								placeholder="Search Lists"
+								disabled={
+									loading
+								}
+							/>
+							{searchError && (
+								<ErrorDiv className="list-error">
+									{
+										searchError
+									}
+								</ErrorDiv>
+							)}
+						</RightSearchWrap>
+					</TabList>
+					<TabPanel index={0}>
+						{!listSearch && (
+							<SliderSection
+								heading="Subscribed Lists"
+								data={
+									userSubscribedLists
+								}
+								totalList={
+									totalPopularLists
+								}
+								setSelectedListId={
+									setSelectedListId
+								}
+								setDiscoverBtn={
+									setDiscoverBtn
+								}
+								setReadMore={
+									setReadMore
+								}
+								offset={
+									offsetPopular
+								}
+								setOffSet={
+									setOffSetPopular
+								}
+								loader={
+									loader
+								}
+								setLoader={
+									setLoader
+								}
+								modal={
+									displayTrendingModel
+								}
+								setModal={
+									setDisplayTrendingModel
+								}
+								setSelectedId={
+									setSelectedId
+								}
+								selectedId={
+									selectedId
+								}
+								setTotalLists={
+									setTotalLists
+								}
+								totalLists={
+									totalLists
+								}
+							/>
+						)}
+						{listSearch && (
+							<SliderSection
+								heading="search results"
+								data={
+									searchList
+								}
+								totalList={
+									totalPopularLists
+								}
+								setSelectedListId={
+									setSelectedListId
+								}
+								setDiscoverBtn={
+									setDiscoverBtn
+								}
+								setReadMore={
+									setReadMore
+								}
+								offset={
+									offsetPopular
+								}
+								setOffSet={
+									setOffSetPopular
+								}
+								loader={
+									loader
+								}
+								setLoader={
+									setLoader
+								}
+								modal={
+									displayTrendingModel
+								}
+								setModal={
+									setDisplayTrendingModel
+								}
+								setSelectedId={
+									setSelectedId
+								}
+								selectedId={
+									selectedId
+								}
+								setTotalLists={
+									setTotalLists
+								}
+								totalLists={
+									totalLists
+								}
+							/>
+						)}
+					</TabPanel>
+					<TabPanel index={1}>
+						{!listSearch && (
+							<SliderSection
+								heading="My Lists"
+								data={
+									userCreatedLists
+								}
+								totalList={
+									totalPopularLists
+								}
+								setSelectedListId={
+									setSelectedListId
+								}
+								setDiscoverBtn={
+									setDiscoverBtn
+								}
+								setReadMore={
+									setReadMore
+								}
+								offset={
+									offsetPopular
+								}
+								setOffSet={
+									setOffSetPopular
+								}
+								loader={
+									loader
+								}
+								setLoader={
+									setLoader
+								}
+								modal={
+									displayTrendingModel
+								}
+								setModal={
+									setDisplayTrendingModel
+								}
+								setSelectedId={
+									setSelectedId
+								}
+								selectedId={
+									selectedId
+								}
+								setTotalLists={
+									setTotalLists
+								}
+								totalLists={
+									totalLists
+								}
+							/>
+						)}
+						{listSearch && (
+							<SliderSection
+								heading="search results"
+								data={
+									searchList
+								}
+								totalList={
+									totalPopularLists
+								}
+								setSelectedListId={
+									setSelectedListId
+								}
+								setDiscoverBtn={
+									setDiscoverBtn
+								}
+								setReadMore={
+									setReadMore
+								}
+								offset={
+									offsetPopular
+								}
+								setOffSet={
+									setOffSetPopular
+								}
+								loader={
+									loader
+								}
+								setLoader={
+									setLoader
+								}
+								modal={
+									displayTrendingModel
+								}
+								setModal={
+									setDisplayTrendingModel
+								}
+								setSelectedId={
+									setSelectedId
+								}
+								selectedId={
+									selectedId
+								}
+								setTotalLists={
+									setTotalLists
+								}
+								totalLists={
+									totalLists
+								}
+							/>
+						)}
+					</TabPanel>
+					<TabPanel index={2}>
+						{!listSearch &&
 							!popularLoading &&
 							popularLists.length && (
-              <SliderSection
-                heading="Most Popular"
-                data={
-                  popularLists
-                }
-                totalList={
-                  totalPopularLists
-                }
-                setSelectedListId={
-                  setSelectedListId
-                }
-                setDiscoverBtn={
-                  setDiscoverBtn
-                }
-                setReadMore={
-                  setReadMore
-                }
-                offset={
-                  offsetPopular
-                }
-                setOffSet={
-                  setOffSetPopular
-                }
-                loader={
-                  loader
-                }
-                setLoader={
-                  setLoader
-                }
-                modal={
-                  displayTrendingModel
-                }
-                setModal={
-                  setDisplayTrendingModel
-                }
-                setSelectedId={
-                  setSelectedId
-                }
-                selectedId={
-                  selectedId
-                }
-                setTotalLists={
-                  setTotalLists
-                }
-                totalLists={
-                  totalLists
-                }
-              />
-            )}
-            {listSearch && (
-              <>
-                <SliderSection
-                  heading="search results"
-                  data={
-                    searchList
-                  }
-                  totalList={
-                    totalPopularLists
-                  }
-                  setSelectedListId={
-                    setSelectedListId
-                  }
-                  setDiscoverBtn={
-                    setDiscoverBtn
-                  }
-                  setReadMore={
-                    setReadMore
-                  }
-                  offset={
-                    offsetPopular
-                  }
-                  setOffSet={
-                    setOffSetPopular
-                  }
-                  loader={
-                    loader
-                  }
-                  setLoader={
-                    setLoader
-                  }
-                  modal={
-                    displayTrendingModel
-                  }
-                  setModal={
-                    setDisplayTrendingModel
-                  }
-                  setSelectedId={
-                    setSelectedId
-                  }
-                  selectedId={
-                    selectedId
-                  }
-                  setTotalLists={
-                    setTotalLists
-                  }
-                  totalLists={
-                    totalLists
-                  }
-                />
-              </>
-            )}
-            {(popularLoading ||
+								<SliderSection
+									heading="Most Popular"
+									data={
+										popularLists
+									}
+									totalList={
+										totalPopularLists
+									}
+									setSelectedListId={
+										setSelectedListId
+									}
+									setDiscoverBtn={
+										setDiscoverBtn
+									}
+									setReadMore={
+										setReadMore
+									}
+									offset={
+										offsetPopular
+									}
+									setOffSet={
+										setOffSetPopular
+									}
+									loader={
+										loader
+									}
+									setLoader={
+										setLoader
+									}
+									modal={
+										displayTrendingModel
+									}
+									setModal={
+										setDisplayTrendingModel
+									}
+									setSelectedId={
+										setSelectedId
+									}
+									selectedId={
+										selectedId
+									}
+									setTotalLists={
+										setTotalLists
+									}
+									totalLists={
+										totalLists
+									}
+								/>
+							)}
+						{listSearch && (
+							<>
+								<SliderSection
+									heading="search results"
+									data={
+										searchList
+									}
+									totalList={
+										totalPopularLists
+									}
+									setSelectedListId={
+										setSelectedListId
+									}
+									setDiscoverBtn={
+										setDiscoverBtn
+									}
+									setReadMore={
+										setReadMore
+									}
+									offset={
+										offsetPopular
+									}
+									setOffSet={
+										setOffSetPopular
+									}
+									loader={
+										loader
+									}
+									setLoader={
+										setLoader
+									}
+									modal={
+										displayTrendingModel
+									}
+									setModal={
+										setDisplayTrendingModel
+									}
+									setSelectedId={
+										setSelectedId
+									}
+									selectedId={
+										selectedId
+									}
+									setTotalLists={
+										setTotalLists
+									}
+									totalLists={
+										totalLists
+									}
+								/>
+							</>
+						)}
+						{(popularLoading ||
 							userCreatedLoading) &&
 							!listSearch && (
-              <div
-                style={{
-                  textAlign: 'center',
-                }}
-              >
-                <ValueLoader />
-              </div>
-            )}
-          </TabPanel>
-        </Tabs>
-      </TopContent>
-    </>
-  );
+								<div
+									style={{
+										textAlign: 'center',
+									}}
+								>
+									<ValueLoader />
+								</div>
+							)}
+					</TabPanel>
+				</Tabs>
+			</TopContent>
+		</>
+	);
 };
 
 export default ListMenu;
