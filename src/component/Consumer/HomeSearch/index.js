@@ -14,6 +14,7 @@ import useStore from '../useState';
 const ContentWrap = styled.div`
   padding: 0px;
   width: 100%;
+  position: relative;
 `;
 
 const HomeSearch = ({
@@ -53,7 +54,6 @@ const HomeSearch = ({
       );
     });
   }, [dispatch]);
-
 
   /** to wait for 3 sec for user reply to allow/deny geoLocation */
   useEffect(() => {

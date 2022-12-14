@@ -1,19 +1,21 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import SearchIcon from '../../../../images/search-icon.png';
 import styled from 'styled-components';
 import {useDispatch, useSelector} from 'react-redux';
 import {setDisplayBar} from '../../../../reducers/globalSearchReducer';
 import error from '../../../../constants';
-import {setSearchData} from '../../../../reducers/myFeedReducer';
-import useStore from '../../useState';
 import {
-  homeSearchThunk,
-  clearSearchFeed,
-  setSideFiltersHomeSearch,
-  setEnterClicked,
+	clearSearchFeed,
+	setEnterClicked,
+	setSearchData,
+	setSideFiltersHomeSearch,
+	searchFeedList,
 } from '../../../../reducers/myFeedReducer';
+import useStore from '../../useState';
 import {checkBusiness} from '../../../../reducers/businessReducer';
-import {useLocation} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
+import GooglePlacesSearch from '../../../../utils/googlePlacesSearch';
+import {addBusiness} from '../../../../Api';
 
 const ErrorDiv = styled.div`
 	color: #ff0000;
@@ -29,7 +31,7 @@ const ErrorDiv = styled.div`
 const GlobalSearchInputWrap = styled.div`
 	position: relative;
 	display: flex;
-	width: 95%;
+	/* width: ${({isFullWidth}) => (isFullWidth ? '100%' : '95%')}; */
 	height: 40px;
 	margin: 10px 10px 15px;
 	border-radius: 5px;
@@ -37,7 +39,7 @@ const GlobalSearchInputWrap = styled.div`
 	z-index: 101;
 	align-items: center;
 	input {
-		width: calc(100% - 38px);
+		width: 100%;
 		height: 40px;
 		background: #ffffff;
 		border: 0;
@@ -63,127 +65,181 @@ const GlobalSearchInputWrap = styled.div`
 `;
 
 const GlobalSearchBox = ({setOffset, type}) => {
-  const dispatch = useDispatch();
+	const dispatch = useDispatch();
 
-  const history = useLocation()
-      .pathname.split('/')
-      .filter((item) => item);
-  const [search, setSearch] = useState('');
-  const loader = useSelector((state) => state.myFeed.loading);
-  const [searchError, setSearchError] = useState('');
-  const searchData = useSelector((state) => state.myFeed.searchData);
-  const filterClosest = useSelector((state) => state.myFeed.filterByClosest);
-  const filters = useSelector((state) => state.business.filters);
-  const user = useSelector((state) => state.user.user);
-  const sideFilterForLikes = useSelector((state) => state.business.filterByMostLiked);
-  const updatedAtFilter = useSelector((state) => state.myFeed.filterByUpdatedAt);
-  const draggedLocation = useStore((state) => state.draggedLocation);
+	const history = useHistory();
+	const location = useLocation()
+		.pathname.split('/')
+		.filter((item) => item);
+	const autoCompleteRef = useRef(null);
 
-  useEffect(() => {
-    return () => {
-      dispatch(setSearchData(''));
-      dispatch(setDisplayBar(false));
-      setSearch('');
-    };
-  }, []);
+	const [search, setSearch] = useState('');
+	const loader = useSelector((state) => state.myFeed.loading);
+	const [searchError, setSearchError] = useState('');
+	const searchData = useSelector((state) => state.myFeed.searchData);
+	const isNoDataFound = useSelector((state) => state.myFeed.isNoDataFound);
+	const filterClosest = useSelector((state) => state.myFeed.filterByClosest);
+	const filters = useSelector((state) => state.business.filters);
+	const user = useSelector((state) => state.user.user);
+	const sideFilterForLikes = useSelector((state) => state.business.filterByMostLiked);
+	const updatedAtFilter = useSelector((state) => state.myFeed.filterByUpdatedAt);
+	const draggedLocation = useStore((state) => state.draggedLocation);
 
-  useEffect(() => {
-    setSearch(searchData);
-  }, [searchData]);
+	useEffect(() => {
+		// to unload the script of google places when there is no data in the db
+		const unloadScript = () => {
+			if (search.length < 4 && !!document.querySelector('.pac-container')) {
+				document.querySelector('.pac-container').remove();
+				return;
+			}
+		};
+		if (isNoDataFound) unloadScript();
+	}, [isNoDataFound, search]);
 
-  /** on key press handler for search */
-  const searchList = (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      if (search !== '' && search.length >= 4 && !search.trim() === false) {
-        setOffset(0);
-        setSearchError('');
-        dispatch(setSearchData(search));
-        switch (type) {
-          case 'Explore':
-            dispatch(clearSearchFeed());
-            dispatch(
-                setSideFiltersHomeSearch()
-            );
-            const obj = {
-              search: search,
-              value: 0,
-              filters: {
-                closest: filterClosest,
-                updated: updatedAtFilter,
-              },
-              latitude: draggedLocation.lat,
-              longitude: draggedLocation.lng,
-            };
-            dispatch(setEnterClicked(true));
-            dispatch(homeSearchThunk(obj));
-            break;
-          case 'Business Search':
-            dispatch(
-                checkBusiness({
-                  businessId: history.at(
-                      -1
-                  ),
-                  filters: {
-                    PostsByMe: filters.PostsByMe ?
-										filters.PostsByMe :
-										!filters.Business &&
-										  !filters.PostsByMe &&
-										  !filters.MySubscriptions &&
-										  !filters.Others ?
-										true :
-										false,
-                    Business: false,
-                    MySubscriptions: filters.MySubscriptions ?
-										filters.MySubscriptions :
-										false,
-                    Others: filters.Others ?
-										filters.Others :
-										false,
-                  },
-                  value: 0,
-                  ownerId: user ?
-									user._id :
+	useEffect(() => {
+		return () => {
+			dispatch(setSearchData(''));
+			dispatch(setDisplayBar(false));
+			setSearch('');
+		};
+	}, []);
+
+	useEffect(() => {
+		setSearch(searchData);
+	}, [searchData]);
+
+	/** handle search results */
+	const searchFn = (filter = search) => {
+		setOffset(0);
+		dispatch(setSearchData(filter));
+		switch (type) {
+			case 'Explore':
+				dispatch(setSideFiltersHomeSearch());
+				const obj = {
+					search: filter,
+					value: 0,
+					filters: {
+						closest: filterClosest,
+						updated: updatedAtFilter,
+					},
+					latitude: draggedLocation.lat,
+					longitude: draggedLocation.lng,
+				};
+				dispatch(setEnterClicked(true));
+				dispatch(searchFeedList(obj));
+				break;
+			case 'Business Search':
+				setSearchError('');
+				dispatch(
+					checkBusiness({
+						businessId: history.at(-1),
+						filters: {
+							PostsByMe: filters.PostsByMe
+								? filters.PostsByMe
+								: !filters.Business &&
+								  !filters.PostsByMe &&
+								  !filters.MySubscriptions &&
+								  !filters.Others
+								? true
+								: false,
+							Business: false,
+							MySubscriptions: filters.MySubscriptions
+								? filters.MySubscriptions
+								: false,
+							Others: filters.Others
+								? filters.Others
+								: false,
+						},
+						value: 0,
+						ownerId: user ? user._id : null,
+						sideFilters: {
+							likes: sideFilterForLikes,
+						},
+						search: filter,
+					})
+				);
+				break;
+		}
+	};
+
+	/** search handler for home page, when user clicks on search icon or hits enter */
+	const searchList = (event, isHomeSearch = false) => {
+		if (event?.key === 'Enter' || isHomeSearch) {
+			const filter = event?.target?.value || search;
+			if (filter.trim().length < 4) {
+				setSearchError(error.SEARCH_ERROR);
+			} else {
+				searchFn(filter);
+			}
+		}
+	};
+
+	/** on change handler for search */
+	const onChangeSearch = async (e, isGoogleSearch, isHomeSearch = false) => {
+		if (isGoogleSearch) {
+			let business = await addBusiness(user.userSub, e);
+			business = JSON.parse(business);
+			if (business?.place?._id) {
+				history.push(`/b/${business.place._id}`);
+				return;
+			}
+		}
+		const filter = e.target.value;
+		setSearch(filter);
+		if (type === 'Explore') dispatch(clearSearchFeed());
+		if (isHomeSearch) return;
+		if (filter.trim().length > 0 && filter.trim().length < 4) {
+			setSearchError(error.SEARCH_ERROR);
+			return;
+		}
+		setSearchError('');
+		searchFn(filter);
+	};
+
+	return (
+		<>
+			<GlobalSearchInputWrap isFullWidth={type === 'Explore'}>
+				{type === 'Explore' ? (
+					<GooglePlacesSearch
+						autoCompleteRef={autoCompleteRef}
+						isNoDataFound={isNoDataFound}
+						query={search}
+						onChange={onChangeSearch}
+						disabled={loader}
+						placeholder={type}
+					/>
+				) : (
+					<input
+						value={search}
+						onKeyPress={searchList}
+						onChange={(e) =>
+							onChangeSearch(
+								e,
+								null,
+								true
+							)
+						}
+						disabled={loader}
+						placeholder={type}
+					/>
+				)}
+				{type !== 'Explore' && (
+					<button>
+						<img
+							src={SearchIcon}
+							onClick={() =>
+								searchList(
 									null,
-                  sideFilters: {
-                    likes: sideFilterForLikes,
-                  },
-                  search: search,
-                })
-            );
-            break;
-        }
-      } else if (search.length >= 0 && search.length < 4) {
-        setSearchError(error.SEARCH_ERROR);
-      }
-    }
-  };
-
-  /** on change handler for search */
-  const onChangeSearch = (e) => {
-    setSearch(e.target.value);
-  };
-
-  return (
-    <>
-      <GlobalSearchInputWrap>
-        <input
-          value={search}
-          onKeyPress={(event) => searchList(event)}
-          onChange={(e) => onChangeSearch(e)}
-          disabled={loader}
-          placeholder={type}
-        />
-        <button>
-          <img
-            src={SearchIcon}
-            onClick={() => searchList()}
-          />
-        </button>
-      </GlobalSearchInputWrap>
-      {searchError !== '' ? <ErrorDiv>{searchError}</ErrorDiv> : null}
-    </>
-  );
+									true
+								)
+							}
+						/>
+					</button>
+				)}
+			</GlobalSearchInputWrap>
+			{!!search.length && searchError ? <ErrorDiv>{searchError}</ErrorDiv> : null}
+		</>
+	);
 };
 
 export default GlobalSearchBox;

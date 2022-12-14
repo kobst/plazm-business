@@ -43,7 +43,7 @@ function findAddress({id, handleChange, addressValue, setAddress}) {
 
   useEffect(() => {
     loadScript(
-        `https://maps.googleapis.com/maps/api/js?key=AIzaSyAYVZIvAZkQsaxLD3UdFH5EH3DvYmSYG6Q&libraries=places`,
+        `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places`,
         () => handleScriptLoad(setQuery, autoCompleteRef),
     );
   }, []);

@@ -88,7 +88,7 @@ const RegisterForm = ({
             <Label name="Phone Number" />
             <Input
               disabled={disable}
-              id="phone_number"
+              id="phoneNumber"
               onChange={(e) => handleChange(e)}
               error={phoneError}
               placeholder=""
@@ -165,7 +165,7 @@ const RegisterForm = ({
 
           <SocialLogin />
         </form>
-      )}
+			)}
     </>
   );
 };

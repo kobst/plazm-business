@@ -85,6 +85,7 @@ export const RightSearchWrap = styled.div`
       font-size: 11px;
     }
   }
+
   .createListBtn {
     background: #ff2e9a;
     border-radius: 3px;
@@ -93,7 +94,9 @@ export const RightSearchWrap = styled.div`
     max-width: 118px;
     width: 100%;
   }
+
 `;
+
 
 export const FeatureWrapper = styled.div`
   position: relative;
