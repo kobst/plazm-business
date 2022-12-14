@@ -86,6 +86,7 @@ const GlobalSearchBox = ({setOffset, type}) => {
 	const draggedLocation = useStore((state) => state.draggedLocation);
 
 	useEffect(() => {
+		// to unload the script of google places when there is no data in the db
 		const unloadScript = () => {
 			if (search.length < 4 && !!document.querySelector('.pac-container')) {
 				document.querySelector('.pac-container').remove();
@@ -107,7 +108,7 @@ const GlobalSearchBox = ({setOffset, type}) => {
 		setSearch(searchData);
 	}, [searchData]);
 
-	/** on key press handler for search */
+	/** handle search results */
 	const searchFn = (filter = search) => {
 		setOffset(0);
 		dispatch(setSearchData(filter));
@@ -161,7 +162,7 @@ const GlobalSearchBox = ({setOffset, type}) => {
 		}
 	};
 
-	/** on key press handler for search */
+	/** search handler for home page, when user clicks on search icon or hits enter */
 	const searchList = (event, isHomeSearch = false) => {
 		if (event?.key === 'Enter' || isHomeSearch) {
 			const filter = event?.target?.value || search;
