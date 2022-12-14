@@ -2,8 +2,8 @@
 @desc: getAllListsGraphql query
 */
 const getAllListsGraphql = () => {
-  const graphQl = {
-    query: `
+	const graphQl = {
+		query: `
             query GetLists{
                 getLists {
                 message
@@ -21,16 +21,16 @@ const getAllListsGraphql = () => {
                   }
                 }
             }`,
-  };
-  return graphQl;
+	};
+	return graphQl;
 };
 
 /*
 @desc: getUserListsGraphql query
 */
 const getUserListsGraphql = (ownerId) => {
-  const graphQl = {
-    query: `
+	const graphQl = {
+		query: `
           query GetUserLists($id: ID!){
             getUserLists(input: {id: $id}) {
               message
@@ -57,19 +57,19 @@ const getUserListsGraphql = (ownerId) => {
                 }
               }
           }`,
-    variables: {
-      id: ownerId,
-    },
-  };
-  return graphQl;
+		variables: {
+			id: ownerId,
+		},
+	};
+	return graphQl;
 };
 
 /*
 @desc: getUserSubscribedListsGraphql query
 */
 const getUserSubscribedListsGraphql = (obj) => {
-  const graphQl = {
-    query: `
+	const graphQl = {
+		query: `
           query GetUserSubscribedLists($id: ID!, $value: Int, $limit: Int){
             getUserSubscribedLists (input: {id: $id, value:$value, limit: $limit}){
               message
@@ -97,23 +97,22 @@ const getUserSubscribedListsGraphql = (obj) => {
                 }
               }
           }`,
-    variables: {
-      id: obj.id,
-      value: obj.value,
-      limit: obj?.limit || 15,
-    },
-  };
-  return graphQl;
+		variables: {
+			id: obj.id,
+			value: obj.value,
+			limit: obj?.limit || 15,
+		},
+	};
+	return graphQl;
 };
-
 
 /*
 @desc: filterUserListsGraphql query
 */
 
 const filterUserListsGraphql = (obj) => {
-  const graphQl = {
-    query: `
+	const graphQl = {
+		query: `
           query FetchUserLists($input: userFetchInput!){
             fetchUserLists(input: $input){
               message
@@ -145,25 +144,25 @@ const filterUserListsGraphql = (obj) => {
                 }
               }
           }`,
-    variables:{
-      input : {
-        id: obj.id,
-        page: obj.page || 1,
-        limit: obj?.limit || 12,
-        created: obj.created || false,
-        subscribed: obj?.subscribed || false,
-      }
-    },
-  };
-  return graphQl;
+		variables: {
+			input: {
+				id: obj.id,
+				page: obj.page || 1,
+				limit: obj?.limit || 12,
+				created: obj.created || false,
+				subscribed: obj?.subscribed || false,
+			},
+		},
+	};
+	return graphQl;
 };
 
 /*
 @desc: getUserCreatedAndFollowedLists query
 */
 const getUserCreatedAndFollowedListsGraphql = (obj) => {
-  const graphQl = {
-    query: `
+	const graphQl = {
+		query: `
           query GetUserCreatedAndFollowedLists($id: ID!, $value: Int, $limit: Int){
             getUserCreatedAndFollowedLists (input: {id: $id, value:$value, limit: $limit}){
               message
@@ -190,22 +189,22 @@ const getUserCreatedAndFollowedListsGraphql = (obj) => {
                 }
               }
           }`,
-    variables: {
-      id: obj.id,
-      value: obj.value,
-      limit: obj?.limit || 15,
-    },
-  };
-  return graphQl;
+		variables: {
+			id: obj.id,
+			value: obj.value,
+			limit: obj?.limit || 15,
+		},
+	};
+	return graphQl;
 };
 /*
 @desc: getListDetailsGraphql query
 */
 const getListDetailsGraphql = (obj) => {
-  const graphQl = {
-    query: `
-          query getListDetails($id: ID!, $value: Int){
-            getListDetails (input: {id: $id, value:$value}){
+	const graphQl = {
+		query: `
+          query getListDetails($id: ID!, $value: Int, $latitude: Float!, $longitude: Float!){
+            getListDetails (input: {id: $id, value:$value, latitude:$latitude, longitude:$longitude}){
               message
               success
               totalLists 
@@ -285,20 +284,22 @@ const getListDetailsGraphql = (obj) => {
               }
               }
           }`,
-    variables: {
-      id: obj.id,
-      value: obj.value,
-    },
-  };
-  return graphQl;
+		variables: {
+			id: obj.id,
+			value: obj.value,
+			latitude: obj.latitude,
+			longitude: obj.longitude,
+		},
+	};
+	return graphQl;
 };
 
 /*
 @desc: getMostTrendingListsGraphql query
 */
 const getMostTrendingListsGraphql = (value) => {
-  const graphQl = {
-    query: `
+	const graphQl = {
+		query: `
           query FetchMostTrendingLists($value: Int){
             fetchMostTrendingLists(input: {value: $value}) {
               message
@@ -326,19 +327,19 @@ const getMostTrendingListsGraphql = (value) => {
                 }
               }
           }`,
-    variables: {
-      value: value,
-    },
-  };
-  return graphQl;
+		variables: {
+			value: value,
+		},
+	};
+	return graphQl;
 };
 
 /*
 @desc: getMostPopularListsGraphql query
 */
 const getMostPopularListsGraphql = (value) => {
-  const graphQl = {
-    query: `
+	const graphQl = {
+		query: `
           query FetchMostPopularLists($value: Int){
             fetchMostPopularLists(input: {value: $value}) {
               message
@@ -366,19 +367,19 @@ const getMostPopularListsGraphql = (value) => {
               }
             }
           }`,
-    variables: {
-      value: value,
-    },
-  };
-  return graphQl;
+		variables: {
+			value: value,
+		},
+	};
+	return graphQl;
 };
 
 /*
 @desc: searchListsGraphql query
 */
 const searchListsGraphql = (obj) => {
-  const graphQl = {
-    query: `
+	const graphQl = {
+		query: `
           query ListSearch($value: Int, $search: String, $userId: String, $subscriberId: String){
             listSearch(input: {value: $value, search: $search, userId: $userId, subscriberId: $subscriberId}) {
               message
@@ -403,24 +404,24 @@ const searchListsGraphql = (obj) => {
               }
             }
           }`,
-    variables: {
-      value: obj.value,
-      search: obj.search,
-      userId: obj.userId,
-      subscriberId: obj.subscriberId,
-    },
-  };
-  return graphQl;
+		variables: {
+			value: obj.value,
+			search: obj.search,
+			userId: obj.userId,
+			subscriberId: obj.subscriberId,
+		},
+	};
+	return graphQl;
 };
 
 export {
-  getAllListsGraphql,
-  getUserListsGraphql,
-  getUserCreatedAndFollowedListsGraphql,
-  getListDetailsGraphql,
-  getMostTrendingListsGraphql,
-  getMostPopularListsGraphql,
-  searchListsGraphql,
-  getUserSubscribedListsGraphql,
-  filterUserListsGraphql,
+	getAllListsGraphql,
+	getUserListsGraphql,
+	getUserCreatedAndFollowedListsGraphql,
+	getListDetailsGraphql,
+	getMostTrendingListsGraphql,
+	getMostPopularListsGraphql,
+	searchListsGraphql,
+	getUserSubscribedListsGraphql,
+	filterUserListsGraphql,
 };

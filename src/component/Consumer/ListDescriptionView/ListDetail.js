@@ -26,6 +26,8 @@ import {
   removeSubscribedList,
 } from "../../../reducers/userReducer";
 import ValueLoader from "../../../utils/loader";
+import BackButton from "../UI/BackButton";
+import { BottomButtonsBar } from "../AddPostModal/createList/styles";
 import ButtonOrange from "../UI/ButtonOrange";
 import useStore from "../useState";
 import DisplayPostInAList from "./DisplayPostsInAList";
@@ -264,13 +266,15 @@ const ArrowBack = styled.div`
 `;
 
 const getImage = (selectedList) => {
-  if(selectedList && selectedList.media && selectedList.media.length > 0) {
-    const img = selectedList.media.find(({image_type}) => image_type === 'COVER') || selectedList.media[0]
-    console.log(img, 'img');
-    return img['image']
+  if (selectedList && selectedList.media && selectedList.media.length > 0) {
+    const img =
+      selectedList.media.find(({ image_type }) => image_type === "COVER") ||
+      selectedList.media[0];
+    console.log(img, "img");
+    return img["image"];
   }
-  return BannerImg
-}
+  return BannerImg;
+};
 
 const ListDetailView = ({ listOpenedFromBusiness }) => {
   const dispatch = useDispatch();
@@ -301,6 +305,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   const selectedList = useStore((state) => state.selectedList);
   const setSelectedList = useStore((state) => state.setSelectedList);
   const selectedListId = useStore((state) => state.selectedListId);
+  const draggedLocation = useStore((state) => state.draggedLocation);
   const setSelectedListId = useStore((state) => state.setSelectedListId);
   const setSelectedListName = useStore((state) => state.setSelectedListName);
   const setListIndex = useStore((state) => state.setListIndex);
@@ -309,7 +314,7 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   const readMore = useStore((state) => state.readMore);
   const gridMode = useStore((state) => state.gridMode);
 
-  const [image, setImage] = useState(() => getImage(selectedList))
+  const [image, setImage] = useState(() => getImage(selectedList));
   //   selectedList && selectedList.media.length > 0
   //     ? selectedList.media.find(({image_type}) => image_type === 'PROFILE') || selectedList.media[0].image
   //     : BannerImg
@@ -321,13 +326,18 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
     // if (!image) {
     if (selectedList) {
       if (selectedList.media.length > 0) {
-        const img = selectedList.media.find(({image_type}) => image_type === 'COVER') || selectedList.media[0]
+        const img =
+          selectedList.media.find(({ image_type }) => image_type === "COVER") ||
+          selectedList.media[0];
         setImage(img.image);
       }
     } else {
       if (selectedListDetails) {
         if (selectedListDetails.media.length > 0) {
-          const img = selectedListDetails.media.find(({image_type}) => image_type === 'COVER') || selectedListDetails.media[0]
+          const img =
+            selectedListDetails.media.find(
+              ({ image_type }) => image_type === "COVER"
+            ) || selectedListDetails.media[0];
           setImage(img.image);
         }
       }
@@ -354,7 +364,12 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   useEffect(() => {
     const fetchListDetails = async () => {
       const result = await dispatch(
-        fetchSelectedListDetails({ id: id, value: offset })
+        fetchSelectedListDetails({
+          id: id,
+          value: offset,
+          latitude: Number(draggedLocation.lat),
+          longitude: Number(draggedLocation.lng),
+        })
       );
       const data = await unwrapResult(result);
       setSelectedList(data?.listDetails);
@@ -364,12 +379,19 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
       }
     };
     offset === 0 && fetchListDetails();
-  }, [dispatch, id, offset]);
+  }, [dispatch, id, offset, draggedLocation]);
 
   const fetchMorePosts = () => {
     if (offset + 20 < totalData) {
       setOffSet(offset + 20);
-      dispatch(fetchSelectedListDetails({ id: id, value: offset + 20 }));
+      dispatch(
+        fetchSelectedListDetails({
+          id: id,
+          value: offset + 20,
+          latitude: Number(draggedLocation.lat),
+          longitude: Number(draggedLocation.lng),
+        })
+      );
     } else setHasMore(false);
   };
 
@@ -431,7 +453,6 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
   //   }
   // };
 
-
   const onCloseTab = () => {
     // if (!listOpenedFromBusiness) setDisplayTab(false);
     // else if (readMore) setDiscoverBtn(true);
@@ -457,7 +478,15 @@ const ListDetailView = ({ listOpenedFromBusiness }) => {
           <ListOptionSection>
             <HeadingWrap>
               <TopHeadingWrap>
-                <ArrowBack onClick={history.goBack}>BACK</ArrowBack>
+                {/* ToDo: Styling needs to be done for back button position */}
+                <BottomButtonsBar>
+                  <BackButton
+                    onClick={history.goBack}
+                    className="BackButtonCreateList"
+                  >
+                    Back
+                  </BackButton>
+                </BottomButtonsBar>
 
                 <ListBannerSection>
                   <img src={image} alt="" onError={() => setImage(BannerImg)} />

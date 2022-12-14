@@ -78,14 +78,28 @@ export const RightSearchWrap = styled.div`
     max-width: 198px;
     width: 100%;
     padding-left: 10px;
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
     ::placeholder {
       color: #c8c8c8;
     }
     @media (max-width: 767px) {
       font-size: 11px;
     }
+<<<<<<< HEAD
 
+=======
+  }
+  .createListBtn {
+    background: #ff2e9a;
+    border-radius: 3px;
+    height: 26px;
+    margin: 0 8px 0 0;
+    max-width: 118px;
+    width: 100%;
+>>>>>>> master
   }
 
   .createListBtn {
