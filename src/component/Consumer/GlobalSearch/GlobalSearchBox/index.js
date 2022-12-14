@@ -165,9 +165,7 @@ const GlobalSearchBox = ({setOffset, type}) => {
 
 	/** on change handler for search */
 	const onChangeSearch = async (e, isGoogleSearch, isHomeSearch = false) => {
-		
 		if (isGoogleSearch) {
-			debugger
 			let business = await addBusiness(user.userSub, e);
 			business = JSON.parse(business);
 			if (business?.place?._id) {
