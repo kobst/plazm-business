@@ -280,6 +280,15 @@ const ListMenu = () => {
 								More
               </Tab>
             </div>
+            <ButtonOrange
+              onClick={
+                handleToggleCreateList
+              }
+              type="submit"
+              className="createListBtn"
+            >
+							Create List
+            </ButtonOrange>
             <RightSearchWrap>
               <Input
                 value={
@@ -309,15 +318,6 @@ const ListMenu = () => {
                 </ErrorDiv>
               )}
             </RightSearchWrap>
-            <ButtonOrange
-              onClick={
-                handleToggleCreateList
-              }
-              type="submit"
-              className="createListBtn"
-            >
-							Create List
-            </ButtonOrange>
           </TabList>
           <TabPanel index={0}>
             {!listSearch && (
