@@ -86,6 +86,16 @@ const GlobalSearchBox = ({setOffset, type}) => {
 	const draggedLocation = useStore((state) => state.draggedLocation);
 
 	useEffect(() => {
+		const unloadScript = () => {
+			if (search.length < 4 && !!document.querySelector('.pac-container')) {
+				document.querySelector('.pac-container').remove();
+				return;
+			}
+		};
+		if (isNoDataFound) unloadScript();
+	}, [isNoDataFound, search]);
+
+	useEffect(() => {
 		return () => {
 			dispatch(setSearchData(''));
 			dispatch(setDisplayBar(false));
@@ -118,7 +128,7 @@ const GlobalSearchBox = ({setOffset, type}) => {
 				dispatch(searchFeedList(obj));
 				break;
 			case 'Business Search':
-				setSearchError('')
+				setSearchError('');
 				dispatch(
 					checkBusiness({
 						businessId: history.at(-1),
