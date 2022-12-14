@@ -5,8 +5,7 @@ import styled from 'styled-components';
 import {unwrapResult} from '@reduxjs/toolkit';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import ValueLoader from '../../../../utils/loader';
-import {clearSearchFeed, homeSearch, homeSearchInitial,
-	 setEnterClicked} from '../../../../reducers/myFeedReducer';
+import {clearSearchFeed, homeSearch, homeSearchInitial, setEnterClicked} from '../../../../reducers/myFeedReducer';
 import error from '../../../../constants';
 
 import GlobalSearchBox from '../../GlobalSearch/GlobalSearchBox';
@@ -56,6 +55,7 @@ const BusinessListing = ({loader, coords, closestFilter}) => {
   const totalPlaces = useSelector((state) => state.myFeed.totalData);
   const dispatch = useDispatch();
   const search = useSelector((state) => state.myFeed.searchData);
+  const exploreSearch = useSelector((state) => state.myFeed.exploreSearch);
   const filterClosest = useSelector((state) => state.myFeed.filterByClosest);
   const updatedAtFilter = useSelector((state) => state.myFeed.filterByUpdatedAt);
 
@@ -86,9 +86,9 @@ const BusinessListing = ({loader, coords, closestFilter}) => {
         value: 0,
         filters: {
           closest:
-						closestFilter && !updatedAtFilter ?
-							closestFilter :
-							filterClosest,
+						closestFilter && !updatedAtFilter
+							? closestFilter
+							: filterClosest,
           updated: updatedAtFilter,
         },
         latitude: draggedLocation.lat,
@@ -129,10 +129,11 @@ const BusinessListing = ({loader, coords, closestFilter}) => {
   return (
     <>
       {showSearchBar && <GlobalSearchBox setOffset={setOffset} type={'Explore'} />}
-      {!!searchFeedList.length && (
+      {(!!searchFeedList.length && search.length > 3) && (
         <SearchListingContent>
           {searchFeedList.map((ele, key) => (
-            <li key={key}
+            <li
+              key={key}
               onClick={() =>
                 displayBusinessDetail(
                     ele._id
@@ -159,9 +160,9 @@ const BusinessListing = ({loader, coords, closestFilter}) => {
 				  >
 				    <InfiniteScroll
 				      dataLength={
-								businessData ?
-									businessData.length :
-									0
+								businessData
+									? businessData.length
+									: 0
 				      }
 				      next={fetchMorePlaces}
 				      hasMore={hasMore}

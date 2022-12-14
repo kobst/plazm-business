@@ -9,11 +9,7 @@ import ValueLoader from "../../../../utils/loader";
 import { useDispatch, useSelector } from "react-redux";
 import BackButton from "../../UI/BackButton";
 import SaveButton from "../../UI/SaveButton";
-<<<<<<< HEAD
 import { createList, setListCreated} from "../../../../reducers/listReducer";
-=======
-import { createList, setListCreated } from "../../../../reducers/listReducer";
->>>>>>> master
 import PostImage from "../PostImage";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
@@ -154,15 +150,9 @@ const CreateListModel = ({
       const res = await dispatch(createList(obj));
       const data = await unwrapResult(res);
       if (data && data.data.createList.success === true) {
-<<<<<<< HEAD
         setResponse('List added successfully.');
         dispatch(setListCreated(true));
         setError('');
-=======
-        setResponse("List added successfully.");
-        dispatch(setListCreated(true));
-        setError("");
->>>>>>> master
         setLoader(false);
         setDisplayCreateList(false);
         setDisplayList(false);

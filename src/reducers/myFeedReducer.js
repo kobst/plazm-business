@@ -164,7 +164,7 @@ export const homeSearch = createAsyncThunk('data/HomeSearch', async (obj) => {
 export const searchFeedList = createAsyncThunk('data/SearchFeedList', async (obj) => {
   const graphQl = homeSearchGraphql(obj);
   const response = await graphQlEndPoint(graphQl);
-  return response.data.homeSearch;
+  return {...response.data.homeSearch, search: obj.search};
 });
 
 export const homeSearchThunk = createAsyncThunk('data/HomeSearch', async (obj) => {
@@ -217,6 +217,7 @@ export const slice = createSlice({
     isSearch: false,
     searchFeed: [],
     searchFeedList: [],
+    exploreSearch: '',
     myFeed: [],
     totalData: 0,
     loadingPostComments: false,
@@ -928,6 +929,7 @@ export const slice = createSlice({
           }),
         }));
         state.isNoDataFound = !data.length;
+        state.exploreSearch = action.payload.search
         state.searchFeedList = data;
       }
     },

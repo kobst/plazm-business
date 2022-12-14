@@ -100,11 +100,9 @@ const GlobalSearchBox = ({setOffset, type}) => {
 	/** on key press handler for search */
 	const searchFn = (filter = search) => {
 		setOffset(0);
-		setSearchError('');
 		dispatch(setSearchData(filter));
 		switch (type) {
 			case 'Explore':
-				dispatch(clearSearchFeed());
 				dispatch(setSideFiltersHomeSearch());
 				const obj = {
 					search: filter,
@@ -120,6 +118,7 @@ const GlobalSearchBox = ({setOffset, type}) => {
 				dispatch(searchFeedList(obj));
 				break;
 			case 'Business Search':
+				setSearchError('')
 				dispatch(
 					checkBusiness({
 						businessId: history.at(-1),
@@ -153,15 +152,20 @@ const GlobalSearchBox = ({setOffset, type}) => {
 	};
 
 	/** on key press handler for search */
-	const searchList = (event) => {
-		if (event.key === 'Enter') {
-			event.preventDefault();
-			searchFn(event.target.value);
+	const searchList = (event, isHomeSearch = false) => {
+		if (event?.key === 'Enter' || isHomeSearch) {
+			const filter = event?.target?.value || search;
+			if (filter.trim().length < 4) {
+				setSearchError(error.SEARCH_ERROR);
+			} else {
+				searchFn(filter);
+			}
 		}
 	};
 
 	/** on change handler for search */
 	const onChangeSearch = async (e, isGoogleSearch, isHomeSearch = false) => {
+		const filter = e.target.value;
 		if (isGoogleSearch) {
 			let business = await addBusiness(user.userSub, e);
 			business = JSON.parse(business);
@@ -170,14 +174,15 @@ const GlobalSearchBox = ({setOffset, type}) => {
 				return;
 			}
 		}
-		setSearch(e.target.value);
+		setSearch(filter);
+		if (type === 'Explore') dispatch(clearSearchFeed());
 		if (isHomeSearch) return;
-		setSearchError('');
-		if (search !== '' && search.length >= 4 && !search.trim() === false) {
-			searchFn(e.target.value);
-		} else if (search.length >= 0 && search.length < 4) {
+		if (filter.trim().length > 0 && filter.trim().length < 4) {
 			setSearchError(error.SEARCH_ERROR);
+			return;
 		}
+		setSearchError('');
+		searchFn(filter);
 	};
 
 	return (
@@ -212,13 +217,16 @@ const GlobalSearchBox = ({setOffset, type}) => {
 						<img
 							src={SearchIcon}
 							onClick={() =>
-								searchFn()
+								searchList(
+									null,
+									true
+								)
 							}
 						/>
 					</button>
 				)}
 			</GlobalSearchInputWrap>
-			{searchError !== '' ? <ErrorDiv>{searchError}</ErrorDiv> : null}
+			{!!search.length && searchError ? <ErrorDiv>{searchError}</ErrorDiv> : null}
 		</>
 	);
 };
