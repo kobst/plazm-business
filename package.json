@@ -71,7 +71,8 @@
 		"rrule": "^2.6.4",
 		"slick-carousel": "^1.8.1",
 		"styled-components": "^5.1.1",
-		"three": "^0.137.5",
+		"three": "^0.143.0",
+		"three-stdlib": "^2.20.4",
 		"yup": "^0.32.8",
 		"zustand": "^3.5.14",
 		"zxcvbn": "^4.4.2"

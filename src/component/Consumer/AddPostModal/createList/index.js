@@ -82,9 +82,9 @@ const CreateListModel = ({
   */
 
   const imageUpload = async (imageFile) => {
-    const folder_name = getFolderName(user.name, user._id);
-    const file_name = getFileName(imageFile.name);
-    const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${file_name}`;
+    const folderName = getFolderName(user.name, user._id);
+    const fileName = getFileName(imageFile.name);
+    const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folderName}/profiles/${fileName}`;
     const value = await fetch(
       `${process.env.REACT_APP_API_URL}/api/upload_photo`,
       {
@@ -93,9 +93,9 @@ const CreateListModel = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          Key: file_name,
+          Key: fileName,
           ContentType: imageFile.type,
-          folder_name: folder_name,
+          folder_name: folderName,
         }),
       }
     );

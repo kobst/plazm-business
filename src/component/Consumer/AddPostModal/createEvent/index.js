@@ -178,7 +178,7 @@ const CreateEventModal = ({
 	};
 
 	/*
-	 * @desc: to change file_name
+	 * @desc: to change fileName
 	 */
 	const getFileName = (name) => {
 		return `${Date.now()}-${name}`;
@@ -206,9 +206,9 @@ const CreateEventModal = ({
 		//   }
 		// }
 		if (imageFile !== null) {
-			const folder_name = folderName(user.name, user._id);
-			const file_name = fileName(imageFile.name);
-			const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folder_name}/profiles/${file_name}`;
+			const folderName = getFolderName(user.name, user._id);
+			const fileName = getFileName(imageFile.name);
+			const baseUrl = `https://${bucket}.s3.amazonaws.com/UserProfiles/${folderName}/profiles/${fileName}`;
 			const value = await fetch(
 				`${process.env.REACT_APP_API_URL}/api/upload_photo`,
 				{
@@ -217,9 +217,9 @@ const CreateEventModal = ({
 						'Content-Type': 'application/json',
 					},
 					body: JSON.stringify({
-						Key: file_name,
+						Key: fileName,
 						ContentType: imageFile.type,
-						folder_name: folder_name,
+						folder_name: folderName,
 					}),
 				}
 			);

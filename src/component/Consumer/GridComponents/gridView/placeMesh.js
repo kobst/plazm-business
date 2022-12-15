@@ -91,13 +91,13 @@ const HexTile = (props) => {
 	const {color, pos, rotation, scale, ...propsSpring} = useSpring({
 		color: active ? 'hotpink' : 'white',
 		pos: active ? [0, 0, 2] : [0, 0, 0],
-		rotation: active ? [0, 0, 0] : [0, THREE.Math.degToRad(180), 0],
+		rotation: active ? [0, 0, 0] : [0, THREE.MathUtils.degToRad(180), 0],
 		scale: active ? [1.5, 1.5, 1.5] : [0.5, 0.5, 0.5],
 		config: {mass: 10, tension: 500, friction: 200, precision: 0.00001},
 	});
 
 	const {rotationS} = useSpring({
-		rotationS: active ? [0, 0, 0] : [0, THREE.Math.degToRad(180), 0],
+		rotationS: active ? [0, 0, 0] : [0, THREE.MathUtils.degToRad(180), 0],
 		config: {mass: 10, tension: 500, friction: 200, precision: 0.00001},
 	});
 
