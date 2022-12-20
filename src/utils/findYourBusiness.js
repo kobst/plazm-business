@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useRef} from 'react';
-import Input from '../component/UI/Input/Input';
+import React, { useState, useEffect, useRef } from "react";
+import Input from "../component/UI/Input/Input";
 function SearchLocationInput({
   id,
   handleChange,
@@ -8,19 +8,19 @@ function SearchLocationInput({
   setBusinessInfo,
   setName,
 }) {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const autoCompleteRef = useRef(null);
   let autoComplete;
 
   const loadScript = (url, callback) => {
-    const script = document.createElement('script');
-    script.type = 'text/javascript';
+    const script = document.createElement("script");
+    script.type = "text/javascript";
 
     if (script.readyState) {
-      script.onreadystatechange = function() {
+      script.onreadystatechange = function () {
         if (
-          script.readyState === 'loaded' ||
-          script.readyState === 'complete'
+          script.readyState === "loaded" ||
+          script.readyState === "complete"
         ) {
           script.onreadystatechange = null;
           callback();
@@ -31,15 +31,15 @@ function SearchLocationInput({
     }
 
     script.src = url;
-    document.getElementsByTagName('head')[0].appendChild(script);
+    document.getElementsByTagName("head")[0].appendChild(script);
   };
 
   function handleScriptLoad(updateQuery, autoCompleteRef) {
     autoComplete = new window.google.maps.places.Autocomplete(
-        autoCompleteRef.current,
+      autoCompleteRef.current
     );
-    autoComplete.addListener('place_changed', () =>
-      handlePlaceSelect(updateQuery),
+    autoComplete.addListener("place_changed", () =>
+      handlePlaceSelect(updateQuery)
     );
   }
 
@@ -53,8 +53,8 @@ function SearchLocationInput({
 
   useEffect(() => {
     loadScript(
-        `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places`,
-        () => handleScriptLoad(setQuery, autoCompleteRef),
+      `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places`,
+      () => handleScriptLoad(setQuery, autoCompleteRef)
     );
   }, []);
 

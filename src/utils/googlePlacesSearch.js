@@ -1,14 +1,14 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from "react";
 
 let autoComplete;
 
 const loadScript = (url, callback) => {
-  let script = document.createElement('script');
-  script.type = 'text/javascript';
+  const script = document.createElement("script");
+  script.type = "text/javascript";
 
   if (script.readyState) {
     script.onreadystatechange = function () {
-      if (script.readyState === 'loaded' || script.readyState === 'complete') {
+      if (script.readyState === "loaded" || script.readyState === "complete") {
         script.onreadystatechange = null;
         callback();
       }
@@ -18,12 +18,12 @@ const loadScript = (url, callback) => {
   }
 
   script.src = url;
-  document.getElementsByTagName('head')[0].appendChild(script);
+  document.getElementsByTagName("head")[0].appendChild(script);
 };
 
 const unloadScript = () => {
-  if (!!document.querySelector('.pac-container')) {
-    document.querySelector('.pac-container').remove();
+  if (!!document.querySelector(".pac-container")) {
+    document.querySelector(".pac-container").remove();
     return;
   }
 };
@@ -32,8 +32,12 @@ function handleScriptLoad(updateQuery, autoCompleteRef) {
   if (autoCompleteRef.current.length < 4) {
     return;
   }
-  autoComplete = new window.google.maps.places.Autocomplete(autoCompleteRef.current);
-  autoComplete.addListener('place_changed', () => handlePlaceSelect(updateQuery));
+  autoComplete = new window.google.maps.places.Autocomplete(
+    autoCompleteRef.current
+  );
+  autoComplete.addListener("place_changed", () =>
+    handlePlaceSelect(updateQuery)
+  );
 }
 
 async function handlePlaceSelect(updateQuery) {
@@ -41,12 +45,19 @@ async function handlePlaceSelect(updateQuery) {
   updateQuery(addressObject, true);
 }
 
-function GooglePlacesSearch({autoCompleteRef, isNoDataFound, query, onChange, disabled, placeholder}) {
+function GooglePlacesSearch({
+  autoCompleteRef,
+  isNoDataFound,
+  query,
+  onChange,
+  disabled,
+  placeholder,
+}) {
   useEffect(() => {
     if (isNoDataFound) {
       loadScript(
-          `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places`,
-          () => handleScriptLoad(onChange, autoCompleteRef)
+        `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places`,
+        () => handleScriptLoad(onChange, autoCompleteRef)
       );
     } else unloadScript();
   }, [isNoDataFound]);

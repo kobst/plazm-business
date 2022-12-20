@@ -1,27 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import LeftBar from '../../UI/Consumer/LeftBar';
-import SideBarTabs from '../../UI/Consumer/SideBarTabs/SideBarTabs';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import LeftBar from "../../UI/Consumer/LeftBar";
+import SideBarTabs from "../../UI/Consumer/SideBarTabs/SideBarTabs";
 // import PanelContent from "../../UI/Consumer/Panel-Content/PanelContent";
 
-import Header from '../../UI/Consumer/Header/Header';
-import RightBar from '../Dashboard/RightBar';
+import Header from "../../UI/Consumer/Header/Header";
+import RightBar from "../Dashboard/RightBar";
 
-import HomeSearch from '../HomeSearch';
-import MyFeed from '../MyFeed';
-import BuisinessView from '../BuisinessView';
-import DiscoverList from '../DiscoverList';
-import ListDetail from '../ListDescriptionView/ListDetail';
-import Profile from '../Profile';
+import HomeSearch from "../HomeSearch";
+import MyFeed from "../MyFeed";
+import BuisinessView from "../BuisinessView";
+import DiscoverList from "../DiscoverList";
+import ListDetail from "../ListDescriptionView/ListDetail";
+import Profile from "../Profile";
 
-import GridContainer from '../GridComponents/index';
-import MapView from '../mapView/index';
-import RadarView from '../radarView/radarView';
-import useStore from '../useState';
-import GlobalSearch from '../GlobalSearch';
-import GlobalSearchBox from '../GlobalSearch/GlobalSearchBox';
-import { useSelector } from 'react-redux';
-import UserProfile from '../UserProfile';
+import GridContainer from "../GridComponents/index";
+import MapView from "../mapView/index";
+// import RadarView from "../radarView/radarView";
+import useStore from "../useState";
+import GlobalSearch from "../GlobalSearch";
+import GlobalSearchBox from "../GlobalSearch/GlobalSearchBox";
+import { useSelector } from "react-redux";
+import UserProfile from "../UserProfile";
 
 const DashboardContent = styled.div`
   width: 100%;
@@ -112,52 +112,52 @@ const Dashboard = () => {
       <DashboardContent>
         <SideBarTabs />
         <GridContainer />
-        {view === 'explore' && (
+        {view === "explore" && (
           <PanelContentContainer>
             <HomeSearch />
           </PanelContentContainer>
         )}
 
-        {view == 'my_feed' && (
+        {view == "my_feed" && (
           <PanelContentContainer>
             <MyFeed />
           </PanelContentContainer>
         )}
 
-        {view === 'business_detail' && (
+        {view === "business_detail" && (
           <PanelContentContainer>
             <BuisinessView businessId={detailId} />
           </PanelContentContainer>
         )}
 
-        {view === 'user_detail' && (
+        {view === "user_detail" && (
           <PanelContentContainer>
             <Profile userId={detailId} />
           </PanelContentContainer>
         )}
-        {view === 'list_detail' && (
+        {view === "list_detail" && (
           <PanelContentContainer>
             <ListDetail />
           </PanelContentContainer>
         )}
 
-        {view === 'list_explore' && <DiscoverList />}
+        {view === "list_explore" && <DiscoverList />}
 
-        {(view === 'explore' ||
-          view === 'my_feed' ||
-          view === 'business_detail') && <GlobalSearch />}
+        {(view === "explore" ||
+          view === "my_feed" ||
+          view === "business_detail") && <GlobalSearch />}
 
         <GridContainer />
 
-        {!['list_explore', 'user_profile'].includes(view) && (
+        {!["list_explore", "user_profile"].includes(view) && (
           <MapContentContainer>
-            <MapCenterOffset id='map-offset-center' />
+            <MapCenterOffset id="map-offset-center" />
             <MapView />
-            <RadarView />
+            {/* <RadarView /> */}
           </MapContentContainer>
         )}
 
-        {view == 'user_profile' && <UserProfile />}
+        {view == "user_profile" && <UserProfile />}
 
         <Header />
       </DashboardContent>
