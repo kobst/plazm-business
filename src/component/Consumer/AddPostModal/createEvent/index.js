@@ -144,6 +144,7 @@ const CreateEventModal = ({
 	const [imageError, setImageError] = useState('');
 	const [formError, setError] = useState('');
 	const [listError, setListError] = useState('');
+	const [dateError, setDateError] = useState('');
 	const [response, setResponse] = useState('');
 	const user = useSelector((state) => state.user.user);
 	const business = useSelector((state) => state.business.business);
