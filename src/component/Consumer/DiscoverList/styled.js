@@ -210,10 +210,12 @@ export const LoaderWrap = styled.div`
 
 export const ItemsWrapper = styled.div`
   position: relative;
-  margin: 0 6px;
+  margin: 0 6px 25px 19px;
   padding: 0;
   text-align: center;
   width: 250px;
+  border-radius: 5px;
+  overflow: hidden;
   &.SearchItemsWrapper {
     margin: 0 5px 10px;
     width: 16%;
@@ -536,6 +538,27 @@ export const ListWraper = styled.div`
 export const GridWrapper = styled.div`
   position: relative;
   width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: calc(100vh - 180px);
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 5px;
+    cursor: pointer;
+  }
+  ::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 4px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #665f91;
+  }
   &.UserProfileGridWrapper {
     padding: 70px 0px 200px 15px;
     max-height: calc(100vh - 270px);
@@ -591,8 +614,11 @@ export const GridWrapper = styled.div`
     padding: 0 0 10px;
     width: 100%;
     display: flex;
-    overflow-x: scroll;
-    flex-wrap: nowrap;
+    /* overflow-x: scroll;
+    flex-wrap: nowrap; */
+    flex-flow: row wrap;
+    overflow-x: hidden;
+    overflow-y: auto;
     /* width */
     ::-webkit-scrollbar {
       width: 8px;

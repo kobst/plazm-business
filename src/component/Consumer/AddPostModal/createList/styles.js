@@ -195,7 +195,7 @@ export const TabsSectionContent = styled.div`
     .react-tabs__tab-panel {
       background: #332e5a;
       border: 1px dashed #b1abea;
-      border-radius: 5px;
+      border-radius: 0 0 5px 5px;
       height: 210px;
       overflow: auto;
       position: relative;
