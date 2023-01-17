@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import SearchIcon from '../../../images/zoom-out.png';
+import styled from "styled-components";
+import SearchIcon from "../../../images/zoom-out.png";
 
 export const TopSectionWrap = styled.div`
   display: flex;
@@ -93,10 +93,9 @@ export const RightSearchWrap = styled.div`
     margin: 0 8px 0 0;
     max-width: 118px;
     width: 100%;
+    font-size: 12px;
   }
-
 `;
-
 
 export const FeatureWrapper = styled.div`
   position: relative;
