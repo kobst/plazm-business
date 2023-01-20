@@ -77,7 +77,7 @@ const BuisinessProfileDetails = ({
         <Scrollbars
           autoHeight
           autoHeightMin={0}
-          autoHeightMax={'calc(100vh - 300px)'}
+          autoHeightMax={'calc(100vh - 150px)'}
           thumbMinSize={30}
           className="InnerScroll"
         >

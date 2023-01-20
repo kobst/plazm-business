@@ -13,7 +13,7 @@ export const OuterWrapper = styled.div`
 `;
 
 export const LoginContainer = styled.div`
-  background: #fff;
+  background: #fafafa;
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -33,9 +33,9 @@ export const LoginFormWrapper = styled.div`
   width: 100%;
   max-width: 400px;
   margin: 0 auto;
-  padding: 146px 0 0;
+  padding: 0px 0 0;
   @media (max-width: 1024px) {
-    padding: 60px 0 0;
+    padding: 60px 0;
   }
   @media (max-width: 991px) {
     padding: 50px 0;
@@ -90,9 +90,10 @@ export const LoginOuter = styled.div`
   display: flex;
   height: 100%;
   width: 100%;
+  align-items: center;
   @media (max-width: 1024px) {
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
   }
 `;
 export const LoginInner = styled.div`
@@ -393,7 +394,7 @@ export const OrDivider = styled.div`
     text-transform: uppercase;
     color: #000000;
     position: absolute;
-    background: #fff;
+    background: #fafafa;
     padding: 5px 10px;
   }
 `;
@@ -472,7 +473,7 @@ export const TermsWrap = styled.div`
     width: 16px;
     background: #d9d9d9;
     box-shadow: inset 0px 0px 3px -1px rgba(0, 0, 0, 0.15);
-    border-radius: 2px;
+    border-radius: 3px;
   }
 
   /* On mouse-over, add a grey background color */
