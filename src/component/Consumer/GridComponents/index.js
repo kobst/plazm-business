@@ -1,12 +1,12 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from "react";
 
-import {useSelector} from 'react-redux';
-import {assignHexDict} from './functions/index';
+import { useSelector } from "react-redux";
+import { assignHexDict } from "./functions/index";
 
-import GridView from './gridView/gridView';
-import useStore from '../useState/index';
+import GridView from "./gridView/gridView";
+import useStore from "../useState/index";
 
-import './style.css';
+import "./style.css";
 
 const GridContainer = () => {
   const feedData = useSelector((state) => state.myFeed.myFeed);
@@ -15,7 +15,6 @@ const GridContainer = () => {
   const gridMode = useStore((state) => state.gridMode);
 
   const setGridView = useStore((state) => state.setGridView);
-
 
   const places = useStore((state) => state.places);
   const setPlaces = useStore((state) => state.setPlaces);
@@ -32,8 +31,9 @@ const GridContainer = () => {
 
   const tabSelected = useStore((state) => state.tabSelected);
 
-
-  const setDisplacedCenterHexPosition = useStore((state) => state.setDisplacedCenterHexPosition);
+  const setDisplacedCenterHexPosition = useStore(
+    (state) => state.setDisplacedCenterHexPosition
+  );
 
   useEffect(() => {
     if (searchData.length > 0 && tabSelected == 1) {
@@ -46,7 +46,6 @@ const GridContainer = () => {
       loadData(feedData);
     }
   }, [feedData, searchData]);
-
 
   const loadData = (data) => {
     const _places = [];
@@ -81,8 +80,8 @@ const GridContainer = () => {
 
     let limitedOrderedPlaces;
     if (place) {
-      const {_orderedPlacesResponse, _slotDictResponse, _multiDictResponse} =
-      assignHexDict(places, draggedLocation, place);
+      const { _orderedPlacesResponse, _slotDictResponse, _multiDictResponse } =
+        assignHexDict(places, draggedLocation, place);
 
       if (_orderedPlacesResponse.length < limit) {
         limit = _orderedPlacesResponse.length;
@@ -95,9 +94,11 @@ const GridContainer = () => {
       setCamPos([0, 0, 5]);
     } else {
       if (places.length > 0) {
-        const {_orderedPlacesResponse, _slotDictResponse, _multiDictResponse} =
-        assignHexDict(places, draggedLocation, place);
-
+        const {
+          _orderedPlacesResponse,
+          _slotDictResponse,
+          _multiDictResponse,
+        } = assignHexDict(places, draggedLocation, place);
 
         if (_orderedPlacesResponse.length < limit) {
           limit = _orderedPlacesResponse.length;
@@ -120,10 +121,12 @@ const GridContainer = () => {
 
   return (
     <div>
-      {gridMode && <container className="grid-container-left">
-        <GridView center={draggedLocation} places={places} />
-      </container> }
-    </div >
+      {gridMode && (
+        <container className="grid-container-left">
+          <GridView center={draggedLocation} places={places} />
+        </container>
+      )}
+    </div>
   );
 };
 

@@ -267,12 +267,17 @@ const GridView = (props) => {
 
     return (
       <>
-        <div style={{ width: "100%", height: "100%" }} onWheel={handleScroll}>
-          <Canvas color attach="background" args={["transparent"]}>
+        <div
+          style={{ width: "100%", height: "100%" }}
+          // TODO removed handleScroll function from here as it was not defined in this block
+          onWheel={() => console.log("this is handle scroll")}
+        >
+          {/* TODO gridview started working after commenting out canvas */}
+          {/* <Canvas color attach="background" args={["transparent"]}>
             <CameraMain ref={camera} position={[0, 0, 20]} />
             {boxesLimited}
             <ambientLight intensity={2.0} />
-          </Canvas>
+          </Canvas> */}
         </div>
       </>
     );
@@ -316,12 +321,16 @@ const GridView = (props) => {
 
   return (
     <>
-      <div style={{ width: "100%", height: "100%" }} onWheel={handleScroll}>
-        <Canvas>
+      <div
+        style={{ width: "100%", height: "100%" }}
+        // TODO removed handleScroll function from here as it was not defined in this block
+        onWheel={() => console.log("this is handle scroll")}
+      >
+        {/* <Canvas>
           <CameraMain ref={camera} position={[0, 0, 20]} />
           {boxesLimited}
           <ambientLight intensity={2.0} />
-        </Canvas>
+        </Canvas> */}
       </div>
     </>
   );
