@@ -1,15 +1,25 @@
-import React from 'react';
-import Button from '../../UI/Button/Button';
-import Input from '../../UI/Input/Input';
-import ValueLoader from '../../../utils/loader';
-import {getMessage} from '../../../config';
-import Label from '../../UI/Label/label';
+import React from "react";
+import Button from "../../UI/Button/Button";
+import Input from "../../UI/Input/Input";
+import ValueLoader from "../../../utils/loader";
+import { getMessage } from "../../../config";
+import Label from "../../UI/Label/label";
 
-import {FormGroup, ErrorMessage} from '../Wrapper/style';
-import SocialLogin from './Social-Login';
+import { FormGroup, ErrorMessage } from "../Wrapper/style";
+import SocialLogin from "./Social-Login";
 
 const renderMessage = getMessage();
-const LoginForm = ({type, disable, userError, error, passwordError, loader, message, handleChange, handleSubmit}) => {
+const LoginForm = ({
+  type,
+  disable,
+  userError,
+  error,
+  passwordError,
+  loader,
+  message,
+  handleChange,
+  handleSubmit,
+}) => {
   return (
     <>
       <form onSubmit={(e) => handleSubmit(e)}>
@@ -23,12 +33,10 @@ const LoginForm = ({type, disable, userError, error, passwordError, loader, mess
             error={userError}
           />
           {error &&
-					(message === 'User does not exist.' ||
-						message === 'Invalid Email') ? (
-						<ErrorMessage>
-						  {message}
-						</ErrorMessage>
-					) : null}
+          (message === "User does not exist." ||
+            message === "Invalid Email") ? (
+            <ErrorMessage>{message}</ErrorMessage>
+          ) : null}
         </FormGroup>
         <FormGroup>
           <Label name="Password" />
@@ -40,12 +48,10 @@ const LoginForm = ({type, disable, userError, error, passwordError, loader, mess
             error={passwordError}
           />
           {error &&
-					message !== 'User does not exist.' &&
-					message !== 'Invalid Email' ? (
-						<ErrorMessage>
-						  {message}
-						</ErrorMessage>
-					) : null}
+          message !== "User does not exist." &&
+          message !== "Invalid Email" ? (
+            <ErrorMessage>{message}</ErrorMessage>
+          ) : null}
         </FormGroup>
         <FormGroup>
           <label className="switch">
@@ -55,11 +61,7 @@ const LoginForm = ({type, disable, userError, error, passwordError, loader, mess
           <div className="RememberMeLabel">Remember Me</div>
         </FormGroup>
         <Button type="submit" className="btn btn-primary">
-          {loader && !message ? (
-						<ValueLoader />
-					) : (
-						renderMessage.Log
-					)}
+          {loader && !message ? <ValueLoader /> : renderMessage.Log}
         </Button>
 
         <SocialLogin />

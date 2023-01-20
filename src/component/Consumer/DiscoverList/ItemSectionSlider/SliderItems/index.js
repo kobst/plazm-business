@@ -118,6 +118,15 @@ const NewInBuzzItems = ({
           user: user,
         })
       );
+      if (heading === "Subscribed Lists") {
+        dispatch(
+          userUnSubscribeToAList({
+            type: "Most Popular",
+            listId: response.listId,
+            user: user,
+          })
+        );
+      }
       /** to update subscribe count */
       setTotalLists(totalLists - 1);
     }
@@ -134,6 +143,7 @@ const NewInBuzzItems = ({
     const response = await unwrapResult(list);
     if (response) {
       setLoader(false);
+
       dispatch(addSubscribedList(response.listId));
       dispatch(
         userSubscribeToAList({
@@ -232,24 +242,26 @@ const NewInBuzzItems = ({
                   </InnerDescriptionPara>
                   <InnerBottomBtns>
                     <ButtonBlue onClick={() => ReadMore()}>Visit</ButtonBlue>
-                    {data?.subscribers.length === 0 ||
-                    !data?.subscribers.find((i) => i._id === user._id) ? (
-                      <>
+                    {data.ownerId[0]._id !== user._id ? (
+                      data?.subscribers.length === 0 ||
+                      !data?.subscribers.find((i) => i._id === user._id) ? (
+                        <>
+                          <SubscribeBtn
+                            onClick={() => listSubscribe()}
+                            disabled={loader}
+                          >
+                            {loader ? <ValueLoader /> : "Subscribe"}
+                          </SubscribeBtn>
+                        </>
+                      ) : (
                         <SubscribeBtn
-                          onClick={() => listSubscribe()}
+                          onClick={() => listUnSubscribe()}
                           disabled={loader}
                         >
-                          {loader ? <ValueLoader /> : "Subscribe"}
+                          {loader ? <ValueLoader /> : "UnSubscribe"}
                         </SubscribeBtn>
-                      </>
-                    ) : (
-                      <SubscribeBtn
-                        onClick={() => listUnSubscribe()}
-                        disabled={loader}
-                      >
-                        {loader ? <ValueLoader /> : "UnSubscribe"}
-                      </SubscribeBtn>
-                    )}
+                      )
+                    ) : null}
                   </InnerBottomBtns>
                 </DisplayItemContent>
               )}

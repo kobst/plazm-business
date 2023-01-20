@@ -52,6 +52,7 @@ function GooglePlacesSearch({
   onChange,
   disabled,
   placeholder,
+  onKeyPress,
 }) {
   useEffect(() => {
     if (isNoDataFound) {
@@ -69,6 +70,7 @@ function GooglePlacesSearch({
       onChange={onChange}
       disabled={disabled}
       placeholder={placeholder}
+      onKeyPress={onKeyPress}
     />
   );
 }

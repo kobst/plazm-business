@@ -14,7 +14,7 @@ import {
   BottomButtonList,
   ListButtons,
   RightPanel,
-  LoaderWrap
+  LoaderWrap,
 } from "./styled.js";
 import { BsGrid } from "react-icons/bs";
 import {
@@ -32,7 +32,7 @@ import ValueLoader from "../../../utils/loader";
 const UserProfile = ({}) => {
   const dispatch = useDispatch("");
   const { id } = useParams();
-  const [flag, setFlag] = useState(true)
+  const [flag, setFlag] = useState(true);
   const [activeTab, setActiveTab] = useState("created");
   const [data, setData] = useState({ data: [], total: 0 });
   const [page, setPage] = useState({ created: 1, subscribed: 1 });
@@ -49,10 +49,20 @@ const UserProfile = ({}) => {
   useEffect(() => {
     if (id || (user && user._id)) dispatch(clearUserProfilePageListData());
     dispatch(
-      filterListsByUser({ id: id || user._id, created: true, page: 1, limit: 200 })
+      filterListsByUser({
+        id: id || user._id,
+        created: true,
+        page: 1,
+        limit: 200,
+      })
     );
     dispatch(
-      filterListsByUser({ id: id || user._id, subscribed: true, page: 1, limit: 200 })
+      filterListsByUser({
+        id: id || user._id,
+        subscribed: true,
+        page: 1,
+        limit: 200,
+      })
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, id]);
@@ -102,7 +112,7 @@ const UserProfile = ({}) => {
     }
   };
 
-  return flag? (
+  return flag ? (
     <LoaderWrap>
       <ValueLoader />
     </LoaderWrap>
