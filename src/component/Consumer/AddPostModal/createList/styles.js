@@ -28,6 +28,7 @@ export const BottomButtonsBar = styled.div`
     margin-left: 0;
     left: 0px;
     position: relative;
+    display: none;
   }
   button {
     @media (max-width: 379px) {
@@ -194,12 +195,12 @@ export const TabsSectionContent = styled.div`
     .react-tabs__tab-panel {
       background: #332e5a;
       border: 1px dashed #b1abea;
-      border-radius: 5px;
+      border-radius: 0 0 5px 5px;
       height: 210px;
       overflow: auto;
       position: relative;
       border-top: 0;
-      .ReactCrop{
+      .ReactCrop {
         overflow: auto !important;
         min-height: 150px;
         ::-webkit-scrollbar {
@@ -220,7 +221,6 @@ export const TabsSectionContent = styled.div`
         ::-webkit-scrollbar-thumb:hover {
           background: #000;
         }
-      
       }
       .ConfirmImgBtn {
         position: absolute;
