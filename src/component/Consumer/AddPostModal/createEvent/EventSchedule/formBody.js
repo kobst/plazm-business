@@ -162,7 +162,6 @@ const DaysWrap = styled.div`
  *@desc: form body for add event schedule details
  */
 function FormBody({ formik, setStartDateFocus, setEndDateFocus }) {
-  // console.log({ values: formik.values });
   // const [repeat, setRepeat] = useState(false);
   const setFieldFocus = (val) => {
     setStartDateFocus(val);
@@ -253,7 +252,7 @@ function FormBody({ formik, setStartDateFocus, setEndDateFocus }) {
         </FormikSelect>
       </InputContainer> */}
       <RepeatDiv>
-        <label class="container">
+        <label className="container">
           One Time
           <input
             type="radio"
@@ -261,9 +260,9 @@ function FormBody({ formik, setStartDateFocus, setEndDateFocus }) {
             onClick={handleRepetition}
             name="radio"
           />
-          <span class="checkmark"></span>
+          <span className="checkmark"></span>
         </label>
-        <label class="container">
+        <label className="container">
           Repeat
           <input
             type="radio"
@@ -271,7 +270,7 @@ function FormBody({ formik, setStartDateFocus, setEndDateFocus }) {
             onClick={handleRepetition}
             name="radio"
           />
-          <span class="checkmark"></span>
+          <span className="checkmark"></span>
         </label>
       </RepeatDiv>
       <DaysWrap>

@@ -62,7 +62,6 @@ const BuisinessView = ({
 
   useEffect(() => {
     return () => {
-      console.log(' no business view - unmount');
       setDetailView(false);
       setSelectedPlace(null);
     };

@@ -66,12 +66,9 @@ const RadarDot = (props) => {
   const [vec] = useState(() => new THREE.Vector3());
 
   // useEffect(() => {
-  // console.log("- - multi effect - - ")
   // let obj = multiDict[props.placeObject._id]
   // if (obj) {
   //     coords.current = obj.posVector
-
-  // console.log(obj.cubeCoor + " " + props.placeObject.company_name)
 
   // if (obj.posVector[2] < -2) {
   //     setColor("blue")
@@ -184,7 +181,6 @@ function Camera(props) {
   });
 
   useEffect(() => {
-    console.log("move grid cam");
     camCoords.current = [camPos[0], camPos[1], 20];
   }, [camPos]);
 
@@ -213,8 +209,6 @@ const RadarView = () => {
   const orderedPlaces = useStore((state) => state.orderedPlaces);
 
   const dotsLimited = useMemo(() => {
-    // console.log(orderedPlaces)
-
     return orderedPlaces.map(({ ...otherProps }, index) => (
       <RadarDot
         key={otherProps._id}
