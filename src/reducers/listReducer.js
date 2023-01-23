@@ -583,10 +583,7 @@ export const slice = createSlice({
       if (state.loadingPopularLists) {
         state.loadingPopularLists = false;
         if (action.payload) {
-          console.log("hello");
-          console.log(state.popularLists, "this is state.popularlists");
-          state.popularLists = state.popularLists.concat(action.payload.list);
-          console.log(state.popularLists, "again state.poularlists");
+          state.popularLists = action.payload.list;
           state.totalPopularLists = action.payload.totalLists;
         }
       }
