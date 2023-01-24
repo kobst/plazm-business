@@ -48,16 +48,13 @@ const DashboardContainer = ({ view, match, isBusinessOpen }) => {
     }
 
     if (view === "my_feed") {
-      // console.log("my feed route");
       setSelectedTab(2);
     }
 
     if (view === "explore") {
-      // console.log("my explore route");
       setSelectedTab(1);
     }
     if (view === "list_explore") {
-      // console.log("my list explore route");
       setSelectedTab(5);
     }
   }, [view]);
@@ -93,7 +90,6 @@ const DashboardContainer = ({ view, match, isBusinessOpen }) => {
           history.push("/business");
         }
       } catch (err) {
-        console.log("Error", err);
         /* if not authenticated then redirect to login consumer page */
         history.push("/consumer/login");
       }

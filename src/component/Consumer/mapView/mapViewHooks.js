@@ -94,18 +94,14 @@ const setBBox = (_orderedPlaces) => {
     if (maxViewable) {
       limit = maxViewable;
     }
-    console.log("ordered places " + _orderedPlaces.length);
-
+    
     for (let i = 0; i < limit; i++) {
-      // console.log(i)
-      // console.log(orderedPlaces[i])
       if (_orderedPlaces[i]) {
         let coords = _orderedPlaces[i].businessLocation.coordinates;
         coordArray.push(coords);
       }
     }
 
-    // console.log("coord array  " + coordArray)
     const geoJsonFeatures = {
       type: "FeatureCollection",
       features: [
@@ -210,12 +206,9 @@ const MapViewHooks = (props) => {
 
   // only use if not using second map
   useEffect(() => {
-    console.log("map view toggle");
     if (gridMode) {
-      console.log("gridView true");
       setDimensions(gridContainerStyle);
     } else {
-      console.log("gridView false");
       setDimensions(mapContainerStyle);
     }
   }, [gridMode]);
@@ -308,41 +301,29 @@ const MapViewHooks = (props) => {
         return () => mounted = false;
     }, [slotDict]);
 
-
-
-
-
-
-      useEffect(() => {
-        console.log(" geocode ");
+    useEffect(() => {
         Geocode.fromLatLng(
           JSON.stringify(draggedLocation.lat),
           JSON.stringify(draggedLocation.lng)
         ).then(
           (response) => {
             const address = response.results[0].formatted_address;
-            console.log(address);
             // "sublocality" "locality"
             for (let i = 0; i < response.results[0].address_components.length; i++) {
               for (let j = 0; j < response.results[0].address_components[i].types.length; j++) {
                 if (response.results[0].address_components[i].types[j] ==="sublocality") {
                   setSubLocality(response.results[0].address_components[i].long_name);
-                  console.log(response.results[0].address_components[i].long_name);
                 }}}
           })}, [draggedLocation])   
 
   
   
 const clickHandler = (event) => {
-    console.log("map clicked");
     if (map) {
         if (event.fitboundUpdate) {
-            console.log("Map bounds have been programmatically changed");
-            console.log(mapRef.getCenter());
+            mapRef.getCenter();
           } else {
-            console.log("Map bounds have been changed by user interaction");
             let cntr = mapRef.getCenter();
-            console.log(cntr);
             setTempCenter(cntr);
             setDraggedLocation(cntr);
           }
@@ -352,12 +333,9 @@ const clickHandler = (event) => {
   const dragHandler = (event) => {
     if (map) {    
         if (event.fitboundUpdate) {
-      console.log("Map bounds have been programmatically changed");
-      console.log(mapRef.getCenter());
+            mapRef.getCenter();
         } else {
-      console.log("Map bounds have been changed by user interaction");
       let cntr = mapRef.getCenter();
-      console.log(cntr);
       setTempCenter(cntr);
       setDraggedLocation(cntr);
     }

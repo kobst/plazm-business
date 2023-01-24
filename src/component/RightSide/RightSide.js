@@ -1078,10 +1078,8 @@ const RightSide = (props) => {
     }
 
     // if(imageCopy.length<5){
-    //   console.log(e.target.files[0])
     //   let params = {Bucket: bucket, Key: e.target.files[0].name, Body: e.target.files[0]};
     //    s3.upload(params, function(err, data) {
-    //       console.log(err, data);
     //  })
     //  const data = await reactS3.uploadFile(e.target.files[0],config)
     // imageArr.push({id:(imageCopy.length)+1,value:data.location})

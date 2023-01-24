@@ -191,27 +191,26 @@ const DisplayFavoriteBusiness = ({
   const search = useSelector((state) => state.myFeed.enterClicked);
   const [image, setImage] = useState(businessInfo.default_image_url);
 
-  const ref = useRef()
-  const isVisible = useOnScreen(ref)
-  const setPostsInView = useStore(state => state.setPostsInView)
-  const postsInView = useStore(state => state.postsInView)
-  const setSelectedPlace = useStore(state => state.setSelectedPlace)
+  const ref = useRef();
+  const isVisible = useOnScreen(ref);
+  const setPostsInView = useStore((state) => state.setPostsInView);
+  const postsInView = useStore((state) => state.postsInView);
+  const setSelectedPlace = useStore((state) => state.setSelectedPlace);
 
   // useEffect(() => {
   //   if (isVisible) {
-  //     console.log("on screen " + data.company_name)
-      
+  //
+
   //     let deepClone = JSON.parse(JSON.stringify(data));
   //     if (!deepClone.businessLocation && deepClone.location) {
   //         deepClone.businessLocation = deepClone.location
   //     }
-  //     // console.log(deepClone)
-   
+  //
+
   //     setPostsInView([...postsInView, deepClone])
 
   //   }
   //   if (!isVisible) {
-  //     console.log("off screen " + data.company_name)
   //     let _postsInView = postsInView
   //     _postsInView = _postsInView.filter(item => {
   //       return item._id != data._id
@@ -222,31 +221,30 @@ const DisplayFavoriteBusiness = ({
   // }, [isVisible])
 
   useEffect(() => {
-
     const removePost = () => {
-      let _postsInView = postsInView
-      _postsInView = _postsInView.filter(item => {
-        return item._id != data._id
-      })
-      setPostsInView(_postsInView)
-    }
+      let _postsInView = postsInView;
+      _postsInView = _postsInView.filter((item) => {
+        return item._id != data._id;
+      });
+      setPostsInView(_postsInView);
+    };
     if (isVisible) {
-      let deepClone = JSON.parse(JSON.stringify(data));
+      const deepClone = JSON.parse(JSON.stringify(data));
       if (!deepClone.businessLocation && deepClone.location) {
-          deepClone.businessLocation = deepClone.location
+        deepClone.businessLocation = deepClone.location;
       }
-      // console.log(deepClone)
-   
-      setPostsInView([...postsInView, deepClone])
 
+      setPostsInView([...postsInView, deepClone]);
     }
-    if (!isVisible) {removePost()}
+    if (!isVisible) {
+      removePost();
+    }
 
-    return () => {removePost()}
+    return () => {
+      removePost();
+    };
+  }, [isVisible]);
 
-  }, [isVisible])
-
-  
   const history = useHistory();
 
   /** to display business details page */
@@ -255,35 +253,32 @@ const DisplayFavoriteBusiness = ({
     history.push(`/b/${businessInfo._id}`);
   };
 
-
   const handleHover = () => {
-    console.log("hover " + businessInfo.company_name)
-    let deepClone = JSON.parse(JSON.stringify(businessInfo));
+    const deepClone = JSON.parse(JSON.stringify(businessInfo));
     deepClone.businessLocation = deepClone.location;
     setSelectedPlace(deepClone);
-  }
+  };
 
   const handleLeave = () => {
-    // console.log("leave" + businessData.company_name)
-    //delay, if selectedPlace is not the same as postData, then cancel. If it is, then set to null
-    setSelectedPlace(null)
-  }
+    // delay, if selectedPlace is not the same as postData, then cancel. If it is, then set to null
+    setSelectedPlace(null);
+  };
 
   return data ? (
     <>
       {!search && businessInfo.company_name !== null ? (
         <UserMsgWrap
-        onMouseEnter={handleHover}
-        onMouseLeave={handleLeave}
+          onMouseEnter={handleHover}
+          onMouseLeave={handleLeave}
           ref={ref}
           onClick={() => displayBusinessDetail()}
           className={
             data.eventSchedule !== null ||
             data.data !== null ||
-            (data.body !== null && data.type === 'Post') ||
-            (data.body !== null && data.type === 'Events') ?
-              'search-active' :
-              ''
+            (data.body !== null && data.type === "Post") ||
+            (data.body !== null && data.type === "Events")
+              ? "search-active"
+              : ""
           }
         >
           <UserMessageContent>
@@ -316,7 +311,7 @@ const DisplayFavoriteBusiness = ({
             </ProfileNameHeader>
           </UserMessageContent>
         </UserMsgWrap>
-      ) : (data.body !== null && data.type === 'Post' && search) ||
+      ) : (data.body !== null && data.type === "Post" && search) ||
         (data.data !== null && search) ? (
         <ProfileThumbBannerFeed>
           <img
@@ -351,13 +346,13 @@ const DisplayFavoriteBusiness = ({
           myFeedView={true}
           setMyFeedIndex={setSearchIndex}
         />
-      ) : data.body !== null && data.type === 'Post' ? (
+      ) : data.body !== null && data.type === "Post" ? (
         <DisplayComment
           postData={data}
           businessData={businessInfo}
           setSelectedListId={setSelectedListId}
         />
-      ) : data.body !== null && data.type === 'Events' ? (
+      ) : data.body !== null && data.type === "Events" ? (
         <DisplayCommentForEvent postData={data} businessData={businessInfo} />
       ) : search && businessInfo.company_name !== null ? (
         <UserMsgWrap
@@ -366,10 +361,10 @@ const DisplayFavoriteBusiness = ({
           className={
             data.eventSchedule !== null ||
             data.data !== null ||
-            (data.body !== null && data.type === 'Post') ||
-            (data.body !== null && data.type === 'Events') ?
-              'search-active' :
-              ''
+            (data.body !== null && data.type === "Post") ||
+            (data.body !== null && data.type === "Events")
+              ? "search-active"
+              : ""
           }
         >
           <UserMessageContent>
@@ -393,10 +388,10 @@ const DisplayFavoriteBusiness = ({
                   <ChatInput>
                     <p>
                       <span className="postSpan">
-                        {data.totalPosts && data.totalPosts.length > 0 ?
-                          data.totalPosts[0].totalPosts :
-                          0}
-                      </span>{' '}
+                        {data.totalPosts && data.totalPosts.length > 0
+                          ? data.totalPosts[0].totalPosts
+                          : 0}
+                      </span>{" "}
                       Posts
                     </p>
                   </ChatInput>

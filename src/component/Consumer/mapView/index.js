@@ -135,7 +135,6 @@ const setBBox = (_orderedPlaces) => {
   if (maxViewable) {
     limit = maxViewable;
   }
-  console.log("ordered places " + _orderedPlaces.length);
 
   for (let i = 0; i < limit; i++) {
     if (_orderedPlaces[i]) {
@@ -267,16 +266,13 @@ const MapView = (props) => {
 
   // only use if not using second map
   useMemo(() => {
-    console.log("map view toggle");
     if (gridMode) {
-      console.log("gridView true");
       // setDimensions(gridContainerStyle);
       setPadding(0);
 
       // Map.resize()
       // ReCenter()
     } else {
-      // console.log("gridView false");
       // setDimensions(mapContainerStyle);
       setRedLine(null);
       setYellowLine(null);
@@ -291,23 +287,13 @@ const MapView = (props) => {
   }, [gridMode]);
 
   useEffect(() => {
-    console.log("detail View from mapview " + detailView);
     if (selectedPlace && selectedPlace.businessLocation && detailView) {
-      console.log(
-        "selected place exists" + JSON.stringify(selectedPlace.businessLocation)
-      );
       setTempCenter(selectedPlace.businessLocation.coordinates);
     }
   }, [detailView]);
 
   useEffect(() => {
     let mounted = true;
-
-    // postsInView.forEach(elem =>{
-    //   // console.log(elem.business[0].company_name)
-    //   console.log(elem)
-
-    // })
 
     if (postsInView.length > 1 && mounted) {
       const obj = setBBox(postsInView);
@@ -347,13 +333,11 @@ const MapView = (props) => {
   }, [slotDict]);
 
   useEffect(() => {
-    console.log(" geocode ");
     Geocode.fromLatLng(
       JSON.stringify(draggedLocation.lat),
       JSON.stringify(draggedLocation.lng)
     ).then((response) => {
       const address = response.results[0].formatted_address;
-      // console.log(address);
       // "sublocality" "locality"
       for (let i = 0; i < response.results[0].address_components.length; i++) {
         for (
@@ -365,7 +349,6 @@ const MapView = (props) => {
             response.results[0].address_components[i].types[j] === "sublocality"
           ) {
             setSubLocality(response.results[0].address_components[i].long_name);
-            console.log(response.results[0].address_components[i].long_name);
           }
         }
       }
@@ -375,7 +358,6 @@ const MapView = (props) => {
   const getOffset = (map) => {
     const cntr = map.getCenter();
     const _centerCoor = map.project(cntr);
-    console.log(_centerCoor);
     const offSetCoor = [_centerCoor.x + 350, _centerCoor.y];
     const offSetLatLng = map.unproject(offSetCoor);
     setDraggedLocation(offSetLatLng);
@@ -384,53 +366,41 @@ const MapView = (props) => {
   const clickHandler = (map, event) => {
     setDraggedLocation(event.lngLat.wrap());
     // let coordinates = event.lnglat.wrap()
-    // console.log({ map, event });
     // props.toggle(event)
 
-    if (event.fitboundUpdate) {
-      console.log("Map bounds have been programmatically changed - click");
-      // console.log(map.getCenter());
-    } else {
-      // console.log("Map bounds have been changed by user interaction");
+    if (!event.fitboundUpdate) {
       const cntr = map.getCenter();
       const cntrPixel = map.project(cntr);
-
-      // console.log(cntr);
-      // setTempCenter(cntr);
-      // setDraggedLocation(cntr);
-
-      // get point
-      // const clickedXYcoordinate = map.unproject(event.point)
-
-      // get delta between clickedXY
-      // deltaX = clickedXY[0] - offsetCenter[0]
-
-      // use delta to add to map.center xy coordinates
-      // const _point = map.project(coordinate)
-      // console.log("map pixel" + coordinate + " " + JSON.stringify(_point))
-      // console.log(offsetCenter)
-      // setTempCenter(coordinate);
-      // setDraggedLocation(coordinate);
     }
+
+    // setTempCenter(cntr);
+    // setDraggedLocation(cntr);
+
+    // get point
+    // const clickedXYcoordinate = map.unproject(event.point)
+
+    // get delta between clickedXY
+    // deltaX = clickedXY[0] - offsetCenter[0]
+
+    // use delta to add to map.center xy coordinates
+    // const _point = map.project(coordinate)
+    // setTempCenter(coordinate);
+    // setDraggedLocation(coordinate);
   };
 
   const dragHandler = (map, event) => {
-    // console.log({ map, event });
     // setBox(null)
     getOffset(map);
 
-    if (event.fitboundUpdate) {
-      console.log("Map bounds have been changed programmatically  - dragged");
-      // console.log(map.getCenter());
-    } else {
-      // console.log("Map bounds have been changed by user interaction");
-      // let cntr = map.getCenter();
-      // let cntrPixel = map.project(cntr)
-      // getOffset(map)
-      // console.log(cntr);
-      // setTempCenter(cntr);
-      // setDraggedLocation(cntr);
-    }
+    // if (event.fitboundUpdate) {
+    //   console.log("Map bounds have been changed programmatically  - dragged");
+    // } else {
+    // let cntr = map.getCenter();
+    // let cntrPixel = map.project(cntr)
+    // getOffset(map)
+    // setTempCenter(cntr);
+    // setDraggedLocation(cntr);
+    // }
   };
 
   return (
@@ -456,7 +426,6 @@ const MapView = (props) => {
         <MapContext.Consumer>
           {(map) => {
             // use `map` here
-            // console.log("map" + map)
             // const newPosDict = {}
             // orderedPlaces.forEach((place) => {
             // map.easeTo({

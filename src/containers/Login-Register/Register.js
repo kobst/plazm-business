@@ -1,19 +1,24 @@
-import React, {useState, useEffect} from 'react';
-import './style.css';
-import {Auth} from 'aws-amplify';
-import {useHistory} from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import "./style.css";
+import { Auth } from "aws-amplify";
+import { useHistory } from "react-router-dom";
 
-import Wrapper from '../../component/Login-Register/Wrapper';
-import RegisterForm from '../../component/Login-Register/Form-Components/Register-Form';
-import {getMessage} from '../../config';
-import ValueLoader from '../../utils/loader';
-import {callApi, addBusiness, updateBusiness, addUserProfile} from '../../Api';
+import Wrapper from "../../component/Login-Register/Wrapper";
+import RegisterForm from "../../component/Login-Register/Form-Components/Register-Form";
+import { getMessage } from "../../config";
+import ValueLoader from "../../utils/loader";
+import {
+  callApi,
+  addBusiness,
+  updateBusiness,
+  addUserProfile,
+} from "../../Api";
 
 const renderMessage = getMessage();
 
 const Register = (props) => {
   const history = useHistory();
-  const {userType} = props;
+  const { userType } = props;
   const type = props.match.url;
   const [username, setUser] = useState();
   const [password, setPassword] = useState();
@@ -46,7 +51,7 @@ const Register = (props) => {
     const updateUser = async (authState) => {
       try {
         await Auth.currentAuthenticatedUser();
-        history.push('/');
+        history.push("/");
       } catch (error) {
         setLoginValue(true);
       }
@@ -62,78 +67,64 @@ const Register = (props) => {
         email,
         phone_number: phoneNumber,
         name: username,
-        'custom:type': userType,
+        "custom:type": userType,
       },
     })
-        .then(async (res) => {
-          if (res.userSub) {
-            if (type.includes('consumer')) {
-              const obj = {
-                name: username,
-                email: email,
-                phoneNumber: phoneNumber,
-                userSub: res.userSub,
-              };
-              const profile =
-							await addUserProfile(
-							    obj,
-							);
-              if (
-                profile.data.addUser
-                    .success ===
-							true
-              ) {
-                form.reset();
-                setVerified(true);
-                setError(false);
-                setLoader(false);
-              }
-            }
-            if (
-              type.includes('business') &&
-						(await checkUser(res.userSub))
-            ) {
+      .then(async (res) => {
+        if (res.userSub) {
+          if (type.includes("consumer")) {
+            const obj = {
+              name: username,
+              email: email,
+              phoneNumber: phoneNumber,
+              userSub: res.userSub,
+            };
+            const profile = await addUserProfile(obj);
+            if (profile.data.addUser.success === true) {
               form.reset();
               setVerified(true);
               setError(false);
               setLoader(false);
             }
           }
-        })
-        .catch((err) => {
-          if (err.message.includes('phone')) {
-            return (
-              setMessage(renderMessage.phone_Err),
-              setError(true),
-              setDisable(false)
-            );
-          } else {
-            return (
-              setMessage(err.message),
-              setError(true),
-              setDisable(false)
-            );
+          if (type.includes("business") && (await checkUser(res.userSub))) {
+            form.reset();
+            setVerified(true);
+            setError(false);
+            setLoader(false);
           }
-        });
+        }
+      })
+      .catch((err) => {
+        if (err.message.includes("phone")) {
+          return (
+            setMessage(renderMessage.phone_Err),
+            setError(true),
+            setDisable(false)
+          );
+        } else {
+          return setMessage(err.message), setError(true), setDisable(false);
+        }
+      });
   };
 
   const confirmSignUp = () => {
     Auth.confirmSignUp(email, confirmationCode)
-        .then(() => {
-          Auth.signIn({
-            username: email,
-            password: password,
-          })
-          // eslint-disable-next-line no-sequences
-              .then(() => history.push('/'))
-              .catch((err) => console.log(err));
+      .then(() => {
+        Auth.signIn({
+          username: email,
+          password: password,
         })
-        .catch((err) => setCodeError(true));
+          // eslint-disable-next-line no-sequences
+          .then(() => history.push("/"))
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => setCodeError(true));
   };
 
   function validateEmail(email) {
     const re =
-			/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
   }
   const validateCode = () => {
@@ -153,7 +144,7 @@ const Register = (props) => {
         setFirstError(true);
       }
     }
-    if (!loc && type.includes('business')) {
+    if (!loc && type.includes("business")) {
       setLocError(true);
     }
     if (loc) {
@@ -190,32 +181,32 @@ const Register = (props) => {
       }
     }
     if (
-      type.includes('business') &&
-			username &&
-			loc &&
-			username.length > 3 &&
-			phoneNumber &&
-			phoneNumber.match(/^[^a-zA-Z]*$/) &&
-			validateEmail(email) &&
-			password &&
-			name &&
-			password.length > 7 &&
-			phoneNumber.length >= 5 &&
-			phoneNumber.length <= 50
+      type.includes("business") &&
+      username &&
+      loc &&
+      username.length > 3 &&
+      phoneNumber &&
+      phoneNumber.match(/^[^a-zA-Z]*$/) &&
+      validateEmail(email) &&
+      password &&
+      name &&
+      password.length > 7 &&
+      phoneNumber.length >= 5 &&
+      phoneNumber.length <= 50
     ) {
       return true;
     }
     if (
-      type.includes('consumer') &&
-			username &&
-			username.length > 3 &&
-			phoneNumber &&
-			phoneNumber.match(/^[^a-zA-Z]*$/) &&
-			validateEmail(email) &&
-			password &&
-			password.length > 7 &&
-			phoneNumber.length >= 5 &&
-			phoneNumber.length <= 50
+      type.includes("consumer") &&
+      username &&
+      username.length > 3 &&
+      phoneNumber &&
+      phoneNumber.match(/^[^a-zA-Z]*$/) &&
+      validateEmail(email) &&
+      password &&
+      password.length > 7 &&
+      phoneNumber.length >= 5 &&
+      phoneNumber.length <= 50
     ) {
       return true;
     }
@@ -277,19 +268,19 @@ const Register = (props) => {
     setPhoneLong(false);
     setPhoneShort(false);
     setPhoneOnlyNumbers(false);
-    if (e.target.id === 'username') {
+    if (e.target.id === "username") {
       setUser(e.target.value);
-    } else if (e.target.id === 'password') {
+    } else if (e.target.id === "password") {
       setPassword(e.target.value);
-    } else if (e.target.id === 'phoneNumber') {
+    } else if (e.target.id === "phoneNumber") {
       setPhoneNumber(e.target.value);
-    } else if (e.target.id === 'email') {
+    } else if (e.target.id === "email") {
       setEmail(e.target.value.trim());
-    } else if (e.target.id === 'confirmationCode') {
+    } else if (e.target.id === "confirmationCode") {
       setconfirmationCode(e.target.value);
-    } else if (e.target.id === 'location') {
-      setName('');
-      setBusinessInfo('');
+    } else if (e.target.id === "location") {
+      setName("");
+      setBusinessInfo("");
       setLoc(e.target.value);
     }
   };
@@ -297,47 +288,47 @@ const Register = (props) => {
   return (
     <>
       {loginValue === true ? (
-				<Wrapper
-				  type={type}
-				  page="register"
-				  welcomeMessage={
-						type.includes('business') ?
-							renderMessage.New_Reg :
-							renderMessage.New_Reg_Consumer
-				  }
-				>
-				  <RegisterForm
-				    type={type}
-				    err={err}
-				    firstError={firstError}
-				    passwordError={passwordError}
-				    loader={loader}
-				    message={message}
-				    handleChange={handleChange}
-				    handleSubmit={handleSubmit}
-				    verified={verified}
-				    business={business}
-				    setbusiness={setbusiness}
-				    setBusinessInfo={setBusinessInfo}
-				    setName={setName}
-				    codeError={codeError}
-				    firstNameError={firstNameError}
-				    phoneError={phoneError}
-				    emailError={emailError}
-				    locationError={locationError}
-				    emptyCode={emptyCode}
-				    phoneLong={phoneLong}
-				    phoneShort={phoneShort}
-				    password={password}
-				    disable={disable}
-				    phoneOnlyNumbers={phoneOnlyNumbers}
-				  />
-				</Wrapper>
-			) : (
-				<div style={{textAlign: 'center', margin: ' 40px auto 0'}}>
-				  <ValueLoader />
-				</div>
-			)}
+        <Wrapper
+          type={type}
+          page="register"
+          welcomeMessage={
+            type.includes("business")
+              ? renderMessage.New_Reg
+              : renderMessage.New_Reg_Consumer
+          }
+        >
+          <RegisterForm
+            type={type}
+            err={err}
+            firstError={firstError}
+            passwordError={passwordError}
+            loader={loader}
+            message={message}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+            verified={verified}
+            business={business}
+            setbusiness={setbusiness}
+            setBusinessInfo={setBusinessInfo}
+            setName={setName}
+            codeError={codeError}
+            firstNameError={firstNameError}
+            phoneError={phoneError}
+            emailError={emailError}
+            locationError={locationError}
+            emptyCode={emptyCode}
+            phoneLong={phoneLong}
+            phoneShort={phoneShort}
+            password={password}
+            disable={disable}
+            phoneOnlyNumbers={phoneOnlyNumbers}
+          />
+        </Wrapper>
+      ) : (
+        <div style={{ textAlign: "center", margin: " 40px auto 0" }}>
+          <ValueLoader />
+        </div>
+      )}
     </>
   );
 };
