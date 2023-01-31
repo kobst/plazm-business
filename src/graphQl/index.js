@@ -4,16 +4,20 @@ import {
   getSelectedUserGraphql,
   addFavoriteBusinessGraphql,
   removeFavoriteBusinessGraphql,
-} from './mutations/user';
+} from "./mutations/user";
 import {
   getUserGraphql,
   getAllUsersGraphql,
   getUserFavoritesGraphql,
   getMyFeedDataGraphql,
   getUserProfileDataGraphql,
-} from './query/user';
+} from "./query/user";
 
-import {getPlaceGraphql, searchAllPlacesGraphql, homeSearchGraphql} from './query/place';
+import {
+  getPlaceGraphql,
+  searchAllPlacesGraphql,
+  homeSearchGraphql,
+} from "./query/place";
 
 import {
   getAllListsGraphql,
@@ -24,25 +28,28 @@ import {
   getMostPopularListsGraphql,
   searchListsGraphql,
   getUserSubscribedListsGraphql,
-} from './query/list';
+} from "./query/list";
 
 import {
   createPostGraphql,
   addLikeToPostGraphql,
   updatePostGraphql,
   deletePostGraphql,
-} from './mutations/post';
+} from "./mutations/post";
 
-import {fetchEventGraphql, fetchEventForAWeekGraphql} from './query/event';
+import { fetchEventGraphql, fetchEventForAWeekGraphql } from "./query/event";
 
 import {
   addCommentGraphql,
   createReplyGraphql,
   addLikeToCommentGraphql,
-} from './mutations/comments';
-import {findPostCommentsGraphql, findCommentRepliesGraphql} from './query/comments';
+} from "./mutations/comments";
+import {
+  findPostCommentsGraphql,
+  findCommentRepliesGraphql,
+} from "./query/comments";
 
-import {addLikeToEventsGraphql, createEventGraphql} from './mutations/event';
+import { addLikeToEventsGraphql, createEventGraphql } from "./mutations/event";
 
 import {
   createListGraphql,
@@ -52,9 +59,9 @@ import {
   deleteListGraphql,
   unsubscribeToAListGraphql,
   subscribeToAListGraphql,
-} from './mutations/list';
+} from "./mutations/list";
 
-import {findBusinessPhotosGraphql} from './query/post';
+import { findBusinessPhotosGraphql } from "./query/post";
 
 export {
   getListDetailsGraphql,

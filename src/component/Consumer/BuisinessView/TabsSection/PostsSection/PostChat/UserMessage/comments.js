@@ -1,20 +1,20 @@
-import React, {useState, useEffect} from 'react';
-import styled from 'styled-components';
-import {useHistory} from 'react-router-dom';
-import ProfileImg from '../../../../../../../images/profile-img.png';
-import ReplyInput from './ReplyInput';
-import LikesBar from '../LikesBar';
-import {Scrollbars} from 'react-custom-scrollbars';
-import {useSelector} from 'react-redux';
-import ValueLoader from '../../../../../../../utils/loader';
-import ScrollToBottom1 from './ScrollToBottom1';
-import ReplyImage from '../../../../../HomeSearch/BusinessListing/UserMessage/replyImage';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { useHistory } from "react-router-dom";
+import ProfileImg from "../../../../../../../images/profile-img.png";
+import ReplyInput from "./ReplyInput";
+import LikesBar from "../LikesBar";
+import { Scrollbars } from "react-custom-scrollbars";
+import { useSelector } from "react-redux";
+import ValueLoader from "../../../../../../../utils/loader";
+import ScrollToBottom1 from "./ScrollToBottom1";
+import ReplyImage from "../../../../../HomeSearch/BusinessListing/UserMessage/replyImage";
 import {
   checkMime,
   replaceBucket,
-} from '../../../../../../../utilities/checkResizedImage';
+} from "../../../../../../../utilities/checkResizedImage";
 
-const reactStringReplace = require('react-string-replace');
+const reactStringReplace = require("react-string-replace");
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -119,10 +119,10 @@ const LoaderWrap = styled.div`
   margin: 30px 0 30px;
 `;
 
-const Comments = ({i, postData, displayComments, setFlag, flag}) => {
+const Comments = ({ i, postData, displayComments, setFlag, flag }) => {
   const [displayReply, setDisplayReply] = useState(false);
   const [displayReplyInput, setDisplayReplyInput] = useState(false);
-  const [replyDescription, setReplyDescription] = useState('');
+  const [replyDescription, setReplyDescription] = useState("");
   const [image, setImage] = useState(null);
   const ws = useSelector((state) => state.user.ws);
   const business = useSelector((state) => state.business.business);
@@ -146,26 +146,26 @@ const Comments = ({i, postData, displayComments, setFlag, flag}) => {
   };
   /** to add reply function */
   const addReply = async (obj) => {
-    setReplyDescription('');
+    setReplyDescription("");
     ws.send(
-        JSON.stringify({
-          action: 'message',
-          commentId: obj._id, // commentId
-          userId: obj.userId, // userId
-          comment: '@' + i.userId.name + ' ' + obj.body,
-          postId: obj.postId,
-          businessId: business[0]._id,
-          taggedUsers: obj.taggedUsers,
-          type: 'Post',
-          sendTaggedUsers: obj.sendTaggedUsers,
-        }),
+      JSON.stringify({
+        action: "message",
+        commentId: obj._id, // commentId
+        userId: obj.userId, // userId
+        comment: "@" + i.userId.name + " " + obj.body,
+        postId: obj.postId,
+        businessId: business[0]._id,
+        taggedUsers: obj.taggedUsers,
+        type: "Post",
+        sendTaggedUsers: obj.sendTaggedUsers,
+      })
     );
   };
   /** to highlight the user mentions mentioned in post description */
   const findDesc = (value, mentions) => {
     if (mentions.length > 0) {
       for (let i = 0; i < mentions.length; i++) {
-        if (value.search(new RegExp(mentions[i].name, 'g') !== -1)) {
+        if (value.search(new RegExp(mentions[i].name, "g") !== -1)) {
           return (
             <div>
               {reactStringReplace(value, mentions[i].name, (match, j) => (
@@ -195,7 +195,7 @@ const Comments = ({i, postData, displayComments, setFlag, flag}) => {
         </ProfileThumb>
         <ProfileNameWrap>
           <ProfileName onClick={() => history.push(`/u/${i.userId._id}`)}>
-            {i.userId.name}{' '}
+            {i.userId.name}{" "}
           </ProfileName>
           <ChatInput> {findDesc(i.body, i.taggedUsers)}</ChatInput>
           <LikesBar
@@ -214,15 +214,17 @@ const Comments = ({i, postData, displayComments, setFlag, flag}) => {
             setFlag={setFlag}
             postId={postData.postId}
           />
-          <Scrollbars
+          {/* <Scrollbars
             autoHeight
             autoHeightMin={0}
-            autoHeightMax={300}
+            autoHeightMax={320}
             thumbMinSize={30}
-            style={{overflowX: 'hidden'}}
+            style={{ overflowX: "hidden" }}
             className="InnerScroll"
-          >
-            <ReplyWrap style={{overflowX: 'hidden'}}>
+          > */}
+
+          <div className="ScrollerRemoved">
+            <ReplyWrap style={{ overflowX: "hidden" }}>
               {displayReply && i.replies.length > 0 && !loadingReplies ? (
                 <div>
                   {i.replies.map((j, key) => (
@@ -239,19 +241,15 @@ const Comments = ({i, postData, displayComments, setFlag, flag}) => {
                                 onClick={() =>
                                   history.push(`/u/${j.userId._id}`)
                                 }
-                                style={{color: '#ff2e9a'}}
+                                style={{ color: "#ff2e9a" }}
                               >
                                 {j.userId.name}
-                              </span>{' '}
+                              </span>{" "}
                             </ProfileName>
                             <ChatInput>
-                              {' '}
+                              {" "}
                               {findDesc(j.body, j.taggedUsers)}
                             </ChatInput>
-                            <LikesBar
-                              date={new Date(j.created_on)}
-                              type="commentReply"
-                            />
                           </ProfileNameWrap>
                         </ProfileNameHeader>
                       </UserMessageContent>
@@ -265,7 +263,8 @@ const Comments = ({i, postData, displayComments, setFlag, flag}) => {
                 </LoaderWrap>
               ) : null}
             </ReplyWrap>
-          </Scrollbars>
+          </div>
+          {/* </Scrollbars> */}
           {displayReply && !loadingReplies ? (
             <>
               <ReplyInput
