@@ -1,5 +1,5 @@
-import {createSlice, createAsyncThunk, current} from '@reduxjs/toolkit';
-import {graphQlEndPoint} from '../Api/graphQl';
+import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
+import { graphQlEndPoint } from "../Api/graphQl";
 import {
   createPostGraphql,
   getPlaceGraphql,
@@ -7,19 +7,19 @@ import {
   addLikeToPostGraphql,
   addLikeToCommentGraphql,
   findCommentRepliesGraphql,
-} from '../graphQl';
+} from "../graphQl";
 
 /*
  * @desc:  to check if business exists or not
  * @params: businessId
  */
 export const checkBusiness = createAsyncThunk(
-    'data/checkBusiness',
-    async (obj) => {
-      const graphQl = getPlaceGraphql(obj);
-      const response = await graphQlEndPoint(graphQl);
-      return response.data.searchPlacesByUserId;
-    },
+  "data/checkBusiness",
+  async (obj) => {
+    const graphQl = getPlaceGraphql(obj);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.searchPlacesByUserId;
+  }
 );
 
 /*
@@ -27,18 +27,18 @@ export const checkBusiness = createAsyncThunk(
  * @params: obj
  */
 export const addPostToBusiness = createAsyncThunk(
-    'data/addPostToBusiness',
-    async (obj) => {
-      const graphQl = createPostGraphql(obj);
-      const response = await graphQlEndPoint(graphQl);
-      return response.data.createPost;
-    },
+  "data/addPostToBusiness",
+  async (obj) => {
+    const graphQl = createPostGraphql(obj);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.createPost;
+  }
 );
 
 /*
  * @desc:  to sort posts by most recent
  */
-export const filterData = createAsyncThunk('data/filterData', async (obj) => {
+export const filterData = createAsyncThunk("data/filterData", async (obj) => {
   const graphQl = getPlaceGraphql(obj);
   const response = await graphQlEndPoint(graphQl);
   return response.data.searchPlacesByUserId;
@@ -49,12 +49,12 @@ export const filterData = createAsyncThunk('data/filterData', async (obj) => {
  * @params: obj
  */
 export const addFilteredPosts = createAsyncThunk(
-    'data/addFilteredPosts',
-    async (obj) => {
-      const graphQl = getPlaceGraphql(obj);
-      const response = await graphQlEndPoint(graphQl);
-      return response.data.searchPlacesByUserId;
-    },
+  "data/addFilteredPosts",
+  async (obj) => {
+    const graphQl = getPlaceGraphql(obj);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.searchPlacesByUserId;
+  }
 );
 
 /*
@@ -62,10 +62,10 @@ export const addFilteredPosts = createAsyncThunk(
  * @params: obj
  */
 export const addCommentToPost = createAsyncThunk(
-    'data/addCommentToPost',
-    async (obj) => {
-      return obj;
-    },
+  "data/addCommentToPost",
+  async (obj) => {
+    return obj;
+  }
 );
 
 /*
@@ -73,12 +73,12 @@ export const addCommentToPost = createAsyncThunk(
  * @params: postId
  */
 export const fetchPostComments = createAsyncThunk(
-    'data/fetchPostComments',
-    async (businessId) => {
-      const graphQl = findPostCommentsGraphql(businessId);
-      const response = await graphQlEndPoint(graphQl);
-      return response.data.getComment;
-    },
+  "data/fetchPostComments",
+  async (businessId) => {
+    const graphQl = findPostCommentsGraphql(businessId);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.getComment;
+  }
 );
 
 /*
@@ -86,12 +86,12 @@ export const fetchPostComments = createAsyncThunk(
  * @params: postId
  */
 export const fetchCommentReplies = createAsyncThunk(
-    'data/fetchCommentReplies',
-    async (businessId) => {
-      const graphQl = findCommentRepliesGraphql(businessId);
-      const response = await graphQlEndPoint(graphQl);
-      return response.data.getReplies;
-    },
+  "data/fetchCommentReplies",
+  async (businessId) => {
+    const graphQl = findCommentRepliesGraphql(businessId);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.getReplies;
+  }
 );
 
 /*
@@ -99,10 +99,10 @@ export const fetchCommentReplies = createAsyncThunk(
  * @params: obj
  */
 export const addReplyToComment = createAsyncThunk(
-    'data/addReplyToComment',
-    async (obj) => {
-      return obj;
-    },
+  "data/addReplyToComment",
+  async (obj) => {
+    return obj;
+  }
 );
 
 /*
@@ -110,10 +110,10 @@ export const addReplyToComment = createAsyncThunk(
  * @params: obj
  */
 export const addPostViaSocket = createAsyncThunk(
-    'data/addPostViaSocket',
-    async (obj) => {
-      return obj;
-    },
+  "data/addPostViaSocket",
+  async (obj) => {
+    return obj;
+  }
 );
 
 /*
@@ -121,12 +121,12 @@ export const addPostViaSocket = createAsyncThunk(
  * @params: obj
  */
 export const addLikeToPost = createAsyncThunk(
-    'data/AddLikeToPost',
-    async (obj) => {
-      const graphQl = addLikeToPostGraphql(obj);
-      const response = await graphQlEndPoint(graphQl);
-      return response.data.addLikeToPost;
-    },
+  "data/AddLikeToPost",
+  async (obj) => {
+    const graphQl = addLikeToPostGraphql(obj);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.addLikeToPost;
+  }
 );
 
 /*
@@ -134,12 +134,12 @@ export const addLikeToPost = createAsyncThunk(
  * @params: obj
  */
 export const addLikeToComment = createAsyncThunk(
-    'data/addLikeToComment',
-    async (obj) => {
-      const graphQl = addLikeToCommentGraphql(obj);
-      const response = await graphQlEndPoint(graphQl);
-      return response.data.addLikeToComment;
-    },
+  "data/addLikeToComment",
+  async (obj) => {
+    const graphQl = addLikeToCommentGraphql(obj);
+    const response = await graphQlEndPoint(graphQl);
+    return response.data.addLikeToComment;
+  }
 );
 
 /*
@@ -147,31 +147,31 @@ export const addLikeToComment = createAsyncThunk(
  * @params: obj
  */
 export const addLikeViaSocket = createAsyncThunk(
-    'data/addLikeViaSocket',
-    async (obj) => {
-      return obj;
-    },
+  "data/addLikeViaSocket",
+  async (obj) => {
+    return obj;
+  }
 );
 
 export const addCommentToPost1 = createAsyncThunk(
-    'data/addCommentToPost1',
-    async (obj) => {
-      return obj;
-    },
+  "data/addCommentToPost1",
+  async (obj) => {
+    return obj;
+  }
 );
 /*
  * @desc:  to add like to comment via sockets
  * @params: obj
  */
 export const addLikeToCommentViaSocket = createAsyncThunk(
-    'data/addLikeToCommentViaSocket',
-    async (obj) => {
-      return obj;
-    },
+  "data/addLikeToCommentViaSocket",
+  async (obj) => {
+    return obj;
+  }
 );
 
 export const slice = createSlice({
-  name: 'business',
+  name: "business",
   initialState: {
     loading: false,
     loadingAddPosts: false,
@@ -206,10 +206,10 @@ export const slice = createSlice({
   reducers: {
     setFilters: (state, action) => {
       if (
-        action.payload['Business'] === false &&
-        action.payload['PostsByMe'] === false &&
-        action.payload['MySubscriptions'] === false &&
-        action.payload['Others'] === false
+        action.payload["Business"] === false &&
+        action.payload["PostsByMe"] === false &&
+        action.payload["MySubscriptions"] === false &&
+        action.payload["Others"] === false
       ) {
         state.filters = {
           Business: false,
@@ -274,9 +274,9 @@ export const slice = createSlice({
       const obj = {
         postId: action.payload._id,
         totalComments:
-          action.payload.totalComments.length > 0 ?
-            action.payload.totalComments[0].totalCount :
-            0,
+          action.payload.totalComments.length > 0
+            ? action.payload.totalComments[0].totalCount
+            : 0,
         totalLikes: action.payload.likes ? action.payload.likes.length : 0,
         postDetails: {
           _id: action.payload._id,
@@ -284,15 +284,15 @@ export const slice = createSlice({
           title: action.payload.title,
           eventSchedule: action.payload.eventSchedule,
           list:
-            action.payload.listId && action.payload.listId.length > 0 ?
-              action.payload.listId[0] :
-              null,
+            action.payload.listId && action.payload.listId.length > 0
+              ? action.payload.listId[0]
+              : null,
           taggedUsers: action.payload.taggedUsers,
           taggedLists: action.payload.taggedLists,
           ownerId: action.payload.ownerId[0],
-          likes: action.payload.likesData ?
-            action.payload.likesData :
-            action.payload.likes,
+          likes: action.payload.likesData
+            ? action.payload.likesData
+            : action.payload.likes,
           media: action.payload.media,
           location: null,
           createdAt: action.payload.createdAt,
@@ -321,7 +321,6 @@ export const slice = createSlice({
         state.loading = false;
         if (action.payload) {
           state.business = action.payload.place;
-
           state.posts = action.payload.posts;
           state.totalPosts = action.payload.totalPosts;
         }
@@ -341,19 +340,19 @@ export const slice = createSlice({
     [addLikeViaSocket.fulfilled]: (state, action) => {
       if (action.payload) {
         const findPost = current(state.posts).filter(
-            (i) => i.postId !== action.payload.postId,
+          (i) => i.postId !== action.payload.postId
         );
         const findPost1 = current(state.posts).filter(
-            (i) => i.postId === action.payload.postId,
+          (i) => i.postId === action.payload.postId
         );
         if (findPost1 && findPost1.length > 0) {
           const likes = findPost1[0].postDetails.likes.concat(
-              action.payload.like,
+            action.payload.like
           );
           let dummy1 = [];
           dummy1.push({
             postId: action.payload.postId,
-            postDetails: {...findPost1[0].postDetails, likes: likes},
+            postDetails: { ...findPost1[0].postDetails, likes: likes },
             comments: findPost1[0].comments,
             totalComments: findPost1[0].totalComments,
             totalLikes: findPost1[0].totalLikes + 1,
@@ -377,7 +376,7 @@ export const slice = createSlice({
             postDetails: {
               ...state.topPostId.postDetails,
               likes: state.topPostId.postDetails.likes.concat(
-                  action.payload.like,
+                action.payload.like
               ),
             },
             comments: state.topPostId.comments,
@@ -390,27 +389,27 @@ export const slice = createSlice({
     [addLikeToCommentViaSocket.fulfilled]: (state, action) => {
       if (action.payload) {
         const findPost = current(state.posts).filter(
-            (i) => i.postId !== action.payload.postId,
+          (i) => i.postId !== action.payload.postId
         );
         const findPost1 = current(state.posts).filter(
-            (i) => i.postId === action.payload.postId,
+          (i) => i.postId === action.payload.postId
         );
         if (findPost1 && findPost1.length > 0) {
           if (findPost1[0].comments.length > 0) {
             const findComment = findPost1[0].comments.filter(
-                (i) => i._id === action.payload.commentId,
+              (i) => i._id === action.payload.commentId
             );
             const findComment1 = findPost1[0].comments.filter(
-                (i) => i._id !== action.payload.commentId,
+              (i) => i._id !== action.payload.commentId
             );
 
             if (findComment && findComment.length > 0) {
               const likes = findComment[0].likes.concat(action.payload.like);
               const commentsSort = findComment1
-                  .concat({...findComment[0], likes: likes})
-                  .sort((a, b) => {
-                    return new Date(a.createdAt) - new Date(b.createdAt);
-                  });
+                .concat({ ...findComment[0], likes: likes })
+                .sort((a, b) => {
+                  return new Date(a.createdAt) - new Date(b.createdAt);
+                });
               let dummy1 = [];
               dummy1.push({
                 postId: action.payload.postId,
@@ -434,10 +433,10 @@ export const slice = createSlice({
     [addCommentToPost.fulfilled]: (state, action) => {
       if (action.payload) {
         const posts = current(state.posts).filter(
-            (i) => i.postId !== action.payload.commentInfo.itemId,
+          (i) => i.postId !== action.payload.commentInfo.itemId
         );
         const posts1 = current(state.posts).filter(
-            (i) => i.postId === action.payload.commentInfo.itemId,
+          (i) => i.postId === action.payload.commentInfo.itemId
         );
         if (posts1 && posts1.length > 0) {
           const comments = posts1[0].comments.concat({
@@ -484,17 +483,17 @@ export const slice = createSlice({
     [addReplyToComment.fulfilled]: (state, action) => {
       if (action.payload) {
         const posts = current(state.posts).filter(
-            (i) => i.postId !== action.payload.postId,
+          (i) => i.postId !== action.payload.postId
         );
         const posts1 = current(state.posts).filter(
-            (i) => i.postId === action.payload.postId,
+          (i) => i.postId === action.payload.postId
         );
         if (posts1 && posts1.length > 0 && posts1[0].comments.length > 0) {
           const findComment = posts1[0].comments.filter(
-              (i) => i._id === action.payload.commentId,
+            (i) => i._id === action.payload.commentId
           )[0];
           const findComment1 = posts1[0].comments.filter(
-              (i) => i._id !== action.payload.commentId,
+            (i) => i._id !== action.payload.commentId
           );
           const replies = findComment.replies.concat({
             ...action.payload.reply,
@@ -505,14 +504,14 @@ export const slice = createSlice({
             },
           });
           const commentsSort = findComment1
-              .concat({
-                ...findComment,
-                replies: replies,
-                totalReplies: findComment.totalReplies + 1,
-              })
-              .sort((a, b) => {
-                return new Date(a.createdAt) - new Date(b.createdAt);
-              });
+            .concat({
+              ...findComment,
+              replies: replies,
+              totalReplies: findComment.totalReplies + 1,
+            })
+            .sort((a, b) => {
+              return new Date(a.createdAt) - new Date(b.createdAt);
+            });
           let dummy1 = [];
           dummy1.push({
             postId: action.payload.postId,
@@ -531,10 +530,10 @@ export const slice = createSlice({
         }
         if (state.topPost && state.topPostId.postId === action.payload.postId) {
           const findComment = state.topPostId.comments.filter(
-              (i) => i._id === action.payload.commentId,
+            (i) => i._id === action.payload.commentId
           )[0];
           const findComment1 = state.topPostId.comments.filter(
-              (i) => i._id !== action.payload.commentId,
+            (i) => i._id !== action.payload.commentId
           );
           const replies = findComment.replies.concat({
             ...action.payload.reply,
@@ -545,14 +544,14 @@ export const slice = createSlice({
             },
           });
           const commentsSort = findComment1
-              .concat({
-                ...findComment,
-                replies: replies,
-                totalReplies: findComment.totalReplies + 1,
-              })
-              .sort((a, b) => {
-                return new Date(a.createdAt) - new Date(b.createdAt);
-              });
+            .concat({
+              ...findComment,
+              replies: replies,
+              totalReplies: findComment.totalReplies + 1,
+            })
+            .sort((a, b) => {
+              return new Date(a.createdAt) - new Date(b.createdAt);
+            });
           state.topPostId = {
             postId: action.payload.postId,
             postDetails: state.topPostId.postDetails,
@@ -580,10 +579,10 @@ export const slice = createSlice({
         if (action.payload) {
           if (action.payload.post.length > 0) {
             const posts = current(state.posts).filter(
-                (i) => i.postId !== action.payload.post[0].comment.itemId,
+              (i) => i.postId !== action.payload.post[0].comment.itemId
             );
             const posts1 = current(state.posts).filter(
-                (i) => i.postId === action.payload.post[0].comment.itemId,
+              (i) => i.postId === action.payload.post[0].comment.itemId
             )[0];
 
             let dummy1 = [];
@@ -640,18 +639,18 @@ export const slice = createSlice({
         state.loadingReplies = false;
         if (action.payload) {
           const posts = current(state.posts).filter(
-              (i) => i.postId !== action.payload.postId,
+            (i) => i.postId !== action.payload.postId
           );
           const posts1 = current(state.posts).filter(
-              (i) => i.postId === action.payload.postId,
+            (i) => i.postId === action.payload.postId
           )[0];
           let dummy1 = [];
           if (posts1 && posts1.comments.length > 0) {
             const findComment = posts1.comments.filter(
-                (i) => i._id === action.payload.commentId,
+              (i) => i._id === action.payload.commentId
             );
             const findComment1 = posts1.comments.filter(
-                (i) => i._id !== action.payload.commentId,
+              (i) => i._id !== action.payload.commentId
             );
             let newArr = [];
             newArr = newArr.concat({
@@ -682,10 +681,10 @@ export const slice = createSlice({
             state.topPostId.postId === action.payload.postId
           ) {
             const findComment = state.topPostId.comments.filter(
-                (i) => i._id === action.payload.commentId,
+              (i) => i._id === action.payload.commentId
             );
             const findComment1 = state.topPostId.comments.filter(
-                (i) => i._id !== action.payload.commentId,
+              (i) => i._id !== action.payload.commentId
             );
             let newArr = [];
             newArr = newArr.concat({
@@ -757,10 +756,10 @@ export const slice = createSlice({
     [addCommentToPost1.fulfilled]: (state, action) => {
       if (action.payload) {
         const posts = current(state.posts).filter(
-            (i) => i.postId !== action.payload.itemId,
+          (i) => i.postId !== action.payload.itemId
         );
         const posts1 = current(state.posts).filter(
-            (i) => i.postId === action.payload.itemId,
+          (i) => i.postId === action.payload.itemId
         );
         if (posts1 && posts1.length > 0) {
           const comments = posts1[0].comments.concat({
@@ -793,24 +792,24 @@ export const slice = createSlice({
     [addLikeToComment.fulfilled]: (state, action) => {
       if (action.payload) {
         const findPost1 = current(state.posts).filter(
-            (i) => i.postId === action.payload.postId,
+          (i) => i.postId === action.payload.postId
         );
         if (findPost1 && findPost1.length > 0) {
           if (findPost1[0].comments.length > 0) {
             const findComment = findPost1[0].comments.filter(
-                (i) => i._id === action.payload.commentId,
+              (i) => i._id === action.payload.commentId
             );
             const findComment1 = findPost1[0].comments.filter(
-                (i) => i._id !== action.payload.commentId,
+              (i) => i._id !== action.payload.commentId
             );
 
             if (findComment && findComment.length > 0) {
               const likes = findComment[0].likes.concat(action.payload.like);
               const commentsSort = findComment1
-                  .concat({...findComment[0], likes: likes})
-                  .sort((a, b) => {
-                    return new Date(a.createdAt) - new Date(b.createdAt);
-                  });
+                .concat({ ...findComment[0], likes: likes })
+                .sort((a, b) => {
+                  return new Date(a.createdAt) - new Date(b.createdAt);
+                });
               if (
                 state.topPost &&
                 state.topPostId.postId === action.payload.postId
@@ -828,19 +827,19 @@ export const slice = createSlice({
         }
         if (state.topPost && state.topPostId.postId === action.payload.postId) {
           const findComment = state.topPostId.comments.filter(
-              (i) => i._id === action.payload.commentId,
+            (i) => i._id === action.payload.commentId
           );
           const findComment1 = state.topPostId.comments.filter(
-              (i) => i._id !== action.payload.commentId,
+            (i) => i._id !== action.payload.commentId
           );
 
           if (findComment && findComment.length > 0) {
             const likes = findComment[0].likes.concat(action.payload.like);
             const commentsSort = findComment1
-                .concat({...findComment[0], likes: likes})
-                .sort((a, b) => {
-                  return new Date(a.createdAt) - new Date(b.createdAt);
-                });
+              .concat({ ...findComment[0], likes: likes })
+              .sort((a, b) => {
+                return new Date(a.createdAt) - new Date(b.createdAt);
+              });
             state.topPostId = {
               postId: action.payload.postId,
               postDetails: state.topPostId.postDetails,

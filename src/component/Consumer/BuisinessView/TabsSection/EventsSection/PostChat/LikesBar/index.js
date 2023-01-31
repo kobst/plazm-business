@@ -1,22 +1,22 @@
-import React, {useState, useEffect} from 'react';
-import styled from 'styled-components';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
 import {
   MdFavoriteBorder,
   MdChatBubbleOutline,
   MdFavorite,
-} from 'react-icons/md';
-import {useDispatch, useSelector} from 'react-redux';
+} from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
 import {
   addLikeToEvent,
   addLikeViaSocket,
   fetchCommentReplies,
   fetchEventComments,
-} from '../../../../../../../reducers/eventReducer';
-import {unwrapResult} from '@reduxjs/toolkit';
+} from "../../../../../../../reducers/eventReducer";
+import { unwrapResult } from "@reduxjs/toolkit";
 import {
   addLikeToComment,
   setEventId,
-} from '../../../../../../../reducers/businessReducer';
+} from "../../../../../../../reducers/businessReducer";
 
 export const BottomBarLikes = styled.div`
   display: flex;
@@ -112,7 +112,7 @@ const LikesBar = ({
     setUserLikedComment(false);
     setUserLikedEvent(false);
 
-    if (type === 'comment') {
+    if (type === "comment") {
       if (postLikes.length > 0) {
         const findUser = postLikes.find((i) => i._id === user._id);
         const findUserInId = postLikes.find((i) => i === user._id);
@@ -120,7 +120,7 @@ const LikesBar = ({
           setUserLikedEvent(true);
         }
       }
-    } else if (type === 'reply') {
+    } else if (type === "reply") {
       if (commentLikes.length > 0) {
         const findUser = commentLikes.find((i) => i._id === user._id);
         if (findUser) {
@@ -133,11 +133,11 @@ const LikesBar = ({
   /** to display comments on a particular event */
   const displayCommentsWithEvents = () => {
     dispatch(setEventId(eventId));
-    if (type === 'comment') {
+    if (type === "comment") {
       setDisplayEventComments(!displayEventComments);
       setFlag(false);
       if (displayEventComments === false) dispatch(fetchEventComments(eventId));
-    } else if (type === 'reply') {
+    } else if (type === "reply") {
       setDisplayReply(!displayReply);
       setFlag(true);
       if (displayReply === false) dispatch(fetchCommentReplies(commentId));
@@ -146,28 +146,28 @@ const LikesBar = ({
 
   /** to add like to post or comment */
   const addLike = async () => {
-    if (type === 'comment') {
+    if (type === "comment") {
       const obj = {
         eventId: eventId,
         userId: user._id,
       };
       dispatch(
-          addLikeViaSocket({postId: eventId, like: {...obj, _id: user._id}}),
+        addLikeViaSocket({ postId: eventId, like: { ...obj, _id: user._id } })
       );
       const data = await dispatch(addLikeToEvent(obj));
       const response = await unwrapResult(data);
       if (response.success === true) {
         ws.send(
-            JSON.stringify({
-              action: 'like',
-              postId: eventId,
-              like: response.like,
-              businessId: business[0]._id,
-              type: 'Event',
-            }),
+          JSON.stringify({
+            action: "like",
+            postId: eventId,
+            like: response.like,
+            businessId: business[0]._id,
+            type: "Event",
+          })
         );
       }
-    } else if (type === 'reply') {
+    } else if (type === "reply") {
       setUserLikedComment(true);
       setLikeCountForComment(totalLikes + 1);
       const obj = {
@@ -178,14 +178,14 @@ const LikesBar = ({
       const response = await unwrapResult(data);
       if (response.success === true) {
         ws.send(
-            JSON.stringify({
-              action: 'like',
-              postId: response.postId,
-              like: response.like,
-              commentId: response.commentId,
-              businessId: business[0]._id,
-              type: 'Event',
-            }),
+          JSON.stringify({
+            action: "like",
+            postId: response.postId,
+            like: response.like,
+            commentId: response.commentId,
+            businessId: business[0]._id,
+            type: "Event",
+          })
         );
       }
     }
@@ -194,32 +194,32 @@ const LikesBar = ({
     <>
       <BottomBarLikes
         className={
-          type === 'reply' ?
-            'replyBar' :
-            type !== 'commentReply' ?
-            'replyBarComment' :
-            ''
+          type === "reply"
+            ? "replyBar"
+            : type !== "commentReply"
+            ? "replyBarComment"
+            : ""
         }
       >
         <LikesBtnWrap>
-          {type !== 'commentReply' && (
+          {type !== "commentReply" && (
             <RightDiv>
               {userLikedEvent || userLikedComment ? (
-                <MdFavorite style={{color: 'red'}} />
+                <MdFavorite style={{ color: "red" }} />
               ) : (
                 <MdFavoriteBorder
                   onClick={() => addLike()}
                   disabled={userLikedEvent || userLikedComment}
                 />
-              )}{' '}
-              {likeCount === 0 ?
-                likeCountForComment === 0 ?
-                  totalLikes :
-                  likeCountForComment :
-                likeCount}
+              )}{" "}
+              {likeCount === 0
+                ? likeCountForComment === 0
+                  ? totalLikes
+                  : likeCountForComment
+                : likeCount}
             </RightDiv>
           )}
-          {type !== 'commentReply' && (
+          {type !== "commentReply" && (
             <RightDiv>
               <button>
                 <MdChatBubbleOutline

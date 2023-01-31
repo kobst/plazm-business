@@ -1,13 +1,13 @@
-import React, {useState, useEffect} from 'react';
-import styled from 'styled-components';
-import BuisinessHeader from './BuisinessHeader';
-import TabsSection from './TabsSection';
-import {useDispatch, useSelector} from 'react-redux';
-import BuisinessProfileDetails from './BuisinessProfileDetails';
-import ValueLoader from '../../../utils/loader';
-import {setFilters} from '../../../reducers/businessReducer';
-import useStore from '../useState/index';
-import GlobalSearchBox from '../GlobalSearch/GlobalSearchBox';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import BuisinessHeader from "./BuisinessHeader";
+import TabsSection from "./TabsSection";
+import { useDispatch, useSelector } from "react-redux";
+import BuisinessProfileDetails from "./BuisinessProfileDetails";
+import ValueLoader from "../../../utils/loader";
+import { setFilters } from "../../../reducers/businessReducer";
+import useStore from "../useState/index";
+import GlobalSearchBox from "../GlobalSearch/GlobalSearchBox";
 
 const BuisinessViewContent = styled.div`
   width: 100%;
@@ -39,14 +39,12 @@ const BusinessWrap = styled.div`
   width: 100%;
 `;
 
-const BuisinessView = ({
-  setDisplayTab,
-  businessId,
-}) => {
+const BuisinessView = ({ setDisplayTab, businessId }) => {
   const loading = useSelector((state) => state.business.loading);
   const showSearchBar = useSelector((state) => state.globalSearch.displayBar);
   const businessProfile = useSelector((state) => state.business.business);
   const flag = useSelector((state) => state.business.flag);
+  const feedData = useSelector((state) => state.myFeed.myFeed);
   const [displayBusinessProfile, setDisplayBusinessProfile] = useState(false);
   const setSelectedPlace = useStore((state) => state.setSelectedPlace);
   const setDetailView = useStore((state) => state.setDetailView);
@@ -71,12 +69,12 @@ const BuisinessView = ({
   useEffect(() => {
     // dispatch(setSideFilters());
     dispatch(
-        setFilters({
-          Business: false,
-          PostsByMe: true,
-          MySubscriptions: false,
-          Others: false,
-        })
+      setFilters({
+        Business: false,
+        PostsByMe: true,
+        MySubscriptions: false,
+        Others: false,
+      })
     );
   }, [dispatch]);
   return (
@@ -91,12 +89,12 @@ const BuisinessView = ({
         </LoaderWrap>
       ) : (
         <BusinessWrap>
-          <div style={{width: '100%'}}>
+          <div style={{ width: "100%" }}>
             {showSearchBar && (
-              <GlobalSearchBox setOffset={() => {}} type={'Business Search'} />
+              <GlobalSearchBox setOffset={() => {}} type={"Business Search"} />
             )}
           </div>
-          <div style={{width: '100%', height: '100vh'}}>
+          <div style={{ width: "100%", height: "100vh" }}>
             <BuisinessViewContent>
               {businessProfile &&
                 businessProfile.length > 0 &&
@@ -116,10 +114,8 @@ const BuisinessView = ({
                 !loading &&
                 businessProfile &&
                 businessProfile.length > 0 && (
-                <TabsSection
-                  businessId={businessId}
-                />
-              )}
+                  <TabsSection businessId={businessId} />
+                )}
             </BuisinessViewContent>
           </div>
         </BusinessWrap>

@@ -1,9 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
-import UserMessageEvents from '../../HomeSearch/BusinessListing/Events/UserMessageEvents';
-import UserMessage from '../../HomeSearch/BusinessListing/UserMessage';
+import React from "react";
+import styled from "styled-components";
+import UserMessageEvents from "../../HomeSearch/BusinessListing/Events/UserMessageEvents";
+import UserMessage from "../../HomeSearch/BusinessListing/UserMessage";
 
-import useStore from '../../useState';
+import useStore from "../../useState";
 
 const FeedListItem = styled.div`
   /* .background-active {
@@ -12,17 +12,14 @@ const FeedListItem = styled.div`
   .background-inactive {
     background-color: #282352;
   } */
-  background: #120F29;
-  border: 1px solid #3F3777;
+  background: #120f29;
+  border: 1px solid #3f3777;
   border-radius: 10px;
   margin: 0 10px 3px;
 `;
 
 /** display business details */
-const DisplayBusinessDetails = ({
-  data,
-  id,
-}) => {
+const DisplayBusinessDetails = ({ data, id }) => {
   const setSelectedListId = useStore((state) => state.setSelectedListId);
 
   const setMyFeedIndex = useStore((state) => state.setMyFeedIndex);
@@ -30,14 +27,14 @@ const DisplayBusinessDetails = ({
   return data ? (
     <FeedListItem>
       <div
-        className={id % 2 === 0 ? 'background-active' : 'background-inactive'}
+        className={id % 2 === 0 ? "background-active" : "background-inactive"}
       >
         {/* to display event for the business */}
         {data.eventSchedule !== null ? (
           <UserMessageEvents
             eventData={data}
             businessInfo={data.business[0]}
-            type={'MyFeedEvent'}
+            type={"MyFeedEvent"}
             setSearchIndex={setMyFeedIndex}
             myFeedView={true}
             isList

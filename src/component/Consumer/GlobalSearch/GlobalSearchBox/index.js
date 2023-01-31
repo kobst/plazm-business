@@ -66,7 +66,6 @@ const GlobalSearchInputWrap = styled.div`
 
 const GlobalSearchBox = ({ setOffset, type }) => {
   const dispatch = useDispatch();
-
   const history = useHistory();
   const location = useLocation()
     .pathname.split("/")
@@ -140,7 +139,7 @@ const GlobalSearchBox = ({ setOffset, type }) => {
         setSearchError("");
         dispatch(
           checkBusiness({
-            businessId: history.at(-1),
+            businessId:location[location.length-1],
             filters: {
               PostsByMe: filters.PostsByMe
                 ? filters.PostsByMe

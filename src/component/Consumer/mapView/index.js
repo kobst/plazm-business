@@ -185,6 +185,7 @@ const setBBox = (_orderedPlaces) => {
 const Map = ReactMapboxGl({
   accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
   interactive: true,
+  minZoom: 4,
 });
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_API_KEY);

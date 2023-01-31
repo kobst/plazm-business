@@ -278,7 +278,7 @@ const ListMenu = () => {
                 onKeyPress={(event) => searchListsData(event)}
                 onChange={handleSearchChange}
                 className="SearchSubscriptionsInput"
-                placeholder="Search Lists"
+                placeholder=""
                 disabled={loading}
               />
               {searchError && (

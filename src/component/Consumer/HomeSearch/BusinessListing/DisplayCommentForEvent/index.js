@@ -1,13 +1,13 @@
-import React, {useState} from 'react';
-import styled from 'styled-components';
-import Comments from '../UserMessage/Comments';
-import ProfileImg from '../../../../../images/profile-img.png';
-import LikesBar from '../LikesBar';
-import DateBar from '../Events/DateBar';
-import TimeBar from '../Events/TimeBar';
-import ImageComment from '../Events/ImageComment';
-import {useSelector} from 'react-redux';
-import {useHistory} from 'react-router-dom';
+import React, { useState } from "react";
+import styled from "styled-components";
+import Comments from "../UserMessage/Comments";
+import ProfileImg from "../../../../../images/profile-img.png";
+import LikesBar from "../LikesBar";
+import DateBar from "../Events/DateBar";
+import TimeBar from "../Events/TimeBar";
+import ImageComment from "../Events/ImageComment";
+import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 const UserMessageContent = styled.div`
   width: 100%;
@@ -125,7 +125,7 @@ const SubHeading = styled.div`
   font-weight: 700;
   color: #00c2ff;
 `;
-const DisplayCommentForEvent = ({postData, businessData}) => {
+const DisplayCommentForEvent = ({ postData, businessData }) => {
   const [displayComments, setDisplayComments] = useState(false);
   const [displayCommentInput, setDisplayCommentInput] = useState(false);
   const search = useSelector((state) => state.myFeed.enterClicked);
@@ -133,13 +133,13 @@ const DisplayCommentForEvent = ({postData, businessData}) => {
   const history = useHistory();
 
   const days = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
   ];
 
   return (
@@ -148,32 +148,30 @@ const DisplayCommentForEvent = ({postData, businessData}) => {
         <UserMessageContent>
           <ProfileNameHeader
             className={
-              (postData.body !== null && postData.type === 'Post') ||
+              (postData.body !== null && postData.type === "Post") ||
               postData.data !== null ||
-              !search ?
-                'line-active' :
-                'line-inactive'
+              !search
+                ? "line-active"
+                : "line-inactive"
             }
           >
             <ProfileThumb>
               <img
                 src={
                   postData.itemId.ownerId === null ||
-                  postData.itemId.ownerId.length === 0 ?
-                    businessData.default_image_url :
-                    postData.itemId.ownerId[0].photo !== '' &&
-                      postData.itemId.ownerId[0].photo !== null ?
-                    postData.itemId.ownerId[0].photo :
-                    ProfileImg
+                  postData.itemId.ownerId.length === 0
+                    ? businessData.default_image_url
+                    : postData.itemId.ownerId[0].photo !== "" &&
+                      postData.itemId.ownerId[0].photo !== null
+                    ? postData.itemId.ownerId[0].photo
+                    : ProfileImg
                 }
                 alt=""
               />
             </ProfileThumb>
             <ProfileNameWrap>
               <ProfileName
-                onClick={() =>
-                  history.push(`/b/${businessData._id}`)
-                }
+                onClick={() => history.push(`/b/${businessData._id}`)}
               >
                 {businessData.company_name}
               </ProfileName>
@@ -182,12 +180,12 @@ const DisplayCommentForEvent = ({postData, businessData}) => {
               <DateBar
                 startDay={
                   days[
-                      new Date(postData.itemId.eventSchedule.start_time).getDay()
+                    new Date(postData.itemId.eventSchedule.start_time).getDay()
                   ]
                 }
                 endDay={
                   days[
-                      new Date(postData.itemId.eventSchedule.end_time).getDay()
+                    new Date(postData.itemId.eventSchedule.end_time).getDay()
                   ]
                 }
               />
@@ -199,9 +197,9 @@ const DisplayCommentForEvent = ({postData, businessData}) => {
                 type="disabled"
                 totalLikes={postData.itemId.likes.length}
                 totalComments={
-                  postData.totalComments.length > 0 ?
-                    postData.totalComments[0].totalCount :
-                    0
+                  postData.totalComments.length > 0
+                    ? postData.totalComments[0].totalCount
+                    : 0
                 }
                 date={new Date(postData.itemId.createdAt)}
                 setDisplayComments={setDisplayComments}
@@ -218,9 +216,9 @@ const DisplayCommentForEvent = ({postData, businessData}) => {
           </ProfileNameHeader>
           <ImageComment
             image={
-              postData.itemId.media.length > 0 ?
-                postData.itemId.media[0].image :
-                ''
+              postData.itemId.media.length > 0
+                ? postData.itemId.media[0].image
+                : ""
             }
           />
         </UserMessageContent>
