@@ -1,11 +1,11 @@
-import React from "react";
-import styled from "styled-components";
-import { useSelector } from "react-redux";
-import { Scrollbars } from "react-custom-scrollbars";
-import BuisinessHeader from "../BuisinessHeader";
-import BuisinessProfileSection from "../BuisinessProfileSection";
-import BuisinessProfileDescription from "../BuisinessProfileDescription";
-import BuisinessHeaderNotClaimed from "../BuisinessHeaderNotClaimed";
+import React from 'react';
+import styled from 'styled-components';
+import {useSelector} from 'react-redux';
+import {Scrollbars} from 'react-custom-scrollbars';
+import BuisinessHeader from '../BuisinessHeader';
+import BuisinessProfileSection from '../BuisinessProfileSection';
+import BuisinessProfileDescription from '../BuisinessProfileDescription';
+import BuisinessHeaderNotClaimed from '../BuisinessHeaderNotClaimed';
 
 const BuisinessViewContent = styled.div`
   width: 100%;

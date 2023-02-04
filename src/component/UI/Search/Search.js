@@ -1,7 +1,7 @@
 
-import React from 'react'
-import styled from 'styled-components'
-import SearchIcon from '../../../images/search.svg'
+import React from 'react';
+import styled from 'styled-components';
+import SearchIcon from '../../../images/search.svg';
 const SearchContainer = styled.div`
 font-family: 'Roboto',sans-serif;
 height:50px;
@@ -32,14 +32,14 @@ input{
     height:40px; 
     padding: 0 15px;
 }
-`
+`;
 
-const Search = (props,children) => {
-    return(
+const Search = (props, children) => {
+  return (
     <SearchContainer>
-        <input type="search" placeholder="Search by Name" /><img src={SearchIcon} alt={SearchIcon} />
+      <input type="search" placeholder="Search by Name" /><img src={SearchIcon} alt={SearchIcon} />
     </SearchContainer>
-    )
-}
+  );
+};
 
-export default Search
+export default Search;

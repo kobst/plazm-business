@@ -1,6 +1,6 @@
 
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
 // import PlusIcon from '../../../Public/images/plus.svg'
 
 const ButtonText = styled.button`
@@ -14,7 +14,7 @@ border:none;
 color:#fff;
 font-weight:500;
 width:100%;
-max-width:${props => props.maxWidth ? props.maxWidth : 'inherit'};
+max-width:${(props) => props.maxWidth ? props.maxWidth : 'inherit'};
 font-family: 'Roboto', sans-serif;
 :hover,:focus{
   background: #280A33;
@@ -25,13 +25,13 @@ font-family: 'Roboto', sans-serif;
 font-size:16px;
 line-height:19px;
 }
-`
+`;
 
-const Button = props => {
-  const { maxWidth} = props
-    return(
-      <ButtonText  maxWidth={maxWidth} {...props} />
-    )
-}
+const Button = (props) => {
+  const {maxWidth} = props;
+  return (
+    <ButtonText maxWidth={maxWidth} {...props} />
+  );
+};
 
-export default Button
+export default Button;

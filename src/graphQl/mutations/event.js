@@ -2,7 +2,7 @@
 @desc: add like to a event
 @params: postId, userId
 */
-const addLikeToEvents = (values) => {
+const addLikeToEventsGraphql = (values) => {
   const graphQl = {
     query: `
             mutation AddLikeToEvents($id: ID!, $userId:ID!){
@@ -32,11 +32,15 @@ const addLikeToEvents = (values) => {
 @desc: create event graphQL mutation
 @params: title, description, user, eventSchedule, recurring, media
 */
-const createEvent = (values) => {
+const createEventGraphql = (values) => {
   const graphQl = {
     query: `
-        mutation AddEvent($title: String, $description:String, $user:ID, $business:ID,  $eventSchedule:eventScheduleInput, $recurring:[Int], $media:[String], $listId: ID, $taggedUsers: [ID], $taggedLists: [ID]){
-            addEvent(input: {title:$title, description:$description, user:$user, business:$business, eventSchedule:$eventSchedule, recurring: $recurring, media: $media, listId: $listId, taggedUsers: $taggedUsers, taggedLists: $taggedLists}) {
+        mutation AddEvent($title: String, $description:String, $user:ID, $business:ID,  
+          $eventSchedule:eventScheduleInput, $recurring:[Int], $media:[String], $listId: ID,
+           $taggedUsers: [ID], $taggedLists: [ID]){
+            addEvent(input: {title:$title, description:$description, user:$user, 
+              business:$business, eventSchedule:$eventSchedule, recurring: $recurring,
+               media: $media, listId: $listId, taggedUsers: $taggedUsers, taggedLists: $taggedLists}) {
             message
             success
             event {
@@ -77,4 +81,4 @@ const createEvent = (values) => {
   return graphQl;
 };
 
-export { addLikeToEvents, createEvent };
+export {addLikeToEventsGraphql, createEventGraphql};

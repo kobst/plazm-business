@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { graphQlEndPoint } from "../Api/graphQl";
 import {
-  addFavoriteBusiness,
-  getUser,
-  getUserFavorites,
-  GetUserProfileData,
-  removeFavoriteBusiness,
+  addFavoriteBusinessGraphql,
+  getUserGraphql,
+  getUserFavoritesGraphql,
+  getUserProfileDataGraphql,
+  removeFavoriteBusinessGraphql,
 } from "../graphQl";
 
 /*
@@ -15,7 +15,7 @@ import {
 export const fetchUserDetails = createAsyncThunk(
   "data/fetchUserDetails",
   async (userSub) => {
-    const graphQl = getUser(userSub, 0, 15);
+    const graphQl = getUserGraphql(userSub, 0, 15);
     const response = graphQlEndPoint(graphQl);
     return response;
   }
@@ -28,7 +28,7 @@ export const fetchUserDetails = createAsyncThunk(
 export const fetchUserProfileData = createAsyncThunk(
   "data/fetchUserProfileData",
   async (id) => {
-    const graphQl = GetUserProfileData(id);
+    const graphQl = getUserProfileDataGraphql(id);
     const response = graphQlEndPoint(graphQl);
     return response;
   }
@@ -38,10 +38,10 @@ export const fetchUserProfileData = createAsyncThunk(
  * @desc:  to add a business to favorites
  * @params: businessId, userId
  */
-export const AddBusinessFavorite = createAsyncThunk(
+export const addBusinessFavorite = createAsyncThunk(
   "data/AddBusinessFavorite",
   async (obj) => {
-    const graphQl = addFavoriteBusiness(obj);
+    const graphQl = addFavoriteBusinessGraphql(obj);
     const response = await graphQlEndPoint(graphQl);
     return response.data.addFavoriteBusiness.user;
   }
@@ -51,10 +51,10 @@ export const AddBusinessFavorite = createAsyncThunk(
  * @desc:  to remove a business to favorites
  * @params: businessId, userId
  */
-export const RemoveBusinessFavorite = createAsyncThunk(
+export const removeBusinessFavorite = createAsyncThunk(
   "data/RemoveBusinessFavorite",
   async (obj) => {
-    const graphQl = removeFavoriteBusiness(obj);
+    const graphQl = removeFavoriteBusinessGraphql(obj);
     const response = await graphQlEndPoint(graphQl);
     return response.data.removeFavoriteBusiness.user;
   }
@@ -67,7 +67,7 @@ export const RemoveBusinessFavorite = createAsyncThunk(
 export const fetchUserFavoritesBusiness = createAsyncThunk(
   "data/fetchUserFavoritesBusiness",
   async ({ id, value, filters, latitude, longitude }) => {
-    const graphQl = getUserFavorites({
+    const graphQl = getUserFavoritesGraphql({
       id: id,
       value: value,
       filters: filters,
@@ -86,10 +86,10 @@ export const fetchUserFavoritesBusiness = createAsyncThunk(
  * @desc:  to remove a business to favorites
  * @params: businessId, userId
  */
-export const RemoveUserBusinessFavorite = createAsyncThunk(
+export const removeUserBusinessFavorite = createAsyncThunk(
   "data/RemoveUserBusinessFavorite",
   async (obj) => {
-    const graphQl = removeFavoriteBusiness(obj);
+    const graphQl = removeFavoriteBusinessGraphql(obj);
     const response = await graphQlEndPoint(graphQl);
     return response.data.removeFavoriteBusiness.user;
   }
@@ -150,43 +150,46 @@ export const slice = createSlice({
         state.error = action.payload;
       }
     },
-    [AddBusinessFavorite.pending]: (state) => {
+    [addBusinessFavorite.pending]: (state) => {
       if (!state.loadingRemoveFavorite) {
         state.loadingRemoveFavorite = true;
       }
     },
-    [AddBusinessFavorite.fulfilled]: (state, action) => {
+    [addBusinessFavorite.fulfilled]: (state, action) => {
       if (state.loadingRemoveFavorite) {
         state.loadingRemoveFavorite = false;
         if (action.payload) {
-          let favorites = [...state.user.favorites, action.payload.businessId];
+          const favorites = [
+            ...state.user.favorites,
+            action.payload.businessId,
+          ];
           state.user = { ...state.user, favorites: favorites };
         }
       }
     },
-    [AddBusinessFavorite.rejected]: (state, action) => {
+    [addBusinessFavorite.rejected]: (state, action) => {
       if (state.loadingRemoveFavorite) {
         state.loadingRemoveFavorite = false;
         state.error = action.payload;
       }
     },
-    [RemoveBusinessFavorite.pending]: (state) => {
+    [removeBusinessFavorite.pending]: (state) => {
       if (!state.loadingAddFavorite) {
         state.loadingAddFavorite = true;
       }
     },
-    [RemoveBusinessFavorite.fulfilled]: (state, action) => {
+    [removeBusinessFavorite.fulfilled]: (state, action) => {
       if (state.loadingAddFavorite) {
         state.loadingAddFavorite = false;
         if (action.payload) {
-          let favorites = state.user.favorites.filter(
+          const favorites = state.user.favorites.filter(
             (i) => i !== action.payload.businessId
           );
           state.user = { ...state.user, favorites: favorites };
         }
       }
     },
-    [RemoveBusinessFavorite.rejected]: (state, action) => {
+    [removeBusinessFavorite.rejected]: (state, action) => {
       if (state.loadingAddFavorite) {
         state.loadingAddFavorite = false;
         state.error = action.payload;
@@ -205,11 +208,6 @@ export const slice = createSlice({
             action.payload.data
           );
           state.totalFavorites = action.payload.totalFavorites;
-          // state.favoriteBusiness = action.payload.sort(function (a, b) {
-          //   return a.favorites.company_name
-          //     .toLowerCase()
-          //     .localeCompare(b.favorites.company_name.toLowerCase());
-          // });
         }
       }
     },
@@ -219,7 +217,7 @@ export const slice = createSlice({
         state.error = action.payload;
       }
     },
-    [RemoveUserBusinessFavorite.fulfilled]: (state, action) => {
+    [removeUserBusinessFavorite.fulfilled]: (state, action) => {
       if (action.payload) {
         state.favoriteBusiness = state.favoriteBusiness.filter(
           (i) => i.favorites._id !== action.payload.businessId

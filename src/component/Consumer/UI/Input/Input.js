@@ -1,6 +1,6 @@
 
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
 
 const InputText = styled.input`
     border: 0;
@@ -24,12 +24,12 @@ const InputText = styled.input`
     @media (max-width:767px){
         font-size: 14px;
     }
-`
+`;
 
 const Input = (props) => {
-    return(
-        <InputText ref={props.refs} {...props} />
-    )
-}
+  return (
+    <InputText ref={props.refs} {...props} />
+  );
+};
 
-export default Input
+export default Input;

@@ -1,9 +1,9 @@
 /*
-@desc: getAllLists query
+@desc: getAllListsGraphql query
 */
-const getAllLists = () => {
-  const graphQl = {
-    query: `
+const getAllListsGraphql = () => {
+	const graphQl = {
+		query: `
             query GetLists{
                 getLists {
                 message
@@ -21,16 +21,16 @@ const getAllLists = () => {
                   }
                 }
             }`,
-  };
-  return graphQl;
+	};
+	return graphQl;
 };
 
 /*
-@desc: getUserLists query
+@desc: getUserListsGraphql query
 */
-const getUserLists = (ownerId) => {
-  const graphQl = {
-    query: `
+const getUserListsGraphql = (ownerId) => {
+	const graphQl = {
+		query: `
           query GetUserLists($id: ID!){
             getUserLists(input: {id: $id}) {
               message
@@ -57,19 +57,19 @@ const getUserLists = (ownerId) => {
                 }
               }
           }`,
-    variables: {
-      id: ownerId,
-    },
-  };
-  return graphQl;
+		variables: {
+			id: ownerId,
+		},
+	};
+	return graphQl;
 };
 
 /*
-@desc: getUserSubscribedLists query
+@desc: getUserSubscribedListsGraphql query
 */
-const getUserSubscribedLists = (obj) => {
-  const graphQl = {
-    query: `
+const getUserSubscribedListsGraphql = (obj) => {
+	const graphQl = {
+		query: `
           query GetUserSubscribedLists($id: ID!, $value: Int, $limit: Int){
             getUserSubscribedLists (input: {id: $id, value:$value, limit: $limit}){
               message
@@ -97,24 +97,22 @@ const getUserSubscribedLists = (obj) => {
                 }
               }
           }`,
-    variables: {
-      id: obj.id,
-      value: obj.value,
-      limit: obj?.limit || 15,
-    },
-  };
-  return graphQl;
+		variables: {
+			id: obj.id,
+			value: obj.value,
+			limit: obj?.limit || 15,
+		},
+	};
+	return graphQl;
 };
 
-
 /*
-@desc: getUserSubscribedLists query
+@desc: filterUserListsGraphql query
 */
 
-
-const filterUserLists = (obj) => {
-  const graphQl = {
-    query: `
+const filterUserListsGraphql = (obj) => {
+	const graphQl = {
+		query: `
           query FetchUserLists($input: userFetchInput!){
             fetchUserLists(input: $input){
               message
@@ -146,25 +144,25 @@ const filterUserLists = (obj) => {
                 }
               }
           }`,
-    variables:{
-      input : {
-        id: obj.id,
-        page: obj.page || 1,
-        limit: obj?.limit || 12,
-        created: obj.created || false,
-        subscribed: obj?.subscribed || false,
-      }
-    },
-  };
-  return graphQl;
+		variables: {
+			input: {
+				id: obj.id,
+				page: obj.page || 1,
+				limit: obj?.limit || 12,
+				created: obj.created || false,
+				subscribed: obj?.subscribed || false,
+			},
+		},
+	};
+	return graphQl;
 };
 
 /*
 @desc: getUserCreatedAndFollowedLists query
 */
-const getUserCreatedAndFollowedLists = (obj) => {
-  const graphQl = {
-    query: `
+const getUserCreatedAndFollowedListsGraphql = (obj) => {
+	const graphQl = {
+		query: `
           query GetUserCreatedAndFollowedLists($id: ID!, $value: Int, $limit: Int){
             getUserCreatedAndFollowedLists (input: {id: $id, value:$value, limit: $limit}){
               message
@@ -191,22 +189,22 @@ const getUserCreatedAndFollowedLists = (obj) => {
                 }
               }
           }`,
-    variables: {
-      id: obj.id,
-      value: obj.value,
-      limit: obj?.limit || 15,
-    },
-  };
-  return graphQl;
+		variables: {
+			id: obj.id,
+			value: obj.value,
+			limit: obj?.limit || 15,
+		},
+	};
+	return graphQl;
 };
 /*
-@desc: getListDetails query
+@desc: getListDetailsGraphql query
 */
-const GetListDetails = (obj) => {
-  const graphQl = {
-    query: `
-          query GetListDetails($id: ID!, $value: Int){
-            getListDetails (input: {id: $id, value:$value}){
+const getListDetailsGraphql = (obj) => {
+	const graphQl = {
+		query: `
+          query getListDetails($id: ID!, $value: Int, $latitude: Float!, $longitude: Float!){
+            getListDetails (input: {id: $id, value:$value, latitude:$latitude, longitude:$longitude}){
               message
               success
               totalLists 
@@ -286,20 +284,22 @@ const GetListDetails = (obj) => {
               }
               }
           }`,
-    variables: {
-      id: obj.id,
-      value: obj.value,
-    },
-  };
-  return graphQl;
+		variables: {
+			id: obj.id,
+			value: obj.value,
+			latitude: obj.latitude,
+			longitude: obj.longitude,
+		},
+	};
+	return graphQl;
 };
 
 /*
-@desc: getMostTrendingLists query
+@desc: getMostTrendingListsGraphql query
 */
-const getMostTrendingLists = (value) => {
-  const graphQl = {
-    query: `
+const getMostTrendingListsGraphql = (value) => {
+	const graphQl = {
+		query: `
           query FetchMostTrendingLists($value: Int){
             fetchMostTrendingLists(input: {value: $value}) {
               message
@@ -327,19 +327,19 @@ const getMostTrendingLists = (value) => {
                 }
               }
           }`,
-    variables: {
-      value: value,
-    },
-  };
-  return graphQl;
+		variables: {
+			value: value,
+		},
+	};
+	return graphQl;
 };
 
 /*
-@desc: getMostPopularLists query
+@desc: getMostPopularListsGraphql query
 */
-const getMostPopularLists = (value) => {
-  const graphQl = {
-    query: `
+const getMostPopularListsGraphql = (value) => {
+	const graphQl = {
+		query: `
           query FetchMostPopularLists($value: Int){
             fetchMostPopularLists(input: {value: $value}) {
               message
@@ -367,19 +367,19 @@ const getMostPopularLists = (value) => {
               }
             }
           }`,
-    variables: {
-      value: value,
-    },
-  };
-  return graphQl;
+		variables: {
+			value: value,
+		},
+	};
+	return graphQl;
 };
 
 /*
-@desc: SearchLists query
+@desc: searchListsGraphql query
 */
-const SearchLists = (obj) => {
-  const graphQl = {
-    query: `
+const searchListsGraphql = (obj) => {
+	const graphQl = {
+		query: `
           query ListSearch($value: Int, $search: String, $userId: String, $subscriberId: String){
             listSearch(input: {value: $value, search: $search, userId: $userId, subscriberId: $subscriberId}) {
               message
@@ -404,24 +404,24 @@ const SearchLists = (obj) => {
               }
             }
           }`,
-    variables: {
-      value: obj.value,
-      search: obj.search,
-      userId: obj.userId,
-      subscriberId: obj.subscriberId,
-    },
-  };
-  return graphQl;
+		variables: {
+			value: obj.value,
+			search: obj.search,
+			userId: obj.userId,
+			subscriberId: obj.subscriberId,
+		},
+	};
+	return graphQl;
 };
 
 export {
-  getAllLists,
-  getUserLists,
-  getUserSubscribedLists,
-  filterUserLists,
-  getUserCreatedAndFollowedLists,
-  GetListDetails,
-  getMostTrendingLists,
-  getMostPopularLists,
-  SearchLists,
+	getAllListsGraphql,
+	getUserListsGraphql,
+	getUserCreatedAndFollowedListsGraphql,
+	getListDetailsGraphql,
+	getMostTrendingListsGraphql,
+	getMostPopularListsGraphql,
+	searchListsGraphql,
+	getUserSubscribedListsGraphql,
+	filterUserListsGraphql,
 };

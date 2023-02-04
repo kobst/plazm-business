@@ -54,9 +54,9 @@ const ImageSliderWrap = styled.div`
 const ImageComment = ({ image, imgSources }) => {
   return (
     <>
-      {image !== "" ? (
+      {image !== '' ? (
         <BottomBarLikes>
-          <img src={image !== "" ? image : CommentStaticImg} alt="" />
+          <img src={image !== '' ? image : CommentStaticImg} alt="" />
         </BottomBarLikes>
       ) : null}
       {imgSources && imgSources.length ? (

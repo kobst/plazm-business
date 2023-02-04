@@ -134,7 +134,7 @@ const Map = ReactMapboxGl({
   interactive: true,
 });
 
-Geocode.setApiKey("AIzaSyAYVZIvAZkQsaxLD3UdFH5EH3DvYmSYG6Q");
+Geocode.setApiKey(process.env.REACT_APP_GOOGLE_API_KEY);
 
 const MapViewHooks = (props) => {
 

@@ -1,23 +1,22 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { IoMdClose } from "react-icons/io";
-import { MdKeyboardArrowDown, MdKeyboardArrowLeft } from "react-icons/md";
-import ProfileImg from "../../../../images/profile-img.png";
-import FacebookImg from "../../../../images/Facebook-new.svg";
-import TwitterImg from "../../../../images/Twitter-new.svg";
-import LinkedInImg from "../../../../images/Linkedin-new.svg";
-import InstagramImg from "../../../../images/Instagram-new.svg";
-import { useSelector, useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
-import FavoritesIcon from "../../../../images/favorites.png";
-import FavoritesIconFilled from "../../../../images/favorites-filled.png";
+import React, {useState, useEffect} from 'react';
+import styled from 'styled-components';
+import {IoMdClose} from 'react-icons/io';
+import {MdKeyboardArrowDown, MdKeyboardArrowLeft} from 'react-icons/md';
+import ProfileImg from '../../../../images/profile-img.png';
+import FacebookImg from '../../../../images/Facebook-new.svg';
+import TwitterImg from '../../../../images/Twitter-new.svg';
+import LinkedInImg from '../../../../images/Linkedin-new.svg';
+import InstagramImg from '../../../../images/Instagram-new.svg';
+import {useSelector, useDispatch} from 'react-redux';
+import {useHistory} from 'react-router-dom';
+import FavoritesIcon from '../../../../images/favorites.png';
+import FavoritesIconFilled from '../../../../images/favorites-filled.png';
 import {
-  AddBusinessFavorite,
-  RemoveBusinessFavorite,
-} from "../../../../reducers/userReducer";
-import { clearBusinessData } from "../../../../reducers/businessReducer";
-import useStore from "../../useState";
-
+  addBusinessFavorite,
+  removeBusinessFavorite,
+} from '../../../../reducers/userReducer';
+import {clearBusinessData} from '../../../../reducers/businessReducer';
+import useStore from '../../useState';
 
 
 const BuisinessHeaderContent = styled.div`
@@ -213,26 +212,23 @@ const BuisinessHeaderNotClaimed = ({
   const [favoriteBusiness, setFavoriteBusiness] = useState(false);
   const businessProfile = useSelector((state) => state.business.business);
   const [image, setImage] = useState(
-    businessProfile[0] ? businessProfile[0].default_image_url : ProfileImg
+    businessProfile[0] ? businessProfile[0].default_image_url : ProfileImg,
   );
   const user = useSelector((state) => state.user.user);
 
-  const listIndex = useStore((state) => state.listIndex)
-  const searchIndex = useStore((state) => state.listIndex)
-  const myFeedIndex = useStore((state) => state.myFeedIndex)
+  const listIndex = useStore((state) => state.listIndex);
+  const searchIndex = useStore((state) => state.listIndex);
+  const myFeedIndex = useStore((state) => state.myFeedIndex);
 
-  const setSearchIndex = useStore((state) => state.setSearchIndex)
-  const setMyFeedIndex = useStore((state) => state.setMyFeedIndex)
-  const setListIndex = useStore((state) => state.setListIndex)
-  const setFavoriteIndex = useStore((state) => state.setFavoriteIndex)
-  const setTabIndex = useStore((state) => state.setTabSelected)
-
+  const setSearchIndex = useStore((state) => state.setSearchIndex);
+  const setMyFeedIndex = useStore((state) => state.setMyFeedIndex);
+  const setListIndex = useStore((state) => state.setListIndex);
+  const setFavoriteIndex = useStore((state) => state.setFavoriteIndex);
+  const setTabIndex = useStore((state) => state.setTabSelected);
 
 
   const dispatch = useDispatch();
   const history = useHistory();
-
-
 
 
   useEffect(() => {
@@ -249,7 +245,7 @@ const BuisinessHeaderNotClaimed = ({
    */
   const closeTab = () => {
     setDisplayTab(false);
-    history.push("/");
+    history.push('/');
   };
 
   /** to add a business to user favorites */
@@ -258,7 +254,7 @@ const BuisinessHeaderNotClaimed = ({
       businessId: businessProfile[0]._id,
       userId: user._id,
     };
-    await dispatch(AddBusinessFavorite(obj));
+    await dispatch(addBusinessFavorite(obj));
   };
 
   /** to remove a business to user favorites */
@@ -267,36 +263,36 @@ const BuisinessHeaderNotClaimed = ({
       businessId: businessProfile[0]._id,
       userId: user._id,
     };
-    await dispatch(RemoveBusinessFavorite(obj));
+    await dispatch(removeBusinessFavorite(obj));
   };
 
   /** to return to all business listing */
   const backBusiness = () => {
     dispatch(clearBusinessData());
     if (searchIndex) {
-      history.push("/");
+      history.push('/');
       setTabIndex(1);
       setSearchIndex(null);
     } else if (myFeedIndex) {
-      history.push("/");
+      history.push('/');
       setTabIndex(2);
       setMyFeedIndex(null);
     } else if (listIndex) {
-      history.push("/");
+      history.push('/');
       setTabIndex(5);
       setListIndex(null);
     } else {
-      setFavoriteIndex(null)
-      history.push("/");
+      setFavoriteIndex(null);
+      history.push('/');
     }
   };
   return (
     businessProfile.length>0? <>
       <BuisinessHeaderContent
         className={
-          isProfile && businessProfile && businessProfile[0].userSub === null
-            ? "NotSlider"
-            : ""
+          isProfile && businessProfile && businessProfile[0].userSub === null ?
+            'NotSlider' :
+            ''
         }
       >
         <ArrowBack>
@@ -305,7 +301,7 @@ const BuisinessHeaderNotClaimed = ({
         <CloseDiv>
           <IoMdClose onClick={() => closeTab()} />
         </CloseDiv>
-        <BottomBar className={isProfile ? "ProfileHeaderNam" : ""}>
+        <BottomBar className={isProfile ? 'ProfileHeaderNam' : ''}>
           <LeftHeader>
             {!isProfile ? (
               <BusinessIcon>
@@ -322,7 +318,7 @@ const BuisinessHeaderNotClaimed = ({
               <BusinessName>
                 <span>
                   {businessProfile && businessProfile[0].company_name}
-                </span>{" "}
+                </span>{' '}
                 {/* business favorite toggle */}
                 {favoriteBusiness ? (
                   <img

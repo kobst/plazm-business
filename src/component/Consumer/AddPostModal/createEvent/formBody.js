@@ -1,14 +1,14 @@
-import React, { useEffect } from "react";
-import styled from "styled-components";
-import { MentionsInput, Mention } from "react-mentions";
-import { useDispatch, useSelector } from "react-redux";
-import Input from "../../UI/FormikInput";
+import React, {useEffect} from 'react';
+import styled from 'styled-components';
+import {MentionsInput, Mention} from 'react-mentions';
+import {useDispatch, useSelector} from 'react-redux';
+import Input from '../../UI/FormikInput';
 // import TextArea from "../../UI/formikTextArea";
-import { findAllUsers } from "../../../../reducers/consumerReducer";
-import { findAllLists } from "../../../../reducers/listReducer";
+import {findAllUsers} from '../../../../reducers/consumerReducer';
+import {findAllLists} from '../../../../reducers/listReducer';
 
 const InputContainer = styled.div`
-  border: 1px solid ${(props) => (props.usererror ? "#FF7171" : "#ffffff")};
+  border: 1px solid ${(props) => (props.usererror ? '#FF7171' : '#ffffff')};
   min-height: 60px;
   font-size: 16px;
   line-height: 21px;
@@ -111,11 +111,11 @@ function FormBody({
 }) {
   const users = useSelector((state) => state.consumer.users);
   const lists = useSelector((state) => state.list.lists);
-  let allData = [...users, ...lists];
-  let data = allData.sort(function (a, b) {
+  const allData = [...users, ...lists];
+  const data = allData.sort(function(a, b) {
     return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
   });
-  let userMentionData = data.map((myUser) => ({
+  const userMentionData = data.map((myUser) => ({
     id: myUser._id,
     display: `${myUser.name}`,
   }));
@@ -130,9 +130,9 @@ function FormBody({
     fetchTaggingData();
   }, [dispatch, lists.length, users.length]);
 
-  /**set form input value */
+  /** set form input value */
   const setValue = (e, field) => {
-    if (field === "title") setEventTitle(e.target.value);
+    if (field === 'title') setEventTitle(e.target.value);
     else setEventDescription(e.target.value);
     formik.setFieldValue(field, e.target.value);
   };
@@ -157,7 +157,7 @@ function FormBody({
       }
     }
     setEventDescription(newPlainTextValue);
-    formik.setFieldValue("description", newPlainTextValue);
+    formik.setFieldValue('description', newPlainTextValue);
   };
   return (
     <>
@@ -167,8 +167,8 @@ function FormBody({
           type="text"
           name="title"
           disabled={loader}
-          onChange={(e) => setValue(e, "title")}
-          onFocus={() => setResponse("")}
+          onChange={(e) => setValue(e, 'title')}
+          onFocus={() => setResponse('')}
         />
       </InputContainer>
       <InputContainer>
@@ -189,7 +189,7 @@ function FormBody({
             appendSpaceOnAdd={true}
           />
         </MentionsInput>
-        {formik.errors && formik.errors.description !== "" ? (
+        {formik.errors && formik.errors.description !== '' ? (
           <ErrorDiv>{formik.errors.description}</ErrorDiv>
         ) : null}
         {/* <TextArea

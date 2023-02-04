@@ -6,17 +6,17 @@ const EventsSkeleton = () => (
 
   <div className="skelton">
     <div className="postskelton">
-    <div className="eventImage">
+      <div className="eventImage">
         <Skeleton height={53} />
       </div>
       <div className="eventText">
         <div className="title">
           <Skeleton count={1} height={12} width={200} />
         </div>
-        <Skeleton count={3} height={7}  width={'90%'} />
+        <Skeleton count={3} height={7} width={'90%'} />
       </div>
 
-      </div>
+    </div>
   </div>
 );
 

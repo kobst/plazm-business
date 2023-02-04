@@ -1,40 +1,52 @@
 {
-    "env": {
-        "browser": true,
-        "es6": true
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "extends": [
+    "google",
+    "plugin:react/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "settings": {
+    "react": {
+      "createClass": "createReactClass", // Regex for Component Factory to use,
+      // default to "createReactClass"
+      "pragma": "React", // Pragma to use, default to "React"
+      "fragment": "Fragment", // Fragment to use (may be a property of <pragma>), default to "Fragment"
+      "version": "detect", // React version. "detect" automatically picks the version you have installed.
+      // You can also use `16.0`, `16.3`, etc, if you want to override the detected value.
+      // It will default to "latest" and warn if missing, and to "detect" in the future
+      "flowVersion": "0.53" // Flow version
+    }
+  },
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
     },
-    "extends": [
-        "plugin:react/recommended",
-        "airbnb"
-    ],
-    "globals": {
-        "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
-    },
-    "parserOptions": {
-        "ecmaFeatures": {
-            "jsx": true
-        },
-        "ecmaVersion": 2018,
-        "sourceType": "module"
-    },
-    "plugins": [
-        "react"
-    ],
-    "rules": {
-        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-        "import/no-extraneous-dependencies": [1, {"devDependencies": true}],
-        "jsx-a11y/anchor-is-valid": 0,
-        "react/forbid-prop-types": 0
-    },
-        "settings": {
-          "import/resolver":{
-            "node": {
-              "paths": ["src"]
-            }
-          }
-        }
-      }
- 
-    
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "plugins": ["react"],
 
+  "rules": {
+    "valid-jsdoc": "off",
+    "require-jsdoc": "off",
+    "no-tabs": "off",
+    "no-mixed-spaces-and-tabs": "off",
+    "max-len": [
+      "warn",
+      {
+        "code": 120,
+        "ignoreRegExpLiterals": true
+      }
+    ],
+    "react/prop-types": 0,
+    "quote-props": "off",
+    "comma-dangle": "off"
+  }
+}

@@ -1,34 +1,17 @@
-import { FaDivide } from "react-icons/fa";
-import React, { useEffect, useState, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import useStore from "../../../Consumer/useState";
+import React, {useEffect, useState} from 'react';
+import useStore from '../../../Consumer/useState';
 
-import { useHistory } from "react-router-dom";
+import {useHistory} from 'react-router-dom';
 
-import UploadImg from "../../../../images/upload-img.jpg";
-import "./styles.css";
+import UploadImg from '../../../../images/upload-img.jpg';
+import './styles.css';
 
-import {
-  checkMime,
-  replaceBucket,
-} from "../../../../utilities/checkResizedImage";
-import ReactTooltip from "react-tooltip";
+import {checkMime, replaceBucket} from '../../../../utilities/checkResizedImage';
+import ReactTooltip from 'react-tooltip';
 
-const ListTab = ({
-  data,
-  handleListTabClick,
-  // setSelectedListId,
-  // selectedListId,
-  // setListTab,
-  // selectedList,
-  // setSelectedList,
-}) => {
-  const history = useHistory();
+const ListTab = ({data, handleListTabClick}) => {
+	const history = useHistory();
 
-  const user = useSelector((state) => state.user.user);
-  const [uploadMenu, setUploadMenu] = useState(false);
-  const menuRef = useRef(null);
-  const dispatch = useDispatch();
   const [image, setImage] = useState(null);
   const [selected, setSelected] = useState(false);
   const [hover, setHover] = useState(false);
@@ -47,14 +30,14 @@ const ListTab = ({
     } else setImage(UploadImg);
   }, [data]);
 
-  useEffect(() => {
-    if (selectedListId === data._id) {
-      // set highlight
-      setSelected(true);
-    } else {
-      setSelected(false);
-    }
-  }, [selectedListId]);
+	useEffect(() => {
+		if (selectedListId === data._id) {
+			// set highlight
+			setSelected(true);
+		} else {
+			setSelected(false);
+		}
+	}, [selectedListId]);
 
   const errorFunction = () => {
     if (data.media.length) {

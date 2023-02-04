@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-import Constants from "../../../../../../../constants/index";
+import React from 'react';
+import styled from 'styled-components';
+import Constants from '../../../../../../../constants/index';
 const BottomBarLikes = styled.div`
   display: flex;
   justify-content: flex-start;
@@ -24,13 +24,13 @@ const LabelInput = styled.div`
   color: #ff2e9a;
 `;
 
-const DaysBar = ({ days = [] }) => {
+const DaysBar = ({days = []}) => {
   return (
     <>
       <BottomBarLikes>
         <LabelWrap>Date -</LabelWrap>
         <LabelInput>
-          {days.map((day) => Constants.REPETITION_DAY[day]).join(", ")}
+          {days.map((day) => Constants.REPETITION_DAY[day]).join(', ')}
         </LabelInput>
       </BottomBarLikes>
     </>

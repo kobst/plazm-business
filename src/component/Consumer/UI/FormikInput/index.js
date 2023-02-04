@@ -1,7 +1,7 @@
-import React from "react";
-import { useField } from "formik";
-import styled from "styled-components";
-import error from "../../../../constants";
+import React from 'react';
+import {useField} from 'formik';
+import styled from 'styled-components';
+import error from '../../../../constants';
 
 const InputText = styled.input`
   border: 0;
@@ -35,7 +35,7 @@ const ErrorDiv = styled.div`
 /*
 @desc: formik form input box
 */
-const Input = ({ label,formError, ...props }) => {
+const Input = ({label, formError, ...props}) => {
   const [field, meta] = useField(props);
   return (
     <>

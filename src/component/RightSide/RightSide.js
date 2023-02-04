@@ -487,7 +487,7 @@ const RightSide = (props) => {
     // console.log("disconnected");
   };
   useEffect(() => {
-    let updateUser = async (authState) => {
+    const updateUser = async (authState) => {
       try {
         const value = await Auth.currentAuthenticatedUser();
         const place = await callPlace(value.attributes.sub);
@@ -495,7 +495,10 @@ const RightSide = (props) => {
         if (users) {
           const userVal = [];
           users.map((v) => {
-            return userVal.push({ _id: v._id, name: "@"+v.name });
+            return userVal.push({
+              _id: v._id,
+              name: "@" + v.name,
+            });
           });
           // const val = userVal.sort(dynamicSort("name"))
           setConsumers(userVal);
@@ -524,7 +527,7 @@ const RightSide = (props) => {
           setSaveDisable(false);
           setDetails();
         } else {
-          let eventArr = [];
+          const eventArr = [];
           setEvent(eventArr);
         }
       } catch (err) {
@@ -533,8 +536,6 @@ const RightSide = (props) => {
       window.scrollTo(0, 0);
     };
     updateUser();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, postRef, isModelOpen, deleteOpen]);
 
   useEffect(() => {
@@ -554,8 +555,6 @@ const RightSide = (props) => {
       }
     };
     checkMentions();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mentions]);
 
   useEffect(() => {
@@ -566,8 +565,6 @@ const RightSide = (props) => {
       }
     };
     updateWebpost();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [webPost]);
   function onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
@@ -578,7 +575,7 @@ const RightSide = (props) => {
   };
 
   const eventManage = (sol) => {
-    let eventArr = [];
+    const eventArr = [];
     setEvent(eventArr);
     if (viewState !== "month") {
       // eslint-disable-next-line array-callback-return
@@ -685,26 +682,10 @@ const RightSide = (props) => {
     }
   };
 
-  const ConvertNumberToTwoDigitString = (n) => {
+  const convertNumberToTwoDigitString = (n) => {
     return n > 9 ? "" + n : "0" + n;
   };
-  // const dynamicSort = (property) => {
-  //   var sortOrder = 1;
 
-  //   if (property[0] === "-") {
-  //     sortOrder = -1;
-  //     property = property.substr(1);
-  //   }
-
-  //   return function (a, b) {
-  //     // eslint-disable-next-line eqeqeq
-  //     if (sortOrder == -1) {
-  //       return b[property].localeCompare(a[property]);
-  //     } else {
-  //       return a[property].localeCompare(b[property]);
-  //     }
-  //   }
-  // }
   const handleEdit = () => {
     handleClose();
     setIsModelOpen(true);
@@ -716,7 +697,7 @@ const RightSide = (props) => {
   };
 
   const returnTodayDate = () => {
-    let today = new Date();
+    const today = new Date();
     const dateArr = today.toLocaleDateString("en-US", options).split(",");
     return (
       <>
@@ -728,7 +709,7 @@ const RightSide = (props) => {
   };
 
   const returnMonth = () => {
-    let today = new Date();
+    const today = new Date();
     return today.toLocaleString("default", { month: "long" });
   };
   const goToDateFromMonthView = (date) => {
@@ -768,8 +749,8 @@ const RightSide = (props) => {
       setToolbarRef(toolbar);
     };
     const goToBack = () => {
-      let view = viewState;
-      let mDate = toolbar.date;
+      const view = viewState;
+      const mDate = toolbar.date;
       let newDate;
       if (view === "month") {
         if (mDate.getMonth() - 1 === now.getMonth()) {
@@ -798,8 +779,8 @@ const RightSide = (props) => {
       toolbar.onNavigate("prev", newDate);
     };
     const goToNext = () => {
-      let view = viewState;
-      let mDate = toolbar.date;
+      const view = viewState;
+      const mDate = toolbar.date;
       let newDate;
       if (view === "month") {
         if (mDate.getMonth() + 1 === now.getMonth()) {
@@ -838,19 +819,19 @@ const RightSide = (props) => {
 
     const month = () => {
       const date = moment(toolbar.date);
-      let month = date.format("MMMM");
+      const month = date.format("MMMM");
 
       return <span className="rbc-toolbar-label">{month}</span>;
     };
     const year = () => {
       const date = moment(toolbar.date);
-      let year = date.format("YYYY");
+      const year = date.format("YYYY");
 
       return <span className="rbc-toolbar-label">{year}</span>;
     };
 
     const day = () => {
-      let view = viewState;
+      const view = viewState;
       const date = moment(toolbar.date);
       let day;
       if (view === "day" || view === "week") {
@@ -903,9 +884,9 @@ const RightSide = (props) => {
   const getDate = (value) => {
     const date = new Date(value);
     const time =
-      ConvertNumberToTwoDigitString(date.getHours()) +
+      convertNumberToTwoDigitString(date.getHours()) +
       ":" +
-      ConvertNumberToTwoDigitString(date.getMinutes()) +
+      convertNumberToTwoDigitString(date.getMinutes()) +
       ", " +
       date
         .toLocaleString()
@@ -923,7 +904,7 @@ const RightSide = (props) => {
     }
   };
 
-  const Validation = () => {
+  const validation = () => {
     if (!description.trim()) {
       return false;
     } else {
@@ -932,7 +913,7 @@ const RightSide = (props) => {
   };
 
   const addPost = async () => {
-    if (Validation()) {
+    if (validation()) {
       setSaveDisable(true);
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}/api/posts`,
@@ -956,7 +937,12 @@ const RightSide = (props) => {
           action: "post",
           post: {
             postId: val.post._id,
-            postDetails: {...val.post,ownerId: null, createdAt: new Date(), type:"Business"},
+            postDetails: {
+              ...val.post,
+              ownerId: null,
+              createdAt: new Date(),
+              type: "Business",
+            },
             totalComments: 0,
             totalLikes: 0,
             comments: [],
@@ -965,7 +951,7 @@ const RightSide = (props) => {
         })
       );
       setPostRef(true);
-      CancelPost();
+      cancelPost();
       return body;
     }
   };
@@ -988,7 +974,7 @@ const RightSide = (props) => {
     setDescription(newPlainTextValue);
   };
 
-  const CancelPost = () => {
+  const cancelPost = () => {
     setDescription("");
     setImageUrl([]);
     setImageUpload([]);
@@ -1004,13 +990,17 @@ const RightSide = (props) => {
     let divContent = value;
     //  eslint-disable-next-line array-callback-return
     mentions.map((v) => {
-      let re = new RegExp("@"+v.name, "g");
-      divContent = divContent.replace(re, "<h2>@"+ v.name + "</h2>");
+      const re = new RegExp("@" + v.name, "g");
+      divContent = divContent.replace(re, "<h2>@" + v.name + "</h2>");
     });
     if (mentions.length !== 0) {
       return (
         <>
-          <div dangerouslySetInnerHTML={{ __html: divContent }}></div>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: divContent,
+            }}
+          ></div>
         </>
       );
     } else {
@@ -1072,7 +1062,10 @@ const RightSide = (props) => {
         body: file,
       })
         .then((response) => {
-          imageArr.push({ id: imageCopy.length + 1, value: baseUrl });
+          imageArr.push({
+            id: imageCopy.length + 1,
+            value: baseUrl,
+          });
           imgUpload.push({ image: baseUrl });
           setImageUpload([...imgUpload]);
           setImageUploadCopy([...imgUpload]);
@@ -1184,7 +1177,7 @@ const RightSide = (props) => {
                         toolbar: getCustomToolbar,
                         month: {
                           dateHeader: (props) => {
-                            let highlightDate =
+                            const highlightDate =
                               eventCopy.find(
                                 (event) =>
                                   moment(props.date).isBetween(
@@ -1224,12 +1217,18 @@ const RightSide = (props) => {
                       step={60}
                       onView={(e) => (setCalenderView(e), setViewState(e))}
                       views={["day", "week", "month"]}
-                      style={{ height: 463, width: "100%" }}
+                      style={{
+                        height: 463,
+                        width: "100%",
+                      }}
                     />
                   ) : (
                     <div
                       className="loader"
-                      style={{ textAlign: "center", margin: " 40px auto 0" }}
+                      style={{
+                        textAlign: "center",
+                        margin: " 40px auto 0",
+                      }}
                     >
                       {" "}
                       <ValueLoader height="70" width="70" />
@@ -1325,13 +1324,19 @@ const RightSide = (props) => {
                 </MentionsInput>
 
                 <div className="mt-10">
-                  <FlexRow style={{ padding: "0px" }}>
+                  <FlexRow
+                    style={{
+                      padding: "0px",
+                    }}
+                  >
                     <input
                       id="myInput"
                       onChange={(e) => upload(e)}
                       type="file"
                       ref={(ref) => (myInput = ref)}
-                      style={{ display: "none" }}
+                      style={{
+                        display: "none",
+                      }}
                     />
                     <ButtonSmall
                       className="btnhover"
@@ -1344,6 +1349,7 @@ const RightSide = (props) => {
                     {imageUrl ? (
                       <UploadOuter>
                         {imageUrl.map((v) => (
+                          // eslint-disable-next-line react/jsx-key
                           <UploadImage id={v.id} onClick={() => deleteImage(v)}>
                             <img src={v.value} alt="Upload" />
                           </UploadImage>
@@ -1354,13 +1360,18 @@ const RightSide = (props) => {
                       <ButtonSmall
                         maxWidth="34px"
                         bgColor="#FF7171"
-                        style={{ marginLeft: "auto", marginRight: "9px" }}
-                        onClick={() => CancelPost()}
+                        style={{
+                          marginLeft: "auto",
+                          marginRight: "9px",
+                        }}
+                        onClick={() => cancelPost()}
                       >
                         <img
                           src={CrossIcon}
                           alt="Cross Icon"
-                          style={{ marginRight: "0px" }}
+                          style={{
+                            marginRight: "0px",
+                          }}
                         />
                       </ButtonSmall>
                     ) : null}
@@ -1398,32 +1409,6 @@ const RightSide = (props) => {
                 <>
                   <div className="mt-25">
                     <Scrollbars autoHeight autoHeightMax={736} style={{}}>
-                      {/* <FeedListing onClick={() => setIsOpen(true)}>
-                      <FeedImage><img src={EventImg} alt="Event" /></FeedImage>
-                      <EventText>
-                        <span>08:35 AM, 12 - 08 - 12</span>
-                        <h3>Marcus George</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Imperdiet sed eget eros, viverra erat morbi. Nulla eleifend a elit sapien. Feugiat orci ullamcorper elit malesuada lacus. Pulvinar convallis rutrum accumsan pulvinar in sodales nullam velit.</p>
-                        <Icon>
-                          <div><img src={WishlistIcon} alt="" /><sup>3</sup>
-                            <Tooltip>
-                              <ul>
-                                <li>Ahmad Mango</li>
-                                <li>Dulce Workman</li>
-                                <li>Hanna Donin</li>
-                                <li>Lincoln Botosh</li>
-                                <li>Haylie Donin</li>
-                                <li>Nolan Aminoff</li>
-                                <li>Madelyn Lipshutz</li>
-                                <li>Ashlynn Siphron</li>
-                                <li><strong>More...</strong></li>
-                              </ul>
-                            </Tooltip>
-                          </div>
-                          <div><img src={CommentIcon} alt="" /><sup>3</sup></div>
-                        </Icon>
-                      </EventText>
-                    </FeedListing> */}
                       <PostModalBox
                         newComment={webComment}
                         isOpen={postOpen}
@@ -1468,6 +1453,7 @@ const RightSide = (props) => {
                       >
                         {typeof allFeed !== "undefined"
                           ? allFeed.slice(0, arrPositon).map((v) => (
+                              // eslint-disable-next-line react/jsx-key
                               <FeedListing>
                                 <FeedImage>
                                   <img
@@ -1512,22 +1498,6 @@ const RightSide = (props) => {
                                         </MenuItem>
                                       </Menu>
                                     </EditRomve>
-
-                                    {/* <EditRomve>
-                                <img onClick={() => setToggle(v._id)} src={MoreIcon} alt="More" />
-                                {toggle && id === v._id ?
-                                  <Tooltip>
-                                    <EditModalBox setToggleMenu={setToggleMenu} setIsOpen={setIsModelOpen} isOpen={isModelOpen} closeModal={() => setIsModelOpen(false)} users={consumers} value={content} />
-                                    <DeleteModalBox setToggleMenu={setToggleMenu} setDeleteOpen={setDeleteOpen} postId={id} isOpen={deleteOpen} closeModal={() => setDeleteOpen(false)} />
-                                    <ul>
-                                      <li onClick={() => handleEdit(v)}>Edit</li>
-                                      <li onClick={() => handleDelete(v)}>Delete</li>
-                                    </ul> </Tooltip> : null
-                                }
-                              </EditRomve> */}
-
-                                    {/* <WishlistImg><img src={WishlistGrey} alt="" /><sup>3</sup></WishlistImg>
-                              <CommentImg><img src={CommentGrey} alt="" /><sup>3</sup></CommentImg> */}
                                   </Icon>
                                 </EventText>
                               </FeedListing>
@@ -1544,207 +1514,10 @@ const RightSide = (props) => {
                   <PostSkeleton />
                 </>
               )}
-
-              {/* {mentions === 'Messages' ?
-                <>
-                  <Search />
-                  <UserListing>
-                    <UserList>
-                      <div className="leftText">
-                        <div className="imgSection">
-                          <img src={UserImage} alt="user" />
-                          <span></span>
-                        </div>
-                        <div className="text">
-                          <h2>Madelyn Mango</h2>
-                          <div className="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
-                        </div>
-                      </div>
-                    </UserList>
-                    <UserList>
-                      <div className="leftText">
-                        <div className="imgSection">
-                          <img src={UserImage} alt="user" />
-                        </div>
-                        <div className="text">
-                          <h2>Madelyn Mango</h2>
-                          <div className="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span className="active">Just Now</span></div>
-                        </div>
-                      </div>
-                    </UserList>
-                    <UserList>
-                      <div className="leftText">
-                        <div className="imgSection">
-                          <img src={UserImage} alt="user" />
-                          <span></span>
-                        </div>
-                        <div className="text">
-                          <h2>Madelyn Mango</h2>
-                          <div className="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
-                        </div>
-                      </div>
-                    </UserList>
-                    <UserList>
-                      <div className="leftText">
-                        <div className="imgSection">
-                          <img src={UserImage} alt="user" />
-                        </div>
-                        <div className="text">
-                          <h2>Madelyn Mango</h2>
-                          <div className="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span className="active">Just Now</span></div>
-                        </div>
-                      </div>
-                    </UserList>
-                    <UserList>
-                      <div className="leftText">
-                        <div className="imgSection">
-                          <img src={UserImage} alt="user" />
-                          <span></span>
-                        </div>
-                        <div className="text">
-                          <h2>Madelyn Mango</h2>
-                          <div className="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
-                        </div>
-                      </div>
-                    </UserList>
-                    <UserList>
-                      <div className="leftText">
-                        <div className="imgSection">
-                          <img src={UserImage} alt="user" />
-                        </div>
-                        <div className="text">
-                          <h2>Madelyn Mango</h2>
-                          <div className="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span className="active">Just Now</span></div>
-                        </div>
-                      </div>
-                    </UserList>
-                    <UserList>
-                      <div className="leftText">
-                        <div className="imgSection">
-                          <img src={UserImage} alt="user" />
-                          <span></span>
-                        </div>
-                        <div className="text">
-                          <h2>Madelyn Mango</h2>
-                          <div className="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
-                        </div>
-                      </div>
-                    </UserList>
-                    <UserList>
-                      <div className="leftText">
-                        <div className="imgSection">
-                          <img src={UserImage} alt="user" />
-                        </div>
-                        <div className="text">
-                          <h2>Madelyn Mango</h2>
-                          <div className="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span className="active">Just Now</span></div>
-                        </div>
-                      </div>
-                    </UserList>
-                    <UserList>
-                      <div className="leftText">
-                        <div className="imgSection">
-                          <img src={UserImage} alt="user" />
-                          <span></span>
-                        </div>
-                        <div className="text">
-                          <h2>Madelyn Mango</h2>
-                          <div className="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
-                        </div>
-                      </div>
-                    </UserList>
-                    <UserList>
-                      <div className="leftText">
-                        <div className="imgSection">
-                          <img src={UserImage} alt="user" />
-                          <span></span>
-                        </div>
-                        <div className="text">
-                          <h2>Madelyn Mango</h2>
-                          <div className="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
-                        </div>
-                      </div>
-                    </UserList>
-                    <UserList>
-                      <div className="leftText">
-                        <div className="imgSection">
-                          <img src={UserImage} alt="user" />
-                        </div>
-                        <div className="text">
-                          <h2>Madelyn Mango</h2>
-                          <div className="content"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet</p> <span>2h</span></div>
-                        </div>
-                      </div>
-                    </UserList>
-                  </UserListing>
-                </> : null
-              } */}
             </Card>
           </EventRight>
         </EventOuter>
       </Row>
-      {/* <Row>
-        <Card>
-          <FlexRow>
-
-            <SubHeading name="Gallery" />
-            <SortSection>
-              <p>You may upload images under the size of 2 MB each. Any dimension related message goes here*</p>
-              <a href=" "> <img src={SortIcon} alt="" /></a>
-            </SortSection>
-          </FlexRow>
-          <hr></hr>
-          <GallerySec />
-
-        </Card>
-      </Row> */}
-
-      {/* <Row>
-        <Card>
-          <FlexRow>
-            <Tabs isActive={activePublic} setMentions={setMentions} name="Public" />
-            <Tabs isActive={activeMentions} setMentions={setMentions} name="All Mentions" />
-            <Tabs isActive={mess} setMentions={setMentions} name="Messages" />
-          </FlexRow>
-          {mentions === 'Public' ?
-            <>
-              <TextArea value={description} onChange={(e) => handleChange(e)} placeholder="Type your post here" />
-              <FlexRow>
-                <LineButton setShowTag={setShowTag} name="Add Tags" />
-                {showTag ?
-                  <Multiselect options={consumers} displayValue="name" /> : null
-                }
-                <Anchor onClick={() => setDescription('')}>Cancel</Anchor>
-                <Button className="btn btn-primary" disabled={saveDisable} onClick={() => addPost()} buttontext="Publish" >{'Publish'}</Button>
-              </FlexRow>
-            </> : null
-          }
-
-          <BottomSection>
-            {mentions === 'Public' ?
-              <Heading name="Feed" /> : null
-            }
-            {mentions === 'Messages' ?
-              <Search /> : null
-            }
-            <ListingOuter>
-              <Listing mentions={mentions} data={place} value={allFeed} />
-            </ListingOuter>
-          </BottomSection>
-
-        </Card>
-        <Card>
-          <FlexRow>
-            <Heading name="Message" />
-            <Button buttontext="New"></Button>
-          </FlexRow>
-          <Search />
-
-          <Messages />
-    
-          <ChatBox />
-        </Card>
-      </Row> */}
     </RightSection>
   );
 };

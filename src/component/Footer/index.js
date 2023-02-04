@@ -1,7 +1,7 @@
 
-import React from 'react'
-import styled from 'styled-components'
-import Logo from '../../images/logo.svg'
+import React from 'react';
+import styled from 'styled-components';
+import Logo from '../../images/logo.svg';
 
 const Container = styled.div`
 display: flex;
@@ -17,7 +17,7 @@ color:#fff;
 @media (max-width:767px){
   margin:10px 0 ; 
 }
-`
+`;
 const FooterLogo = styled.div`
 padding:0px;
 img{
@@ -27,17 +27,16 @@ img{
   }
 }
 
-`
+`;
 
 
-
-const Header = props => {
+const Header = (props) => {
   return (
     <Container>
       <FooterLogo><img src={Logo} alt="logo" /></FooterLogo>
       <p>All Copyrights Reserved 2020</p>
     </Container>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

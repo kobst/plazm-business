@@ -1,19 +1,19 @@
-import React, { useEffect, useState, useRef} from "react";
-import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
-import InfiniteScroll from "react-infinite-scroll-component";
-import ValueLoader from "../../../utils/loader";
+import React, {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import styled from 'styled-components';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import ValueLoader from '../../../utils/loader';
 import {
   clearMyFeedData,
   fetchMyFeedData,
-} from "../../../reducers/myFeedReducer";
-import DisplayBusinessDetails from "./DisplayBusinessDetails";
-import { unwrapResult } from "@reduxjs/toolkit";
+} from '../../../reducers/myFeedReducer';
+import DisplayBusinessDetails from './DisplayBusinessDetails';
+import {unwrapResult} from '@reduxjs/toolkit';
 import SearchBar from "./SearchBar";
 import GridView from "../GridComponents/gridView/gridView";
-import { getHomeFeedRest } from "../../../Api";
-import useStore from "../useState";
-import GlobalSearchBox from "../GlobalSearch/GlobalSearchBox";
+import {getHomeFeedRest} from "../../../Api";
+import useStore from '../useState';
+import GlobalSearchBox from '../GlobalSearch/GlobalSearchBox';
 
 const LoaderWrap = styled.div`
   width: 100%;
@@ -111,13 +111,12 @@ const MyFeed = () => {
   const userLocation = useSelector((state) => state.business.userLocation);
   const filterByClosest = useSelector((state) => state.myFeed.filterByClosest);
   const filterByUpdatedAt = useSelector(
-    (state) => state.myFeed.filterByUpdatedAt
+      (state) => state.myFeed.filterByUpdatedAt,
   );
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffSet] = useState(0);
   const dispatch = useDispatch();
   const [flag, setFlag] = useState(true);
-  const mountedRef = useRef(true)
 
   const setSelectedListId = useStore((state) => state.setSelectedListId);
   const setMyFeedIndex = useStore((state) => state.setMyFeedIndex);
@@ -130,35 +129,19 @@ const MyFeed = () => {
   const setPostsInView = useStore(state => state.setPostsInView)
  
 
-  const setSearchIndex = useStore((state) => state.setSearchIndex);
-  const setListClickedFromSearch = useStore(
-    (state) => state.setListClickedFromSearch
-  );
   const showSearchBar = useSelector((state) => state.globalSearch.displayBar);
 
-
-
-  
-
   useEffect(() => {
-    // console.log(
-    //   process.env.REACT_APP_LATITUDE +
-    //     " lat  " +
-    //     process.env.REACT_APP_LONGITUDE +
-    //     "lng"
-    // );
-    // setPostsInView([])
     const fetchData = async () => {
       const _gridMode = gridMode;
       if (_gridMode) {
         setGridMode(false);
       }
-      console.log("fetch data home feed")
       const obj = {
         id: user._id,
         value: 0,
         search: searchData,
-        filters: { closest: filterByClosest, updated: filterByUpdatedAt },
+        filters: {closest: filterByClosest, updated: filterByUpdatedAt},
         latitude: draggedLocation.lat,
         longitude: draggedLocation.lng,
       };
@@ -188,14 +171,14 @@ const MyFeed = () => {
     if (offset + 20 < totalData) {
       setOffSet(offset + 20);
       dispatch(
-        fetchMyFeedData({
-          id: user._id,
-          value: offset + 20,
-          search: searchData,
-          filters: { closest: filterByClosest, updated: filterByUpdatedAt },
-          latitude: draggedLocation.lat,
-          longitude: draggedLocation.lng,
-        })
+          fetchMyFeedData({
+            id: user._id,
+            value: offset + 20,
+            search: searchData,
+            filters: {closest: filterByClosest, updated: filterByUpdatedAt},
+            latitude: draggedLocation.lat,
+            longitude: draggedLocation.lng,
+          }),
       );
     } else setHasMore(false);
   };
@@ -215,12 +198,12 @@ const MyFeed = () => {
               setFlag={setFlag}
             /> */}
             {showSearchBar && (
-              <GlobalSearchBox setOffset={setOffSet} type={"Search Feed"} />
+              <GlobalSearchBox setOffset={setOffSet} type={'Search Feed'} />
             )}
 
             <div
               id="scrollableDiv"
-              style={{ height: "calc(100vh - 44px)", overflow: "auto" }}
+              style={{height: 'calc(100vh - 44px)', overflow: 'auto'}}
             >
               <InfiniteScroll
                 dataLength={feedData ? feedData.length : 0}
@@ -229,9 +212,9 @@ const MyFeed = () => {
                 loader={
                   offset < totalData && loading ? (
                     <div
-                      style={{ textAlign: "center", margin: " 40px auto 0" }}
+                      style={{textAlign: 'center', margin: ' 40px auto 0'}}
                     >
-                      {" "}
+                      {' '}
                       <ValueLoader height="40" width="40" />
                     </div>
                   ) : null

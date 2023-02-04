@@ -1,13 +1,13 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { graphQlEndPoint } from "../Api/graphQl";
-import { getAllUsers, getSelectedUser } from "../graphQl";
+import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import {graphQlEndPoint} from '../Api/graphQl';
+import {getAllUsersGraphql, getSelectedUserGraphql} from '../graphQl';
 
 /*
  * @desc:  to check if business exists or not
  * @params: businessId
  */
-export const findAllUsers = createAsyncThunk("data/findAllUsers", async () => {
-  const graphQl = getAllUsers();
+export const findAllUsers = createAsyncThunk('data/findAllUsers', async () => {
+  const graphQl = getAllUsersGraphql();
   const response = await graphQlEndPoint(graphQl);
   return response.data.getAllUser.user;
 });
@@ -17,16 +17,16 @@ export const findAllUsers = createAsyncThunk("data/findAllUsers", async () => {
  * @params: search
  */
 export const findSelectedUsers = createAsyncThunk(
-  "data/findSelectedUsers",
-  async (search) => {
-    const graphQl = getSelectedUser(search);
-    const response = await graphQlEndPoint(graphQl);
-    return response.data.getSelectedUser.user;
-  }
+    'data/findSelectedUsers',
+    async (search) => {
+      const graphQl = getSelectedUserGraphql(search);
+      const response = await graphQlEndPoint(graphQl);
+      return response.data.getSelectedUser.user;
+    },
 );
 
 export const slice = createSlice({
-  name: "business",
+  name: 'business',
   initialState: {
     loading: false,
     users: [],
@@ -60,5 +60,5 @@ export const slice = createSlice({
   },
 });
 
-export const { setGloablLoader } = slice.actions;
+export const {setGloablLoader} = slice.actions;
 export default slice.reducer;

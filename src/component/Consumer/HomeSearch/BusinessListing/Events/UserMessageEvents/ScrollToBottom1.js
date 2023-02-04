@@ -1,9 +1,9 @@
-import React, { useRef, useEffect } from "react";
+import React, {useRef, useEffect} from 'react';
 
 const ScrollToBottom1 = () => {
   const elementRef1 = useRef(null);
   useEffect(() =>
-    elementRef1.current.scrollIntoView({ behavior: "smooth", block: "end" })
+    elementRef1.current.scrollIntoView({behavior: 'smooth', block: 'end'}),
   );
   return <div ref={elementRef1} />;
 };

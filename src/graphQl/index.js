@@ -1,102 +1,102 @@
 import {
-  AddUser,
-  updateUserProfile,
-  getSelectedUser,
-  addFavoriteBusiness,
-  removeFavoriteBusiness,
-} from "./mutations/user";
+  addUserGraphql,
+  updateUserProfileGraphql,
+  getSelectedUserGraphql,
+  addFavoriteBusinessGraphql,
+  removeFavoriteBusinessGraphql,
+} from './mutations/user';
 import {
-  getUser,
-  getAllUsers,
-  getUserFavorites,
-  GetMyFeedData,
-  GetUserProfileData,
-} from "./query/user";
+  getUserGraphql,
+  getAllUsersGraphql,
+  getUserFavoritesGraphql,
+  getMyFeedDataGraphql,
+  getUserProfileDataGraphql,
+} from './query/user';
 
-import { getPlace, searchAllPlaces, homeSearch } from "./query/place";
-
-import {
-  getAllLists,
-  getUserLists,
-  getUserCreatedAndFollowedLists,
-  getUserSubscribedLists,
-  GetListDetails,
-  getMostTrendingLists,
-  getMostPopularLists,
-  SearchLists,
-} from "./query/list";
+import {getPlaceGraphql, searchAllPlacesGraphql, homeSearchGraphql} from './query/place';
 
 import {
-  createPost,
-  addLikeToPost,
-  updatePost,
-  deletePost,
-} from "./mutations/post";
-
-import { fetchEvent, fetchEventForAWeek } from "./query/event";
-
-import {
-  AddComment,
-  CreateReply,
-  AddLikeToComment,
-} from "./mutations/comments";
-import { findPostComments, findCommentReplies } from "./query/comments";
-
-import { addLikeToEvents, createEvent } from "./mutations/event";
+  getAllListsGraphql,
+  getUserListsGraphql,
+  getUserCreatedAndFollowedListsGraphql,
+  getListDetailsGraphql,
+  getMostTrendingListsGraphql,
+  getMostPopularListsGraphql,
+  searchListsGraphql,
+  getUserSubscribedListsGraphql,
+} from './query/list';
 
 import {
-  CreateList,
-  addPostToList,
-  DeletePostFromAList,
-  addEventToList,
-  DeleteList,
-  UnsubscribeToAList,
-  SubscribeToAList,
-} from "./mutations/list";
+  createPostGraphql,
+  addLikeToPostGraphql,
+  updatePostGraphql,
+  deletePostGraphql,
+} from './mutations/post';
 
-import { findBusinessPhotos } from "./query/post";
+import {fetchEventGraphql, fetchEventForAWeekGraphql} from './query/event';
+
+import {
+  addCommentGraphql,
+  createReplyGraphql,
+  addLikeToCommentGraphql,
+} from './mutations/comments';
+import {findPostCommentsGraphql, findCommentRepliesGraphql} from './query/comments';
+
+import {addLikeToEventsGraphql, createEventGraphql} from './mutations/event';
+
+import {
+  createListGraphql,
+  addPostToListGraphql,
+  deletePostFromAListGraphql,
+  addEventToListGraphql,
+  deleteListGraphql,
+  unsubscribeToAListGraphql,
+  subscribeToAListGraphql,
+} from './mutations/list';
+
+import {findBusinessPhotosGraphql} from './query/post';
 
 export {
-  GetListDetails,
-  GetUserProfileData,
-  GetMyFeedData,
-  homeSearch,
-  DeleteList,
-  getUserSubscribedLists,
-  getUserCreatedAndFollowedLists,
-  createEvent,
-  addEventToList,
-  findBusinessPhotos,
-  getUserFavorites,
-  getUserLists,
-  addPostToList,
-  DeletePostFromAList,
-  addFavoriteBusiness,
-  removeFavoriteBusiness,
-  findCommentReplies,
-  getSelectedUser,
-  addLikeToEvents,
-  addLikeToPost,
-  AddUser,
-  updateUserProfile,
-  getUser,
-  getAllUsers,
-  getPlace,
-  searchAllPlaces,
-  getAllLists,
-  createPost,
-  fetchEvent,
-  fetchEventForAWeek,
-  AddComment,
-  CreateReply,
-  findPostComments,
-  AddLikeToComment,
-  CreateList,
-  UnsubscribeToAList,
-  SubscribeToAList,
-  updatePost,
-  deletePost,
-  getMostTrendingLists,
-  getMostPopularLists,
-  SearchLists,
+  getListDetailsGraphql,
+  getUserProfileDataGraphql,
+  getMyFeedDataGraphql,
+  homeSearchGraphql,
+  deleteListGraphql,
+  getUserCreatedAndFollowedListsGraphql,
+  createEventGraphql,
+  addEventToListGraphql,
+  findBusinessPhotosGraphql,
+  getUserFavoritesGraphql,
+  getUserListsGraphql,
+  addPostToListGraphql,
+  deletePostFromAListGraphql,
+  addFavoriteBusinessGraphql,
+  removeFavoriteBusinessGraphql,
+  findCommentRepliesGraphql,
+  getSelectedUserGraphql,
+  addLikeToEventsGraphql,
+  addLikeToPostGraphql,
+  addUserGraphql,
+  updateUserProfileGraphql,
+  getUserGraphql,
+  getAllUsersGraphql,
+  getPlaceGraphql,
+  searchAllPlacesGraphql,
+  getAllListsGraphql,
+  createPostGraphql,
+  fetchEventGraphql,
+  fetchEventForAWeekGraphql,
+  addCommentGraphql,
+  createReplyGraphql,
+  findPostCommentsGraphql,
+  addLikeToCommentGraphql,
+  createListGraphql,
+  unsubscribeToAListGraphql,
+  subscribeToAListGraphql,
+  updatePostGraphql,
+  deletePostGraphql,
+  getMostTrendingListsGraphql,
+  getMostPopularListsGraphql,
+  searchListsGraphql,
+  getUserSubscribedListsGraphql,
 };

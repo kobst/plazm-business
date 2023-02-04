@@ -1,19 +1,18 @@
-import React, { useState, useRef, useEffect } from "react";
-import styled from "styled-components";
-import { MdNotificationsActive, MdMessage } from "react-icons/md";
-import UploadImg from "../../../../images/upload-img.jpg";
-import DropdwonArrowTop from "../../../../images/top_arrow.png";
-// import { FaSort } from "react-icons/fa";
-import { CgLock } from "react-icons/cg";
-import FollwersImg from "../../../../images/profile-img.png";
-import { BsThreeDotsVertical } from "react-icons/bs";
-import CheckboxSquare from "../../UI/CheckboxSquare";
-import { useDispatch, useSelector } from "react-redux";
-import { deleteUserCreatedList } from "../../../../reducers/listReducer";
+import React, {useState, useRef, useEffect} from 'react';
+import styled from 'styled-components';
+import {MdNotificationsActive, MdMessage} from 'react-icons/md';
+import UploadImg from '../../../../images/upload-img.jpg';
+import DropdwonArrowTop from '../../../../images/top_arrow.png';
+import {CgLock} from 'react-icons/cg';
+import FollwersImg from '../../../../images/profile-img.png';
+import {BsThreeDotsVertical} from 'react-icons/bs';
+import CheckboxSquare from '../../UI/CheckboxSquare';
+import {useDispatch, useSelector} from 'react-redux';
+import {deleteUserCreatedList} from '../../../../reducers/listReducer';
 import {
   checkMime,
   replaceBucket,
-} from "../../../../utilities/checkResizedImage";
+} from '../../../../utilities/checkResizedImage';
 const ListSection = styled.div`
   width: 100%;
   position: relative;
@@ -345,9 +344,9 @@ const DisplayListSection = ({
   }, [data]);
 
   useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
@@ -373,16 +372,16 @@ const DisplayListSection = ({
   };
 
   const errorFunction = () => {
-    if (data.media.length && image !== data.media[0].image)
+    if (data.media.length && image !== data.media[0].image) {
       setImage(data.media[0].image);
-    else setImage(UploadImg);
+    } else setImage(UploadImg);
   };
 
   return (
     <>
       <ListSection
         onClick={() => setSelectedListId(data._id)}
-        className={selectedList === data._id ? "SelectedListItem" : ""}
+        className={selectedList === data._id ? 'SelectedListItem' : ''}
       >
         <ListImageWrap>
           <img src={image} alt="" onError={() => errorFunction()} />
@@ -414,22 +413,22 @@ const DisplayListSection = ({
             ) : null}
             <FollowedListingWrap>
               <FollowersListing>
-                {data.subscribers.length > 0
-                  ? data.subscribers.slice(0, 8).map((i, key) => {
-                      return (
-                        <FollowersList key={key}>
-                          <img
-                            src={
-                              i.userId && i.userId.photo
-                                ? i.userId.photo
-                                : FollwersImg
-                            }
-                            alt=""
-                          />
-                        </FollowersList>
-                      );
-                    })
-                  : null}
+                {data.subscribers.length > 0 ?
+                  data.subscribers.slice(0, 8).map((i, key) => {
+                    return (
+                      <FollowersList key={key}>
+                        <img
+                          src={
+                              i.userId && i.userId.photo ?
+                                i.userId.photo :
+                                FollwersImg
+                          }
+                          alt=""
+                        />
+                      </FollowersList>
+                    );
+                  }) :
+                  null}
               </FollowersListing>
               {data.subscribers.length > 7 ? (
                 <MoreSection>+{data.subscribers.length - 7} more</MoreSection>

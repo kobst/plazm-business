@@ -1,76 +1,66 @@
-import React, { useEffect, useState } from "react";
-import Dashboard from "../../../component/Consumer/Dashboard/Dashboard";
-import "./style.css";
+import React, { useEffect } from "react";
 import { Auth } from "aws-amplify";
-import history from "../../../utils/history";
-import ValueLoader from "../../../utils/loader";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  checkBusiness,
-  setFlagReducer,
-} from "../../../reducers/businessReducer";
+import { useHistory } from "react-router-dom";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { fetchUserDetails, setWs } from "../../../reducers/userReducer";
-import useStore from "../../../component/Consumer/useState";
-import { setListData } from "../../../reducers/listReducer";
 
-const DashboardContainer = (props) => {
-  const [businessExists, setBusinessExists] = useState(false);
+import Dashboard from "@components/Consumer/Dashboard/Dashboard";
+import useStore from "@components/Consumer/useState";
+import { checkBusiness, setFlagReducer } from "@reducers/businessReducer";
+import { setListData } from "@reducers/listReducer";
+import { fetchUserDetails, setWs } from "@reducers/userReducer";
+import ValueLoader from "@utils/loader";
+import "./style.css";
 
-  const filters = useSelector((state) => state.business.filters);
-  const user = useSelector((state) => state.user.user);
-  const sideFilterForLikes = useSelector(
-    (state) => state.business.filterByMostLiked
+const DashboardContainer = ({ view, match, isBusinessOpen }) => {
+  const history = useHistory();
+
+  const { filters, filterByMostLiked: sideFilterForLikes } = useSelector(
+    (state) => state.business
   );
+  const user = useSelector((state) => state.user.user);
+
   const globalLoader = useSelector((state) => state.consumer.globalLoader);
 
   const dispatch = useDispatch();
-  const [businessId, setBusinessId] = useState("");
 
-  const businessDetailProfile = useStore(
-    (state) => state.businessDetailProfile
-  );
   const setBusinessDetailProfile = useStore(
     (state) => state.setBusinessDetailProfile
   );
-  const detailId = useStore((state) => state.detailId);
   const setDetailId = useStore((state) => state.setDetailId);
   const profile = useStore((state) => state.profile);
   const setProfile = useStore((state) => state.setProfile);
   const setSelectedTab = useStore((state) => state.setTabSelected);
   const setSelectedListId = useStore((state) => state.setSelectedListId);
-  const view = useStore((state) => state.view);
   const setView = useStore((state) => state.setView);
 
-  const [flag, setFlag] = useState(false);
-
   useEffect(() => {
-    setView(props.view);
+    setView(view);
 
-    if (props.view === "business_detail" || props.view === "user_detail") {
-      setDetailId(props.match.params.id ? props.match.params.id : "");
+    if (view === "business_detail" || view === "user_detail") {
+      setDetailId(match.params.id || "");
       setSelectedTab(-1);
     }
 
-    if (props.view === "list_detail") {
-      setSelectedListId(props.match.params.id ? props.match.params.id : "");
+    if (view === "list_detail") {
+      setSelectedListId(match.params.id || "");
       setSelectedTab(-1);
     }
 
-    if (props.view === "my_feed") {
+    if (view === "my_feed") {
       // console.log("my feed route");
       setSelectedTab(2);
     }
 
-    if (props.view === "explore") {
+    if (view === "explore") {
       // console.log("my explore route");
       setSelectedTab(1);
     }
-    if (props.view === "list_explore") {
+    if (view === "list_explore") {
       // console.log("my list explore route");
       setSelectedTab(5);
     }
-  }, [props.view]);
+  }, [view]);
 
   useEffect(() => {
     /* to get loggedIn user profile */
@@ -101,17 +91,15 @@ const DashboardContainer = (props) => {
           }
         } else {
           history.push("/business");
-          window.location.reload();
         }
-      } catch {
+      } catch (err) {
+        console.log("Error", err);
         /* if not authenticated then redirect to login consumer page */
         history.push("/consumer/login");
-        window.location.reload();
       }
     };
     getProfile();
-    setFlag(false);
-  }, [flag, dispatch]);
+  }, [dispatch]);
 
   useEffect(() => {
     /** find business function */
@@ -120,48 +108,44 @@ const DashboardContainer = (props) => {
         /** to check if business exists or not */
         const response = await dispatch(
           checkBusiness({
-            businessId: props.match.params.id,
+            businessId: match.params.id,
             filters: {
-              PostsByMe: filters.PostsByMe
-                ? filters.PostsByMe
-                : !filters.Business &&
+              PostsByMe:
+                filters.PostsByMe ||
+                (!filters.Business &&
                   !filters.PostsByMe &&
                   !filters.MySubscriptions &&
-                  !filters.Others
-                ? true
-                : false,
+                  !filters.Others),
               Business: false,
-              MySubscriptions: filters.MySubscriptions
-                ? filters.MySubscriptions
-                : false,
-              Others: filters.Others ? filters.Others : false,
+              MySubscriptions: filters.MySubscriptions || false,
+              Others: filters.Others || false,
             },
             value: 0,
-            ownerId: user ? user._id : null,
+            ownerId: user?._id || null,
             sideFilters: { likes: sideFilterForLikes },
           })
         );
         const data = await unwrapResult(response);
-        if (data.success === true && data.place.length > 0) {
+        if (data.success && data.place.length) {
           /** fetch business images */
           dispatch(setFlagReducer());
           setBusinessDetailProfile(data.place[0]);
-          setBusinessExists(true);
           // console.log("business data" + JSON.stringify(data.place));
         } else {
           dispatch(setFlagReducer());
-          setBusinessExists(false);
           // set error business does not exist
         }
       }
     };
 
-    if (user._id) findBusiness(props.view);
-  }, [props.view, props.isBusinessOpen, props.match.params.id, dispatch, user]);
+    if (user._id) findBusiness(view);
+  }, [view, isBusinessOpen, match.params.id, dispatch, user]);
 
-  return profile && !globalLoader ? (
-    <Dashboard view={props.view} />
-  ) : (
+  if (profile && !globalLoader) {
+    return <Dashboard view={view} />;
+  }
+
+  return (
     <div
       style={{
         textAlign: "center",
@@ -178,19 +162,3 @@ const DashboardContainer = (props) => {
 };
 
 export default DashboardContainer;
-
-{
-  /* <Dashboard
-// profile={profile}
-// setFlag={setFlag}
-// isBusinessOpen={props.isBusinessOpen}
-// isUserOpen={props.isUserOpen}
-// businessExists={businessExists}
-// businessId={props.match.params.id ? businessId : null}
-// userId={props.isUserOpen ? props.match.params.id : null}
-// listId={props.isListOpen ? props.match.params.id : null}
-// detailId={detailId}
-view={props.view}
-
-/> */
-}

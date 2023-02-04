@@ -1,9 +1,9 @@
 
-import React from 'react'
-import styled from 'styled-components'
-import CrossIcon from '../../../Public/images/cross.svg'
-import LineButton from '../LineButton/LineButton'
-import Button from '../Button/Button'
+import React from 'react';
+import styled from 'styled-components';
+import CrossIcon from '../../../Public/images/cross.svg';
+import LineButton from '../LineButton/LineButton';
+import Button from '../Button/Button';
 
 const MessagesSection = styled.div`
 font-family: 'Roboto',sans-serif;
@@ -27,7 +27,7 @@ textarea{
     outline:none;
   }
 }
-`
+`;
 const InputBox = styled.div`
 border-bottom:1px solid #ddd;
 margin-bottom:15px;
@@ -37,7 +37,7 @@ span{
   margin-right:5px;
   font-weight:500;
 }
-`
+`;
 const Badges = styled.div`
 height: 26px;
 background: #E4E4E4;
@@ -55,22 +55,22 @@ cursor:pointer;
 img{
     margin-left: 9px;
 }
-`
+`;
 const FlexRow = styled.div`
 display: flex;
 justify-content: space-between;
 align-items:center;
 margin-top:30px;
-`
+`;
 const Anchor = styled.a`
 margin-left:auto;
 font-size:14px;
 font-weight:500;
 margin-right:20px;
 cursor:pointer;
-`
+`;
 
-const Messages = props => {
+const Messages = (props) => {
   return (
     <MessagesSection>
       <InputBox>
@@ -80,12 +80,12 @@ const Messages = props => {
       <textarea placeholder="Messages" />
       <LineButton name="Media" />
       <FlexRow>
-            <Anchor>Cancle</Anchor>
-            <Button buttontext="Post"></Button>
-          </FlexRow>
+        <Anchor>Cancle</Anchor>
+        <Button buttontext="Post"></Button>
+      </FlexRow>
 
     </MessagesSection>
-  )
-}
+  );
+};
 
-export default Messages
+export default Messages;

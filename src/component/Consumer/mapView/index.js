@@ -14,7 +14,6 @@ import Geocode, { setRegion } from "react-geocode";
 import GoogleMapReact from "google-map-react";
 import ColorDict from '../GridComponents/functions/colorSlotDict'
 import styled from "styled-components";
-// import '../../App.css';
 
 import * as turf from "@turf/turf";
 import { connect } from "react-redux";
@@ -35,7 +34,6 @@ const MapCenterOffset = styled.div`
 // https://alex3165.github.io/react-mapbox-gl/demos
 
 //https://medium.com/critigenopensource/an-approach-to-integrating-mapboxgl-in-react-redux-b50d82bc0ed0
-
 
 const setLinesExt = (dict) => {
     let centerWhite = dict["0-0-0"]
@@ -108,8 +106,6 @@ const setBBox = (_orderedPlaces) => {
     console.log("ordered places " + _orderedPlaces.length);
 
     for (let i = 0; i < limit; i++) {
-      // console.log(i)
-      // console.log(orderedPlaces[i])
       if (_orderedPlaces[i]) {
 
         let coords = _orderedPlaces[i].businessLocation.coordinates;
@@ -130,7 +126,6 @@ const setBBox = (_orderedPlaces) => {
       }
     }
 
-    // console.log("coord array  " + coordArray)
     const geoJsonFeatures = {
       type: "FeatureCollection",
       features: [
@@ -155,7 +150,6 @@ const setBBox = (_orderedPlaces) => {
     let ne = [lngLatBox[2], lngLatBox[3]];
     let fitBoundsObj = [sw, ne];
     return {box: fitBoundsObj, geo: geoFeatures}
-    // setBox(fitboundsObj);
 };
 
 
@@ -164,7 +158,7 @@ const Map = ReactMapboxGl({
   interactive: true,
 });
 
-Geocode.setApiKey("AIzaSyAYVZIvAZkQsaxLD3UdFH5EH3DvYmSYG6Q");
+Geocode.setApiKey(process.env.REACT_APP_GOOGLE_API_KEY);
 
 const MapView = (props) => {
 

@@ -1,6 +1,6 @@
 
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
 
 const ButtonText = styled.button`
 background: #0094FF;
@@ -11,7 +11,7 @@ border:none;
 color:#fff;
 font-weight:bold;
 min-width: 100px;
-max-width:${props => props.maxWidth ? props.maxWidth : 'inherit'};
+max-width:${(props) => props.maxWidth ? props.maxWidth : 'inherit'};
 border-radius: 5px;
 border:0;
 padding: 0 25px;
@@ -26,12 +26,12 @@ padding: 0 25px;
 @media (max-width:359px){
   font-size: 10px;
 }
-`
+`;
 
 const BackButton = (props) => {
-    return(
-      <ButtonText ref={props.refs} {...props}  />
-    )
-}
+  return (
+    <ButtonText ref={props.refs} {...props} />
+  );
+};
 
-export default BackButton
+export default BackButton;

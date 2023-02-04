@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import React, {useState, useEffect} from 'react';
+import styled from 'styled-components';
 import {
   MdFavoriteBorder,
   MdChatBubbleOutline,
   MdFavorite,
-} from "react-icons/md";
-import { useDispatch, useSelector } from "react-redux";
-import SaveButton from "../../../../UI/SaveButton";
-import { useHistory } from "react-router";
-import { setTopEvent } from "../../../../../../reducers/eventReducer";
+} from 'react-icons/md';
+import {useDispatch, useSelector} from 'react-redux';
+import SaveButton from '../../../../UI/SaveButton';
+import {useHistory} from 'react-router';
+import {setTopEvent} from '../../../../../../reducers/eventReducer';
 
 export const BottomBarLikes = styled.div`
   display: flex;
@@ -99,14 +99,14 @@ const LikesBar = ({
     setUserLikedComment(false);
     setUserLikedEvent(false);
 
-    if (type === "comment") {
+    if (type === 'comment') {
       if (postLikes.length > 0) {
         const findUser = postLikes.find((i) => i === user._id);
         if (findUser) {
           setUserLikedEvent(true);
         }
       }
-    } else if (type === "reply") {
+    } else if (type === 'reply') {
       if (commentLikes.length > 0) {
         const findUser = commentLikes.find((i) => i._id === user._id);
         if (findUser) {
@@ -129,29 +129,29 @@ const LikesBar = ({
     <>
       <BottomBarLikes
         className={
-          type === "reply"
-            ? "replyBar"
-            : type !== "commentReply"
-            ? "replyBarComment"
-            : ""
+          type === 'reply' ?
+            'replyBar' :
+            type !== 'commentReply' ?
+            'replyBarComment' :
+            ''
         }
       >
         <LikesBtnWrap>
-          {type !== "commentReply" && (
+          {type !== 'commentReply' && (
             <RightDiv>
               {userLikedEvent || userLikedComment ? (
-                <MdFavorite style={{ color: "red" }} />
+                <MdFavorite style={{color: 'red'}} />
               ) : (
                 <MdFavoriteBorder />
-              )}{" "}
-              {likeCount === 0
-                ? likeCountForComment === 0
-                  ? totalLikes
-                  : likeCountForComment
-                : likeCount}
+              )}{' '}
+              {likeCount === 0 ?
+                likeCountForComment === 0 ?
+                  totalLikes :
+                  likeCountForComment :
+                likeCount}
             </RightDiv>
           )}
-          {type !== "commentReply" && (
+          {type !== 'commentReply' && (
             <RightDiv>
               <button>
                 <MdChatBubbleOutline />

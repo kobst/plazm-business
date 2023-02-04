@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import React from 'react';
+import styled from 'styled-components';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 const ImageSliderWrap = styled.div`
   width: 100%;
@@ -33,7 +33,7 @@ const ImageSliderWrap = styled.div`
   }
 `;
 
-const ImageSlider = ({ imgSources }) => {
+const ImageSlider = ({imgSources}) => {
   return (
     <ImageSliderWrap>
       <Slider dots={true} autoplay={true}>

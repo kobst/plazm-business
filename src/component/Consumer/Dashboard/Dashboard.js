@@ -16,7 +16,7 @@ import Profile from "../Profile";
 
 import GridContainer from "../GridComponents/index";
 import MapView from "../mapView/index";
-import RadarView from "../radarView/radarView";
+// import RadarView from "../radarView/radarView";
 import useStore from "../useState";
 import GlobalSearch from "../GlobalSearch";
 import GlobalSearchBox from "../GlobalSearch/GlobalSearchBox";
@@ -103,26 +103,10 @@ const GridContentContainer = styled.div`
   z-index: 3;
   /* overflow: auto; */
 `;
-// const Dashboard = ({view}) => {
-//background: #221e45;
 
 const Dashboard = () => {
-  const gridMode = useStore((state) => state.gridMode);
   const view = useStore((state) => state.view);
   const detailId = useStore((state) => state.detailId);
-  // useEffect(() => {
-  //   if (gridMode) {
-  //     console.log("show grid");
-  //   }
-  // }, [gridMode]);
-
-  // put all the grid logic here?  for the map and radar ....
-  //maybe not necessary as long as griContainer remains without conditional
-
-  useEffect(() => {
-    // console.log(view);
-    // put all the loading for the views here? use effect on view....
-  }, [view]);
   return (
     <>
       <DashboardContent>
@@ -169,7 +153,7 @@ const Dashboard = () => {
           <MapContentContainer>
             <MapCenterOffset id="map-offset-center" />
             <MapView />
-            <RadarView />
+            {/* <RadarView /> */}
           </MapContentContainer>
         )}
 

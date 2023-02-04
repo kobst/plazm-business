@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import ModalPostContent from "./ModalPostContent";
-import AllListingsContent from "../AddPostModal/AllListings";
-import CreateListModel from "./createList";
-import { fetchUserLists } from "../../../reducers/listReducer";
-import { useDispatch, useSelector } from "react-redux";
+import React, {useEffect, useState} from 'react';
+import styled from 'styled-components';
+import ModalPostContent from './ModalPostContent';
+import AllListingsContent from '../AddPostModal/AllListings';
+import CreateListModel from './createList';
+import {fetchUserLists} from '../../../reducers/listReducer';
+import {useDispatch, useSelector} from 'react-redux';
 
 const ModalContent = styled.div`
   width: 100%;
@@ -48,18 +48,18 @@ const ModalContent = styled.div`
   }
 `;
 
-const AddPostModal = ({ businessId, closeModal, data }) => {
+const AddPostModal = ({businessId, closeModal, data}) => {
   const dispatch = useDispatch();
   const [displayList, setDisplayList] = useState(false);
   const [displayCreateList, setDisplayCreateList] = useState(false);
   const [selectedListForPost, setSelectedListForPost] = useState(
-    data && data.listId.length > 0 ? data.listId[0]._id : null
+    data && data.listId.length > 0 ? data.listId[0]._id : null,
   );
-  const [description, setDescription] = useState(data ? data.data : "");
+  const [description, setDescription] = useState(data ? data.data : '');
   const [mentionArrayList, setMentionArrayList] = useState([]);
   const [mentionArrayUser, setMentionArrayUser] = useState([]);
   const [imageUpload, setImageUpload] = useState(
-    data && data.media && data.media.length > 0 ? data.media[0] : null
+    data && data.media && data.media.length > 0 ? data.media[0] : null,
   );
   const user = useSelector((state) => state.user.user);
   const userLists = useSelector((state) => state.list.userLists);
@@ -67,18 +67,18 @@ const AddPostModal = ({ businessId, closeModal, data }) => {
 
   useEffect(() => {
     if (data && data.taggedLists) {
-      let arr = [];
+      const arr = [];
       data.taggedLists.map((i) => arr.push(i._id));
       setMentionArrayList(arr);
     }
     if (data && data.taggedUsers) {
-      let arr = [];
+      const arr = [];
       data.taggedUsers.map((i) => arr.push(i._id));
       setMentionArrayUser(arr);
     }
   }, [data]);
 
-  /**fetch user list */
+  /** fetch user list */
   useEffect(() => {
     if (userLists.length === 0) dispatch(fetchUserLists(user._id));
   }, [dispatch, user._id, userLists.length]);

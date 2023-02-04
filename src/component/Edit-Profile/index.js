@@ -9,16 +9,14 @@ import ButtonSmall from "../UI/ButtonSmall";
 import PlusIcon from "../../images/plus-img.svg";
 import DropdownIcon from "../../images/dropdown-arrow.svg";
 import MapPin from "../../images/map-pin.svg";
-import history from "../../utils/history";
 import "@pathofdev/react-tag-input/build/index.css";
 import TimePicker from "react-bootstrap-time-picker";
-// import GallerySec from '../UI/Gallery'
-// import ReactTagInput from "@pathofdev/react-tag-input";
 import GoogleMapReact from "google-map-react";
 import Geocode from "react-geocode";
 import FindAddressValue from "../../utils/findAddress";
 import TagInputCross from "../../images/Mask.svg";
 import error from "../../constants";
+import { useHistory } from "react-router-dom";
 
 const bucket = process.env.REACT_APP_BUCKET;
 
@@ -277,6 +275,7 @@ const ErrorDiv = styled.div`
   margin-left: 14px;
 `;
 const EditProfile = ({ value }) => {
+  const history = useHistory();
   const [company, setCompany] = useState();
   const [website, setWebsite] = useState();
   const [phone, setPhone] = useState();
@@ -350,7 +349,7 @@ const EditProfile = ({ value }) => {
       }
       if (value.address) {
         setAddress(value.address);
-        FindAddress(value.address);
+        findAddress(value.address);
       }
       if (value.hours_format) {
         for (let i = 0; i < value.hours_format.length; i++) {
@@ -386,7 +385,6 @@ const EditProfile = ({ value }) => {
         setImageUrl(value.default_image_url);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   const updateBusiness = async () => {
@@ -539,7 +537,7 @@ const EditProfile = ({ value }) => {
     setLatitude(lat);
     setLongitude(lng);
   };
-  const FindAddress = (userAddress) => {
+  const findAddress = (userAddress) => {
     Geocode.fromAddress(userAddress).then(
       (response) => {
         const { lat, lng } = response.results[0].geometry.location;
@@ -656,7 +654,9 @@ const EditProfile = ({ value }) => {
                   onChange={(e) => upload(e)}
                   type="file"
                   ref={(ref) => (myInput = ref)}
-                  style={{ display: "none" }}
+                  style={{
+                    display: "none",
+                  }}
                 />
                 <TopProfile onClick={(e) => myInput.click()}>
                   {typeof preview !== undefined ||
@@ -698,9 +698,11 @@ const EditProfile = ({ value }) => {
                     Drop Pin
                   </ButtonSmall>
                   <ButtonSmall
-                    onClick={() => FindAddress(userAddress)}
+                    onClick={() => findAddress(userAddress)}
                     maxWidth="137px"
-                    style={{ marginLeft: "auto" }}
+                    style={{
+                      marginLeft: "auto",
+                    }}
                   >
                     Find Address
                   </ButtonSmall>
@@ -892,10 +894,13 @@ const EditProfile = ({ value }) => {
         <Card>
           <FlexRow>
             <ButtonSmall
-              onClick={() => (history.push(`/`), window.location.reload())}
+              onClick={() => history.push(`/`)}
               maxWidth="110px"
               bgColor="#FF7171"
-              style={{ marginLeft: "auto", marginRight: "10px" }}
+              style={{
+                marginLeft: "auto",
+                marginRight: "10px",
+              }}
             >
               Cancel
             </ButtonSmall>

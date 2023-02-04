@@ -1,32 +1,29 @@
 import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
-import { useState } from "react";
 import { graphQlEndPoint } from "../Api/graphQl";
 import {
-  addEventToList,
-  addPostToList,
-  CreateList,
-  getAllLists,
-  getUserSubscribedLists,
-  getUserCreatedAndFollowedLists,
-  getUserLists,
-  DeleteList,
-  UnsubscribeToAList,
-  SubscribeToAList,
-  DeletePostFromAList,
-  getMostTrendingLists,
-  getMostPopularLists,
-  SearchLists,
+  addEventToListGraphql,
+  addPostToListGraphql,
+  createListGraphql,
+  getAllListsGraphql,
+  getUserCreatedAndFollowedListsGraphql,
+  getUserSubscribedListsGraphql,
+  getUserListsGraphql,
+  deleteListGraphql,
+  unsubscribeToAListGraphql,
+  subscribeToAListGraphql,
+  deletePostFromAListGraphql,
+  getMostTrendingListsGraphql,
+  getMostPopularListsGraphql,
+  searchListsGraphql,
 } from "../graphQl";
 
-
-import useStore from "../component/Consumer/useState";
-import { filterUserLists } from "../graphQl/query/list";
+import { filterUserListsGraphql } from "../graphQl/query/list";
 /*
  * @desc:  to check if business exists or not
  * @params: businessId
  */
 export const findAllLists = createAsyncThunk("data/findAllLists", async () => {
-  const graphQl = getAllLists();
+  const graphQl = getAllListsGraphql();
   const response = await graphQlEndPoint(graphQl);
   return response.data.getLists.list;
 });
@@ -36,7 +33,7 @@ export const findAllLists = createAsyncThunk("data/findAllLists", async () => {
  * @params: businessId
  */
 export const createList = createAsyncThunk("data/createList", async (obj) => {
-  const graphQl = CreateList(obj);
+  const graphQl = createListGraphql(obj);
   const response = await graphQlEndPoint(graphQl);
   return response;
 });
@@ -48,7 +45,7 @@ export const createList = createAsyncThunk("data/createList", async (obj) => {
 export const fetchUserLists = createAsyncThunk(
   "data/fetchUserLists",
   async (obj) => {
-    const graphQl = getUserLists(obj);
+    const graphQl = getUserListsGraphql(obj);
     const response = await graphQlEndPoint(graphQl);
     return response.data.getUserLists.list;
   }
@@ -61,11 +58,10 @@ export const fetchUserLists = createAsyncThunk(
 export const filterListsByUser = createAsyncThunk(
   "data/filterListsByUser",
   async (obj) => {
-    const graphQl = filterUserLists(obj);
+    const graphQl = filterUserListsGraphql(obj);
     const response = await graphQlEndPoint(graphQl);
     const { list, totalLists, type } = response.data.fetchUserLists;
-    console.log({ list, totalLists});
-    return { data: list, total: totalLists, type }
+    return { data: list, total: totalLists, type };
   }
 );
 
@@ -73,10 +69,10 @@ export const filterListsByUser = createAsyncThunk(
  * @desc:  to add post to list
  * @params: listId, postId
  */
-export const AddPostToList = createAsyncThunk(
+export const addPostToList = createAsyncThunk(
   "data/AddPostToList",
   async (obj) => {
-    const graphQl = addPostToList(obj);
+    const graphQl = addPostToListGraphql(obj);
     const response = await graphQlEndPoint(graphQl);
     return response;
   }
@@ -86,10 +82,10 @@ export const AddPostToList = createAsyncThunk(
  * @desc:  to add post to list
  * @params: listId, postId
  */
-export const RemovePostFromAList = createAsyncThunk(
+export const removePostFromAList = createAsyncThunk(
   "data/RemovePostFromAList",
   async (obj) => {
-    const graphQl = DeletePostFromAList(obj);
+    const graphQl = deletePostFromAListGraphql(obj);
     const response = await graphQlEndPoint(graphQl);
     return response;
   }
@@ -99,10 +95,10 @@ export const RemovePostFromAList = createAsyncThunk(
  * @desc:  to add event to list
  * @params: listId, eventId
  */
-export const AddEventToList = createAsyncThunk(
+export const addEventToList = createAsyncThunk(
   "data/AddEventToList",
   async (obj) => {
-    const graphQl = addEventToList(obj);
+    const graphQl = addEventToListGraphql(obj);
     const response = await graphQlEndPoint(graphQl);
     return response;
   }
@@ -115,12 +111,11 @@ export const AddEventToList = createAsyncThunk(
 export const fetchUserSubscribedList = createAsyncThunk(
   "data/fetchUserSubscribedList",
   async (obj) => {
-    const graphQl = getUserSubscribedLists(obj);
+    const graphQl = getUserSubscribedListsGraphql(obj);
     const response = await graphQlEndPoint(graphQl);
     return response.data.getUserSubscribedLists;
   }
 );
-
 
 /*
  * @desc:  to fetch user created and followed list
@@ -129,7 +124,7 @@ export const fetchUserSubscribedList = createAsyncThunk(
 export const fetchUserCreatedAndFollowedList = createAsyncThunk(
   "data/fetchUserCreatedAndFollowedList",
   async (obj) => {
-    const graphQl = getUserCreatedAndFollowedLists(obj);
+    const graphQl = getUserCreatedAndFollowedListsGraphql(obj);
     const response = await graphQlEndPoint(graphQl);
     return response.data.getUserCreatedAndFollowedLists;
   }
@@ -142,7 +137,7 @@ export const fetchUserCreatedAndFollowedList = createAsyncThunk(
 export const deleteUserCreatedList = createAsyncThunk(
   "data/deleteUserCreatedList",
   async (obj) => {
-    const graphQl = DeleteList(obj);
+    const graphQl = deleteListGraphql(obj);
     const response = await graphQlEndPoint(graphQl);
     return response.data.deleteUserList;
   }
@@ -152,10 +147,10 @@ export const deleteUserCreatedList = createAsyncThunk(
  * @desc:  to unsubscribe to a list
  * @params: businessId
  */
-export const UnSubscribeToAList = createAsyncThunk(
+export const unSubscribeToAList = createAsyncThunk(
   "data/UnSubscribeToAList",
   async (obj) => {
-    const graphQl = UnsubscribeToAList(obj);
+    const graphQl = unsubscribeToAListGraphql(obj);
     const response = await graphQlEndPoint(graphQl);
     if (response.data.unSubscribeToAList.success === true) return obj;
   }
@@ -165,10 +160,10 @@ export const UnSubscribeToAList = createAsyncThunk(
  * @desc:  to subscribe to a list
  * @params: businessId
  */
-export const SubscribeToAListAction = createAsyncThunk(
-  "data/SubscribeToAList",
+export const subscribeToAListAction = createAsyncThunk(
+  "data/subscribeToAList",
   async (obj) => {
-    const graphQl = SubscribeToAList(obj);
+    const graphQl = subscribeToAListGraphql(obj);
     const response = await graphQlEndPoint(graphQl);
     if (response.data.subscribeToAList.success === true) return obj;
   }
@@ -178,10 +173,10 @@ export const SubscribeToAListAction = createAsyncThunk(
  * @desc:  to fetch trending lists
  * @params: value
  */
-export const FetchTrendingLists = createAsyncThunk(
+export const fetchTrendingLists = createAsyncThunk(
   "data/FetchTrendingLists",
   async (value) => {
-    const graphQl = getMostTrendingLists(value);
+    const graphQl = getMostTrendingListsGraphql(value);
     const response = await graphQlEndPoint(graphQl);
     return response.data.fetchMostTrendingLists;
   }
@@ -191,10 +186,10 @@ export const FetchTrendingLists = createAsyncThunk(
  * @desc:  to fetch most popular lists
  * @params: value
  */
-export const FetchMostPopularLists = createAsyncThunk(
+export const fetchMostPopularLists = createAsyncThunk(
   "data/FetchMostPopularLists",
   async (value) => {
-    const graphQl = getMostPopularLists(value);
+    const graphQl = getMostPopularListsGraphql(value);
     const response = await graphQlEndPoint(graphQl);
     return response.data.fetchMostPopularLists;
   }
@@ -204,10 +199,10 @@ export const FetchMostPopularLists = createAsyncThunk(
  * @desc:  to search lists
  * @params: value
  */
-export const SearchListApi = createAsyncThunk(
+export const searchListApi = createAsyncThunk(
   "data/SearchListApi",
   async (value) => {
-    const graphQl = SearchLists(value);
+    const graphQl = searchListsGraphql(value);
     const response = await graphQlEndPoint(graphQl);
     return response.data.listSearch;
   }
@@ -253,6 +248,7 @@ export const slice = createSlice({
     loadingSearchList: false,
     searchList: [],
     totalSearchList: 0,
+    isListCreated: false,
   },
   reducers: {
     clearListData: (state) => {
@@ -263,6 +259,9 @@ export const slice = createSlice({
     },
     setListSearch: (state, action) => {
       state.listSearch = action.payload;
+    },
+    setListCreated: (state, action) => {
+      state.isListCreated = action.payload;
     },
     clearListSearchData: (state) => {
       state.searchList = [];
@@ -324,13 +323,16 @@ export const slice = createSlice({
           break;
         case "created":
           listName = "selectedListDetails";
-          console.log(state.userCreatedLists, 'state.userCreatedLists',  action.payload);
-          findList = state.userCreatedLists.data.find(l => l._id === action.payload.listId)
-          console.log(findList, 'findList');
+          findList = state.userCreatedLists.data.find(
+            (l) => l._id === action.payload.listId
+          );
           findList.subscribers = findList.subscribers.concat({
             _id: action.payload.user._id,
           });
-          state.userSubscribedLists.data = [findList, ...state.userSubscribedLists.data];
+          state.userSubscribedLists.data = [
+            findList,
+            ...state.userSubscribedLists.data,
+          ];
           state.userSubscribedLists.total = state.userSubscribedLists.total + 1;
           break;
       }
@@ -366,9 +368,13 @@ export const slice = createSlice({
           break;
         case "created":
           listName = "selectedListDetails";
-          console.log(state);
-          findList = state.userSubscribedLists.data.find(l => l._id === action.payload.listId)
-          state.userSubscribedLists.data = state.userSubscribedLists.data.filter(l => l._id === action.payload.listId);
+          findList = state.userSubscribedLists.data.find(
+            (l) => l._id === action.payload.listId
+          );
+          state.userSubscribedLists.data =
+            state.userSubscribedLists.data.filter(
+              (l) => l._id === action.payload.listId
+            );
           state.userSubscribedLists.total = state.userSubscribedLists.total - 1;
           break;
       }
@@ -425,21 +431,23 @@ export const slice = createSlice({
       }
     },
     [filterListsByUser.pending]: (state) => {
-        state.loadingFilterUserLists += 1 ;
+      state.loadingFilterUserLists += 1;
     },
     [filterListsByUser.fulfilled]: (state, action) => {
       if (state.loadingFilterUserLists) {
         state.loadingFilterUserLists -= 1;
         if (action.payload) {
-          const {type, data, total} = action.payload;
-          if(type === 'created') {
+          const { type, data, total } = action.payload;
+          if (type === "created") {
             // state.userCreatedLists = {data, total}
-            state.userCreatedLists.data = state.userCreatedLists.data.concat(data);
+            state.userCreatedLists.data =
+              state.userCreatedLists.data.concat(data);
             state.userCreatedLists.total = total;
           }
-          if(type === 'subscribed') {
+          if (type === "subscribed") {
             // state.userSubscribedLists = {data, total};
-            state.userSubscribedLists.data = state.userSubscribedLists.data.concat(data);
+            state.userSubscribedLists.data =
+              state.userSubscribedLists.data.concat(data);
             state.userSubscribedLists.total = total;
           }
         }
@@ -483,7 +491,6 @@ export const slice = createSlice({
         if (action.payload) {
           state.subscribedLists = action.payload.list;
           state.totalSubscribedList = action.payload.totalLists;
-
         }
       }
     },
@@ -502,7 +509,11 @@ export const slice = createSlice({
       if (state.loadingUserCreatedAndFollowed) {
         state.loadingUserCreatedAndFollowed = false;
         if (action.payload) {
-          state.data = state.data.concat(action.payload.list);
+          action.payload.list.forEach((item) => {
+            if (!state.data.some((i) => item._id === i._id)) {
+              state.data.push(item);
+            }
+          });
           state.totalList = action.payload.totalLists;
         }
       }
@@ -520,12 +531,12 @@ export const slice = createSlice({
         );
       }
     },
-    [UnSubscribeToAList.pending]: (state) => {
+    [unSubscribeToAList.pending]: (state) => {
       if (!state.loadingUnSubscribe) {
         state.loadingUnSubscribe = true;
       }
     },
-    [UnSubscribeToAList.fulfilled]: (state, action) => {
+    [unSubscribeToAList.fulfilled]: (state, action) => {
       if (state.loadingUnSubscribe) {
         state.loadingUnSubscribe = false;
         if (action.payload) {
@@ -537,18 +548,18 @@ export const slice = createSlice({
         }
       }
     },
-    [UnSubscribeToAList.rejected]: (state, action) => {
+    [unSubscribeToAList.rejected]: (state, action) => {
       if (state.loadingUnSubscribe) {
         state.loadingUnSubscribe = false;
         state.error = action.payload;
       }
     },
-    [FetchTrendingLists.pending]: (state) => {
+    [fetchTrendingLists.pending]: (state) => {
       if (!state.loadingTrendingLists) {
         state.loadingTrendingLists = true;
       }
     },
-    [FetchTrendingLists.fulfilled]: (state, action) => {
+    [fetchTrendingLists.fulfilled]: (state, action) => {
       if (state.loadingTrendingLists) {
         state.loadingTrendingLists = false;
         if (action.payload) {
@@ -557,18 +568,18 @@ export const slice = createSlice({
         }
       }
     },
-    [FetchTrendingLists.rejected]: (state, action) => {
+    [fetchTrendingLists.rejected]: (state, action) => {
       if (state.loadingTrendingLists) {
         state.loadingTrendingLists = false;
         state.error = action.payload;
       }
     },
-    [FetchMostPopularLists.pending]: (state) => {
+    [fetchMostPopularLists.pending]: (state) => {
       if (!state.loadingPopularLists) {
         state.loadingPopularLists = true;
       }
     },
-    [FetchMostPopularLists.fulfilled]: (state, action) => {
+    [fetchMostPopularLists.fulfilled]: (state, action) => {
       if (state.loadingPopularLists) {
         state.loadingPopularLists = false;
         if (action.payload) {
@@ -577,13 +588,13 @@ export const slice = createSlice({
         }
       }
     },
-    [FetchMostPopularLists.rejected]: (state, action) => {
+    [fetchMostPopularLists.rejected]: (state, action) => {
       if (state.loadingPopularLists) {
         state.loadingPopularLists = false;
         state.error = action.payload;
       }
     },
-    [SearchListApi.pending]: (state) => {
+    [searchListApi.pending]: (state) => {
       if (!state.loadingSearchList) {
         state.loadingSearchList = true;
         if (state.listSearch === "") {
@@ -592,7 +603,7 @@ export const slice = createSlice({
         }
       }
     },
-    [SearchListApi.fulfilled]: (state, action) => {
+    [searchListApi.fulfilled]: (state, action) => {
       if (state.loadingSearchList) {
         state.loadingSearchList = false;
         if (action.payload) {
@@ -601,7 +612,7 @@ export const slice = createSlice({
         }
       }
     },
-    [SearchListApi.rejected]: (state, action) => {
+    [searchListApi.rejected]: (state, action) => {
       if (state.loadingSearchList) {
         state.loadingSearchList = false;
         state.error = action.payload;
@@ -620,6 +631,7 @@ export const {
   userSubscribeToAList,
   userUnSubscribeToAList,
   setListSearch,
+  setListCreated,
   clearListSearchData,
   setSelectedListDetails,
   setListData,
