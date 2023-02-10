@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
 
 const InputText = styled.input`
@@ -30,7 +30,13 @@ const InputText = styled.input`
 `;
 
 const Input = (props) => {
-  return <InputText ref={props.refs} {...props} usererror={props.error} />;
+  const ref = useRef();
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.focus();
+    }
+  }, [props.value]);
+  return <InputText ref={ref} {...props} usererror={props.error} />;
 };
 
 export default Input;

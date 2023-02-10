@@ -13,6 +13,8 @@ import {
 	fetchUserCreatedAndFollowedList,
 	clearListData,
 	setListCreated,
+	fetchMostPopularLists,
+	setListSearch,
 } from '../../../../reducers/listReducer';
 import useStore from '../../../Consumer/useState/index';
 import CompassIconWhite from '../../../../images/compass-white.png';
@@ -55,6 +57,7 @@ const SideBarTabs = () => {
 	const loading = useSelector((state) => state.myFeed.loading);
 	const isListCreated = useSelector((state) => state.list.isListCreated);
 
+	const RenderHome = useStore((state)=>state.renderHome)
 	const userSubscribedLists = useStore((state) => state.userSubscribedLists);
 	const setUserSubscribedLists = useStore((state) => state.setUserSubscribedLists);
 	const setUserCreatedLists = useStore((state) => state.setUserCreatedLists);
@@ -67,7 +70,7 @@ const SideBarTabs = () => {
 	const setSelectedList = useStore((state) => state.setSelectedList);
 	const setSelectedPlace = useStore((state) => state.setSelectedPlace);
 	const setOrderedPlaces = useStore((state) => state.setOrderedPlaces);
-
+	const setRenderHome = useStore((state)=>state.setRenderHome)
 	// old useStore
 
 	const [expanded, setExpanded] = useState(false);
@@ -139,13 +142,16 @@ const SideBarTabs = () => {
 		setSelectedListId(null);
 		setOrderedPlaces([]);
 		setSelectedPlace(null);
+		setRenderHome(!RenderHome)
 		history.push('/home');
 	};
-
+	
 	const listDiscovery = () => {
 		setSelectedPlace(null);
 		history.push('/lists');
 		setDiscoverBtn(false);
+		dispatch(fetchMostPopularLists(0));
+		dispatch(setListSearch(''))
 	};
 
 	const handleHover = () => {
@@ -247,6 +253,9 @@ const SideBarTabs = () => {
 								</span>
 							</div>
 						</Tab>
+
+
+
 						<Tab
 							disabled={
 								loading ||
@@ -290,6 +299,10 @@ const SideBarTabs = () => {
 								</span>
 							</div>
 						</Tab>
+
+
+
+
 						<Tab
 							disabled={
 								loading ||

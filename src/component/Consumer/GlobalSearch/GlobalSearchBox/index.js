@@ -102,7 +102,7 @@ const GlobalSearchBox = ({ setOffset, type }) => {
     };
     if (isNoDataFound) unloadScript();
   }, [isNoDataFound, search]);
-
+  
   useEffect(() => {
     return () => {
       dispatch(setSearchData(""));
@@ -175,6 +175,7 @@ const GlobalSearchBox = ({ setOffset, type }) => {
         setSearchError(error.SEARCH_ERROR);
       } else {
         searchFn(filter);
+        dispatch(setDisplayBar(false))
         const id = searchFeedListData?.[0]?._id;
         if (id) history.push(`/b/${id}`);
       }
