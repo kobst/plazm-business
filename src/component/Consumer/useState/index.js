@@ -1,6 +1,7 @@
 import create from "zustand";
 
 const [useStore] = create((set) => ({
+  renderHome: true,
   profile: null,
   businessDetailProfile: null,
   detailId: null,
@@ -55,6 +56,7 @@ const [useStore] = create((set) => ({
   previewMode: false,
   maxViewable: 10,
   maxViewableDepth: 4,
+  setRenderHome: (renderHome) => set((state) => ({ ...state, renderHome })),
   setProfile: (profile) =>
     set((state) => ({
       ...state,

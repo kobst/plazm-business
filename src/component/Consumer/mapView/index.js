@@ -291,7 +291,7 @@ const MapView = (props) => {
     if (selectedPlace && selectedPlace.businessLocation && detailView) {
       setTempCenter(selectedPlace.businessLocation.coordinates);
     }
-  }, [detailView]);
+  }, [detailView, selectedPlace]);
 
   useEffect(() => {
     let mounted = true;

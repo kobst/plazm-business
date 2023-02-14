@@ -118,6 +118,7 @@ const MyFeed = () => {
   const dispatch = useDispatch();
   const [flag, setFlag] = useState(true);
 
+  const RenderHome = useStore((state) => state.renderHome);
   const setSelectedListId = useStore((state) => state.setSelectedListId);
   const setMyFeedIndex = useStore((state) => state.setMyFeedIndex);
   const draggedLocation = useStore((state) => state.draggedLocation);
@@ -162,6 +163,7 @@ const MyFeed = () => {
     userLocation,
     draggedLocation,
     searchData,
+    RenderHome,
   ]);
 
   /** to fetch more data by infinite scroll */
