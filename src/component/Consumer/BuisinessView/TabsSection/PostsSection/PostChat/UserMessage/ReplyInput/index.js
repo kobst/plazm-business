@@ -234,7 +234,7 @@ const ReplyInput = ({
   /** handle change input for mentions input */
   const handleChange = async (event, newValue, newPlainTextValue, mentions) => {
     /** to fetch list of all users */
-
+    setDisplayEmoji(false);
     if (mentions.length !== 0) {
       /** to find if the mention is of users or lists */
       const findUser = selectedUsers.find((i) => i._id === mentions[0].id);

@@ -73,14 +73,22 @@ const ImageHandler = ({
   });
 
   const onImageLoad = (e) => {
-    // setCrop(centerAspectCrop(width, height, aspect))
-    setCrop({
-      unit: "px",
-      width: cropWidth,
-      height: cropHeight,
-      x: 0,
-      y: 0,
-    });
+    const { naturalWidth: width, naturalHeight: height } = e.currentTarget;
+
+    const crop = centerCrop(
+      makeAspectCrop(
+        {
+          unit: "%",
+          width: 90,
+        },
+        aspect,
+        width,
+        height
+      ),
+      width,
+      height
+    );
+    setCrop(crop);
   };
 
   const showCroppedImage = async () => {
@@ -135,9 +143,10 @@ const ImageHandler = ({
               setCrop(p);
               setCompletedCrop(p);
             }}
-            keepSelection
-            locked
-            aspect={aspect}
+            // aspect set to undefined so that user can easily adjust the width and height of image
+            aspect={undefined}
+            maxHeight={cropHeight}
+            maxWidth={cropWidth}
           >
             <img
               className="CloseCropCross"
