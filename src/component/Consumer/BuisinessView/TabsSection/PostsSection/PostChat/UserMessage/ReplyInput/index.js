@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { FaRegSmile } from "react-icons/fa";
 import ProfileImg from "../../../../../../../../images/profile-img.png";
@@ -206,6 +206,7 @@ const ReplyInput = ({
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [image, setImage] = useState(null);
   const dispatch = useDispatch();
+  const emojiRef = useRef(null);
 
   const selectedPostId = useSelector(
     (state) => state.business.selectedPostIdForComments
@@ -321,6 +322,18 @@ const ReplyInput = ({
       return callback(x);
     }
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (emojiRef.current && !emojiRef.current.contains(event.target)) {
+        setDisplayEmoji(false);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
   return (
     <>
       <ChatContent className={type === "reply" ? "InnerReply" : ""}>
@@ -356,7 +369,7 @@ const ReplyInput = ({
                   renderSuggestion={customRenderSuggestion}
                 />
               </MentionsInput>
-              <EmojiWrap>
+              <EmojiWrap ref={emojiRef}>
                 <FaRegSmile onClick={() => setDisplayEmoji(!displayEmoji)} />
                 {displayEmoji ? <Picker onEmojiClick={onEmojiClick} /> : null}
               </EmojiWrap>
