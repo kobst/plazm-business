@@ -159,8 +159,7 @@ const NewInBuzzItems = ({
     setModal(false);
     setSelectedId(null);
   };
-
-  return (
+ return (
     <>
       <ItemsWrapper ref={divRef} className="UserProfileGridList">
         <CoverImg

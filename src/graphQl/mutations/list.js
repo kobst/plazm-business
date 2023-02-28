@@ -12,8 +12,12 @@ const createListGraphql = (values) => {
                 list {
                     _id
                     name
+                    isPublic
                     description
-                    ownerId
+                    ownerId {
+                      _id
+                      name
+                    }
                     posts
                     likes
                     subscribers

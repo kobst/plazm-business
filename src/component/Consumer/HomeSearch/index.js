@@ -1,15 +1,15 @@
-import React, {useEffect, useState} from 'react';
-import styled from 'styled-components';
-import {useDispatch} from 'react-redux';
-import BusinessListing from './BusinessListing';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import BusinessListing from "./BusinessListing";
 import {
   clearMyFeedData,
   setLoading,
   setSideFiltersHomeSearch,
-} from '../../../reducers/myFeedReducer';
-import {setUserlocation} from '../../../reducers/businessReducer';
+} from "../../../reducers/myFeedReducer";
+import { setUserlocation } from "../../../reducers/businessReducer";
 
-import useStore from '../useState';
+import useStore from "../useState";
 
 const ContentWrap = styled.div`
   padding: 0px;
@@ -17,19 +17,18 @@ const ContentWrap = styled.div`
   position: relative;
 `;
 
-const HomeSearch = ({
-  ...props
-}) => {
+const HomeSearch = ({ ...props }) => {
   const dispatch = useDispatch();
-  const [locationState, setLocationState] = useState('prompt');
+  const [locationState, setLocationState] = useState("prompt");
   const [loader, setLoader] = useState(null);
   const [coords, setCoords] = useState(null);
   const [closestFilter, setClosestFilter] = useState(true);
 
-
   const setSelectedListId = useStore((state) => state.setSelectedListId);
   const setSearchIndex = useStore((state) => state.setSearchIndex);
-  const setListClickedFromSearch = useStore((state) => state.setListClickedFromSearch);
+  const setListClickedFromSearch = useStore(
+    (state) => state.setListClickedFromSearch
+  );
   const draggedLocation = useStore((state) => state.draggedLocation);
 
   useEffect(() => {
@@ -39,18 +38,18 @@ const HomeSearch = ({
 
   // /** to set coordinates when location is enabled */
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(function(position) {
+    navigator.geolocation.getCurrentPosition(function (position) {
       setClosestFilter(true);
-      setLocationState('granted');
+      setLocationState("granted");
       setCoords({
         latitude: draggedLocation.lat,
         longitude: draggedLocation.lng,
       });
       dispatch(
-          setUserlocation({
-            latitude: draggedLocation.lat,
-            longitude: draggedLocation.lat,
-          }),
+        setUserlocation({
+          latitude: draggedLocation.lat,
+          longitude: draggedLocation.lat,
+        })
       );
     });
   }, [dispatch]);
@@ -60,7 +59,7 @@ const HomeSearch = ({
     if (locationState) {
       setLoader(true);
       dispatch(setLoading());
-      if (locationState === 'prompt') {
+      if (locationState === "prompt") {
         setTimeout(() => {
           setLoader(false);
         }, 3000);

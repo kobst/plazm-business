@@ -738,7 +738,7 @@ export const slice = createSlice({
                 obj.list && obj.list.image ? [].concat(obj.list.image) : [],
             }),
           }));
-          state.searchFeed = state.searchFeed.concat(data);
+          state.searchFeed = data;
           state.totalData = action.payload.totalPlaces;
         }
       }
